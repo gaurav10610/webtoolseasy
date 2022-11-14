@@ -4,9 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppDirectoryModule } from './app-directory/app-directory.module';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'app', pathMatch: 'full' },
-  { path: 'app', loadChildren: () => AppDirectoryModule },
-  { path: 'uuid', loadChildren: () => UuidModule },
+  { path: '', redirectTo: 'apps', pathMatch: 'full' },
+  { path: 'apps', loadChildren: () => AppDirectoryModule },
+  { path: 'apps/uuid', loadChildren: () => UuidModule },
 ];
 
 @NgModule({

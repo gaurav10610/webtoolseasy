@@ -1,15 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppDisplayConfig } from 'src/app/@types/config';
+import { BaseComponent } from 'src/app/base/base.component';
+import { ConfigService } from 'src/app/service/common/config.service';
 
 @Component({
   selector: 'app-app-directory',
   templateUrl: './app-directory.component.html',
-  styleUrls: ['./app-directory.component.scss']
+  styleUrls: ['./app-directory.component.scss'],
 })
-export class AppDirectoryComponent implements OnInit {
+export class AppDirectoryComponent extends BaseComponent implements OnInit{
+  assetsPath = '../../../assets/';
 
-  constructor() { }
+  /**
+   * application config for composing UI
+   */
+  appsConfig: AppDisplayConfig[] = [
+    {
+      applicationId: 'uuid',
+      displayText: 'UUID: Generate UUID Online',
+    },
+  ];
 
-  ngOnInit(): void {
+  constructor(router: Router, configService: ConfigService) {
+    super(router, configService);
   }
 
+  ngOnInit(): void {}
 }

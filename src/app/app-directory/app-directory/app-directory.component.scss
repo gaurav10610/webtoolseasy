@@ -1,47 +1,3 @@
-.full-height {
-  height: 100%;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.flex-display {
-  display: flex;
-}
-
-.flex-column-flow {
-  flex-flow: column;
-}
-
-.flex-row-flow {
-  flex-flow: row;
-}
-
-.flex-full-height {
-  flex-grow: 1;
-}
-
-.header-div {
-  height: 60px;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-.app-background {
-  background-color: #eaeded;
-}
-
-.no-y-scroll {
-    overflow-y: hidden;
-}
-
-.no-x-scroll {
-    overflow-x: hidden;
-}
-
 .apps-container {
   margin: 10px;
   display: flex;
@@ -51,14 +7,5 @@
 .application {
   border-radius: 10px;
   margin: 10px;
-  width: 15%;
-}
-
-.example-card {
-  max-width: 400px;
-}
-
-.example-header-image {
-  background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
-  background-size: cover;
+  max-width: fit-content;
 }
