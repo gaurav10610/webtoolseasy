@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppDirectoryComponent } from './app-directory/app-directory.component';
 
+import { AppDirectoryRoutingModule } from './app-directory-routing.module';
+import { AppDirectoryComponent } from './app-directory/app-directory.component';
 
 
 @NgModule({
@@ -9,7 +10,8 @@ import { AppDirectoryComponent } from './app-directory/app-directory.component';
     AppDirectoryComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    AppDirectoryRoutingModule
   ]
 })
 export class AppDirectoryModule { }

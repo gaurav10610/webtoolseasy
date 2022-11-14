@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UuidComponent } from './uuid/uuid.component';
 
+import { UuidRoutingModule } from './uuid-routing.module';
+import { UuidComponent } from './uuid/uuid.component';
 
 
 @NgModule({
@@ -9,7 +10,8 @@ import { UuidComponent } from './uuid/uuid.component';
     UuidComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    UuidRoutingModule
   ]
 })
 export class UuidModule { }
