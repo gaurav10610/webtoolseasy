@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AppDirectoryRoutingModule } from './app-directory-routing.module';
 import { AppDirectoryComponent } from './app-directory/app-directory.component';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
-  declarations: [
-    AppDirectoryComponent
-  ],
+  declarations: [AppDirectoryComponent],
   imports: [
     CommonModule,
-    AppDirectoryRoutingModule
-  ]
+    AppDirectoryRoutingModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+  ],
 })
-export class AppDirectoryModule { }
+export class AppDirectoryModule {}
