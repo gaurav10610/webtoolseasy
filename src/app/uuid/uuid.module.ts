@@ -6,6 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [UuidComponent],
@@ -16,6 +18,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatIconModule,
     MatButtonModule,
     MatChipsModule,
+    MatButtonToggleModule,
+    ClipboardModule,
   ],
 })
 export class UuidModule {}

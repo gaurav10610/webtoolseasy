@@ -2,6 +2,13 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
+        <button
+          mat-icon-button
+          aria-label="Home Button"
+          (click)="navigateByAppId('home')"
+        >
+          <mat-icon>home</mat-icon>
+        </button>
       <span class="header-font">The Tools Directory</span>
       <!-- <span class="spacer"></span>
       <button mat-icon-button aria-label="">

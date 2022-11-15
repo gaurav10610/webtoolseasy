@@ -2,24 +2,79 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
-      <button mat-icon-button aria-label="Home Button" (click)="navigateByAppId('home')">
+      <button
+        mat-icon-button
+        aria-label="Home Button"
+        (click)="navigateByAppId('home')"
+      >
         <mat-icon>home</mat-icon>
       </button>
-      <span class="header-font">UUID Generator</span>
+      <span class="header-font">The Tools Directory</span>
     </mat-toolbar>
   </div>
 
   <!-- tags div -->
-  <div style="margin: 10px;">
+  <div style="margin: 10px; background-color: white">
     <mat-chip-list aria-label="tags">
-      <mat-chip>#uuid</mat-chip>
-      <mat-chip>#unique identifier</mat-chip>
-      <mat-chip>#uuid generator</mat-chip>
-      <mat-chip>#programming</mat-chip>
-      <mat-chip>#development</mat-chip>
-    </mat-chip-list></div>
+      <mat-chip *ngFor="let tag of tags">#{{ tag }}</mat-chip>
+    </mat-chip-list>
+  </div>
 
   <!-- app container -->
-  <div class="flex-full-height app-background">
+  <div
+    class="flex-display flex-column-flow flex-align-center flex-full-height app-background"
+  >
+    <span
+      style="margin: 20px; font-size: xx-large"
+      class="header-font bold-text"
+      >Online UUID Generator</span
+    >
+    <!-- generate uuid -->
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-bottom: 20px"
+    >
+      <span style="font-size: xx-large; padding-right: 10px">{{
+        currentUUID
+      }}</span>
+      <button mat-raised-button (click)="copyGeneratedId()">
+        <mat-icon>content_copy</mat-icon> Copy
+      </button>
+    </div>
+
+    <div class="flex-display flex-column-flow flex-align-center">
+      <button
+        mat-raised-button
+        color="primary"
+        style="margin-bottom: 20px"
+        (click)="generateUUID()"
+      >
+        Generate Again!
+      </button>
+      <mat-button-toggle-group
+        name="uuidVersion"
+        aria-label="UUID Version"
+        style="margin-bottom: 20px"
+        #group="matButtonToggleGroup"
+        (click)="changeVersion(group.value)"
+        value="V4"
+      >
+        <mat-button-toggle value="V1"
+          ><span class="bold-text">version 1</span></mat-button-toggle
+        >
+        <!-- <mat-button-toggle value="V3"
+          ><span class="bold-text">version 3</span></mat-button-toggle
+        > -->
+        <mat-button-toggle value="V4"
+          ><span class="bold-text">version 4</span></mat-button-toggle
+        >
+      </mat-button-toggle-group>
+      <span
+        class="bold-text header-font"
+        style="margin-bottom: 10px; font-size: large"
+        >What is UUID {{ selectedVersion }}?</span
+      >
+      <span class="header-font">{{ description }}</span>
+    </div>
   </div>
 </div>
