@@ -6,6 +6,7 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LogUtils } from 'src/app/service/util/logger';
+import { AppIconService } from 'src/app/service/icon/app-icon.service';
 
 @Component({
   selector: 'app-uuid',
@@ -23,7 +24,8 @@ export class UuidComponent extends BaseComponent implements OnInit {
     router: Router,
     configService: ConfigService,
     contextService: ContextService,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    appIconService: AppIconService
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('uuid');

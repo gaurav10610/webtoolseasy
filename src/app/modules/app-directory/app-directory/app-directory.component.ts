@@ -4,6 +4,7 @@ import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
 import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
+import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
@@ -20,14 +21,16 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
   appsConfig: AppDisplayConfig[] = [
     {
       applicationId: 'uuid',
-      displayText: 'UUID: Generate UUID Online',
+      displayText: 'Generate UUID Online',
+      iconName: 'uuid-icon',
     },
   ];
 
   constructor(
     router: Router,
     configService: ConfigService,
-    contextService: ContextService
+    contextService: ContextService,
+    appIconService: AppIconService
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('home');

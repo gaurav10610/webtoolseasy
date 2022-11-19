@@ -2,13 +2,17 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
+      <mat-icon
+        svgIcon="app-icon"
+        class="app-icon pointer-cursor"
+        (click)="navigateByAppId('home')"></mat-icon>
+      <span class="header-font flex-full-height">WebToolsEasy</span>
       <button
         mat-icon-button
-        aria-label="Home Button"
+        aria-label="home icon button"
         (click)="navigateByAppId('home')">
         <mat-icon>home</mat-icon>
       </button>
-      <span class="header-font">WebToolsEasy</span>
     </mat-toolbar>
   </div>
 
@@ -25,7 +29,7 @@
         class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
         <span class="uuid-font">{{ currentUUID }}</span>
       </div>
-      <button mat-raised-button (click)="copyGeneratedId()">
+      <button mat-raised-button (click)="copyGeneratedId()" color="primary">
         <mat-icon>content_copy</mat-icon> Copy
       </button>
     </div>
