@@ -7,5 +7,19 @@
 .application {
   border-radius: 10px;
   margin: 10px;
-  max-width: fit-content;
+}
+
+@media screen and (max-width: 735px) {
+  .application {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .app-card {
+    flex-direction: row;
+  }
+  .app-card mat-icon{
+    margin-right: 20px;
+  }
 }

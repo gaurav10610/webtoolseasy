@@ -24,6 +24,11 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       displayText: 'Generate UUID Online',
       iconName: 'uuid-icon',
     },
+    {
+      applicationId: 'jwt',
+      displayText: 'Decode JWT Token Online',
+      iconName: 'jwt-icon',
+    },
   ];
 
   constructor(

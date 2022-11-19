@@ -16,6 +16,10 @@ export class AppIconService {
       iconName: 'uuid-icon',
       iconRelativeUrl: 'uuid-icon.svg',
     },
+    {
+      iconName: 'jwt-icon',
+      iconRelativeUrl: 'jwt-icon.svg',
+    },
   ];
 
   constructor(
