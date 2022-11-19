@@ -5,6 +5,7 @@ import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
 import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-uuid',
@@ -43,7 +44,9 @@ export class UuidComponent extends BaseComponent implements OnInit {
     this.description = this.displayData.get('V4').description;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    LogUtils.info('uuid component has been rendered');
+  }
 
   changeVersion(selectedVersion: string) {
     this.selectedVersion = selectedVersion;

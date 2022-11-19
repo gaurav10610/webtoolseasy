@@ -1,7 +1,7 @@
-import { UuidModule } from './uuid/uuid.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppDirectoryModule } from './app-directory/app-directory.module';
+import { AppDirectoryModule } from './modules/app-directory/app-directory.module';
+import { UuidModule } from './modules/uuid/uuid.module';
 
 const routes: Routes = [
   { path: '', redirectTo: 'apps', pathMatch: 'full' },

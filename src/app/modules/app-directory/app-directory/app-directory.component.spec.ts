@@ -8,9 +8,8 @@ describe('AppDirectoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AppDirectoryComponent ]
-    })
-    .compileComponents();
+      declarations: [AppDirectoryComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

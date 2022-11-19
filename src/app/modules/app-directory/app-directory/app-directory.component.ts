@@ -4,6 +4,7 @@ import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
 import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
+import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-app-directory',
@@ -11,7 +12,7 @@ import { ContextService } from 'src/app/service/context/context.service';
   styleUrls: ['./app-directory.component.scss'],
 })
 export class AppDirectoryComponent extends BaseComponent implements OnInit {
-  assetsPath = '../../../assets/';
+  assetsPath = '../../../../assets/';
 
   /**
    * application config for composing UI
@@ -32,5 +33,7 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     this.contextService.setAppId('home');
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    LogUtils.info('app directory component has been rendered');
+  }
 }

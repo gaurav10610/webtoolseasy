@@ -2,13 +2,12 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
-        <button
-          mat-icon-button
-          aria-label="Home Button"
-          (click)="navigateByAppId('home')"
-        >
-          <mat-icon>home</mat-icon>
-        </button>
+      <button
+        mat-icon-button
+        aria-label="Home Button"
+        (click)="navigateByAppId('home')">
+        <mat-icon>home</mat-icon>
+      </button>
       <span class="header-font">WebToolsEasy</span>
       <!-- <span class="spacer"></span>
       <button mat-icon-button aria-label="">
@@ -24,8 +23,7 @@
       <div
         class="application"
         *ngFor="let application of appsConfig"
-        (click)="navigateByAppId(application.applicationId)"
-      >
+        (click)="navigateByAppId(application.applicationId)">
         <mat-card>
           <span class="header-font bold-text">{{
             application.displayText
