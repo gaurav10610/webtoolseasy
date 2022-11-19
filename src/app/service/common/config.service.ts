@@ -8,11 +8,11 @@ export class ConfigService {
   applicationConfig: Map<string, ApplicationConfig> = new Map();
   constructor() {
     this.applicationConfig.set('home', {
-      navigationUrl: 'apps',
+      navigationUrl: 'tools',
       tags: [],
     });
     this.applicationConfig.set('uuid', {
-      navigationUrl: 'apps/uuid',
+      navigationUrl: 'tools/uuid',
       tags: [
         'uuid',
         'unique identifier',
@@ -21,6 +21,10 @@ export class ConfigService {
         'programming',
         'development',
       ],
+    });
+    this.applicationConfig.set('jwt', {
+      navigationUrl: 'tools/jwt',
+      tags: ['jwt', 'jwt token', 'jwt decode'],
     });
   }
 

@@ -1,0 +1,57 @@
+.heading-font {
+  font-size: xx-large;
+}
+
+@media screen and (max-width: 735px) {
+  .heading-font {
+    font-size: large;
+  }
+}
+
+.token-area {
+  width: 30%;
+}
+
+@media screen and (max-width: 735px) {
+  .token-area {
+    width: 80%;
+  }
+}
+
+// .token-area-container {
+//   min-height: 500px;
+//   width: 100%;
+// }
+
+@media screen and (max-width: 735px) {
+  .token-area-container {
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 735px) {
+  .encoded-token-field {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .encoded-token-field {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (min-width: 735px) {
+  .token-area-class {
+    font-size: large;
+    height: 30em;
+    width: 30em;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .token-area-class {
+    height: 10em;
+    width: 100%;
+  }
+}

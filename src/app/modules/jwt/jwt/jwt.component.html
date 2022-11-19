@@ -1,1 +1,74 @@
-<p>jwt works!</p>
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <div class="header-div">
+    <mat-toolbar color="primary">
+      <mat-icon
+        svgIcon="app-icon"
+        class="app-icon pointer-cursor"
+        (click)="navigateByAppId('home')"></mat-icon>
+      <span class="header-font flex-full-height">WebToolsEasy</span>
+      <button
+        mat-icon-button
+        aria-label="home icon button"
+        (click)="navigateByAppId('home')">
+        <mat-icon>home</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+
+  <!-- app container -->
+  <div class="flex-display flex-column-flow flex-align-center">
+    <span style="margin: 20px" class="header-font bold-text heading-font"
+      >Decode JWT Token Online</span
+    >
+
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width">
+      <mat-form-field
+        appearance="outline"
+        class="token-area encoded-token-field"
+        color="{{ isTokenValid ? 'primary' : 'warn' }}">
+        <mat-label>Encoded Token</mat-label>
+        <textarea
+          matInput
+          value="{{ encodedToken }}"
+          (input)="encodedInputChange($event)"
+          class="token-area-class"></textarea>
+      </mat-form-field>
+
+      <mat-form-field
+        appearance="outline"
+        floatLabel="always"
+        class="token-area">
+        <mat-label>Decoded Token</mat-label>
+        <textarea
+          matInput
+          value="{{ decodedToken }}"
+          class="token-area-class"></textarea>
+        <mat-error *ngIf="!isTokenValid">encoded token is invalid</mat-error>
+      </mat-form-field>
+    </div>
+
+    <button
+      mat-raised-button
+      (click)="copyDecodedToken()"
+      color="primary"
+      style="margin-bottom: 10px">
+      <mat-icon>content_copy</mat-icon> Copy Decoded Token
+    </button>
+
+    <div class="flex-display flex-row-flow flex-center flex-align-center">
+      <span class="header-font bold-text" style="margin-right: 5px">Note:</span>
+      <span class="header-font">
+        Token is being decoded using HS256 Algorithm</span
+      >
+    </div>
+
+    <!-- tags div -->
+    <div style="margin: 10px" class="flex-display flex-row-flow flex-center">
+      <mat-chip-list aria-label="tags">
+        <mat-chip *ngFor="let tag of tags">#{{ tag }}</mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+</div>
