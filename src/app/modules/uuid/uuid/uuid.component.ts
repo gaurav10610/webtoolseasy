@@ -7,7 +7,7 @@ import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LogUtils } from 'src/app/service/util/logger';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
-import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
@@ -28,10 +28,12 @@ export class UuidComponent extends BaseComponent implements OnInit {
     contextService: ContextService,
     private clipboard: Clipboard,
     appIconService: AppIconService,
-    private gaService: GoogleAnalyticsService
+    private gaService: GoogleAnalyticsService,
+    private titleService: Title
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('uuid');
+    this.titleService.setTitle('UUID Generator | Web Tools Easy');
     this.tags = <string[]>(
       this.configService.getApplicationTags(
         this.contextService.getCurrentAppId()
@@ -51,12 +53,7 @@ export class UuidComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     LogUtils.info('uuid component has been rendered');
-    if (environment.production) {
-      this.gaService.pageView(
-        <string>this.configService.getApplicationRoute('uuid'),
-        'uuid page'
-      );
-    }
+    this.gaService.pageView('tools/uuid', 'uuid page');
   }
 
   changeVersion(selectedVersion: string) {

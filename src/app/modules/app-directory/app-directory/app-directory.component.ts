@@ -7,7 +7,7 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
-import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-app-directory',
@@ -43,19 +43,16 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     configService: ConfigService,
     contextService: ContextService,
     appIconService: AppIconService,
-    private gaService: GoogleAnalyticsService
+    private gaService: GoogleAnalyticsService,
+    private titleService: Title
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('home');
+    this.titleService.setTitle('Tools Home | Web Tools Easy');
   }
 
   ngOnInit(): void {
     LogUtils.info('app directory component has been rendered');
-    if (environment.production) {
-      this.gaService.pageView(
-        <string>this.configService.getApplicationRoute('home'),
-        'home page'
-      );
-    }
+    this.gaService.pageView('/tools', 'home page');
   }
 }

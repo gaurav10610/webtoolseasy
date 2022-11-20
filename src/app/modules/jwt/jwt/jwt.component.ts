@@ -14,7 +14,7 @@ import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
@@ -33,10 +33,12 @@ export class JwtComponent
     private clipboard: Clipboard,
     appIconService: AppIconService,
     private renderer: Renderer2,
-    private gaService: GoogleAnalyticsService
+    private gaService: GoogleAnalyticsService,
+    private titleService: Title
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('jwt');
+    this.titleService.setTitle('JWT Decoder | Web Tools Easy');
     this.tags = <string[]>(
       this.configService.getApplicationTags(
         this.contextService.getCurrentAppId()
@@ -64,12 +66,7 @@ export class JwtComponent
 
   ngOnInit(): void {
     LogUtils.info('jwt component has rendered');
-    if (environment.production) {
-      this.gaService.pageView(
-        <string>this.configService.getApplicationRoute('jwt'),
-        'jwt page'
-      );
-    }
+    this.gaService.pageView('/tools/jwt', 'jwt page');
   }
 
   ngAfterViewInit(): void {
