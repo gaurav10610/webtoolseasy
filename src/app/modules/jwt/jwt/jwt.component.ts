@@ -15,7 +15,6 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Title } from '@angular/platform-browser';
-import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'app-jwt',
@@ -33,7 +32,6 @@ export class JwtComponent
     private clipboard: Clipboard,
     appIconService: AppIconService,
     private renderer: Renderer2,
-    private gaService: GoogleAnalyticsService,
     private titleService: Title
   ) {
     super(router, configService, contextService);
@@ -66,7 +64,6 @@ export class JwtComponent
 
   ngOnInit(): void {
     LogUtils.info('jwt component has rendered');
-    this.gaService.pageView('/tools/jwt', 'jwt page');
   }
 
   ngAfterViewInit(): void {

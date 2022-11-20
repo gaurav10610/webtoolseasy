@@ -6,7 +6,6 @@ import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { GoogleAnalyticsService } from 'ngx-google-analytics';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -43,7 +42,6 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     configService: ConfigService,
     contextService: ContextService,
     appIconService: AppIconService,
-    private gaService: GoogleAnalyticsService,
     private titleService: Title
   ) {
     super(router, configService, contextService);
@@ -53,6 +51,5 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     LogUtils.info('app directory component has been rendered');
-    this.gaService.pageView('/tools', 'home page');
   }
 }

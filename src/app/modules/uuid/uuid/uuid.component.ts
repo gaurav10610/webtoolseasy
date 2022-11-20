@@ -8,7 +8,6 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { LogUtils } from 'src/app/service/util/logger';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { Title } from '@angular/platform-browser';
-import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'app-uuid',
@@ -28,7 +27,6 @@ export class UuidComponent extends BaseComponent implements OnInit {
     contextService: ContextService,
     private clipboard: Clipboard,
     appIconService: AppIconService,
-    private gaService: GoogleAnalyticsService,
     private titleService: Title
   ) {
     super(router, configService, contextService);
@@ -53,7 +51,6 @@ export class UuidComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     LogUtils.info('uuid component has been rendered');
-    this.gaService.pageView('tools/uuid', 'uuid page');
   }
 
   changeVersion(selectedVersion: string) {
