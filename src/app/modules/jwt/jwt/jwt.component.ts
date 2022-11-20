@@ -73,7 +73,6 @@ export class JwtComponent
   }
 
   ngAfterViewInit(): void {
-    LogUtils.info('jwt component has rendered');
     this.updateEncodedToken(this.encodedToken);
     this.updateDecodedToken(this.decodedToken);
   }
