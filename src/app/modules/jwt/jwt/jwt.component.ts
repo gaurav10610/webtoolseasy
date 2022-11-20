@@ -14,6 +14,8 @@ import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'app-jwt',
@@ -30,7 +32,8 @@ export class JwtComponent
     contextService: ContextService,
     private clipboard: Clipboard,
     appIconService: AppIconService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private gaService: GoogleAnalyticsService
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('jwt');
@@ -48,22 +51,25 @@ export class JwtComponent
   }
 
   isTokenValid: boolean = true;
-
   jwtDecoder: JwtHelperService;
 
   @ViewChild('encodedDiv', { static: false })
   encodedDiv!: ElementRef;
-
   @ViewChild('decodedDiv', { static: false })
   decodedDiv!: ElementRef;
 
   encodedToken: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
-
   decodedToken: string = '';
 
   ngOnInit(): void {
     LogUtils.info('jwt component has rendered');
+    if (environment.production) {
+      this.gaService.pageView(
+        <string>this.configService.getApplicationRoute('jwt'),
+        'jwt page'
+      );
+    }
   }
 
   ngAfterViewInit(): void {

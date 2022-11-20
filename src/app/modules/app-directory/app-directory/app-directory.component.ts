@@ -6,6 +6,8 @@ import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-app-directory',
@@ -40,7 +42,8 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     router: Router,
     configService: ConfigService,
     contextService: ContextService,
-    appIconService: AppIconService
+    appIconService: AppIconService,
+    private gaService: GoogleAnalyticsService
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('home');
@@ -48,5 +51,11 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     LogUtils.info('app directory component has been rendered');
+    if (environment.production) {
+      this.gaService.pageView(
+        <string>this.configService.getApplicationRoute('home'),
+        'home page'
+      );
+    }
   }
 }
