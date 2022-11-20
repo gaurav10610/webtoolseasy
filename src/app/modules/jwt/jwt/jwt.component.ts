@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/base.component';
 import { ConfigService } from 'src/app/service/common/config.service';
@@ -13,13 +20,17 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   templateUrl: './jwt.component.html',
   styleUrls: ['./jwt.component.scss'],
 })
-export class JwtComponent extends BaseComponent implements OnInit {
+export class JwtComponent
+  extends BaseComponent
+  implements OnInit, AfterViewInit
+{
   constructor(
     router: Router,
     configService: ConfigService,
     contextService: ContextService,
     private clipboard: Clipboard,
-    appIconService: AppIconService
+    appIconService: AppIconService,
+    private renderer: Renderer2
   ) {
     super(router, configService, contextService);
     this.contextService.setAppId('jwt');
@@ -38,30 +49,75 @@ export class JwtComponent extends BaseComponent implements OnInit {
 
   isTokenValid: boolean = true;
 
+  jwtDecoder: JwtHelperService;
+
+  @ViewChild('encodedDiv', { static: false })
+  encodedDiv!: ElementRef;
+
+  @ViewChild('decodedDiv', { static: false })
+  decodedDiv!: ElementRef;
+
   encodedToken: string =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+    'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
 
   decodedToken: string = '';
-  jwtDecoder: JwtHelperService;
 
   ngOnInit(): void {
     LogUtils.info('jwt component has rendered');
   }
 
+  ngAfterViewInit(): void {
+    LogUtils.info('jwt component has rendered');
+    this.updateEncodedToken(this.encodedToken);
+    this.updateDecodedToken(this.decodedToken);
+  }
+
   encodedInputChange(event: any) {
-    LogUtils.info(`encoded token has changed`);
-    this.encodedToken = event.target.value;
+    LogUtils.info(
+      `encoded token has changed with value: ${this.encodedDiv.nativeElement.innerText}`
+    );
+    this.decodeUpdatedToken(this.encodedDiv.nativeElement.innerText);
+  }
+
+  onTokenPaste(event: any) {
+    event.preventDefault();
+    const pastedData = (
+      event.clipboardData || (<any>window).clipboardData
+    ).getData('text');
+    LogUtils.info(`pasted data: ${pastedData}`);
+    this.updateEncodedToken(pastedData);
+    this.decodeUpdatedToken(pastedData);
+  }
+
+  decodeUpdatedToken(encodedTokenValue: string) {
     try {
-      const decodedTokenValue = this.jwtDecoder.decodeToken(this.encodedToken);
+      this.encodedToken = encodedTokenValue;
+      const decodedTokenValue = this.jwtDecoder.decodeToken(encodedTokenValue);
       this.isTokenValid = true;
       this.decodedToken = JSON.stringify(decodedTokenValue, null, '    ');
+      this.updateDecodedToken(this.decodedToken);
     } catch (error) {
       LogUtils.error(
         `error occured while decoding token: ${this.encodedToken}`
       );
-      this.decodedToken = 'encoded token is invalid';
       this.isTokenValid = false;
     }
+  }
+
+  updateEncodedToken(encodedToken: string) {
+    this.renderer.setProperty(
+      this.encodedDiv.nativeElement,
+      'innerText',
+      encodedToken
+    );
+  }
+
+  updateDecodedToken(decodedToken: string) {
+    this.renderer.setProperty(
+      this.decodedDiv.nativeElement,
+      'innerText',
+      decodedToken
+    );
   }
 
   copyDecodedToken() {

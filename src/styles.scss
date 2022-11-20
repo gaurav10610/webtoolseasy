@@ -12,6 +12,14 @@ body {
 
 // #3f51b5
 
+.y-scroll {
+  overflow-y: scroll;
+}
+
+.x-scroll {
+  overflow-x: scroll;
+}
+
 .full-height {
   height: 100%;
 }

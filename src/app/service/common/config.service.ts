@@ -24,7 +24,18 @@ export class ConfigService {
     });
     this.applicationConfig.set('jwt', {
       navigationUrl: 'tools/jwt',
-      tags: ['jwt', 'jwt token', 'jwt decode'],
+      tags: [
+        'jwt',
+        'json web token',
+        'jwt token',
+        'jwt decode',
+        'programming',
+        'development',
+      ],
+    });
+    this.applicationConfig.set('soon', {
+      navigationUrl: 'tools',
+      tags: [],
     });
   }
 

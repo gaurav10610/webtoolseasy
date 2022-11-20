@@ -27,7 +27,7 @@
       style="margin-bottom: 20px">
       <div
         class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
-        <span class="uuid-font">{{ currentUUID }}</span>
+        <span class="uuid-font" style="color: #ff4081">{{ currentUUID }}</span>
       </div>
       <button mat-raised-button (click)="copyGeneratedId()" color="primary">
         <mat-icon>content_copy</mat-icon> Copy
@@ -74,7 +74,7 @@
   <!-- tags div -->
   <div style="margin: 10px" class="flex-display flex-row-flow flex-center">
     <mat-chip-list aria-label="tags">
-      <mat-chip *ngFor="let tag of tags">#{{ tag }}</mat-chip>
+      <mat-chip *ngFor="let tag of tags">{{ tag }}</mat-chip>
     </mat-chip-list>
   </div>
 </div>

@@ -26,8 +26,13 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     },
     {
       applicationId: 'jwt',
-      displayText: 'Decode JWT Token Online',
+      displayText: 'Decode JWT Online',
       iconName: 'jwt-icon',
+    },
+    {
+      applicationId: 'soon',
+      displayText: 'More Tools Coming Soon',
+      iconName: 'soon-icon',
     },
   ];
 

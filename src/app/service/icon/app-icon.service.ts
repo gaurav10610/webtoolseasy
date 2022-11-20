@@ -20,6 +20,10 @@ export class AppIconService {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
     },
+    {
+      iconName: 'soon-icon',
+      iconRelativeUrl: 'soon-icon.svg',
+    },
   ];
 
   constructor(
