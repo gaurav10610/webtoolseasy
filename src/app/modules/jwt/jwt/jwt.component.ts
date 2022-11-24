@@ -14,7 +14,7 @@ import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Title } from '@angular/platform-browser';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-jwt',
@@ -32,11 +32,13 @@ export class JwtComponent
     private clipboard: Clipboard,
     appIconService: AppIconService,
     private renderer: Renderer2,
-    private titleService: Title
+    titleService: Title,
+    metaService: Meta
   ) {
-    super(router, configService, contextService);
-    this.contextService.setAppId('jwt');
-    this.titleService.setTitle('JWT Decoder | Web Tools Easy');
+    super(router, configService, contextService, titleService, metaService);
+    this.contextService.setCurrentAppId('jwt');
+    this.updatePageMetaData();
+
     this.tags = <string[]>(
       this.configService.getApplicationTags(
         this.contextService.getCurrentAppId()

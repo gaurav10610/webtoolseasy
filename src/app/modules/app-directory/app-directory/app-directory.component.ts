@@ -6,7 +6,7 @@ import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { Title } from '@angular/platform-browser';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-app-directory',
@@ -42,11 +42,12 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     configService: ConfigService,
     contextService: ContextService,
     appIconService: AppIconService,
-    private titleService: Title
+    titleService: Title,
+    metaService: Meta
   ) {
-    super(router, configService, contextService);
-    this.contextService.setAppId('home');
-    this.titleService.setTitle('Tools Home | Web Tools Easy');
+    super(router, configService, contextService, titleService, metaService);
+    this.contextService.setCurrentAppId('home');
+    this.updatePageMetaData();
   }
 
   ngOnInit(): void {

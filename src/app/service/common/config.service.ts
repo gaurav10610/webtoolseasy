@@ -8,33 +8,81 @@ export class ConfigService {
   applicationConfig: Map<string, ApplicationConfig> = new Map();
   constructor() {
     this.applicationConfig.set('home', {
-      navigationUrl: 'tools',
+      navigationUrl: '/tools',
+      pageTitle: 'Tools Home | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Home page of WebToolsEasy',
+        },
+        {
+          name: 'keywords',
+          content: 'JWT, UUID, WebToolsEasy',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
       tags: [],
     });
     this.applicationConfig.set('uuid', {
-      navigationUrl: 'tools/uuid',
+      navigationUrl: '/tools/uuid',
+      pageTitle: 'UUID Generator | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Online UUID Generator',
+        },
+        {
+          name: 'keywords',
+          content: 'UUID Generator, Generate UUID Online, UUID',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
       tags: [
         'uuid',
         'unique identifier',
         'id generator',
         'uuid generator',
         'programming',
-        'development',
       ],
     });
     this.applicationConfig.set('jwt', {
-      navigationUrl: 'tools/jwt',
+      navigationUrl: '/tools/jwt',
+      pageTitle: 'JWT Decoder | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Online JWT Decoder',
+        },
+        {
+          name: 'keywords',
+          content: 'JWT Decoder, Decode JWT Online, JSON Web Token',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
       tags: [
         'jwt',
         'json web token',
         'jwt token',
-        'jwt decode',
+        'jwt decoder',
         'programming',
-        'development',
       ],
     });
     this.applicationConfig.set('soon', {
-      navigationUrl: 'tools',
+      navigationUrl: '',
+      pageTitle: '',
+      metaTags: [],
       tags: [],
     });
   }
@@ -45,5 +93,9 @@ export class ConfigService {
 
   getApplicationTags(applicationId: string): string[] | undefined {
     return this.applicationConfig.get(applicationId)?.tags;
+  }
+
+  getApplicationConfig(applicationId: string): ApplicationConfig | undefined {
+    return this.applicationConfig.get(applicationId);
   }
 }

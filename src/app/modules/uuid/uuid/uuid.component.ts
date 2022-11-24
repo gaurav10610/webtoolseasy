@@ -7,7 +7,7 @@ import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LogUtils } from 'src/app/service/util/logger';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-uuid',
@@ -27,11 +27,13 @@ export class UuidComponent extends BaseComponent implements OnInit {
     contextService: ContextService,
     private clipboard: Clipboard,
     appIconService: AppIconService,
-    private titleService: Title
+    titleService: Title,
+    metaService: Meta
   ) {
-    super(router, configService, contextService);
-    this.contextService.setAppId('uuid');
-    this.titleService.setTitle('UUID Generator | Web Tools Easy');
+    super(router, configService, contextService, titleService, metaService);
+    this.contextService.setCurrentAppId('uuid');
+    this.updatePageMetaData();
+
     this.tags = <string[]>(
       this.configService.getApplicationTags(
         this.contextService.getCurrentAppId()

@@ -12,7 +12,7 @@ export class ContextService {
     return this.applicationId;
   }
 
-  setAppId(applicationId: string) {
+  setCurrentAppId(applicationId: string) {
     this.applicationId = applicationId;
   }
 }

@@ -26,9 +26,15 @@
                 margin-top: 10px;
                 margin-bottom: 15px;
               "></mat-icon>
-            <span class="header-font bold-text">{{
-              application.displayText
-            }}</span>
+            <a
+              [replaceUrl]="true"
+              routerLink="{{
+                configService.getApplicationConfig(application.applicationId)
+                  ?.navigationUrl
+              }}"
+              (click)="onAppClick($event)"
+              >{{ application.displayText }}</a
+            >
           </div>
         </mat-card>
       </div>

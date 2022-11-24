@@ -1,3 +1,5 @@
+import { MetaDefinition } from '@angular/platform-browser';
+
 export interface AppDisplayConfig {
   applicationId: string;
   displayText: string;
@@ -6,5 +8,7 @@ export interface AppDisplayConfig {
 
 export interface ApplicationConfig {
   navigationUrl: string;
+  metaTags: MetaDefinition[];
+  pageTitle: string;
   tags: string[];
 }
