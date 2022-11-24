@@ -79,6 +79,26 @@ export class ConfigService {
         'programming',
       ],
     });
+    this.applicationConfig.set('json-formatter', {
+      navigationUrl: '/tools/json-formatter',
+      pageTitle: 'JSON Formater | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Online JSON Formatter',
+        },
+        {
+          name: 'keywords',
+          content: 'JSON Formatter, Format JSON Online, JSON',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
+      tags: ['json', 'json formatter', 'json beautify', 'programming'],
+    });
     this.applicationConfig.set('soon', {
       navigationUrl: '',
       pageTitle: '',

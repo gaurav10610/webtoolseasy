@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppDirectoryModule } from './modules/app-directory/app-directory.module';
+import { JsonFormatterModule } from './modules/json-formatter/json-formatter.module';
 import { JwtModule } from './modules/jwt/jwt.module';
 import { UuidModule } from './modules/uuid/uuid.module';
 
@@ -9,6 +10,7 @@ const routes: Routes = [
   { path: 'tools', loadChildren: () => AppDirectoryModule },
   { path: 'tools/uuid', loadChildren: () => UuidModule },
   { path: 'tools/jwt', loadChildren: () => JwtModule },
+  { path: 'tools/json-formatter', loadChildren: () => JsonFormatterModule },
 ];
 
 @NgModule({

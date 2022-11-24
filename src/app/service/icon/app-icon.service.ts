@@ -24,6 +24,10 @@ export class AppIconService {
       iconName: 'soon-icon',
       iconRelativeUrl: 'soon-icon.svg',
     },
+    {
+      iconName: 'json-icon',
+      iconRelativeUrl: 'json-icon.svg',
+    },
   ];
 
   constructor(

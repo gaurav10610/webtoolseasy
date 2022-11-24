@@ -48,12 +48,13 @@ export class JwtComponent
     this.decodedToken = JSON.stringify(
       this.jwtDecoder.decodeToken(this.encodedToken),
       null,
-      '    '
+      this.tabSpaceValue
     );
   }
 
   isTokenValid: boolean = true;
   jwtDecoder: JwtHelperService;
+  tabSpaceValue: string = '  ';
 
   @ViewChild('encodedDiv', { static: false })
   encodedDiv!: ElementRef;
@@ -95,7 +96,11 @@ export class JwtComponent
       this.encodedToken = encodedTokenValue;
       const decodedTokenValue = this.jwtDecoder.decodeToken(encodedTokenValue);
       this.isTokenValid = true;
-      this.decodedToken = JSON.stringify(decodedTokenValue, null, '    ');
+      this.decodedToken = JSON.stringify(
+        decodedTokenValue,
+        null,
+        this.tabSpaceValue
+      );
       this.updateDecodedToken(this.decodedToken);
     } catch (error) {
       LogUtils.error(
@@ -116,8 +121,8 @@ export class JwtComponent
   updateDecodedToken(decodedToken: string) {
     this.renderer.setProperty(
       this.decodedDiv.nativeElement,
-      'innerText',
-      decodedToken
+      'innerHTML',
+      `<pre>${decodedToken}</pre>`
     );
   }
 
