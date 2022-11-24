@@ -4,7 +4,6 @@ import { AppDirectoryRoutingModule } from './app-directory-routing.module';
 import { AppDirectoryComponent } from './app-directory/app-directory.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
@@ -14,7 +13,6 @@ import { MatCardModule } from '@angular/material/card';
     AppDirectoryRoutingModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule,
     MatCardModule,
   ],
 })
