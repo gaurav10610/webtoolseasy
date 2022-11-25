@@ -107,14 +107,6 @@ export class ConfigService {
     });
   }
 
-  getApplicationRoute(applicationId: string): string | undefined {
-    return this.applicationConfig.get(applicationId)?.navigationUrl;
-  }
-
-  getApplicationTags(applicationId: string): string[] | undefined {
-    return this.applicationConfig.get(applicationId)?.tags;
-  }
-
   getApplicationConfig(applicationId: string): ApplicationConfig | undefined {
     return this.applicationConfig.get(applicationId);
   }

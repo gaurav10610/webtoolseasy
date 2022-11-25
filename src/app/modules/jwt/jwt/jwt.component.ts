@@ -40,9 +40,9 @@ export class JwtComponent
     this.updatePageMetaData();
 
     this.tags = <string[]>(
-      this.configService.getApplicationTags(
+      this.configService.getApplicationConfig(
         this.contextService.getCurrentAppId()
-      )
+      )?.tags
     );
     this.jwtDecoder = new JwtHelperService();
     this.decodedToken = JSON.stringify(

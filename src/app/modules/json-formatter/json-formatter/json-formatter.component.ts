@@ -14,7 +14,6 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { FormatOptions, prettyPrintJson } from 'pretty-print-json';
 
 @Component({
   selector: 'app-json-formatter',
@@ -39,23 +38,11 @@ export class JsonFormatterComponent
     this.contextService.setCurrentAppId('json-formatter');
     this.updatePageMetaData();
     this.tags = <string[]>(
-      this.configService.getApplicationTags(
+      this.configService.getApplicationConfig(
         this.contextService.getCurrentAppId()
-      )
-    );
-
-    /**
-     * format default json
-     */
-    this.formatOptions = {};
-    this.formattedJson = JSON.stringify(
-      JSON.parse(this.rawJson),
-      null,
-      this.tabSpaceValue
+      )?.tags
     );
   }
-
-  formatOptions: FormatOptions;
 
   isJsonValid: boolean = true;
 
@@ -64,7 +51,7 @@ export class JsonFormatterComponent
   @ViewChild('formattedJsonDiv', { static: false })
   formattedJsonDiv!: ElementRef;
 
-  rawJson: string = `{"Role":"Admin","Issuer":"Sample Issuer","Username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
+  rawJson: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   formattedJson: string = '';
   tabSpaceValue: string = '   ';
 
@@ -73,11 +60,19 @@ export class JsonFormatterComponent
   }
 
   ngAfterViewInit(): void {
+    /**
+     * format default json
+     */
+    this.formattedJson = JSON.stringify(
+      JSON.parse(this.rawJson),
+      null,
+      this.tabSpaceValue
+    );
     this.updateRawJson(this.rawJson);
     this.updateFormattedJson(this.formattedJson);
   }
 
-  rawJsonChange(event: any) {
+  rawJsonChange() {
     LogUtils.info(
       `encoded token has changed with value: ${this.rawJsonDiv.nativeElement.innerText}`
     );

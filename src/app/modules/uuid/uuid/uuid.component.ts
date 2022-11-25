@@ -35,9 +35,9 @@ export class UuidComponent extends BaseComponent implements OnInit {
     this.updatePageMetaData();
 
     this.tags = <string[]>(
-      this.configService.getApplicationTags(
+      this.configService.getApplicationConfig(
         this.contextService.getCurrentAppId()
-      )
+      )?.tags
     );
 
     this.displayData.set('V1', {

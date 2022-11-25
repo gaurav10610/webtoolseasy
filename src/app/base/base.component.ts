@@ -28,11 +28,14 @@ export abstract class BaseComponent {
 
   navigateByAppId(applicationId: string) {
     if (
-      <string>this.configService.getApplicationRoute(applicationId)?.trim() !==
-      ''
+      <string>(
+        this.configService.getApplicationConfig(applicationId)?.navigationUrl
+      ) !== ''
     ) {
       this.router.navigateByUrl(
-        <string>this.configService.getApplicationRoute(applicationId)
+        <string>(
+          this.configService.getApplicationConfig(applicationId)?.navigationUrl
+        )
       );
     }
   }
