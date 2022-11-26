@@ -35,7 +35,7 @@ export class JsonFormatterComponent
     metaService: Meta
   ) {
     super(router, configService, contextService, titleService, metaService);
-    this.contextService.setCurrentAppId('json-formatter');
+    this.contextService.setCurrentAppId('jsonformatter');
     this.updatePageMetaData();
     this.tags = <string[]>(
       this.configService.getApplicationConfig(
@@ -84,7 +84,6 @@ export class JsonFormatterComponent
     const pastedData = (
       event.clipboardData || (<any>window).clipboardData
     ).getData('text');
-    LogUtils.info(`pasted data: ${pastedData}`);
     this.updateRawJson(pastedData);
     this.formatJson(pastedData);
   }

@@ -86,7 +86,6 @@ export class JwtComponent
     const pastedData = (
       event.clipboardData || (<any>window).clipboardData
     ).getData('text');
-    LogUtils.info(`pasted data: ${pastedData}`);
     this.updateEncodedToken(pastedData);
     this.decodeUpdatedToken(pastedData);
   }

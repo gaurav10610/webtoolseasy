@@ -28,6 +28,26 @@ export class AppIconService {
       iconName: 'json-icon',
       iconRelativeUrl: 'json-icon.svg',
     },
+    {
+      iconName: 'image-compress-icon',
+      iconRelativeUrl: 'image-compress-icon.svg',
+    },
+    {
+      iconName: 'image-file-icon',
+      iconRelativeUrl: 'image-file.svg',
+    },
+    {
+      iconName: 'download-icon',
+      iconRelativeUrl: 'download.svg',
+    },
+    {
+      iconName: 'compress-icon',
+      iconRelativeUrl: 'compress-icon.svg',
+    },
+    {
+      iconName: 'info-icon',
+      iconRelativeUrl: 'info.svg',
+    },
   ];
 
   constructor(

@@ -1,0 +1,104 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <div class="header-div">
+    <mat-toolbar color="primary">
+      <mat-icon
+        svgIcon="app-icon"
+        class="app-icon pointer-cursor"
+        (click)="navigateByAppId('home')"></mat-icon>
+      <span class="header-font flex-full-height">WebToolsEasy</span>
+      <button
+        mat-icon-button
+        aria-label="home icon button"
+        (click)="navigateByAppId('home')">
+        <mat-icon>home</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+
+  <!-- app container -->
+  <div
+    class="flex-full-height flex-display flex-column-flow flex-align-center"
+    style="padding: 10px">
+    <span style="margin: 20px" class="header-font bold-text heading-font"
+      >Compress Image Online</span
+    >
+
+    <!-- image compressin parent div -->
+    <div
+      class="flex-display flex-column-flow flex-align-center image-list-parent">
+      <!-- select images button -->
+      <div
+        class="flex-display flex-row-flow flex-center full-width"
+        [ngStyle]="{
+          margin: '10px',
+          'justify-content': fileList.length > 0 ? 'end' : 'center'
+        }">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openFileDialog()"
+          style="margin-right: 10px">
+          <mat-icon>add_circle_outline</mat-icon> Select Images
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="startCompressAll()"
+          *ngIf="fileList.length > 0">
+          <mat-icon>play_arrow</mat-icon> Compress All
+        </button>
+        <input
+          #inputFiles
+          type="file"
+          style="display: none"
+          multiple
+          (change)="selectFiles($event)" />
+      </div>
+
+      <!-- list of image files -->
+      <div
+        class="full-width flex-display flex-column-flow y-scroll file-list-div no-scroll"
+        *ngIf="fileList.length > 0">
+        <mat-card
+          *ngFor="let file of fileList"
+          style="margin-bottom: 10px; border: 1px solid black">
+          <div class="flex-display flex-row-flow flex-align-center">
+            <mat-icon
+              svgIcon="image-file-icon"
+              class="app-icon pointer-cursor"></mat-icon>
+            <div class="flex-display flex-row-flow header-font file-name-div">
+              {{ file.name }}
+            </div>
+            <span class="flex-full-height"></span>
+            <div
+              class="flex-display flex-row-flow flex-align-center flex-center">
+              <mat-icon
+                svgIcon="info-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                (click)="showInfo(file)"></mat-icon>
+              <mat-icon
+                svgIcon="compress-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                *ngIf="!file.isCompressed"
+                (click)="compressImage(file)"></mat-icon>
+              <mat-icon
+                svgIcon="download-icon"
+                class="pointer-cursor"
+                *ngIf="file.isCompressed"></mat-icon>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- tags div -->
+    <div style="margin: 10px" class="flex-display flex-row-flow flex-center">
+      <mat-chip-list aria-label="tags">
+        <mat-chip *ngFor="let tag of tags">{{ tag }}</mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+</div>

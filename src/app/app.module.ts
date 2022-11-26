@@ -9,6 +9,7 @@ import {
   NgxGoogleAnalyticsRouterModule,
 } from 'ngx-google-analytics';
 import { environment } from 'src/environments/environment';
+import { ImageCompressionComponent } from './components/image-compression/image-compression.component';
 
 @NgModule({
   declarations: [AppComponent],

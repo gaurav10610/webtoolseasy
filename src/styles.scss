@@ -5,6 +5,16 @@ body {
   height: 100%;
 }
 
+.heading-font {
+  font-size: xx-large;
+}
+
+@media screen and (max-width: 735px) {
+  .heading-font {
+    font-size: large;
+  }
+}
+
 .app-icon {
   transform: scale(1.5);
   padding-right: 10px;
@@ -54,6 +64,15 @@ body {
 
 .app-background {
   background-color: #eaeded;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .no-y-scroll {

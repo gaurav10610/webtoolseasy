@@ -1,13 +1,3 @@
-.heading-font {
-  font-size: xx-large;
-}
-
-@media screen and (max-width: 735px) {
-  .heading-font {
-    font-size: large;
-  }
-}
-
 @media screen and (max-width: 735px) {
   .token-area-container {
     flex-direction: column;

@@ -31,9 +31,14 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       iconName: 'jwt-icon',
     },
     {
-      applicationId: 'json-formatter',
+      applicationId: 'jsonformatter',
       displayText: 'Format JSON Online',
       iconName: 'json-icon',
+    },
+    {
+      applicationId: 'imagecompress',
+      displayText: 'Compress Image Online',
+      iconName: 'image-compress-icon',
     },
     {
       applicationId: 'soon',

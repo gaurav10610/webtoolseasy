@@ -1,0 +1,26 @@
+.image-list-parent {
+  width: 80%;
+}
+
+@media screen and (max-width: 735px) {
+  .image-list-parent {
+    width: 90%;
+  }
+}
+
+.file-list-div {
+  max-height: 400px;
+}
+
+@media screen and (max-width: 735px) {
+  .file-list-div {
+    max-height: 300px;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .file-name-div {
+    width: 60%;
+    overflow-x: hidden;
+  }
+}

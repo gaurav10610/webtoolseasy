@@ -79,7 +79,7 @@ export class ConfigService {
         'programming',
       ],
     });
-    this.applicationConfig.set('json-formatter', {
+    this.applicationConfig.set('jsonformatter', {
       navigationUrl: '/tools/json-formatter',
       pageTitle: 'JSON Formater | Web Tools Easy',
       metaTags: [
@@ -98,6 +98,27 @@ export class ConfigService {
         { name: 'robots', content: 'index, follow' },
       ],
       tags: ['json', 'json formatter', 'json beautify', 'programming'],
+    });
+    this.applicationConfig.set('imagecompress', {
+      navigationUrl: '/tools/image-compress',
+      pageTitle: 'Image Compression | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Online Image Compression',
+        },
+        {
+          name: 'keywords',
+          content:
+            'Image Compressor, Image Compression Online, Compression, Image',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
+      tags: ['image', 'image compression', 'image compressor', 'compression'],
     });
     this.applicationConfig.set('soon', {
       navigationUrl: '',
