@@ -1,6 +1,6 @@
-import { UuidComponent } from './uuid/uuid.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UuidComponent } from 'src/app/components/uuid/uuid.component';
 
 const routes: Routes = [{ path: '', component: UuidComponent }];
 

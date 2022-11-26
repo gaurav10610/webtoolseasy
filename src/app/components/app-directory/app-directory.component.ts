@@ -14,7 +14,7 @@ import { Title, Meta } from '@angular/platform-browser';
   styleUrls: ['./app-directory.component.scss'],
 })
 export class AppDirectoryComponent extends BaseComponent implements OnInit {
-  assetsPath = '../../../../assets/';
+  assetsPath = '../../../assets/';
 
   /**
    * application config for composing UI
