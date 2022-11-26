@@ -1,5 +1,4 @@
 export interface FileData {
-  id: string;
   file: File;
   isCompressed: boolean;
   compressProgress: number;

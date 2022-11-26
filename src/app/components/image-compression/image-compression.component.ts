@@ -13,7 +13,6 @@ import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { v4 } from 'uuid';
 import { default as imageCompression } from 'browser-image-compression';
 
 @Component({
@@ -60,7 +59,6 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
     for (const file of event.target.files) {
       const isValid = this.isValidFileFormat(file);
       this.fileList.push({
-        id: v4(),
         file: file,
         type: FileDataType.IMAGE,
         inProgress: false,
@@ -98,7 +96,9 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
       fileData.isCompressed = true;
       fileData.inProgress = false;
     } catch (error) {
-      LogUtils.error(`error while compressing image with id: ${fileData.id}`);
+      LogUtils.error(
+        `error while compressing image with name: ${fileData.file.name}`
+      );
       fileData.inProgress = false;
       fileData.isCompressed = false;
       fileData.error = '* compression error';
