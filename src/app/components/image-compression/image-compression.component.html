@@ -67,17 +67,33 @@
             <mat-icon
               svgIcon="image-file-icon"
               class="app-icon pointer-cursor"></mat-icon>
-            <div class="flex-display flex-row-flow header-font file-name-div">
-              {{ file.name }}
+            <div
+              class="flex-display flex-column-flow header-font file-name-div">
+              <span class="header-font bold-text">{{ file.name }}</span>
+              <span
+                *ngIf="file.isCompressed"
+                class="bold-text header-font"
+                style="color: #ff4081"
+                >{{ file.oldSize }} -> {{ file.compressedSize }}</span
+              >
+              <span
+                *ngIf="file.error !== undefined"
+                class="bold-text header-font"
+                style="color: red"
+                >{{ file.error }}</span
+              >
             </div>
             <span class="flex-full-height"></span>
             <div
               class="flex-display flex-row-flow flex-align-center flex-center">
-              <mat-icon
+              <span *ngIf="file.inProgress" style="margin-right: 10px"
+                >Progress: {{ file.compressProgress }} %</span
+              >
+              <!-- <mat-icon
                 svgIcon="info-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                (click)="showInfo(file)"></mat-icon>
+                (click)="showInfo(file)"></mat-icon> -->
               <mat-icon
                 svgIcon="compress-icon"
                 class="pointer-cursor"
@@ -87,7 +103,8 @@
               <mat-icon
                 svgIcon="download-icon"
                 class="pointer-cursor"
-                *ngIf="file.isCompressed"></mat-icon>
+                *ngIf="file.isCompressed"
+                (click)="downloadImage(file)"></mat-icon>
             </div>
           </div>
         </mat-card>

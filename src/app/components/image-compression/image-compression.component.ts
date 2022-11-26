@@ -14,6 +14,7 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { v4 } from 'uuid';
+import { default as imageCompression } from 'browser-image-compression';
 
 @Component({
   selector: 'app-image-compression',
@@ -57,13 +58,21 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
 
   async selectFiles(event: any) {
     for (const file of event.target.files) {
+      const isValid = this.isValidFileFormat(file);
       this.fileList.push({
         id: v4(),
         file: file,
         type: FileDataType.IMAGE,
+        inProgress: false,
+        compressProgress: 0,
         isCompressed: false,
         name: file.name,
-        isValid: this.isValidFileFormat(file),
+        isValid,
+        error: isValid ? undefined : '* error: invalid file type',
+        compressOptions: {
+          signal: new AbortController().signal,
+        },
+        oldSize: this.formatBytes(file.size),
       });
     }
   }
@@ -75,11 +84,72 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
   }
 
   async compressImage(fileData: FileData) {
-    fileData.isCompressed = true;
+    fileData.inProgress = true;
+    fileData.compressProgress = 0;
+    fileData.error = undefined;
+    try {
+      fileData.compressedData = await imageCompression(fileData.file, {
+        ...fileData.compressOptions,
+        onProgress: progress => {
+          fileData.compressProgress = progress;
+        },
+      });
+      fileData.compressedSize = this.formatBytes(fileData.compressedData.size);
+      fileData.isCompressed = true;
+      fileData.inProgress = false;
+    } catch (error) {
+      LogUtils.error(`error while compressing image with id: ${fileData.id}`);
+      fileData.inProgress = false;
+      fileData.isCompressed = false;
+      fileData.error = '* compression error';
+    }
+  }
+
+  downloadImage(fileData: FileData) {
+    const fileName: string = fileData.file.name;
+    LogUtils.info(fileName.substring(0, fileName.lastIndexOf('.')) || fileName);
+
+    const downloadAnchor = this.renderer.createElement('a');
+    this.renderer.setProperty(
+      downloadAnchor,
+      'href',
+      URL.createObjectURL(fileData.compressedData!)
+    );
+    this.renderer.setProperty(
+      downloadAnchor,
+      'download',
+      'compressedImage.png'
+    );
+    downloadAnchor.click();
   }
 
   isValidFileFormat(file: File): boolean {
-    return true;
+    return ['image/jpeg', 'image/png'].includes(file.type);
+  }
+
+  /**
+   * format size in to higher terms
+   * @param bytes
+   * @param decimals
+   * @returns
+   */
+  formatBytes(bytes: number, decimals: number = 2): string {
+    if (bytes === 0) return '0 Bytes';
+    const k: number = 1024;
+    const dm: number = decimals < 0 ? 0 : decimals;
+    const sizes: string[] = [
+      'Bytes',
+      'KB',
+      'MB',
+      'GB',
+      'TB',
+      'PB',
+      'EB',
+      'ZB',
+      'YB',
+    ];
+    const i: number = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
   showInfo(fileData: FileData) {}
