@@ -106,8 +106,10 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
   }
 
   downloadImage(fileData: FileData) {
-    const fileName: string = fileData.file.name;
-    LogUtils.info(fileName.substring(0, fileName.lastIndexOf('.')) || fileName);
+    const fileName: string =
+      fileData.file.name.substring(0, fileData.file.name.lastIndexOf('.')) ||
+      fileData.file.name;
+    const extension = fileData.file.name.split('.').pop();
 
     const downloadAnchor = this.renderer.createElement('a');
     this.renderer.setProperty(
@@ -118,7 +120,7 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
     this.renderer.setProperty(
       downloadAnchor,
       'download',
-      'compressedImage.png'
+      `${fileName}-compressed.${extension}`
     );
     downloadAnchor.click();
   }
