@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ImageCompressionComponent } from 'src/app/components/image-compression/image-compression.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [ImageCompressionComponent],
@@ -18,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     MatChipsModule,
     MatCardModule,
+    MatTooltipModule,
   ],
 })
 export class ImageCompressionModule {}

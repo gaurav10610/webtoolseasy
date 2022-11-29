@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContextService {
-  constructor() {}
+  constructor(private deviceService: DeviceDetectorService) {}
 
   private applicationId: string = 'home';
 

@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  NgZone,
   OnInit,
   Renderer2,
   ViewChild,
@@ -28,7 +29,8 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
     appIconService: AppIconService,
     titleService: Title,
     metaService: Meta,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private zoneRef: NgZone
   ) {
     super(router, configService, contextService, titleService, metaService);
     this.contextService.setCurrentAppId('imagecompress');
@@ -48,6 +50,8 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     LogUtils.info('image compression component has rendered');
   }
+
+  isDownloadAllActive: boolean = false;
 
   async openFileDialog() {
     this.renderer
@@ -73,6 +77,21 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
         oldSize: this.formatBytes(file.size),
       });
     }
+
+    /**
+     * sorting the list to keep invalid files at one end
+     */
+    this.fileList = this.fileList.sort((value1, value2) => {
+      if (value2.isValid) {
+        return 1;
+      }
+
+      if (value1.isValid) {
+        return -1;
+      }
+
+      return 0;
+    });
   }
 
   async startCompressAll() {
@@ -82,30 +101,37 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
   }
 
   async compressImage(fileData: FileData) {
-    fileData.inProgress = true;
-    fileData.compressProgress = 0;
-    fileData.error = undefined;
-    try {
-      fileData.compressedData = await imageCompression(fileData.file, {
-        ...fileData.compressOptions,
-        onProgress: progress => {
-          fileData.compressProgress = progress;
-        },
-      });
-      fileData.compressedSize = this.formatBytes(fileData.compressedData.size);
-      fileData.isCompressed = true;
-      fileData.inProgress = false;
-    } catch (error) {
-      LogUtils.error(
-        `error while compressing image with name: ${fileData.file.name}`
-      );
-      fileData.inProgress = false;
-      fileData.isCompressed = false;
-      fileData.error = '* compression error';
-    }
+    this.zoneRef.run(async () => {
+      fileData.inProgress = true;
+      fileData.compressProgress = 0;
+      fileData.error = undefined;
+      try {
+        fileData.compressedData = await imageCompression(fileData.file, {
+          ...fileData.compressOptions,
+          onProgress: progress => {
+            fileData.compressProgress = progress;
+          },
+        });
+        fileData.compressedSize = this.formatBytes(
+          fileData.compressedData.size
+        );
+        fileData.isCompressed = true;
+        fileData.inProgress = false;
+        this.isDownloadAllActive = true;
+      } catch (error) {
+        LogUtils.error(
+          `error while compressing image with name: ${fileData.file.name}`
+        );
+        fileData.inProgress = false;
+        fileData.isCompressed = false;
+        fileData.error = '* compression error';
+      }
+    });
   }
 
-  downloadImage(fileData: FileData) {
+  async downloadAll(): Promise<void> {}
+
+  async downloadImage(fileData: FileData): Promise<void> {
     const fileName: string =
       fileData.file.name.substring(0, fileData.file.name.lastIndexOf('.')) ||
       fileData.file.name;

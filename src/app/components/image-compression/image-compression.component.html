@@ -38,16 +38,27 @@
           mat-raised-button
           color="primary"
           (click)="openFileDialog()"
-          style="margin-right: 10px">
+          style="margin-right: 10px"
+          matTooltip="select images to compress">
           <mat-icon>add_circle_outline</mat-icon> Select Images
         </button>
         <button
           mat-raised-button
           color="primary"
           (click)="startCompressAll()"
-          *ngIf="fileList.length > 0">
+          *ngIf="fileList.length > 0"
+          matTooltip="compress all images">
           <mat-icon>play_arrow</mat-icon> Compress All
         </button>
+        <!-- <button
+          mat-raised-button
+          color="primary"
+          (click)="downloadAll()"
+          *ngIf="isDownloadAllActive"
+          style="margin-left: 10px"
+          matTooltip="download all images">
+          <mat-icon>file_download</mat-icon> Download All
+        </button> -->
         <input
           #inputFiles
           type="file"
@@ -98,13 +109,23 @@
                 svgIcon="compress-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="!file.isCompressed"
-                (click)="compressImage(file)"></mat-icon>
+                *ngIf="!file.isCompressed && file.isValid"
+                (click)="compressImage(file)"
+                matTooltip="compress image"></mat-icon>
               <mat-icon
                 svgIcon="download-icon"
                 class="pointer-cursor"
                 *ngIf="file.isCompressed"
-                (click)="downloadImage(file)"></mat-icon>
+                (click)="downloadImage(file)"
+                matTooltip="download compressed image"></mat-icon>
+              <mat-icon
+                class="pointer-cursor"
+                *ngIf="!file.isValid"
+                color="warn"
+                matTooltip="only image files can be compressed"
+                style="transform: scale(1.5)"
+                >error</mat-icon
+              >
             </div>
           </div>
         </mat-card>

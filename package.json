@@ -23,6 +23,7 @@
     "@angular/router": "~13.2.0",
     "@auth0/angular-jwt": "^5.1.0",
     "browser-image-compression": "^2.0.0",
+    "ngx-device-detector": "^3.0.0",
     "ngx-google-analytics": "^13.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
