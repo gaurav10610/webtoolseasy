@@ -50,15 +50,15 @@
           matTooltip="compress all images">
           <mat-icon>play_arrow</mat-icon> Compress All
         </button>
-        <!-- <button
+        <button
           mat-raised-button
           color="primary"
           (click)="downloadAll()"
-          *ngIf="isDownloadAllActive"
+          *ngIf="isDownloadAllActive && !isMobile"
           style="margin-left: 10px"
           matTooltip="download all images">
           <mat-icon>file_download</mat-icon> Download All
-        </button> -->
+        </button>
         <input
           #inputFiles
           type="file"

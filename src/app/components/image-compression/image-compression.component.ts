@@ -15,6 +15,7 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
+import { isMobile } from 'is-mobile';
 
 @Component({
   selector: 'app-image-compression',
@@ -40,8 +41,10 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
         this.contextService.getCurrentAppId()
       )?.tags
     );
+    this.isMobile = isMobile();
   }
 
+  isMobile: boolean;
   fileList: FileData[] = [];
 
   @ViewChild('inputFiles', { static: false })
@@ -129,7 +132,11 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
     });
   }
 
-  async downloadAll(): Promise<void> {}
+  async downloadAll(): Promise<void> {
+    this.fileList
+      .filter(fileData => fileData.isValid)
+      .forEach(fileData => this.downloadImage(fileData));
+  }
 
   async downloadImage(fileData: FileData): Promise<void> {
     const fileName: string =
