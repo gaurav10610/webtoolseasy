@@ -9,9 +9,13 @@ import {
   NgxGoogleAnalyticsRouterModule,
 } from 'ngx-google-analytics';
 import { environment } from 'src/environments/environment';
+import { HomeComponent } from './components/home/home.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -19,6 +23,9 @@ import { environment } from 'src/environments/environment';
     HttpClientModule,
     NgxGoogleAnalyticsModule.forRoot(environment.gaCode),
     NgxGoogleAnalyticsRouterModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

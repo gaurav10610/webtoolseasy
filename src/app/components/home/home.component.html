@@ -1,0 +1,72 @@
+<div class="full-height no-scroll flex-display parent-div">
+  <!-- application branding -->
+  <div
+    class="flex-display flex-column-flow flex-align-center flex-center parent-view-div">
+    <div
+      class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
+      <mat-icon svgIcon="app-icon"></mat-icon>
+    </div>
+    <span class="header-font bold-text app-name" style="margin-bottom: 10px"
+      >Web Tools Easy</span
+    >
+    <span class="header-font" style="margin-bottom: 10px"
+      >Super easy tools to make life easy</span
+    >
+    <button
+      mat-stroked-button
+      color="primary"
+      style="margin-right: 10px"
+      matTooltip="select images to compress"
+      [replaceUrl]="true"
+      routerLink="/tools">
+      Get Started
+    </button>
+  </div>
+
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center flex-full-height parent-view-div app-links">
+    <span class="header-font bold-text" style="font-size: large"
+      >Tools Directory</span
+    >
+    <mat-list role="list">
+      <mat-list-item role="listitem"
+        ><div class="flex-display flex-row-flow flex-center flex-align-center">
+          <mat-icon
+            svgIcon="uuid-icon"
+            style="margin-right: 10px; transform: scale(1.5)"></mat-icon
+          ><a [replaceUrl]="true" routerLink="/tools/uuid"
+            >Online UUID Generator</a
+          >
+        </div></mat-list-item
+      >
+      <mat-list-item role="listitem"
+        ><div class="flex-display flex-row-flow flex-center flex-align-center">
+          <mat-icon
+            svgIcon="jwt-icon"
+            style="margin-right: 10px; transform: scale(1.5)"></mat-icon>
+          <a [replaceUrl]="true" routerLink="/tools/jwt">Online JWT Decoder</a>
+        </div></mat-list-item
+      >
+      <mat-list-item role="listitem"
+        ><div class="flex-display flex-row-flow flex-center flex-align-center">
+          <mat-icon
+            svgIcon="json-icon"
+            style="margin-right: 10px; transform: scale(1.5)"></mat-icon
+          ><a [replaceUrl]="true" routerLink="/tools/json-formatter"
+            >Online JSON Formatter</a
+          >
+        </div></mat-list-item
+      >
+      <mat-list-item role="listitem"
+        ><div class="flex-display flex-row-flow flex-center flex-align-center">
+          <mat-icon
+            svgIcon="image-compress-icon"
+            style="margin-right: 10px; transform: scale(1.5)"></mat-icon
+          ><a [replaceUrl]="true" routerLink="/tools/image-compress"
+            >Online Image Compressor</a
+          >
+        </div></mat-list-item
+      >
+    </mat-list>
+  </div>
+</div>

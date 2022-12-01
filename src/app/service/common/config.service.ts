@@ -8,12 +8,32 @@ export class ConfigService {
   applicationConfig: Map<string, ApplicationConfig> = new Map();
   constructor() {
     this.applicationConfig.set('home', {
+      navigationUrl: '',
+      pageTitle: 'Online Web Tools | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Home page of WebToolsEasy',
+        },
+        {
+          name: 'keywords',
+          content: 'Web Tools Online, JWT, UUID, JSON, Image Compression',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
+      tags: [],
+    });
+    this.applicationConfig.set('tools', {
       navigationUrl: '/tools',
       pageTitle: 'Tools Home | Web Tools Easy',
       metaTags: [
         {
           name: 'description',
-          content: 'Home page of WebToolsEasy',
+          content: 'Tools directory of WebToolsEasy',
         },
         {
           name: 'keywords',

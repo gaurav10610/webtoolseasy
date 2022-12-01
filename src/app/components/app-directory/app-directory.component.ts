@@ -22,22 +22,22 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
   appsConfig: AppDisplayConfig[] = [
     {
       applicationId: 'uuid',
-      displayText: 'Generate UUID Online',
+      displayText: 'Online UUID Generator',
       iconName: 'uuid-icon',
     },
     {
       applicationId: 'jwt',
-      displayText: 'Decode JWT Online',
+      displayText: 'Online JWT Decoder',
       iconName: 'jwt-icon',
     },
     {
       applicationId: 'jsonformatter',
-      displayText: 'Format JSON Online',
+      displayText: 'Online JSON Formatter',
       iconName: 'json-icon',
     },
     {
       applicationId: 'imagecompress',
-      displayText: 'Compress Image Online',
+      displayText: 'Online Image Compressor',
       iconName: 'image-compress-icon',
     },
     {
@@ -56,7 +56,7 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     metaService: Meta
   ) {
     super(router, configService, contextService, titleService, metaService);
-    this.contextService.setCurrentAppId('home');
+    this.contextService.setCurrentAppId('tools');
     this.updatePageMetaData();
   }
 
