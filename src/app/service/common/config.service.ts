@@ -33,7 +33,8 @@ export class ConfigService {
       metaTags: [
         {
           name: 'description',
-          content: 'Tools directory of WebToolsEasy',
+          content:
+            'Tools directory of WebToolsEasy | UUID Generator | JWT Decoder | JSON Formatter | Image Compressor',
         },
         {
           name: 'keywords',
@@ -125,7 +126,8 @@ export class ConfigService {
       metaTags: [
         {
           name: 'description',
-          content: 'Online Image Compression',
+          content:
+            'Online Image Compression. Select multiple JPEG, PNG images and compress for free',
         },
         {
           name: 'keywords',

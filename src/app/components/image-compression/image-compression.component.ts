@@ -1,7 +1,9 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   NgZone,
+  OnDestroy,
   OnInit,
   Renderer2,
   ViewChild,
@@ -15,14 +17,19 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
-import { isMobile } from 'is-mobile';
+import * as JSZip from 'jszip';
+import { Subject, takeUntil } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-image-compression',
   templateUrl: './image-compression.component.html',
   styleUrls: ['./image-compression.component.scss'],
 })
-export class ImageCompressionComponent extends BaseComponent implements OnInit {
+export class ImageCompressionComponent
+  extends BaseComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   constructor(
     router: Router,
     configService: ConfigService,
@@ -31,7 +38,8 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
     titleService: Title,
     metaService: Meta,
     private renderer: Renderer2,
-    private zoneRef: NgZone
+    private zoneRef: NgZone,
+    breakpointObserver: BreakpointObserver
   ) {
     super(router, configService, contextService, titleService, metaService);
     this.contextService.setCurrentAppId('imagecompress');
@@ -41,17 +49,39 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
         this.contextService.getCurrentAppId()
       )?.tags
     );
-    this.isMobile = isMobile();
+
+    breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.Web])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        for (const query of Object.keys(result.breakpoints)) {
+          if (result.breakpoints[query]) {
+            this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
+          }
+        }
+      });
   }
 
-  isMobile: boolean;
+  isMobile!: boolean;
   fileList: FileData[] = [];
+  zipBuilder!: JSZip;
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
+  destroyed = new Subject<void>();
+
   ngOnInit(): void {
     LogUtils.info('image compression component has rendered');
+  }
+
+  ngAfterViewInit(): void {
+    this.zipBuilder = new JSZip();
+  }
+
+  ngOnDestroy() {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
   isDownloadAllActive: boolean = false;
@@ -62,25 +92,39 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
       .click();
   }
 
-  async selectFiles(event: any) {
-    for (const file of event.target.files) {
-      const isValid = this.isValidFileFormat(file);
-      this.fileList.push({
-        file: file,
-        type: FileDataType.IMAGE,
-        inProgress: false,
-        compressProgress: 0,
-        isCompressed: false,
-        name: file.name,
-        isValid,
-        error: isValid ? undefined : '* error: invalid file type',
-        compressOptions: {
-          signal: new AbortController().signal,
-        },
-        oldSize: this.formatBytes(file.size),
-      });
-    }
+  /**
+   * file drop event handler
+   * @param event
+   */
+  async dropHandler(event: any) {
+    // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
 
+    if (event.dataTransfer.items) {
+      // Use DataTransferItemList interface to access the file(s)
+      [...event.dataTransfer.items]
+        .filter(item => item.kind === 'file')
+        .map(item => item.getAsFile())
+        .forEach(async file => await this.addFileToCompress(file));
+    } else {
+      // Use DataTransfer interface to access the file(s)
+      [...event.dataTransfer.files].forEach(
+        async file => await this.addFileToCompress(file)
+      );
+    }
+    await this.sortFiles();
+  }
+
+  /**
+   * handle drag over event
+   * @param event
+   */
+  async dragOverHandler(event: any) {
+    // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
+  }
+
+  async sortFiles() {
     /**
      * sorting the list to keep invalid files at one end
      */
@@ -95,6 +139,32 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
 
       return 0;
     });
+  }
+
+  async addFileToCompress(file: File) {
+    this.fileList.push({
+      file: file,
+      type: FileDataType.IMAGE,
+      inProgress: false,
+      compressProgress: 0,
+      isCompressed: false,
+      name: file.name,
+      isValid: this.isValidFileFormat(file),
+      error: this.isValidFileFormat(file)
+        ? undefined
+        : '* error: invalid file type',
+      compressOptions: {
+        signal: new AbortController().signal,
+      },
+      oldSize: this.formatBytes(file.size),
+    });
+  }
+
+  async selectFiles(event: any) {
+    for (const file of event.target.files) {
+      await this.addFileToCompress(file);
+    }
+    await this.sortFiles();
   }
 
   async startCompressAll() {
@@ -135,26 +205,37 @@ export class ImageCompressionComponent extends BaseComponent implements OnInit {
   async downloadAll(): Promise<void> {
     this.fileList
       .filter(fileData => fileData.isValid)
-      .forEach(fileData => this.downloadImage(fileData));
+      .forEach(fileData =>
+        this.zipBuilder.file(fileData.name, fileData.compressedData!, {
+          binary: true,
+        })
+      );
+
+    const zipFileData: Blob = await this.zipBuilder.generateAsync({
+      type: 'blob',
+    });
+    this.downloadFile('compress-images.zip', zipFileData);
   }
 
   async downloadImage(fileData: FileData): Promise<void> {
     const fileName: string =
-      fileData.file.name.substring(0, fileData.file.name.lastIndexOf('.')) ||
-      fileData.file.name;
+      fileData.name.substring(0, fileData.file.name.lastIndexOf('.')) ||
+      fileData.name;
     const extension = fileData.file.name.split('.').pop();
+    await this.downloadFile(
+      `${fileName}-compressed.${extension}`,
+      fileData.compressedData!
+    );
+  }
 
+  async downloadFile(fileName: string, fileContent: Blob): Promise<void> {
     const downloadAnchor = this.renderer.createElement('a');
     this.renderer.setProperty(
       downloadAnchor,
       'href',
-      URL.createObjectURL(fileData.compressedData!)
+      URL.createObjectURL(fileContent)
     );
-    this.renderer.setProperty(
-      downloadAnchor,
-      'download',
-      `${fileName}-compressed.${extension}`
-    );
+    this.renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
   }
 

@@ -18,9 +18,19 @@
   }
 }
 
+.image-drag-div {
+  width: 70%;
+  padding: 30px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
 @media screen and (max-width: 735px) {
   .file-name-div {
     width: 60%;
     overflow-x: hidden;
+  }
+  .image-drag-div {
+    width: 90%;
   }
 }

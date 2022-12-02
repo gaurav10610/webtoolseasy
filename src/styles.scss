@@ -15,6 +15,13 @@ body {
   }
 }
 
+.tags-class {
+  margin: 5px;
+  padding: 7px 12px;
+  background: #e0e0e0;
+  border-radius: 16px;
+}
+
 .app-icon {
   transform: scale(1.5);
   padding-right: 10px;
@@ -88,7 +95,7 @@ body {
 }
 
 .header-font {
-  font-family: monospace, "Courier New", Courier;
+  font-family: monospace, 'Courier New', Courier;
 }
 
 .bold-text {
@@ -105,5 +112,5 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }

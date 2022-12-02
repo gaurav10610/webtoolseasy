@@ -24,23 +24,59 @@
       >Compress Image Online</span
     >
 
+    <!-- file imput -->
+    <input
+      #inputFiles
+      type="file"
+      style="display: none"
+      multiple
+      (change)="selectFiles($event)" />
+
     <!-- image compressin parent div -->
     <div
-      class="flex-display flex-column-flow flex-align-center image-list-parent">
+      class="flex-display flex-column-flow flex-align-center image-list-parent"
+      (drop)="dropHandler($event)"
+      (dragover)="dragOverHandler($event)">
+      <div
+        class="flex-display flex-column-flow flex-center flex-align-center image-drag-div"
+        *ngIf="fileList.length === 0">
+        <mat-icon
+          style="transform: scale(2); margin-bottom: 10px"
+          (click)="openFileDialog()"
+          class="pointer-cursor"
+          >collections</mat-icon
+        >
+        <span class="header-font" style="margin-bottom: 20px; font-size: large"
+          >Drag & drop files here</span
+        >
+        <span class="header-font" style="margin-bottom: 10px; font-size: large"
+          >or</span
+        >
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openFileDialog()"
+          matTooltip="select images to compress">
+          <mat-icon>file_upload</mat-icon> Browse for files
+        </button>
+      </div>
+
       <!-- select images button -->
       <div
         class="flex-display flex-row-flow flex-center full-width"
         [ngStyle]="{
           margin: '10px',
           'justify-content': fileList.length > 0 ? 'end' : 'center'
-        }">
+        }"
+        *ngIf="fileList.length > 0">
         <button
           mat-raised-button
           color="primary"
           (click)="openFileDialog()"
           style="margin-right: 10px"
           matTooltip="select images to compress">
-          <mat-icon>add_circle_outline</mat-icon> Select Images
+          <mat-icon>file_upload</mat-icon> Select Images
         </button>
         <button
           mat-raised-button
@@ -57,14 +93,8 @@
           *ngIf="isDownloadAllActive && !isMobile"
           style="margin-left: 10px"
           matTooltip="download all images">
-          <mat-icon>file_download</mat-icon> Download All
+          <mat-icon>file_download</mat-icon> Download Zip
         </button>
-        <input
-          #inputFiles
-          type="file"
-          style="display: none"
-          multiple
-          (change)="selectFiles($event)" />
       </div>
 
       <!-- list of image files -->
@@ -133,10 +163,13 @@
     </div>
 
     <!-- tags div -->
-    <div style="margin: 10px" class="flex-display flex-row-flow flex-center">
-      <mat-chip-list aria-label="tags">
-        <mat-chip *ngFor="let tag of tags">{{ tag }}</mat-chip>
-      </mat-chip-list>
+    <div
+      style="margin: 20px; flex-wrap: wrap"
+      class="flex-display flex-row-flow flex-center">
+      <div class="tags-class">image</div>
+      <div class="tags-class">image compression</div>
+      <div class="tags-class">image compressor</div>
+      <div class="tags-class">compression</div>
     </div>
   </div>
 </div>
