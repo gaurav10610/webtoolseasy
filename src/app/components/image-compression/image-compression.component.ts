@@ -54,11 +54,7 @@ export class ImageCompressionComponent
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
-        for (const query of Object.keys(result.breakpoints)) {
-          if (result.breakpoints[query]) {
-            this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
-          }
-        }
+        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
       });
   }
 
