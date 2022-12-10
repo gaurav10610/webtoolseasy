@@ -1,4 +1,5 @@
 export interface FileData {
+  id: string;
   file: File;
   isCompressed: boolean;
   compressProgress: number;
@@ -8,9 +9,15 @@ export interface FileData {
   isValid: boolean;
   compressedData?: Blob;
   compressOptions: any;
-  oldSize: string;
-  compressedSize?: string;
   error?: string;
+  compressionRate: number;
+  maxFileSize: number;
+}
+
+export interface ImageCompressSettings {
+  fileId: string;
+  compressionRate: number;
+  maxFileSize: number;
 }
 
 export enum FileDataType {

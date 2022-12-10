@@ -10,7 +10,11 @@ import {
 } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { FileData, FileDataType } from 'src/app/@types/file';
+import {
+  FileData,
+  FileDataType,
+  ImageCompressSettings,
+} from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
 import { ConfigService } from 'src/app/service/common/config.service';
 import { ContextService } from 'src/app/service/context/context.service';
@@ -20,6 +24,13 @@ import { default as imageCompression } from 'browser-image-compression';
 import * as JSZip from 'jszip';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { CompressSettingsComponent } from '../compress-settings/compress-settings.component';
+import { v4 } from 'uuid';
 
 @Component({
   selector: 'app-image-compression',
@@ -39,7 +50,8 @@ export class ImageCompressionComponent
     metaService: Meta,
     private renderer: Renderer2,
     private zoneRef: NgZone,
-    breakpointObserver: BreakpointObserver
+    breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog
   ) {
     super(router, configService, contextService, titleService, metaService);
     this.contextService.setCurrentAppId('imagecompress');
@@ -55,6 +67,7 @@ export class ImageCompressionComponent
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
         this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
+        LogUtils.info(`mobile view: ${this.isMobile}`);
       });
   }
 
@@ -66,6 +79,8 @@ export class ImageCompressionComponent
   inputFiles!: ElementRef;
 
   destroyed = new Subject<void>();
+  isDownloadAllActive: boolean = false;
+  activeDialog: MatDialogRef<any> | undefined;
 
   ngOnInit(): void {
     LogUtils.info('image compression component has rendered');
@@ -80,12 +95,69 @@ export class ImageCompressionComponent
     this.destroyed.complete();
   }
 
-  isDownloadAllActive: boolean = false;
-
   async openFileDialog() {
     this.renderer
       .selectRootElement(this.inputFiles.nativeElement, true)
       .click();
+  }
+
+  /**
+   * open settings dialog
+   * @param file
+   */
+  async openSettingsDialog(file: FileData) {
+    this.closeDialog();
+    const dialogConfig: MatDialogConfig = { data: file };
+    this.activeDialog = this.dialog.open(
+      CompressSettingsComponent,
+      dialogConfig
+    );
+
+    /**
+     * subscribe dialog close event
+     */
+    this.activeDialog
+      .afterClosed()
+      .subscribe(this.handleSettingsChange.bind(this));
+  }
+
+  async closeDialog(data = {}) {
+    if (this.activeDialog) {
+      this.activeDialog.close(data);
+    }
+  }
+
+  /**
+   * handle compression rate change event
+   * @param data
+   */
+  async handleSettingsChange(data: any = {}) {
+    LogUtils.info(`settings dialog closed with data: ${JSON.stringify(data)}`);
+
+    /**
+     * process only if some settings has been changed
+     */
+    if (Object.keys(data).length > 0) {
+      const compressSettings: ImageCompressSettings = <ImageCompressSettings>(
+        data
+      );
+      this.zoneRef.run(() => {
+        const fileData: FileData = this.fileList.find(
+          fileData => fileData.id === compressSettings.fileId
+        )!;
+
+        if (fileData.compressionRate !== compressSettings.compressionRate) {
+          fileData.isCompressed = false;
+        }
+
+        fileData.compressionRate = compressSettings.compressionRate;
+        fileData.maxFileSize = compressSettings.maxFileSize;
+        fileData.compressOptions = {
+          ...fileData.compressOptions,
+          maxSizeMB: compressSettings.maxFileSize / 1024 / 1024,
+        };
+      });
+    }
   }
 
   /**
@@ -139,6 +211,7 @@ export class ImageCompressionComponent
 
   async addFileToCompress(file: File) {
     this.fileList.push({
+      id: v4(),
       file: file,
       type: FileDataType.IMAGE,
       inProgress: false,
@@ -151,8 +224,10 @@ export class ImageCompressionComponent
         : '* error: invalid file type',
       compressOptions: {
         signal: new AbortController().signal,
+        maxSizeMB: (0.9 * file.size) / 1024 / 1024,
       },
-      oldSize: this.formatBytes(file.size),
+      compressionRate: 20,
+      maxFileSize: 0.9 * file.size,
     });
   }
 
@@ -181,9 +256,6 @@ export class ImageCompressionComponent
             fileData.compressProgress = progress;
           },
         });
-        fileData.compressedSize = this.formatBytes(
-          fileData.compressedData.size
-        );
         fileData.isCompressed = true;
         fileData.inProgress = false;
         this.isDownloadAllActive = true;

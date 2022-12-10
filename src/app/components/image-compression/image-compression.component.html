@@ -36,14 +36,12 @@
     <div
       class="flex-display flex-column-flow flex-align-center image-list-parent"
       (drop)="dropHandler($event)"
-      (dragover)="dragOverHandler($event)">
+      (dragover)="dragOverHandler($event)"
+      style="margin-bottom: 10px">
       <div
         class="flex-display flex-column-flow flex-center flex-align-center image-drag-div"
         *ngIf="fileList.length === 0">
-        <mat-icon
-          style="transform: scale(2); margin-bottom: 10px"
-          (click)="openFileDialog()"
-          class="pointer-cursor"
+        <mat-icon style="transform: scale(2); margin-bottom: 10px"
           >collections</mat-icon
         >
         <span class="header-font" style="margin-bottom: 20px; font-size: large"
@@ -108,23 +106,28 @@
             <mat-icon
               svgIcon="image-file-icon"
               class="app-icon pointer-cursor"></mat-icon>
+
+            <!-- file name & size div -->
             <div
               class="flex-display flex-column-flow header-font file-name-div">
-              <span class="header-font bold-text">{{ file.name }}</span>
+              <span class="bold-text">{{ file.name }}</span>
               <span
                 *ngIf="file.isCompressed"
                 class="bold-text header-font"
                 style="color: #ff4081"
-                >{{ file.oldSize }} -> {{ file.compressedSize }}</span
+                >{{ formatBytes(file.file.size) }} ->
+                {{ formatBytes(file.compressedData?.size!) }}</span
               >
               <span
                 *ngIf="file.error !== undefined"
-                class="bold-text header-font"
+                class="bold-text"
                 style="color: red"
                 >{{ file.error }}</span
               >
             </div>
             <span class="flex-full-height"></span>
+
+            <!-- file icons div -->
             <div
               class="flex-display flex-row-flow flex-align-center flex-center">
               <span *ngIf="file.inProgress" style="margin-right: 10px"
@@ -135,6 +138,14 @@
                 class="pointer-cursor"
                 style="margin-right: 10px"
                 (click)="showInfo(file)"></mat-icon> -->
+
+              <mat-icon
+                svgIcon="settings-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                *ngIf="file.isValid"
+                matTooltip="change compression settings"
+                (click)="openSettingsDialog(file)"></mat-icon>
               <mat-icon
                 svgIcon="compress-icon"
                 class="pointer-cursor"
@@ -160,6 +171,13 @@
           </div>
         </mat-card>
       </div>
+    </div>
+
+    <div
+      class="flex-display flex-row-flow"
+      style="margin-left: 10px; margin-right: 10px">
+      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
+      <span>Only JPEG or PNG images can be compressed</span>
     </div>
 
     <!-- tags div -->

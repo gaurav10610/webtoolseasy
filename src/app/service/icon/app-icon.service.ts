@@ -48,6 +48,10 @@ export class AppIconService {
       iconName: 'info-icon',
       iconRelativeUrl: 'info.svg',
     },
+    {
+      iconName: 'settings-icon',
+      iconRelativeUrl: 'settings.svg',
+    },
   ];
 
   constructor(

@@ -8,9 +8,12 @@ import { ImageCompressionComponent } from 'src/app/components/image-compression/
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MatSliderModule } from '@angular/material/slider';
+import { CompressSettingsComponent } from 'src/app/components/compress-settings/compress-settings.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [ImageCompressionComponent],
+  declarations: [ImageCompressionComponent, CompressSettingsComponent],
   imports: [
     CommonModule,
     ImageCompressionRoutingModule,
@@ -20,6 +23,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatCardModule,
     MatTooltipModule,
     LayoutModule,
+    MatSliderModule,
+    MatDialogModule,
   ],
 })
 export class ImageCompressionModule {}
