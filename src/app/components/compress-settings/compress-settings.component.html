@@ -1,14 +1,16 @@
-<div class="flex-display flex-column-flow flex-center flex-align-center">
+<div
+  class="flex-display flex-column-flow flex-center flex-align-center"
+  style="margin: 20px">
   <div class="flex-display flex-row-flow flex-align-center full-width">
     <span class="bold-text" style="margin-right: 5px">Compress %:</span>
     <mat-slider
-      min="20"
+      min="10"
       max="80"
       step="1"
       color="primary"
       style="margin-right: 5px"
-      (change)="onCompressionRateChange($event)">
-      <input matSliderThumb />
+      (input)="onCompressionRateChange($event)">
+      <input matSliderThumb [value]="compressionRate" />
     </mat-slider>
     <span class="bold-text">{{ compressionRate }}%</span>
   </div>
