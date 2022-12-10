@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/base.component';
@@ -19,9 +20,17 @@ export class HomeComponent extends BaseComponent implements OnInit {
     contextService: ContextService,
     appIconService: AppIconService,
     titleService: Title,
-    metaService: Meta
+    metaService: Meta,
+    @Inject(DOCUMENT) document: Document
   ) {
-    super(router, configService, contextService, titleService, metaService);
+    super(
+      router,
+      configService,
+      contextService,
+      titleService,
+      metaService,
+      document
+    );
     this.contextService.setCurrentAppId('home');
     this.updatePageMetaData();
   }

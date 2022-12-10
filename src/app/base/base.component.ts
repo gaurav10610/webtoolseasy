@@ -11,19 +11,22 @@ export abstract class BaseComponent {
   tags: string[] = [];
   metaService: Meta;
   titleService: Title;
+  document: Document;
 
   constructor(
     router: Router,
     configService: ConfigService,
     contextService: ContextService,
     titleService: Title,
-    metaService: Meta
+    metaService: Meta,
+    document: Document
   ) {
     this.router = router;
     this.configService = configService;
     this.contextService = contextService;
     this.titleService = titleService;
     this.metaService = metaService;
+    this.document = document;
   }
 
   navigateByAppId(applicationId: string) {
@@ -40,6 +43,14 @@ export abstract class BaseComponent {
     }
   }
 
+  /**
+   * set following page metadata
+   *
+   * 1. title
+   * 2. meta
+   * 3. canonical url
+   *
+   */
   updatePageMetaData() {
     const applicationConfig: ApplicationConfig =
       this.configService.getApplicationConfig(
@@ -50,6 +61,21 @@ export abstract class BaseComponent {
       this.metaService.removeTag(`name=${metaDefinition.name}`);
       this.metaService.addTag(metaDefinition);
     });
+
+    /**
+     * set canonical url
+     */
+    let linkElement: HTMLLinkElement | null =
+      this.document.querySelector(`link[rel='canonical']`) || null;
+    if (linkElement == null) {
+      linkElement = this.document.createElement('link') as HTMLLinkElement;
+      this.document.head.appendChild(linkElement);
+    }
+    linkElement.setAttribute('rel', 'canonical');
+    linkElement.setAttribute(
+      'href',
+      `https://webtoolseasy.com${applicationConfig.navigationUrl}`
+    );
   }
 
   onAppClick(event: any) {

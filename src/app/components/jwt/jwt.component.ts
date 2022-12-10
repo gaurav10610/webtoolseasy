@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   OnInit,
   Renderer2,
   ViewChild,
@@ -15,6 +16,7 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Title, Meta } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-jwt',
@@ -33,9 +35,17 @@ export class JwtComponent
     appIconService: AppIconService,
     private renderer: Renderer2,
     titleService: Title,
-    metaService: Meta
+    metaService: Meta,
+    @Inject(DOCUMENT) document: any
   ) {
-    super(router, configService, contextService, titleService, metaService);
+    super(
+      router,
+      configService,
+      contextService,
+      titleService,
+      metaService,
+      document
+    );
     this.contextService.setCurrentAppId('jwt');
     this.updatePageMetaData();
 

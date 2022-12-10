@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
@@ -7,6 +7,7 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Title, Meta } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-app-directory',
@@ -53,9 +54,17 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     contextService: ContextService,
     appIconService: AppIconService,
     titleService: Title,
-    metaService: Meta
+    metaService: Meta,
+    @Inject(DOCUMENT) document: any
   ) {
-    super(router, configService, contextService, titleService, metaService);
+    super(
+      router,
+      configService,
+      contextService,
+      titleService,
+      metaService,
+      document
+    );
     this.contextService.setCurrentAppId('tools');
     this.updatePageMetaData();
   }

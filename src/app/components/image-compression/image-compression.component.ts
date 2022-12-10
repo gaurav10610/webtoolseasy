@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   NgZone,
   OnDestroy,
   OnInit,
@@ -31,6 +32,7 @@ import {
 } from '@angular/material/dialog';
 import { CompressSettingsComponent } from '../compress-settings/compress-settings.component';
 import { v4 } from 'uuid';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-image-compression',
@@ -51,9 +53,17 @@ export class ImageCompressionComponent
     private renderer: Renderer2,
     private zoneRef: NgZone,
     breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    @Inject(DOCUMENT) document: any
   ) {
-    super(router, configService, contextService, titleService, metaService);
+    super(
+      router,
+      configService,
+      contextService,
+      titleService,
+      metaService,
+      document
+    );
     this.contextService.setCurrentAppId('imagecompress');
     this.updatePageMetaData();
     this.tags = <string[]>(

@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   OnInit,
   Renderer2,
   ViewChild,
@@ -14,6 +15,7 @@ import { ContextService } from 'src/app/service/context/context.service';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-json-formatter',
@@ -32,9 +34,17 @@ export class JsonFormatterComponent
     appIconService: AppIconService,
     private renderer: Renderer2,
     titleService: Title,
-    metaService: Meta
+    metaService: Meta,
+    @Inject(DOCUMENT) document: any
   ) {
-    super(router, configService, contextService, titleService, metaService);
+    super(
+      router,
+      configService,
+      contextService,
+      titleService,
+      metaService,
+      document
+    );
     this.contextService.setCurrentAppId('jsonformatter');
     this.updatePageMetaData();
     this.tags = <string[]>(

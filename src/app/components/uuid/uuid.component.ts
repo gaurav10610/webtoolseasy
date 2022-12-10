@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/base.component';
 import { ConfigService } from 'src/app/service/common/config.service';
@@ -8,6 +8,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { LogUtils } from 'src/app/service/util/logger';
 import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-uuid',
@@ -28,9 +29,17 @@ export class UuidComponent extends BaseComponent implements OnInit {
     private clipboard: Clipboard,
     appIconService: AppIconService,
     titleService: Title,
-    metaService: Meta
+    metaService: Meta,
+    @Inject(DOCUMENT) document: any
   ) {
-    super(router, configService, contextService, titleService, metaService);
+    super(
+      router,
+      configService,
+      contextService,
+      titleService,
+      metaService,
+      document
+    );
     this.contextService.setCurrentAppId('uuid');
     this.updatePageMetaData();
 
