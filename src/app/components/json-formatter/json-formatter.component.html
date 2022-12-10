@@ -2,15 +2,19 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
-      <mat-icon
-        svgIcon="app-icon"
-        class="app-icon pointer-cursor"
-        (click)="navigateByAppId('tools')"></mat-icon>
+      <button
+        mat-icon-button
+        aria-label="app icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+      </button>
       <span class="header-font flex-full-height">WebToolsEasy</span>
       <button
         mat-icon-button
         aria-label="home icon button"
-        (click)="navigateByAppId('tools')">
+        [replaceUrl]="true"
+        routerLink="/tools">
         <mat-icon>home</mat-icon>
       </button>
     </mat-toolbar>
@@ -41,7 +45,7 @@
           contentEditable="true"
           (input)="rawJsonChange()"
           (paste)="onJsonPaste($event)"
-          style="color: limegreen">
+          style="color: indigo">
           <span></span>
         </div>
 
@@ -65,7 +69,7 @@
           #formattedJsonDiv
           class="token-area-class y-scroll full-height full-width"
           contenteditable="true"
-          style="color: magenta">
+          style="color: deeppink">
           <span></span>
         </div>
       </div>
@@ -82,9 +86,10 @@
     <div
       class="flex-display flex-row-flow flex-center"
       style="margin-left: 10px; margin-right: 10px">
-      <span class="header-font bold-text" style="margin-right: 5px">Note:</span>
-      <span class="header-font">
-        No server is involved. Processing is being done in browser only.</span
+      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
+      <span>
+        No server is involved. Json string formatting is being done in browser
+        only</span
       >
     </div>
 

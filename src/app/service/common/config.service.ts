@@ -97,6 +97,7 @@ export class ConfigService {
         'json web token',
         'jwt token',
         'jwt decoder',
+        'hs256 decode',
         'programming',
       ],
     });

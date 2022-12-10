@@ -2,15 +2,19 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
-      <mat-icon
-        svgIcon="app-icon"
-        class="app-icon pointer-cursor"
-        (click)="navigateByAppId('tools')"></mat-icon>
+      <button
+        mat-icon-button
+        aria-label="app icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+      </button>
       <span class="header-font flex-full-height">WebToolsEasy</span>
       <button
         mat-icon-button
         aria-label="home icon button"
-        (click)="navigateByAppId('tools')">
+        [replaceUrl]="true"
+        routerLink="/tools">
         <mat-icon>home</mat-icon>
       </button>
     </mat-toolbar>
