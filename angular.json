@@ -121,7 +121,6 @@
       }
     }
   },
-  "defaultProject": "webtoolseasy",
   "schematics": {
     "@angular-eslint/schematics:application": {
       "setParserOptionsProject": true
