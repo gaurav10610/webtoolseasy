@@ -236,7 +236,7 @@ export class ImageCompressionComponent
         signal: new AbortController().signal,
         maxSizeMB: (0.9 * file.size) / 1024 / 1024,
       },
-      compressionRate: 20,
+      compressionRate: 10,
       maxFileSize: 0.9 * file.size,
     });
   }

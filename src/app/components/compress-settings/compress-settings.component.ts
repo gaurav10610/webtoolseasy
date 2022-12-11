@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSliderChange } from '@angular/material/slider';
 import { FileData, ImageCompressSettings } from 'src/app/@types/file';
 import { LogUtils } from 'src/app/service/util/logger';
 
@@ -10,7 +9,7 @@ import { LogUtils } from 'src/app/service/util/logger';
   styleUrls: ['./compress-settings.component.scss'],
 })
 export class CompressSettingsComponent implements OnInit {
-  compressionRate: number = 10;
+  compressionRate: number;
   maxFileSize: number;
   oldFileSize: number;
   fileId: string;
@@ -22,15 +21,16 @@ export class CompressSettingsComponent implements OnInit {
     this.maxFileSize = data.maxFileSize;
     this.oldFileSize = data.file.size;
     this.fileId = data.id;
+    this.compressionRate = data.compressionRate;
   }
 
   ngOnInit(): void {
     LogUtils.info('compression settings component has been rendered');
   }
 
-  onCompressionRateChange(event: MatSliderChange) {
-    this.compressionRate = event.value!;
-    const compressionRatio: number = 100 - event.value!;
+  onCompressionRateChange(event: any) {
+    this.compressionRate = event.target.value;
+    const compressionRatio: number = 100 - event.target.value;
     this.maxFileSize = (compressionRatio / 100) * this.oldFileSize;
   }
 
