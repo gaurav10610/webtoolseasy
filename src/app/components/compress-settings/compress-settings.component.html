@@ -1,0 +1,44 @@
+<div
+  class="flex-display flex-column-flow flex-center flex-align-center"
+  style="margin: 20px">
+  <div class="flex-display flex-row-flow flex-align-center full-width">
+    <span class="bold-text" style="margin-right: 5px">Compress %:</span>
+    <mat-slider
+      min="10"
+      max="80"
+      step="1"
+      color="primary"
+      style="margin-right: 5px"
+      (input)="onCompressionRateChange($event)">
+      <input matSliderThumb [value]="compressionRate" />
+    </mat-slider>
+    <span class="bold-text">{{ compressionRate }}%</span>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow flex-align-center full-width"
+    style="margin-bottom: 5px">
+    <span class="bold-text" style="margin-right: 5px">Compress File Size:</span>
+    <span>{{ formatBytes(maxFileSize) }}</span>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow flex-align-center full-width"
+    style="margin-bottom: 10px">
+    <span class="bold-text" style="margin-right: 5px">Old File Size:</span>
+    <span>{{ formatBytes(oldFileSize) }}</span>
+  </div>
+
+  <div class="flex-display flex-row-flow flex">
+    <button
+      mat-raised-button
+      color="primary"
+      style="margin-right: 10px"
+      (click)="applySettings()">
+      Apply Settings
+    </button>
+    <button mat-raised-button color="primary" (click)="cancelDialog()">
+      Cancel
+    </button>
+  </div>
+</div>

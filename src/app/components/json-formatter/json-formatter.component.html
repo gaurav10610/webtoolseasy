@@ -1,0 +1,106 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <div class="header-div">
+    <mat-toolbar color="primary">
+      <button
+        mat-icon-button
+        aria-label="app icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+      </button>
+      <span class="header-font flex-full-height">WebToolsEasy</span>
+      <button
+        mat-icon-button
+        aria-label="home icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon>home</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+
+  <!-- app container -->
+  <div class="flex-display flex-column-flow flex-align-center">
+    <span style="margin: 20px" class="header-font bold-text heading-font"
+      >Format JSON Online</span
+    >
+
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width"
+      style="margin-bottom: 10px">
+      <div
+        class="flex-display flex-column-flow encoded-token-field token-parent-div">
+        <div class="flex-display flex-row-flow flex-align-center">
+          <span
+            class="header-font div-label"
+            style="margin-bottom: 5px; margin-right: 5px"
+            >JSON String</span
+          >
+          <span>(Paste JSON Here)</span>
+        </div>
+        <div
+          #rawJsonDiv
+          class="token-area-class encoded-token-field y-scroll full-height full-width"
+          contentEditable="true"
+          (input)="rawJsonChange()"
+          (paste)="onJsonPaste($event)"
+          style="color: indigo">
+          <span></span>
+        </div>
+
+        <div
+          class="flex-display flex-row-flow"
+          *ngIf="!isJsonValid"
+          style="margin-top: 10px">
+          <mat-icon color="warn" style="transform: scale(2); margin-right: 15px"
+            >error</mat-icon
+          >
+          <span class="header-font" style="color: red"
+            >json string is invalid</span
+          >
+        </div>
+      </div>
+      <div class="flex-display flex-column-flow token-parent-div">
+        <span class="header-font div-label" style="margin-bottom: 5px"
+          >Formatted JSON</span
+        >
+        <div
+          #formattedJsonDiv
+          class="token-area-class y-scroll full-height full-width"
+          contenteditable="true"
+          style="color: deeppink">
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <button
+      mat-raised-button
+      (click)="copyFormattedJson()"
+      color="primary"
+      style="margin-bottom: 10px">
+      <mat-icon>content_copy</mat-icon> Copy Formatted JSON
+    </button>
+
+    <div
+      class="flex-display flex-row-flow flex-center"
+      style="margin-left: 10px; margin-right: 10px">
+      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
+      <span>
+        No server is involved. Json string formatting is being done in browser
+        only</span
+      >
+    </div>
+
+    <!-- tags div -->
+    <div
+      style="margin: 20px; flex-wrap: wrap"
+      class="flex-display flex-row-flow flex-center">
+      <div class="tags-class">json</div>
+      <div class="tags-class">json formatter</div>
+      <div class="tags-class">json beautify</div>
+      <div class="tags-class">programming</div>
+    </div>
+  </div>
+</div>

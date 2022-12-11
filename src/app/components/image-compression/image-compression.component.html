@@ -1,0 +1,199 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <div class="header-div">
+    <mat-toolbar color="primary">
+      <button
+        mat-icon-button
+        aria-label="app icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+      </button>
+      <span class="header-font flex-full-height">WebToolsEasy</span>
+      <button
+        mat-icon-button
+        aria-label="home icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon>home</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+
+  <!-- app container -->
+  <div
+    class="flex-full-height flex-display flex-column-flow flex-align-center"
+    style="padding: 10px">
+    <span style="margin: 20px" class="header-font bold-text heading-font"
+      >Compress Image Online</span
+    >
+
+    <!-- file imput -->
+    <input
+      #inputFiles
+      type="file"
+      style="display: none"
+      multiple
+      (change)="selectFiles($event)" />
+
+    <!-- image compressin parent div -->
+    <div
+      class="flex-display flex-column-flow flex-align-center image-list-parent"
+      (drop)="dropHandler($event)"
+      (dragover)="dragOverHandler($event)"
+      style="margin-bottom: 10px">
+      <div
+        class="flex-display flex-column-flow flex-center flex-align-center image-drag-div"
+        *ngIf="fileList.length === 0">
+        <mat-icon style="transform: scale(2); margin-bottom: 10px"
+          >collections</mat-icon
+        >
+        <span class="header-font" style="margin-bottom: 20px; font-size: large"
+          >Drag & drop files here</span
+        >
+        <span class="header-font" style="margin-bottom: 10px; font-size: large"
+          >or</span
+        >
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openFileDialog()"
+          matTooltip="select images to compress">
+          <mat-icon>file_upload</mat-icon> Browse for files
+        </button>
+      </div>
+
+      <!-- select images button -->
+      <div
+        class="flex-display flex-row-flow flex-center full-width"
+        [ngStyle]="{
+          margin: '10px',
+          'justify-content': fileList.length > 0 ? 'end' : 'center'
+        }"
+        *ngIf="fileList.length > 0">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openFileDialog()"
+          style="margin-right: 10px"
+          matTooltip="select images to compress">
+          <mat-icon>file_upload</mat-icon> Select Images
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="startCompressAll()"
+          *ngIf="fileList.length > 0"
+          matTooltip="compress all images">
+          <mat-icon>play_arrow</mat-icon> Compress All
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="downloadAll()"
+          *ngIf="isDownloadAllActive && !isMobile"
+          style="margin-left: 10px"
+          matTooltip="download all images">
+          <mat-icon>file_download</mat-icon> Download Zip
+        </button>
+      </div>
+
+      <!-- list of image files -->
+      <div
+        class="full-width flex-display flex-column-flow y-scroll file-list-div no-scroll"
+        *ngIf="fileList.length > 0">
+        <mat-card
+          *ngFor="let file of fileList"
+          style="margin-bottom: 10px; border: 1px solid black">
+          <div
+            class="flex-display flex-row-flow flex-align-center"
+            style="margin: 15px">
+            <mat-icon
+              svgIcon="image-file-icon"
+              class="app-icon pointer-cursor"></mat-icon>
+
+            <!-- file name & size div -->
+            <div
+              class="flex-display flex-column-flow header-font file-name-div">
+              <span class="bold-text">{{ file.name }}</span>
+              <span
+                *ngIf="file.isCompressed"
+                class="bold-text header-font"
+                style="color: #ff4081"
+                >{{ formatBytes(file.file.size) }} ->
+                {{ formatBytes(file.compressedData?.size!) }}</span
+              >
+              <span
+                *ngIf="file.error !== undefined"
+                class="bold-text"
+                style="color: red"
+                >{{ file.error }}</span
+              >
+            </div>
+            <span class="flex-full-height"></span>
+
+            <!-- file icons div -->
+            <div
+              class="flex-display flex-row-flow flex-align-center flex-center">
+              <span *ngIf="file.inProgress" style="margin-right: 10px"
+                >Progress: {{ file.compressProgress }} %</span
+              >
+              <!-- <mat-icon
+                svgIcon="info-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                (click)="showInfo(file)"></mat-icon> -->
+
+              <mat-icon
+                svgIcon="settings-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                *ngIf="file.isValid"
+                matTooltip="change compression settings"
+                (click)="openSettingsDialog(file)"></mat-icon>
+              <mat-icon
+                svgIcon="compress-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                *ngIf="!file.isCompressed && file.isValid"
+                (click)="compressImage(file)"
+                matTooltip="compress image"></mat-icon>
+              <mat-icon
+                svgIcon="download-icon"
+                class="pointer-cursor"
+                *ngIf="file.isCompressed"
+                (click)="downloadImage(file)"
+                matTooltip="download compressed image"></mat-icon>
+              <mat-icon
+                class="pointer-cursor"
+                *ngIf="!file.isValid"
+                color="warn"
+                matTooltip="only image files can be compressed"
+                style="transform: scale(1.5)"
+                >error</mat-icon
+              >
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <div
+      class="flex-display flex-row-flow"
+      style="margin-left: 10px; margin-right: 10px">
+      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
+      <span>Only JPEG or PNG images can be compressed</span>
+    </div>
+
+    <!-- tags div -->
+    <div
+      style="margin: 20px; flex-wrap: wrap"
+      class="flex-display flex-row-flow flex-center">
+      <div class="tags-class">image</div>
+      <div class="tags-class">image compression</div>
+      <div class="tags-class">image compressor</div>
+      <div class="tags-class">compression</div>
+    </div>
+  </div>
+</div>

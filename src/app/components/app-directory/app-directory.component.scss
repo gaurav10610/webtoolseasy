@@ -1,0 +1,29 @@
+.apps-container {
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.application {
+  border-radius: 10px;
+  margin: 10px;
+}
+
+@media screen and (max-width: 735px) {
+  .application {
+    width: 100%;
+  }
+}
+
+.app-card {
+  margin: 15px;
+}
+
+@media screen and (max-width: 735px) {
+  .app-card {
+    flex-direction: row;
+  }
+  .app-card mat-icon{
+    margin-right: 20px;
+  }
+}

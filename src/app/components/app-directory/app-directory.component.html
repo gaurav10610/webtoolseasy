@@ -1,0 +1,43 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <div class="header-div">
+    <mat-toolbar color="primary">
+      <mat-icon svgIcon="app-icon" class="app-icon pointer-cursor"></mat-icon>
+      <span class="header-font">WebToolsEasy</span>
+    </mat-toolbar>
+  </div>
+
+  <!-- app container -->
+  <div class="flex-full-height app-background">
+    <!-- applications container -->
+    <div id="apps-container" class="apps-container pointer-cursor">
+      <div
+        class="application"
+        *ngFor="let application of appsConfig"
+        (click)="navigateByAppId(application.applicationId)">
+        <mat-card>
+          <div
+            class="flex-display flex-column-flow flex-center flex-align-center app-card">
+            <mat-icon
+              svgIcon="{{ application.iconName }}"
+              class="pointer-cursor"
+              style="
+                transform: scale(2);
+                margin-top: 10px;
+                margin-bottom: 15px;
+              "></mat-icon>
+            <a
+              [replaceUrl]="true"
+              routerLink="{{
+                configService.getApplicationConfig(application.applicationId)
+                  ?.navigationUrl
+              }}"
+              (click)="onAppClick($event)"
+              >{{ application.displayText }}</a
+            >
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

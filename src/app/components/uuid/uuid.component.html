@@ -1,0 +1,96 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <div class="header-div">
+    <mat-toolbar color="primary">
+      <button
+        mat-icon-button
+        aria-label="app icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+      </button>
+      <span class="header-font flex-full-height">WebToolsEasy</span>
+      <button
+        mat-icon-button
+        aria-label="home icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon>home</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+
+  <!-- app container -->
+  <div class="flex-display flex-column-flow flex-align-center">
+    <span style="margin: 20px" class="header-font bold-text uuid-font"
+      >Generate UUID Online</span
+    >
+    <!-- generate uuid -->
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+      style="margin-bottom: 20px">
+      <div
+        class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+        <span class="uuid-font" style="color: #ff4081">{{ currentUUID }}</span>
+      </div>
+      <button mat-raised-button (click)="copyGeneratedId()" color="primary">
+        <mat-icon>content_copy</mat-icon> Copy
+      </button>
+    </div>
+
+    <div class="flex-display flex-column-flow flex-align-center">
+      <button
+        mat-raised-button
+        color="primary"
+        style="margin-bottom: 20px"
+        (click)="generateUUID()">
+        <mat-icon>repeat</mat-icon>
+        Generate Again
+      </button>
+      <mat-button-toggle-group
+        name="uuidVersion"
+        aria-label="UUID Version"
+        style="margin-bottom: 20px"
+        #group="matButtonToggleGroup"
+        (click)="changeVersion(group.value)"
+        value="V4">
+        <mat-button-toggle value="V1"
+          ><span class="bold-text">version 1</span></mat-button-toggle
+        >
+        <!-- <mat-button-toggle value="V3"
+          ><span class="bold-text">version 3</span></mat-button-toggle
+        > -->
+        <mat-button-toggle value="V4"
+          ><span class="bold-text">version 4</span></mat-button-toggle
+        >
+      </mat-button-toggle-group>
+      <span
+        class="bold-text header-font"
+        style="margin-bottom: 10px; font-size: large"
+        >What is UUID {{ selectedVersion }}?</span
+      >
+      <span style="padding-left: 10px">{{ description }}</span>
+    </div>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow flex-center"
+    style="margin-left: 10px; margin-right: 10px">
+    <span class="bold-text" style="margin-right: 5px">NOTE:</span>
+    <span>
+      UUID generation is being done in browser only. No server is
+      involved.</span
+    >
+  </div>
+
+  <!-- tags div -->
+  <div
+    style="margin: 20px; flex-wrap: wrap"
+    class="flex-display flex-row-flow flex-center">
+    <div class="tags-class">uuid</div>
+    <div class="tags-class">unique identifier</div>
+    <div class="tags-class">id generator</div>
+    <div class="tags-class">uuid generator</div>
+    <div class="tags-class">programming</div>
+  </div>
+</div>
