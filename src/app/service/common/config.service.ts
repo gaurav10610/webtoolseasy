@@ -103,7 +103,7 @@ export class ConfigService {
     });
     this.applicationConfig.set('jsonformatter', {
       navigationUrl: '/tools/json-formatter',
-      pageTitle: 'JSON Formater | Web Tools Easy',
+      pageTitle: 'JSON Formatter | Web Tools Easy',
       metaTags: [
         {
           name: 'description',
