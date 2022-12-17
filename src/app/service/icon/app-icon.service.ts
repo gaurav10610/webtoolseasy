@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
@@ -61,8 +62,21 @@ export class AppIconService {
 
   constructor(
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) platformId: string
   ) {
+    if (isPlatformBrowser(platformId)) {
+      /**
+       * set assets path when executed in browser
+       */
+      this.iconsPath = `${environment.hostname}assets/images/icons/`;
+    } else {
+      /**
+       * set assets path when executed on server
+       */
+      this.iconsPath = `http://localhost:${environment.port}/assets/images/icons/`;
+    }
+
     this.iconsConfig.forEach(iconConfig =>
       this.matIconRegistry.addSvgIcon(
         iconConfig.iconName,
