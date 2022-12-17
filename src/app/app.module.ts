@@ -17,7 +17,7 @@ import { MatListModule } from '@angular/material/list';
 @NgModule({
   declarations: [AppComponent, HomeComponent],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'webtoolseasyApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,

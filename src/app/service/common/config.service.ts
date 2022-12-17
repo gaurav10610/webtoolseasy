@@ -103,7 +103,7 @@ export class ConfigService {
     });
     this.applicationConfig.set('jsonformatter', {
       navigationUrl: '/tools/json-formatter',
-      pageTitle: 'JSON Formater | Web Tools Easy',
+      pageTitle: 'JSON Formatter | Web Tools Easy',
       metaTags: [
         {
           name: 'description',
@@ -120,6 +120,32 @@ export class ConfigService {
         { name: 'robots', content: 'index, follow' },
       ],
       tags: ['json', 'json formatter', 'json beautify', 'programming'],
+    });
+    this.applicationConfig.set('jsformatter', {
+      navigationUrl: '/tools/js-formatter',
+      pageTitle: 'JS Formatter | Web Tools Easy',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Online JS Formatter. Beautify javascript online',
+        },
+        {
+          name: 'keywords',
+          content:
+            'JS Formatter, Format JS Online, Format Javascript, Beautify JS online',
+        },
+        {
+          name: 'author',
+          content: 'Gaurav Kumar Yadav',
+        },
+        { name: 'robots', content: 'index, follow' },
+      ],
+      tags: [
+        'js formatter',
+        'js beautify',
+        'format js online',
+        'beautify js online',
+      ],
     });
     this.applicationConfig.set('imagecompress', {
       navigationUrl: '/tools/image-compress',
