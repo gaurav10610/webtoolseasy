@@ -4,18 +4,17 @@ import {
   ElementRef,
   Inject,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Meta, Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DOCUMENT } from '@angular/common';
+import { jsonformatter as componentConfig } from 'src/environments/component-config';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-json-formatter',
@@ -26,34 +25,7 @@ export class JsonFormatterComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
-    private clipboard: Clipboard,
-    appIconService: AppIconService,
-    private renderer: Renderer2,
-    titleService: Title,
-    metaService: Meta,
-    @Inject(DOCUMENT) document: any
-  ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
-    );
-    this.contextService.setCurrentAppId('jsonformatter');
-    this.updatePageMetaData();
-    this.tags = <string[]>(
-      this.configService.getApplicationConfig(
-        this.contextService.getCurrentAppId()
-      )?.tags
-    );
-  }
-
+  appId: string = 'jsonformatter';
   isJsonValid: boolean = true;
 
   @ViewChild('rawJsonDiv', { static: false })
@@ -65,14 +37,37 @@ export class JsonFormatterComponent
   formattedJson: string = '';
   tabSpaceValue: string = '   ';
 
+  constructor(
+    private clipboard: Clipboard,
+    private renderer: Renderer2,
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: any,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
+  ) {
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
+    );
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
+    );
+  }
+
   ngOnInit(): void {
-    LogUtils.info('json formatter componet has rendered');
+    LogUtils.info('json formatter: ngOnInit');
   }
 
   ngAfterViewInit(): void {
-    /**
-     * format default json
-     */
+    LogUtils.info('json formatter: ngAfterViewInit');
     this.formattedJson = JSON.stringify(
       JSON.parse(this.rawJson),
       null,

@@ -1,12 +1,10 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
+import { home as componentConfig } from 'src/environments/component-config';
 
 @Component({
   selector: 'app-home',
@@ -14,25 +12,28 @@ import { LogUtils } from 'src/app/service/util/logger';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent extends BaseComponent implements OnInit {
+  appId: string = 'home';
   constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
-    appIconService: AppIconService,
-    titleService: Title,
-    metaService: Meta,
-    @Inject(DOCUMENT) document: Document
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: Document,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
   ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
     );
-    this.contextService.setCurrentAppId('home');
-    this.updatePageMetaData();
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
+    );
   }
 
   ngOnInit(): void {

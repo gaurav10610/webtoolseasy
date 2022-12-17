@@ -1,54 +1,57 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
 import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LogUtils } from 'src/app/service/util/logger';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
-import { Meta, Title } from '@angular/platform-browser';
+import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { uuid as componentConfig } from 'src/environments/component-config';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-uuid',
   templateUrl: './uuid.component.html',
   styleUrls: ['./uuid.component.scss'],
 })
-export class UuidComponent extends BaseComponent implements OnInit {
+export class UuidComponent
+  extends BaseComponent
+  implements OnInit, AfterViewInit
+{
   currentUUID: string = v4();
   selectedVersion: string = 'V4';
 
   displayData: Map<string, any> = new Map();
-  description: string;
+  description: string = '';
+  appId: string = 'uuid';
 
   constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
     private clipboard: Clipboard,
-    appIconService: AppIconService,
-    titleService: Title,
-    metaService: Meta,
-    @Inject(DOCUMENT) document: any
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: any,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
   ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
     );
-    this.contextService.setCurrentAppId('uuid');
-    this.updatePageMetaData();
-
-    this.tags = <string[]>(
-      this.configService.getApplicationConfig(
-        this.contextService.getCurrentAppId()
-      )?.tags
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
     );
-
     this.displayData.set('V1', {
       description:
         'Version-1 UUIDs are generated from a time and a node ID (usually the MAC address).',
@@ -61,7 +64,11 @@ export class UuidComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    LogUtils.info('uuid component has been rendered');
+    LogUtils.info('uuid component: ngOnInit');
+  }
+
+  ngAfterViewInit(): void {
+    LogUtils.info('uuid component: ngAfterViewInit');
   }
 
   changeVersion(selectedVersion: string) {

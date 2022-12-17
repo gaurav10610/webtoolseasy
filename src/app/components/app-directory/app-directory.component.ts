@@ -1,13 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { Title, Meta } from '@angular/platform-browser';
+import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { tools as componentConfig } from 'src/environments/component-config';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-app-directory',
@@ -23,56 +22,80 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       applicationId: 'uuid',
       displayText: 'Online UUID Generator',
       iconName: 'uuid-icon',
+      navigateUrl: '/tools/uuid',
     },
     {
       applicationId: 'jwt',
       displayText: 'Online JWT Decoder',
       iconName: 'jwt-icon',
+      navigateUrl: '/tools/jwt',
     },
     {
       applicationId: 'jsonformatter',
       displayText: 'Online JSON Formatter',
       iconName: 'json-icon',
+      navigateUrl: '/tools/json-formatter',
     },
     {
       applicationId: 'imagecompress',
       displayText: 'Online Image Compressor',
       iconName: 'image-compress-icon',
+      navigateUrl: '/tools/image-compress',
     },
     {
       applicationId: 'jsformatter',
       displayText: 'Online JS Formatter',
       iconName: 'js-icon',
+      navigateUrl: '/tools/js-formatter',
     },
     {
       applicationId: 'soon',
       displayText: 'More Tools Coming Soon',
       iconName: 'soon-icon',
+      navigateUrl: '',
     },
   ];
 
+  appId: string = 'tools';
+
   constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
-    appIconService: AppIconService,
-    titleService: Title,
-    metaService: Meta,
-    @Inject(DOCUMENT) document: any
+    private router: Router,
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: any,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
   ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
     );
-    this.contextService.setCurrentAppId('tools');
-    this.updatePageMetaData();
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
+    );
   }
 
   ngOnInit(): void {
     LogUtils.info('app directory component has been rendered');
+  }
+
+  navigateByAppId(applicationId: string) {
+    const appConfig: AppDisplayConfig = this.appsConfig.find(
+      applicationConfig => applicationConfig.applicationId === applicationId
+    )!;
+    if (appConfig.navigateUrl !== '') {
+      this.router.navigateByUrl(appConfig.navigateUrl);
+    }
+  }
+
+  onAppClick(event: any) {
+    event.stopPropagation();
   }
 }

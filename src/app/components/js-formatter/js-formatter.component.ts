@@ -5,18 +5,17 @@ import {
   ElementRef,
   Inject,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { js_beautify } from 'js-beautify';
+import { jsformatter as componentConfig } from 'src/environments/component-config';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-js-formatter',
@@ -38,31 +37,27 @@ export class JsFormatterComponent
   formattedJs: string = '';
 
   constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
     private clipboard: Clipboard,
-    appIconService: AppIconService,
     private renderer: Renderer2,
-    titleService: Title,
-    metaService: Meta,
-    @Inject(DOCUMENT) document: any
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: any,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
   ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
     );
-
-    this.contextService.setCurrentAppId('jsformatter');
-    this.updatePageMetaData();
-    this.tags = <string[]>(
-      this.configService.getApplicationConfig(
-        this.contextService.getCurrentAppId()
-      )?.tags
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
     );
   }
 

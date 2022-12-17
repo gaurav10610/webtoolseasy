@@ -28,10 +28,7 @@
               "></mat-icon>
             <a
               [replaceUrl]="true"
-              routerLink="{{
-                configService.getApplicationConfig(application.applicationId)
-                  ?.navigationUrl
-              }}"
+              routerLink="{{ application.navigateUrl }}"
               (click)="onAppClick($event)"
               >{{ application.displayText }}</a
             >
