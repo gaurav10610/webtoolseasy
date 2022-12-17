@@ -69,26 +69,16 @@ export class JsFormatterComponent
     LogUtils.info('js formatter component: ngAfterViewInit');
     this.updateRawJs(this.rawJs);
     this.formattedJs = js_beautify(this.rawJs);
-    this.updateFormattedJs(this.formattedJs);
   }
 
   updateRawJs(rawJs: string) {
     this.renderer.setProperty(this.rawJsDiv.nativeElement, 'innerText', rawJs);
   }
 
-  updateFormattedJs(formattedJs: string) {
-    this.renderer.setProperty(
-      this.formattedJsDiv.nativeElement,
-      'innerHTML',
-      `<pre>${formattedJs}</pre>`
-    );
-  }
-
   formatJs(rawJsValue: string) {
     try {
       this.rawJs = rawJsValue;
       this.formattedJs = js_beautify(rawJsValue);
-      this.updateFormattedJs(this.formattedJs);
     } catch (e) {
       LogUtils.error(`error occured while decoding token: ${rawJsValue}`);
     }

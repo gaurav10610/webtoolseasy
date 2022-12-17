@@ -31,12 +31,6 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       navigateUrl: '/tools/jwt',
     },
     {
-      applicationId: 'jsonformatter',
-      displayText: 'Online JSON Formatter',
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
       applicationId: 'imagecompress',
       displayText: 'Online Image Compressor',
       iconName: 'image-compress-icon',
@@ -47,6 +41,24 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       displayText: 'Online JS Formatter',
       iconName: 'js-icon',
       navigateUrl: '/tools/js-formatter',
+    },
+    {
+      applicationId: 'jsonformatter',
+      displayText: 'Online JSON Formatter',
+      iconName: 'json-icon',
+      navigateUrl: '/tools/json-formatter',
+    },
+    {
+      applicationId: 'htmlformatter',
+      displayText: 'Online HTML Formatter',
+      iconName: 'html-icon',
+      navigateUrl: '/tools/html-formatter',
+    },
+    {
+      applicationId: 'cssformatter',
+      displayText: 'Online CSS Formatter',
+      iconName: 'css-icon',
+      navigateUrl: '/tools/css-formatter',
     },
     {
       applicationId: 'soon',

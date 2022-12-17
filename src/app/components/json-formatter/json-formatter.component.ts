@@ -74,7 +74,6 @@ export class JsonFormatterComponent
       this.tabSpaceValue
     );
     this.updateRawJson(this.rawJson);
-    this.updateFormattedJson(this.formattedJson);
   }
 
   rawJsonChange() {
@@ -102,7 +101,6 @@ export class JsonFormatterComponent
         this.tabSpaceValue
       );
       this.isJsonValid = true;
-      this.updateFormattedJson(this.formattedJson);
     } catch (error) {
       LogUtils.error(`error occured while decoding token: ${this.rawJson}`);
       this.isJsonValid = false;
@@ -114,14 +112,6 @@ export class JsonFormatterComponent
       this.rawJsonDiv.nativeElement,
       'innerText',
       rawJson
-    );
-  }
-
-  updateFormattedJson(formattedJson: string) {
-    this.renderer.setProperty(
-      this.formattedJsonDiv.nativeElement,
-      'innerHTML',
-      `<pre>${formattedJson}</pre>`
     );
   }
 

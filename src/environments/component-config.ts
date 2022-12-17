@@ -6,11 +6,12 @@ export const home: ApplicationConfig = {
   metaTags: [
     {
       name: 'description',
-      content: 'Home page of WebToolsEasy',
+      content:
+        'Home Page of WebToolsEasy | Generate UUID Online | Compress JPEG,PNG Image Online | Decode JWT Online | Format JS,JSON,CSS,HTML Online',
     },
     {
       name: 'keywords',
-      content: 'Web Tools Online, JWT, UUID, JSON, Image Compression',
+      content: 'Web Tools Online, JWT, UUID, JSON, Image Compression, JS',
     },
     {
       name: 'author',
@@ -48,6 +49,14 @@ export const home: ApplicationConfig = {
       iconName: 'js-icon',
       iconRelativeUrl: 'js-icon.svg',
     },
+    {
+      iconName: 'css-icon',
+      iconRelativeUrl: 'css.svg',
+    },
+    {
+      iconName: 'html-icon',
+      iconRelativeUrl: 'html.svg',
+    },
   ],
 };
 
@@ -58,11 +67,11 @@ export const tools: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Tools directory of WebToolsEasy | UUID Generator | JWT Decoder | JSON Formatter | Image Compressor',
+        'Tools directory of WebToolsEasy | Generate UUID Online | Compress JPEG,PNG Image Online | Decode JWT Online | Format JS,JSON,CSS,HTML Online',
     },
     {
       name: 'keywords',
-      content: 'JWT, UUID, WebToolsEasy',
+      content: 'JWT, UUID, JS, JSON, Image Compression, WebToolsEasy',
     },
     {
       name: 'author',
@@ -104,6 +113,14 @@ export const tools: ApplicationConfig = {
       iconName: 'js-icon',
       iconRelativeUrl: 'js-icon.svg',
     },
+    {
+      iconName: 'css-icon',
+      iconRelativeUrl: 'css.svg',
+    },
+    {
+      iconName: 'html-icon',
+      iconRelativeUrl: 'html.svg',
+    },
   ],
 };
 
@@ -113,11 +130,13 @@ export const uuid: ApplicationConfig = {
   metaTags: [
     {
       name: 'description',
-      content: 'Online UUID Generator',
+      content:
+        'UUID Generator | Generate UUID Version 4 Online | Generate UUID Version 1 Online',
     },
     {
       name: 'keywords',
-      content: 'UUID Generator, Generate UUID Online, UUID',
+      content:
+        'UUID Generator, Generate UUID Version 4 Online, Generate UUID Version 1 Online, UUID',
     },
     {
       name: 'author',
@@ -146,11 +165,11 @@ export const jwt: ApplicationConfig = {
   metaTags: [
     {
       name: 'description',
-      content: 'Online JWT Decoder',
+      content: 'JWT Decoder | Decode JWT HS256 Online',
     },
     {
       name: 'keywords',
-      content: 'JWT Decoder, Decode JWT Online, JSON Web Token',
+      content: 'JWT Decoder, Decode JWT Online, HS256, JSON Web Token',
     },
     {
       name: 'author',
@@ -180,11 +199,12 @@ export const jsonformatter: ApplicationConfig = {
   metaTags: [
     {
       name: 'description',
-      content: 'Online JSON Formatter',
+      content:
+        'JSON Formatter | Format JSON Online | Beautify JSON String Online',
     },
     {
       name: 'keywords',
-      content: 'JSON Formatter, Format JSON Online, JSON',
+      content: 'JSON Formatter, Format JSON Online, Beautify JSON Online, JSON',
     },
     {
       name: 'author',
@@ -207,12 +227,13 @@ export const jsformatter: ApplicationConfig = {
   metaTags: [
     {
       name: 'description',
-      content: 'Online JS Formatter. Beautify javascript online',
+      content:
+        'JS Formatter | Format JS Code Online | Beautify JS Online | Format Javascript Code',
     },
     {
       name: 'keywords',
       content:
-        'JS Formatter, Format JS Online, Format Javascript, Beautify JS online',
+        'JS Formatter, Format JS Online, Format Javascript, Beautify JS Online',
     },
     {
       name: 'author',
@@ -241,11 +262,12 @@ export const imagecompress: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Online Image Compression. Select multiple JPEG, PNG images and compress for free',
+        'Image Compressor | Compress Multiple JPEG,PNG Images For Free | Choose Size & Compress JPEG,PNG Online',
     },
     {
       name: 'keywords',
-      content: 'Image Compressor, Image Compression Online, Compression, Image',
+      content:
+        'Image Compressor, Image Compression Online, Compress JPEG,PNG Online, Compression',
     },
     {
       name: 'author',
@@ -282,6 +304,69 @@ export const soon: ApplicationConfig = {
   icons: [],
 };
 
-export const cssFormatterConfig = {};
+export const cssformatter = {
+  navigationUrl: '/tools/css-formatter',
+  pageTitle: 'CSS Formatter | Web Tools Easy',
+  metaTags: [
+    {
+      name: 'description',
+      content: 'CSS Formatter | Format CSS Online | Beautify CSS Online',
+    },
+    {
+      name: 'keywords',
+      content:
+        'CSS Formatter, Format CSS Online, Format CSS, Beautify CSS online',
+    },
+    {
+      name: 'author',
+      content: 'Gaurav Kumar Yadav',
+    },
+    { name: 'robots', content: 'index, follow' },
+  ],
+  tags: [
+    'css formatter',
+    'css beautify',
+    'format css online',
+    'beautify css online',
+  ],
+  icons: [
+    {
+      iconName: 'app-icon',
+      iconRelativeUrl: 'app-icon.svg',
+    },
+  ],
+};
 
-export const htmlFormatterConfig = {};
+export const htmlformatter = {
+  navigationUrl: '/tools/html-formatter',
+  pageTitle: 'HTML Formatter | Web Tools Easy',
+  metaTags: [
+    {
+      name: 'description',
+      content:
+        'HTML Formatter | Format HTML Online | Beautify HTML Code Online',
+    },
+    {
+      name: 'keywords',
+      content:
+        'HTML Formatter, Format HTML Online, Format HTML, Beautify HTML Online',
+    },
+    {
+      name: 'author',
+      content: 'Gaurav Kumar Yadav',
+    },
+    { name: 'robots', content: 'index, follow' },
+  ],
+  tags: [
+    'html formatter',
+    'html beautify',
+    'format html online',
+    'beautify html online',
+  ],
+  icons: [
+    {
+      iconName: 'app-icon',
+      iconRelativeUrl: 'app-icon.svg',
+    },
+  ],
+};
