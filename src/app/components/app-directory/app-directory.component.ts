@@ -15,8 +15,6 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./app-directory.component.scss'],
 })
 export class AppDirectoryComponent extends BaseComponent implements OnInit {
-  assetsPath = '../../../assets/';
-
   /**
    * application config for composing UI
    */
@@ -40,6 +38,11 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       applicationId: 'imagecompress',
       displayText: 'Online Image Compressor',
       iconName: 'image-compress-icon',
+    },
+    {
+      applicationId: 'jsformatter',
+      displayText: 'Online JS Formatter',
+      iconName: 'js-icon',
     },
     {
       applicationId: 'soon',
