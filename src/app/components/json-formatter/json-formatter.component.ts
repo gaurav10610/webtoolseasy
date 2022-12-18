@@ -60,6 +60,7 @@ export class JsonFormatterComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
   }
 
   ngOnInit(): void {
@@ -77,9 +78,6 @@ export class JsonFormatterComponent
   }
 
   rawJsonChange() {
-    LogUtils.info(
-      `encoded token has changed with value: ${this.rawJsonDiv.nativeElement.innerText}`
-    );
     this.formatJson(this.rawJsonDiv.nativeElement.innerText);
   }
 

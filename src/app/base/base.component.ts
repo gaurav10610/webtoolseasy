@@ -6,8 +6,13 @@ import { ApplicationConfig, IconConfig } from '../@types/config';
 
 export abstract class BaseComponent {
   iconsPath = `${environment.hostname}assets/images/icons/`;
+  tags: string[] = [];
 
   constructor() {}
+
+  updateTags(componentConfig: ApplicationConfig) {
+    this.tags = componentConfig.tags;
+  }
 
   loadCustomIcons(
     icons: IconConfig[],

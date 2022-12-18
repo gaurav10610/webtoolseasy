@@ -33,8 +33,6 @@ export class JwtComponent
 
   @ViewChild('encodedDiv', { static: false })
   encodedDiv!: ElementRef;
-  @ViewChild('decodedDiv', { static: false })
-  decodedDiv!: ElementRef;
 
   encodedToken: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
@@ -63,6 +61,7 @@ export class JwtComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
   }
 
   ngOnInit(): void {
@@ -78,13 +77,9 @@ export class JwtComponent
       this.tabSpaceValue
     );
     this.updateEncodedToken(this.encodedToken);
-    this.updateDecodedToken(this.decodedToken);
   }
 
   encodedInputChange(event: any) {
-    LogUtils.info(
-      `encoded token has changed with value: ${this.encodedDiv.nativeElement.innerText}`
-    );
     this.decodeUpdatedToken(this.encodedDiv.nativeElement.innerText);
   }
 
@@ -107,7 +102,6 @@ export class JwtComponent
         null,
         this.tabSpaceValue
       );
-      this.updateDecodedToken(this.decodedToken);
     } catch (error) {
       LogUtils.error(
         `error occured while decoding token: ${this.encodedToken}`
@@ -121,14 +115,6 @@ export class JwtComponent
       this.encodedDiv.nativeElement,
       'innerText',
       encodedToken
-    );
-  }
-
-  updateDecodedToken(decodedToken: string) {
-    this.renderer.setProperty(
-      this.decodedDiv.nativeElement,
-      'innerHTML',
-      `<pre>${decodedToken}</pre>`
     );
   }
 

@@ -196,10 +196,19 @@
     <div
       style="margin: 20px; flex-wrap: wrap"
       class="flex-display flex-row-flow flex-center">
-      <div class="tags-class">image</div>
-      <div class="tags-class">image compression</div>
-      <div class="tags-class">image compressor</div>
-      <div class="tags-class">compression</div>
+      <h5
+        *ngFor="let tag of tags"
+        style="
+          margin: 5px;
+          background: #e0e0e0;
+          border-radius: 16px;
+          padding-left: 8px;
+          padding-right: 8px;
+          padding-top: 4px;
+          padding-bottom: 4px;
+        ">
+        {{ tag }}
+      </h5>
     </div>
   </div>
 </div>

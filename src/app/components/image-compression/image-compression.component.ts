@@ -79,6 +79,7 @@ export class ImageCompressionComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

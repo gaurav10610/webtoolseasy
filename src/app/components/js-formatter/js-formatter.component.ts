@@ -59,6 +59,7 @@ export class JsFormatterComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
   }
 
   ngOnInit(): void {

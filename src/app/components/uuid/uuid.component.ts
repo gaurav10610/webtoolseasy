@@ -52,6 +52,7 @@ export class UuidComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
     this.displayData.set('V1', {
       description:
         'Version-1 UUIDs are generated from a time and a node ID (usually the MAC address).',

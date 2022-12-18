@@ -70,11 +70,10 @@
           >Decoded Token</span
         >
         <div
-          #decodedDiv
           class="token-area-class y-scroll full-height full-width"
           contenteditable="true"
           style="color: deeppink">
-          <span #decodedValue></span>
+          <pre>{{ decodedToken }}</pre>
         </div>
       </div>
     </div>
@@ -104,12 +103,19 @@
     <div
       style="margin: 20px; flex-wrap: wrap"
       class="flex-display flex-row-flow flex-center">
-      <div class="tags-class">jwt</div>
-      <div class="tags-class">json web token</div>
-      <div class="tags-class">jwt token</div>
-      <div class="tags-class">jwt decoder</div>
-      <div class="tags-class">hs256 decode</div>
-      <div class="tags-class">programming</div>
+      <h5
+        *ngFor="let tag of tags"
+        style="
+          margin: 5px;
+          background: #e0e0e0;
+          border-radius: 16px;
+          padding-left: 8px;
+          padding-right: 8px;
+          padding-top: 4px;
+          padding-bottom: 4px;
+        ">
+        {{ tag }}
+      </h5>
     </div>
   </div>
 </div>

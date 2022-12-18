@@ -57,6 +57,7 @@ export class CssFormatterComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
   }
 
   ngOnInit(): void {

@@ -60,6 +60,7 @@ export class HtmlFormatterComponent
       this.metaService,
       this.document
     );
+    this.updateTags(componentConfig);
   }
 
   ngOnInit(): void {

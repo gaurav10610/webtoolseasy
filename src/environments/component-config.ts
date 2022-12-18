@@ -146,10 +146,9 @@ export const uuid: ApplicationConfig = {
   ],
   tags: [
     'uuid',
-    'unique identifier',
-    'id generator',
-    'uuid generator',
-    'programming',
+    'generate uuid v4',
+    'generate uuid v1',
+    'generate uuid online',
   ],
   icons: [
     {
@@ -178,12 +177,10 @@ export const jwt: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'jwt',
-    'json web token',
-    'jwt token',
     'jwt decoder',
-    'hs256 decode',
-    'programming',
+    'decode jwt online',
+    'json web token',
+    'decode hs256 jwt',
   ],
   icons: [
     {
@@ -212,7 +209,7 @@ export const jsonformatter: ApplicationConfig = {
     },
     { name: 'robots', content: 'index, follow' },
   ],
-  tags: ['json', 'json formatter', 'json beautify', 'programming'],
+  tags: ['json formatter', 'beautify json', 'format json online'],
   icons: [
     {
       iconName: 'app-icon',
@@ -246,6 +243,7 @@ export const jsformatter: ApplicationConfig = {
     'js beautify',
     'format js online',
     'beautify js online',
+    'javascript formatter',
   ],
   icons: [
     {
@@ -275,7 +273,12 @@ export const imagecompress: ApplicationConfig = {
     },
     { name: 'robots', content: 'index, follow' },
   ],
-  tags: ['image', 'image compression', 'image compressor', 'compression'],
+  tags: [
+    'compress jpeg, png image',
+    'compress image online',
+    'image compression',
+    'jpeg, png compressor',
+  ],
   icons: [
     {
       iconName: 'app-icon',
