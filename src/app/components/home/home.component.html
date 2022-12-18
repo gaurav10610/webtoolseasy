@@ -1,4 +1,4 @@
-<div class="full-height no-scroll flex-display parent-div">
+<div class="full-height no-scroll flex-display parent-div y-scroll">
   <!-- application branding -->
   <div
     class="flex-display flex-column-flow flex-align-center flex-center parent-view-div">
@@ -6,12 +6,18 @@
       class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
       <mat-icon svgIcon="app-icon"></mat-icon>
     </div>
-    <span class="header-font bold-text app-name" style="margin-bottom: 20px"
-      >Web Tools Easy</span
-    >
-    <span style="margin-bottom: 10px"
-      >Super easy web tools to make work easier</span
-    >
+    <h1
+      style="
+        margin-bottom: 20px;
+        font-family: monospace, 'Courier New', Courier;
+        font-size: xx-large;
+        font-weight: bold;
+      ">
+      Web Tools Easy
+    </h1>
+    <h3 style="margin-bottom: 10px">
+      Super easy web tools to make work easier
+    </h3>
     <button
       mat-stroked-button
       color="primary"
@@ -20,16 +26,73 @@
       [replaceUrl]="true"
       routerLink="/tools"
       style="width: 200px">
-      Get Started
+      Explore Web Tools
     </button>
   </div>
 
   <div
     class="flex-display flex-column-flow flex-center flex-align-center flex-full-height parent-view-div app-links">
-    <span class="header-font bold-text" style="font-size: large"
-      >Tools Directory</span
-    >
-    <mat-list role="list">
+    <h1 style="font-family: monospace, 'Courier New', Courier">
+      Web Tools Directory
+    </h1>
+    <div class="app-list">
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="uuid-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="/tools/uuid"
+          >Online UUID Generator</a
+        >
+      </div>
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="jwt-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon>
+        <a [replaceUrl]="true" routerLink="/tools/jwt">Online JWT Decoder</a>
+      </div>
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="image-compress-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="/tools/image-compress"
+          >Online Image Compressor</a
+        >
+      </div>
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="js-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="/tools/js-formatter"
+          >Online JS Formatter</a
+        >
+      </div>
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="json-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="/tools/json-formatter"
+          >Online JSON Formatter</a
+        >
+      </div>
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="html-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="/tools/html-formatter"
+          >Online HTML Formatter</a
+        >
+      </div>
+      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
+        <mat-icon
+          svgIcon="css-icon"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="/tools/css-formatter"
+          >Online CSS Formatter</a
+        >
+      </div>
+    </div>
+
+    <!-- <mat-list role="list">
       <mat-list-item role="listitem"
         ><div class="flex-display flex-row-flow flex-align-center">
           <mat-icon
@@ -98,6 +161,6 @@
           >
         </div></mat-list-item
       >
-    </mat-list>
+    </mat-list> -->
   </div>
 </div>

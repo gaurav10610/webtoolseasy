@@ -10,12 +10,24 @@
   transform: scale(10);
 }
 
-.app-name {
-  font-size: xxx-large;
-}
-
 .parent-view-div {
   width: 50%;
+}
+
+@media screen and (min-width: 735px) { 
+  .app-parent-div {
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    padding-right: 10px;
+  }
+  .app-list {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
 
 @media screen and (max-width: 735px) {
@@ -24,9 +36,6 @@
   }
   .icon-div mat-icon {
     transform: scale(5);
-  }
-  .app-name {
-    font-size: x-large;
   }
   .parent-div {
     flex-flow: column;
