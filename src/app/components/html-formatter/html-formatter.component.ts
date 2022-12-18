@@ -90,9 +90,6 @@ export class HtmlFormatterComponent
   }
 
   rawHtmlChange() {
-    LogUtils.info(
-      `raw js has changed with value: ${this.rawHtmlDiv.nativeElement.innerText}`
-    );
     this.formatHtml(this.rawHtmlDiv.nativeElement.innerText);
   }
 

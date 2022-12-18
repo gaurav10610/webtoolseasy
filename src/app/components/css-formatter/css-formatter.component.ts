@@ -30,8 +30,6 @@ export class CssFormatterComponent
 
   @ViewChild('rawCssDiv', { static: false })
   rawCssDiv!: ElementRef;
-  @ViewChild('formattedCssDiv', { static: false })
-  formattedCssDiv!: ElementRef;
 
   rawCss: string = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
   formattedCss: string = '';
@@ -89,9 +87,6 @@ export class CssFormatterComponent
   }
 
   rawCssChange() {
-    LogUtils.info(
-      `raw js has changed with value: ${this.rawCssDiv.nativeElement.innerText}`
-    );
     this.formatCss(this.rawCssDiv.nativeElement.innerText);
   }
 
