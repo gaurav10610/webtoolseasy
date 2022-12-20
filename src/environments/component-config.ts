@@ -62,21 +62,26 @@ export const home: ApplicationConfig = {
       iconName: 'linkedin-icon',
       iconRelativeUrl: 'linkedin.svg',
     },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
+    },
   ],
 };
 
 export const tools: ApplicationConfig = {
   navigationUrl: '/tools',
-  pageTitle: 'Tools Home | Web Tools Easy',
+  pageTitle: 'Web Tools Home',
   metaTags: [
     {
       name: 'description',
       content:
-        'Tools directory of WebToolsEasy | Generate UUID Online | Compress JPEG,PNG Image Online | Decode JWT Online | Format JS,JSON,CSS,HTML Online',
+        'Web Tools Home | UUID Generator | Compress JPEG, Compress PNG | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
     },
     {
       name: 'keywords',
-      content: 'JWT, UUID, JS, JSON, Image Compression, WebToolsEasy',
+      content:
+        'Free Web Tools, JWT Decode, UUID Generator, JSON Formatter, Compress JPEG, Compress PNG, JS Formatter, HTML Formatter, CSS Formatter',
     },
     {
       name: 'author',
@@ -131,17 +136,17 @@ export const tools: ApplicationConfig = {
 
 export const uuid: ApplicationConfig = {
   navigationUrl: '/tools/uuid',
-  pageTitle: 'UUID Generator | Web Tools Easy',
+  pageTitle: 'UUID Generator',
   metaTags: [
     {
       name: 'description',
       content:
-        'UUID Generator | Generate UUID Version 4 Online | Generate UUID Version 1 Online',
+        'UUID Generator | Generate UUID Version 4 | Generate UUID Version 1',
     },
     {
       name: 'keywords',
       content:
-        'UUID Generator, Generate UUID Version 4 Online, Generate UUID Version 1 Online, UUID',
+        'UUID Generator, Generate UUID Version 4, Generate UUID Version 1, Generate UUID',
     },
     {
       name: 'author',
@@ -151,9 +156,10 @@ export const uuid: ApplicationConfig = {
   ],
   tags: [
     'uuid',
-    'generate uuid v4',
-    'generate uuid v1',
-    'generate uuid online',
+    'online uuid generator',
+    'version 4 uuid',
+    'version 1 uuid',
+    'generate uuid',
   ],
   icons: [
     {
