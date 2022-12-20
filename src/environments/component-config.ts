@@ -2,16 +2,17 @@ import { ApplicationConfig } from 'src/app/@types/config';
 
 export const home: ApplicationConfig = {
   navigationUrl: '',
-  pageTitle: 'Online Web Tools | Web Tools Easy',
+  pageTitle: 'Free Web Tools',
   metaTags: [
     {
       name: 'description',
       content:
-        'Home Page of WebToolsEasy | Generate UUID Online | Compress JPEG,PNG Image Online | Decode JWT Online | Format JS,JSON,CSS,HTML Online',
+        'Online Web Tools | UUID Generator | Compress JPEG, Compress PNG | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
     },
     {
       name: 'keywords',
-      content: 'Web Tools Online, JWT, UUID, JSON, Image Compression, JS',
+      content:
+        'Online Web Tools, JWT Decode, UUID Generator, JSON Formatter, Compress JPEG, Compress PNG, JS Formatter, HTML Formatter, CSS Formatter',
     },
     {
       name: 'author',
@@ -56,6 +57,10 @@ export const home: ApplicationConfig = {
     {
       iconName: 'html-icon',
       iconRelativeUrl: 'html.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
     },
   ],
 };
