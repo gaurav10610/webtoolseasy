@@ -12,7 +12,7 @@ export const home: ApplicationConfig = {
     {
       name: 'keywords',
       content:
-        'Online Web Tools, JWT Decode, UUID Generator, JSON Formatter, Compress JPEG, Compress PNG, JS Formatter, HTML Formatter, CSS Formatter',
+        'Free Web Tools, JWT Decode, UUID Generator, JSON Formatter, Compress JPEG, Compress PNG, JS Formatter, HTML Formatter, CSS Formatter',
     },
     {
       name: 'author',
