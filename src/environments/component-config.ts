@@ -136,7 +136,7 @@ export const tools: ApplicationConfig = {
 
 export const uuid: ApplicationConfig = {
   navigationUrl: '/tools/uuid',
-  pageTitle: 'UUID Generator',
+  pageTitle: 'Online UUID Generator',
   metaTags: [
     {
       name: 'description',
