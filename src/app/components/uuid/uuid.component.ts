@@ -23,11 +23,8 @@ export class UuidComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  currentUUID: string = v4();
-  selectedVersion: string = 'V4';
-
-  displayData: Map<string, any> = new Map();
-  description: string = '';
+  uuidV1: string;
+  uuidV4: string;
   appId: string = 'uuid';
 
   constructor(
@@ -53,15 +50,8 @@ export class UuidComponent
       this.document
     );
     this.updateTags(componentConfig);
-    this.displayData.set('V1', {
-      description:
-        'Version-1 UUIDs are generated from a time and a node ID (usually the MAC address).',
-    });
-    this.displayData.set('V4', {
-      description:
-        'Version-4 UUIDs are generated using a random or pseudo-random number.',
-    });
-    this.description = this.displayData.get('V4').description;
+    this.uuidV1 = v1();
+    this.uuidV4 = v4();
   }
 
   ngOnInit(): void {
@@ -72,25 +62,24 @@ export class UuidComponent
     LogUtils.info('uuid component: ngAfterViewInit');
   }
 
-  changeVersion(selectedVersion: string) {
-    this.selectedVersion = selectedVersion;
-    this.description = this.displayData.get(selectedVersion).description;
-  }
-
-  generateUUID() {
-    switch (this.selectedVersion) {
+  generateUUID(version: string) {
+    switch (version) {
       case 'V1':
-        this.currentUUID = v1();
+        this.uuidV1 = v1();
         break;
       case 'V4':
-        this.currentUUID = v4();
+        this.uuidV4 = v4();
         break;
       default:
-        this.currentUUID = v4();
+        this.uuidV4 = v4();
     }
   }
 
-  copyGeneratedId() {
-    this.clipboard.copy(this.currentUUID);
+  copyGeneratedId(version: string) {
+    if (version === 'V1') {
+      this.clipboard.copy(this.uuidV1);
+    } else if (version === 'V4') {
+      this.clipboard.copy(this.uuidV4);
+    }
   }
 }

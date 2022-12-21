@@ -7,6 +7,7 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { tools as componentConfig } from 'src/environments/component-config';
 import { MatIconRegistry } from '@angular/material/icon';
+import { appDisplayConfig } from 'src/environments/tools-directory-config';
 
 @Component({
   selector: 'app-app-directory',
@@ -17,56 +18,7 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
   /**
    * application config for composing UI
    */
-  appsConfig: AppDisplayConfig[] = [
-    {
-      applicationId: 'uuid',
-      displayText: 'Online UUID Generator',
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid',
-    },
-    {
-      applicationId: 'jwt',
-      displayText: 'Online JWT Decoder',
-      iconName: 'jwt-icon',
-      navigateUrl: '/tools/jwt',
-    },
-    {
-      applicationId: 'imagecompress',
-      displayText: 'Online Image Compressor',
-      iconName: 'image-compress-icon',
-      navigateUrl: '/tools/image-compress',
-    },
-    {
-      applicationId: 'jsformatter',
-      displayText: 'Online JS Formatter',
-      iconName: 'js-icon',
-      navigateUrl: '/tools/js-formatter',
-    },
-    {
-      applicationId: 'jsonformatter',
-      displayText: 'Online JSON Formatter',
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: 'Online HTML Formatter',
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: 'Online CSS Formatter',
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-    {
-      applicationId: 'soon',
-      displayText: 'More Tools Coming Soon',
-      iconName: 'soon-icon',
-      navigateUrl: '',
-    },
-  ];
+  appsConfig: AppDisplayConfig[] = appDisplayConfig;
 
   appId: string = 'tools';
 

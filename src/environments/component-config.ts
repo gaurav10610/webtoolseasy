@@ -141,12 +141,12 @@ export const uuid: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'UUID Generator | Generate UUID Version 4 | Generate UUID Version 1',
+        'UUID Generator | Generate UUID | Online UUID Generator | Generate UUID V4 | Generate UUID V1',
     },
     {
       name: 'keywords',
       content:
-        'UUID Generator, Generate UUID Version 4, Generate UUID Version 1, Generate UUID',
+        'UUID Generator, Generate UUID, Generate UUID V4, Generate UUID V1, Online UUID Generator, UUID V4, UUID V1',
     },
     {
       name: 'author',
@@ -156,15 +156,23 @@ export const uuid: ApplicationConfig = {
   ],
   tags: [
     'uuid',
+    'uuid v4 generator',
+    'uuid v1 generator',
     'online uuid generator',
-    'version 4 uuid',
-    'version 1 uuid',
     'generate uuid',
   ],
   icons: [
     {
       iconName: 'app-icon',
       iconRelativeUrl: 'app-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
     },
   ],
 };

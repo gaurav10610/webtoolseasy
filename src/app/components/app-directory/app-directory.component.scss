@@ -9,9 +9,9 @@
   margin: 10px;
 }
 
-@media screen and (max-width: 735px) {
+@media screen and (min-width: 735px) {
   .application {
-    width: 100%;
+    width: 20%;
   }
 }
 
@@ -25,5 +25,8 @@
   }
   .app-card mat-icon{
     margin-right: 20px;
+  }
+  .application {
+    width: 100%;
   }
 }
