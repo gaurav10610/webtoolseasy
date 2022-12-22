@@ -8,7 +8,10 @@
       routerLink="/tools">
       <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
     </button>
-    <span class="header-font flex-full-height">WebToolsEasy</span>
+    <div
+      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+      <span class="header-font">WebToolsEasy</span>
+    </div>
     <button
       mat-icon-button
       aria-label="home icon button"
@@ -20,17 +23,10 @@
 
   <!-- app container -->
   <div
-    class="flex-full-height flex-display flex-column-flow flex-align-center"
+    class="flex-full-height flex-display flex-column-flow flex-align-center y-scroll"
     style="padding: 10px">
-    <h1
-      style="
-        margin: 20px;
-        font-family: monospace, 'Courier New', Courier;
-        font-size: x-large;
-        font-weight: bold;
-      ">
-      Compress Image Online
-    </h1>
+    <h1 id="heading">Image Compressor</h1>
+    <h2 id="heading2">Compress JPEG, PNG images for free</h2>
 
     <!-- file imput -->
     <input
@@ -105,11 +101,11 @@
 
       <!-- list of image files -->
       <div
-        class="full-width flex-display flex-column-flow y-scroll file-list-div no-scroll"
+        class="full-width flex-display flex-column-flow y-scroll file-list-div"
         *ngIf="fileList.length > 0">
         <mat-card
           *ngFor="let file of fileList"
-          style="margin-bottom: 10px; border: 1px solid black">
+          style="margin-bottom: 10px; border: 1px solid lightgrey">
           <div
             class="flex-display flex-row-flow flex-align-center"
             style="margin: 15px">
@@ -183,30 +179,81 @@
       </div>
     </div>
 
-    <div
-      class="flex-display flex-row-flow"
-      style="margin-left: 10px; margin-right: 10px">
-      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
-      <span>Only JPEG or PNG images can be compressed</span>
+    <div style="width: 80%">
+      <h3 style="font-weight: bold">How to use image compressor?</h3>
+      <ul>
+        <li>
+          Drag & drop or select image files ( jpeg, png only ) to compress.
+        </li>
+        <li>
+          All image files will be listed. An error will be shown for invalid
+          file types ( files other than jpeg, png ).
+        </li>
+        <li>
+          For compressing images either use compress button corresponding to the
+          image file or use compress all button.
+        </li>
+        <li>
+          By default images will be compressed by 20% of their original size.
+          Use settings button to override this, choose any compression level and
+          apply settings then try compressing again with new settings.
+        </li>
+        <li>
+          Use download button corresponding to an image file to download
+          compressed image.
+        </li>
+        <li>
+          Use download zip button to download all compressed images at once.
+        </li>
+      </ul>
+      <h3 style="font-weight: bold">What is image compression?</h3>
+      <ul>
+        <li>
+          <span
+            >Image compression is a type of data compression applied to digital
+            images, to reduce their cost for storage or transmission. Algorithms
+            may take advantage of visual perception and the statistical
+            properties of image data to provide superior results compared with
+            generic data compression methods which are used for other digital
+            data.
+            <a
+              target="_blank"
+              href="https://en.wikipedia.org/wiki/Image_compression"
+              >Read more on Wiki</a
+            ></span
+          >
+        </li>
+      </ul>
+      <span
+        >Only JPEG & PNG image can be compressed as of now. Image compression is
+        being done locally in browser only.</span
+      >
     </div>
 
     <!-- tags div -->
     <div
       style="margin: 20px; flex-wrap: wrap"
       class="flex-display flex-row-flow flex-center">
-      <h5
-        *ngFor="let tag of tags"
-        style="
-          margin: 5px;
-          background: #e0e0e0;
-          border-radius: 16px;
-          padding-left: 8px;
-          padding-right: 8px;
-          padding-top: 4px;
-          padding-bottom: 4px;
-        ">
+      <p class="tag-class" *ngFor="let tag of tags">
         {{ tag }}
-      </h5>
+      </p>
+    </div>
+
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-bottom: 10px">
+      <span style="margin-right: 10px; font-style: italic">Follow -</span>
+      <a
+        href="https://www.linkedin.com/company/webtoolseasy/"
+        target="_blank"
+        style="margin-right: 20px">
+        <mat-icon svgIcon="linkedin-icon"></mat-icon
+      ></a>
+      <a
+        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+        target="_blank">
+        <mat-icon svgIcon="facebook-icon"></mat-icon
+      ></a>
     </div>
   </div>
 </div>

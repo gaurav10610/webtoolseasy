@@ -285,17 +285,17 @@ export const jsformatter: ApplicationConfig = {
 
 export const imagecompress: ApplicationConfig = {
   navigationUrl: '/tools/image-compress',
-  pageTitle: 'Image Compression | Web Tools Easy',
+  pageTitle: 'Image Compressor | Image File Size Reducer',
   metaTags: [
     {
       name: 'description',
       content:
-        'Image Compressor | Compress Multiple JPEG,PNG Images For Free | Choose Size & Compress JPEG,PNG Online',
+        'Image Compressor | Compress Multiple JPEG,PNG Images For Free | Compress JPEG | Compress PNG | Image Size Reducer',
     },
     {
       name: 'keywords',
       content:
-        'Image Compressor, Image Compression Online, Compress JPEG,PNG Online, Compression',
+        'image compressor, image size reducer, image file size reducer, jpg size reducer, png size reducer, compress jpeg, compress png',
     },
     {
       name: 'author',
@@ -304,10 +304,12 @@ export const imagecompress: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'compress jpeg, png image',
-    'compress image online',
-    'image compression',
-    'jpeg, png compressor',
+    'image compressor',
+    'image size reducer',
+    'jpg size reducer',
+    'png size reducer',
+    'compress jpeg',
+    'compress png',
   ],
   icons: [
     {
@@ -329,6 +331,14 @@ export const imagecompress: ApplicationConfig = {
     {
       iconName: 'compress-icon',
       iconRelativeUrl: 'compress-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
     },
   ],
 };

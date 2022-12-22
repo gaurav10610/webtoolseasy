@@ -8,8 +8,23 @@
   }
 }
 
+#heading {
+  margin: 10px;
+  font-family: monospace, 'Courier New', Courier;
+  font-size: xxx-large;
+  font-weight: bold;
+}
+
+#heading2 {
+  margin: 10px;
+  font-size: large;
+}
+
 .file-list-div {
   max-height: 400px;
+  border: 1px solid lightgrey;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 @media screen and (max-width: 735px) {
@@ -18,10 +33,20 @@
   }
 }
 
+.tag-class {
+  margin: 5px;
+  background: #e0e0e0;
+  border-radius: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
 .image-drag-div {
-  width: 70%;
+  width: 100%;
   padding: 30px;
-  border: 1px solid black;
+  border: 1px solid grey;
   border-radius: 10px;
 }
 
@@ -32,5 +57,11 @@
   }
   .image-drag-div {
     width: 90%;
+  }
+  #heading {
+    font-size: x-large;
+  }
+  .app-name {
+    justify-content: center;
   }
 }
