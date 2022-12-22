@@ -326,6 +326,10 @@ export const imagecompress: ApplicationConfig = {
       iconName: 'settings-icon',
       iconRelativeUrl: 'settings.svg',
     },
+    {
+      iconName: 'compress-icon',
+      iconRelativeUrl: 'compress-icon.svg',
+    },
   ],
 };
 
