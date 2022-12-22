@@ -218,24 +218,26 @@ export class ImageCompressionComponent
   }
 
   async addFileToCompress(file: File) {
-    this.fileList.push({
-      id: v4(),
-      file: file,
-      type: FileDataType.IMAGE,
-      inProgress: false,
-      compressProgress: 0,
-      isCompressed: false,
-      name: file.name,
-      isValid: this.isValidFileFormat(file),
-      error: this.isValidFileFormat(file)
-        ? undefined
-        : '* error: invalid file type',
-      compressOptions: {
-        signal: new AbortController().signal,
-        maxSizeMB: (0.9 * file.size) / 1024 / 1024,
-      },
-      compressionRate: 10,
-      maxFileSize: 0.9 * file.size,
+    this.zoneRef.run(() => {
+      this.fileList.push({
+        id: v4(),
+        file: file,
+        type: FileDataType.IMAGE,
+        inProgress: false,
+        compressProgress: 0,
+        isCompressed: false,
+        name: file.name,
+        isValid: this.isValidFileFormat(file),
+        error: this.isValidFileFormat(file)
+          ? undefined
+          : '* error: invalid file type',
+        compressOptions: {
+          signal: new AbortController().signal,
+          maxSizeMB: (0.9 * file.size) / 1024 / 1024,
+        },
+        compressionRate: 10,
+        maxFileSize: 0.9 * file.size,
+      });
     });
   }
 
