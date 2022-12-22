@@ -10,7 +10,7 @@
   font-weight: bold;
 }
 
-#heading2{
+#heading2 {
   margin: 10px;
   font-family: monospace, 'Courier New', Courier;
   font-size: x-large;
@@ -23,7 +23,7 @@
   font-weight: bold;
 }
 
-#heading5 {
+.tag-class {
   margin: 5px;
   background: #e0e0e0;
   border-radius: 16px;
@@ -51,7 +51,7 @@
     border-radius: 10px;
     margin: 15px;
     width: 50%;
-    min-height: 300px;
+    height: 350px;
   }
 }
 
@@ -70,5 +70,8 @@
   }
   #heading {
     font-size: x-large;
+  }
+  .app-name {
+    justify-content: center;
   }
 }

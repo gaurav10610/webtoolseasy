@@ -2,8 +2,24 @@
   <!-- profile header -->
   <div class="header-div">
     <mat-toolbar color="primary">
-      <mat-icon svgIcon="app-icon" class="app-icon pointer-cursor"></mat-icon>
-      <span class="header-font">WebToolsEasy</span>
+      <button
+        mat-icon-button
+        aria-label="app icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+      </button>
+      <div
+        class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+        <span class="header-font">WebToolsEasy</span>
+      </div>
+      <button
+        mat-icon-button
+        aria-label="home icon button"
+        [replaceUrl]="true"
+        routerLink="/tools">
+        <mat-icon>home</mat-icon>
+      </button>
     </mat-toolbar>
   </div>
 

@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { AppDirectoryComponent } from 'src/app/components/app-directory/app-directory.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [AppDirectoryComponent],
@@ -14,6 +15,7 @@ import { AppDirectoryComponent } from 'src/app/components/app-directory/app-dire
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
+    MatButtonModule,
   ],
 })
 export class AppDirectoryModule {}

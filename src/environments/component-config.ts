@@ -179,15 +179,17 @@ export const uuid: ApplicationConfig = {
 
 export const jwt: ApplicationConfig = {
   navigationUrl: '/tools/jwt',
-  pageTitle: 'JWT Decoder | Web Tools Easy',
+  pageTitle: 'JWT Token Decode',
   metaTags: [
     {
       name: 'description',
-      content: 'JWT Decoder | Decode JWT HS256 Online',
+      content:
+        'JWT Decoder | JWT Token Decode | JWT Decode HS256 | Online JWT Token Decoder | JSON Web Token',
     },
     {
       name: 'keywords',
-      content: 'JWT Decoder, Decode JWT Online, HS256, JSON Web Token',
+      content:
+        'JWT Decode, JWT Decoder, JWT Token Decode, JWT Decode HS256, JSON Web Token',
     },
     {
       name: 'author',
@@ -196,15 +198,24 @@ export const jwt: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'jwt decoder',
-    'decode jwt online',
-    'json web token',
-    'decode hs256 jwt',
+    'jwt decode',
+    'jwt token decode',
+    'decode jwt',
+    'jwt decode online',
+    'jwt hs256',
   ],
   icons: [
     {
       iconName: 'app-icon',
       iconRelativeUrl: 'app-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
     },
   ],
 };

@@ -9,7 +9,10 @@
         routerLink="/tools">
         <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
       </button>
-      <span class="header-font flex-full-height">WebToolsEasy</span>
+      <div
+        class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+        <span class="header-font">WebToolsEasy</span>
+      </div>
       <button
         mat-icon-button
         aria-label="home icon button"
@@ -21,16 +24,14 @@
   </div>
 
   <!-- app container -->
-  <div class="flex-display flex-column-flow flex-align-center">
-    <h1
-      style="
-        margin: 20px;
-        font-family: monospace, 'Courier New', Courier;
-        font-size: x-large;
-        font-weight: bold;
-      ">
-      Decode JWT Online
-    </h1>
+  <div
+    class="flex-display flex-column-flow flex-align-center y-scroll no-x-scroll"
+    style="margin: 10px">
+    <div
+      class="full-width flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-top: 10px; margin-bottom: 20px">
+      <h1 id="heading">Online UUID Generator</h1>
+    </div>
 
     <div
       class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width"
@@ -82,40 +83,53 @@
       mat-raised-button
       (click)="copyDecodedToken()"
       color="primary"
-      style="margin-bottom: 10px">
+      style="margin-bottom: 10px; padding: 10px">
       <mat-icon>content_copy</mat-icon> Copy Decoded Token
     </button>
 
-    <div
-      class="flex-display flex-row-flow flex-center"
-      style="margin-left: 10px; margin-right: 10px">
-      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
-      <div class="flex-display flex-column-flow">
-        <span> 1. Token is being decoded using HS256 Algorithm.</span>
-        <span>
-          2. Token is being decoded in browser only. No server is
-          involved.</span
-        >
-      </div>
+    <h2 id="heading2">What is JSON Web Token (JWT)?</h2>
+    <span style="margin-bottom: 20px" class="jwt-description"
+      >JSON Web Token (JWT, pronounced /dʒɒt/, same as the word "jot"[1]) is a
+      proposed Internet standard for creating data with optional signature
+      and/or optional encryption whose payload holds JSON that asserts some
+      number of claims. The tokens are signed either using a private secret or a
+      public/private key.
+      <a target="_blank" href="https://en.wikipedia.org/wiki/JSON_Web_Token"
+        >Read more on Wiki</a
+      ></span
+    >
+
+    <div class="flex-display flex-row-flow flex-center">
+      <p>
+        Only tokens which are encoded with HS256 algorithm can be decoded. JWT
+        token is being decoded locally in browser only.
+      </p>
     </div>
 
     <!-- tags div -->
     <div
       style="margin: 20px; flex-wrap: wrap"
       class="flex-display flex-row-flow flex-center">
-      <h5
-        *ngFor="let tag of tags"
-        style="
-          margin: 5px;
-          background: #e0e0e0;
-          border-radius: 16px;
-          padding-left: 8px;
-          padding-right: 8px;
-          padding-top: 4px;
-          padding-bottom: 4px;
-        ">
+      <p class="tag-class" *ngFor="let tag of tags">
         {{ tag }}
-      </h5>
+      </p>
+    </div>
+
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-bottom: 10px">
+      <span style="margin-right: 10px; font-style: italic">Follow -</span>
+      <a
+        href="https://www.linkedin.com/company/webtoolseasy/"
+        target="_blank"
+        style="margin-right: 20px">
+        <mat-icon svgIcon="linkedin-icon"></mat-icon
+      ></a>
+      <a
+        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+        target="_blank">
+        <mat-icon svgIcon="facebook-icon"></mat-icon
+      ></a>
     </div>
   </div>
 </div>
