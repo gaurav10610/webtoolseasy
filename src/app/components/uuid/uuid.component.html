@@ -1,29 +1,27 @@
 <div class="full-height flex-display flex-column-flow no-y-scroll no-x-scroll">
   <!-- profile header -->
-  <div class="header-div">
-    <mat-toolbar color="primary">
-      <button
-        mat-icon-button
-        aria-label="app icon button"
-        [replaceUrl]="true"
-        routerLink="/tools">
-        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
-      </button>
-      <div
-        class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
-        <span class="header-font">WebToolsEasy</span>
-      </div>
-      <button
-        mat-icon-button
-        aria-label="home icon button"
-        [replaceUrl]="true"
-        routerLink="/tools">
-        <mat-icon>home</mat-icon>
-      </button>
-    </mat-toolbar>
-  </div>
+  <mat-toolbar color="primary">
+    <button
+      mat-icon-button
+      aria-label="app icon button"
+      [replaceUrl]="true"
+      routerLink="/tools">
+      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+    </button>
+    <div
+      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+      <span class="header-font">WebToolsEasy</span>
+    </div>
+    <button
+      mat-icon-button
+      aria-label="home icon button"
+      [replaceUrl]="true"
+      routerLink="/tools">
+      <mat-icon>home</mat-icon>
+    </button>
+  </mat-toolbar>
 
-  <div class="full-width y-scroll no-x-scroll">
+  <div class="full-width no-x-scroll apps-container">
     <div
       class="full-width flex-display flex-row-flow flex-center flex-align-center"
       style="margin-top: 10px">

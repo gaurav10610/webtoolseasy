@@ -23,7 +23,7 @@
   .app-card {
     flex-direction: row;
   }
-  .app-card mat-icon{
+  .app-card mat-icon {
     margin-right: 20px;
   }
   .application {
@@ -31,5 +31,8 @@
   }
   .app-name {
     justify-content: center;
+  }
+  .base-app-container {
+    overflow-y: scroll;
   }
 }
