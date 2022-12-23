@@ -21,13 +21,6 @@
   font-weight: bold;
 }
 
-#heading2 {
-  margin: 10px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: x-large;
-  font-weight: bold;
-}
-
 .tag-class {
   margin: 5px;
   background: #e0e0e0;
@@ -71,8 +64,7 @@
   .encoded-token-field {
     margin-right: 30px;
   }
-  .jwt-description {
-    margin-bottom: 20px;
-    max-width: 60%;
+  #heading2 {
+    font-size: x-large;
   }
 }

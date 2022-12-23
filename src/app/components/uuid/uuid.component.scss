@@ -11,10 +11,8 @@
 }
 
 #heading2 {
-  margin: 10px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: x-large;
   font-weight: bold;
+  font-size: x-large;
 }
 
 #heading3 {
@@ -49,8 +47,7 @@
     padding: 15px;
     border: 1px solid lightgrey;
     border-radius: 10px;
-    margin: 15px;
-    width: 50%;
+    width: 45%;
     height: 350px;
   }
 }
@@ -69,12 +66,9 @@
     flex-flow: column;
   }
   #heading {
-    font-size: x-large;
+    font-size: xx-large;
   }
   .app-name {
     justify-content: center;
-  }
-  .apps-container {
-    overflow-y: scroll;
   }
 }

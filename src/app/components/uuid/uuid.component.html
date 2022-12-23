@@ -21,16 +21,16 @@
     </button>
   </mat-toolbar>
 
-  <div class="full-width no-x-scroll apps-container">
+  <div class="full-width no-x-scroll y-scroll" style="padding: 10px">
     <div
-      class="full-width flex-display flex-row-flow flex-center flex-align-center"
-      style="margin-top: 10px">
+      class="full-width flex-display flex-column-flow flex-center flex-align-center"
+      style="margin-top: 10px; margin-bottom: 20px">
       <h1 id="heading">UUID Generator</h1>
     </div>
 
     <div
-      class="flex-display app-container-div flex-align-center flex-center"
-      style="padding: 10px">
+      class="flex-display app-container-div flex-align-center"
+      style="justify-content: space-around">
       <!-- version 4 app container -->
       <div class="flex-display flex-column-flow flex-align-center uuid-app">
         <h2 id="heading2">Generate UUID V4</h2>
@@ -118,8 +118,16 @@
     </div>
 
     <div
-      class="flex-display flex-row-flow flex-center"
-      style="margin-top: 20px; margin-right: 10px; margin-left: 10px">
+      class="flex-display flex-column-flow"
+      style="margin-top: 10px; margin-left: 20px">
+      <h3 id="heading3">What is UUID ( Universally unique identifier ) ?</h3>
+      <p>
+        Universally Unique Identifiers, or UUIDS, are 128 bit numbers, composed
+        of 16 octets and represented as 32 base-16 characters, that can be used
+        to identify information across a computer system. This specification was
+        originally created by Microsoft and standardized by both the IETF and
+        ITU.
+      </p>
       <p>
         All the UUIDs are generated locally in browser only. Genearted UUIDs are
         provided as is without any warranty.
