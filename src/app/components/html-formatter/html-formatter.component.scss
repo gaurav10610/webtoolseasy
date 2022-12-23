@@ -7,6 +7,18 @@
   }
 }
 
+#heading {
+  margin: 5px;
+  font-family: monospace, 'Courier New', Courier;
+  font-size: xxx-large;
+  font-weight: bold;
+}
+
+#heading2 {
+  margin: 10px;
+  font-size: large;
+}
+
 .token-parent-div {
   width: 40%;
   height: 30em;
@@ -16,11 +28,29 @@
   font-size: x-large;
 }
 
+.base-app-container {
+  padding: 10px;
+}
+
 .token-area-class {
   border: 1px solid black;
   border-radius: 10px;
   padding: 10px;
   overflow-wrap: break-word;
+}
+
+.tag-class {
+  margin: 5px;
+  background: #e0e0e0;
+  border-radius: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.token-area-container {
+  justify-content: space-around;
 }
 
 @media screen and (max-width: 735px) {
@@ -29,9 +59,6 @@
   }
   .token-area-class {
     font-size: larger;
-  }
-  .hint-text {
-    display: none;
   }
   .div-label {
     font-size: large;
@@ -43,5 +70,11 @@
     height: 10em;
     width: 80%;
     font-size: larger;
+  }
+  .app-name {
+    justify-content: center;
+  }
+  #heading {
+    font-size: x-large;
   }
 }

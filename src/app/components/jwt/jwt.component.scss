@@ -31,6 +31,10 @@
   padding-bottom: 4px;
 }
 
+.token-area-container {
+  justify-content: space-around;
+}
+
 @media screen and (max-width: 735px) {
   .token-area-container {
     flex-direction: column;

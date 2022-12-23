@@ -32,7 +32,7 @@
     </div>
 
     <div
-      class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width"
+      class="flex-display flex-row-flow flex-align-center token-area-container full-width"
       style="margin-bottom: 10px">
       <div
         class="flex-display flex-column-flow encoded-token-field token-parent-div">
@@ -68,20 +68,23 @@
       mat-raised-button
       (click)="copyFormattedJs()"
       color="primary"
-      style="margin-bottom: 10px; padding: 10px">
+      style="
+        margin-right: 50px;
+        margin-bottom: 10px;
+        padding: 10px;
+        align-self: flex-end;
+      ">
       <mat-icon>content_copy</mat-icon> Copy Formatted JS
     </button>
 
-    <div class="flex-display flex-column-flow" style="width: 80%">
-      <h3 style="font-weight: bold">How to use JS Formatter?</h3>
+    <div class="flex-display flex-column-flow" style="width: 90%">
+      <h3 style="font-weight: bold">How to use JS Formatter/Beautifier ?</h3>
       <ul>
         <li>
           Paste unformatted/minified javascript in unformatted js block and code
           will be formatted automatically.
         </li>
-        <li>
-          Javascript formatting is being done locally done in browser only.
-        </li>
+        <li>Javascript formatting is being done locally in browser only.</li>
       </ul>
     </div>
 

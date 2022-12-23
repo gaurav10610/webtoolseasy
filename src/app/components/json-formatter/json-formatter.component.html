@@ -8,7 +8,10 @@
       routerLink="/tools">
       <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
     </button>
-    <span class="header-font flex-full-height">WebToolsEasy</span>
+    <div
+      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+      <span class="header-font">WebToolsEasy</span>
+    </div>
     <button
       mat-icon-button
       aria-label="home icon button"
@@ -19,27 +22,23 @@
   </mat-toolbar>
 
   <!-- app container -->
-  <div class="flex-display flex-column-flow flex-align-center">
-    <h1
-      style="
-        margin: 20px;
-        font-family: monospace, 'Courier New', Courier;
-        font-size: x-large;
-        font-weight: bold;
-      ">
-      Format JSON Online
-    </h1>
+  <div
+    class="flex-display flex-column-flow flex-align-center base-app-container y-scroll">
+    <div
+      class="full-width flex-display flex-column-flow flex-center flex-align-center"
+      style="margin-top: 10px; margin-bottom: 20px">
+      <h1 id="heading">JSON Formatter</h1>
+      <h2 id="heading2">Online JSON Beautifier</h2>
+    </div>
 
     <div
-      class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width"
+      class="flex-display flex-row-flow flex-align-center token-area-container full-width"
       style="margin-bottom: 10px">
       <div
         class="flex-display flex-column-flow encoded-token-field token-parent-div">
         <div class="flex-display flex-row-flow flex-align-center">
-          <span
-            class="header-font div-label"
-            style="margin-bottom: 5px; margin-right: 5px"
-            >JSON String</span
+          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
+            >Unformatted JSON</span
           >
           <span>(Paste JSON Here)</span>
         </div>
@@ -66,9 +65,7 @@
         </div>
       </div>
       <div class="flex-display flex-column-flow token-parent-div">
-        <span class="header-font div-label" style="margin-bottom: 5px"
-          >Formatted JSON</span
-        >
+        <span class="div-label" style="margin-bottom: 5px">Formatted JSON</span>
         <div
           #formattedJsonDiv
           class="token-area-class y-scroll full-height full-width"
@@ -83,37 +80,50 @@
       mat-raised-button
       (click)="copyFormattedJson()"
       color="primary"
-      style="margin-bottom: 10px">
+      style="
+        margin-right: 50px;
+        margin-bottom: 10px;
+        padding: 10px;
+        align-self: flex-end;
+      ">
       <mat-icon>content_copy</mat-icon> Copy Formatted JSON
     </button>
 
-    <div
-      class="flex-display flex-row-flow flex-center"
-      style="margin-left: 10px; margin-right: 10px">
-      <span class="bold-text" style="margin-right: 5px">NOTE:</span>
-      <span>
-        No server is involved. Json string formatting is being done in browser
-        only</span
-      >
+    <div class="flex-display flex-column-flow" style="width: 90%">
+      <h3 style="font-weight: bold">How to use JSON Formatter/Beautifier ?</h3>
+      <ul>
+        <li>
+          Paste unformatted/minified json string in unformatted JSON block and
+          json will be formatted automatically.
+        </li>
+        <li>JSON formatting is being done locally in browser only.</li>
+      </ul>
     </div>
 
     <!-- tags div -->
     <div
-      style="margin: 20px; flex-wrap: wrap"
+      style="margin: 10px; flex-wrap: wrap"
       class="flex-display flex-row-flow flex-center">
-      <h5
-        *ngFor="let tag of tags"
-        style="
-          margin: 5px;
-          background: #e0e0e0;
-          border-radius: 16px;
-          padding-left: 8px;
-          padding-right: 8px;
-          padding-top: 4px;
-          padding-bottom: 4px;
-        ">
+      <p class="tag-class" *ngFor="let tag of tags">
         {{ tag }}
-      </h5>
+      </p>
+    </div>
+
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-bottom: 10px">
+      <span style="margin-right: 10px; font-style: italic">Follow -</span>
+      <a
+        href="https://www.linkedin.com/company/webtoolseasy/"
+        target="_blank"
+        style="margin-right: 20px">
+        <mat-icon svgIcon="linkedin-icon"></mat-icon
+      ></a>
+      <a
+        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+        target="_blank">
+        <mat-icon svgIcon="facebook-icon"></mat-icon
+      ></a>
     </div>
   </div>
 </div>

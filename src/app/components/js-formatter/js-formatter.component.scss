@@ -49,6 +49,10 @@
   }
 }
 
+.token-area-container {
+  justify-content: space-around;
+}
+
 @media screen and (max-width: 735px) {
   .token-area-class {
     font-size: larger;

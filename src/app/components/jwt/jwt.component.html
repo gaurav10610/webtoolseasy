@@ -32,7 +32,7 @@
     </div>
 
     <div
-      class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width"
+      class="flex-display flex-row-flow flex-align-center token-area-container full-width"
       style="margin-bottom: 10px">
       <div
         class="flex-display flex-column-flow encoded-token-field token-parent-div">
@@ -77,11 +77,16 @@
       mat-raised-button
       (click)="copyDecodedToken()"
       color="primary"
-      style="margin-bottom: 10px; padding: 10px">
+      style="
+        margin-right: 50px;
+        margin-bottom: 10px;
+        padding: 10px;
+        align-self: flex-end;
+      ">
       <mat-icon>content_copy</mat-icon> Copy Decoded Token
     </button>
 
-    <div class="flex-display flex-column-flow" style="width: 80%">
+    <div class="flex-display flex-column-flow" style="width: 90%">
       <h2 id="heading2" style="font-weight: bold">
         What is JSON Web Token (JWT) ?
       </h2>
