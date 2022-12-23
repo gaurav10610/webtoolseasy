@@ -250,17 +250,17 @@ export const jsonformatter: ApplicationConfig = {
 
 export const jsformatter: ApplicationConfig = {
   navigationUrl: '/tools/js-formatter',
-  pageTitle: 'JS Formatter | Web Tools Easy',
+  pageTitle: 'JS Formatter | JS Beautifier',
   metaTags: [
     {
       name: 'description',
       content:
-        'JS Formatter | Format JS Code Online | Beautify JS Online | Format Javascript Code',
+        'JS Formatter | JS Beautifier | Javascript Formatter | String Format Javascript | Javascript Prettify',
     },
     {
       name: 'keywords',
       content:
-        'JS Formatter, Format JS Online, Format Javascript, Beautify JS Online',
+        'JS Formatter, JS Beautifier, Javascript Formatter, String Format Javascript, Javascript Prettify',
     },
     {
       name: 'author',
@@ -270,15 +270,23 @@ export const jsformatter: ApplicationConfig = {
   ],
   tags: [
     'js formatter',
-    'js beautify',
-    'format js online',
-    'beautify js online',
+    'js beautifier',
+    'string format javascript',
+    'javascript prettify',
     'javascript formatter',
   ],
   icons: [
     {
       iconName: 'app-icon',
       iconRelativeUrl: 'app-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
     },
   ],
 };
