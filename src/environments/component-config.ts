@@ -66,6 +66,10 @@ export const home: ApplicationConfig = {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
     },
+    {
+      iconName: 'screen-icon',
+      iconRelativeUrl: 'screen.svg',
+    },
   ],
 };
 
@@ -130,6 +134,10 @@ export const tools: ApplicationConfig = {
     {
       iconName: 'html-icon',
       iconRelativeUrl: 'html.svg',
+    },
+    {
+      iconName: 'screen-icon',
+      iconRelativeUrl: 'screen.svg',
     },
   ],
 };
@@ -365,7 +373,7 @@ export const jsformatter: ApplicationConfig = {
   ],
 };
 
-export const cssformatter = {
+export const cssformatter: ApplicationConfig = {
   navigationUrl: '/tools/css-formatter',
   pageTitle: 'CSS Formatter | CSS Beautifier',
   metaTags: [
@@ -408,7 +416,7 @@ export const cssformatter = {
   ],
 };
 
-export const htmlformatter = {
+export const htmlformatter: ApplicationConfig = {
   navigationUrl: '/tools/html-formatter',
   pageTitle: 'HTML Formatter | HTML Beautify',
   metaTags: [
@@ -446,6 +454,53 @@ export const htmlformatter = {
     {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
+    },
+  ],
+};
+
+export const screenrecorder: ApplicationConfig = {
+  navigationUrl: '/tools/screen-recorder',
+  pageTitle: 'Free Screen Recorder | Screen Capture',
+  metaTags: [
+    {
+      name: 'description',
+      content:
+        'Free Screen Recorder | Screen Capture | Screen Record on MAC | Screen Recorder Windows 10 | Windows Screen Recorder',
+    },
+    {
+      name: 'keywords',
+      content:
+        'free screen recorder, screen capture, screen record on mac, screen recorder windows 10, windows screen recorder',
+    },
+    {
+      name: 'author',
+      content: 'Gaurav Kumar Yadav',
+    },
+    { name: 'robots', content: 'index, follow' },
+  ],
+  tags: [
+    'screen recorder',
+    'screen capture',
+    'screen record on mac',
+    'screen recorder windows 10',
+    'windows screen recorder',
+  ],
+  icons: [
+    {
+      iconName: 'app-icon',
+      iconRelativeUrl: 'app-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
+    },
+    {
+      iconName: 'screen-icon',
+      iconRelativeUrl: 'screen.svg',
     },
   ],
 };
