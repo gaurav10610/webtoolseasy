@@ -2,16 +2,8 @@
   height: 300px;
 }
 
-.parent-div {
-  flex-flow: row;
-}
-
 .icon-div mat-icon {
   transform: scale(10);
-}
-
-.parent-view-div {
-  width: 50%;
 }
 
 @media screen and (min-width: 735px) { 
@@ -30,6 +22,10 @@
   }
 }
 
+#subheading{
+  font-family: monospace, 'Courier New', Courier;
+}
+
 @media screen and (max-width: 735px) {
   .icon-div {
     height: 150px;
@@ -37,14 +33,7 @@
   .icon-div mat-icon {
     transform: scale(5);
   }
-  .parent-div {
-    flex-flow: column;
-  }
-  .parent-view-div {
-    width: 100%;
-    height: 50%;
-  }
-  .app-links{
-    justify-content: start;
+  #subheading{
+    font-size: larger;
   }
 }

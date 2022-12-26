@@ -2,9 +2,11 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { home as componentConfig } from 'src/environments/component-config';
+import { appDisplayConfig } from 'src/environments/tools-directory-config';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +15,13 @@ import { home as componentConfig } from 'src/environments/component-config';
 })
 export class HomeComponent extends BaseComponent implements OnInit {
   appId: string = 'home';
+  /**
+   * application config for composing UI
+   */
+  appsConfig: AppDisplayConfig[] = appDisplayConfig.filter(
+    appConfig => appConfig.applicationId !== 'soon'
+  );
+
   constructor(
     private titleService: Title,
     private metaService: Meta,

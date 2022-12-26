@@ -1,7 +1,6 @@
-<div class="full-height no-scroll flex-display parent-div y-scroll">
+<div class="full-height flex-display flex-column-flow y-scroll">
   <!-- application branding -->
-  <div
-    class="flex-display flex-column-flow flex-align-center flex-center parent-view-div">
+  <div class="flex-display flex-column-flow flex-align-center flex-center">
     <div
       class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
       <mat-icon svgIcon="app-icon"></mat-icon>
@@ -15,7 +14,7 @@
       ">
       WebToolsEasy
     </h1>
-    <h3 style="margin-bottom: 10px">Free web tools to make work super easy</h3>
+    <h2 id="subheading">Free web tools to make work super easy</h2>
     <button
       mat-stroked-button
       color="primary"
@@ -26,83 +25,43 @@
       style="width: 200px">
       Explore Web Tools
     </button>
+  </div>
 
-    <div
-      class="flex-display flex-row-flow flex-center flex-align-center"
-      style="padding-top: 10px">
-      <span style="margin-right: 10px; font-style: italic">Follow -</span>
-      <a
-        href="https://www.linkedin.com/company/webtoolseasy/"
-        target="_blank"
-        style="margin-right: 20px">
-        <mat-icon svgIcon="linkedin-icon"></mat-icon
-      ></a>
-      <a
-        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
-        target="_blank">
-        <mat-icon svgIcon="facebook-icon"></mat-icon
-      ></a>
+  <div
+    class="flex-display flex-column-flow flex-align-center app-links"
+    style="padding-top: 20px">
+    <h3
+      style="font-family: monospace, 'Courier New', Courier; font-weight: bold">
+      Top Web Tools
+    </h3>
+    <div class="app-list">
+      <div
+        class="flex-display flex-row-flow flex-align-center app-parent-div"
+        *ngFor="let appConfig of appsConfig">
+        <mat-icon
+          svgIcon="{{ appConfig.iconName }}"
+          style="margin: 15px; transform: scale(1.5)"></mat-icon
+        ><a [replaceUrl]="true" routerLink="{{ appConfig.navigateUrl }}">{{
+          appConfig.displayText
+        }}</a>
+      </div>
     </div>
   </div>
 
   <div
-    class="flex-display flex-column-flow flex-center flex-align-center flex-full-height parent-view-div app-links">
-    <h2 style="font-family: monospace, 'Courier New', Courier">
-      Top Web Tools
-    </h2>
-    <div class="app-list">
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="uuid-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="/tools/uuid">UUID Generator</a>
-      </div>
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="jwt-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon>
-        <a [replaceUrl]="true" routerLink="/tools/jwt">JWT Decoder</a>
-      </div>
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="image-compress-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="/tools/image-compress"
-          >Image Compressor</a
-        >
-      </div>
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="js-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="/tools/js-formatter"
-          >JS Formatter</a
-        >
-      </div>
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="json-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="/tools/json-formatter"
-          >JSON Formatter</a
-        >
-      </div>
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="html-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="/tools/html-formatter"
-          >HTML Formatter</a
-        >
-      </div>
-      <div class="flex-display flex-row-flow flex-align-center app-parent-div">
-        <mat-icon
-          svgIcon="css-icon"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="/tools/css-formatter"
-          >CSS Formatter</a
-        >
-      </div>
-    </div>
+    class="flex-display flex-row-flow flex-center flex-align-center"
+    style="padding-top: 10px">
+    <span style="margin-right: 10px; font-style: italic">Follow -</span>
+    <a
+      href="https://www.linkedin.com/company/webtoolseasy/"
+      target="_blank"
+      style="margin-right: 20px">
+      <mat-icon svgIcon="linkedin-icon"></mat-icon
+    ></a>
+    <a
+      href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+      target="_blank">
+      <mat-icon svgIcon="facebook-icon"></mat-icon
+    ></a>
   </div>
 </div>
