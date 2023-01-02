@@ -10,11 +10,6 @@ export const home: ApplicationConfig = {
         'Online Web Tools | UUID Generator | Image Compressor | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
     },
     {
-      name: 'keywords',
-      content:
-        'free web tools, jwt decode, uuid generator, json formatter, compress jpeg, compress png, js formatter, html formatter, css formatter',
-    },
-    {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
@@ -83,11 +78,6 @@ export const tools: ApplicationConfig = {
         'UUID Generator | Compress JPEG, Compress PNG | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
     },
     {
-      name: 'keywords',
-      content:
-        'free web tools, jwt decode, uuid generator, json formatter, compress jpeg, compress png, js formatter, html formatter, css formatter',
-    },
-    {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
@@ -149,12 +139,7 @@ export const uuid: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'UUID Generator | Generate UUID | Online UUID Generator | Generate UUID V4 | Generate UUID V1',
-    },
-    {
-      name: 'keywords',
-      content:
-        'uuid generator, generate uuid, generate uuid v4, generate uuid v1, online uuid generator, uuid v4, uuid v1',
+        'UUID Generator | Generate UUID | Online UUID Generator | Generate UUID V4 | Generate UUID V1 | UUID V4 | UUID V1',
     },
     {
       name: 'author',
@@ -192,12 +177,7 @@ export const jwt: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'JWT Decoder | JWT Token Decode | JWT Decode HS256 | Online JWT Token Decoder | JSON Web Token',
-    },
-    {
-      name: 'keywords',
-      content:
-        'jwt decode, jwt decoder, jwt token decode, jwt decode hs256, json web token',
+        'JWT Decoder | JWT Decode | JWT Token Decode | JWT Decode HS256 | Online JWT Token Decoder | JSON Web Token',
     },
     {
       name: 'author',
@@ -235,12 +215,7 @@ export const imagecompress: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Image Compressor | Compress Multiple JPEG,PNG Images For Free | Compress JPEG | Compress PNG | Image Size Reducer',
-    },
-    {
-      name: 'keywords',
-      content:
-        'image compressor, image size reducer, image file size reducer, jpg size reducer, png size reducer, compress jpeg, compress png',
+        'Image Compressor | Image Size Reducer | Image File Size Reducer | JPG Size Reducer | PNG Size Reducer | Compress JPEG | Compress PNG',
     },
     {
       name: 'author',
@@ -295,12 +270,7 @@ export const jsonformatter: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'JSON Formatter | JSON Beautifier | Best JSON Formatter | JSON Formatter Online',
-    },
-    {
-      name: 'keywords',
-      content:
-        'json formatter, json beautifier, best json formatter, json formatter online, json',
+        'JSON Formatter | JSON Beautifier | Best JSON Formatter | JSON Formatter Online | JSON',
     },
     {
       name: 'author',
@@ -338,11 +308,6 @@ export const jsformatter: ApplicationConfig = {
       name: 'description',
       content:
         'JS Formatter | JS Beautifier | Javascript Formatter | String Format Javascript | Javascript Prettify',
-    },
-    {
-      name: 'keywords',
-      content:
-        'JS Formatter, JS Beautifier, Javascript Formatter, String Format Javascript, Javascript Prettify',
     },
     {
       name: 'author',
@@ -383,11 +348,6 @@ export const cssformatter: ApplicationConfig = {
         'CSS Formatter | CSS Beautifier | CSS Prettify | CSS Formatter Online | CSS Beautifier Online',
     },
     {
-      name: 'keywords',
-      content:
-        'css formatter | css beautifier | css prettify | css formatter online | css beautifier online',
-    },
-    {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
@@ -426,11 +386,6 @@ export const htmlformatter: ApplicationConfig = {
         'HTML Formatter | HTML Beautify | HTML Formatter Online | HTML Code Formatter',
     },
     {
-      name: 'keywords',
-      content:
-        'html formatter, html beautify, html formatter online, html code formatter',
-    },
-    {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
@@ -465,12 +420,7 @@ export const screenrecorder: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Free Screen Recorder | Screen Capture | Screen Record on MAC | Screen Recorder Windows 10 | Windows Screen Recorder',
-    },
-    {
-      name: 'keywords',
-      content:
-        'free screen recorder, screen capture, screen record on mac, screen recorder windows 10, windows screen recorder',
+        'Free Screen Recorder | Screen Capture | Screen Record On Mac | Screen Recorder Windows 10 | Windows Screen Recorder',
     },
     {
       name: 'author',
