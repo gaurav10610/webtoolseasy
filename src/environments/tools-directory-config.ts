@@ -43,12 +43,12 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     iconName: 'css-icon',
     navigateUrl: '/tools/css-formatter',
   },
-  // {
-  //   applicationId: 'screen-recorder',
-  //   displayText: 'Screen Recorder',
-  //   iconName: 'screen-icon',
-  //   navigateUrl: '/tools/screen-recorder',
-  // },
+  {
+    applicationId: 'screen-recorder',
+    displayText: 'Screen Recorder',
+    iconName: 'screen-icon',
+    navigateUrl: '/tools/screen-recorder',
+  },
   {
     applicationId: 'soon',
     displayText: 'More Tools Coming Soon',

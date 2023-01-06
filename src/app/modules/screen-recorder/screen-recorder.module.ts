@@ -6,6 +6,8 @@ import { ScreenRecorderComponent } from 'src/app/components/screen-recorder/scre
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ScreenRecorderComponent],
@@ -15,6 +17,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    MatCheckboxModule,
+    FormsModule,
   ],
 })
 export class ScreenRecorderModule {}
