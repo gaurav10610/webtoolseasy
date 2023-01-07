@@ -40,10 +40,11 @@
       </div>
 
       <section style="margin-bottom: 10px" class="flex-display recoder-options">
-        <mat-checkbox
-          [(ngModel)]="includeScreenAudio"
-          (change)="recorderOptionChange($event, 'screen-audio')"
-          >include screen audio</mat-checkbox
+        <mat-checkbox (change)="recorderOptionChange($event, 'mic-audio')"
+          >include mic audio</mat-checkbox
+        >
+        <mat-checkbox (change)="recorderOptionChange($event, 'camera-video')"
+          >include camera video</mat-checkbox
         >
       </section>
 
