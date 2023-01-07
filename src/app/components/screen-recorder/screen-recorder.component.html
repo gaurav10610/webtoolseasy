@@ -51,7 +51,7 @@
       <button
         mat-raised-button
         aria-label="start recording button"
-        *ngIf="!isRecording"
+        *ngIf="!isRecording && !isProcessingStream"
         color="primary"
         (click)="startRecording()">
         <mat-icon>play_arrow</mat-icon> Start Recording
@@ -59,13 +59,24 @@
       <button
         mat-raised-button
         aria-label="stop recording button"
-        *ngIf="isRecording"
+        *ngIf="isRecording && !isProcessingStream"
         color="warn"
         (click)="stopRecording()">
         <mat-icon>stop</mat-icon> Stop Recording
       </button>
 
       <span #timer class="timer">00:00</span>
+
+      <div
+        class="flex-display flex-row-flow flex-align-center"
+        *ngIf="isProcessingStream">
+        <mat-spinner
+          color="primary"
+          style="margin-right: 10px"
+          diameter="30"></mat-spinner>
+        <span class="bold-text">preparing video file to download</span>
+      </div>
+      <video id="mergedVideo" *ngIf="showMergedVideo"></video>
     </div>
 
     <!-- tags div -->

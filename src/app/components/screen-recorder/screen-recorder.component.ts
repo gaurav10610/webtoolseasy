@@ -40,6 +40,10 @@ export class ScreenRecorderComponent
   timerIntervalFunctionId: any;
   timeCounter: number = 0;
 
+  recordFileExtension: string = 'webm';
+
+  static RECORDING_START_DELAY = 3000;
+
   /**
    * recording options
    */
@@ -49,16 +53,20 @@ export class ScreenRecorderComponent
 
   screenStream: MediaStream | undefined;
   webcamStream: MediaStream | undefined;
-
-  @ViewChild('timer', { static: false })
-  timer!: ElementRef;
+  mergedMediaStream: MediaStream | undefined;
 
   fileList: any = {};
+
+  showMergedVideo: boolean = false;
 
   /**
    * media recorder instance holder
    */
-  mediaRecorder: MediaRecorder | undefined;
+  mediaStreamRecorder: MediaRecorder | undefined;
+  videoFileBuffer: Blob[] = [];
+
+  @ViewChild('timer', { static: false })
+  timer!: ElementRef;
 
   constructor(
     private titleService: Title,
@@ -100,6 +108,7 @@ export class ScreenRecorderComponent
       this.startTime = new Date();
       this.screenStream = undefined;
       this.webcamStream = undefined;
+      this.mergedMediaStream = undefined;
 
       /**
        * resetting timer
@@ -143,25 +152,32 @@ export class ScreenRecorderComponent
         this.stopRecording();
       }
 
-      let finalMediaStream: MediaStream | null;
       if (this.webcamStream) {
-        finalMediaStream = this.mergeStreams(
+        this.mergedMediaStream = this.mergeStreams(
           this.screenStream!,
           this.webcamStream
-        );
+        )!;
 
-        if (finalMediaStream === null) {
+        if (
+          this.mergedMediaStream === null ||
+          this.mergedMediaStream === undefined
+        ) {
           LogUtils.error(`error encountered while merging media streams`);
           this.stopRecording();
         }
       } else {
-        finalMediaStream = this.screenStream!;
+        this.mergedMediaStream = this.screenStream!;
       }
 
-      /**
-       * configure media stream recorder
-       */
-      this.configureStreamRecorder(finalMediaStream!);
+      if (this.mergedMediaStream) {
+        /**
+         * configure media stream recorder
+         */
+        this.configureStreamRecorder(this.mergedMediaStream);
+        // setTimeout(() => {
+        //   this.startShowingMergedVideo(this.mergedMediaStream);
+        // }, 2000);
+      }
     });
   }
 
@@ -256,6 +272,31 @@ export class ScreenRecorderComponent
   configureStreamRecorder(mediaStream: MediaStream) {
     LogUtils.info(`configuring media stream recorder`);
     LogUtils.info(mediaStream);
+
+    const mediaRecorderOptions: MediaRecorderOptions = {
+      mimeType: `video/${this.recordFileExtension}`,
+    };
+
+    // const mediaRecorderOptions: MediaRecorderOptions = {
+    //   mimeType: 'video/mp4',
+    // };
+
+    this.mediaStreamRecorder = new MediaRecorder(
+      mediaStream,
+      mediaRecorderOptions
+    );
+
+    // reset file buffer
+    this.videoFileBuffer = [];
+
+    this.mediaStreamRecorder.ondataavailable = (event: BlobEvent) => {
+      this.videoFileBuffer.push(event.data);
+    };
+
+    /**
+     * Need video stream slices of 1 second each
+     */
+    this.mediaStreamRecorder.start(1000);
   }
 
   configureTimer() {
@@ -303,6 +344,7 @@ export class ScreenRecorderComponent
   stopRecording() {
     this.zoneRef.run(async () => {
       this.isRecording = false;
+      this.mediaStreamRecorder?.stop();
       this.endTime = new Date();
       this.timeCounter = 0;
       if (this.timerIntervalFunctionId) {
@@ -310,10 +352,53 @@ export class ScreenRecorderComponent
       }
       this.screenStream?.getTracks().forEach(track => track.stop());
       this.webcamStream?.getTracks().forEach(track => track.stop());
+      this.mergedMediaStream?.getTracks().forEach(track => track.stop());
+
+      if (this.screenStream && this.mergedMediaStream) {
+        this.processMediaStream();
+      }
     });
   }
 
-  async processingStream() {}
+  processMediaStream() {
+    this.isProcessingStream = true;
+    setTimeout(() => {
+      this.downloadVideoFile(
+        `recorded-video-file.${this.recordFileExtension}`,
+        new Blob(this.videoFileBuffer, {
+          type: `video/${this.recordFileExtension}`,
+        })
+      )
+        .then(() => {
+          this.zoneRef.run(() => {
+            this.isProcessingStream = false;
+          });
+        })
+        .catch(error => {
+          LogUtils.info(
+            `error occured while preparing video file for download`
+          );
+          LogUtils.error(error);
+        });
+    }, ScreenRecorderComponent.RECORDING_START_DELAY);
+  }
+
+  startShowingMergedVideo(mediaStream: any): void {
+    this.showMergedVideo = true;
+    const videoTag: HTMLVideoElement = this.renderer.selectRootElement(
+      '#mergedVideo',
+      true
+    );
+    try {
+      this.renderer.setProperty(videoTag, 'srcObject', mediaStream);
+    } catch (error) {
+      this.renderer.setProperty(
+        videoTag,
+        'src',
+        URL.createObjectURL(mediaStream)
+      );
+    }
+  }
 
   /**
    * checkbox change event
@@ -330,5 +415,16 @@ export class ScreenRecorderComponent
         this.includeCameraVideo = event.checked;
         break;
     }
+  }
+
+  async downloadVideoFile(fileName: string, fileContent: Blob): Promise<void> {
+    const downloadAnchor = this.renderer.createElement('a');
+    this.renderer.setProperty(
+      downloadAnchor,
+      'href',
+      URL.createObjectURL(fileContent)
+    );
+    this.renderer.setProperty(downloadAnchor, 'download', fileName);
+    downloadAnchor.click();
   }
 }
