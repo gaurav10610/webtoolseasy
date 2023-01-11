@@ -17,7 +17,7 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { screenrecorder as componentConfig } from 'src/environments/component-config';
 import { get, set } from 'idb-keyval';
-import { AddStreamOptions, VideoStreamMerger } from 'video-stream-merger';
+import { VideoStreamMerger } from 'video-stream-merger';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -40,7 +40,15 @@ export class ScreenRecorderComponent
   timerIntervalFunctionId: any;
   timeCounter: number = 0;
 
-  recordFileExtension: string = 'webm';
+  videoFileExtention: string = 'webm';
+  recorderOptionConfig: any = {
+    webm: {
+      mimeType: 'video/webm; codecs=vp9',
+    },
+    mp4: {
+      mimeType: 'video/mp4',
+    },
+  };
 
   static RECORDING_START_DELAY = 3000;
 
@@ -121,7 +129,11 @@ export class ScreenRecorderComponent
 
       try {
         this.screenStream = await this.getScreenStream();
-        // LogUtils.info(this.screenStream);
+        LogUtils.info(
+          `screen stream dimensions: ${this.getVideoStreamHeightWidth(
+            this.screenStream
+          )}`
+        );
 
         /**
          * configure stream ended listener in case user manually stops media
@@ -142,7 +154,12 @@ export class ScreenRecorderComponent
         if (this.includeMicAudio || this.includeCameraVideo) {
           this.webcamStream = await this.getCameraAndMicStream();
           this.configureStreamStopListener(this.webcamStream);
-          // LogUtils.info(this.webcamStream);
+
+          LogUtils.info(
+            `webcam video stream dimensions: ${this.getVideoStreamHeightWidth(
+              this.webcamStream
+            )}`
+          );
         }
       } catch (error) {
         LogUtils.error(
@@ -153,7 +170,7 @@ export class ScreenRecorderComponent
       }
 
       if (this.webcamStream) {
-        this.mergedMediaStream = this.mergeStreams(
+        this.mergedMediaStream = this.mergeMediaStreams(
           this.screenStream!,
           this.webcamStream
         )!;
@@ -170,6 +187,12 @@ export class ScreenRecorderComponent
       }
 
       if (this.mergedMediaStream) {
+        LogUtils.info(
+          `merged video stream dimensions: ${this.getVideoStreamHeightWidth(
+            this.mergedMediaStream
+          )}`
+        );
+
         /**
          * configure media stream recorder
          */
@@ -216,47 +239,40 @@ export class ScreenRecorderComponent
    * @param webcamStream
    * @returns
    */
-  mergeStreams(
+  mergeMediaStreams(
     screenStream: MediaStream,
     webcamStream: MediaStream
   ): MediaStream | null {
-    let streamMerger: VideoStreamMerger = new VideoStreamMerger();
+    const screenStreamSettings: MediaTrackSettings = this.screenStream
+      ?.getVideoTracks()[0]
+      .getSettings()!;
 
-    const mergeScreenStreamOptions: AddStreamOptions = {
+    const mergerOptions: any = {
+      width: screenStreamSettings.width!,
+      height: screenStreamSettings.height!,
+    };
+
+    let streamMerger: VideoStreamMerger = new VideoStreamMerger(mergerOptions);
+
+    const mergeScreenStreamOptions: any = {
       x: 0,
       y: 0,
       width: streamMerger.width,
       height: streamMerger.height,
       mute: true,
       index: 0,
-      muted: true,
-      draw: (ctx, frame, done) => {
-        ctx.drawImage(frame, 0, 0, streamMerger.width, streamMerger.height);
-        done();
-      },
-      audioEffect: (sourceNode, destinationNode) => {
-        sourceNode.connect(destinationNode);
-      },
     };
 
     // Add the screen capture. Position it to fill the whole stream (the default)
     streamMerger.addStream(screenStream, mergeScreenStreamOptions);
 
-    const mergeWebcamStreamOptions: AddStreamOptions = {
-      x: 0,
-      y: streamMerger.height - 100,
+    const mergeWebcamStreamOptions: any = {
+      x: streamMerger.width - 100,
+      y: 0,
       width: 100,
       height: 100,
       mute: false,
       index: 1,
-      muted: false,
-      draw: (ctx, frame, done) => {
-        ctx.drawImage(frame, 0, 0, 100, 100);
-        done();
-      },
-      audioEffect: (sourceNode, destinationNode) => {
-        sourceNode.connect(destinationNode);
-      },
     };
 
     // Add the webcam stream. Position it on the bottom left and resize it to 100x100.
@@ -273,17 +289,9 @@ export class ScreenRecorderComponent
     LogUtils.info(`configuring media stream recorder`);
     LogUtils.info(mediaStream);
 
-    const mediaRecorderOptions: MediaRecorderOptions = {
-      mimeType: `video/${this.recordFileExtension}`,
-    };
-
-    // const mediaRecorderOptions: MediaRecorderOptions = {
-    //   mimeType: 'video/mp4',
-    // };
-
     this.mediaStreamRecorder = new MediaRecorder(
       mediaStream,
-      mediaRecorderOptions
+      this.recorderOptionConfig[this.videoFileExtention]
     );
 
     // reset file buffer
@@ -364,9 +372,9 @@ export class ScreenRecorderComponent
     this.isProcessingStream = true;
     setTimeout(() => {
       this.downloadVideoFile(
-        `recorded-video-file.${this.recordFileExtension}`,
+        `recorded-video-file.${this.videoFileExtention}`,
         new Blob(this.videoFileBuffer, {
-          type: `video/${this.recordFileExtension}`,
+          type: `video/${this.videoFileExtention}`,
         })
       )
         .then(() => {
@@ -426,5 +434,15 @@ export class ScreenRecorderComponent
     );
     this.renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
+  }
+
+  getVideoStreamHeightWidth(mediaStream: MediaStream) {
+    if (mediaStream.getVideoTracks().length > 0) {
+      const settings: MediaTrackSettings = mediaStream
+        .getVideoTracks()[0]
+        .getSettings();
+      return `[ height: ${settings.height}, width: ${settings.width} ]`;
+    }
+    return '';
   }
 }
