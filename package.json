@@ -9,6 +9,7 @@
     "test": "ng test",
     "lint": "ng lint --fix",
     "dev:ssr": "ng run webtoolseasy:serve-ssr",
+    "build:serve": "npm run build:ssr && npm run serve:ssr",
     "serve:ssr": "PORT=9898 nodemon dist/webtoolseasy/server/main.js",
     "build:ssr": "ng build && ng run webtoolseasy:server",
     "prerender": "ng run webtoolseasy:prerender"

@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -118,7 +118,9 @@ export class ScreenRecorderComponent
   }
 
   ngOnDestroy(): void {
-    clear();
+    if (isPlatformBrowser(this.platformId)) {
+      clear();
+    }
     this.destroyed.next();
     this.destroyed.complete();
   }
