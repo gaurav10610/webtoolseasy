@@ -55,14 +55,6 @@
         >
       </section>
 
-      <!-- <mat-form-field appearance="outline" color="primary">
-        <mat-label>Output Video Format</mat-label>
-        <mat-select disableRipple [(value)]="videoFileExtention">
-          <mat-option value="webm">WebM</mat-option>
-          <mat-option value="mp4">MP4</mat-option>
-        </mat-select>
-      </mat-form-field> -->
-
       <button
         mat-raised-button
         aria-label="start recording button"
@@ -90,6 +82,42 @@
           style="margin-right: 10px"
           diameter="30"></mat-spinner>
         <span class="bold-text">preparing video file to download</span>
+      </div>
+
+      <div class="flex-display flex-column-flow description">
+        <h3 style="font-weight: bold">How to use screen recorder</h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. To include mic audio & camera video in the recorded video, use
+            checkboxes
+          </p>
+          <p>2. Start screen recording using start recording button</p>
+          <p>3. When asked for mic & camera permission then provide the same</p>
+          <p>
+            4. Camera video if included will appear at bottom right corner in
+            the recorded video in 150X150 px box
+          </p>
+          <p>
+            5. Screen recording can be stopped via native stop recording button
+            or use stop recording button on the screen (button will appear once
+            recording starts)
+          </p>
+          <p>
+            6. Once recording is stopped then recorded video will be downloaded
+            automatically
+          </p>
+        </div>
+        <h3 style="font-weight: bold">Features</h3>
+        <div style="margin-left: 30px">
+          <p>1. Screen recording is 100% free</p>
+          <p>2. Unlimited screen recording in HD format</p>
+          <p>3. Record screen with camera video & mic audio</p>
+          <p>4. No software installation is needed to record screen</p>
+          <p>
+            5. Screen recording is 100% secure as whole processing is being done
+            at client side only (in host browser)
+          </p>
+        </div>
       </div>
     </div>
 

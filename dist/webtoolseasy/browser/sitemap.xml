@@ -2,47 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
     <url>
         <loc>https://webtoolseasy.com/</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/uuid</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/jwt</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/json-formatter</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/image-compress</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/js-formatter</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/css-formatter</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/html-formatter</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://webtoolseasy.com/tools/screen-recorder</loc>
     </url>
 </urlset>

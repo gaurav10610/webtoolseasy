@@ -165,7 +165,6 @@ export class ScreenRecorderComponent
          * stream using native stop sharing button
          */
         this.configureStreamStopListener(this.screenStream);
-        this.configureTimer();
       } catch (error) {
         LogUtils.error(`error occured while capturing screen stream`);
         LogUtils.error(error);
@@ -290,6 +289,7 @@ export class ScreenRecorderComponent
      * Need video stream slices of 1 second each
      */
     this.mediaStreamRecorder.start(1000);
+    this.configureTimer();
   }
 
   configureTimer() {

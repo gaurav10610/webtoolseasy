@@ -45,8 +45,14 @@
   font-weight: bold;
 }
 
-@media screen and (min-width: 735px) {
+.description {
+  margin-top: 20px;
+}
 
+@media screen and (min-width: 735px) {
+  .description {
+    width: 70%;
+  }
 }
 
 @media screen and (max-width: 735px) {
@@ -70,5 +76,8 @@
   }
   .error {
     font-size: small;
+  }
+  .description {
+    width: 100%;
   }
 }
