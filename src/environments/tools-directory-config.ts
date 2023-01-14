@@ -2,6 +2,12 @@ import { AppDisplayConfig } from 'src/app/@types/config';
 
 export const appDisplayConfig: AppDisplayConfig[] = [
   {
+    applicationId: 'screen-recorder',
+    displayText: 'Screen Recorder',
+    iconName: 'screen-icon',
+    navigateUrl: '/tools/screen-recorder',
+  },
+  {
     applicationId: 'uuid',
     displayText: 'UUID Generator',
     iconName: 'uuid-icon',
@@ -42,12 +48,6 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: 'CSS Formatter',
     iconName: 'css-icon',
     navigateUrl: '/tools/css-formatter',
-  },
-  {
-    applicationId: 'screen-recorder',
-    displayText: 'Screen Recorder',
-    iconName: 'screen-icon',
-    navigateUrl: '/tools/screen-recorder',
   },
   {
     applicationId: 'soon',

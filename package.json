@@ -31,6 +31,7 @@
     "browser-image-compression": "2.0.0",
     "express": "4.15.2",
     "idb-keyval": "6.2.0",
+    "is-mobile": "^3.1.1",
     "js-beautify": "1.14.7",
     "jszip": "3.10.1",
     "ngx-google-analytics": "14.0.1",

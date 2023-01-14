@@ -5,6 +5,7 @@ import {
   ElementRef,
   Inject,
   NgZone,
+  OnDestroy,
   OnInit,
   PLATFORM_ID,
   Renderer2,
@@ -16,8 +17,11 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { screenrecorder as componentConfig } from 'src/environments/component-config';
-import { get, set } from 'idb-keyval';
+import { clear, get, set } from 'idb-keyval';
 import { VideoStreamMerger } from 'video-stream-merger';
+import { isMobile } from 'is-mobile';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -26,7 +30,7 @@ import { VideoStreamMerger } from 'video-stream-merger';
 })
 export class ScreenRecorderComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit
+  implements OnInit, AfterViewInit, OnDestroy
 {
   appId: string = 'imagecompress';
   isRecording: boolean = false;
@@ -62,19 +66,21 @@ export class ScreenRecorderComponent
   screenStream: MediaStream | undefined;
   webcamStream: MediaStream | undefined;
   mergedMediaStream: MediaStream | undefined;
-
-  fileList: any = {};
+  videoChunksCounter = 0;
 
   showMergedVideo: boolean = false;
+
+  isSupported: boolean = true;
 
   /**
    * media recorder instance holder
    */
   mediaStreamRecorder: MediaRecorder | undefined;
-  videoFileBuffer: Blob[] = [];
 
   @ViewChild('timer', { static: false })
   timer!: ElementRef;
+
+  destroyed = new Subject<void>();
 
   constructor(
     private titleService: Title,
@@ -84,7 +90,8 @@ export class ScreenRecorderComponent
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
     private renderer: Renderer2,
-    private zoneRef: NgZone
+    private zoneRef: NgZone,
+    private breakpointObserver: BreakpointObserver
   ) {
     super();
     this.loadCustomIcons(
@@ -100,6 +107,20 @@ export class ScreenRecorderComponent
       this.document
     );
     this.updateTags(componentConfig);
+    this.isSupported = !isMobile();
+
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.Web])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        this.isSupported = !isMobile();
+      });
+  }
+
+  ngOnDestroy(): void {
+    clear();
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
   ngOnInit(): void {
@@ -119,6 +140,7 @@ export class ScreenRecorderComponent
     this.webcamStream = undefined;
     this.mergedMediaStream = undefined;
     this.mediaStreamRecorder = undefined;
+    this.videoChunksCounter = 0;
   }
 
   startRecording() {
@@ -126,6 +148,9 @@ export class ScreenRecorderComponent
       this.isRecording = true;
       this.resetContextVariables();
       this.resetTimer();
+
+      // clear all buffer data from index db
+      await clear();
 
       try {
         this.screenStream = await this.getScreenStream();
@@ -256,11 +281,9 @@ export class ScreenRecorderComponent
       this.recorderOptionConfig[this.videoFileExtention]
     );
 
-    // reset file buffer
-    this.videoFileBuffer = [];
-
     this.mediaStreamRecorder.ondataavailable = (event: BlobEvent) => {
-      this.videoFileBuffer.push(event.data);
+      set(this.videoChunksCounter, event.data);
+      this.videoChunksCounter++;
     };
 
     /**
@@ -329,24 +352,28 @@ export class ScreenRecorderComponent
 
   processMediaStream() {
     this.isProcessingStream = true;
-    setTimeout(() => {
-      this.downloadVideoFile(
-        `recorded-video-file.${this.videoFileExtention}`,
-        new Blob(this.videoFileBuffer, {
-          type: `video/${this.videoFileExtention}`,
-        })
-      )
-        .then(() => {
-          this.zoneRef.run(() => {
-            this.isProcessingStream = false;
-          });
-        })
-        .catch(error => {
-          LogUtils.info(
-            `error occured while preparing video file for download`
-          );
-          LogUtils.error(error);
-        });
+    setTimeout(async () => {
+      try {
+        const videoFileBuffer = [];
+
+        for (let index = 0; index < this.videoChunksCounter; index++) {
+          videoFileBuffer.push(await get(index));
+        }
+
+        await this.downloadVideoFile(
+          `recorded-video-file.webm`,
+          new Blob(videoFileBuffer, {
+            type: `video/webm`,
+          })
+        );
+
+        this.zoneRef.run(() => (this.isProcessingStream = false));
+        clear();
+      } catch (error) {
+        LogUtils.info(`error occured while preparing video file for download`);
+        LogUtils.error(error);
+        this.zoneRef.run(() => (this.isProcessingStream = false));
+      }
     }, ScreenRecorderComponent.RECORDING_START_DELAY);
   }
 

@@ -38,6 +38,13 @@
   padding-bottom: 4px;
 }
 
+.error {
+  color: red;
+  font-size: large;
+  font-style: italic;
+  font-weight: bold;
+}
+
 @media screen and (min-width: 735px) {
 
 }
@@ -60,5 +67,8 @@
   }
   .recoder-options {
     flex-direction: column;
+  }
+  .error {
+    font-size: small;
   }
 }

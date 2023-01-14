@@ -26,7 +26,7 @@
     class="flex-display flex-column-flow flex-align-center base-app-container y-scroll">
     <div
       class="full-width flex-display flex-column-flow flex-center flex-align-center"
-      style="margin-top: 10px; margin-bottom: 20px">
+      style="margin-top: 10px">
       <h1 id="heading">Screen Recorder</h1>
       <h2 id="heading2">Free Online Screen Recorder</h2>
     </div>
@@ -39,7 +39,14 @@
         <mat-icon svgIcon="screen-icon"></mat-icon>
       </div>
 
-      <section style="margin-bottom: 10px" class="flex-display recoder-options">
+      <span *ngIf="!isSupported" class="error"
+        >screen capturing is not supported by host browser</span
+      >
+
+      <section
+        style="margin-bottom: 10px"
+        class="flex-display recoder-options"
+        *ngIf="isSupported">
         <mat-checkbox (change)="recorderOptionChange($event, 'mic-audio')"
           >include mic audio</mat-checkbox
         >
@@ -59,7 +66,7 @@
       <button
         mat-raised-button
         aria-label="start recording button"
-        *ngIf="!isRecording && !isProcessingStream"
+        *ngIf="!isRecording && !isProcessingStream && isSupported"
         color="primary"
         (click)="startRecording()">
         <mat-icon>play_arrow</mat-icon> Start Recording
@@ -67,13 +74,13 @@
       <button
         mat-raised-button
         aria-label="stop recording button"
-        *ngIf="isRecording && !isProcessingStream"
+        *ngIf="isRecording && !isProcessingStream && isSupported"
         color="warn"
         (click)="stopRecording()">
         <mat-icon>stop</mat-icon> Stop Recording
       </button>
 
-      <span #timer class="timer">00:00</span>
+      <span #timer class="timer" *ngIf="isSupported">00:00</span>
 
       <div
         class="flex-display flex-row-flow flex-align-center"
