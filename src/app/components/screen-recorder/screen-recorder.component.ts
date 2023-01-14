@@ -32,11 +32,6 @@ export class ScreenRecorderComponent
   isRecording: boolean = false;
   isProcessingStream: boolean = false;
 
-  /**
-   * recording start and end time
-   */
-  startTime: Date | undefined;
-  endTime: Date | undefined;
   timerIntervalFunctionId: any;
   timeCounter: number = 0;
 
@@ -48,6 +43,11 @@ export class ScreenRecorderComponent
     mp4: {
       mimeType: 'video/mp4',
     },
+  };
+
+  cameraVideoOptions = {
+    width: 150,
+    height: 150,
   };
 
   static RECORDING_START_DELAY = 3000;
@@ -110,22 +110,22 @@ export class ScreenRecorderComponent
     LogUtils.info('screen recorder component: ngAfterViewInit');
   }
 
+  resetTimer() {
+    this.renderer.setProperty(this.timer.nativeElement, 'textContent', '00:00');
+  }
+
+  resetContextVariables() {
+    this.screenStream = undefined;
+    this.webcamStream = undefined;
+    this.mergedMediaStream = undefined;
+    this.mediaStreamRecorder = undefined;
+  }
+
   startRecording() {
     this.zoneRef.run(async () => {
       this.isRecording = true;
-      this.startTime = new Date();
-      this.screenStream = undefined;
-      this.webcamStream = undefined;
-      this.mergedMediaStream = undefined;
-
-      /**
-       * resetting timer
-       */
-      this.renderer.setProperty(
-        this.timer.nativeElement,
-        'textContent',
-        '00:00'
-      );
+      this.resetContextVariables();
+      this.resetTimer();
 
       try {
         this.screenStream = await this.getScreenStream();
@@ -148,18 +148,9 @@ export class ScreenRecorderComponent
       }
 
       try {
-        /**
-         * requesting audio/video media stream
-         */
         if (this.includeMicAudio || this.includeCameraVideo) {
           this.webcamStream = await this.getCameraAndMicStream();
           this.configureStreamStopListener(this.webcamStream);
-
-          LogUtils.info(
-            `webcam video stream dimensions: ${this.getVideoStreamHeightWidth(
-              this.webcamStream
-            )}`
-          );
         }
       } catch (error) {
         LogUtils.error(
@@ -175,10 +166,7 @@ export class ScreenRecorderComponent
           this.webcamStream
         )!;
 
-        if (
-          this.mergedMediaStream === null ||
-          this.mergedMediaStream === undefined
-        ) {
+        if (!this.mergedMediaStream) {
           LogUtils.error(`error encountered while merging media streams`);
           this.stopRecording();
         }
@@ -187,19 +175,7 @@ export class ScreenRecorderComponent
       }
 
       if (this.mergedMediaStream) {
-        LogUtils.info(
-          `merged video stream dimensions: ${this.getVideoStreamHeightWidth(
-            this.mergedMediaStream
-          )}`
-        );
-
-        /**
-         * configure media stream recorder
-         */
         this.configureStreamRecorder(this.mergedMediaStream);
-        // setTimeout(() => {
-        //   this.startShowingMergedVideo(this.mergedMediaStream);
-        // }, 2000);
       }
     });
   }
@@ -209,28 +185,14 @@ export class ScreenRecorderComponent
    * @param mediaStream
    */
   configureStreamStopListener(mediaStream: MediaStream): void {
-    if (
-      mediaStream.getVideoTracks() &&
-      mediaStream.getVideoTracks().length > 0
-    ) {
-      mediaStream.getVideoTracks()[0].addEventListener('ended', event => {
-        LogUtils.info(`video media stream has ended`);
+    mediaStream.getTracks().forEach(track => {
+      track.addEventListener('ended', event => {
+        LogUtils.info(`media stream track has ended`);
         if (this.isRecording) {
           this.stopRecording();
         }
       });
-    }
-    if (
-      mediaStream.getAudioTracks() &&
-      mediaStream.getAudioTracks().length > 0
-    ) {
-      mediaStream.getAudioTracks()[0].addEventListener('ended', event => {
-        LogUtils.info(`audio media stream has ended`);
-        if (this.isRecording) {
-          this.stopRecording();
-        }
-      });
-    }
+    });
   }
 
   /**
@@ -267,10 +229,10 @@ export class ScreenRecorderComponent
     streamMerger.addStream(screenStream, mergeScreenStreamOptions);
 
     const mergeWebcamStreamOptions: any = {
-      x: streamMerger.width - 100,
-      y: 0,
-      width: 100,
-      height: 100,
+      x: streamMerger.width - this.cameraVideoOptions.width,
+      y: streamMerger.height - this.cameraVideoOptions.height,
+      width: this.cameraVideoOptions.width,
+      height: this.cameraVideoOptions.height,
       mute: false,
       index: 1,
     };
@@ -350,22 +312,19 @@ export class ScreenRecorderComponent
   }
 
   stopRecording() {
-    this.zoneRef.run(async () => {
-      this.isRecording = false;
-      this.mediaStreamRecorder?.stop();
-      this.endTime = new Date();
-      this.timeCounter = 0;
-      if (this.timerIntervalFunctionId) {
-        clearInterval(this.timerIntervalFunctionId);
-      }
-      this.screenStream?.getTracks().forEach(track => track.stop());
-      this.webcamStream?.getTracks().forEach(track => track.stop());
-      this.mergedMediaStream?.getTracks().forEach(track => track.stop());
+    this.isRecording = false;
+    this.mediaStreamRecorder?.stop();
+    this.timeCounter = 0;
+    if (this.timerIntervalFunctionId) {
+      clearInterval(this.timerIntervalFunctionId);
+    }
+    this.screenStream?.getTracks().forEach(track => track.stop());
+    this.webcamStream?.getTracks().forEach(track => track.stop());
+    this.mergedMediaStream?.getTracks().forEach(track => track.stop());
 
-      if (this.screenStream && this.mergedMediaStream) {
-        this.processMediaStream();
-      }
-    });
+    if (this.screenStream && this.mergedMediaStream) {
+      this.processMediaStream();
+    }
   }
 
   processMediaStream() {
@@ -389,23 +348,6 @@ export class ScreenRecorderComponent
           LogUtils.error(error);
         });
     }, ScreenRecorderComponent.RECORDING_START_DELAY);
-  }
-
-  startShowingMergedVideo(mediaStream: any): void {
-    this.showMergedVideo = true;
-    const videoTag: HTMLVideoElement = this.renderer.selectRootElement(
-      '#mergedVideo',
-      true
-    );
-    try {
-      this.renderer.setProperty(videoTag, 'srcObject', mediaStream);
-    } catch (error) {
-      this.renderer.setProperty(
-        videoTag,
-        'src',
-        URL.createObjectURL(mediaStream)
-      );
-    }
   }
 
   /**
