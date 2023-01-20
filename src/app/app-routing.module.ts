@@ -9,6 +9,7 @@ import { JsFormatterModule } from './modules/js-formatter/js-formatter.module';
 import { JsonFormatterModule } from './modules/json-formatter/json-formatter.module';
 import { JwtModule } from './modules/jwt/jwt.module';
 import { ScreenRecorderModule } from './modules/screen-recorder/screen-recorder.module';
+import { TextCompareModule } from './modules/text-compare/text-compare.module';
 import { UuidModule } from './modules/uuid/uuid.module';
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'tools/css-formatter', loadChildren: () => CssFormatterModule },
   { path: 'tools/html-formatter', loadChildren: () => HtmlFormatterModule },
   { path: 'tools/screen-recorder', loadChildren: () => ScreenRecorderModule },
+  { path: 'tools/text-compare', loadChildren: () => TextCompareModule },
 ];
 
 @NgModule({

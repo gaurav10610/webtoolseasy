@@ -7,7 +7,7 @@ export const home: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Online Web Tools | UUID Generator | Image Compressor | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
+        'Online Web Tools | Screen Recorder | UUID Generator | Image Compressor | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
     },
     {
       name: 'author',
@@ -65,6 +65,10 @@ export const home: ApplicationConfig = {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
     },
+    {
+      iconName: 'comparison-icon',
+      iconRelativeUrl: 'comparison.svg',
+    },
   ],
 };
 
@@ -75,7 +79,7 @@ export const tools: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'UUID Generator | Compress JPEG, Compress PNG | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
+        'Screen Recorder | UUID Generator | Compress JPEG, Compress PNG | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
     },
     {
       name: 'author',
@@ -128,6 +132,10 @@ export const tools: ApplicationConfig = {
     {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
+    },
+    {
+      iconName: 'comparison-icon',
+      iconRelativeUrl: 'comparison.svg',
     },
   ],
 };
@@ -451,6 +459,43 @@ export const screenrecorder: ApplicationConfig = {
     {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
+    },
+  ],
+};
+
+export const textcompare: ApplicationConfig = {
+  navigationUrl: '/tools/text-compare',
+  pageTitle: 'Text Compare | Compare Text Online',
+  metaTags: [
+    {
+      name: 'description',
+      content:
+        'Text Difference Checker | Diffchecker online | Text Compare | Compare Text Online',
+    },
+    {
+      name: 'author',
+      content: 'Gaurav Kumar Yadav',
+    },
+    { name: 'robots', content: 'index, follow' },
+  ],
+  tags: [
+    'text difference checker',
+    'diffchecker online',
+    'text compare',
+    'compare text online',
+  ],
+  icons: [
+    {
+      iconName: 'app-icon',
+      iconRelativeUrl: 'app-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
     },
   ],
 };

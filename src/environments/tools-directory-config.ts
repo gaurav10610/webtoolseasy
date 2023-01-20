@@ -26,6 +26,12 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     navigateUrl: '/tools/image-compress',
   },
   {
+    applicationId: 'textcompare',
+    displayText: 'Text Compare',
+    iconName: 'comparison-icon',
+    navigateUrl: '/tools/text-compare',
+  },
+  {
     applicationId: 'jsformatter',
     displayText: 'JS Formatter',
     iconName: 'js-icon',
