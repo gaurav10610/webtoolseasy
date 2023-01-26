@@ -50,47 +50,16 @@
       <div class="flex-display color-coding" style="margin: 20px">
         <div class="flex-display flex-row-flow flex-align-center color-code">
           <mat-icon style="margin-right: 5px; color: grey">rectangle</mat-icon>
-          <span>character which is common</span>
+          <span>part which is common</span>
         </div>
         <div class="flex-display flex-row-flow flex-align-center color-code">
           <mat-icon style="margin-right: 5px; color: red">rectangle</mat-icon>
-          <span>character which is removed</span>
+          <span>part which is removed</span>
         </div>
         <div class="flex-display flex-row-flow flex-align-center">
           <mat-icon style="margin-right: 5px; color: green">rectangle</mat-icon>
-          <span>character which is added</span>
+          <span>part which is added</span>
         </div>
-      </div>
-
-      <div style="margin-bottom: 20px" class="flex-display flex-column-flow">
-        <mat-form-field appearance="outline" color="primary">
-          <mat-label>Select comparison type</mat-label>
-          <mat-select
-            disableRipple
-            value="char"
-            (valueChange)="changeComparisonType($event)">
-            <mat-option value="char">Character by character</mat-option>
-            <mat-option value="word">Word by word</mat-option>
-            <mat-option value="line">Line by line</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <section>
-          <mat-checkbox (change)="compareOptionsChange($event, 'case')"
-            >ignore case</mat-checkbox
-          >
-          <mat-checkbox
-            (change)="compareOptionsChange($event, 'whitespace')"
-            *ngIf="comparisonType !== 'char'"
-            >ignore leading & trailing whitespace</mat-checkbox
-          >
-        </section>
-        <button
-          mat-raised-button
-          aria-label="switch_text_button"
-          color="primary"
-          (click)="switchTexts()">
-          <mat-icon>swap_horiz</mat-icon>Switch texts
-        </button>
       </div>
 
       <div
@@ -105,7 +74,7 @@
               style="margin-bottom: 5px; margin-right: 5px"
               >Text 1</span
             >
-            <span>(Paste old text here)</span>
+            <span>(Paste original text here)</span>
           </div>
           <div
             class="token-area-class encoded-token-field y-scroll full-height full-width"
@@ -127,7 +96,7 @@
               style="margin-bottom: 5px; margin-right: 5px"
               >Text 2</span
             >
-            <span>(Paste new text here)</span>
+            <span>(Paste target text here)</span>
           </div>
           <div
             class="token-area-class y-scroll full-height full-width"
@@ -141,40 +110,80 @@
           </div>
         </div>
       </div>
+
+      <div
+        style="margin-bottom: 20px; margin-top: 20px"
+        class="flex-display flex-column-flow">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Select comparison type</mat-label>
+          <mat-select
+            disableRipple
+            value="char"
+            (valueChange)="changeComparisonType($event)">
+            <mat-option value="char">Character by character</mat-option>
+            <mat-option value="word">Word by word</mat-option>
+            <mat-option value="line">Line by line</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section>
+          <mat-checkbox (change)="compareOptionsChange($event, 'case')"
+            >ignore case</mat-checkbox
+          >
+          <mat-checkbox
+            (change)="compareOptionsChange($event, 'whitespace')"
+            *ngIf="comparisonType !== 'char'"
+            >ignore whitespace</mat-checkbox
+          >
+        </section>
+        <button
+          mat-raised-button
+          aria-label="switch_text_button"
+          color="primary"
+          (click)="switchTexts()">
+          <mat-icon>swap_horiz</mat-icon>Switch texts
+        </button>
+      </div>
     </div>
 
     <div class="flex-display flex-column-flow description">
       <h3 style="font-weight: bold">How to compare text</h3>
       <div style="margin-left: 30px">
+        <p>1. Paste original text in text 1 area</p>
+        <p>2. Paste target text in text 2 area</p>
         <p>
-          1. To include mic audio & camera video in the recorded video, use
-          checkboxes
-        </p>
-        <p>2. Start screen recording using start recording button</p>
-        <p>3. When asked for mic & camera permission then provide the same</p>
-        <p>
-          4. Camera video if included will appear at bottom right corner in the
-          recorded video in 150X150 px box
+          3. Difference between both the texts will be evaluated automatically
+          and will be reflected in difference area
         </p>
         <p>
-          5. Screen recording can be stopped via native stop recording button or
-          use stop recording button on the screen (button will appear once
-          recording starts)
+          4. Default text comparion type is charcter by charcter, which can be
+          changed via comparison type dropdown to any of the available
+          comparison type like word by word or line by line
+        </p>
+        <p>5. To ignore case while comparing, use the corresponding checkbox</p>
+        <p>
+          6. To ignore leading & trailing whitespace while comparing, use the
+          corresponding checkbox
         </p>
         <p>
-          6. Once recording is stopped then recorded video will be downloaded
-          automatically
+          7. For swapping text 1 & text 2 with each other use the switch texts
+          button
+        </p>
+        <p>
+          8. After making any of the above change difference between both the
+          texts will be evaluated automatically
         </p>
       </div>
       <h3 style="font-weight: bold">Features</h3>
       <div style="margin-left: 30px">
-        <p>1. Screen recording is 100% free</p>
-        <p>2. Unlimited screen recording in HD format</p>
-        <p>3. Record screen with camera video & mic audio</p>
-        <p>4. No software installation is needed to record screen</p>
+        <p>1. Text comparsion is 100% free</p>
         <p>
-          5. Screen recording is 100% secure as whole processing is being done
-          at client side only (in host browser)
+          2. Text comparsion is 100% secure as whole processing is being done at
+          client side only (in host browser)
+        </p>
+        <p>3. Unlimited text comparison</p>
+        <p>4. Track down plagiarism</p>
+        <p>
+          5. Compare text character by character, word by word or line by line
         </p>
       </div>
     </div>
