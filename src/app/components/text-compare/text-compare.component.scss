@@ -21,7 +21,7 @@
 }
 
 .div-label {
-  font-size: x-large;
+  font-size: large;
 }
 
 .base-app-container {
@@ -46,6 +46,20 @@
 
 .diff-parent-div {
   max-width: 80%;
+}
+
+.description {
+  margin-top: 20px;
+  width: 90%;
+}
+
+@media screen and (min-width: 735px) { 
+.color-coding {
+  flex-direction: row;
+}
+.color-code {
+  margin-right: 10px;
+}
 }
 
 @media screen and (max-width: 735px) {
@@ -73,5 +87,11 @@
     height: 10em;
     width: 80%;
     font-size: larger;
+  }
+  .description {
+    width: 100%;
+  }
+  .color-coding {
+    flex-direction: column;
   }
 }

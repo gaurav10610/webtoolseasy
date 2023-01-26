@@ -47,19 +47,34 @@
         </div>
       </div>
 
+      <div class="flex-display color-coding" style="margin: 20px">
+        <div class="flex-display flex-row-flow flex-align-center color-code">
+          <mat-icon style="margin-right: 5px; color: grey">rectangle</mat-icon>
+          <span>character which is common</span>
+        </div>
+        <div class="flex-display flex-row-flow flex-align-center color-code">
+          <mat-icon style="margin-right: 5px; color: red">rectangle</mat-icon>
+          <span>character which is removed</span>
+        </div>
+        <div class="flex-display flex-row-flow flex-align-center">
+          <mat-icon style="margin-right: 5px; color: green">rectangle</mat-icon>
+          <span>character which is added</span>
+        </div>
+      </div>
+
       <div
         class="flex-display flex-row-flow flex-align-center token-area-container full-width"
         style="margin-bottom: 10px">
         <!-- Text 1 div -->
         <div
           class="flex-display flex-column-flow encoded-token-field token-parent-div">
-          <div class="flex-display flex-row-flow flex-align-center">
+          <div class="flex-display flex-row-flow">
             <span
               class="div-label"
               style="margin-bottom: 5px; margin-right: 5px"
               >Text 1</span
             >
-            <span>(Paste text here)</span>
+            <span>(Paste old text here)</span>
           </div>
           <div
             #text1Div
@@ -74,13 +89,13 @@
 
         <!-- Text 2 div -->
         <div class="flex-display flex-column-flow token-parent-div">
-          <div class="flex-display flex-row-flow flex-align-center">
+          <div class="flex-display flex-row-flow">
             <span
               class="div-label"
               style="margin-bottom: 5px; margin-right: 5px"
               >Text 2</span
             >
-            <span>(Paste text 2 here)</span>
+            <span>(Paste new text here)</span>
           </div>
           <div
             #text2Div
@@ -92,6 +107,42 @@
             <span></span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="flex-display flex-column-flow description">
+      <h3 style="font-weight: bold">How to use screen recorder</h3>
+      <div style="margin-left: 30px">
+        <p>
+          1. To include mic audio & camera video in the recorded video, use
+          checkboxes
+        </p>
+        <p>2. Start screen recording using start recording button</p>
+        <p>3. When asked for mic & camera permission then provide the same</p>
+        <p>
+          4. Camera video if included will appear at bottom right corner in the
+          recorded video in 150X150 px box
+        </p>
+        <p>
+          5. Screen recording can be stopped via native stop recording button or
+          use stop recording button on the screen (button will appear once
+          recording starts)
+        </p>
+        <p>
+          6. Once recording is stopped then recorded video will be downloaded
+          automatically
+        </p>
+      </div>
+      <h3 style="font-weight: bold">Features</h3>
+      <div style="margin-left: 30px">
+        <p>1. Screen recording is 100% free</p>
+        <p>2. Unlimited screen recording in HD format</p>
+        <p>3. Record screen with camera video & mic audio</p>
+        <p>4. No software installation is needed to record screen</p>
+        <p>
+          5. Screen recording is 100% secure as whole processing is being done
+          at client side only (in host browser)
+        </p>
       </div>
     </div>
 
