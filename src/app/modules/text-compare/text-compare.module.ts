@@ -6,6 +6,8 @@ import { TextCompareComponent } from 'src/app/components/text-compare/text-compa
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [TextCompareComponent],
@@ -15,6 +17,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    MatCheckboxModule,
+    MatSelectModule,
   ],
 })
 export class TextCompareModule {}

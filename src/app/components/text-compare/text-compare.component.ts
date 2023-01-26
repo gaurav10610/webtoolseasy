@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnDestroy,
   OnInit,
   PLATFORM_ID,
   Renderer2,
@@ -15,7 +14,8 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { textcompare as componentConfig } from 'src/environments/component-config';
-import { diffChars, Change } from 'diff';
+import { diffChars, Change, diffWords, diffLines } from 'diff';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-text-compare',
@@ -24,7 +24,7 @@ import { diffChars, Change } from 'diff';
 })
 export class TextCompareComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnInit, AfterViewInit
 {
   text1: string = 'webtoolseasy is awesome';
   text2: string = 'webtoolseasy is super cool';
@@ -37,6 +37,10 @@ export class TextCompareComponent
 
   @ViewChild('diffBlock', { static: false })
   diffBlock!: ElementRef;
+
+  ignoreCase: boolean = false;
+  ignoreWhitespace: boolean = false;
+  comparisonType: string = 'char';
 
   constructor(
     private titleService: Title,
@@ -74,16 +78,12 @@ export class TextCompareComponent
     this.evaluateDifference(this.text1, this.text2);
   }
 
-  ngOnDestroy(): void {
-    LogUtils.info('text compare component: ngOnDestroy');
-  }
-
-  onText1Change() {
+  async onText1Change() {
     this.text1 = this.text1Div.nativeElement.innerText;
     this.evaluateDifference(this.text1, this.text2);
   }
 
-  onText1Paste(event: any) {
+  async onText1Paste(event: any) {
     event.preventDefault();
     const pastedData = (
       event.clipboardData || (<any>window).clipboardData
@@ -98,12 +98,12 @@ export class TextCompareComponent
     this.renderer.setProperty(this.text1Div.nativeElement, 'innerText', text1);
   }
 
-  onText2Change() {
+  async onText2Change() {
     this.text2 = this.text2Div.nativeElement.innerText;
     this.evaluateDifference(this.text1, this.text2);
   }
 
-  onText2Paste(event: any) {
+  async onText2Paste(event: any) {
     event.preventDefault();
     const pastedData = (
       event.clipboardData || (<any>window).clipboardData
@@ -123,9 +123,23 @@ export class TextCompareComponent
    * @param text1
    * @param text2
    */
-  evaluateDifference(text1: string, text2: string): void {
+  async evaluateDifference(text1: string, text2: string) {
     LogUtils.info(`evaluating difference between the two texts`);
-    const diffs: Change[] = diffChars(text1, text2, { ignoreCase: false });
+    let diffChecker: any;
+    switch (this.comparisonType) {
+      case 'char':
+        diffChecker = diffChars;
+        break;
+      case 'word':
+        diffChecker = diffWords;
+        break;
+      case 'line':
+        diffChecker = diffLines;
+    }
+    const diffs: Change[] = diffChecker(text1, text2, {
+      ignoreCase: this.ignoreCase,
+      ignoreWhitespace: this.ignoreWhitespace,
+    });
 
     if (diffs.length > 0) {
       const childElements = this.diffBlock.nativeElement.children;
@@ -147,5 +161,31 @@ export class TextCompareComponent
     });
 
     this.renderer.appendChild(this.diffBlock.nativeElement, fragment);
+  }
+
+  async compareOptionsChange(event: MatCheckboxChange, comparisonType: string) {
+    switch (comparisonType) {
+      case 'case':
+        this.ignoreCase = event.checked;
+        break;
+      case 'whitespace':
+        this.ignoreWhitespace = event.checked;
+    }
+    this.evaluateDifference(this.text1, this.text2);
+  }
+
+  async switchTexts() {
+    const bufferText = this.text1;
+    this.text1 = this.text2;
+    this.text2 = bufferText;
+    this.updateText1(this.text1);
+    this.updateText2(this.text2);
+    this.evaluateDifference(this.text1, this.text2);
+  }
+
+  changeComparisonType(selectValue: string) {
+    this.comparisonType = selectValue;
+    LogUtils.info(`comparison type changed: ${selectValue}`);
+    this.evaluateDifference(this.text1, this.text2);
   }
 }

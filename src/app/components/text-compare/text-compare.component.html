@@ -3,7 +3,7 @@
   <mat-toolbar color="primary">
     <button
       mat-icon-button
-      aria-label="app icon button"
+      aria-label="app_icon_button"
       [replaceUrl]="true"
       routerLink="">
       <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
@@ -62,6 +62,37 @@
         </div>
       </div>
 
+      <div style="margin-bottom: 20px" class="flex-display flex-column-flow">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Select comparison type</mat-label>
+          <mat-select
+            disableRipple
+            value="char"
+            (valueChange)="changeComparisonType($event)">
+            <mat-option value="char">Character by character</mat-option>
+            <mat-option value="word">Word by word</mat-option>
+            <mat-option value="line">Line by line</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section>
+          <mat-checkbox (change)="compareOptionsChange($event, 'case')"
+            >ignore case</mat-checkbox
+          >
+          <mat-checkbox
+            (change)="compareOptionsChange($event, 'whitespace')"
+            *ngIf="comparisonType !== 'char'"
+            >ignore leading & trailing whitespace</mat-checkbox
+          >
+        </section>
+        <button
+          mat-raised-button
+          aria-label="switch_text_button"
+          color="primary"
+          (click)="switchTexts()">
+          <mat-icon>swap_horiz</mat-icon>Switch texts
+        </button>
+      </div>
+
       <div
         class="flex-display flex-row-flow flex-align-center token-area-container full-width"
         style="margin-bottom: 10px">
@@ -100,7 +131,7 @@
           </div>
           <div
             class="token-area-class y-scroll full-height full-width"
-            style="color: deeppink">
+            style="color: indigo">
             <pre
               #text2Div
               contenteditable="true"
@@ -113,7 +144,7 @@
     </div>
 
     <div class="flex-display flex-column-flow description">
-      <h3 style="font-weight: bold">How to use screen recorder</h3>
+      <h3 style="font-weight: bold">How to compare text</h3>
       <div style="margin-left: 30px">
         <p>
           1. To include mic audio & camera video in the recorded video, use
