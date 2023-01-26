@@ -124,7 +124,7 @@ export class TextCompareComponent
    * @param text2
    */
   evaluateDifference(text1: string, text2: string): void {
-    LogUtils.info(`evaluating difference between ${text1} & ${text2}`);
+    LogUtils.info(`evaluating difference between the two texts`);
     const diffs: Change[] = diffChars(text1, text2, { ignoreCase: false });
 
     if (diffs.length > 0) {
@@ -147,7 +147,5 @@ export class TextCompareComponent
     });
 
     this.renderer.appendChild(this.diffBlock.nativeElement, fragment);
-
-    LogUtils.info(diffs);
   }
 }

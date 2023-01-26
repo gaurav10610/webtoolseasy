@@ -77,13 +77,14 @@
             <span>(Paste old text here)</span>
           </div>
           <div
-            #text1Div
             class="token-area-class encoded-token-field y-scroll full-height full-width"
-            contentEditable="true"
-            style="color: indigo"
-            (input)="onText1Change()"
-            (paste)="onText1Paste($event)">
-            <span></span>
+            style="color: indigo">
+            <pre
+              #text1Div
+              contenteditable="true"
+              (input)="onText1Change()"
+              (paste)="onText1Paste($event)"
+              class="full-height full-width"></pre>
           </div>
         </div>
 
@@ -98,13 +99,14 @@
             <span>(Paste new text here)</span>
           </div>
           <div
-            #text2Div
             class="token-area-class y-scroll full-height full-width"
-            contenteditable="true"
-            style="color: deeppink"
-            (input)="onText2Change()"
-            (paste)="onText2Paste($event)">
-            <span></span>
+            style="color: deeppink">
+            <pre
+              #text2Div
+              contenteditable="true"
+              (input)="onText2Change()"
+              (paste)="onText2Paste($event)"
+              class="full-height full-width"></pre>
           </div>
         </div>
       </div>

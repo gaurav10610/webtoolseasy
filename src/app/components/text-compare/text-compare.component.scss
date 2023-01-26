@@ -53,13 +53,17 @@
   width: 90%;
 }
 
-@media screen and (min-width: 735px) { 
-.color-coding {
-  flex-direction: row;
+@media screen and (min-width: 735px) {
+  .color-coding {
+    flex-direction: row;
+  }
+  .color-code {
+    margin-right: 10px;
+  }
 }
-.color-code {
-  margin-right: 10px;
-}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
 }
 
 @media screen and (max-width: 735px) {
