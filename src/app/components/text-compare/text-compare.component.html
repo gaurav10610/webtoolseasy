@@ -31,6 +31,70 @@
       <h2 id="heading2">Compare Text Online</h2>
     </div>
 
+    <div class="flex-display flex-column-flow flex-align-center full-width">
+      <!-- difference div -->
+      <div
+        class="flex-display flex-column-flow diff-parent-div"
+        style="margin: 20px">
+        <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
+          >Difference</span
+        >
+        <div
+          class="token-area-class y-scroll full-height full-width"
+          contenteditable="false"
+          style="color: deeppink">
+          <pre #diffBlock></pre>
+        </div>
+      </div>
+
+      <div
+        class="flex-display flex-row-flow flex-align-center token-area-container full-width"
+        style="margin-bottom: 10px">
+        <!-- Text 1 div -->
+        <div
+          class="flex-display flex-column-flow encoded-token-field token-parent-div">
+          <div class="flex-display flex-row-flow flex-align-center">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Text 1</span
+            >
+            <span>(Paste text here)</span>
+          </div>
+          <div
+            #text1Div
+            class="token-area-class encoded-token-field y-scroll full-height full-width"
+            contentEditable="true"
+            style="color: indigo"
+            (input)="onText1Change()"
+            (paste)="onText1Paste($event)">
+            <span></span>
+          </div>
+        </div>
+
+        <!-- Text 2 div -->
+        <div class="flex-display flex-column-flow token-parent-div">
+          <div class="flex-display flex-row-flow flex-align-center">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Text 2</span
+            >
+            <span>(Paste text 2 here)</span>
+          </div>
+          <div
+            #text2Div
+            class="token-area-class y-scroll full-height full-width"
+            contenteditable="true"
+            style="color: deeppink"
+            (input)="onText2Change()"
+            (paste)="onText2Paste($event)">
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- tags div -->
     <div
       style="margin: 10px; flex-wrap: wrap"

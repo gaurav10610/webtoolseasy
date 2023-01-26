@@ -8,6 +8,12 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     navigateUrl: '/tools/screen-recorder',
   },
   {
+    applicationId: 'textcompare',
+    displayText: 'Text Compare',
+    iconName: 'comparison-icon',
+    navigateUrl: '/tools/text-compare',
+  },
+  {
     applicationId: 'uuid',
     displayText: 'UUID Generator',
     iconName: 'uuid-icon',
@@ -24,12 +30,6 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: 'Compress Image',
     iconName: 'image-compress-icon',
     navigateUrl: '/tools/image-compress',
-  },
-  {
-    applicationId: 'textcompare',
-    displayText: 'Text Compare',
-    iconName: 'comparison-icon',
-    navigateUrl: '/tools/text-compare',
   },
   {
     applicationId: 'jsformatter',
