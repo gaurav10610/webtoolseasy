@@ -16,10 +16,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'thetoolsdirectory'`, () => {
+  it(`should have as title 'webtoolseasy'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('thetoolsdirectory');
+    expect(app.title).toEqual('webtoolseasy');
   });
 
   it('should render title', () => {
@@ -27,7 +27,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.content span')?.textContent).toContain(
-      'thetoolsdirectory app is running!'
+      'webtoolseasy app is running!'
     );
   });
 });

@@ -6,20 +6,17 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import {
   FileData,
   FileDataType,
   ImageCompressSettings,
 } from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
 import * as JSZip from 'jszip';
@@ -30,9 +27,11 @@ import {
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { CompressSettingsComponent } from '../compress-settings/compress-settings.component';
+import { CompressSettingsComponent } from 'src/app/components/compress-settings/compress-settings.component';
 import { v4 } from 'uuid';
 import { DOCUMENT } from '@angular/common';
+import { imagecompress as componentConfig } from 'src/environments/component-config';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-image-compression',
@@ -43,44 +42,6 @@ export class ImageCompressionComponent
   extends BaseComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
-    appIconService: AppIconService,
-    titleService: Title,
-    metaService: Meta,
-    private renderer: Renderer2,
-    private zoneRef: NgZone,
-    breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog,
-    @Inject(DOCUMENT) document: any
-  ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
-    );
-    this.contextService.setCurrentAppId('imagecompress');
-    this.updatePageMetaData();
-    this.tags = <string[]>(
-      this.configService.getApplicationConfig(
-        this.contextService.getCurrentAppId()
-      )?.tags
-    );
-
-    breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.Web])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(result => {
-        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
-        LogUtils.info(`mobile view: ${this.isMobile}`);
-      });
-  }
-
   isMobile!: boolean;
   fileList: FileData[] = [];
   zipBuilder!: JSZip;
@@ -91,6 +52,43 @@ export class ImageCompressionComponent
   destroyed = new Subject<void>();
   isDownloadAllActive: boolean = false;
   activeDialog: MatDialogRef<any> | undefined;
+  appId: string = 'imagecompress';
+
+  constructor(
+    private titleService: Title,
+    private metaService: Meta,
+    private renderer: Renderer2,
+    private zoneRef: NgZone,
+    private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
+    @Inject(DOCUMENT) private document: any,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
+  ) {
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
+    );
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
+    );
+    this.updateTags(componentConfig);
+
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.Web])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
+        LogUtils.info(`mobile view: ${this.isMobile}`);
+      });
+  }
 
   ngOnInit(): void {
     LogUtils.info('image compression component has rendered');
@@ -220,24 +218,26 @@ export class ImageCompressionComponent
   }
 
   async addFileToCompress(file: File) {
-    this.fileList.push({
-      id: v4(),
-      file: file,
-      type: FileDataType.IMAGE,
-      inProgress: false,
-      compressProgress: 0,
-      isCompressed: false,
-      name: file.name,
-      isValid: this.isValidFileFormat(file),
-      error: this.isValidFileFormat(file)
-        ? undefined
-        : '* error: invalid file type',
-      compressOptions: {
-        signal: new AbortController().signal,
-        maxSizeMB: (0.9 * file.size) / 1024 / 1024,
-      },
-      compressionRate: 10,
-      maxFileSize: 0.9 * file.size,
+    this.zoneRef.run(() => {
+      this.fileList.push({
+        id: v4(),
+        file: file,
+        type: FileDataType.IMAGE,
+        inProgress: false,
+        compressProgress: 0,
+        isCompressed: false,
+        name: file.name,
+        isValid: this.isValidFileFormat(file),
+        error: this.isValidFileFormat(file)
+          ? undefined
+          : '* error: invalid file type',
+        compressOptions: {
+          signal: new AbortController().signal,
+          maxSizeMB: (0.9 * file.size) / 1024 / 1024,
+        },
+        compressionRate: 10,
+        maxFileSize: 0.9 * file.size,
+      });
     });
   }
 

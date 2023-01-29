@@ -4,19 +4,18 @@ import {
   ElementRef,
   Inject,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base/base.component';
-import { ConfigService } from 'src/app/service/common/config.service';
-import { ContextService } from 'src/app/service/context/context.service';
-import { AppIconService } from 'src/app/service/icon/app-icon.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Title, Meta } from '@angular/platform-browser';
+import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { jwt as componentConfig } from 'src/environments/component-config';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-jwt',
@@ -27,67 +26,60 @@ export class JwtComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  constructor(
-    router: Router,
-    configService: ConfigService,
-    contextService: ContextService,
-    private clipboard: Clipboard,
-    appIconService: AppIconService,
-    private renderer: Renderer2,
-    titleService: Title,
-    metaService: Meta,
-    @Inject(DOCUMENT) document: any
-  ) {
-    super(
-      router,
-      configService,
-      contextService,
-      titleService,
-      metaService,
-      document
-    );
-    this.contextService.setCurrentAppId('jwt');
-    this.updatePageMetaData();
+  appId: string = 'jwt';
+  isTokenValid: boolean = true;
+  jwtDecoder: JwtHelperService | undefined;
+  tabSpaceValue: string = '  ';
 
-    this.tags = <string[]>(
-      this.configService.getApplicationConfig(
-        this.contextService.getCurrentAppId()
-      )?.tags
+  @ViewChild('encodedDiv', { static: false })
+  encodedDiv!: ElementRef;
+
+  encodedToken: string =
+    'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
+  decodedToken: string = '';
+
+  constructor(
+    private clipboard: Clipboard,
+    private renderer: Renderer2,
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(DOCUMENT) private document: any,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: string
+  ) {
+    super();
+    this.loadCustomIcons(
+      componentConfig.icons,
+      this.matIconRegistry,
+      this.domSanitizer,
+      this.platformId
     );
+    this.updatePageMetaData(
+      componentConfig,
+      this.titleService,
+      this.metaService,
+      this.document
+    );
+    this.updateTags(componentConfig);
+  }
+
+  ngOnInit(): void {
+    LogUtils.info('jwt component: ngOnInit');
+  }
+
+  ngAfterViewInit(): void {
+    LogUtils.info('jwt component: ngAfterViewInit');
     this.jwtDecoder = new JwtHelperService();
     this.decodedToken = JSON.stringify(
       this.jwtDecoder.decodeToken(this.encodedToken),
       null,
       this.tabSpaceValue
     );
-  }
-
-  isTokenValid: boolean = true;
-  jwtDecoder: JwtHelperService;
-  tabSpaceValue: string = '  ';
-
-  @ViewChild('encodedDiv', { static: false })
-  encodedDiv!: ElementRef;
-  @ViewChild('decodedDiv', { static: false })
-  decodedDiv!: ElementRef;
-
-  encodedToken: string =
-    'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
-  decodedToken: string = '';
-
-  ngOnInit(): void {
-    LogUtils.info('jwt component has rendered');
-  }
-
-  ngAfterViewInit(): void {
     this.updateEncodedToken(this.encodedToken);
-    this.updateDecodedToken(this.decodedToken);
   }
 
   encodedInputChange(event: any) {
-    LogUtils.info(
-      `encoded token has changed with value: ${this.encodedDiv.nativeElement.innerText}`
-    );
     this.decodeUpdatedToken(this.encodedDiv.nativeElement.innerText);
   }
 
@@ -103,14 +95,13 @@ export class JwtComponent
   decodeUpdatedToken(encodedTokenValue: string) {
     try {
       this.encodedToken = encodedTokenValue;
-      const decodedTokenValue = this.jwtDecoder.decodeToken(encodedTokenValue);
+      const decodedTokenValue = this.jwtDecoder!.decodeToken(encodedTokenValue);
       this.isTokenValid = true;
       this.decodedToken = JSON.stringify(
         decodedTokenValue,
         null,
         this.tabSpaceValue
       );
-      this.updateDecodedToken(this.decodedToken);
     } catch (error) {
       LogUtils.error(
         `error occured while decoding token: ${this.encodedToken}`
@@ -124,14 +115,6 @@ export class JwtComponent
       this.encodedDiv.nativeElement,
       'innerText',
       encodedToken
-    );
-  }
-
-  updateDecodedToken(decodedToken: string) {
-    this.renderer.setProperty(
-      this.decodedDiv.nativeElement,
-      'innerHTML',
-      `<pre>${decodedToken}</pre>`
     );
   }
 

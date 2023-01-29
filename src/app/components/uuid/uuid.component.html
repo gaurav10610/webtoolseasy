@@ -1,96 +1,163 @@
-<div class="full-height flex-display flex-column-flow no-y-scroll">
+<div class="full-height flex-display flex-column-flow no-y-scroll no-x-scroll">
   <!-- profile header -->
-  <div class="header-div">
-    <mat-toolbar color="primary">
-      <button
-        mat-icon-button
-        aria-label="app icon button"
-        [replaceUrl]="true"
-        routerLink="/tools">
-        <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
-      </button>
-      <span class="header-font flex-full-height">WebToolsEasy</span>
-      <button
-        mat-icon-button
-        aria-label="home icon button"
-        [replaceUrl]="true"
-        routerLink="/tools">
-        <mat-icon>home</mat-icon>
-      </button>
-    </mat-toolbar>
-  </div>
-
-  <!-- app container -->
-  <div class="flex-display flex-column-flow flex-align-center">
-    <span style="margin: 20px" class="header-font bold-text uuid-font"
-      >Generate UUID Online</span
-    >
-    <!-- generate uuid -->
+  <mat-toolbar color="primary">
+    <button
+      mat-icon-button
+      aria-label="app icon button"
+      [replaceUrl]="true"
+      routerLink="">
+      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+    </button>
     <div
-      class="flex-display flex-row-flow flex-center flex-align-center uid-div"
-      style="margin-bottom: 20px">
-      <div
-        class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
-        <span class="uuid-font" style="color: #ff4081">{{ currentUUID }}</span>
+      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+      <span class="header-font">WebToolsEasy</span>
+    </div>
+    <button
+      mat-icon-button
+      aria-label="home icon button"
+      [replaceUrl]="true"
+      routerLink="/tools">
+      <mat-icon>home</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="full-width no-x-scroll y-scroll" style="padding: 10px">
+    <div
+      class="full-width flex-display flex-column-flow flex-center flex-align-center"
+      style="margin-top: 10px; margin-bottom: 20px">
+      <h1 id="heading">UUID Generator</h1>
+    </div>
+
+    <div
+      class="flex-display app-container-div flex-align-center"
+      style="justify-content: space-around">
+      <!-- version 4 app container -->
+      <div class="flex-display flex-column-flow flex-align-center uuid-app">
+        <h2 id="heading2">Generate UUID V4</h2>
+        <!-- generate uuid -->
+        <div
+          class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+          style="margin-bottom: 20px">
+          <div
+            class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+            <span class="uuid-class" style="color: #ff4081">{{ uuidV4 }}</span>
+          </div>
+          <button
+            mat-raised-button
+            (click)="copyGeneratedId('V4')"
+            color="primary">
+            <mat-icon>content_copy</mat-icon> Copy
+          </button>
+        </div>
+
+        <div class="flex-display flex-column-flow flex-align-center">
+          <button
+            mat-raised-button
+            color="primary"
+            style="margin-bottom: 20px"
+            (click)="generateUUID('V4')">
+            <mat-icon>repeat</mat-icon>
+            Generate Again
+          </button>
+          <h3 id="heading3">What is UUID Version 4?</h3>
+          <span>
+            A version 4 UUID is a randomly generated 128-bit identifier. As in
+            other UUIDs, 4 bits are used to indicate version 4, and 2 bits are
+            used to indicate the variant. Thus, 6 bits are constant, leaving 122
+            bits for the randomly generated part, for a total of 2122 (5.3×1036,
+            5.3 undecillion) possible values.
+            <a
+              target="_blank"
+              href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
+              >Read more on Wiki</a
+            ></span
+          >
+        </div>
       </div>
-      <button mat-raised-button (click)="copyGeneratedId()" color="primary">
-        <mat-icon>content_copy</mat-icon> Copy
-      </button>
+
+      <!-- version 1 app container -->
+      <div class="flex-display flex-column-flow flex-align-center uuid-app">
+        <h2 id="heading2">Generate UUID V1</h2>
+        <!-- generate uuid -->
+        <div
+          class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+          style="margin-bottom: 20px">
+          <div
+            class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+            <span class="uuid-class" style="color: #ff4081">{{ uuidV1 }}</span>
+          </div>
+          <button
+            mat-raised-button
+            (click)="copyGeneratedId('V1')"
+            color="primary">
+            <mat-icon>content_copy</mat-icon> Copy
+          </button>
+        </div>
+
+        <div class="flex-display flex-column-flow flex-align-center">
+          <button
+            mat-raised-button
+            color="primary"
+            style="margin-bottom: 20px"
+            (click)="generateUUID('V1')">
+            <mat-icon>repeat</mat-icon>
+            Generate Again
+          </button>
+          <h3 id="heading3">What is UUID Version 1?</h3>
+          <span
+            >Version-1 is based on the current time and the MAC address for the
+            computer or "node" generating the UUID.
+            <a
+              target="_blank"
+              href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
+              >Read more on Wiki</a
+            ></span
+          >
+        </div>
+      </div>
     </div>
 
-    <div class="flex-display flex-column-flow flex-align-center">
-      <button
-        mat-raised-button
-        color="primary"
-        style="margin-bottom: 20px"
-        (click)="generateUUID()">
-        <mat-icon>repeat</mat-icon>
-        Generate Again
-      </button>
-      <mat-button-toggle-group
-        name="uuidVersion"
-        aria-label="UUID Version"
-        style="margin-bottom: 20px"
-        #group="matButtonToggleGroup"
-        (click)="changeVersion(group.value)"
-        value="V4">
-        <mat-button-toggle value="V1"
-          ><span class="bold-text">version 1</span></mat-button-toggle
-        >
-        <!-- <mat-button-toggle value="V3"
-          ><span class="bold-text">version 3</span></mat-button-toggle
-        > -->
-        <mat-button-toggle value="V4"
-          ><span class="bold-text">version 4</span></mat-button-toggle
-        >
-      </mat-button-toggle-group>
-      <span
-        class="bold-text header-font"
-        style="margin-bottom: 10px; font-size: large"
-        >What is UUID {{ selectedVersion }}?</span
-      >
-      <span style="padding-left: 10px">{{ description }}</span>
+    <div
+      class="flex-display flex-column-flow"
+      style="margin-top: 10px; margin-left: 20px">
+      <h3 id="heading3">What is UUID ( Universally unique identifier ) ?</h3>
+      <p>
+        Universally Unique Identifiers, or UUIDS, are 128 bit numbers, composed
+        of 16 octets and represented as 32 base-16 characters, that can be used
+        to identify information across a computer system. This specification was
+        originally created by Microsoft and standardized by both the IETF and
+        ITU.
+      </p>
+      <p>
+        All the UUIDs are generated locally in browser only. Genearted UUIDs are
+        provided as is without any warranty.
+      </p>
     </div>
-  </div>
 
-  <div
-    class="flex-display flex-row-flow flex-center"
-    style="margin-left: 10px; margin-right: 10px">
-    <span class="bold-text" style="margin-right: 5px">NOTE:</span>
-    <span>
-      UUID generation is being done in browser only. No server is
-      involved.</span
-    >
-  </div>
+    <!-- tags div -->
+    <div
+      style="margin: 20px; flex-wrap: wrap"
+      class="flex-display flex-row-flow flex-center">
+      <p class="tag-class" *ngFor="let tag of tags">
+        {{ tag }}
+      </p>
+    </div>
 
-  <!-- tags div -->
-  <div
-    style="margin: 20px; flex-wrap: wrap"
-    class="flex-display flex-row-flow flex-center">
-    <div class="tags-class">uuid</div>
-    <div class="tags-class">unique identifier</div>
-    <div class="tags-class">id generator</div>
-    <div class="tags-class">uuid generator</div>
-    <div class="tags-class">programming</div>
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-bottom: 10px">
+      <span style="margin-right: 10px; font-style: italic">Follow -</span>
+      <a
+        href="https://www.linkedin.com/company/webtoolseasy/"
+        target="_blank"
+        style="margin-right: 20px">
+        <mat-icon svgIcon="linkedin-icon"></mat-icon
+      ></a>
+      <a
+        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+        target="_blank">
+        <mat-icon svgIcon="facebook-icon"></mat-icon
+      ></a>
+    </div>
   </div>
 </div>

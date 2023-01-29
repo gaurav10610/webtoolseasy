@@ -2,20 +2,28 @@
   height: 300px;
 }
 
-.parent-div {
-  flex-flow: row;
-}
-
 .icon-div mat-icon {
   transform: scale(10);
 }
 
-.app-name {
-  font-size: xxx-large;
+@media screen and (min-width: 735px) { 
+  .app-parent-div {
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    padding-right: 10px;
+  }
+  .app-list {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
 
-.parent-view-div {
-  width: 50%;
+#subheading{
+  font-family: monospace, 'Courier New', Courier;
 }
 
 @media screen and (max-width: 735px) {
@@ -25,17 +33,13 @@
   .icon-div mat-icon {
     transform: scale(5);
   }
-  .app-name {
-    font-size: x-large;
+  #subheading{
+    font-size: larger;
   }
-  .parent-div {
-    flex-flow: column;
+  .app-links {
+    display: none;
   }
-  .parent-view-div {
-    width: 100%;
-    height: 50%;
-  }
-  .app-links{
-    justify-content: start;
+  .top-div {
+    justify-content: center;
   }
 }

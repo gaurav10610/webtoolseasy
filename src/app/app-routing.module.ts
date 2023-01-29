@@ -2,9 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AppDirectoryModule } from './modules/app-directory/app-directory.module';
+import { CssFormatterModule } from './modules/css-formatter/css-formatter.module';
+import { HtmlFormatterModule } from './modules/html-formatter/html-formatter.module';
 import { ImageCompressionModule } from './modules/image-compression/image-compression.module';
+import { JsFormatterModule } from './modules/js-formatter/js-formatter.module';
 import { JsonFormatterModule } from './modules/json-formatter/json-formatter.module';
 import { JwtModule } from './modules/jwt/jwt.module';
+import { ScreenRecorderModule } from './modules/screen-recorder/screen-recorder.module';
+import { TextCompareModule } from './modules/text-compare/text-compare.module';
 import { UuidModule } from './modules/uuid/uuid.module';
 
 const routes: Routes = [
@@ -14,10 +19,19 @@ const routes: Routes = [
   { path: 'tools/jwt', loadChildren: () => JwtModule },
   { path: 'tools/json-formatter', loadChildren: () => JsonFormatterModule },
   { path: 'tools/image-compress', loadChildren: () => ImageCompressionModule },
+  { path: 'tools/js-formatter', loadChildren: () => JsFormatterModule },
+  { path: 'tools/css-formatter', loadChildren: () => CssFormatterModule },
+  { path: 'tools/html-formatter', loadChildren: () => HtmlFormatterModule },
+  { path: 'tools/screen-recorder', loadChildren: () => ScreenRecorderModule },
+  { path: 'tools/text-compare', loadChildren: () => TextCompareModule },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      initialNavigation: 'enabledBlocking',
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

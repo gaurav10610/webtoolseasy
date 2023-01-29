@@ -12,12 +12,11 @@ import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'webtoolseasyApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -25,7 +24,6 @@ import { MatListModule } from '@angular/material/list';
     NgxGoogleAnalyticsRouterModule,
     MatIconModule,
     MatButtonModule,
-    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

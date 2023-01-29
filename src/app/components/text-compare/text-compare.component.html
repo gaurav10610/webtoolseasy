@@ -1,0 +1,217 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <mat-toolbar color="primary">
+    <button
+      mat-icon-button
+      aria-label="app_icon_button"
+      [replaceUrl]="true"
+      routerLink="">
+      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+    </button>
+    <div
+      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
+      <span class="header-font">WebToolsEasy</span>
+    </div>
+    <button
+      mat-icon-button
+      aria-label="home icon button"
+      [replaceUrl]="true"
+      routerLink="/tools">
+      <mat-icon>home</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- app container -->
+  <div
+    class="flex-display flex-column-flow flex-align-center base-app-container y-scroll">
+    <div
+      class="full-width flex-display flex-column-flow flex-center flex-align-center"
+      style="margin-top: 10px">
+      <h1 id="heading">Text Compare</h1>
+      <h2 id="heading2">Compare Text Online</h2>
+    </div>
+
+    <div class="flex-display flex-column-flow flex-align-center full-width">
+      <!-- difference div -->
+      <div
+        class="flex-display flex-column-flow diff-parent-div"
+        style="margin: 20px">
+        <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
+          >Difference</span
+        >
+        <div
+          class="token-area-class y-scroll full-height full-width"
+          contenteditable="false"
+          style="color: deeppink">
+          <pre #diffBlock></pre>
+        </div>
+      </div>
+
+      <div class="flex-display color-coding" style="margin: 20px">
+        <div class="flex-display flex-row-flow flex-align-center color-code">
+          <mat-icon style="margin-right: 5px; color: grey">rectangle</mat-icon>
+          <span>part which is common</span>
+        </div>
+        <div class="flex-display flex-row-flow flex-align-center color-code">
+          <mat-icon style="margin-right: 5px; color: red">rectangle</mat-icon>
+          <span>part which is removed</span>
+        </div>
+        <div class="flex-display flex-row-flow flex-align-center">
+          <mat-icon style="margin-right: 5px; color: green">rectangle</mat-icon>
+          <span>part which is added</span>
+        </div>
+      </div>
+
+      <div
+        class="flex-display flex-row-flow flex-align-center token-area-container full-width"
+        style="margin-bottom: 10px">
+        <!-- Text 1 div -->
+        <div
+          class="flex-display flex-column-flow encoded-token-field token-parent-div">
+          <div class="flex-display flex-row-flow">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Text 1</span
+            >
+            <span>(Paste original text here)</span>
+          </div>
+          <div
+            class="token-area-class encoded-token-field y-scroll full-height full-width"
+            style="color: indigo">
+            <pre
+              #text1Div
+              contenteditable="true"
+              (input)="onText1Change()"
+              (paste)="onText1Paste($event)"
+              class="full-height full-width"></pre>
+          </div>
+        </div>
+
+        <!-- Text 2 div -->
+        <div class="flex-display flex-column-flow token-parent-div">
+          <div class="flex-display flex-row-flow">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Text 2</span
+            >
+            <span>(Paste target text here)</span>
+          </div>
+          <div
+            class="token-area-class y-scroll full-height full-width"
+            style="color: indigo">
+            <pre
+              #text2Div
+              contenteditable="true"
+              (input)="onText2Change()"
+              (paste)="onText2Paste($event)"
+              class="full-height full-width"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="margin-bottom: 20px; margin-top: 20px"
+        class="flex-display flex-column-flow">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>Select comparison type</mat-label>
+          <mat-select
+            disableRipple
+            value="char"
+            (valueChange)="changeComparisonType($event)">
+            <mat-option value="char">Character by character</mat-option>
+            <mat-option value="word">Word by word</mat-option>
+            <mat-option value="line">Line by line</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section>
+          <mat-checkbox (change)="compareOptionsChange($event, 'case')"
+            >ignore case</mat-checkbox
+          >
+          <mat-checkbox
+            (change)="compareOptionsChange($event, 'whitespace')"
+            *ngIf="comparisonType !== 'char'"
+            >ignore whitespace</mat-checkbox
+          >
+        </section>
+        <button
+          mat-raised-button
+          aria-label="switch_text_button"
+          color="primary"
+          (click)="switchTexts()">
+          <mat-icon>swap_horiz</mat-icon>Switch texts
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-display flex-column-flow description">
+      <h3 style="font-weight: bold">How to compare text</h3>
+      <div style="margin-left: 30px">
+        <p>1. Paste original text in text 1 area</p>
+        <p>2. Paste target text in text 2 area</p>
+        <p>
+          3. Difference between both the texts will be evaluated automatically
+          and will be reflected in difference area
+        </p>
+        <p>
+          4. Default text comparion type is charcter by charcter, which can be
+          changed via comparison type dropdown to any of the available
+          comparison type like word by word or line by line
+        </p>
+        <p>5. To ignore case while comparing, use the corresponding checkbox</p>
+        <p>
+          6. To ignore leading & trailing whitespace while comparing, use the
+          corresponding checkbox
+        </p>
+        <p>
+          7. For swapping text 1 & text 2 with each other use the switch texts
+          button
+        </p>
+        <p>
+          8. After making any of the above change difference between both the
+          texts will be evaluated automatically
+        </p>
+      </div>
+      <h3 style="font-weight: bold">Features</h3>
+      <div style="margin-left: 30px">
+        <p>1. Text comparsion is 100% free</p>
+        <p>
+          2. Text comparsion is 100% secure as whole processing is being done at
+          client side only (in host browser)
+        </p>
+        <p>3. Unlimited text comparison</p>
+        <p>4. Track down plagiarism</p>
+        <p>
+          5. Compare text character by character, word by word or line by line
+        </p>
+      </div>
+    </div>
+
+    <!-- tags div -->
+    <div
+      style="margin: 10px; flex-wrap: wrap"
+      class="flex-display flex-row-flow flex-center">
+      <p class="tag-class" *ngFor="let tag of tags">
+        {{ tag }}
+      </p>
+    </div>
+
+    <div
+      class="flex-display flex-row-flow flex-center flex-align-center"
+      style="margin-bottom: 10px">
+      <span style="margin-right: 10px; font-style: italic">Follow -</span>
+      <a
+        href="https://www.linkedin.com/company/webtoolseasy/"
+        target="_blank"
+        style="margin-right: 20px">
+        <mat-icon svgIcon="linkedin-icon"></mat-icon
+      ></a>
+      <a
+        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+        target="_blank">
+        <mat-icon svgIcon="facebook-icon"></mat-icon
+      ></a>
+    </div>
+  </div>
+</div>

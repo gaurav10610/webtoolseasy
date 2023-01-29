@@ -1,16 +1,31 @@
 <div class="full-height flex-display flex-column-flow no-y-scroll">
   <!-- profile header -->
-  <div class="header-div">
-    <mat-toolbar color="primary">
-      <mat-icon svgIcon="app-icon" class="app-icon pointer-cursor"></mat-icon>
+  <mat-toolbar color="primary">
+    <button
+      mat-icon-button
+      aria-label="app icon button"
+      [replaceUrl]="true"
+      routerLink="">
+      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+    </button>
+    <div
+      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
       <span class="header-font">WebToolsEasy</span>
-    </mat-toolbar>
-  </div>
+    </div>
+    <button
+      mat-icon-button
+      aria-label="home icon button"
+      [replaceUrl]="true"
+      routerLink="/tools"
+      style="visibility: hidden">
+      <mat-icon>home</mat-icon>
+    </button>
+  </mat-toolbar>
 
   <!-- app container -->
-  <div class="flex-full-height app-background">
+  <div class="flex-full-height app-background base-app-container">
     <!-- applications container -->
-    <div id="apps-container" class="apps-container pointer-cursor">
+    <div id="apps-container" class="apps-container pointer-cursor flex-center">
       <div
         class="application"
         *ngFor="let application of appsConfig"
@@ -28,10 +43,7 @@
               "></mat-icon>
             <a
               [replaceUrl]="true"
-              routerLink="{{
-                configService.getApplicationConfig(application.applicationId)
-                  ?.navigationUrl
-              }}"
+              routerLink="{{ application.navigateUrl }}"
               (click)="onAppClick($event)"
               >{{ application.displayText }}</a
             >

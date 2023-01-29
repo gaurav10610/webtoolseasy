@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   gaCode: 'G-XXXXX',
+  hostname: 'http://localhost:4200/',
+  port: 4200,
 };
 
 /*
