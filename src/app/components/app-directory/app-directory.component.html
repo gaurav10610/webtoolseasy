@@ -1,26 +1,6 @@
 <div class="full-height flex-display flex-column-flow no-y-scroll">
   <!-- profile header -->
-  <mat-toolbar color="primary">
-    <button
-      mat-icon-button
-      aria-label="app icon button"
-      [replaceUrl]="true"
-      routerLink="">
-      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
-    </button>
-    <div
-      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
-      <span class="header-font">WebToolsEasy</span>
-    </div>
-    <button
-      mat-icon-button
-      aria-label="home icon button"
-      [replaceUrl]="true"
-      routerLink="/tools"
-      style="visibility: hidden">
-      <mat-icon>home</mat-icon>
-    </button>
-  </mat-toolbar>
+  <app-header-toolbar></app-header-toolbar>
 
   <!-- app container -->
   <div
