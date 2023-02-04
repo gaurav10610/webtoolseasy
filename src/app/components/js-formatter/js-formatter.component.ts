@@ -16,6 +16,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { js_beautify } from 'js-beautify';
 import { jsformatter as componentConfig } from 'src/environments/component-config';
 import { MatIconRegistry } from '@angular/material/icon';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-js-formatter',
@@ -44,7 +45,8 @@ export class JsFormatterComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -60,6 +62,8 @@ export class JsFormatterComponent
       this.document
     );
     this.updateTags(componentConfig);
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {

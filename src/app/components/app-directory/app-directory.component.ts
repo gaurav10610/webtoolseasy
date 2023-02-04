@@ -8,6 +8,7 @@ import { DOCUMENT } from '@angular/common';
 import { tools as componentConfig } from 'src/environments/component-config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-app-directory',
@@ -29,7 +30,8 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -44,6 +46,8 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
       this.metaService,
       this.document
     );
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {

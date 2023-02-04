@@ -14,13 +14,6 @@
   overflow-wrap: break-word;
 }
 
-#heading {
-  margin: 10px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: xxx-large;
-  font-weight: bold;
-}
-
 .tag-class {
   margin: 5px;
   background: #e0e0e0;
@@ -53,9 +46,6 @@
   .token-area-class {
     font-size: larger;
   }
-  #heading {
-    font-size: x-large;
-  }
 }
 
 @media screen and (min-width: 735px) {
@@ -64,8 +54,5 @@
   }
   .encoded-token-field {
     margin-right: 30px;
-  }
-  #heading2 {
-    font-size: x-large;
   }
 }

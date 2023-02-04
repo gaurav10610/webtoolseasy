@@ -22,6 +22,7 @@ import { VideoStreamMerger } from 'video-stream-merger';
 import { isMobile } from 'is-mobile';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -91,7 +92,8 @@ export class ScreenRecorderComponent
     @Inject(PLATFORM_ID) private platformId: string,
     private renderer: Renderer2,
     private zoneRef: NgZone,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -108,6 +110,9 @@ export class ScreenRecorderComponent
     );
     this.updateTags(componentConfig);
     this.isSupported = !isMobile();
+
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

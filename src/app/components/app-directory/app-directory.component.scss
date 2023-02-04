@@ -13,13 +13,6 @@
   margin: 15px;
 }
 
-#heading {
-  margin: 20px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: xxx-large;
-  font-weight: bold;
-}
-
 @media screen and (min-width: 735px) {
   .application {
     width: 20%;
@@ -27,9 +20,6 @@
 }
 
 @media screen and (max-width: 735px) {
-  #heading {
-    font-size: x-large;
-  }
   .app-card {
     flex-direction: row;
   }

@@ -16,6 +16,7 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { htmlformatter as componentConfig } from 'src/environments/component-config';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-html-formatter',
@@ -45,7 +46,8 @@ export class HtmlFormatterComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -61,6 +63,8 @@ export class HtmlFormatterComponent
       this.document
     );
     this.updateTags(componentConfig);
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {

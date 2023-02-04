@@ -16,6 +16,7 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { textcompare as componentConfig } from 'src/environments/component-config';
 import { diffChars, Change, diffWords, diffLines } from 'diff';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-text-compare',
@@ -49,7 +50,8 @@ export class TextCompareComponent
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -65,6 +67,8 @@ export class TextCompareComponent
       this.document
     );
     this.updateTags(componentConfig);
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {

@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
+import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 
 @NgModule({
   declarations: [ScreenRecorderComponent],
@@ -19,6 +20,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
     MatCheckboxModule,
     MatProgressSpinnerModule,
     HeaderToolbarModule,
+    ToolHeadingModule,
   ],
 })
 export class ScreenRecorderModule {}

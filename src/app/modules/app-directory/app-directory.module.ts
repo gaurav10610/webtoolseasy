@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { AppDirectoryComponent } from 'src/app/components/app-directory/app-directory.component';
 import { MatButtonModule } from '@angular/material/button';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
+import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 
 @NgModule({
   declarations: [AppDirectoryComponent],
@@ -16,6 +17,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
     MatCardModule,
     MatButtonModule,
     HeaderToolbarModule,
+    ToolHeadingModule,
   ],
 })
 export class AppDirectoryModule {}

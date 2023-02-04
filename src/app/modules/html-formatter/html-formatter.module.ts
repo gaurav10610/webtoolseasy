@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HtmlFormatterComponent } from 'src/app/components/html-formatter/html-formatter.component';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
+import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 
 @NgModule({
   declarations: [HtmlFormatterComponent],
@@ -17,6 +18,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
     MatButtonModule,
     ClipboardModule,
     HeaderToolbarModule,
+    ToolHeadingModule,
   ],
 })
 export class HtmlFormatterModule {}

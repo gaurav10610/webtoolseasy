@@ -3,18 +3,6 @@
   border-radius: 10px;
 }
 
-#heading {
-  margin: 10px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: xxx-large;
-  font-weight: bold;
-}
-
-#heading2 {
-  font-weight: bold;
-  font-size: x-large;
-}
-
 #heading3 {
   margin-bottom: 10px;
   font-size: large;
@@ -64,8 +52,5 @@
   }
   .app-container-div {
     flex-flow: column;
-  }
-  #heading {
-    font-size: xx-large;
   }
 }

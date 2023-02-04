@@ -15,6 +15,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { DOCUMENT } from '@angular/common';
 import { jsonformatter as componentConfig } from 'src/environments/component-config';
 import { MatIconRegistry } from '@angular/material/icon';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-json-formatter',
@@ -45,7 +46,8 @@ export class JsonFormatterComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -61,6 +63,8 @@ export class JsonFormatterComponent
       this.document
     );
     this.updateTags(componentConfig);
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {

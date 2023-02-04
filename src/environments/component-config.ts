@@ -74,6 +74,7 @@ export const home: ApplicationConfig = {
 
 export const tools: ApplicationConfig = {
   navigationUrl: '/tools',
+  mainHeading: 'Web Tools Directory',
   pageTitle: 'Free Web Tools - Tools Home',
   metaTags: [
     {
@@ -137,10 +138,19 @@ export const tools: ApplicationConfig = {
       iconName: 'comparison-icon',
       iconRelativeUrl: 'comparison.svg',
     },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
+    },
   ],
 };
 
 export const uuid: ApplicationConfig = {
+  mainHeading: 'UUID Generator',
   navigationUrl: '/tools/uuid',
   pageTitle: 'Online UUID Generator',
   metaTags: [
@@ -179,6 +189,7 @@ export const uuid: ApplicationConfig = {
 };
 
 export const jwt: ApplicationConfig = {
+  mainHeading: 'JWT Decoder',
   navigationUrl: '/tools/jwt',
   pageTitle: 'JWT Token Decode',
   metaTags: [
@@ -217,6 +228,8 @@ export const jwt: ApplicationConfig = {
 };
 
 export const imagecompress: ApplicationConfig = {
+  mainHeading: 'Image Compressor',
+  subHeading: 'Compress JPEG, PNG images for free',
   navigationUrl: '/tools/image-compress',
   pageTitle: 'Image Compressor | Image File Size Reducer',
   metaTags: [
@@ -272,6 +285,8 @@ export const imagecompress: ApplicationConfig = {
 };
 
 export const jsonformatter: ApplicationConfig = {
+  mainHeading: 'JSON Formatter',
+  subHeading: 'Online JSON Beautifier',
   navigationUrl: '/tools/json-formatter',
   pageTitle: 'JSON Formatter | JSON Beautifier',
   metaTags: [
@@ -309,6 +324,8 @@ export const jsonformatter: ApplicationConfig = {
 };
 
 export const jsformatter: ApplicationConfig = {
+  mainHeading: 'JS Formatter',
+  subHeading: 'Online JS Beautifier',
   navigationUrl: '/tools/js-formatter',
   pageTitle: 'JS Formatter | JS Beautifier',
   metaTags: [
@@ -347,6 +364,8 @@ export const jsformatter: ApplicationConfig = {
 };
 
 export const cssformatter: ApplicationConfig = {
+  mainHeading: 'CSS Formatter',
+  subHeading: 'Online CSS Beautifier',
   navigationUrl: '/tools/css-formatter',
   pageTitle: 'CSS Formatter | CSS Beautifier',
   metaTags: [
@@ -385,6 +404,8 @@ export const cssformatter: ApplicationConfig = {
 };
 
 export const htmlformatter: ApplicationConfig = {
+  mainHeading: 'HTML Formatter',
+  subHeading: 'Online HTML Beautifier',
   navigationUrl: '/tools/html-formatter',
   pageTitle: 'HTML Formatter | HTML Beautify',
   metaTags: [
@@ -422,6 +443,8 @@ export const htmlformatter: ApplicationConfig = {
 };
 
 export const screenrecorder: ApplicationConfig = {
+  mainHeading: 'Screen Recorder',
+  subHeading: 'Free Online Screen Recorder',
   navigationUrl: '/tools/screen-recorder',
   pageTitle: 'Free Screen Recorder | Screen Capture',
   metaTags: [
@@ -464,6 +487,8 @@ export const screenrecorder: ApplicationConfig = {
 };
 
 export const textcompare: ApplicationConfig = {
+  mainHeading: 'Text Compare',
+  subHeading: 'Compare Text Online',
   navigationUrl: '/tools/text-compare',
   pageTitle: 'Text Compare | Compare Text Online',
   metaTags: [

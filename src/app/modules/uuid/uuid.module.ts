@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UuidComponent } from 'src/app/components/uuid/uuid.component';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
+import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 
 @NgModule({
   declarations: [UuidComponent],
@@ -16,6 +17,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
     MatButtonModule,
     ClipboardModule,
     HeaderToolbarModule,
+    ToolHeadingModule,
   ],
 })
 export class UuidModule {}

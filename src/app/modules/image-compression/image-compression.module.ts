@@ -11,6 +11,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CompressSettingsComponent } from 'src/app/components/compress-settings/compress-settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
+import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 
 @NgModule({
   declarations: [ImageCompressionComponent, CompressSettingsComponent],
@@ -25,6 +26,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
     MatSliderModule,
     MatDialogModule,
     HeaderToolbarModule,
+    ToolHeadingModule,
   ],
 })
 export class ImageCompressionModule {}

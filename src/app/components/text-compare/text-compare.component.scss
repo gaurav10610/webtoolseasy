@@ -1,15 +1,3 @@
-#heading {
-  margin: 5px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: xxx-large;
-  font-weight: bold;
-}
-
-#heading2 {
-  margin: 10px;
-  font-size: large;
-}
-
 .tag-class {
   margin: 5px;
   background: #e0e0e0;
@@ -66,9 +54,6 @@
 }
 
 @media screen and (max-width: 735px) {
-  #heading {
-    font-size: x-large;
-  }
   .token-parent-div {
     height: 10em;
     width: 80%;
