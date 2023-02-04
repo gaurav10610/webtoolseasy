@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
+import { TagsModule } from 'src/app/modules/tags/tags.module';
 
 @NgModule({
   declarations: [TextCompareComponent],
@@ -21,6 +22,7 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
     MatSelectModule,
     HeaderToolbarModule,
     ToolHeadingModule,
+    TagsModule,
   ],
 })
 export class TextCompareModule {}

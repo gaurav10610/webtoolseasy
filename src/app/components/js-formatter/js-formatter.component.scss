@@ -7,16 +7,6 @@
   font-size: x-large;
 }
 
-.tag-class {
-  margin: 5px;
-  background: #e0e0e0;
-  border-radius: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
 .token-area-class {
   border: 1px solid lightgrey;
   border-radius: 10px;
@@ -28,6 +18,10 @@
   padding: 10px;
 }
 
+.token-area-container {
+  justify-content: space-around;
+}
+
 @media screen and (min-width: 735px) {
   .token-area-class {
     font-size: large;
@@ -35,10 +29,6 @@
   .encoded-token-field {
     margin-right: 30px;
   }
-}
-
-.token-area-container {
-  justify-content: space-around;
 }
 
 @media screen and (max-width: 735px) {

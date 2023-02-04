@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { JsFormatterComponent } from 'src/app/components/js-formatter/js-formatter.component';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
+import { TagsModule } from 'src/app/modules/tags/tags.module';
 
 @NgModule({
   declarations: [JsFormatterComponent],
@@ -19,6 +20,7 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
     ClipboardModule,
     HeaderToolbarModule,
     ToolHeadingModule,
+    TagsModule,
   ],
 })
 export class JsFormatterModule {}

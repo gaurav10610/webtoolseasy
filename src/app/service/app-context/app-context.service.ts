@@ -9,4 +9,5 @@ export class AppContextService {
    */
   mainHeading: string = '';
   subHeading: string | undefined;
+  tags: string[] = [];
 }

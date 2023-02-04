@@ -108,7 +108,7 @@ export class ScreenRecorderComponent
       this.metaService,
       this.document
     );
-    this.updateTags(componentConfig);
+    this.appContextService.tags = componentConfig.tags;
     this.isSupported = !isMobile();
 
     this.appContextService.mainHeading = componentConfig.mainHeading!;

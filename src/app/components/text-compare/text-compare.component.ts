@@ -66,7 +66,7 @@ export class TextCompareComponent
       this.metaService,
       this.document
     );
-    this.updateTags(componentConfig);
+    this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
   }

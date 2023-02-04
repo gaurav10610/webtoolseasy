@@ -12,6 +12,7 @@ import { CompressSettingsComponent } from 'src/app/components/compress-settings/
 import { MatDialogModule } from '@angular/material/dialog';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
+import { TagsModule } from 'src/app/modules/tags/tags.module';
 
 @NgModule({
   declarations: [ImageCompressionComponent, CompressSettingsComponent],
@@ -27,6 +28,7 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
     MatDialogModule,
     HeaderToolbarModule,
     ToolHeadingModule,
+    TagsModule,
   ],
 })
 export class ImageCompressionModule {}

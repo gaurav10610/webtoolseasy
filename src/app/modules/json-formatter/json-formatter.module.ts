@@ -7,6 +7,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { JsonFormatterComponent } from 'src/app/components/json-formatter/json-formatter.component';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
+import { TagsModule } from 'src/app/modules/tags/tags.module';
 
 @NgModule({
   declarations: [JsonFormatterComponent],
@@ -18,6 +19,7 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
     ClipboardModule,
     HeaderToolbarModule,
     ToolHeadingModule,
+    TagsModule,
   ],
 })
 export class JsonFormatterModule {}
