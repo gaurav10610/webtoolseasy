@@ -17,4 +17,22 @@
     routerLink="/tools">
     <mat-icon>home</mat-icon>
   </button>
+  <button
+    mat-icon-button
+    aria-label="facebook icon button"
+    (click)="
+      navigateSocialLink(
+        'https://www.facebook.com/people/Webtoolseasy/100088911459047/'
+      )
+    ">
+    <mat-icon svgIcon="facebook-icon"></mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    aria-label="linkedin icon button"
+    (click)="
+      navigateSocialLink('https://www.linkedin.com/company/webtoolseasy/')
+    ">
+    <mat-icon svgIcon="linkedin-icon"></mat-icon>
+  </button>
 </mat-toolbar>
