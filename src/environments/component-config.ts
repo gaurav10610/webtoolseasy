@@ -487,8 +487,8 @@ export const screenrecorder: ApplicationConfig = {
 };
 
 export const textcompare: ApplicationConfig = {
-  mainHeading: 'Text Compare',
-  subHeading: 'Compare Text Online',
+  mainHeading: 'Text Comparison',
+  subHeading: 'Text Difference Checker',
   navigationUrl: '/tools/text-compare',
   pageTitle: 'Text Compare | Compare Text Online',
   metaTags: [
