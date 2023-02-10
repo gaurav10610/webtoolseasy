@@ -29,13 +29,13 @@ export class JsonFormatterComponent
   appId: string = 'jsonformatter';
   isJsonValid: boolean = true;
 
-  @ViewChild('rawJsonDiv', { static: false })
-  rawJsonDiv!: ElementRef;
-  @ViewChild('formattedJsonDiv', { static: false })
-  formattedJsonDiv!: ElementRef;
+  @ViewChild('text1AreaContent', { static: false })
+  text1AreaContent!: ElementRef;
+
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: ElementRef;
 
   rawJson: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
-  formattedJson: string = '';
   tabSpaceValue: string = '   ';
 
   constructor(
@@ -73,16 +73,17 @@ export class JsonFormatterComponent
 
   ngAfterViewInit(): void {
     LogUtils.info('json formatter: ngAfterViewInit');
-    this.formattedJson = JSON.stringify(
+    const formattedJson = JSON.stringify(
       JSON.parse(this.rawJson),
       null,
       this.tabSpaceValue
     );
     this.updateRawJson(this.rawJson);
+    this.updateFormattedJson(formattedJson);
   }
 
   rawJsonChange() {
-    this.formatJson(this.rawJsonDiv.nativeElement.innerText);
+    this.formatJson(this.text1AreaContent.nativeElement.innerText);
   }
 
   onJsonPaste(event: any) {
@@ -97,12 +98,13 @@ export class JsonFormatterComponent
   formatJson(rawJsonValue: string) {
     try {
       this.rawJson = rawJsonValue;
-      this.formattedJson = JSON.stringify(
+      const formattedJson = JSON.stringify(
         JSON.parse(rawJsonValue),
         null,
         this.tabSpaceValue
       );
       this.isJsonValid = true;
+      this.updateFormattedJson(formattedJson);
     } catch (error) {
       LogUtils.error(`error occured while decoding token: ${this.rawJson}`);
       this.isJsonValid = false;
@@ -111,13 +113,21 @@ export class JsonFormatterComponent
 
   updateRawJson(rawJson: string) {
     this.renderer.setProperty(
-      this.rawJsonDiv.nativeElement,
+      this.text1AreaContent.nativeElement,
       'innerText',
       rawJson
     );
   }
 
+  updateFormattedJson(formattedJson: string) {
+    this.renderer.setProperty(
+      this.text2AreaContent.nativeElement,
+      'innerText',
+      formattedJson
+    );
+  }
+
   copyFormattedJson() {
-    this.clipboard.copy(this.formattedJson);
+    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
 }

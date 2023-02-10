@@ -29,13 +29,13 @@ export class JsFormatterComponent
 {
   appId: string = 'jsformatter';
 
-  @ViewChild('rawJsDiv', { static: false })
-  rawJsDiv!: ElementRef;
-  @ViewChild('formattedJsDiv', { static: false })
-  formattedJsDiv!: ElementRef;
+  @ViewChild('text1AreaContent', { static: false })
+  text1AreaContent!: ElementRef;
+
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: ElementRef;
 
   rawJs: string = `if(value==='webtoolseasy'){formatjs();}else{console.log('this is awesome');}`;
-  formattedJs: string = '';
 
   constructor(
     private clipboard: Clipboard,
@@ -73,27 +73,40 @@ export class JsFormatterComponent
   ngAfterViewInit(): void {
     LogUtils.info('js formatter component: ngAfterViewInit');
     this.updateRawJs(this.rawJs);
-    this.formattedJs = js_beautify(this.rawJs);
+    const formattedJs = js_beautify(this.rawJs);
+    this.updateFormattedJs(formattedJs);
   }
 
   updateRawJs(rawJs: string) {
-    this.renderer.setProperty(this.rawJsDiv.nativeElement, 'innerText', rawJs);
+    this.renderer.setProperty(
+      this.text1AreaContent.nativeElement,
+      'innerText',
+      rawJs
+    );
+  }
+
+  updateFormattedJs(formattedJs: string) {
+    this.renderer.setProperty(
+      this.text2AreaContent.nativeElement,
+      'innerText',
+      formattedJs
+    );
   }
 
   formatJs(rawJsValue: string) {
     try {
       this.rawJs = rawJsValue;
-      this.formattedJs = js_beautify(rawJsValue);
+      const formattedJs = js_beautify(rawJsValue);
+      this.updateFormattedJs(formattedJs);
     } catch (e) {
       LogUtils.error(`error occured while decoding token: ${rawJsValue}`);
     }
   }
 
   rawJsChange() {
-    LogUtils.info(
-      `raw js has changed with value: ${this.rawJsDiv.nativeElement.innerText}`
-    );
-    this.formatJs(this.rawJsDiv.nativeElement.innerText);
+    const rawJs = this.text1AreaContent.nativeElement.innerText;
+    LogUtils.info(`raw js has changed with value: ${rawJs}`);
+    this.formatJs(rawJs);
   }
 
   onJsPaste(event: any) {
@@ -106,6 +119,6 @@ export class JsFormatterComponent
   }
 
   copyFormattedJs() {
-    this.clipboard.copy(this.formattedJs);
+    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
 }

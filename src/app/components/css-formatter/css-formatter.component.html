@@ -8,7 +8,7 @@
     <!--web tool headings-->
     <app-tool-heading></app-tool-heading>
 
-    <div
+    <!-- <div
       class="flex-display flex-row-flow flex-center flex-align-center token-area-container full-width"
       style="margin-bottom: 10px">
       <div
@@ -38,20 +38,57 @@
           <pre>{{ formattedCss }}</pre>
         </div>
       </div>
+    </div> -->
+
+    <div
+      class="flex-display flex-row-flow flex-align-center text-area-container full-width"
+      style="margin-bottom: 10px">
+      <!-- Text 1 div -->
+      <div
+        class="flex-display flex-column-flow text1-area-margin text-area-div">
+        <div class="flex-display flex-row-flow">
+          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
+            >Unformatted CSS</span
+          >
+          <span>(Paste CSS Here)</span>
+        </div>
+        <div
+          class="text-content-div text1-area-margin y-scroll full-height full-width"
+          style="color: indigo">
+          <pre
+            #text1AreaContent
+            contenteditable="true"
+            (input)="rawCssChange()"
+            (paste)="onCssPaste($event)"
+            class="full-height full-width"></pre>
+        </div>
+      </div>
+
+      <!-- Text 2 div -->
+      <div class="flex-display flex-column-flow text-area-div">
+        <div class="flex-display flex-row-flow">
+          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
+            >Formatted CSS</span
+          >
+        </div>
+        <div
+          class="text-content-div y-scroll full-height full-width"
+          style="color: indigo">
+          <pre
+            #text2AreaContent
+            contenteditable="false"
+            class="full-height full-width"></pre>
+        </div>
+      </div>
     </div>
 
-    <button
-      mat-raised-button
-      (click)="copyFormattedCss()"
-      color="primary"
-      style="
-        margin-right: 50px;
-        margin-bottom: 10px;
-        padding: 10px;
-        align-self: flex-end;
-      ">
-      <mat-icon>content_copy</mat-icon> Copy Formatted CSS
-    </button>
+    <div
+      class="flex-display flex-row-flow full-width copy-button"
+      style="margin-top: 10px; margin-bottom: 10px">
+      <button mat-raised-button (click)="copyFormattedCss()" color="primary">
+        <mat-icon>content_copy</mat-icon> Copy Formatted CSS
+      </button>
+    </div>
 
     <div class="flex-display flex-column-flow" style="width: 90%">
       <h3 style="font-weight: bold">How to use CSS Formatter/Beautifier ?</h3>
