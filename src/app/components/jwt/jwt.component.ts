@@ -32,12 +32,14 @@ export class JwtComponent
   jwtDecoder: JwtHelperService | undefined;
   tabSpaceValue: string = '  ';
 
-  @ViewChild('encodedDiv', { static: false })
-  encodedDiv!: ElementRef;
+  @ViewChild('text1AreaContent', { static: false })
+  text1AreaContent!: ElementRef;
+
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: ElementRef;
 
   encodedToken: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
-  decodedToken: string = '';
 
   constructor(
     private clipboard: Clipboard,
@@ -75,16 +77,17 @@ export class JwtComponent
   ngAfterViewInit(): void {
     LogUtils.info('jwt component: ngAfterViewInit');
     this.jwtDecoder = new JwtHelperService();
-    this.decodedToken = JSON.stringify(
+    const decodedToken = JSON.stringify(
       this.jwtDecoder.decodeToken(this.encodedToken),
       null,
       this.tabSpaceValue
     );
     this.updateEncodedToken(this.encodedToken);
+    this.updateDecodedToken(decodedToken);
   }
 
-  encodedInputChange(event: any) {
-    this.decodeUpdatedToken(this.encodedDiv.nativeElement.innerText);
+  encodedInputChange() {
+    this.decodeUpdatedToken(this.text1AreaContent.nativeElement.innerText);
   }
 
   onTokenPaste(event: any) {
@@ -101,11 +104,12 @@ export class JwtComponent
       this.encodedToken = encodedTokenValue;
       const decodedTokenValue = this.jwtDecoder!.decodeToken(encodedTokenValue);
       this.isTokenValid = true;
-      this.decodedToken = JSON.stringify(
+      const decodedToken = JSON.stringify(
         decodedTokenValue,
         null,
         this.tabSpaceValue
       );
+      this.updateDecodedToken(decodedToken);
     } catch (error) {
       LogUtils.error(
         `error occured while decoding token: ${this.encodedToken}`
@@ -116,13 +120,21 @@ export class JwtComponent
 
   updateEncodedToken(encodedToken: string) {
     this.renderer.setProperty(
-      this.encodedDiv.nativeElement,
+      this.text1AreaContent.nativeElement,
       'innerText',
       encodedToken
     );
   }
 
+  updateDecodedToken(decodedToken: string) {
+    this.renderer.setProperty(
+      this.text2AreaContent.nativeElement,
+      'innerText',
+      decodedToken
+    );
+  }
+
   copyDecodedToken() {
-    this.clipboard.copy(this.decodedToken);
+    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
 }

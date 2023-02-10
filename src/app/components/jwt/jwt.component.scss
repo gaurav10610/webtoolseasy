@@ -1,48 +1,46 @@
-.token-parent-div {
-  width: 40%;
+.div-label {
+  font-size: large;
+}
+
+.text-area-div {
+  width: 47%;
   height: 30em;
 }
 
-.div-label {
-  font-size: x-large;
-}
-
-.token-area-class {
+.text-content-div {
   border: 1px solid lightgrey;
   border-radius: 10px;
   padding: 10px;
-  overflow-wrap: break-word;
 }
 
-.token-area-container {
+.text-area-container {
   justify-content: space-around;
 }
 
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.copy-button {
+  justify-content: flex-end;
+}
+
 @media screen and (max-width: 735px) {
-  .token-area-container {
-    flex-direction: column;
-  }
-  .encoded-token-field {
-    margin-bottom: 20px;
-  }
-  .token-parent-div {
+  .text-area-div {
     height: 10em;
     width: 80%;
     font-size: larger;
   }
-  .div-label {
-    font-size: large;
+  .text1-area-margin {
+    margin-bottom: 20px;
   }
-  .token-area-class {
+  .text-area-container {
+    flex-direction: column;
+  }
+  .text-content-div {
     font-size: larger;
   }
-}
-
-@media screen and (min-width: 735px) {
-  .token-area-class {
-    font-size: large;
-  }
-  .encoded-token-field {
-    margin-right: 30px;
+  .copy-button {
+    justify-content: center;
   }
 }

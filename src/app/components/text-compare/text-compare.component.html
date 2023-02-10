@@ -17,7 +17,7 @@
           >Difference</span
         >
         <div
-          class="token-area-class y-scroll full-height full-width"
+          class="text-content-div y-scroll full-height full-width"
           contenteditable="false"
           style="color: deeppink">
           <pre #diffBlock></pre>
@@ -40,11 +40,11 @@
       </div>
 
       <div
-        class="flex-display flex-row-flow flex-align-center token-area-container full-width"
+        class="flex-display flex-row-flow flex-align-center text-area-container full-width"
         style="margin-bottom: 10px">
         <!-- Text 1 div -->
         <div
-          class="flex-display flex-column-flow encoded-token-field token-parent-div">
+          class="flex-display flex-column-flow text1-area-margin text-area-div">
           <div class="flex-display flex-row-flow">
             <span
               class="div-label"
@@ -54,10 +54,10 @@
             <span>(Paste original text here)</span>
           </div>
           <div
-            class="token-area-class encoded-token-field y-scroll full-height full-width"
+            class="text-content-div text1-area-margin y-scroll full-height full-width"
             style="color: indigo">
             <pre
-              #text1Div
+              #text1AreaContent
               contenteditable="true"
               (input)="onText1Change()"
               (paste)="onText1Paste($event)"
@@ -66,7 +66,7 @@
         </div>
 
         <!-- Text 2 div -->
-        <div class="flex-display flex-column-flow token-parent-div">
+        <div class="flex-display flex-column-flow text-area-div">
           <div class="flex-display flex-row-flow">
             <span
               class="div-label"
@@ -76,10 +76,10 @@
             <span>(Paste target text here)</span>
           </div>
           <div
-            class="token-area-class y-scroll full-height full-width"
+            class="text-content-div y-scroll full-height full-width"
             style="color: indigo">
             <pre
-              #text2Div
+              #text2AreaContent
               contenteditable="true"
               (input)="onText2Change()"
               (paste)="onText2Paste($event)"

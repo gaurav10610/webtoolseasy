@@ -1,24 +1,28 @@
-.div-label {
-  font-size: large;
-}
-
 .base-app-container {
   padding: 10px;
 }
 
-.token-parent-div {
+.div-label {
+  font-size: large;
+}
+
+.text-area-div {
   width: 47%;
   height: 30em;
 }
 
-.token-area-class {
+.text-content-div {
   border: 1px solid lightgrey;
   border-radius: 10px;
   padding: 10px;
 }
 
-.token-area-container {
+.text-area-container {
   justify-content: space-around;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
 }
 
 .diff-parent-div {
@@ -39,23 +43,19 @@
   }
 }
 
-[contenteditable]:focus {
-  outline: 0px solid transparent;
-}
-
 @media screen and (max-width: 735px) {
-  .token-parent-div {
+  .text-area-div {
     height: 10em;
     width: 80%;
     font-size: larger;
   }
-  .encoded-token-field {
+  .text1-area-margin {
     margin-bottom: 20px;
   }
-  .token-area-container {
+  .text-area-container {
     flex-direction: column;
   }
-  .token-area-class {
+  .text-content-div {
     font-size: larger;
   }
   .diff-parent-div {
