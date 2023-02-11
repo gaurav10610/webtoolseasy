@@ -7,6 +7,7 @@ import { AppDirectoryComponent } from 'src/app/components/app-directory/app-dire
 import { MatButtonModule } from '@angular/material/button';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
+import { FooterModule } from 'src/app/modules/footer/footer-module';
 
 @NgModule({
   declarations: [AppDirectoryComponent],
@@ -18,6 +19,7 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
     MatButtonModule,
     HeaderToolbarModule,
     ToolHeadingModule,
+    FooterModule,
   ],
 })
 export class AppDirectoryModule {}

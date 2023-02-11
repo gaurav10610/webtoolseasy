@@ -4,6 +4,10 @@
   flex-wrap: wrap;
 }
 
+.base-app-container {
+  padding: 10px;
+}
+
 .application {
   border-radius: 10px;
   margin: 10px;
@@ -31,7 +35,7 @@
   .application {
     width: 100%;
   }
-  .base-app-container {
+  .main-div {
     overflow-y: scroll;
   }
 }

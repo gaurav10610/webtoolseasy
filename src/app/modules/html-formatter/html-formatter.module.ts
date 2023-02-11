@@ -9,6 +9,7 @@ import { HtmlFormatterComponent } from 'src/app/components/html-formatter/html-f
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 import { TagsModule } from 'src/app/modules/tags/tags.module';
+import { FooterModule } from 'src/app/modules/footer/footer-module';
 
 @NgModule({
   declarations: [HtmlFormatterComponent],
@@ -21,6 +22,7 @@ import { TagsModule } from 'src/app/modules/tags/tags.module';
     HeaderToolbarModule,
     ToolHeadingModule,
     TagsModule,
+    FooterModule,
   ],
 })
 export class HtmlFormatterModule {}
