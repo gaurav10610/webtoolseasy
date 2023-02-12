@@ -2,111 +2,118 @@
   <!-- profile header -->
   <app-header-toolbar></app-header-toolbar>
 
-  <!-- app container -->
-  <div
-    class="flex-display flex-column-flow flex-align-center base-app-container y-scroll">
-    <!--web tool headings-->
-    <app-tool-heading></app-tool-heading>
-
+  <div class="full-width y-scroll">
+    <!-- app container -->
     <div
-      class="flex-display flex-row-flow flex-align-center text-area-container full-width"
-      style="margin-bottom: 10px">
-      <!-- Text 1 div -->
+      class="flex-display flex-column-flow flex-align-center base-app-container">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
       <div
-        class="flex-display flex-column-flow text1-area-margin text-area-div">
-        <div class="flex-display flex-row-flow">
-          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
-            >Unformatted HTML</span
-          >
-          <span>(Paste HTML Here)</span>
-        </div>
+        class="flex-display flex-row-flow flex-align-center text-area-container full-width"
+        style="margin-bottom: 10px">
+        <!-- Text 1 div -->
         <div
-          class="text-content-div text1-area-margin y-scroll full-height full-width"
-          style="color: indigo">
-          <pre
-            #text1AreaContent
-            contenteditable="true"
-            (input)="rawHtmlChange()"
-            (paste)="onHtmlPaste($event)"
-            class="full-height full-width"></pre>
+          class="flex-display flex-column-flow text1-area-margin text-area-div">
+          <div class="flex-display flex-row-flow">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Unformatted HTML</span
+            >
+            <span>(Paste HTML Here)</span>
+          </div>
+          <div
+            class="text-content-div text1-area-margin y-scroll full-height full-width"
+            style="color: indigo">
+            <pre
+              #text1AreaContent
+              contenteditable="true"
+              (input)="rawHtmlChange()"
+              (paste)="onHtmlPaste($event)"
+              class="full-height full-width"></pre>
+          </div>
+        </div>
+
+        <!-- Text 2 div -->
+        <div class="flex-display flex-column-flow text-area-div">
+          <div class="flex-display flex-row-flow">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Formatted HTML</span
+            >
+          </div>
+          <div
+            class="text-content-div y-scroll full-height full-width"
+            style="color: indigo">
+            <pre
+              #text2AreaContent
+              contenteditable="false"
+              class="full-height full-width"></pre>
+          </div>
         </div>
       </div>
 
-      <!-- Text 2 div -->
-      <div class="flex-display flex-column-flow text-area-div">
-        <div class="flex-display flex-row-flow">
-          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
-            >Formatted HTML</span
-          >
+      <div
+        class="flex-display flex-row-flow full-width copy-button"
+        style="margin-top: 10px; margin-bottom: 10px">
+        <button mat-raised-button (click)="copyFormattedHtml()" color="primary">
+          <mat-icon>content_copy</mat-icon> Copy Formatted HTML
+        </button>
+      </div>
+
+      <div class="flex-display flex-column-flow full-width">
+        <h3 style="font-weight: bold">How to use HTML Formatter/Beautifier</h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. Paste unformatted/minified HTML in unformatted HTML block and
+            HTML will be formatted automatically.
+          </p>
+          <p>2. HTML formatting is being done in host browser only.</p>
         </div>
-        <div
-          class="text-content-div y-scroll full-height full-width"
-          style="color: indigo">
-          <pre
-            #text2AreaContent
-            contenteditable="false"
-            class="full-height full-width"></pre>
+        <h3 style="font-weight: bold">Key features</h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. Easy to use: Our user-friendly interface makes it simple for
+            anyone to format their HTML with just pasting it here.
+          </p>
+          <p>
+            2. Real-time formatting: Our tool formats your HTML in real-time, so
+            you can see the changes as you make them.
+          </p>
+          <p>
+            No need to download any software. Simply paste your HTML into our
+            platform and get a clean, organized, and optimized result.
+          </p>
+        </div>
+        <h3 style="font-weight: bold">
+          Why Choose Our Online HTML Formatter Tool?
+        </h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. Improves readability: Clean and organized HTML is easier to read
+            and understand, making it easier for you or your team to work with.
+          </p>
+          <p>
+            2. Saves time: Automated formatting and optimization saves you time
+            and effort compared to manual formatting.
+          </p>
+          <p>
+            3. Supports collaboration: Clean, organized HTML makes it easier for
+            multiple people to work on the same project, improving collaboration
+            and reducing the risk of errors.
+          </p>
+          <p>
+            4. Security: Your data is 100% secure on our platform as whole
+            processing is being done in host browser only.
+          </p>
         </div>
       </div>
-    </div>
 
-    <div
-      class="flex-display flex-row-flow full-width copy-button"
-      style="margin-top: 10px; margin-bottom: 10px">
-      <button mat-raised-button (click)="copyFormattedHtml()" color="primary">
-        <mat-icon>content_copy</mat-icon> Copy Formatted HTML
-      </button>
+      <!-- tags div -->
+      <app-tags></app-tags>
     </div>
-
-    <div class="flex-display flex-column-flow full-width">
-      <h3 style="font-weight: bold">How to use HTML Formatter/Beautifier</h3>
-      <div style="margin-left: 30px">
-        <p>
-          1. Paste unformatted/minified HTML in unformatted HTML block and HTML
-          will be formatted automatically.
-        </p>
-        <p>2. HTML formatting is being done in host browser only.</p>
-      </div>
-      <h3 style="font-weight: bold">Key features</h3>
-      <div style="margin-left: 30px">
-        <p>
-          1. Easy to use: Our user-friendly interface makes it simple for anyone
-          to format their HTML with just pasting it here.
-        </p>
-        <p>
-          2. Real-time formatting: Our tool formats your HTML in real-time, so
-          you can see the changes as you make them.
-        </p>
-        <p>
-          No need to download any software. Simply paste your HTML into our
-          platform and get a clean, organized, and optimized result.
-        </p>
-      </div>
-      <h3 style="font-weight: bold">
-        Why Choose Our Online HTML Formatter Tool?
-      </h3>
-      <div style="margin-left: 30px">
-        <p>
-          1. Improves readability: Clean and organized HTML is easier to read
-          and understand, making it easier for you or your team to work with.
-        </p>
-        <p>
-          2. Saves time: Automated formatting and optimization saves you time
-          and effort compared to manual formatting.
-        </p>
-        <p>
-          3. Supports collaboration: Clean, organized HTML makes it easier for
-          multiple people to work on the same project, improving collaboration
-          and reducing the risk of errors.
-        </p>
-        <p>
-          4. Security: Your data is 100% secure on our platform as whole
-          processing is being done in host browser only.
-        </p>
-      </div>
-    </div>
-
-    <!-- tags div -->
-    <app-tags></app-tags>
+    <app-footer></app-footer>
   </div>
 </div>

@@ -17,6 +17,10 @@
   flex-flow: row;
 }
 
+.base-app-container {
+  padding: 10px;
+}
+
 @media screen and (min-width: 735px) {
   .uuid-container {
     margin-right: 10px;

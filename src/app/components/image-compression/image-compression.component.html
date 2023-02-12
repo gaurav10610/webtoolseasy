@@ -2,244 +2,253 @@
   <!-- profile header -->
   <app-header-toolbar></app-header-toolbar>
 
-  <!-- app container -->
-  <div
-    class="flex-full-height flex-display flex-column-flow flex-align-center y-scroll"
-    style="padding: 10px">
-    <!--web tool headings-->
-    <app-tool-heading></app-tool-heading>
-
-    <!-- file imput -->
-    <input
-      #inputFiles
-      type="file"
-      style="display: none"
-      multiple
-      (change)="selectFiles($event)" />
-
-    <!-- image compressin parent div -->
+  <div class="full-width y-scroll">
+    <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center image-list-parent"
-      (drop)="dropHandler($event)"
-      (dragover)="dragOverHandler($event)"
-      style="margin-bottom: 10px">
+      class="flex-full-height flex-display flex-column-flow flex-align-center"
+      style="padding: 10px">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <!-- file imput -->
+      <input
+        #inputFiles
+        type="file"
+        style="display: none"
+        multiple
+        (change)="selectFiles($event)" />
+
+      <!-- image compressin parent div -->
       <div
-        class="flex-display flex-column-flow flex-center flex-align-center image-drag-div"
-        *ngIf="fileList.length === 0">
-        <mat-icon style="transform: scale(2); margin-bottom: 10px"
-          >collections</mat-icon
-        >
-        <span class="header-font" style="margin-bottom: 20px; font-size: large"
-          >Drag & drop files here</span
-        >
-        <span class="header-font" style="margin-bottom: 10px; font-size: large"
-          >or</span
-        >
+        class="flex-display flex-column-flow flex-align-center image-list-parent"
+        (drop)="dropHandler($event)"
+        (dragover)="dragOverHandler($event)"
+        style="margin-bottom: 10px">
+        <div
+          class="flex-display flex-column-flow flex-center flex-align-center image-drag-div"
+          *ngIf="fileList.length === 0">
+          <mat-icon style="transform: scale(2); margin-bottom: 10px"
+            >collections</mat-icon
+          >
+          <span
+            class="header-font"
+            style="margin-bottom: 20px; font-size: large"
+            >Drag & drop files here</span
+          >
+          <span
+            class="header-font"
+            style="margin-bottom: 10px; font-size: large"
+            >or</span
+          >
 
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="openFileDialog()"
-          matTooltip="select images to compress">
-          <mat-icon>file_upload</mat-icon> Browse for files
-        </button>
-      </div>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openFileDialog()"
+            matTooltip="select images to compress">
+            <mat-icon>file_upload</mat-icon> Browse for files
+          </button>
+        </div>
 
-      <!-- select images button -->
-      <div
-        class="flex-display flex-row-flow flex-center full-width"
-        [ngStyle]="{
-          margin: '10px',
-          'justify-content': fileList.length > 0 ? 'end' : 'center'
-        }"
-        *ngIf="fileList.length > 0">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="openFileDialog()"
-          style="margin-right: 10px"
-          matTooltip="select images to compress">
-          <mat-icon>file_upload</mat-icon> Select Images
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="startCompressAll()"
-          *ngIf="fileList.length > 0"
-          matTooltip="compress all images">
-          <mat-icon>play_arrow</mat-icon> Compress All
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="downloadAll()"
-          *ngIf="isDownloadAllActive && !isMobile"
-          style="margin-left: 10px"
-          matTooltip="download all images">
-          <mat-icon>file_download</mat-icon> Download Zip
-        </button>
-      </div>
+        <!-- select images button -->
+        <div
+          class="flex-display flex-row-flow flex-center full-width"
+          [ngStyle]="{
+            margin: '10px',
+            'justify-content': fileList.length > 0 ? 'end' : 'center'
+          }"
+          *ngIf="fileList.length > 0">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openFileDialog()"
+            style="margin-right: 10px"
+            matTooltip="select images to compress">
+            <mat-icon>file_upload</mat-icon> Select Images
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="startCompressAll()"
+            *ngIf="fileList.length > 0"
+            matTooltip="compress all images">
+            <mat-icon>play_arrow</mat-icon> Compress All
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="downloadAll()"
+            *ngIf="isDownloadAllActive && !isMobile"
+            style="margin-left: 10px"
+            matTooltip="download all images">
+            <mat-icon>file_download</mat-icon> Download Zip
+          </button>
+        </div>
 
-      <!-- list of image files -->
-      <div
-        class="full-width flex-display flex-column-flow y-scroll file-list-div"
-        *ngIf="fileList.length > 0">
-        <mat-card
-          *ngFor="let file of fileList"
-          style="margin-bottom: 10px; border: 1px solid lightgrey">
-          <div
-            class="flex-display flex-row-flow flex-align-center"
-            style="margin: 15px">
-            <mat-icon
-              svgIcon="image-file-icon"
-              class="app-icon pointer-cursor"></mat-icon>
-
-            <!-- file name & size div -->
+        <!-- list of image files -->
+        <div
+          class="full-width flex-display flex-column-flow y-scroll file-list-div"
+          *ngIf="fileList.length > 0">
+          <mat-card
+            *ngFor="let file of fileList"
+            style="margin-bottom: 10px; border: 1px solid lightgrey">
             <div
-              class="flex-display flex-column-flow header-font file-name-div">
-              <span class="bold-text">{{ file.name }}</span>
-              <span
-                *ngIf="file.isCompressed"
-                class="bold-text header-font"
-                style="color: #ff4081"
-                >{{ formatBytes(file.file.size) }} ->
-                {{ formatBytes(file.compressedData?.size!) }}</span
-              >
-              <span
-                *ngIf="file.error !== undefined"
-                class="bold-text"
-                style="color: red"
-                >{{ file.error }}</span
-              >
+              class="flex-display flex-row-flow flex-align-center"
+              style="margin: 15px">
+              <mat-icon
+                svgIcon="image-file-icon"
+                class="app-icon pointer-cursor"></mat-icon>
+
+              <!-- file name & size div -->
+              <div
+                class="flex-display flex-column-flow header-font file-name-div">
+                <span class="bold-text">{{ file.name }}</span>
+                <span
+                  *ngIf="file.isCompressed"
+                  class="bold-text header-font"
+                  style="color: #ff4081"
+                  >{{ formatBytes(file.file.size) }} ->
+                  {{ formatBytes(file.compressedData?.size!) }}</span
+                >
+                <span
+                  *ngIf="file.error !== undefined"
+                  class="bold-text"
+                  style="color: red"
+                  >{{ file.error }}</span
+                >
+              </div>
+              <span class="flex-full-height"></span>
+
+              <!-- file icons div -->
+              <div
+                class="flex-display flex-row-flow flex-align-center flex-center">
+                <span *ngIf="file.inProgress" style="margin-right: 10px"
+                  >Progress: {{ file.compressProgress }} %</span
+                >
+
+                <mat-icon
+                  svgIcon="settings-icon"
+                  class="pointer-cursor"
+                  style="margin-right: 10px"
+                  *ngIf="file.isValid"
+                  matTooltip="change compression settings"
+                  (click)="openSettingsDialog(file)"></mat-icon>
+                <mat-icon
+                  svgIcon="compress-icon"
+                  class="pointer-cursor"
+                  style="margin-right: 10px"
+                  *ngIf="!file.isCompressed && file.isValid"
+                  (click)="compressImage(file)"
+                  matTooltip="compress image"></mat-icon>
+                <mat-icon
+                  svgIcon="download-icon"
+                  class="pointer-cursor"
+                  *ngIf="file.isCompressed"
+                  (click)="downloadImage(file)"
+                  matTooltip="download compressed image"></mat-icon>
+                <mat-icon
+                  class="pointer-cursor"
+                  *ngIf="!file.isValid"
+                  color="warn"
+                  matTooltip="only image files can be compressed"
+                  style="transform: scale(1.5)"
+                  >error</mat-icon
+                >
+              </div>
             </div>
-            <span class="flex-full-height"></span>
-
-            <!-- file icons div -->
-            <div
-              class="flex-display flex-row-flow flex-align-center flex-center">
-              <span *ngIf="file.inProgress" style="margin-right: 10px"
-                >Progress: {{ file.compressProgress }} %</span
-              >
-
-              <mat-icon
-                svgIcon="settings-icon"
-                class="pointer-cursor"
-                style="margin-right: 10px"
-                *ngIf="file.isValid"
-                matTooltip="change compression settings"
-                (click)="openSettingsDialog(file)"></mat-icon>
-              <mat-icon
-                svgIcon="compress-icon"
-                class="pointer-cursor"
-                style="margin-right: 10px"
-                *ngIf="!file.isCompressed && file.isValid"
-                (click)="compressImage(file)"
-                matTooltip="compress image"></mat-icon>
-              <mat-icon
-                svgIcon="download-icon"
-                class="pointer-cursor"
-                *ngIf="file.isCompressed"
-                (click)="downloadImage(file)"
-                matTooltip="download compressed image"></mat-icon>
-              <mat-icon
-                class="pointer-cursor"
-                *ngIf="!file.isValid"
-                color="warn"
-                matTooltip="only image files can be compressed"
-                style="transform: scale(1.5)"
-                >error</mat-icon
-              >
-            </div>
-          </div>
-        </mat-card>
+          </mat-card>
+        </div>
       </div>
+
+      <div style="width: 80%" class="flex-display flex-column-flow">
+        <h3 style="font-weight: bold">How to compress images</h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. Drag & drop or select image files ( jpeg, png only ) to compress.
+          </p>
+          <p>
+            2. All image files will be listed. An error will be shown for
+            invalid file types ( files other than jpeg, png ).
+          </p>
+          <p>
+            3. For compressing images either use compress button corresponding
+            to the image file or use compress all button.
+          </p>
+          <p>
+            4. By default images will be compressed by 20% of their original
+            size. Use settings button to customize compression level.
+          </p>
+          <p>
+            5. Use download button corresponding to an image file to download
+            compressed image.
+          </p>
+          <p>
+            6. Use download zip button to download all compressed images at
+            once.
+          </p>
+        </div>
+        <h3 style="font-weight: bold">Key features</h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. Easy to use: Our user-friendly interface makes it simple for
+            anyone to compress their images with just a few clicks.
+          </p>
+          <p>
+            2. High-quality compression: Our tool uses advanced compression
+            algorithms to reduce image file size while preserving image quality.
+          </p>
+          <p>
+            3. Batch processing: Compress multiple images at once, saving you
+            time and effort.
+          </p>
+          <p>
+            4. Supports JPEG and PNG formats: Our tool works with both JPEG and
+            PNG image formats, providing versatile compression options.
+          </p>
+          <p>
+            5. No need to download any software. Simply upload your images to
+            our platform and get your compressed images in no time.
+          </p>
+        </div>
+        <h3 style="font-weight: bold">What is image compression?</h3>
+        <p>
+          Image compression is the process of reducing the file size of a
+          digital image without significantly impacting its quality. The goal of
+          image compression is to make images smaller in size, so they can be
+          stored, transmitted, and processed more efficiently. This can be
+          especially important for website owners, as large image files can slow
+          down the website's loading time, affecting the user experience.
+        </p>
+        <p>
+          There are two main types of image compression: lossless and lossy.
+          Lossless compression reduces the file size of an image without losing
+          any image data, while lossy compression reduces the file size by
+          discarding some image data. Lossy compression is generally used for
+          images that contain a lot of redundant information, such as
+          photographs, where some loss in quality is acceptable to achieve a
+          smaller file size.
+        </p>
+        <p>
+          JPEG and PNG are two of the most common image formats used for image
+          compression. JPEG uses lossy compression and is suitable for
+          photographs, while PNG uses lossless compression and is best for
+          images with sharp lines and flat areas of color, such as graphics and
+          illustrations.
+        </p>
+        <p>
+          Overall, image compression is an important technique for optimizing
+          images and making them faster to load and easier to handle.
+        </p>
+        <h3 style="font-weight: bold">Disclaimer</h3>
+        <p>
+          Only JPEG & PNG image can be compressed as of now. Image compression
+          is being done locally in browser only.
+        </p>
+      </div>
+
+      <!-- tags div -->
+      <app-tags></app-tags>
     </div>
-
-    <div style="width: 80%" class="flex-display flex-column-flow">
-      <h3 style="font-weight: bold">How to compress images</h3>
-      <div style="margin-left: 30px">
-        <p>
-          1. Drag & drop or select image files ( jpeg, png only ) to compress.
-        </p>
-        <p>
-          2. All image files will be listed. An error will be shown for invalid
-          file types ( files other than jpeg, png ).
-        </p>
-        <p>
-          3. For compressing images either use compress button corresponding to
-          the image file or use compress all button.
-        </p>
-        <p>
-          4. By default images will be compressed by 20% of their original size.
-          Use settings button to customize compression level.
-        </p>
-        <p>
-          5. Use download button corresponding to an image file to download
-          compressed image.
-        </p>
-        <p>
-          6. Use download zip button to download all compressed images at once.
-        </p>
-      </div>
-      <h3 style="font-weight: bold">Key features</h3>
-      <div style="margin-left: 30px">
-        <p>
-          1. Easy to use: Our user-friendly interface makes it simple for anyone
-          to compress their images with just a few clicks.
-        </p>
-        <p>
-          2. High-quality compression: Our tool uses advanced compression
-          algorithms to reduce image file size while preserving image quality.
-        </p>
-        <p>
-          3. Batch processing: Compress multiple images at once, saving you time
-          and effort.
-        </p>
-        <p>
-          4. Supports JPEG and PNG formats: Our tool works with both JPEG and
-          PNG image formats, providing versatile compression options.
-        </p>
-        <p>
-          5. No need to download any software. Simply upload your images to our
-          platform and get your compressed images in no time.
-        </p>
-      </div>
-      <h3 style="font-weight: bold">What is image compression?</h3>
-      <p>
-        Image compression is the process of reducing the file size of a digital
-        image without significantly impacting its quality. The goal of image
-        compression is to make images smaller in size, so they can be stored,
-        transmitted, and processed more efficiently. This can be especially
-        important for website owners, as large image files can slow down the
-        website's loading time, affecting the user experience.
-      </p>
-      <p>
-        There are two main types of image compression: lossless and lossy.
-        Lossless compression reduces the file size of an image without losing
-        any image data, while lossy compression reduces the file size by
-        discarding some image data. Lossy compression is generally used for
-        images that contain a lot of redundant information, such as photographs,
-        where some loss in quality is acceptable to achieve a smaller file size.
-      </p>
-      <p>
-        JPEG and PNG are two of the most common image formats used for image
-        compression. JPEG uses lossy compression and is suitable for
-        photographs, while PNG uses lossless compression and is best for images
-        with sharp lines and flat areas of color, such as graphics and
-        illustrations.
-      </p>
-      <p>
-        Overall, image compression is an important technique for optimizing
-        images and making them faster to load and easier to handle.
-      </p>
-      <h3 style="font-weight: bold">Disclaimer</h3>
-      <p>
-        Only JPEG & PNG image can be compressed as of now. Image compression is
-        being done locally in browser only.
-      </p>
-    </div>
-
-    <!-- tags div -->
-    <app-tags></app-tags>
+    <app-footer></app-footer>
   </div>
 </div>
