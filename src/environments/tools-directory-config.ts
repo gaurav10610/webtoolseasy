@@ -56,9 +56,9 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     navigateUrl: '/tools/css-formatter',
   },
   {
-    applicationId: 'soon',
-    displayText: 'More Tools Coming Soon',
-    iconName: 'soon-icon',
-    navigateUrl: '',
+    applicationId: 'videoconverter',
+    displayText: 'Video Converter',
+    iconName: 'video-convert-icon',
+    navigateUrl: '/tools/video-converter',
   },
 ];

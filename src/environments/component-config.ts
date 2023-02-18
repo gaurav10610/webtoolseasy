@@ -55,7 +55,7 @@ export const home: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -68,6 +68,10 @@ export const home: ApplicationConfig = {
     {
       iconName: 'comparison-icon',
       iconRelativeUrl: 'comparison.svg',
+    },
+    {
+      iconName: 'video-convert-icon',
+      iconRelativeUrl: 'video-convert.svg',
     },
   ],
 };
@@ -140,11 +144,15 @@ export const tools: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
+    },
+    {
+      iconName: 'video-convert-icon',
+      iconRelativeUrl: 'video-convert.svg',
     },
   ],
 };
@@ -179,7 +187,7 @@ export const uuid: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -218,7 +226,7 @@ export const jwt: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -275,7 +283,7 @@ export const imagecompress: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -314,7 +322,7 @@ export const jsonformatter: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -354,7 +362,7 @@ export const jsformatter: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -394,7 +402,7 @@ export const cssformatter: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -433,7 +441,7 @@ export const htmlformatter: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -473,7 +481,7 @@ export const screenrecorder: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -516,7 +524,7 @@ export const textcompare: ApplicationConfig = {
     },
     {
       iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin.svg',
+      iconRelativeUrl: 'linkedin-icon.svg',
     },
     {
       iconName: 'facebook-icon',
@@ -525,10 +533,45 @@ export const textcompare: ApplicationConfig = {
   ],
 };
 
-export const soon: ApplicationConfig = {
-  navigationUrl: '',
-  pageTitle: '',
-  metaTags: [],
-  tags: [],
-  icons: [],
+export const videoconverter: ApplicationConfig = {
+  mainHeading: 'Online Video Converter',
+  subHeading: 'Convert Videos For Free',
+  navigationUrl: '/tools/video-converter',
+  pageTitle: 'Video Converter | Convert Videos For Free',
+  metaTags: [
+    {
+      name: 'description',
+      content:
+        'Text Difference Checker | Diffchecker online | Text Compare | Compare Text Online',
+    },
+    {
+      name: 'author',
+      content: 'Gaurav Kumar Yadav',
+    },
+    { name: 'robots', content: 'index, follow' },
+  ],
+  tags: [
+    'text difference checker',
+    'diffchecker online',
+    'text compare',
+    'compare text online',
+  ],
+  icons: [
+    {
+      iconName: 'app-icon',
+      iconRelativeUrl: 'app-icon.svg',
+    },
+    {
+      iconName: 'linkedin-icon',
+      iconRelativeUrl: 'linkedin-icon.svg',
+    },
+    {
+      iconName: 'facebook-icon',
+      iconRelativeUrl: 'facebook.svg',
+    },
+    {
+      iconName: 'video-convert-icon',
+      iconRelativeUrl: 'video-convert.svg',
+    },
+  ],
 };
