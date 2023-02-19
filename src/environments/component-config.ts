@@ -573,5 +573,9 @@ export const videoconverter: ApplicationConfig = {
       iconName: 'video-convert-icon',
       iconRelativeUrl: 'video-convert.svg',
     },
+    {
+      iconName: 'settings-icon',
+      iconRelativeUrl: 'settings.svg',
+    },
   ],
 };

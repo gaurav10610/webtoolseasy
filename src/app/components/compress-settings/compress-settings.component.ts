@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FileData, ImageCompressSettings } from 'src/app/@types/file';
+import { ImageFileData, ImageCompressSettings } from 'src/app/@types/file';
 import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
@@ -16,7 +16,7 @@ export class CompressSettingsComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) data: FileData
+    @Inject(MAT_DIALOG_DATA) data: ImageFileData
   ) {
     this.maxFileSize = data.maxFileSize;
     this.oldFileSize = data.file.size;

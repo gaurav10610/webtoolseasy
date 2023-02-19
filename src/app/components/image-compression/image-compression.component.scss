@@ -23,17 +23,14 @@
 }
 
 @media screen and (max-width: 735px) {
-  .file-list-div {
-    max-height: 300px;
-  }
-}
-
-@media screen and (max-width: 735px) {
   .file-name-div {
     width: 60%;
     overflow-x: hidden;
   }
   .image-drag-div {
     width: 90%;
+  }
+  .file-list-div {
+    max-height: 300px;
   }
 }

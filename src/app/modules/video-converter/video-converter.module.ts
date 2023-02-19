@@ -8,6 +8,11 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
 import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { VideoConverterComponent } from 'src/app/components/video-converter/video-converter.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [VideoConverterComponent],
@@ -16,6 +21,11 @@ import { VideoConverterComponent } from 'src/app/components/video-converter/vide
     VideoConverterRoutingModule,
     MatIconModule,
     MatButtonModule,
+    MatCardModule,
+    MatTooltipModule,
+    LayoutModule,
+    MatSliderModule,
+    MatDialogModule,
     HeaderToolbarModule,
     ToolHeadingModule,
     TagsModule,
