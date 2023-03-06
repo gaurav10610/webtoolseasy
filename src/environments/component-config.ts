@@ -198,6 +198,7 @@ export const uuid: ApplicationConfig = {
 
 export const jwt: ApplicationConfig = {
   mainHeading: 'JWT Decoder',
+  subHeading: 'Decode JSON Web Token For Free',
   navigationUrl: '/tools/jwt',
   pageTitle: 'JWT Token Decode',
   metaTags: [
