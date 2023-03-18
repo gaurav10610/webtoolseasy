@@ -23,6 +23,7 @@ export interface VideoFileData extends BaseFileData {
   isConverted: boolean;
   convertedFileData?: Blob;
   isLoaded: boolean;
+  targetFileName?: string;
 }
 
 export interface ImageCompressSettings {

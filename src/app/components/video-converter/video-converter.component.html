@@ -9,7 +9,7 @@
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
-      <!-- file imput -->
+      <!-- file input -->
       <input
         #inputFiles
         type="file"
@@ -36,7 +36,7 @@
           mat-raised-button
           color="primary"
           (click)="openFileDialog()"
-          matTooltip="select images to compress">
+          matTooltip="select video to convert">
           <mat-icon>file_upload</mat-icon> Browse for files
         </button>
       </div>
@@ -107,7 +107,9 @@
             <!-- file icons div -->
             <div
               class="flex-display flex-row-flow flex-align-center flex-center">
-              <span *ngIf="file.inProgress" style="margin-right: 10px"
+              <span
+                *ngIf="file.inProgress && file.convertProgress > 0"
+                style="margin-right: 10px"
                 >Progress: {{ file.convertProgress }} %</span
               >
 
@@ -142,6 +144,7 @@
                 svgIcon="play-icon"
                 class="pointer-cursor"
                 *ngIf="!file.isConverted && file.isValid && file.isLoaded"
+                (click)="convertVideoFile(file)"
                 matTooltip="convert video file"></mat-icon>
               <mat-icon
                 svgIcon="download-icon"

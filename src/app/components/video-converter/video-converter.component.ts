@@ -23,6 +23,14 @@ import { videoconverter as componentConfig } from 'src/environments/component-co
 import { v4 } from 'uuid';
 import * as JSZip from 'jszip';
 import { createFFmpeg, fetchFile, FFmpeg } from '@ffmpeg/ffmpeg';
+import {
+  ConvertLogEvent,
+  ConvertProgressEvent,
+  FFMpegCommandType,
+  FileLoadedEvent,
+} from 'src/app/@types/ffmpeg';
+import { FFMPEG_COMMANDS } from 'src/environments/ffmpeg-commands';
+import { FfmpegService } from 'src/app/service/ffmpeg/ffmpeg.service';
 
 @Component({
   selector: 'app-video-converter',
@@ -44,7 +52,8 @@ export class VideoConverterComponent
 
   isDownloadAllActive: boolean = true;
   zipBuilder!: JSZip;
-  ffmpeg!: FFmpeg;
+
+  fileIndexes: Map<string, number>;
 
   constructor(
     private titleService: Title,
@@ -56,7 +65,8 @@ export class VideoConverterComponent
     private appContextService: AppContextService,
     private renderer: Renderer2,
     private zoneRef: NgZone,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private ffmpegService: FfmpegService
   ) {
     super();
     this.loadCustomIcons(
@@ -82,26 +92,37 @@ export class VideoConverterComponent
         this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
+
+    this.fileIndexes = new Map();
+
+    /**
+     * configure ffmpeg service
+     */
+    this.ffmpegService.initialize();
+    this.ffmpegService.fileLoadedEvent.subscribe(
+      this.handleBufferFileLoad.bind(this)
+    );
+    this.ffmpegService.progressEvent.subscribe(
+      this.handleConverionProgress.bind(this)
+    );
+    this.ffmpegService.convertLogEvent.subscribe(
+      this.handleFFMpegLog.bind(this)
+    );
   }
 
   ngOnInit(): void {
     LogUtils.info('video converter: ngOnInit');
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit() {
     LogUtils.info('video converter: ngAfterViewInit');
     this.zipBuilder = new JSZip();
-    this.ffmpeg = createFFmpeg({
-      log: false,
-    });
-    this.ffmpeg.setLogger(this.handleFFMpegLog.bind(this));
-    this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
-    await this.ffmpeg.load();
   }
 
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
+    this.ffmpegService.exit();
   }
 
   async selectFiles(event: any) {
@@ -150,6 +171,52 @@ export class VideoConverterComponent
   }
 
   /**
+   * handle file loaded in buffer event
+   * @param eventData
+   */
+  async handleBufferFileLoad(eventData: FileLoadedEvent): Promise<void> {
+    LogUtils.info(`file loaded: ${eventData.fileId}`);
+    this.zoneRef.run(() => {
+      if (eventData.loaded) {
+        // this.fileList[this.fileIndexes.get(eventData.fileId)!].isLoaded = true;
+        this.fileList.find(file => file.id === eventData.fileId)!.isLoaded =
+          true;
+        LogUtils.info(this.fileList);
+        LogUtils.info(this.fileIndexes);
+      } else {
+        LogUtils.info(
+          `fail to load file with id: ${eventData.fileId} in buffer`
+        );
+      }
+    });
+  }
+
+  /**
+   * handle file conversion progress
+   * @param eventData
+   */
+  async handleConverionProgress(eventData: ConvertProgressEvent) {
+    this.zoneRef.run(() => {
+      const videoFileData: VideoFileData =
+        this.fileList[this.fileIndexes.get(eventData.fileId)!];
+      videoFileData.convertProgress = eventData.progress;
+      videoFileData.inProgress = true;
+
+      /**
+       * conversion has been completed
+       */
+      if (eventData.progress === 100) {
+        videoFileData.isConverted = true;
+        videoFileData.inProgress = false;
+      }
+    });
+  }
+
+  handleFFMpegLog(logParams: ConvertLogEvent) {
+    LogUtils.info(`FFMPEG LOGS => ${logParams.message}`);
+  }
+
+  /**
    * add file to convert
    * @param file
    */
@@ -160,7 +227,7 @@ export class VideoConverterComponent
         file: file,
         inProgress: false,
         type: FileDataType.VIDEO,
-        name: file.name,
+        name: this.formatFileName(file.name),
         isValid: this.isValidFileFormat(file),
         convertProgress: 0,
         targetFormat: 'mp3',
@@ -171,54 +238,29 @@ export class VideoConverterComponent
       this.fileList.push(videoFileData);
 
       /**
+       * keep index mapping for fast access
+       */
+      this.fileIndexes.set(
+        videoFileData.id,
+        this.fileList.findIndex(file => file.id === videoFileData.id)
+      );
+
+      /**
        * load file in ffmpeg buffer
        */
       if (videoFileData.isValid) {
-        this.writeFileInFFMpegBuffer(videoFileData);
+        this.ffmpegService.writeFileInFFMpegBuffer(videoFileData);
       }
     });
   }
 
-  async runFFMpegCommand(): Promise<void> {}
-
-  handleFFMpegLog(logParams: any) {
-    LogUtils.info(
-      `FFMPEG LOGS => [type: ${logParams.type}, message: ${logParams.message}] `
-    );
+  async convertVideoFile(videoFileData: VideoFileData): Promise<void> {
+    this.ffmpegService.submitFileToConvert(videoFileData);
   }
 
-  handleFFMpegProgress(progressParams: any) {
-    LogUtils.info(`ffmpeg progress ${progressParams.ratio}`);
+  formatFileName(fileName: string): string {
+    return fileName.replace(/ /g, '_');
   }
-
-  /**
-   * write video file in ffmpeg buffer
-   * @param videoFileData
-   */
-  async writeFileInFFMpegBuffer(videoFileData: VideoFileData): Promise<void> {
-    this.ffmpeg.FS(
-      'writeFile',
-      videoFileData.name,
-      await fetchFile(videoFileData.file)
-    );
-    this.zoneRef.run(() => {
-      this.fileList.find(file => videoFileData.id === file.id)!.isLoaded = true;
-    });
-  }
-
-  /**
-   * write video file in ffmpeg buffer
-   * @param videoFileData
-   */
-  async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
-    return this.ffmpeg.FS('readFile', fileName);
-  }
-
-  /**
-   * convert video file
-   * @param videoFileData
-   */
-  async convertVideoFile(videoFileData: VideoFileData): Promise<void> {}
 
   async downloadAll(): Promise<void> {
     this.fileList
@@ -241,10 +283,8 @@ export class VideoConverterComponent
 
   async downloadVideo(videoFileData: VideoFileData): Promise<void> {
     const fileName: string =
-      videoFileData.name.substring(
-        0,
-        videoFileData.file.name.lastIndexOf('.')
-      ) || videoFileData.name;
+      videoFileData.name.substring(0, videoFileData.name.lastIndexOf('.')) ||
+      videoFileData.name;
     await this.downloadFile(
       `${fileName}-converted.${videoFileData.targetFormat}`,
       videoFileData.convertedFileData!
