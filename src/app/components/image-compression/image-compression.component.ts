@@ -308,16 +308,16 @@ export class ImageCompressionComponent
     this.downloadFile('compress-images.zip', zipFileData);
   }
 
-  async downloadImage(ImageFileData: ImageFileData): Promise<void> {
+  async downloadImage(imageFileData: ImageFileData): Promise<void> {
     const fileName: string =
-      ImageFileData.name.substring(
+      imageFileData.name.substring(
         0,
-        ImageFileData.file.name.lastIndexOf('.')
-      ) || ImageFileData.name;
-    const extension = ImageFileData.file.name.split('.').pop();
+        imageFileData.file.name.lastIndexOf('.')
+      ) || imageFileData.name;
+    const extension = imageFileData.file.name.split('.').pop();
     await this.downloadFile(
       `${fileName}-compressed.${extension}`,
-      ImageFileData.compressedData!
+      imageFileData.compressedData!
     );
   }
 

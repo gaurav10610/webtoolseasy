@@ -19,6 +19,10 @@ export interface ImageFileData extends BaseFileData {
 
 export interface VideoFileData extends BaseFileData {
   convertProgress: number;
+  targetFormat: string;
+  isConverted: boolean;
+  convertedFileData?: Blob;
+  isLoaded: boolean;
 }
 
 export interface ImageCompressSettings {

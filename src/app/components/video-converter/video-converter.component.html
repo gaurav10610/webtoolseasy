@@ -2,7 +2,7 @@
   <!-- profile header -->
   <app-header-toolbar></app-header-toolbar>
 
-  <div class="full-width y-scroll">
+  <div class="full-width y-scroll flex-display flex-column-flow">
     <!-- app container -->
     <div
       class="flex-display flex-column-flow flex-align-center base-app-container">
@@ -41,7 +41,7 @@
         </button>
       </div>
 
-      <!-- select images button -->
+      <!-- select videos button -->
       <div
         class="flex-display flex-row-flow flex-center full-width"
         [ngStyle]="{
@@ -55,13 +55,13 @@
           (click)="openFileDialog()"
           style="margin-right: 10px"
           matTooltip="select images to compress">
-          <mat-icon>file_upload</mat-icon> Select Images
+          <mat-icon>file_upload</mat-icon> Select Files
         </button>
         <button
           mat-raised-button
           color="primary"
           matTooltip="compress all images">
-          <mat-icon>play_arrow</mat-icon> Compress All
+          <mat-icon>play_arrow</mat-icon> Convert All
         </button>
         <button
           mat-raised-button
@@ -111,30 +111,49 @@
                 >Progress: {{ file.convertProgress }} %</span
               >
 
+              <mat-spinner
+                style="margin-right: 10px"
+                diameter="32"
+                *ngIf="file.isValid && !file.isLoaded"></mat-spinner>
+
+              <mat-form-field
+                appearance="outline"
+                color="primary"
+                style="margin-right: 10px; margin-bottom: -1.25em"
+                *ngIf="file.isValid">
+                <mat-label>Select format</mat-label>
+                <mat-select
+                  disableRipple
+                  value="mp3"
+                  (valueChange)="changeTargetFormat(file.id, $event)">
+                  <mat-option value="mp3">mp3</mat-option>
+                  <mat-option value="mp4">mp4</mat-option>
+                  <mat-option value="webm">webm</mat-option>
+                </mat-select>
+              </mat-form-field>
+
               <mat-icon
                 svgIcon="settings-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
                 *ngIf="file.isValid"
                 matTooltip="change compression settings"></mat-icon>
-              <!-- <mat-icon
-                svgIcon="compress-icon"
+              <mat-icon
+                svgIcon="play-icon"
                 class="pointer-cursor"
-                style="margin-right: 10px"
-                *ngIf="!file.isCompressed && file.isValid"
-                (click)="compressImage(file)"
-                matTooltip="compress image"></mat-icon>
+                *ngIf="!file.isConverted && file.isValid && file.isLoaded"
+                matTooltip="convert video file"></mat-icon>
               <mat-icon
                 svgIcon="download-icon"
                 class="pointer-cursor"
-                *ngIf="file.isCompressed"
-                (click)="downloadImage(file)"
-                matTooltip="download compressed image"></mat-icon> -->
+                *ngIf="file.isConverted"
+                (click)="downloadVideo(file)"
+                matTooltip="download compressed image"></mat-icon>
               <mat-icon
                 class="pointer-cursor"
                 *ngIf="!file.isValid"
                 color="warn"
-                matTooltip="only image files can be compressed"
+                matTooltip="only limited video formats can be converted"
                 style="transform: scale(1.5)"
                 >error</mat-icon
               >

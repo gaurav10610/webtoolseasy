@@ -38,8 +38,8 @@ export const home: ApplicationConfig = {
       iconRelativeUrl: 'image-compress-icon.svg',
     },
     {
-      iconName: 'compress-icon',
-      iconRelativeUrl: 'compress-icon.svg',
+      iconName: 'play-icon',
+      iconRelativeUrl: 'play-icon.svg',
     },
     {
       iconName: 'js-icon',
@@ -117,10 +117,6 @@ export const tools: ApplicationConfig = {
     {
       iconName: 'image-compress-icon',
       iconRelativeUrl: 'image-compress-icon.svg',
-    },
-    {
-      iconName: 'compress-icon',
-      iconRelativeUrl: 'compress-icon.svg',
     },
     {
       iconName: 'js-icon',
@@ -279,8 +275,8 @@ export const imagecompress: ApplicationConfig = {
       iconRelativeUrl: 'settings.svg',
     },
     {
-      iconName: 'compress-icon',
-      iconRelativeUrl: 'compress-icon.svg',
+      iconName: 'play-icon',
+      iconRelativeUrl: 'play-icon.svg',
     },
     {
       iconName: 'linkedin-icon',
@@ -577,6 +573,14 @@ export const videoconverter: ApplicationConfig = {
     {
       iconName: 'settings-icon',
       iconRelativeUrl: 'settings.svg',
+    },
+    {
+      iconName: 'download-icon',
+      iconRelativeUrl: 'download.svg',
+    },
+    {
+      iconName: 'play-icon',
+      iconRelativeUrl: 'play-icon.svg',
     },
   ],
 };

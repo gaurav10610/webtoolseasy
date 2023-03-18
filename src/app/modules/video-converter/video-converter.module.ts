@@ -13,6 +13,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [VideoConverterComponent],
@@ -22,10 +24,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
+    MatSelectModule,
     MatTooltipModule,
     LayoutModule,
     MatSliderModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     HeaderToolbarModule,
     ToolHeadingModule,
     TagsModule,

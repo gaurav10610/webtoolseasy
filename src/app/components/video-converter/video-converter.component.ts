@@ -21,6 +21,8 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
 import { LogUtils } from 'src/app/service/util/logger';
 import { videoconverter as componentConfig } from 'src/environments/component-config';
 import { v4 } from 'uuid';
+import * as JSZip from 'jszip';
+import { createFFmpeg, fetchFile, FFmpeg } from '@ffmpeg/ffmpeg';
 
 @Component({
   selector: 'app-video-converter',
@@ -41,6 +43,8 @@ export class VideoConverterComponent
   destroyed = new Subject<void>();
 
   isDownloadAllActive: boolean = true;
+  zipBuilder!: JSZip;
+  ffmpeg!: FFmpeg;
 
   constructor(
     private titleService: Title,
@@ -84,8 +88,15 @@ export class VideoConverterComponent
     LogUtils.info('video converter: ngOnInit');
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     LogUtils.info('video converter: ngAfterViewInit');
+    this.zipBuilder = new JSZip();
+    this.ffmpeg = createFFmpeg({
+      log: false,
+    });
+    this.ffmpeg.setLogger(this.handleFFMpegLog.bind(this));
+    this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
+    await this.ffmpeg.load();
   }
 
   ngOnDestroy() {
@@ -144,7 +155,7 @@ export class VideoConverterComponent
    */
   async addFileToConvert(file: File) {
     this.zoneRef.run(() => {
-      this.fileList.push({
+      const videoFileData: VideoFileData = {
         id: v4(),
         file: file,
         inProgress: false,
@@ -152,9 +163,103 @@ export class VideoConverterComponent
         name: file.name,
         isValid: this.isValidFileFormat(file),
         convertProgress: 0,
+        targetFormat: 'mp3',
+        isConverted: false,
+        isLoaded: false,
         error: this.isValidFileFormat(file) ? undefined : this.ERROR_MESSAGE,
-      });
+      };
+      this.fileList.push(videoFileData);
+
+      /**
+       * load file in ffmpeg buffer
+       */
+      if (videoFileData.isValid) {
+        this.writeFileInFFMpegBuffer(videoFileData);
+      }
     });
+  }
+
+  async runFFMpegCommand(): Promise<void> {}
+
+  handleFFMpegLog(logParams: any) {
+    LogUtils.info(
+      `FFMPEG LOGS => [type: ${logParams.type}, message: ${logParams.message}] `
+    );
+  }
+
+  handleFFMpegProgress(progressParams: any) {
+    LogUtils.info(`ffmpeg progress ${progressParams.ratio}`);
+  }
+
+  /**
+   * write video file in ffmpeg buffer
+   * @param videoFileData
+   */
+  async writeFileInFFMpegBuffer(videoFileData: VideoFileData): Promise<void> {
+    this.ffmpeg.FS(
+      'writeFile',
+      videoFileData.name,
+      await fetchFile(videoFileData.file)
+    );
+    this.zoneRef.run(() => {
+      this.fileList.find(file => videoFileData.id === file.id)!.isLoaded = true;
+    });
+  }
+
+  /**
+   * write video file in ffmpeg buffer
+   * @param videoFileData
+   */
+  async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
+    return this.ffmpeg.FS('readFile', fileName);
+  }
+
+  /**
+   * convert video file
+   * @param videoFileData
+   */
+  async convertVideoFile(videoFileData: VideoFileData): Promise<void> {}
+
+  async downloadAll(): Promise<void> {
+    this.fileList
+      .filter(videoFileData => videoFileData.isValid)
+      .forEach(videoFileData =>
+        this.zipBuilder.file(
+          videoFileData.name,
+          videoFileData.convertedFileData!,
+          {
+            binary: true,
+          }
+        )
+      );
+
+    const zipFileData: Blob = await this.zipBuilder.generateAsync({
+      type: 'blob',
+    });
+    this.downloadFile('converted-videos.zip', zipFileData);
+  }
+
+  async downloadVideo(videoFileData: VideoFileData): Promise<void> {
+    const fileName: string =
+      videoFileData.name.substring(
+        0,
+        videoFileData.file.name.lastIndexOf('.')
+      ) || videoFileData.name;
+    await this.downloadFile(
+      `${fileName}-converted.${videoFileData.targetFormat}`,
+      videoFileData.convertedFileData!
+    );
+  }
+
+  async downloadFile(fileName: string, fileContent: Blob): Promise<void> {
+    const downloadAnchor = this.renderer.createElement('a');
+    this.renderer.setProperty(
+      downloadAnchor,
+      'href',
+      URL.createObjectURL(fileContent)
+    );
+    this.renderer.setProperty(downloadAnchor, 'download', fileName);
+    downloadAnchor.click();
   }
 
   /**
@@ -163,7 +268,7 @@ export class VideoConverterComponent
    * @returns
    */
   isValidFileFormat(file: File): boolean {
-    return true;
+    return ['video/mp4'].includes(file.type);
   }
 
   async sortFiles() {
@@ -181,6 +286,18 @@ export class VideoConverterComponent
 
       return 0;
     });
+  }
+
+  /**
+   * change video file target format
+   * @param fileId identifier of file
+   * @param targetFormat
+   */
+  changeTargetFormat(fileId: string, targetFormat: string) {
+    LogUtils.info(
+      `changing target format of file with id: ${fileId} to ${targetFormat}`
+    );
+    this.fileList.find(file => file.id === fileId)!.targetFormat = targetFormat;
   }
 
   /**
