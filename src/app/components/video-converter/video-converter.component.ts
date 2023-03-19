@@ -22,14 +22,13 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { videoconverter as componentConfig } from 'src/environments/component-config';
 import { v4 } from 'uuid';
 import * as JSZip from 'jszip';
-import { createFFmpeg, fetchFile, FFmpeg } from '@ffmpeg/ffmpeg';
 import {
+  ConvertEvent,
+  ConvertEventType,
   ConvertLogEvent,
   ConvertProgressEvent,
-  FFMpegCommandType,
   FileLoadedEvent,
 } from 'src/app/@types/ffmpeg';
-import { FFMPEG_COMMANDS } from 'src/environments/ffmpeg-commands';
 import { FfmpegService } from 'src/app/service/ffmpeg/ffmpeg.service';
 
 @Component({
@@ -41,7 +40,8 @@ export class VideoConverterComponent
   extends BaseComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
-  fileList: VideoFileData[] = [];
+  fileStore: Map<string, VideoFileData>;
+  fileDisplayList: VideoFileData[];
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
@@ -50,10 +50,8 @@ export class VideoConverterComponent
   isMobile!: boolean;
   destroyed = new Subject<void>();
 
-  isDownloadAllActive: boolean = true;
+  isDownloadAllActive: boolean = false;
   zipBuilder!: JSZip;
-
-  fileIndexes: Map<string, number>;
 
   constructor(
     private titleService: Title,
@@ -93,12 +91,9 @@ export class VideoConverterComponent
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
 
-    this.fileIndexes = new Map();
+    this.fileStore = new Map();
+    this.fileDisplayList = [];
 
-    /**
-     * configure ffmpeg service
-     */
-    this.ffmpegService.initialize();
     this.ffmpegService.fileLoadedEvent.subscribe(
       this.handleBufferFileLoad.bind(this)
     );
@@ -107,6 +102,9 @@ export class VideoConverterComponent
     );
     this.ffmpegService.convertLogEvent.subscribe(
       this.handleFFMpegLog.bind(this)
+    );
+    this.ffmpegService.convertEvent.subscribe(
+      this.handleConvertEvent.bind(this)
     );
   }
 
@@ -122,7 +120,6 @@ export class VideoConverterComponent
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
-    this.ffmpegService.exit();
   }
 
   async selectFiles(event: any) {
@@ -175,14 +172,12 @@ export class VideoConverterComponent
    * @param eventData
    */
   async handleBufferFileLoad(eventData: FileLoadedEvent): Promise<void> {
-    LogUtils.info(`file loaded: ${eventData.fileId}`);
     this.zoneRef.run(() => {
       if (eventData.loaded) {
-        // this.fileList[this.fileIndexes.get(eventData.fileId)!].isLoaded = true;
-        this.fileList.find(file => file.id === eventData.fileId)!.isLoaded =
-          true;
-        LogUtils.info(this.fileList);
-        LogUtils.info(this.fileIndexes);
+        // this.fileStore.get(eventData.fileId)!.isLoaded = true;
+        LogUtils.info(
+          `file with id: ${eventData.fileId} loaded in ffmpeg buffer`
+        );
       } else {
         LogUtils.info(
           `fail to load file with id: ${eventData.fileId} in buffer`
@@ -197,8 +192,9 @@ export class VideoConverterComponent
    */
   async handleConverionProgress(eventData: ConvertProgressEvent) {
     this.zoneRef.run(() => {
-      const videoFileData: VideoFileData =
-        this.fileList[this.fileIndexes.get(eventData.fileId)!];
+      const videoFileData: VideoFileData = this.fileStore.get(
+        eventData.fileId
+      )!;
       videoFileData.convertProgress = eventData.progress;
       videoFileData.inProgress = true;
 
@@ -206,10 +202,25 @@ export class VideoConverterComponent
        * conversion has been completed
        */
       if (eventData.progress === 100) {
-        videoFileData.isConverted = true;
         videoFileData.inProgress = false;
       }
     });
+  }
+
+  /**
+   * handle file convert event
+   * @param eventData
+   */
+  async handleConvertEvent(eventData: ConvertEvent) {
+    if (eventData.type === ConvertEventType.END) {
+      this.zoneRef.run(() => {
+        this.isDownloadAllActive = true;
+      });
+      LogUtils.info(`converted file received with id: ${eventData.fileId}`);
+      this.fileStore
+        .get(eventData.fileId)!
+        .convertedFileData.set(eventData.targetFormat, eventData.fileData);
+    }
   }
 
   handleFFMpegLog(logParams: ConvertLogEvent) {
@@ -222,39 +233,52 @@ export class VideoConverterComponent
    */
   async addFileToConvert(file: File) {
     this.zoneRef.run(() => {
+      const formattedName = this.formatFileName(file.name);
+      const extension = formattedName.split('.').pop();
+      const id = v4();
       const videoFileData: VideoFileData = {
-        id: v4(),
+        id,
         file: file,
         inProgress: false,
         type: FileDataType.VIDEO,
-        name: this.formatFileName(file.name),
+        name: `${this.ffmpegService.getPlainFileName(
+          formattedName
+        )}_${id}.${extension}`,
         isValid: this.isValidFileFormat(file),
         convertProgress: 0,
         targetFormat: 'mp3',
-        isConverted: false,
-        isLoaded: false,
+        convertedFileData: new Map(),
         error: this.isValidFileFormat(file) ? undefined : this.ERROR_MESSAGE,
       };
-      this.fileList.push(videoFileData);
-
-      /**
-       * keep index mapping for fast access
-       */
-      this.fileIndexes.set(
-        videoFileData.id,
-        this.fileList.findIndex(file => file.id === videoFileData.id)
-      );
-
-      /**
-       * load file in ffmpeg buffer
-       */
-      if (videoFileData.isValid) {
-        this.ffmpegService.writeFileInFFMpegBuffer(videoFileData);
-      }
+      this.fileStore.set(videoFileData.id, videoFileData);
+      this.fileDisplayList.push(videoFileData);
     });
   }
 
+  /**
+   * trigger conversion for all videos at once
+   */
+  async convertAllVideos() {
+    for (let videoFileData of this.fileStore.values()) {
+      if (
+        videoFileData.isValid &&
+        !videoFileData.inProgress &&
+        !videoFileData.convertedFileData.has(videoFileData.targetFormat)
+      ) {
+        this.convertVideoFile(videoFileData);
+      }
+    }
+  }
+
+  /**
+   * schedule video for conversion
+   * @param videoFileData
+   */
   async convertVideoFile(videoFileData: VideoFileData): Promise<void> {
+    this.zoneRef.run(() => {
+      videoFileData.inProgress = true;
+      videoFileData.convertProgress = 0;
+    });
     this.ffmpegService.submitFileToConvert(videoFileData);
   }
 
@@ -262,19 +286,33 @@ export class VideoConverterComponent
     return fileName.replace(/ /g, '_');
   }
 
+  /**
+   * download all videos as zip file
+   */
   async downloadAll(): Promise<void> {
-    this.fileList
-      .filter(videoFileData => videoFileData.isValid)
-      .forEach(videoFileData =>
+    for (let videoFileData of this.fileStore.values()) {
+      if (
+        videoFileData.isValid &&
+        !videoFileData.inProgress &&
+        videoFileData.convertedFileData.has(videoFileData.targetFormat)
+      ) {
+        const fileName: string = this.ffmpegService.getPlainFileName(
+          videoFileData.name
+        );
         this.zipBuilder.file(
-          videoFileData.name,
-          videoFileData.convertedFileData!,
+          `${fileName}_converted.${videoFileData.targetFormat}`,
+          new Blob(
+            [videoFileData.convertedFileData!.get(videoFileData.targetFormat)!],
+            {
+              type: this.getMimeType(videoFileData.targetFormat),
+            }
+          ),
           {
             binary: true,
           }
-        )
-      );
-
+        );
+      }
+    }
     const zipFileData: Blob = await this.zipBuilder.generateAsync({
       type: 'blob',
     });
@@ -282,13 +320,30 @@ export class VideoConverterComponent
   }
 
   async downloadVideo(videoFileData: VideoFileData): Promise<void> {
-    const fileName: string =
-      videoFileData.name.substring(0, videoFileData.name.lastIndexOf('.')) ||
-      videoFileData.name;
-    await this.downloadFile(
-      `${fileName}-converted.${videoFileData.targetFormat}`,
-      videoFileData.convertedFileData!
+    const fileName: string = this.ffmpegService.getPlainFileName(
+      videoFileData.name
     );
+    await this.downloadFile(
+      `${fileName}_converted.${videoFileData.targetFormat}`,
+      new Blob(
+        [videoFileData.convertedFileData!.get(videoFileData.targetFormat)!],
+        {
+          type: this.getMimeType(videoFileData.targetFormat),
+        }
+      )
+    );
+  }
+
+  /**
+   * resolve mimeType for downloading the file
+   * @param targetFormat
+   * @returns
+   */
+  getMimeType(targetFormat: string) {
+    if (targetFormat === 'mp4' || targetFormat === 'webm') {
+      return `video/${targetFormat}`;
+    }
+    return `audio/${targetFormat}`;
   }
 
   async downloadFile(fileName: string, fileContent: Blob): Promise<void> {
@@ -308,14 +363,14 @@ export class VideoConverterComponent
    * @returns
    */
   isValidFileFormat(file: File): boolean {
-    return ['video/mp4'].includes(file.type);
+    return ['video/mp4', 'video/webm'].includes(file.type);
   }
 
+  /**
+   * sorting the list to keep invalid files at one end
+   */
   async sortFiles() {
-    /**
-     * sorting the list to keep invalid files at one end
-     */
-    this.fileList = this.fileList.sort((value1, value2) => {
+    this.fileDisplayList = this.fileDisplayList.sort((value1, value2) => {
       if (value2.isValid) {
         return 1;
       }
@@ -334,10 +389,13 @@ export class VideoConverterComponent
    * @param targetFormat
    */
   changeTargetFormat(fileId: string, targetFormat: string) {
-    LogUtils.info(
-      `changing target format of file with id: ${fileId} to ${targetFormat}`
-    );
-    this.fileList.find(file => file.id === fileId)!.targetFormat = targetFormat;
+    const videoFileData = this.fileStore.get(fileId)!;
+    if (videoFileData.targetFormat !== targetFormat) {
+      LogUtils.info(
+        `changing target format of file with id: ${fileId} to ${targetFormat}`
+      );
+      this.fileStore.get(fileId)!.targetFormat = targetFormat;
+    }
   }
 
   /**

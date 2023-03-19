@@ -15,6 +15,8 @@ export interface FFMpegBaseFileEvent {
 
 export interface ConvertEvent extends FFMpegBaseFileEvent {
   type: ConvertEventType;
+  fileData?: Uint8Array;
+  targetFormat: string;
 }
 
 export interface ConvertProgressEvent extends FFMpegBaseFileEvent {

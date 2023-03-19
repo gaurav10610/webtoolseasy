@@ -21,7 +21,7 @@
         class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width"
         (drop)="dropHandler($event)"
         (dragover)="dragOverHandler($event)"
-        *ngIf="fileList.length === 0">
+        *ngIf="fileDisplayList.length === 0">
         <mat-icon style="transform: scale(2); margin-bottom: 10px"
           >collections</mat-icon
         >
@@ -46,9 +46,9 @@
         class="flex-display flex-row-flow flex-center full-width"
         [ngStyle]="{
           padding: '10px',
-          'justify-content': fileList.length > 0 ? 'end' : 'center'
+          'justify-content': fileDisplayList.length > 0 ? 'end' : 'center'
         }"
-        *ngIf="fileList.length > 0">
+        *ngIf="fileDisplayList.length > 0">
         <button
           mat-raised-button
           color="primary"
@@ -60,24 +60,26 @@
         <button
           mat-raised-button
           color="primary"
-          matTooltip="compress all images">
+          matTooltip="convert all videos"
+          (click)="convertAllVideos()">
           <mat-icon>play_arrow</mat-icon> Convert All
         </button>
         <button
           mat-raised-button
           color="primary"
           style="margin-left: 10px"
-          matTooltip="download all images"
-          *ngIf="isDownloadAllActive && !isMobile">
+          matTooltip="download all videos"
+          *ngIf="isDownloadAllActive && !isMobile"
+          (click)="downloadAll()">
           <mat-icon>file_download</mat-icon> Download Zip
         </button>
       </div>
 
       <div
         class="flex-display flex-column-flow y-scroll file-drop-area file-area-width file-list-div"
-        *ngIf="fileList.length > 0">
+        *ngIf="fileDisplayList.length > 0">
         <mat-card
-          *ngFor="let file of fileList"
+          *ngFor="let file of fileDisplayList"
           style="margin-bottom: 10px; border: 1px solid lightgrey">
           <div
             class="flex-display flex-row-flow flex-align-center"
@@ -90,7 +92,7 @@
             <!-- file name & size div -->
             <div
               class="flex-display flex-column-flow header-font file-name-div">
-              <span class="bold-text">{{ file.name }}</span>
+              <span class="bold-text">{{ file.file.name }}</span>
               <span class="bold-text header-font" style="color: #3f51b5">{{
                 formatBytes(file.file.size)
               }}</span>
@@ -108,25 +110,34 @@
             <div
               class="flex-display flex-row-flow flex-align-center flex-center">
               <span
-                *ngIf="file.inProgress && file.convertProgress > 0"
+                *ngIf="file.inProgress && file.convertProgress === 0"
                 style="margin-right: 10px"
+                class="bold-text"
+                >queued</span
+              >
+              <span
+                *ngIf="!isMobile && file.inProgress && file.convertProgress > 0"
+                style="margin-right: 10px"
+                class="bold-text"
                 >Progress: {{ file.convertProgress }} %</span
               >
 
               <mat-spinner
                 style="margin-right: 10px"
                 diameter="32"
-                *ngIf="file.isValid && !file.isLoaded"></mat-spinner>
+                *ngIf="file.inProgress && file.convertProgress > 0"
+                mode="determinate"
+                value="{{ file.convertProgress }}"></mat-spinner>
 
               <mat-form-field
                 appearance="outline"
                 color="primary"
                 style="margin-right: 10px; margin-bottom: -1.25em"
-                *ngIf="file.isValid">
+                *ngIf="file.isValid && !file.inProgress">
                 <mat-label>Select format</mat-label>
                 <mat-select
                   disableRipple
-                  value="mp3"
+                  [value]="file.targetFormat"
                   (valueChange)="changeTargetFormat(file.id, $event)">
                   <mat-option value="mp3">mp3</mat-option>
                   <mat-option value="mp4">mp4</mat-option>
@@ -138,20 +149,24 @@
                 svgIcon="settings-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="file.isValid"
-                matTooltip="change compression settings"></mat-icon>
+                *ngIf="file.isValid && isMobile && !file.inProgress"
+                matTooltip="change conversion settings"></mat-icon>
               <mat-icon
                 svgIcon="play-icon"
                 class="pointer-cursor"
-                *ngIf="!file.isConverted && file.isValid && file.isLoaded"
+                *ngIf="
+                  file.isValid &&
+                  !file.inProgress &&
+                  !file.convertedFileData.has(file.targetFormat)
+                "
                 (click)="convertVideoFile(file)"
                 matTooltip="convert video file"></mat-icon>
               <mat-icon
                 svgIcon="download-icon"
                 class="pointer-cursor"
-                *ngIf="file.isConverted"
+                *ngIf="file.convertedFileData.has(file.targetFormat)"
                 (click)="downloadVideo(file)"
-                matTooltip="download compressed image"></mat-icon>
+                matTooltip="download converted video"></mat-icon>
               <mat-icon
                 class="pointer-cursor"
                 *ngIf="!file.isValid"

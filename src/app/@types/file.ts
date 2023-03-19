@@ -20,9 +20,7 @@ export interface ImageFileData extends BaseFileData {
 export interface VideoFileData extends BaseFileData {
   convertProgress: number;
   targetFormat: string;
-  isConverted: boolean;
-  convertedFileData?: Blob;
-  isLoaded: boolean;
+  convertedFileData: Map<string, Uint8Array | undefined>;
   targetFileName?: string;
 }
 

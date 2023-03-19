@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { createFFmpeg, fetchFile, FFmpeg } from '@ffmpeg/ffmpeg';
 import {
   ConvertEvent,
+  ConvertEventType,
   ConvertLogEvent,
   ConvertProgressEvent,
   FFMpegCommandType,
@@ -22,10 +23,8 @@ export class FfmpegService {
    * queue data strcuture to hold the submitted files
    */
   private fileQueue!: QueueStorage<VideoFileData>;
-  private context = {
-    fileId: '',
-    isConverting: false,
-  };
+  private isConverting = false;
+  private currentFile: VideoFileData | undefined = undefined;
 
   /**
    * fileId -> targetFormat
@@ -37,9 +36,11 @@ export class FfmpegService {
   fileLoadedEvent!: EventEmitter<FileLoadedEvent>;
   convertLogEvent!: EventEmitter<ConvertLogEvent>;
 
-  constructor() {}
+  constructor() {
+    this.init();
+  }
 
-  initialize() {
+  init() {
     this.fileQueue = new QueueStorage();
     this.fileMap = new Map();
 
@@ -47,29 +48,21 @@ export class FfmpegService {
     this.convertEvent = new EventEmitter();
     this.fileLoadedEvent = new EventEmitter();
     this.convertLogEvent = new EventEmitter();
+  }
 
+  async initializeFFMpeg() {
     this.ffmpeg = createFFmpeg({
       log: false,
     });
 
-    this.ffmpeg.setLogger(this.handleLog.bind(this));
-    this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
-
-    this.ffmpeg.load();
-  }
-
-  exit() {
-    this.ffmpeg.exit();
-  }
-
-  /**
-   * handle ffmpeg log
-   * @param logParams
-   */
-  handleLog(logParams: any) {
-    this.convertLogEvent.emit({
-      ...logParams,
+    this.ffmpeg.setLogger(logParams => {
+      this.convertLogEvent.emit({
+        ...logParams,
+      });
     });
+
+    this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
+    await this.ffmpeg.load();
   }
 
   /**
@@ -77,9 +70,9 @@ export class FfmpegService {
    * @param progressParams
    */
   handleFFMpegProgress(progressParams: any) {
-    const progress: number = progressParams.ratio * 100;
+    const progress: number = Number((progressParams.ratio * 100).toFixed(2));
     this.progressEvent.emit({
-      fileId: this.context.fileId!,
+      fileId: this.currentFile!.id,
       progress,
     });
 
@@ -87,16 +80,29 @@ export class FfmpegService {
      * this means, that current file is converted completely so reset the context
      */
     if (progress === 100) {
-      this.context.fileId = '';
-      this.context.isConverting = false;
+      /**
+       * conversion complete event
+       */
+      this.convertEvent.emit({
+        fileId: this.currentFile!.id,
+        type: ConvertEventType.END,
+        fileData: this.ffmpeg.FS('readFile', this.currentFile!.targetFileName!),
+        targetFormat: this.currentFile!.targetFormat,
+      });
+
+      // exit ffmpeg
+      // this.ffmpeg.exit();
+
+      this.currentFile = undefined;
+      this.isConverting = false;
 
       /**
        * if file queue is not empty then schedule next file for conversion
        */
-      if (!this.fileQueue.isEmpty() && !this.context.isConverting) {
-        this.context.isConverting = true;
+      if (!this.fileQueue.isEmpty() && !this.isConverting) {
+        this.isConverting = true;
         const videoFileData: VideoFileData = this.fileQueue.dequeue();
-        this.context.fileId = videoFileData.id;
+        this.currentFile = videoFileData;
         this.convertVideoFile(videoFileData);
       }
     }
@@ -169,10 +175,10 @@ export class FfmpegService {
     this.fileQueue.enqueue(videoFileData);
     this.fileMap.set(videoFileData.id, videoFileData.targetFormat);
 
-    if (!this.context.isConverting) {
-      this.context.isConverting = true;
+    if (!this.isConverting) {
+      this.isConverting = true;
       const nextFile: VideoFileData = this.fileQueue.dequeue();
-      this.context.fileId = nextFile.id;
+      this.currentFile = nextFile;
       this.convertVideoFile(nextFile);
     }
   }
@@ -182,6 +188,13 @@ export class FfmpegService {
    * @param videoFileData
    */
   async convertVideoFile(videoFileData: VideoFileData): Promise<void> {
+    await this.initializeFFMpeg();
+
+    /**
+     * load file in ffmpeg buffer
+     */
+    await this.writeFileInFFMpegBuffer(videoFileData);
+
     /**
      * resolve ffmpeg command type
      */
@@ -193,7 +206,7 @@ export class FfmpegService {
      */
     videoFileData.targetFileName = `${this.getPlainFileName(
       videoFileData.name
-    )}-converted.${videoFileData.targetFormat}`;
+    )}_converted.${videoFileData.targetFormat}`;
 
     /**
      * prepare ffmpeg command
