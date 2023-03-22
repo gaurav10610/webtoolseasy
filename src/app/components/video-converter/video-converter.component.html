@@ -133,15 +133,15 @@
                 appearance="outline"
                 color="primary"
                 style="margin-right: 10px; margin-bottom: -1.25em"
-                *ngIf="file.isValid && !file.inProgress">
+                *ngIf="file.isValid && !file.inProgress && !isMobile">
                 <mat-label>Select format</mat-label>
                 <mat-select
                   disableRipple
                   [value]="file.targetFormat"
                   (valueChange)="changeTargetFormat(file.id, $event)">
-                  <mat-option value="mp3">mp3</mat-option>
-                  <mat-option value="mp4">mp4</mat-option>
-                  <mat-option value="webm">webm</mat-option>
+                  <mat-option value="mp3">mp3 (Audio)</mat-option>
+                  <mat-option value="mp4">mp4 (Video)</mat-option>
+                  <mat-option value="webm">webm (Video)</mat-option>
                 </mat-select>
               </mat-form-field>
 

@@ -1,0 +1,26 @@
+<div class="flex-display flex-column-flow">
+  <div
+    class="popup-row flex-display flex-row-flow"
+    *ngFor="let row of formContext.rows">
+    <div *ngFor="let element of row.elements" class="popup-element">
+      <!-- drop down element -->
+      <mat-form-field
+        appearance="outline"
+        color="primary"
+        style="margin-right: 10px; margin-bottom: -1.25em"
+        *ngIf="element.type === 'dropdown'">
+        <mat-label>Select format</mat-label>
+        <mat-select
+          disableRipple
+          [value]="element.data.targetFormat"
+          (valueChange)="changeDropdownValue(element.propertyName, $event)">
+          <mat-option
+            value="option.value"
+            *ngFor="let option of element.data.options"
+            >{{ option.displayName }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

@@ -90,8 +90,8 @@ export class FfmpegService {
         targetFormat: this.currentFile!.targetFormat,
       });
 
-      // exit ffmpeg
-      // this.ffmpeg.exit();
+      // free up the buffer memory
+      this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
 
       this.currentFile = undefined;
       this.isConverting = false;

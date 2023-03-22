@@ -168,6 +168,11 @@ export class VideoConverterComponent
   }
 
   /**
+   * handle settings change
+   */
+  async handleSettingsChange() {}
+
+  /**
    * handle file loaded in buffer event
    * @param eventData
    */
@@ -192,6 +197,7 @@ export class VideoConverterComponent
    */
   async handleConverionProgress(eventData: ConvertProgressEvent) {
     this.zoneRef.run(() => {
+      LogUtils.info(`file progress event for file id: ${eventData.fileId}`);
       const videoFileData: VideoFileData = this.fileStore.get(
         eventData.fileId
       )!;
