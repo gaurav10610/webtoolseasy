@@ -119,11 +119,9 @@ export class ImageCompressionComponent
    */
   async openSettingsDialog(file: ImageFileData) {
     this.closeDialog();
-    const dialogConfig: MatDialogConfig = { data: file };
-    this.activeDialog = this.dialog.open(
-      CompressSettingsComponent,
-      dialogConfig
-    );
+    this.activeDialog = this.dialog.open(CompressSettingsComponent, {
+      data: file,
+    });
 
     /**
      * subscribe dialog close event

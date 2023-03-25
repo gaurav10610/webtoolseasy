@@ -1,12 +1,23 @@
-export enum FFMpegCommandType {
-  TO_MP3 = 'toMp3',
-  TO_MP4 = 'toMp4',
-  TO_WEBM = 'toWebM',
+export enum FFMpegMediaFormatType {
+  VIDEO = 'video',
+  AUDIO = 'audio',
+}
+
+export interface FFMpegMediaFormatConfig {
+  displayName: string;
+  command: string;
+  targetFormat: string;
+}
+
+export interface FFMpegOutputConfig {
+  audio: FFMpegMediaFormatConfig[];
+  video: FFMpegMediaFormatConfig[];
 }
 
 export enum ConvertEventType {
   START = 1,
   END = 2,
+  FAILED = 3,
 }
 
 export interface FFMpegBaseFileEvent {

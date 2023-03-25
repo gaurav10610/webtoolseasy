@@ -5,13 +5,14 @@ import {
   ConvertEventType,
   ConvertLogEvent,
   ConvertProgressEvent,
-  FFMpegCommandType,
+  FFMpegMediaFormatConfig,
+  FFMpegMediaFormatType,
   FileLoadedEvent,
 } from 'src/app/@types/ffmpeg';
 import { VideoFileData } from 'src/app/@types/file';
 import { QueueStorage } from 'src/app/custom-datastructures/QueueStorage';
-import { FFMPEG_COMMANDS } from 'src/environments/ffmpeg-commands';
-import { LogUtils } from '../util/logger';
+import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
+import { LogUtils } from 'src/app/service/util/logger';
 
 @Injectable({
   providedIn: 'root',
@@ -55,14 +56,56 @@ export class FfmpegService {
       log: false,
     });
 
-    this.ffmpeg.setLogger(logParams => {
-      this.convertLogEvent.emit({
-        ...logParams,
-      });
-    });
+    this.ffmpeg.setLogger(this.handleLogs.bind(this));
 
     this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
     await this.ffmpeg.load();
+  }
+
+  async flushBuffer() {
+    if (this.ffmpeg && this.ffmpeg.isLoaded()) {
+      const files: string[] = this.ffmpeg.FS('readdir', '/');
+      files.forEach(fileName => this.ffmpeg.FS('unlink', fileName));
+    }
+  }
+
+  /**
+   * handle conversion logs
+   * @param logParams
+   */
+  handleLogs(logParams: any) {
+    this.convertLogEvent.emit({
+      ...logParams,
+    });
+
+    const { message } = logParams;
+    if (message === 'Conversion failed!') {
+      /**
+       * emit conversion failed event
+       */
+      this.convertEvent.emit({
+        fileId: this.currentFile!.id,
+        type: ConvertEventType.FAILED,
+        targetFormat: this.currentFile!.targetFormat,
+      });
+
+      // free up the buffer memory
+      this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
+      this.ffmpeg.FS('unlink', this.currentFile!.name);
+
+      this.currentFile = undefined;
+      this.isConverting = false;
+
+      /**
+       * if file queue is not empty then schedule next file for conversion
+       */
+      if (!this.fileQueue.isEmpty() && !this.isConverting) {
+        this.isConverting = true;
+        const videoFileData: VideoFileData = this.fileQueue.dequeue();
+        this.currentFile = videoFileData;
+        this.convertVideoFile(videoFileData);
+      }
+    }
   }
 
   /**
@@ -92,6 +135,7 @@ export class FfmpegService {
 
       // free up the buffer memory
       this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
+      this.ffmpeg.FS('unlink', this.currentFile!.name);
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -109,29 +153,6 @@ export class FfmpegService {
   }
 
   /**
-   * resolve ffmpeg command type using target media format
-   * @param videoFileData
-   * @returns
-   */
-  resolveFFMpegCommandType(videoFileData: VideoFileData): FFMpegCommandType {
-    let commandType: FFMpegCommandType;
-    switch (videoFileData.targetFormat) {
-      case 'mp3':
-        commandType = FFMpegCommandType.TO_MP3;
-        break;
-      case 'mp4':
-        commandType = FFMpegCommandType.TO_MP4;
-        break;
-      case 'webm':
-        commandType = FFMpegCommandType.TO_WEBM;
-        break;
-      default:
-        commandType = FFMpegCommandType.TO_MP3;
-    }
-    return commandType;
-  }
-
-  /**
    * get file name without extension
    * @param fileName
    * @returns
@@ -142,12 +163,15 @@ export class FfmpegService {
 
   /**
    * build ffmpeg command from specified command type and arguments
-   * @param commandType
+   * @param targetFormat
    * @param args
    * @returns
    */
-  buildFFMpegCommand(commandType: FFMpegCommandType, args: string[]): string[] {
-    let command: string = FFMPEG_COMMANDS[commandType];
+  buildFFMpegCommand(targetFormat: string, args: string[]): string[] {
+    const mediaType = this.getMediaType(targetFormat);
+    let command = FFMPEG_OUTPUT_CONFIG[mediaType].find(
+      config => config.targetFormat === targetFormat
+    )?.command!;
     for (let i = 0; i < args.length; i++) {
       command = command.split(`{${i}}`).join(args[i]);
     }
@@ -196,12 +220,6 @@ export class FfmpegService {
     await this.writeFileInFFMpegBuffer(videoFileData);
 
     /**
-     * resolve ffmpeg command type
-     */
-    const commandType: FFMpegCommandType =
-      this.resolveFFMpegCommandType(videoFileData);
-
-    /**
      * build converted file name
      */
     videoFileData.targetFileName = `${this.getPlainFileName(
@@ -211,10 +229,10 @@ export class FfmpegService {
     /**
      * prepare ffmpeg command
      */
-    const ffmpegCommand: string[] = this.buildFFMpegCommand(commandType, [
-      videoFileData.name,
-      videoFileData.targetFileName,
-    ]);
+    const ffmpegCommand: string[] = this.buildFFMpegCommand(
+      videoFileData.targetFormat,
+      [videoFileData.name, videoFileData.targetFileName]
+    );
 
     LogUtils.info(`running ffmpeg commad - ${ffmpegCommand.join(' ')}`);
 
@@ -250,5 +268,20 @@ export class FfmpegService {
    */
   async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
     return this.ffmpeg.FS('readFile', fileName);
+  }
+
+  /**
+   * get media type
+   * @param targetFormat
+   */
+  getMediaType(targetFormat: string): FFMpegMediaFormatType {
+    let config: FFMpegMediaFormatConfig | undefined;
+    config = FFMPEG_OUTPUT_CONFIG.audio.find(
+      mediaConfig => mediaConfig.targetFormat === targetFormat
+    );
+    if (config) {
+      return FFMpegMediaFormatType.AUDIO;
+    }
+    return FFMpegMediaFormatType.VIDEO;
   }
 }

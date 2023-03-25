@@ -4,6 +4,7 @@ import {
   PopupFormContext,
   PopupFormSubmitResult,
 } from 'src/app/@types/popup-form';
+import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-popup-form',
@@ -32,11 +33,11 @@ export class PopupFormComponent implements OnInit, OnDestroy {
     this.result = undefined;
   }
 
-  handleSubmit() {
+  applySettings() {
     this.dialogRef.close(this.result);
   }
 
-  handleCancel() {
+  cancelDialog() {
     this.dialogRef.close();
   }
 

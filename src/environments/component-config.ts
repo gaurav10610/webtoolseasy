@@ -539,7 +539,7 @@ export const videoconverter: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Text Difference Checker | Diffchecker online | Text Compare | Compare Text Online',
+        'video converter | mp4 to mp3 | webm to mp4 | mp4 to webm | video to audio',
     },
     {
       name: 'author',
@@ -548,10 +548,11 @@ export const videoconverter: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'text difference checker',
-    'diffchecker online',
-    'text compare',
-    'compare text online',
+    'video converter',
+    'mp4 to mp3',
+    'webm to mp4',
+    'mp4 to webm',
+    'video to audio',
   ],
   icons: [
     {
