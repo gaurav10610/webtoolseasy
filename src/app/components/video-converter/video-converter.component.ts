@@ -159,6 +159,8 @@ export class VideoConverterComponent
     this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.video);
 
     this.conversionLogs = [];
+
+    this.checkCompatibility();
   }
 
   ngOnInit(): void {
