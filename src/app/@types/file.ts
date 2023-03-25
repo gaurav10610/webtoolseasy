@@ -23,6 +23,7 @@ export interface VideoFileData extends BaseFileData {
   convertedFileData: Map<string, Uint8Array | undefined>;
   targetFileName?: string;
   conversionErrors: Map<string, string>;
+  converterStatus?: string;
 }
 
 export interface ImageCompressSettings {

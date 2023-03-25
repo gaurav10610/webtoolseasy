@@ -34,6 +34,10 @@ export interface ConvertProgressEvent extends FFMpegBaseFileEvent {
   progress: number;
 }
 
+export interface FFMpegLoadingStatus extends FFMpegBaseFileEvent {
+  status: string;
+}
+
 export interface FileLoadedEvent extends FFMpegBaseFileEvent {
   loaded: boolean;
 }

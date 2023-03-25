@@ -109,10 +109,16 @@
                 >{{ file.conversionErrors.get(file.targetFormat) }}</span
               >
               <span
-                *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
-                style="margin-top: 10px"
+                *ngIf="
+                  isMobile && file.inProgress && file.convertProgress === 0
+                "
                 class="bold-text"
-                >Progress: {{ file.convertProgress }} %</span
+                >Converter Status: {{ file.converterStatus }}</span
+              >
+              <span
+                *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
+                class="bold-text"
+                >Progress: {{ file.convertProgress }}%</span
               >
             </div>
 
@@ -131,7 +137,7 @@
                 *ngIf="!isMobile && file.inProgress && file.convertProgress > 0"
                 style="margin-right: 10px"
                 class="bold-text"
-                >Progress: {{ file.convertProgress }} %</span
+                >Progress: {{ file.convertProgress }}%</span
               >
 
               <mat-spinner

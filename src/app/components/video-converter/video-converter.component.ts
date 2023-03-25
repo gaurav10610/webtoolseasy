@@ -27,6 +27,7 @@ import {
   ConvertEventType,
   ConvertLogEvent,
   ConvertProgressEvent,
+  FFMpegLoadingStatus,
   FFMpegMediaFormatConfig,
   FileLoadedEvent,
 } from 'src/app/@types/ffmpeg';
@@ -144,6 +145,12 @@ export class VideoConverterComponent
       )
     );
 
+    this.subscriptions.push(
+      this.ffmpegService.ffmpegLoadedEvent.subscribe(
+        this.handleFFMpegStatus.bind(this)
+      )
+    );
+
     this.supportedOutputFormats = [];
     this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.audio);
     this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.video);
@@ -172,49 +179,14 @@ export class VideoConverterComponent
     this.ffmpegService.flushBuffer();
   }
 
-  async selectFiles(event: any) {
-    for (const file of event.target.files) {
-      await this.addFileToConvert(file);
-    }
-    await this.sortFiles();
-  }
-
-  openFileDialog() {
-    this.renderer
-      .selectRootElement(this.inputFiles.nativeElement, true)
-      .click();
-  }
-
   /**
-   * handle drag over event
-   * @param event
+   * handle ffmpeg status event
+   * @param eventData
    */
-  async dragOverHandler(event: any) {
-    // Prevent default behavior (Prevent file from being opened)
-    event.preventDefault();
-  }
-
-  /**
-   * file drop event handler
-   * @param event
-   */
-  async dropHandler(event: any) {
-    // Prevent default behavior (Prevent file from being opened)
-    event.preventDefault();
-
-    if (event.dataTransfer.items) {
-      // Use DataTransferItemList interface to access the file(s)
-      [...event.dataTransfer.items]
-        .filter(item => item.kind === 'file')
-        .map(item => item.getAsFile())
-        .forEach(async file => await this.addFileToConvert(file));
-    } else {
-      // Use DataTransfer interface to access the file(s)
-      [...event.dataTransfer.files].forEach(
-        async file => await this.addFileToConvert(file)
-      );
-    }
-    await this.sortFiles();
+  async handleFFMpegStatus(eventData: FFMpegLoadingStatus) {
+    this.zoneRef.run(() => {
+      this.fileStore.get(eventData.fileId)!.converterStatus = eventData.status;
+    });
   }
 
   /**
@@ -573,5 +545,50 @@ export class VideoConverterComponent
     if (this.activeDialog) {
       this.activeDialog.close(data);
     }
+  }
+
+  async selectFiles(event: any) {
+    for (const file of event.target.files) {
+      await this.addFileToConvert(file);
+    }
+    await this.sortFiles();
+  }
+
+  openFileDialog() {
+    this.renderer
+      .selectRootElement(this.inputFiles.nativeElement, true)
+      .click();
+  }
+
+  /**
+   * handle drag over event
+   * @param event
+   */
+  async dragOverHandler(event: any) {
+    // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
+  }
+
+  /**
+   * file drop event handler
+   * @param event
+   */
+  async dropHandler(event: any) {
+    // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
+
+    if (event.dataTransfer.items) {
+      // Use DataTransferItemList interface to access the file(s)
+      [...event.dataTransfer.items]
+        .filter(item => item.kind === 'file')
+        .map(item => item.getAsFile())
+        .forEach(async file => await this.addFileToConvert(file));
+    } else {
+      // Use DataTransfer interface to access the file(s)
+      [...event.dataTransfer.files].forEach(
+        async file => await this.addFileToConvert(file)
+      );
+    }
+    await this.sortFiles();
   }
 }

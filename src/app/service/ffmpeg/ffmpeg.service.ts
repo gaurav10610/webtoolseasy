@@ -5,6 +5,7 @@ import {
   ConvertEventType,
   ConvertLogEvent,
   ConvertProgressEvent,
+  FFMpegLoadingStatus,
   FFMpegMediaFormatConfig,
   FFMpegMediaFormatType,
   FileLoadedEvent,
@@ -36,6 +37,7 @@ export class FfmpegService {
   convertEvent!: EventEmitter<ConvertEvent>;
   fileLoadedEvent!: EventEmitter<FileLoadedEvent>;
   convertLogEvent!: EventEmitter<ConvertLogEvent>;
+  ffmpegLoadedEvent!: EventEmitter<FFMpegLoadingStatus>;
 
   constructor() {
     this.init();
@@ -49,6 +51,7 @@ export class FfmpegService {
     this.convertEvent = new EventEmitter();
     this.fileLoadedEvent = new EventEmitter();
     this.convertLogEvent = new EventEmitter();
+    this.ffmpegLoadedEvent = new EventEmitter();
   }
 
   async initializeFFMpeg() {
@@ -212,7 +215,17 @@ export class FfmpegService {
    * @param videoFileData
    */
   async convertVideoFile(videoFileData: VideoFileData): Promise<void> {
+    this.ffmpegLoadedEvent.emit({
+      fileId: videoFileData.id,
+      status: 'initializing',
+    });
+
     await this.initializeFFMpeg();
+
+    this.ffmpegLoadedEvent.emit({
+      fileId: videoFileData.id,
+      status: 'ready',
+    });
 
     /**
      * load file in ffmpeg buffer
