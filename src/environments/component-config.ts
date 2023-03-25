@@ -552,6 +552,7 @@ export const videoconverter: ApplicationConfig = {
     'mp4 to mp3',
     'webm to mp4',
     'mp4 to webm',
+    'mkv to mp4',
     'video to audio',
   ],
   icons: [

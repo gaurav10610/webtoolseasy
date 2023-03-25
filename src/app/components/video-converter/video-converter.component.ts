@@ -44,6 +44,7 @@ import {
   FFMPEG_OUTPUT_CONFIG,
   FFMPEG_SUPPORTED_INPUT_VIDEO_FORMATS,
 } from 'src/environments/ffmpeg-config';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-video-converter',
@@ -68,6 +69,8 @@ export class VideoConverterComponent
   zipBuilder!: JSZip;
 
   activeDialog: MatDialogRef<any> | undefined;
+
+  isSupported: boolean = true;
 
   /**
    * ffmpeg wasm supported formats
@@ -146,7 +149,7 @@ export class VideoConverterComponent
     );
 
     this.subscriptions.push(
-      this.ffmpegService.ffmpegLoadedEvent.subscribe(
+      this.ffmpegService.ffmpegStateEvent.subscribe(
         this.handleFFMpegStatus.bind(this)
       )
     );
@@ -177,6 +180,12 @@ export class VideoConverterComponent
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions = [];
     this.ffmpegService.flushBuffer();
+  }
+
+  checkCompatibility() {
+    if (environment.production) {
+      this.isSupported = !this.isMobile;
+    }
   }
 
   /**
