@@ -4,7 +4,6 @@ import {
   PopupFormContext,
   PopupFormSubmitResult,
 } from 'src/app/@types/popup-form';
-import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-popup-form',

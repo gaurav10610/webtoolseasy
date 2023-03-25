@@ -108,6 +108,12 @@
                 style="color: red"
                 >{{ file.conversionErrors.get(file.targetFormat) }}</span
               >
+              <span
+                *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
+                style="margin-top: 10px"
+                class="bold-text"
+                >Progress: {{ file.convertProgress }} %</span
+              >
             </div>
 
             <span class="flex-full-height"></span>
@@ -265,6 +271,15 @@
 
       <!-- tags div -->
       <app-tags></app-tags>
+
+      <!-- show debug logs in mobile -->
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="downloadLogs()"
+        *ngIf="isMobile">
+        download logs
+      </button>
     </div>
     <app-footer></app-footer>
   </div>

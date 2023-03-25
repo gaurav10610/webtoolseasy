@@ -74,6 +74,7 @@ export class VideoConverterComponent
   supportedOutputFormats: FFMpegMediaFormatConfig[];
 
   subscriptions: Subscription[];
+  conversionLogs: string[];
 
   constructor(
     private titleService: Title,
@@ -146,6 +147,8 @@ export class VideoConverterComponent
     this.supportedOutputFormats = [];
     this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.audio);
     this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.video);
+
+    this.conversionLogs = [];
   }
 
   ngOnInit(): void {
@@ -283,8 +286,27 @@ export class VideoConverterComponent
     }
   }
 
+  /**
+   * handle ffmpeg logs
+   * @param logParams
+   */
   handleFFMpegLog(logParams: ConvertLogEvent) {
     LogUtils.info(`FFMPEG LOGS => ${logParams.message}`);
+    if (this.isMobile) {
+      this.conversionLogs.push(logParams.message);
+    }
+  }
+
+  /**
+   * show logs on popup modal
+   */
+  downloadLogs() {
+    this.downloadFile(
+      'log-files.txt',
+      new Blob([this.conversionLogs.join('\n\n')], {
+        type: 'text/plain',
+      })
+    );
   }
 
   /**
