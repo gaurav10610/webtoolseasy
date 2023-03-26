@@ -12,12 +12,6 @@
   max-height: 400px;
 }
 
-@media screen and (min-width: 735px) {
-  .file-area-width {
-    width: 95%;
-  }
-}
-
 @media screen and (max-width: 735px) {
   .file-area-width {
     width: 85%;

@@ -17,6 +17,7 @@
         multiple
         (change)="selectFiles($event)" />
 
+      <!-- file drop area -->
       <div
         class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width"
         (drop)="dropHandler($event)"
@@ -48,7 +49,7 @@
         >
       </div>
 
-      <!-- select videos button -->
+      <!-- select, compress all, download all buttons -->
       <div
         class="flex-display flex-row-flow flex-center full-width"
         [ngStyle]="{
@@ -61,7 +62,7 @@
           color="primary"
           (click)="openFileDialog()"
           style="margin-right: 10px"
-          matTooltip="select images to compress">
+          matTooltip="select videos to convert">
           <mat-icon>file_upload</mat-icon> Select Files
         </button>
         <button
@@ -82,6 +83,7 @@
         </button>
       </div>
 
+      <!-- list of files -->
       <div
         class="flex-display flex-column-flow y-scroll file-drop-area file-area-width file-list-div"
         *ngIf="fileDisplayList.length > 0">
@@ -208,6 +210,7 @@
         </mat-card>
       </div>
 
+      <!-- description area -->
       <div class="flex-display flex-column-flow" style="margin: 20px">
         <h3 style="font-weight: bold">How to use video converter</h3>
         <div style="margin-left: 30px">
