@@ -16,6 +16,7 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { textcompare as componentConfig } from 'src/environments/component-config';
 import { diffChars, Change, diffWords, diffLines } from 'diff';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-text-compare',
@@ -29,11 +30,11 @@ export class TextCompareComponent
   text1: string = 'webtoolseasy is awesome';
   text2: string = 'webtoolseasy is super cool';
 
-  @ViewChild('text1Div', { static: false })
-  text1Div!: ElementRef;
+  @ViewChild('text1AreaContent', { static: false })
+  text1AreaContent!: ElementRef;
 
-  @ViewChild('text2Div', { static: false })
-  text2Div!: ElementRef;
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: ElementRef;
 
   @ViewChild('diffBlock', { static: false })
   diffBlock!: ElementRef;
@@ -49,7 +50,8 @@ export class TextCompareComponent
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -64,7 +66,9 @@ export class TextCompareComponent
       this.metaService,
       this.document
     );
-    this.updateTags(componentConfig);
+    this.appContextService.tags = componentConfig.tags;
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {
@@ -79,7 +83,7 @@ export class TextCompareComponent
   }
 
   async onText1Change() {
-    this.text1 = this.text1Div.nativeElement.innerText;
+    this.text1 = this.text1AreaContent.nativeElement.innerText;
     this.evaluateDifference(this.text1, this.text2);
   }
 
@@ -95,11 +99,15 @@ export class TextCompareComponent
   }
 
   updateText1(text1: string) {
-    this.renderer.setProperty(this.text1Div.nativeElement, 'innerText', text1);
+    this.renderer.setProperty(
+      this.text1AreaContent.nativeElement,
+      'innerText',
+      text1
+    );
   }
 
   async onText2Change() {
-    this.text2 = this.text2Div.nativeElement.innerText;
+    this.text2 = this.text2AreaContent.nativeElement.innerText;
     this.evaluateDifference(this.text1, this.text2);
   }
 
@@ -115,7 +123,11 @@ export class TextCompareComponent
   }
 
   updateText2(text2: string) {
-    this.renderer.setProperty(this.text2Div.nativeElement, 'innerText', text2);
+    this.renderer.setProperty(
+      this.text2AreaContent.nativeElement,
+      'innerText',
+      text2
+    );
   }
 
   /**

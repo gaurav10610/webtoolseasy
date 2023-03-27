@@ -16,6 +16,7 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { cssformatter as componentConfig } from 'src/environments/component-config';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-css-formatter',
@@ -28,11 +29,13 @@ export class CssFormatterComponent
 {
   appId: string = 'cssformatter';
 
-  @ViewChild('rawCssDiv', { static: false })
-  rawCssDiv!: ElementRef;
+  @ViewChild('text1AreaContent', { static: false })
+  text1AreaContent!: ElementRef;
+
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: ElementRef;
 
   rawCss: string = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
-  formattedCss: string = '';
 
   constructor(
     private clipboard: Clipboard,
@@ -42,7 +45,8 @@ export class CssFormatterComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -57,7 +61,9 @@ export class CssFormatterComponent
       this.metaService,
       this.document
     );
-    this.updateTags(componentConfig);
+    this.appContextService.tags = componentConfig.tags;
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {
@@ -67,28 +73,38 @@ export class CssFormatterComponent
   ngAfterViewInit(): void {
     LogUtils.info('css formatter component: ngAfterViewInit');
     this.updateRawCss(this.rawCss);
-    this.formattedCss = css_beautify(this.rawCss);
+    const formattedCss = css_beautify(this.rawCss);
+    this.updateFormattedCss(formattedCss);
   }
 
   updateRawCss(rawCss: string) {
     this.renderer.setProperty(
-      this.rawCssDiv.nativeElement,
+      this.text1AreaContent.nativeElement,
       'innerText',
       rawCss
+    );
+  }
+
+  updateFormattedCss(formattedCss: string) {
+    this.renderer.setProperty(
+      this.text2AreaContent.nativeElement,
+      'innerText',
+      formattedCss
     );
   }
 
   formatCss(rawCssValue: string) {
     try {
       this.rawCss = rawCssValue;
-      this.formattedCss = css_beautify(rawCssValue);
+      const formattedCss = css_beautify(rawCssValue);
+      this.updateFormattedCss(formattedCss);
     } catch (e) {
       LogUtils.error(`error occured while decoding token: ${rawCssValue}`);
     }
   }
 
   rawCssChange() {
-    this.formatCss(this.rawCssDiv.nativeElement.innerText);
+    this.formatCss(this.text1AreaContent.nativeElement.innerText);
   }
 
   onCssPaste(event: any) {
@@ -101,6 +117,6 @@ export class CssFormatterComponent
   }
 
   copyFormattedCss() {
-    this.clipboard.copy(this.formattedCss);
+    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
 }

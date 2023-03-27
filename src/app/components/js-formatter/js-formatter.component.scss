@@ -1,80 +1,46 @@
-.token-parent-div {
-  width: 40%;
-  height: 30em;
-}
-
 .div-label {
-  font-size: x-large;
-}
-
-#heading {
-  margin: 5px;
-  font-family: monospace, 'Courier New', Courier;
-  font-size: xxx-large;
-  font-weight: bold;
-}
-
-#heading2 {
-  margin: 10px;
   font-size: large;
 }
 
-.tag-class {
-  margin: 5px;
-  background: #e0e0e0;
-  border-radius: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+.text-area-div {
+  width: 47%;
+  height: 30em;
 }
 
-.token-area-class {
+.text-content-div {
   border: 1px solid lightgrey;
   border-radius: 10px;
   padding: 10px;
-  overflow-wrap: break-word;
 }
 
-.base-app-container {
-  padding: 10px;
-}
-
-@media screen and (min-width: 735px) {
-  .token-area-class {
-    font-size: large;
-  }
-  .encoded-token-field {
-    margin-right: 30px;
-  }
-}
-
-.token-area-container {
+.text-area-container {
   justify-content: space-around;
 }
 
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.copy-button {
+  justify-content: flex-end;
+}
+
 @media screen and (max-width: 735px) {
-  .token-area-class {
-    font-size: larger;
-  }
-  .app-name {
-    justify-content: center;
-  }
-  .div-label {
-    font-size: large;
-  }
-  .token-parent-div {
+  .text-area-div {
     height: 10em;
     width: 80%;
     font-size: larger;
   }
-  .encoded-token-field {
+  .text1-area-margin {
     margin-bottom: 20px;
   }
-  .token-area-container {
+  .text-area-container {
     flex-direction: column;
   }
-  #heading {
-    font-size: x-large;
+  .text-content-div {
+    font-size: larger;
+  }
+  .copy-button {
+    justify-content: center;
   }
 }

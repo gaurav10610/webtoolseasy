@@ -11,6 +11,7 @@ import { JwtModule } from './modules/jwt/jwt.module';
 import { ScreenRecorderModule } from './modules/screen-recorder/screen-recorder.module';
 import { TextCompareModule } from './modules/text-compare/text-compare.module';
 import { UuidModule } from './modules/uuid/uuid.module';
+import { VideoConverterModule } from './modules/video-converter/video-converter.module';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'tools/html-formatter', loadChildren: () => HtmlFormatterModule },
   { path: 'tools/screen-recorder', loadChildren: () => ScreenRecorderModule },
   { path: 'tools/text-compare', loadChildren: () => TextCompareModule },
+  { path: 'tools/video-converter', loadChildren: () => VideoConverterModule },
 ];
 
 @NgModule({

@@ -1,0 +1,302 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <app-header-toolbar></app-header-toolbar>
+
+  <div class="full-width y-scroll flex-display flex-column-flow">
+    <!-- app container -->
+    <div
+      class="flex-display flex-column-flow flex-align-center base-app-container">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <!-- file input -->
+      <input
+        #inputFiles
+        type="file"
+        style="display: none"
+        multiple
+        (change)="selectFiles($event)" />
+
+      <!-- file drop area -->
+      <div
+        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width"
+        (drop)="dropHandler($event)"
+        (dragover)="dragOverHandler($event)"
+        *ngIf="fileDisplayList.length === 0 && isSupported">
+        <mat-icon style="transform: scale(2); margin-bottom: 10px"
+          >collections</mat-icon
+        >
+        <span class="header-font" style="margin-bottom: 20px; font-size: large"
+          >Drag & drop files here</span
+        >
+        <span class="header-font" style="margin-bottom: 10px; font-size: large"
+          >or</span
+        >
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openFileDialog()"
+          matTooltip="select video to convert">
+          <mat-icon>file_upload</mat-icon> Browse for files
+        </button>
+      </div>
+
+      <div *ngIf="!isSupported">
+        <span style="color: red; font-style: italic" class="bold"
+          >Video converter currently is not supported on host platfrom. We're
+          working on it, thank you for showing interest.</span
+        >
+      </div>
+
+      <!-- select, compress all, download all buttons -->
+      <div
+        class="flex-display flex-row-flow flex-center full-width"
+        [ngStyle]="{
+          padding: '10px',
+          'justify-content': fileDisplayList.length > 0 ? 'end' : 'center'
+        }"
+        *ngIf="fileDisplayList.length > 0">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openFileDialog()"
+          style="margin-right: 10px"
+          matTooltip="select videos to convert">
+          <mat-icon>file_upload</mat-icon> Select Files
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          matTooltip="convert all videos"
+          (click)="convertAllVideos()">
+          <mat-icon>play_arrow</mat-icon> Convert All
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          style="margin-left: 10px"
+          matTooltip="download all videos"
+          *ngIf="isDownloadAllActive && !isMobile"
+          (click)="downloadAll()">
+          <mat-icon>file_download</mat-icon> Download Zip
+        </button>
+      </div>
+
+      <!-- list of files -->
+      <div
+        class="flex-display flex-column-flow y-scroll file-drop-area file-area-width file-list-div"
+        *ngIf="fileDisplayList.length > 0">
+        <mat-card
+          *ngFor="let file of fileDisplayList"
+          style="margin-bottom: 10px; border: 1px solid lightgrey">
+          <div
+            class="flex-display flex-row-flow flex-align-center"
+            style="margin: 15px">
+            <mat-icon
+              svgIcon="video-convert-icon"
+              class="app-icon pointer-cursor"
+              style="margin-left: 10px"></mat-icon>
+
+            <!-- file name & size div -->
+            <div
+              class="flex-display flex-column-flow header-font file-name-div">
+              <span class="bold-text">{{ file.file.name }}</span>
+              <span class="bold-text header-font" style="color: #3f51b5">{{
+                formatBytes(file.file.size)
+              }}</span>
+              <span
+                *ngIf="file.error !== undefined"
+                class="bold-text"
+                style="color: red"
+                >{{ file.error }}</span
+              >
+              <span
+                *ngIf="file.conversionErrors.get(file.targetFormat)"
+                class="bold-text"
+                style="color: red"
+                >{{ file.conversionErrors.get(file.targetFormat) }}</span
+              >
+              <span
+                *ngIf="
+                  isMobile && file.inProgress && file.convertProgress === 0
+                "
+                class="bold-text"
+                >Converter Status: {{ file.converterStatus }}</span
+              >
+              <span
+                *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
+                class="bold-text"
+                >Progress: {{ file.convertProgress }}%</span
+              >
+            </div>
+
+            <span class="flex-full-height"></span>
+
+            <!-- file icons div -->
+            <div
+              class="flex-display flex-row-flow flex-align-center flex-center">
+              <span
+                *ngIf="file.inProgress && file.convertProgress === 0"
+                style="margin-right: 10px"
+                class="bold-text"
+                >queued</span
+              >
+              <span
+                *ngIf="!isMobile && file.inProgress && file.convertProgress > 0"
+                style="margin-right: 10px"
+                class="bold-text"
+                >Progress: {{ file.convertProgress }}%</span
+              >
+
+              <mat-spinner
+                style="margin-right: 10px"
+                diameter="32"
+                *ngIf="file.inProgress && file.convertProgress > 0"
+                mode="determinate"
+                value="{{ file.convertProgress }}"></mat-spinner>
+
+              <mat-form-field
+                appearance="outline"
+                color="primary"
+                style="margin-right: 10px; margin-bottom: -1.25em"
+                *ngIf="file.isValid && !file.inProgress && !isMobile">
+                <mat-label>Select format</mat-label>
+                <mat-select
+                  disableRipple
+                  [value]="file.targetFormat"
+                  (valueChange)="changeTargetFormat(file.id, $event)">
+                  <mat-option
+                    [value]="option.targetFormat"
+                    *ngFor="let option of supportedOutputFormats"
+                    >{{ option.displayName }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+
+              <mat-icon
+                svgIcon="settings-icon"
+                class="pointer-cursor"
+                style="margin-right: 10px"
+                *ngIf="file.isValid && isMobile && !file.inProgress"
+                matTooltip="change conversion settings"
+                (click)="openSettings(file)"></mat-icon>
+              <mat-icon
+                svgIcon="play-icon"
+                class="pointer-cursor"
+                *ngIf="
+                  file.isValid &&
+                  !file.inProgress &&
+                  !file.convertedFileData.has(file.targetFormat)
+                "
+                (click)="convertVideoFile(file)"
+                matTooltip="convert video file"></mat-icon>
+              <mat-icon
+                svgIcon="download-icon"
+                class="pointer-cursor"
+                *ngIf="file.convertedFileData.has(file.targetFormat)"
+                (click)="downloadVideo(file)"
+                matTooltip="download converted video"></mat-icon>
+              <mat-icon
+                class="pointer-cursor"
+                *ngIf="!file.isValid"
+                color="warn"
+                matTooltip="only limited video formats can be converted"
+                style="transform: scale(1.5)"
+                >error</mat-icon
+              >
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- description area -->
+      <div class="flex-display flex-column-flow" style="margin: 20px">
+        <h3 style="font-weight: bold">How to use video converter</h3>
+        <div style="margin-left: 30px">
+          <p>1. Drag & drop or select video files to convert</p>
+          <p>
+            2. All video files will be listed. An error will be shown for
+            invalid file types
+          </p>
+          <p>
+            3. For converting videos either use convert button corresponding to
+            the video file or use convert all button
+          </p>
+          <p>
+            4. Default target format for all videos will be MP3 (Audio) and it
+            can be changed via dropdown corresponding to each video file
+          </p>
+          <p>
+            5. Use download button corresponding to a video file to download
+            converted video
+          </p>
+          <p>
+            6. Use download zip button to download all converted videos at once
+          </p>
+        </div>
+        <h3 style="font-weight: bold">Features</h3>
+        <div style="margin-left: 30px">
+          <p>1. Video conversion is 100% free</p>
+          <p>
+            2. Video conversion is 100% secure as whole processing is being done
+            at client side only (in host browser)
+          </p>
+          <p>3. Unlimited videos can be converted for free</p>
+          <p>
+            4. Supports wide range of input video formats - MP4, WEBM, OGV, MKV,
+            OGM
+          </p>
+          <p>
+            5. Supports wide range of output media formats - MP3, OGG, OPUS,
+            AAC, MP4 x264, MP4 x265, WEBM, OGV
+          </p>
+        </div>
+        <h3 style="font-weight: bold">
+          What is the need of a video conversion tool?
+        </h3>
+        <div style="margin-left: 30px">
+          <p>
+            1. Compatibility: Different devices and applications often support
+            different video formats. By using an online video conversion tool,
+            you can convert your video file into a format that is compatible
+            with the device or application you want to use it on.
+          </p>
+          <p>
+            2. File size: Large video files can take up a lot of storage space
+            on your device or take a long time to upload or download. By using a
+            video conversion tool, you can reduce the file size of your video
+            without compromising on quality, making it easier to store and
+            share.
+          </p>
+          <p>
+            3. Editing: If you need to edit a video, you may need to convert it
+            into a different format to work with the editing software you're
+            using. An online video conversion tool can help you convert your
+            video file into a format that's compatible with your editing
+            software.
+          </p>
+          <p>
+            4. Sharing: Different social media platforms and websites often have
+            different requirements for video formats and file sizes. An online
+            video conversion tool can help you convert your video into the
+            appropriate format and size for sharing on different platforms.
+          </p>
+        </div>
+      </div>
+
+      <!-- tags div -->
+      <app-tags></app-tags>
+
+      <!-- show debug logs in mobile -->
+      <!-- <button
+        mat-raised-button
+        color="primary"
+        (click)="downloadLogs()"
+        *ngIf="isMobile">
+        download logs
+      </button> -->
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

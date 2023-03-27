@@ -1,55 +1,45 @@
 <div class="full-height flex-display flex-column-flow no-y-scroll">
   <!-- profile header -->
-  <mat-toolbar color="primary">
-    <button
-      mat-icon-button
-      aria-label="app icon button"
-      [replaceUrl]="true"
-      routerLink="">
-      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
-    </button>
-    <div
-      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
-      <span class="header-font">WebToolsEasy</span>
-    </div>
-    <button
-      mat-icon-button
-      aria-label="home icon button"
-      [replaceUrl]="true"
-      routerLink="/tools"
-      style="visibility: hidden">
-      <mat-icon>home</mat-icon>
-    </button>
-  </mat-toolbar>
+  <app-header-toolbar></app-header-toolbar>
 
-  <!-- app container -->
-  <div class="flex-full-height app-background base-app-container">
-    <!-- applications container -->
-    <div id="apps-container" class="apps-container pointer-cursor flex-center">
+  <div
+    class="full-width flex-display flex-column-flow flex-full-height main-div">
+    <!-- app container -->
+    <div
+      class="flex-display flex-column-flow flex-align-center flex-full-height app-background base-app-container">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <!-- applications container -->
       <div
-        class="application"
-        *ngFor="let application of appsConfig"
-        (click)="navigateByAppId(application.applicationId)">
-        <mat-card>
-          <div
-            class="flex-display flex-column-flow flex-center flex-align-center app-card">
-            <mat-icon
-              svgIcon="{{ application.iconName }}"
-              class="pointer-cursor"
-              style="
-                transform: scale(2);
-                margin-top: 10px;
-                margin-bottom: 15px;
-              "></mat-icon>
-            <a
-              [replaceUrl]="true"
-              routerLink="{{ application.navigateUrl }}"
-              (click)="onAppClick($event)"
-              >{{ application.displayText }}</a
-            >
-          </div>
-        </mat-card>
+        id="apps-container"
+        class="apps-container pointer-cursor flex-center">
+        <div
+          class="application"
+          *ngFor="let application of appsConfig"
+          (click)="navigateByAppId(application.applicationId)">
+          <mat-card>
+            <div
+              class="flex-display flex-column-flow flex-center flex-align-center app-card">
+              <mat-icon
+                svgIcon="{{ application.iconName }}"
+                class="pointer-cursor"
+                style="
+                  transform: scale(2);
+                  margin-top: 10px;
+                  margin-bottom: 15px;
+                "></mat-icon>
+              <a
+                [replaceUrl]="true"
+                routerLink="{{ application.navigateUrl }}"
+                (click)="onAppClick($event)"
+                >{{ application.displayText }}</a
+              >
+            </div>
+          </mat-card>
+        </div>
       </div>
     </div>
+    <app-footer></app-footer>
   </div>
 </div>

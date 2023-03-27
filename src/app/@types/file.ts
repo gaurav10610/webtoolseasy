@@ -1,17 +1,29 @@
-export interface FileData {
+export interface BaseFileData {
   id: string;
   file: File;
-  isCompressed: boolean;
-  compressProgress: number;
   inProgress: boolean;
   type: FileDataType;
   name: string;
   isValid: boolean;
+  error?: string;
+}
+
+export interface ImageFileData extends BaseFileData {
+  isCompressed: boolean;
+  compressProgress: number;
   compressedData?: Blob;
   compressOptions: any;
-  error?: string;
   compressionRate: number;
   maxFileSize: number;
+}
+
+export interface VideoFileData extends BaseFileData {
+  convertProgress: number;
+  targetFormat: string;
+  convertedFileData: Map<string, Uint8Array | undefined>;
+  targetFileName?: string;
+  conversionErrors: Map<string, string>;
+  converterStatus?: string;
 }
 
 export interface ImageCompressSettings {
@@ -22,4 +34,5 @@ export interface ImageCompressSettings {
 
 export enum FileDataType {
   IMAGE = 'image',
+  VIDEO = 'video',
 }

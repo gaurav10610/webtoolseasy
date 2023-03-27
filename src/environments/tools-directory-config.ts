@@ -2,6 +2,12 @@ import { AppDisplayConfig } from 'src/app/@types/config';
 
 export const appDisplayConfig: AppDisplayConfig[] = [
   {
+    applicationId: 'videoconverter',
+    displayText: 'Video Converter',
+    iconName: 'video-convert-icon',
+    navigateUrl: '/tools/video-converter',
+  },
+  {
     applicationId: 'screen-recorder',
     displayText: 'Screen Recorder',
     iconName: 'screen-icon',
@@ -54,11 +60,5 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: 'CSS Formatter',
     iconName: 'css-icon',
     navigateUrl: '/tools/css-formatter',
-  },
-  {
-    applicationId: 'soon',
-    displayText: 'More Tools Coming Soon',
-    iconName: 'soon-icon',
-    navigateUrl: '',
   },
 ];

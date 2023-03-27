@@ -16,6 +16,7 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { htmlformatter as componentConfig } from 'src/environments/component-config';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-html-formatter',
@@ -28,14 +29,14 @@ export class HtmlFormatterComponent
 {
   appId: string = 'htmlformatter';
 
-  @ViewChild('rawHtmlDiv', { static: false })
-  rawHtmlDiv!: ElementRef;
-  @ViewChild('formattedHtmlDiv', { static: false })
-  formattedHtmlDiv!: ElementRef;
+  @ViewChild('text1AreaContent', { static: false })
+  text1AreaContent!: ElementRef;
+
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: ElementRef;
 
   rawHtml: string =
     '<html><head><title>Example of Paragraph tag</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
-  formattedHtml: string = '';
 
   constructor(
     private clipboard: Clipboard,
@@ -45,7 +46,8 @@ export class HtmlFormatterComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -60,7 +62,9 @@ export class HtmlFormatterComponent
       this.metaService,
       this.document
     );
-    this.updateTags(componentConfig);
+    this.appContextService.tags = componentConfig.tags;
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   ngOnInit(): void {
@@ -70,28 +74,38 @@ export class HtmlFormatterComponent
   ngAfterViewInit(): void {
     LogUtils.info('html formatter component: ngAfterViewInit');
     this.updateRawHtml(this.rawHtml);
-    this.formattedHtml = html_beautify(this.rawHtml);
+    const formattedHtml = html_beautify(this.rawHtml);
+    this.updateFormattedHtml(formattedHtml);
   }
 
   updateRawHtml(rawHtml: string) {
     this.renderer.setProperty(
-      this.rawHtmlDiv.nativeElement,
+      this.text1AreaContent.nativeElement,
       'innerText',
       rawHtml
+    );
+  }
+
+  updateFormattedHtml(formattedHtml: string) {
+    this.renderer.setProperty(
+      this.text2AreaContent.nativeElement,
+      'innerText',
+      formattedHtml
     );
   }
 
   formatHtml(rawHtmlValue: string) {
     try {
       this.rawHtml = rawHtmlValue;
-      this.formattedHtml = html_beautify(rawHtmlValue);
+      const formattedHtml = html_beautify(rawHtmlValue);
+      this.updateFormattedHtml(formattedHtml);
     } catch (e) {
       LogUtils.error(`error occured while decoding token: ${rawHtmlValue}`);
     }
   }
 
   rawHtmlChange() {
-    this.formatHtml(this.rawHtmlDiv.nativeElement.innerText);
+    this.formatHtml(this.text1AreaContent.nativeElement.innerText);
   }
 
   onHtmlPaste(event: any) {
@@ -104,6 +118,6 @@ export class HtmlFormatterComponent
   }
 
   copyFormattedHtml() {
-    this.clipboard.copy(this.formattedHtml);
+    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
 }

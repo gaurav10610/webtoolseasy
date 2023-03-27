@@ -1,163 +1,148 @@
-<div class="full-height flex-display flex-column-flow no-y-scroll no-x-scroll">
+<div class="full-height flex-display flex-column-flow no-y-scroll">
   <!-- profile header -->
-  <mat-toolbar color="primary">
-    <button
-      mat-icon-button
-      aria-label="app icon button"
-      [replaceUrl]="true"
-      routerLink="">
-      <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
-    </button>
-    <div
-      class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
-      <span class="header-font">WebToolsEasy</span>
-    </div>
-    <button
-      mat-icon-button
-      aria-label="home icon button"
-      [replaceUrl]="true"
-      routerLink="/tools">
-      <mat-icon>home</mat-icon>
-    </button>
-  </mat-toolbar>
+  <app-header-toolbar></app-header-toolbar>
 
-  <div class="full-width no-x-scroll y-scroll" style="padding: 10px">
+  <div
+    class="y-scroll no-x-scroll flex-full-height flex-display flex-column-flow">
     <div
-      class="full-width flex-display flex-column-flow flex-center flex-align-center"
-      style="margin-top: 10px; margin-bottom: 20px">
-      <h1 id="heading">UUID Generator</h1>
-    </div>
+      class="base-app-container flex-display flex-column-flow flex-full-height">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
 
-    <div
-      class="flex-display app-container-div flex-align-center"
-      style="justify-content: space-around">
-      <!-- version 4 app container -->
-      <div class="flex-display flex-column-flow flex-align-center uuid-app">
-        <h2 id="heading2">Generate UUID V4</h2>
-        <!-- generate uuid -->
-        <div
-          class="flex-display flex-row-flow flex-center flex-align-center uid-div"
-          style="margin-bottom: 20px">
+      <div
+        class="flex-display app-container-div flex-align-center"
+        style="justify-content: space-around">
+        <!-- version 4 app container -->
+        <div class="flex-display flex-column-flow flex-align-center uuid-app">
+          <h2 id="heading2">Generate UUID V4</h2>
+          <!-- generate uuid -->
           <div
-            class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
-            <span class="uuid-class" style="color: #ff4081">{{ uuidV4 }}</span>
+            class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+            style="margin-bottom: 20px">
+            <div
+              class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+              <span class="uuid-class" style="color: #ff4081">{{
+                uuidV4
+              }}</span>
+            </div>
+            <button
+              mat-raised-button
+              (click)="copyGeneratedId('V4')"
+              color="primary">
+              <mat-icon>content_copy</mat-icon> Copy
+            </button>
           </div>
-          <button
-            mat-raised-button
-            (click)="copyGeneratedId('V4')"
-            color="primary">
-            <mat-icon>content_copy</mat-icon> Copy
-          </button>
+
+          <div class="flex-display flex-column-flow flex-align-center">
+            <button
+              mat-raised-button
+              color="primary"
+              style="margin-bottom: 20px"
+              (click)="generateUUID('V4')">
+              <mat-icon>repeat</mat-icon>
+              Generate Again
+            </button>
+            <h3 id="heading3">What is UUID Version 4?</h3>
+            <span>
+              A version 4 UUID is a randomly generated 128-bit identifier. As in
+              other UUIDs, 4 bits are used to indicate version 4, and 2 bits are
+              used to indicate the variant. Thus, 6 bits are constant, leaving
+              122 bits for the randomly generated part, for a total of 2122
+              (5.3×1036, 5.3 undecillion) possible values.
+              <a
+                target="_blank"
+                href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
+                >Read more on Wiki</a
+              ></span
+            >
+          </div>
         </div>
 
-        <div class="flex-display flex-column-flow flex-align-center">
-          <button
-            mat-raised-button
-            color="primary"
-            style="margin-bottom: 20px"
-            (click)="generateUUID('V4')">
-            <mat-icon>repeat</mat-icon>
-            Generate Again
-          </button>
-          <h3 id="heading3">What is UUID Version 4?</h3>
-          <span>
-            A version 4 UUID is a randomly generated 128-bit identifier. As in
-            other UUIDs, 4 bits are used to indicate version 4, and 2 bits are
-            used to indicate the variant. Thus, 6 bits are constant, leaving 122
-            bits for the randomly generated part, for a total of 2122 (5.3×1036,
-            5.3 undecillion) possible values.
-            <a
-              target="_blank"
-              href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
-              >Read more on Wiki</a
-            ></span
-          >
+        <!-- version 1 app container -->
+        <div class="flex-display flex-column-flow flex-align-center uuid-app">
+          <h2 id="heading2">Generate UUID V1</h2>
+          <!-- generate uuid -->
+          <div
+            class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+            style="margin-bottom: 20px">
+            <div
+              class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+              <span class="uuid-class" style="color: #ff4081">{{
+                uuidV1
+              }}</span>
+            </div>
+            <button
+              mat-raised-button
+              (click)="copyGeneratedId('V1')"
+              color="primary">
+              <mat-icon>content_copy</mat-icon> Copy
+            </button>
+          </div>
+
+          <div class="flex-display flex-column-flow flex-align-center">
+            <button
+              mat-raised-button
+              color="primary"
+              style="margin-bottom: 20px"
+              (click)="generateUUID('V1')">
+              <mat-icon>repeat</mat-icon>
+              Generate Again
+            </button>
+            <h3 id="heading3">What is UUID Version 1?</h3>
+            <span
+              >Version-1 is based on the current time and the MAC address for
+              the computer or "node" generating the UUID.
+              <a
+                target="_blank"
+                href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
+                >Read more on Wiki</a
+              ></span
+            >
+          </div>
         </div>
       </div>
 
-      <!-- version 1 app container -->
-      <div class="flex-display flex-column-flow flex-align-center uuid-app">
-        <h2 id="heading2">Generate UUID V1</h2>
-        <!-- generate uuid -->
-        <div
-          class="flex-display flex-row-flow flex-center flex-align-center uid-div"
-          style="margin-bottom: 20px">
-          <div
-            class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
-            <span class="uuid-class" style="color: #ff4081">{{ uuidV1 }}</span>
-          </div>
-          <button
-            mat-raised-button
-            (click)="copyGeneratedId('V1')"
-            color="primary">
-            <mat-icon>content_copy</mat-icon> Copy
-          </button>
-        </div>
-
-        <div class="flex-display flex-column-flow flex-align-center">
-          <button
-            mat-raised-button
-            color="primary"
-            style="margin-bottom: 20px"
-            (click)="generateUUID('V1')">
-            <mat-icon>repeat</mat-icon>
-            Generate Again
-          </button>
-          <h3 id="heading3">What is UUID Version 1?</h3>
-          <span
-            >Version-1 is based on the current time and the MAC address for the
-            computer or "node" generating the UUID.
-            <a
-              target="_blank"
-              href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
-              >Read more on Wiki</a
-            ></span
-          >
-        </div>
+      <div
+        class="flex-display flex-column-flow"
+        style="margin-top: 10px; margin-left: 20px">
+        <h3 id="heading3">What is UUID ( Universally unique identifier ) ?</h3>
+        <p>
+          A UUID is a standardized method of generating unique identifiers for
+          resources or objects in a computer system. These identifiers are
+          designed to be unique across time and space, making them ideal for use
+          in a variety of applications, such as database systems, network
+          protocols, and software libraries.
+        </p>
+        <p>
+          The unique identifier generated by a UUID is typically represented as
+          a string of characters, often in the format of
+          xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where each x is a hexadecimal
+          digit. This combination of randomness and the use of a standard format
+          makes UUIDs an effective way of ensuring that identifiers are unique
+          even when generated in different systems or at different times.
+        </p>
+        <p>
+          UUIDs are especially useful in distributed systems, where multiple
+          systems need to coordinate to manage resources, and in applications
+          that need to generate unique identifiers without a centralized
+          coordination mechanism.
+        </p>
+        <p>
+          In summary, UUID is a powerful tool for resource and object
+          identification within a system, providing a standardized and effective
+          way of generating unique identifiers that are unique across time and
+          space.
+        </p>
+        <h3 id="heading3">Disclaimer</h3>
+        <p>
+          All the UUIDs are generated locally in browser only. Genearted UUIDs
+          are provided as is without any warranty.
+        </p>
       </div>
-    </div>
 
-    <div
-      class="flex-display flex-column-flow"
-      style="margin-top: 10px; margin-left: 20px">
-      <h3 id="heading3">What is UUID ( Universally unique identifier ) ?</h3>
-      <p>
-        Universally Unique Identifiers, or UUIDS, are 128 bit numbers, composed
-        of 16 octets and represented as 32 base-16 characters, that can be used
-        to identify information across a computer system. This specification was
-        originally created by Microsoft and standardized by both the IETF and
-        ITU.
-      </p>
-      <p>
-        All the UUIDs are generated locally in browser only. Genearted UUIDs are
-        provided as is without any warranty.
-      </p>
+      <!-- tags div -->
+      <app-tags></app-tags>
     </div>
-
-    <!-- tags div -->
-    <div
-      style="margin: 20px; flex-wrap: wrap"
-      class="flex-display flex-row-flow flex-center">
-      <p class="tag-class" *ngFor="let tag of tags">
-        {{ tag }}
-      </p>
-    </div>
-
-    <div
-      class="flex-display flex-row-flow flex-center flex-align-center"
-      style="margin-bottom: 10px">
-      <span style="margin-right: 10px; font-style: italic">Follow -</span>
-      <a
-        href="https://www.linkedin.com/company/webtoolseasy/"
-        target="_blank"
-        style="margin-right: 20px">
-        <mat-icon svgIcon="linkedin-icon"></mat-icon
-      ></a>
-      <a
-        href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
-        target="_blank">
-        <mat-icon svgIcon="facebook-icon"></mat-icon
-      ></a>
-    </div>
+    <app-footer></app-footer>
   </div>
 </div>

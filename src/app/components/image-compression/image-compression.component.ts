@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import {
-  FileData,
+  ImageFileData,
   FileDataType,
   ImageCompressSettings,
 } from 'src/app/@types/file';
@@ -32,6 +32,7 @@ import { v4 } from 'uuid';
 import { DOCUMENT } from '@angular/common';
 import { imagecompress as componentConfig } from 'src/environments/component-config';
 import { MatIconRegistry } from '@angular/material/icon';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 @Component({
   selector: 'app-image-compression',
@@ -43,7 +44,7 @@ export class ImageCompressionComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   isMobile!: boolean;
-  fileList: FileData[] = [];
+  fileList: ImageFileData[] = [];
   zipBuilder!: JSZip;
 
   @ViewChild('inputFiles', { static: false })
@@ -64,7 +65,8 @@ export class ImageCompressionComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
+    private appContextService: AppContextService
   ) {
     super();
     this.loadCustomIcons(
@@ -79,7 +81,9 @@ export class ImageCompressionComponent
       this.metaService,
       this.document
     );
-    this.updateTags(componentConfig);
+    this.appContextService.tags = componentConfig.tags;
+    this.appContextService.mainHeading = componentConfig.mainHeading!;
+    this.appContextService.subHeading = componentConfig.subHeading;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
@@ -113,13 +117,11 @@ export class ImageCompressionComponent
    * open settings dialog
    * @param file
    */
-  async openSettingsDialog(file: FileData) {
+  async openSettingsDialog(file: ImageFileData) {
     this.closeDialog();
-    const dialogConfig: MatDialogConfig = { data: file };
-    this.activeDialog = this.dialog.open(
-      CompressSettingsComponent,
-      dialogConfig
-    );
+    this.activeDialog = this.dialog.open(CompressSettingsComponent, {
+      data: file,
+    });
 
     /**
      * subscribe dialog close event
@@ -150,18 +152,20 @@ export class ImageCompressionComponent
         data
       );
       this.zoneRef.run(() => {
-        const fileData: FileData = this.fileList.find(
-          fileData => fileData.id === compressSettings.fileId
+        const ImageFileData: ImageFileData = this.fileList.find(
+          ImageFileData => ImageFileData.id === compressSettings.fileId
         )!;
 
-        if (fileData.compressionRate !== compressSettings.compressionRate) {
-          fileData.isCompressed = false;
+        if (
+          ImageFileData.compressionRate !== compressSettings.compressionRate
+        ) {
+          ImageFileData.isCompressed = false;
         }
 
-        fileData.compressionRate = compressSettings.compressionRate;
-        fileData.maxFileSize = compressSettings.maxFileSize;
-        fileData.compressOptions = {
-          ...fileData.compressOptions,
+        ImageFileData.compressionRate = compressSettings.compressionRate;
+        ImageFileData.maxFileSize = compressSettings.maxFileSize;
+        ImageFileData.compressOptions = {
+          ...ImageFileData.compressOptions,
           maxSizeMB: compressSettings.maxFileSize / 1024 / 1024,
         };
       });
@@ -250,43 +254,50 @@ export class ImageCompressionComponent
 
   async startCompressAll() {
     this.fileList
-      .filter(fileData => fileData.isValid)
-      .forEach(fileData => this.compressImage(fileData));
+      .filter(ImageFileData => ImageFileData.isValid)
+      .forEach(ImageFileData => this.compressImage(ImageFileData));
   }
 
-  async compressImage(fileData: FileData) {
+  async compressImage(ImageFileData: ImageFileData) {
     this.zoneRef.run(async () => {
-      fileData.inProgress = true;
-      fileData.compressProgress = 0;
-      fileData.error = undefined;
+      ImageFileData.inProgress = true;
+      ImageFileData.compressProgress = 0;
+      ImageFileData.error = undefined;
       try {
-        fileData.compressedData = await imageCompression(fileData.file, {
-          ...fileData.compressOptions,
-          onProgress: progress => {
-            fileData.compressProgress = progress;
-          },
-        });
-        fileData.isCompressed = true;
-        fileData.inProgress = false;
+        ImageFileData.compressedData = await imageCompression(
+          ImageFileData.file,
+          {
+            ...ImageFileData.compressOptions,
+            onProgress: progress => {
+              ImageFileData.compressProgress = progress;
+            },
+          }
+        );
+        ImageFileData.isCompressed = true;
+        ImageFileData.inProgress = false;
         this.isDownloadAllActive = true;
       } catch (error) {
         LogUtils.error(
-          `error while compressing image with name: ${fileData.file.name}`
+          `error while compressing image with name: ${ImageFileData.file.name}`
         );
-        fileData.inProgress = false;
-        fileData.isCompressed = false;
-        fileData.error = '* compression error';
+        ImageFileData.inProgress = false;
+        ImageFileData.isCompressed = false;
+        ImageFileData.error = '* compression error';
       }
     });
   }
 
   async downloadAll(): Promise<void> {
     this.fileList
-      .filter(fileData => fileData.isValid)
-      .forEach(fileData =>
-        this.zipBuilder.file(fileData.name, fileData.compressedData!, {
-          binary: true,
-        })
+      .filter(ImageFileData => ImageFileData.isValid)
+      .forEach(ImageFileData =>
+        this.zipBuilder.file(
+          ImageFileData.name,
+          ImageFileData.compressedData!,
+          {
+            binary: true,
+          }
+        )
       );
 
     const zipFileData: Blob = await this.zipBuilder.generateAsync({
@@ -295,14 +306,16 @@ export class ImageCompressionComponent
     this.downloadFile('compress-images.zip', zipFileData);
   }
 
-  async downloadImage(fileData: FileData): Promise<void> {
+  async downloadImage(imageFileData: ImageFileData): Promise<void> {
     const fileName: string =
-      fileData.name.substring(0, fileData.file.name.lastIndexOf('.')) ||
-      fileData.name;
-    const extension = fileData.file.name.split('.').pop();
+      imageFileData.name.substring(
+        0,
+        imageFileData.file.name.lastIndexOf('.')
+      ) || imageFileData.name;
+    const extension = imageFileData.file.name.split('.').pop();
     await this.downloadFile(
       `${fileName}-compressed.${extension}`,
-      fileData.compressedData!
+      imageFileData.compressedData!
     );
   }
 
@@ -346,5 +359,5 @@ export class ImageCompressionComponent
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  showInfo(fileData: FileData) {}
+  showInfo(ImageFileData: ImageFileData) {}
 }

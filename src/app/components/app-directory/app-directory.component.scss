@@ -9,19 +9,21 @@
   margin: 10px;
 }
 
+.app-card {
+  margin: 15px;
+}
+
 @media screen and (min-width: 735px) {
   .application {
     width: 20%;
   }
 }
 
-.app-card {
-  margin: 15px;
-}
-
 @media screen and (max-width: 735px) {
   .app-card {
     flex-direction: row;
+    padding-left: 25%;
+    justify-content: flex-start;
   }
   .app-card mat-icon {
     margin-right: 20px;
@@ -29,10 +31,7 @@
   .application {
     width: 100%;
   }
-  .app-name {
-    justify-content: center;
-  }
-  .base-app-container {
+  .main-div {
     overflow-y: scroll;
   }
 }

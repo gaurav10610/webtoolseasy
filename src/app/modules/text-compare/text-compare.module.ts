@@ -5,20 +5,26 @@ import { TextCompareRoutingModule } from './text-compare-routing.module';
 import { TextCompareComponent } from 'src/app/components/text-compare/text-compare.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
+import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
+import { TagsModule } from 'src/app/modules/tags/tags.module';
+import { FooterModule } from 'src/app/modules/footer/footer-module';
 
 @NgModule({
   declarations: [TextCompareComponent],
   imports: [
     CommonModule,
     TextCompareRoutingModule,
-    MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
     MatSelectModule,
+    HeaderToolbarModule,
+    ToolHeadingModule,
+    TagsModule,
+    FooterModule,
   ],
 })
 export class TextCompareModule {}
