@@ -117,6 +117,7 @@ export class VideoConverterComponent
       .subscribe(result => {
         this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
         LogUtils.info(`mobile view: ${this.isMobile}`);
+        this.checkCompatibility();
       });
 
     this.fileStore = new Map();
