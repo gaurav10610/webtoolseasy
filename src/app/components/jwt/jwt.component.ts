@@ -11,12 +11,12 @@ import {
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { jwt as componentConfig } from 'src/environments/component-config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { decodeJwt, decodeProtectedHeader } from 'jose';
 
 @Component({
   selector: 'app-jwt',
@@ -29,14 +29,25 @@ export class JwtComponent
 {
   appId: string = 'jwt';
   isTokenValid: boolean = true;
-  jwtDecoder: JwtHelperService | undefined;
   tabSpaceValue: string = '  ';
 
+  /**
+   * encoded token
+   */
   @ViewChild('text1AreaContent', { static: false })
   text1AreaContent!: ElementRef;
 
+  /**
+   * decoded token
+   */
   @ViewChild('text2AreaContent', { static: false })
   text2AreaContent!: ElementRef;
+
+  /**
+   * token header
+   */
+  @ViewChild('text3AreaContent', { static: false })
+  text3AreaContent!: ElementRef;
 
   encodedToken: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
@@ -76,14 +87,8 @@ export class JwtComponent
 
   ngAfterViewInit(): void {
     LogUtils.info('jwt component: ngAfterViewInit');
-    this.jwtDecoder = new JwtHelperService();
-    const decodedToken = JSON.stringify(
-      this.jwtDecoder.decodeToken(this.encodedToken),
-      null,
-      this.tabSpaceValue
-    );
     this.updateEncodedToken(this.encodedToken);
-    this.updateDecodedToken(decodedToken);
+    this.decodeUpdatedToken(this.encodedToken);
   }
 
   encodedInputChange() {
@@ -102,18 +107,34 @@ export class JwtComponent
   decodeUpdatedToken(encodedTokenValue: string) {
     try {
       this.encodedToken = encodedTokenValue;
-      const decodedTokenValue = this.jwtDecoder!.decodeToken(encodedTokenValue);
+
+      /**
+       * decoded JWT token
+       */
+      const decodedTokenValue = decodeJwt(encodedTokenValue);
+
+      /**
+       * decoded JWT token headers
+       */
+      const tokenHeadersValue = decodeProtectedHeader(encodedTokenValue);
       this.isTokenValid = true;
       const decodedToken = JSON.stringify(
         decodedTokenValue,
         null,
         this.tabSpaceValue
       );
+      const tokenHeaders = JSON.stringify(
+        tokenHeadersValue,
+        null,
+        this.tabSpaceValue
+      );
       this.updateDecodedToken(decodedToken);
+      this.updateTokenHeaders(tokenHeaders);
     } catch (error) {
       LogUtils.error(
         `error occured while decoding token: ${this.encodedToken}`
       );
+      LogUtils.error(error);
       this.isTokenValid = false;
     }
   }
@@ -134,7 +155,19 @@ export class JwtComponent
     );
   }
 
+  updateTokenHeaders(tokeanHeaders: string) {
+    this.renderer.setProperty(
+      this.text3AreaContent.nativeElement,
+      'innerText',
+      tokeanHeaders
+    );
+  }
+
   copyDecodedToken() {
     this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
+  }
+
+  onEncodedDivClick() {
+    this.text1AreaContent.nativeElement.focus();
   }
 }

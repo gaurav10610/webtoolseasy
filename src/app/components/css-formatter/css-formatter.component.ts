@@ -119,4 +119,8 @@ export class CssFormatterComponent
   copyFormattedCss() {
     this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
+
+  onEncodedDivClick() {
+    this.text1AreaContent.nativeElement.focus();
+  }
 }

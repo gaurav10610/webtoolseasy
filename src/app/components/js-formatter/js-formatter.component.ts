@@ -121,4 +121,8 @@ export class JsFormatterComponent
   copyFormattedJs() {
     this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
   }
+
+  onEncodedDivClick() {
+    this.text1AreaContent.nativeElement.focus();
+  }
 }
