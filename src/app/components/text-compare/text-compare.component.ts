@@ -17,6 +17,7 @@ import { textcompare as componentConfig } from 'src/environments/component-confi
 import { diffChars, Change, diffWords, diffLines } from 'diff';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { FileService } from 'src/app/service/file/file.service';
 
 @Component({
   selector: 'app-text-compare',
@@ -39,9 +40,14 @@ export class TextCompareComponent
   @ViewChild('diffBlock', { static: false })
   diffBlock!: ElementRef;
 
+  @ViewChild('inputFiles', { static: false })
+  inputFiles!: ElementRef;
+
   ignoreCase: boolean = false;
   ignoreWhitespace: boolean = false;
   comparisonType: string = 'char';
+
+  currentFileDialogId!: string;
 
   constructor(
     private titleService: Title,
@@ -51,7 +57,8 @@ export class TextCompareComponent
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
     private renderer: Renderer2,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private fileService: FileService
   ) {
     super();
     this.loadCustomIcons(
@@ -199,5 +206,39 @@ export class TextCompareComponent
     this.comparisonType = selectValue;
     LogUtils.info(`comparison type changed: ${selectValue}`);
     this.evaluateDifference(this.text1, this.text2);
+  }
+
+  async selectFiles(event: any) {
+    const file: File = event.target.files[0];
+    if (this.currentFileDialogId === 'text1') {
+      this.fileService.readFileAsText(file, this.onTextFile1Upload.bind(this));
+    }
+    if (this.currentFileDialogId === 'text2') {
+      this.fileService.readFileAsText(file, this.onTextFile2Upload.bind(this));
+    }
+    event.target.value = null;
+  }
+
+  async onTextFile1Upload(textContent: string) {
+    this.text1 = textContent;
+    this.updateText1(this.text1);
+    this.evaluateDifference(this.text1, this.text2);
+  }
+
+  async onTextFile2Upload(textContent: string) {
+    this.text2 = textContent;
+    this.updateText2(this.text2);
+    this.evaluateDifference(this.text1, this.text2);
+  }
+
+  /**
+   * select file
+   * @param fileId
+   */
+  async openFileDialog(fileId: string) {
+    this.currentFileDialogId = fileId;
+    this.renderer
+      .selectRootElement(this.inputFiles.nativeElement, true)
+      .click();
   }
 }

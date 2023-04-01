@@ -492,15 +492,15 @@ export const screenrecorder: ApplicationConfig = {
 };
 
 export const textcompare: ApplicationConfig = {
-  mainHeading: 'Text Comparison',
-  subHeading: 'Text Difference Checker',
+  mainHeading: 'Text File Difference',
+  subHeading: 'Compare Text Files Online',
   navigationUrl: '/tools/text-compare',
   pageTitle: 'Text Compare | Compare Text Online',
   metaTags: [
     {
       name: 'description',
       content:
-        'Text Difference Checker | Diffchecker online | Text Compare | Compare Text Online',
+        'Text Difference Checker | Diff checker online | Text Compare | File Compare | Compare Files Online | Diff Tool',
     },
     {
       name: 'author',
@@ -509,10 +509,11 @@ export const textcompare: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
+    'diff checker',
+    'text to compare',
+    'text compare online',
+    'file diff',
     'text difference checker',
-    'diffchecker online',
-    'text compare',
-    'compare text online',
   ],
   icons: [
     {
