@@ -214,7 +214,7 @@ export const jwt: ApplicationConfig = {
     'jwt token decode',
     'decode jwt',
     'jwt decode online',
-    'jwt hs256',
+    'RFC 7519',
   ],
   icons: [
     {
