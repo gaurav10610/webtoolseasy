@@ -21,7 +21,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
 import { LogUtils } from 'src/app/service/util/logger';
 import { componentConfig } from 'src/environments/component-config/video-converter/config';
 import { v4 } from 'uuid';
-import { downloadZip } from 'client-zip';
+import * as JSZip from 'jszip';
 import {
   ConvertEvent,
   ConvertEventType,
@@ -66,6 +66,7 @@ export class VideoConverterComponent
   destroyed = new Subject<void>();
 
   isDownloadAllActive: boolean = false;
+  zipBuilder!: JSZip;
 
   activeDialog: MatDialogRef<any> | undefined;
 
@@ -169,6 +170,7 @@ export class VideoConverterComponent
 
   ngAfterViewInit() {
     LogUtils.info('video converter: ngAfterViewInit');
+    this.zipBuilder = new JSZip();
   }
 
   ngOnDestroy() {
@@ -357,7 +359,6 @@ export class VideoConverterComponent
    * download all videos as zip file
    */
   async downloadAll(): Promise<void> {
-    const zipBlobs: any = [];
     for (let videoFileData of this.fileStore.values()) {
       if (
         videoFileData.isValid &&
@@ -367,19 +368,23 @@ export class VideoConverterComponent
         const fileName: string = this.ffmpegService.getPlainFileName(
           videoFileData.name
         );
-
-        zipBlobs.push({
-          input: new Blob(
+        this.zipBuilder.file(
+          `${fileName}_converted.${videoFileData.targetFormat}`,
+          new Blob(
             [videoFileData.convertedFileData!.get(videoFileData.targetFormat)!],
             {
               type: this.getMimeType(videoFileData.targetFormat),
             }
           ),
-          name: `${fileName}_converted.${videoFileData.targetFormat}`,
-        });
+          {
+            binary: true,
+          }
+        );
       }
     }
-    const zipFileData: Blob = await downloadZip(zipBlobs).blob();
+    const zipFileData: Blob = await this.zipBuilder.generateAsync({
+      type: 'blob',
+    });
     this.downloadFile('converted-videos.zip', zipFileData);
   }
 
