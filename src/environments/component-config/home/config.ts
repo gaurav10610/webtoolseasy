@@ -30,10 +30,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'jwt-icon.svg',
     },
     {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
       iconName: 'image-compress-icon',
       iconRelativeUrl: 'image-compress-icon.svg',
     },
@@ -42,16 +38,20 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'play-icon.svg',
     },
     {
+      iconName: 'json-icon',
+      iconRelativeUrl: 'json-icon.svg',
+    },
+    {
       iconName: 'js-icon',
       iconRelativeUrl: 'js-icon.svg',
     },
     {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
       iconName: 'html-icon',
       iconRelativeUrl: 'html.svg',
+    },
+    {
+      iconName: 'css-icon',
+      iconRelativeUrl: 'css.svg',
     },
     {
       iconName: 'linkedin-icon',

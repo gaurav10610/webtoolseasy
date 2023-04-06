@@ -1,0 +1,18 @@
+<div
+  *ngIf="appContextService.relatedTools"
+  class="flex-display flex-column-flow">
+  <span style="margin-bottom: 10px; font-size: large">Related Tools</span>
+
+  <div class="flex-display flex-row-flow flex-wrap">
+    <div
+      class="flex-display flex-row-flow flex-align-center app-parent-div"
+      *ngFor="let appConfig of appContextService.relatedTools">
+      <mat-icon
+        svgIcon="{{ appConfig.iconName }}"
+        style="margin: 15px; transform: scale(1.5)"></mat-icon
+      ><a [replaceUrl]="true" routerLink="{{ appConfig.navigateUrl }}">{{
+        appConfig.displayText
+      }}</a>
+    </div>
+  </div>
+</div>

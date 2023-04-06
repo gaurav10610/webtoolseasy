@@ -1,10 +1,12 @@
 import { MetaDefinition } from '@angular/platform-browser';
 
-export interface AppDisplayConfig {
-  applicationId: string;
+export interface BaseAppConfig {
   displayText: string;
-  iconName: string;
   navigateUrl: string;
+}
+export interface AppDisplayConfig extends BaseAppConfig {
+  applicationId: string;
+  iconName: string;
 }
 
 export interface ApplicationConfig {
@@ -15,6 +17,7 @@ export interface ApplicationConfig {
   pageTitle: string;
   tags: string[];
   icons: IconConfig[];
+  relatedTools?: AppDisplayConfig[];
 }
 
 export interface IconConfig {

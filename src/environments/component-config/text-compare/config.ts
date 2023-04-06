@@ -4,7 +4,7 @@ export const componentConfig: ApplicationConfig = {
   mainHeading: 'Text File Difference',
   subHeading: 'Compare Text Files Online',
   navigationUrl: '/tools/text-compare',
-  pageTitle: 'Text Compare | Compare Text Online',
+  pageTitle: 'Text File Compare | Text File Difference',
   metaTags: [
     {
       name: 'description',

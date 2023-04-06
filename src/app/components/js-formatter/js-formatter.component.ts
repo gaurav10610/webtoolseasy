@@ -64,6 +64,7 @@ export class JsFormatterComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
   }
 
   ngOnInit(): void {

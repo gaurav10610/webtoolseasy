@@ -37,5 +37,37 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
     },
+    {
+      iconName: 'json-icon',
+      iconRelativeUrl: 'json-icon.svg',
+    },
+    {
+      iconName: 'html-icon',
+      iconRelativeUrl: 'html.svg',
+    },
+    {
+      iconName: 'css-icon',
+      iconRelativeUrl: 'css.svg',
+    },
+  ],
+  relatedTools: [
+    {
+      applicationId: 'jsonformatter',
+      displayText: 'JSON Formatter',
+      iconName: 'json-icon',
+      navigateUrl: '/tools/json-formatter',
+    },
+    {
+      applicationId: 'htmlformatter',
+      displayText: 'HTML Formatter',
+      iconName: 'html-icon',
+      navigateUrl: '/tools/html-formatter',
+    },
+    {
+      applicationId: 'cssformatter',
+      displayText: 'CSS Formatter',
+      iconName: 'css-icon',
+      navigateUrl: '/tools/css-formatter',
+    },
   ],
 };
