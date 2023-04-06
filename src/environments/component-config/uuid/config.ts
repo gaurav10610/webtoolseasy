@@ -2,13 +2,14 @@ import { ApplicationConfig } from 'src/app/@types/config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
+  subHeading: 'Generate UUID V4 & V1 For Free',
   navigationUrl: '/tools/uuid',
   pageTitle: 'Online UUID Generator',
   metaTags: [
     {
       name: 'description',
       content:
-        'UUID Generator | Generate UUID | Online UUID Generator | Generate UUID V4 | Generate UUID V1 | UUID V4 | UUID V1',
+        'UUID Generator | Generate UUID | Online UUID Generator | Generate UUID V4 | Generate UUID V1 | Bulk UUID Generator',
     },
     {
       name: 'author',
@@ -22,6 +23,7 @@ export const componentConfig: ApplicationConfig = {
     'uuid v1 generator',
     'online uuid generator',
     'generate uuid',
+    'bulk uuid generator',
   ],
   icons: [
     {
