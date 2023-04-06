@@ -1,7 +1,7 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'UUID Generator',
+  mainHeading: 'Online UUID Generator',
   navigationUrl: '/tools/uuid',
   pageTitle: 'Online UUID Generator',
   metaTags: [
