@@ -16,7 +16,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { screenrecorder as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/screen-recorder/config';
 import { clear, get, set } from 'idb-keyval';
 import { VideoStreamMerger } from 'video-stream-merger';
 import { isMobile } from 'is-mobile';

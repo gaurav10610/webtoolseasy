@@ -30,7 +30,7 @@ import {
 import { CompressSettingsComponent } from 'src/app/components/compress-settings/compress-settings.component';
 import { v4 } from 'uuid';
 import { DOCUMENT } from '@angular/common';
-import { imagecompress as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/image-compression/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 

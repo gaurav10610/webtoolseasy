@@ -19,7 +19,7 @@ import { FileDataType, VideoFileData } from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { videoconverter as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/video-converter/config';
 import { v4 } from 'uuid';
 import * as JSZip from 'jszip';
 import {

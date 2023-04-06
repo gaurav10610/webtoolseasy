@@ -14,7 +14,7 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { css_beautify } from 'js-beautify';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { cssformatter as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/css-formatter/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 

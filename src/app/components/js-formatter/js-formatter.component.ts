@@ -14,7 +14,7 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { js_beautify } from 'js-beautify';
-import { jsformatter as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/js-formatter/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 

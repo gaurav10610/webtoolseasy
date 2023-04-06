@@ -13,7 +13,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { textcompare as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/text-compare/config';
 import { diffChars, Change, diffWords, diffLines } from 'diff';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
