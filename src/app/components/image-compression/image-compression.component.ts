@@ -19,20 +19,16 @@ import {
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
-import * as JSZip from 'jszip';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CompressSettingsComponent } from 'src/app/components/compress-settings/compress-settings.component';
 import { v4 } from 'uuid';
 import { DOCUMENT } from '@angular/common';
 import { componentConfig } from 'src/environments/component-config/image-compression/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { downloadZip } from 'client-zip';
 
 @Component({
   selector: 'app-image-compression',
@@ -45,7 +41,6 @@ export class ImageCompressionComponent
 {
   isMobile!: boolean;
   fileList: ImageFileData[] = [];
-  zipBuilder!: JSZip;
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
@@ -99,7 +94,7 @@ export class ImageCompressionComponent
   }
 
   ngAfterViewInit(): void {
-    this.zipBuilder = new JSZip();
+    LogUtils.info('ngAfterViewInit: image compression component');
   }
 
   ngOnDestroy() {
@@ -288,21 +283,16 @@ export class ImageCompressionComponent
   }
 
   async downloadAll(): Promise<void> {
-    this.fileList
-      .filter(ImageFileData => ImageFileData.isValid)
-      .forEach(ImageFileData =>
-        this.zipBuilder.file(
-          ImageFileData.name,
-          ImageFileData.compressedData!,
-          {
-            binary: true,
-          }
-        )
-      );
-
-    const zipFileData: Blob = await this.zipBuilder.generateAsync({
-      type: 'blob',
-    });
+    const zipFileData: Blob = await downloadZip(
+      this.fileList
+        .filter(ImageFileData => ImageFileData.isValid)
+        .map(imageFileData => {
+          return {
+            input: imageFileData.compressedData!,
+            name: imageFileData.name,
+          };
+        })
+    ).blob();
     this.downloadFile('compress-images.zip', zipFileData);
   }
 
