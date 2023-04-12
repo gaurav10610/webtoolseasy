@@ -6,7 +6,7 @@
     class="full-width flex-display flex-column-flow flex-full-height main-div">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center flex-full-height app-background base-app-container">
+      class="flex-display flex-column-flow flex-align-center flex-full-height base-app-container">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -15,28 +15,28 @@
         id="apps-container"
         class="apps-container pointer-cursor flex-center">
         <div
-          class="application"
+          class="application shadow-grey"
           *ngFor="let application of appsConfig"
           (click)="navigateByAppId(application.applicationId)">
-          <mat-card>
-            <div
-              class="flex-display flex-column-flow flex-center flex-align-center app-card">
-              <mat-icon
-                svgIcon="{{ application.iconName }}"
-                class="pointer-cursor"
-                style="
-                  transform: scale(2);
-                  margin-top: 10px;
-                  margin-bottom: 15px;
-                "></mat-icon>
-              <a
-                [replaceUrl]="true"
-                routerLink="{{ application.navigateUrl }}"
-                (click)="onAppClick($event)"
-                >{{ application.displayText }}</a
-              >
-            </div>
-          </mat-card>
+          <!-- <mat-card> -->
+          <div
+            class="flex-display flex-column-flow flex-center flex-align-center app-card">
+            <mat-icon
+              svgIcon="{{ application.iconName }}"
+              class="pointer-cursor"
+              style="
+                transform: scale(2);
+                margin-top: 10px;
+                margin-bottom: 15px;
+              "></mat-icon>
+            <a
+              [replaceUrl]="true"
+              routerLink="{{ application.navigateUrl }}"
+              (click)="onAppClick($event)"
+              >{{ application.displayText }}</a
+            >
+          </div>
+          <!-- </mat-card> -->
         </div>
       </div>
     </div>

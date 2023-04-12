@@ -113,6 +113,7 @@ export class ScreenRecorderComponent
 
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

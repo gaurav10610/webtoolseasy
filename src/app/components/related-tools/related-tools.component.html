@@ -1,11 +1,12 @@
 <div
   *ngIf="appContextService.relatedTools"
-  class="flex-display flex-column-flow">
+  class="flex-display flex-column-flow"
+  style="margin-top: 20px">
   <span style="margin-bottom: 10px; font-size: large">Related Tools</span>
 
   <div class="flex-display flex-row-flow flex-wrap">
     <div
-      class="flex-display flex-row-flow flex-align-center app-parent-div"
+      class="flex-display flex-row-flow flex-align-center app-parent-div shadow-grey"
       *ngFor="let appConfig of appContextService.relatedTools">
       <mat-icon
         svgIcon="{{ appConfig.iconName }}"

@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupFormModule } from 'src/app/modules/popup-form/popup-form.module';
+import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 
 @NgModule({
   declarations: [VideoConverterComponent],
@@ -36,6 +37,7 @@ import { PopupFormModule } from 'src/app/modules/popup-form/popup-form.module';
     TagsModule,
     FooterModule,
     PopupFormModule,
+    RelatedToolsModule,
   ],
 })
 export class VideoConverterModule {}

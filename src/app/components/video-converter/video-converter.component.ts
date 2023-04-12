@@ -110,6 +110,7 @@ export class VideoConverterComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

@@ -19,6 +19,10 @@ body {
   }
 }
 
+.shadow-grey {
+  box-shadow: 3px 5px lightgrey;
+}
+
 .app-icon {
   transform: scale(1.5);
   padding-right: 10px;
@@ -62,10 +66,6 @@ body {
 
 .spacer {
   flex: 1 1 auto;
-}
-
-.app-background {
-  background-color: #eaeded;
 }
 
 .no-scroll::-webkit-scrollbar {

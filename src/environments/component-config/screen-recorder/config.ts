@@ -41,5 +41,17 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
     },
+    {
+      iconName: 'video-convert-icon',
+      iconRelativeUrl: 'video-convert.svg',
+    },
+  ],
+  relatedTools: [
+    {
+      applicationId: 'videoconverter',
+      displayText: 'Video Converter',
+      iconName: 'video-convert-icon',
+      navigateUrl: '/tools/video-converter',
+    },
   ],
 };

@@ -54,5 +54,17 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'play-icon',
       iconRelativeUrl: 'play-icon.svg',
     },
+    {
+      iconName: 'screen-icon',
+      iconRelativeUrl: 'screen.svg',
+    },
+  ],
+  relatedTools: [
+    {
+      applicationId: 'screen-recorder',
+      displayText: 'Screen Recorder',
+      iconName: 'screen-icon',
+      navigateUrl: '/tools/screen-recorder',
+    },
   ],
 };

@@ -5,18 +5,14 @@
 }
 
 .application {
-  border-radius: 10px;
+  // border-radius: 10px;
   margin: 10px;
+  width: 20%;
+  border: 1px solid lightgrey;
 }
 
 .app-card {
   margin: 15px;
-}
-
-@media screen and (min-width: 735px) {
-  .application {
-    width: 20%;
-  }
 }
 
 @media screen and (max-width: 735px) {

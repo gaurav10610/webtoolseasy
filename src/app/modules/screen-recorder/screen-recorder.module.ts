@@ -11,6 +11,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
+import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 
 @NgModule({
   declarations: [ScreenRecorderComponent],
@@ -25,6 +26,7 @@ import { FooterModule } from 'src/app/modules/footer/footer-module';
     ToolHeadingModule,
     TagsModule,
     FooterModule,
+    RelatedToolsModule,
   ],
 })
 export class ScreenRecorderModule {}
