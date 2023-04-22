@@ -1,4 +1,5 @@
 import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'HTML Formatter',
@@ -70,3 +71,30 @@ export const componentConfig: ApplicationConfig = {
     },
   ],
 };
+
+export const descriptionData: DescriptionBlock[] = [
+  {
+    heading: 'How to use HTML Formatter/Beautifier',
+    listData: [
+      `Paste unformatted/minified HTML in unformatted HTML block and HTML will be formatted automatically.`,
+      `HTML formatting is being done in host browser only.`,
+    ],
+  },
+  {
+    heading: 'Key features',
+    listData: [
+      `Easy to use: Our user-friendly interface makes it simple for anyone to format their HTML with just pasting it here.`,
+      `Real-time formatting: Our tool formats your HTML in real-time, so you can see the changes as you make them.`,
+      `No need to download any software. Simply paste your HTML into our platform and get a clean, organized, and optimized result.`,
+    ],
+  },
+  {
+    heading: 'Why Choose Our Online HTML Formatter Tool?',
+    listData: [
+      `Improves readability: Clean and organized HTML is easier to read and understand, making it easier for you or your team to work with.`,
+      `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
+      `Supports collaboration: Clean, organized HTML makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
+      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
+    ],
+  },
+];

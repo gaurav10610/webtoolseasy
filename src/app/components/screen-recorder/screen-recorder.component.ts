@@ -16,7 +16,10 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { componentConfig } from 'src/environments/component-config/screen-recorder/config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/screen-recorder/config';
 import { clear, get, set } from 'idb-keyval';
 import { VideoStreamMerger } from 'video-stream-merger';
 import { isMobile } from 'is-mobile';
@@ -114,6 +117,7 @@ export class ScreenRecorderComponent
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.relatedTools = componentConfig.relatedTools;
+    this.appContextService.descrptionData = descriptionData;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

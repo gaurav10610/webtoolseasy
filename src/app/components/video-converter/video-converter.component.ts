@@ -19,7 +19,10 @@ import { FileDataType, VideoFileData } from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { componentConfig } from 'src/environments/component-config/video-converter/config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/video-converter/config';
 import { v4 } from 'uuid';
 import * as JSZip from 'jszip';
 import {
@@ -111,6 +114,7 @@ export class VideoConverterComponent
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.relatedTools = componentConfig.relatedTools;
+    this.appContextService.descrptionData = descriptionData;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

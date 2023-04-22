@@ -13,7 +13,10 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { componentConfig } from 'src/environments/component-config/text-compare/config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/text-compare/config';
 import { diffChars, Change, diffWords, diffLines } from 'diff';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
@@ -76,6 +79,7 @@ export class TextCompareComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.descrptionData = descriptionData;
   }
 
   ngOnInit(): void {

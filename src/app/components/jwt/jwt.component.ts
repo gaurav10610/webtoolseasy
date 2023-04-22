@@ -13,7 +13,10 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
-import { componentConfig } from 'src/environments/component-config/jwt/config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/jwt/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { decodeJwt, decodeProtectedHeader } from 'jose';
@@ -79,6 +82,7 @@ export class JwtComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.descrptionData = descriptionData;
   }
 
   ngOnInit(): void {
