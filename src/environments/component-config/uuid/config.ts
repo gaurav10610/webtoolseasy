@@ -3,14 +3,14 @@ import { DescriptionBlock } from 'src/app/@types/description';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
-  subHeading: 'Generate UUID V4 & V1 For Free',
+  subHeading: 'Individual or Bulk UUID V4 & V1 Generator',
   navigationUrl: '/tools/uuid',
   pageTitle: 'Online UUID Generator',
   metaTags: [
     {
       name: 'description',
       content:
-        'UUID Generator | Generate UUID | Online UUID Generator | Generate UUID V4 | Generate UUID V1 | Bulk UUID Generator',
+        'Quickly and easily generate individual or bulk sets of universally unique identifiers (UUIDs)',
     },
     {
       name: 'author',
@@ -44,15 +44,15 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'What is UUID Version 4?',
+    heading: 'What is Version 4 UUID?',
     blockData: [
-      `A version 4 UUID is a randomly generated 128-bit identifier. As in other UUIDs, 4 bits are used to indicate version 4, and 2 bits are used to indicate the variant. Thus, 6 bits are constant, leaving 122 bits for the randomly generated part, for a total of 2122 (5.3×1036, 5.3 undecillion) possible values.`,
+      `A version 4 UUID is a randomly generated 128-bit identifier. As in other UUID, 4 bits are used to indicate version 4, and 2 bits are used to indicate the variant. Thus, 6 bits are constant, leaving 122 bits for the randomly generated part, for a total of 2122 (5.3×1036, 5.3 undecillion) possible values.`,
     ],
   },
   {
-    heading: 'What is UUID Version 1?',
+    heading: 'What is Version 1 UUID?',
     blockData: [
-      `Version-1 is based on the current time and the MAC address for the computer or "node" generating the UUID.`,
+      `Version 1 is based on the current time and the MAC address for the computer or "node" generating the UUID.`,
     ],
   },
   {
@@ -65,9 +65,30 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
+    heading: 'Key Features',
+    listData: [
+      `Unlimited UUID generation for free`,
+      `Generate UUIDs in bulk using bulk UUID generator tool and export UUIDs in a text file`,
+      `Security: All the UUIDs are generated in host browser only`,
+    ],
+  },
+  {
     heading: 'Disclaimer',
     blockData: [
-      `All the UUIDs are generated locally in browser only. Genearted UUIDs are provided as is without any warranty.`,
+      `Genearted UUIDs are provided as is without any kind of warranty.`,
+    ],
+  },
+  {
+    heading: 'References',
+    links: [
+      {
+        displayText: 'Read more about UUIDs at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/Universally_unique_identifier',
+      },
+      {
+        displayText: 'RFC 4122',
+        url: 'https://www.ietf.org/rfc/rfc4122.txt',
+      },
     ],
   },
 ];

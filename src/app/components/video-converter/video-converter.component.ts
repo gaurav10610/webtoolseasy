@@ -48,6 +48,7 @@ import {
   FFMPEG_SUPPORTED_INPUT_VIDEO_FORMATS,
 } from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
+import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 
 @Component({
   selector: 'app-video-converter',
@@ -120,8 +121,9 @@ export class VideoConverterComponent
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
-        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
-        LogUtils.info(`mobile view: ${this.isMobile}`);
+        this.isMobile = breakpointObserver.isMatched(
+          `(max-width: ${MOBILE_VIEW_WIDTH_THRESHOLD})`
+        );
         this.checkCompatibility();
       });
 

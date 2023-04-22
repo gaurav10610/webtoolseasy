@@ -40,6 +40,22 @@
           {{ block }}
         </span>
       </div>
+
+      <!-- div for paragraphs -->
+      <div
+        *ngIf="descriptionRecord.links"
+        class="flex-display flex-column-flow">
+        <div *ngFor="let link of descriptionRecord.links" class="flex-display">
+          <div>
+            <mat-icon aria-hidden="false" aria-label="right pointer icon"
+              >chevron_right</mat-icon
+            >
+          </div>
+          <a style="margin-bottom: 15px" href="{{ link.url }}">
+            {{ link.displayText }}
+          </a>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
