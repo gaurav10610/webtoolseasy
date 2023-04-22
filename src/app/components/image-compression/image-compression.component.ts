@@ -29,6 +29,7 @@ import { DOCUMENT } from '@angular/common';
 import { componentConfig } from 'src/environments/component-config/image-compression/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { descriptionData } from 'src/environments/component-config/image-compression/description';
 
 @Component({
   selector: 'app-image-compression',
@@ -80,6 +81,7 @@ export class ImageCompressionComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    appContextService.descrptionData = descriptionData;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

@@ -9,6 +9,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
+import { DescriptionModule } from 'src/app/modules/description/description.module';
 
 @NgModule({
   declarations: [JwtComponent],
@@ -22,6 +23,7 @@ import { FooterModule } from 'src/app/modules/footer/footer-module';
     ToolHeadingModule,
     TagsModule,
     FooterModule,
+    DescriptionModule,
   ],
 })
 export class JwtModule {}

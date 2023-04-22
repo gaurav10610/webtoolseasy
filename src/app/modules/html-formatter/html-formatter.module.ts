@@ -11,6 +11,7 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
 import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
+import { DescriptionModule } from 'src/app/modules/description/description.module';
 
 @NgModule({
   declarations: [HtmlFormatterComponent],
@@ -25,6 +26,7 @@ import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.
     TagsModule,
     FooterModule,
     RelatedToolsModule,
+    DescriptionModule,
   ],
 })
 export class HtmlFormatterModule {}

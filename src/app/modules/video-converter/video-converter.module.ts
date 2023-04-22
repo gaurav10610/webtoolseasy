@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupFormModule } from 'src/app/modules/popup-form/popup-form.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
+import { DescriptionModule } from 'src/app/modules/description/description.module';
 
 @NgModule({
   declarations: [VideoConverterComponent],
@@ -38,6 +39,7 @@ import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.
     FooterModule,
     PopupFormModule,
     RelatedToolsModule,
+    DescriptionModule,
   ],
 })
 export class VideoConverterModule {}
