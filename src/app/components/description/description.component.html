@@ -16,15 +16,17 @@
       <div
         *ngIf="descriptionRecord.listData"
         class="flex-display flex-column-flow">
-        <span
+        <div
           *ngFor="let line of descriptionRecord.listData"
           style="margin-bottom: 10px"
-          class="flex-display flex-row-flow description-font">
-          <mat-icon aria-hidden="false" aria-label="right pointer icon"
-            >chevron_right</mat-icon
-          >
-          {{ line }}
-        </span>
+          class="flex-display description-font">
+          <div>
+            <mat-icon aria-hidden="false" aria-label="right pointer icon"
+              >chevron_right</mat-icon
+            >
+          </div>
+          <span> {{ line }}</span>
+        </div>
       </div>
 
       <!-- div for paragraphs -->

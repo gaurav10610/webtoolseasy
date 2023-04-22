@@ -44,7 +44,7 @@ export const componentConfig: ApplicationConfig = {
 export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
-    blockData: [
+    listData: [
       `Supports wide range of JWT alogirithms i.e HS256, HS384, HS512, PS256, PS384, PS512, RS256, RS384, RS512, ES256, ES256K, ES384, ES512 & EdDSA`,
     ],
   },
