@@ -3,14 +3,14 @@ import { DescriptionBlock } from 'src/app/@types/description';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder',
-  subHeading: 'Decode JSON Web Token For Free',
+  subHeading: 'JSON Web Token (JWT) Decode',
   navigationUrl: '/tools/jwt',
-  pageTitle: 'JWT Token Decode',
+  pageTitle: 'JWT Decoder',
   metaTags: [
     {
       name: 'description',
       content:
-        'JWT Decoder | JWT Decode | JWT Token Decode | JWT Decode HS256 | Online JWT Token Decoder | JSON Web Token',
+        'JSON Web Token (JWT) Decode. JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is digitally signed using JSON Web Signature (JWS).',
     },
     {
       name: 'author',
@@ -38,16 +38,22 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
     },
+    {
+      iconName: 'uuid-icon',
+      iconRelativeUrl: 'uuid-icon.svg',
+    },
+  ],
+  relatedTools: [
+    {
+      applicationId: 'uuid',
+      displayText: 'UUID Generator',
+      iconName: 'uuid-icon',
+      navigateUrl: '/tools/uuid',
+    },
   ],
 };
 
 export const descriptionData: DescriptionBlock[] = [
-  {
-    heading: 'Key features',
-    listData: [
-      `Supports wide range of JWT alogirithms i.e HS256, HS384, HS512, PS256, PS384, PS512, RS256, RS384, RS512, ES256, ES256K, ES384, ES512 & EdDSA`,
-    ],
-  },
   {
     heading: 'What is JSON Web Token (JWT)?',
     blockData: [
@@ -62,6 +68,32 @@ export const descriptionData: DescriptionBlock[] = [
     blockData: [
       `A JWT decoder tool allows you to decode, verify, and inspect the contents of a JWT. This is essential for developers and security professionals who need to troubleshoot, test, or inspect the contents of a JWT for security or compliance purposes.`,
       `With an online JWT decoder tool, you can quickly and easily decode and inspect the contents of a JWT, including the header, payload, and signature. This information can be used to verify the authenticity of the JWT, to identify any potential security vulnerabilities, or to ensure compliance with security standards.`,
+    ],
+  },
+  {
+    heading: 'Key features',
+    listData: [
+      `Supports wide range of JWT alogirithms i.e HS256, HS384, HS512, PS256, PS384, PS512, RS256, RS384, RS512, ES256, ES256K, ES384, ES512 & EdDSA`,
+      `Secure: JSON Web Token (JWT) is being decoded in host browser only.`,
+    ],
+  },
+  {
+    heading: 'Disclaimer',
+    blockData: [
+      `JWTs are credentials, which can grant access to resources. Be careful where you paste them! We do not record tokens.`,
+    ],
+  },
+  {
+    heading: 'References',
+    links: [
+      {
+        displayText: 'Read more about JSON Web Token (JWT) at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/JSON_Web_Token',
+      },
+      {
+        displayText: 'RFC 7519',
+        url: 'https://www.ietf.org/rfc/rfc7519.txt',
+      },
     ],
   },
 ];

@@ -83,6 +83,7 @@ export class JwtComponent
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.descrptionData = descriptionData;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
   }
 
   ngOnInit(): void {

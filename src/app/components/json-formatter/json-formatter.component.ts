@@ -111,7 +111,7 @@ export class JsonFormatterComponent
       this.isJsonValid = true;
       this.updateFormattedJson(formattedJson);
     } catch (error) {
-      LogUtils.error(`error occured while decoding token: ${this.rawJson}`);
+      LogUtils.error(`error occured while formatting json: ${this.rawJson}`);
       this.isJsonValid = false;
     }
   }

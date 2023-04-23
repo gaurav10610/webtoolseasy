@@ -34,6 +34,18 @@
               (paste)="onJsonPaste($event)"
               class="full-height full-width"></span>
           </div>
+
+          <div
+            class="flex-display flex-row-flow"
+            *ngIf="!isJsonValid"
+            style="margin-top: 10px">
+            <mat-icon
+              color="warn"
+              style="transform: scale(2); margin-right: 15px"
+              >error</mat-icon
+            >
+            <span class="header-font" style="color: red">json is invalid</span>
+          </div>
         </div>
 
         <!-- Text 2 div -->

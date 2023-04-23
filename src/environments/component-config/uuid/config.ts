@@ -39,6 +39,18 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
     },
+    {
+      iconName: 'jwt-icon',
+      iconRelativeUrl: 'jwt-icon.svg',
+    },
+  ],
+  relatedTools: [
+    {
+      applicationId: 'jwt',
+      displayText: 'JWT Decoder',
+      iconName: 'jwt-icon',
+      navigateUrl: '/tools/jwt',
+    },
   ],
 };
 

@@ -5,12 +5,12 @@ export const componentConfig: ApplicationConfig = {
   mainHeading: 'JSON Formatter',
   subHeading: 'Online JSON Beautifier',
   navigationUrl: '/tools/json-formatter',
-  pageTitle: 'JSON Formatter | JSON Beautifier',
+  pageTitle: 'Best JSON Formatter and JSON Validator: Online JSON Formatter',
   metaTags: [
     {
       name: 'description',
       content:
-        'JSON Formatter | JSON Beautifier | Best JSON Formatter | JSON Formatter Online | JSON',
+        'Online JSON Formatter / Beautifier and JSON Validator will format JSON data, and helps to validate. Save and Copy JSON',
     },
     {
       name: 'author',
@@ -20,9 +20,10 @@ export const componentConfig: ApplicationConfig = {
   ],
   tags: [
     'json formatter',
+    'json validator',
     'json beautifier',
     'best json formatter',
-    'json formatter online',
+    'best json validator',
   ],
   icons: [
     {
@@ -74,18 +75,9 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use JSON Formatter/Beautifier',
+    heading: 'How to use JSON Formatter/Beautifier?',
     listData: [
       `Paste unformatted/minified json in unformatted JSON block and JSON will be formatted automatically.`,
-      `JSON formatting is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: 'Key features',
-    listData: [
-      `Easy to use: Our user-friendly interface makes it simple for anyone to format their JSON with just pasting it here.`,
-      `Real-time formatting: Our tool formats your JSON in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your JSON into our platform and get a clean, organized, and optimized result.`,
     ],
   },
   {
@@ -95,6 +87,41 @@ export const descriptionData: DescriptionBlock[] = [
       `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
       `Supports collaboration: Clean, organized JSON makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
       `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
+    ],
+  },
+  {
+    heading: 'What is JSON or JavaScript Object Notation?',
+    blockData: [
+      `JSON or JavaScript Object Notation is a language-independent open data format that uses human-readable text to express data objects consisting of attribute-value pairs.`,
+      `Although originally derived from the JavaScript scripting language, JSON data can be generated and parsed with a wide variety of programming languages including JavaScript, PHP, Python, Ruby, and Java.`,
+    ],
+  },
+  {
+    heading: 'Key features',
+    listData: [
+      `Easy to use: Our user-friendly interface makes it simple for anyone to format their JSON with just pasting it here.`,
+      `Real-time formatting: Our tool formats your JSON in real-time, so you can see the changes as you make them.`,
+      `No need to download any software. Simply paste your JSON into our platform and get a clean, organized, and optimized result.`,
+      `Auto validation: Once a JSON is pasted then tool will auto validate the JSON before formatting it.`,
+      `Formatted JSON can be saved or copied easily.`,
+    ],
+  },
+  {
+    heading: 'References',
+    links: [
+      {
+        displayText:
+          'Read more about JSON or JavaScript Object Notation at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/JSON',
+      },
+      {
+        displayText: 'RFC 8259',
+        url: 'https://datatracker.ietf.org/doc/html/rfc8259',
+      },
+      {
+        displayText: 'json.org',
+        url: 'https://www.json.org/json-en.html',
+      },
     ],
   },
 ];
