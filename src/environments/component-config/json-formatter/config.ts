@@ -77,11 +77,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'How to use JSON Formatter / Beautifier / Validator?',
     listData: [
-      `Paste unformatted/minified json in unformatted JSON block and JSON will be formatted / beautified / validated automatically.`,
+      `Paste unformatted / minified json in unformatted JSON block and JSON will be formatted / beautified / validated automatically.`,
     ],
   },
   {
-    heading: 'Why Choose Our Online JSON Formatter Tool?',
+    heading: 'Why choose our Online JSON Formatter Tool?',
     listData: [
       `Improves readability: Clean and organized JSON is easier to read and understand, making it easier for you or your team to work with.`,
       `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
