@@ -75,9 +75,9 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use JSON Formatter/Beautifier?',
+    heading: 'How to use JSON Formatter / Beautifier / Validator?',
     listData: [
-      `Paste unformatted/minified json in unformatted JSON block and JSON will be formatted automatically.`,
+      `Paste unformatted/minified json in unformatted JSON block and JSON will be formatted / beautified / validated automatically.`,
     ],
   },
   {
