@@ -5,7 +5,7 @@ export const componentConfig: ApplicationConfig = {
   mainHeading: 'JSON Formatter',
   subHeading: 'Online JSON Beautifier',
   navigationUrl: '/tools/json-formatter',
-  pageTitle: 'Best JSON Formatter and JSON Validator: Online JSON Formatter',
+  pageTitle: 'Best JSON Formatter / Beautifier and JSON Validator',
   metaTags: [
     {
       name: 'description',

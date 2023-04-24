@@ -5,7 +5,7 @@ export const componentConfig: ApplicationConfig = {
   mainHeading: 'CSS Formatter',
   subHeading: 'Online CSS Beautifier',
   navigationUrl: '/tools/css-formatter',
-  pageTitle: 'CSS Formatter | CSS Beautifier',
+  pageTitle: 'Best CSS Formatter / Beautifier',
   metaTags: [
     {
       name: 'description',
