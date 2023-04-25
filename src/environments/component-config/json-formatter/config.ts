@@ -115,7 +115,8 @@ export const descriptionData: DescriptionBlock[] = [
         url: 'https://en.wikipedia.org/wiki/JSON',
       },
       {
-        displayText: 'RFC 8259',
+        displayText:
+          'RFC 8259 - The JavaScript Object Notation (JSON) Data Interchange Format',
         url: 'https://datatracker.ietf.org/doc/html/rfc8259',
       },
       {

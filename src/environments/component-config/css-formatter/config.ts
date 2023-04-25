@@ -113,7 +113,7 @@ export const descriptionData: DescriptionBlock[] = [
         url: 'https://en.wikipedia.org/wiki/CSS',
       },
       {
-        displayText: 'RFC 2318',
+        displayText: 'RFC 2318 - The text/css Media Type',
         url: 'https://datatracker.ietf.org/doc/html/rfc2318',
       },
       {

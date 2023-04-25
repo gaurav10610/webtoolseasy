@@ -194,7 +194,8 @@ export class VideoConverterComponent
 
   checkCompatibility() {
     if (environment.production) {
-      this.isSupported = !this.isMobile;
+      // this.isSupported = !this.isMobile;
+      this.isSupported = true;
     }
   }
 
