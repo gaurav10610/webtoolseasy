@@ -11,6 +11,7 @@ export enum AppDisplayNames {
   JSON_FORMATTER = 'JSON Formatter',
   HTML_FORMATTER = 'HTML Formatter',
   CSS_FORMATTER = 'CSS Formatter',
+  JSON_VIEWER = 'JSON Viewer',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -61,6 +62,12 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.JSON_FORMATTER,
     iconName: 'json-icon',
     navigateUrl: '/tools/json-formatter',
+  },
+  {
+    applicationId: 'jsonviewer',
+    displayText: AppDisplayNames.JSON_VIEWER,
+    iconName: 'json-icon',
+    navigateUrl: '/tools/json-viewer',
   },
   {
     applicationId: 'htmlformatter',
