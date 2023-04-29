@@ -1,11 +1,12 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'HTML Formatter',
   subHeading: 'Online HTML Beautifier',
   navigationUrl: '/tools/html-formatter',
-  pageTitle: 'Best HTML Beautifier, HTML Formatter',
+  pageTitle: 'Best HTML Formatter / Beautifier',
   metaTags: [
     {
       name: 'description',
@@ -53,19 +54,19 @@ export const componentConfig: ApplicationConfig = {
   relatedTools: [
     {
       applicationId: 'jsformatter',
-      displayText: 'JS Formatter',
+      displayText: AppDisplayNames.JS_FORMATTER,
       iconName: 'js-icon',
       navigateUrl: '/tools/js-formatter',
     },
     {
       applicationId: 'jsonformatter',
-      displayText: 'JSON Formatter',
+      displayText: AppDisplayNames.JSON_FORMATTER,
       iconName: 'json-icon',
       navigateUrl: '/tools/json-formatter',
     },
     {
       applicationId: 'cssformatter',
-      displayText: 'CSS Formatter',
+      displayText: AppDisplayNames.CSS_FORMATTER,
       iconName: 'css-icon',
       navigateUrl: '/tools/css-formatter',
     },

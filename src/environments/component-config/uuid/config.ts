@@ -1,5 +1,6 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
@@ -47,7 +48,7 @@ export const componentConfig: ApplicationConfig = {
   relatedTools: [
     {
       applicationId: 'jwt',
-      displayText: 'JWT Decoder',
+      displayText: AppDisplayNames.JWT_DECODER,
       iconName: 'jwt-icon',
       navigateUrl: '/tools/jwt',
     },

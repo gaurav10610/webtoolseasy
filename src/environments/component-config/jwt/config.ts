@@ -1,5 +1,6 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder',
@@ -46,7 +47,7 @@ export const componentConfig: ApplicationConfig = {
   relatedTools: [
     {
       applicationId: 'uuid',
-      displayText: 'UUID Generator',
+      displayText: AppDisplayNames.UUID_GENERATOR,
       iconName: 'uuid-icon',
       navigateUrl: '/tools/uuid',
     },

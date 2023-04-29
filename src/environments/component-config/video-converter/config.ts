@@ -1,5 +1,6 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Video Converter',
@@ -63,7 +64,7 @@ export const componentConfig: ApplicationConfig = {
   relatedTools: [
     {
       applicationId: 'screen-recorder',
-      displayText: 'Screen Recorder',
+      displayText: AppDisplayNames.SCREEN_RECORDER,
       iconName: 'screen-icon',
       navigateUrl: '/tools/screen-recorder',
     },

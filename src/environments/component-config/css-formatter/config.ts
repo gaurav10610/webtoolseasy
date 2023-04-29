@@ -1,5 +1,6 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'CSS Formatter',
@@ -54,19 +55,19 @@ export const componentConfig: ApplicationConfig = {
   relatedTools: [
     {
       applicationId: 'jsformatter',
-      displayText: 'JS Formatter',
+      displayText: AppDisplayNames.JS_FORMATTER,
       iconName: 'js-icon',
       navigateUrl: '/tools/js-formatter',
     },
     {
       applicationId: 'jsonformatter',
-      displayText: 'JSON Formatter',
+      displayText: AppDisplayNames.JSON_FORMATTER,
       iconName: 'json-icon',
       navigateUrl: '/tools/json-formatter',
     },
     {
       applicationId: 'htmlformatter',
-      displayText: 'HTML Formatter',
+      displayText: AppDisplayNames.HTML_FORMATTER,
       iconName: 'html-icon',
       navigateUrl: '/tools/html-formatter',
     },
