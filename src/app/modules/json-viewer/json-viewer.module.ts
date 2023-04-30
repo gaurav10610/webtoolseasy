@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { JsonViewerRoutingModule } from './json-viewer-routing.module';
 import { JsonViewerComponent } from 'src/app/components/json-viewer/json-viewer.component';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxJsonViewerModule } from 'ngx-json-viewer-scrolling';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';

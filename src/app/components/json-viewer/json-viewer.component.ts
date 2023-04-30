@@ -16,6 +16,8 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
 import { LogUtils } from 'src/app/service/util/logger';
 import { descriptionData } from 'src/environments/component-config/css-formatter/config';
 import { componentConfig } from 'src/environments/component-config/json-viewer/config';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { NgxJsonViewerComponent } from 'ngx-json-viewer-scrolling';
 
 @Component({
   selector: 'app-json-viewer',
@@ -32,6 +34,9 @@ export class JsonViewerComponent
   @ViewChild('text1AreaContent', { static: false })
   text1AreaContent!: ElementRef;
 
+  @ViewChild('text2AreaContent', { static: false })
+  text2AreaContent!: NgxJsonViewerComponent;
+
   rawJson: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   tabSpaceValue: string = '   ';
   formattedJSON = JSON.parse(this.rawJson);
@@ -44,7 +49,8 @@ export class JsonViewerComponent
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private clipboard: Clipboard
   ) {
     super();
     this.loadCustomIcons(
@@ -109,6 +115,12 @@ export class JsonViewerComponent
 
   updateJsonTree(formattedJson: string) {
     this.formattedJSON = JSON.parse(formattedJson);
+  }
+
+  copyFormattedJson() {
+    this.clipboard.copy(
+      JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue)
+    );
   }
 
   onEncodedDivClick() {

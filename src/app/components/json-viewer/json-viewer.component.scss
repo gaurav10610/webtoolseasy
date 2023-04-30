@@ -1,47 +1,46 @@
 .div-label {
-    font-size: large;
-  }
-  
+  font-size: large;
+}
+
+.text-area-div {
+  width: 47%;
+  height: 30em;
+  font-size: larger;
+}
+
+.text-content-div {
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.text-area-container {
+  justify-content: space-around;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.copy-button {
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 735px) {
   .text-area-div {
-    width: 47%;
-    height: 30em;
-    font-size: larger;
+    height: 10em;
+    width: 80%;
   }
-  
-  .text-content-div {
-    border: 1px solid lightgrey;
-    border-radius: 10px;
-    padding: 10px;
+  .text1-area-margin {
+    margin-bottom: 20px;
   }
-  
   .text-area-container {
-    justify-content: space-around;
+    flex-direction: column;
   }
-  
-  [contenteditable]:focus {
-    outline: 0px solid transparent;
-  }
-  
+  // .text-content-div {
+  //   font-size: larger;
+  // }
   .copy-button {
-    justify-content: flex-end;
+    justify-content: center;
   }
-  
-  @media screen and (max-width: 735px) {
-    .text-area-div {
-      height: 10em;
-      width: 80%;
-    }
-    .text1-area-margin {
-      margin-bottom: 20px;
-    }
-    .text-area-container {
-      flex-direction: column;
-    }
-    .text-content-div {
-      font-size: larger;
-    }
-    .copy-button {
-      justify-content: center;
-    }
-  }
-  
+}

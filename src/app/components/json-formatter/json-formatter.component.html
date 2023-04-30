@@ -57,13 +57,11 @@
               >Formatted JSON</span
             >
           </div>
-          <div
-            class="text-content-div y-scroll full-height full-width"
-            style="color: indigo">
-            <pre
+          <div class="text-content-div y-scroll full-height full-width">
+            <ngx-json-viewer
               #text2AreaContent
-              contenteditable="false"
-              class="full-height full-width"></pre>
+              [json]="formattedJSON"
+              [expanded]="true"></ngx-json-viewer>
           </div>
         </div>
       </div>
