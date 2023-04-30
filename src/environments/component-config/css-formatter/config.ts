@@ -66,6 +66,12 @@ export const componentConfig: ApplicationConfig = {
       navigateUrl: '/tools/json-formatter',
     },
     {
+      applicationId: 'jsonviewer',
+      displayText: AppDisplayNames.JSON_VIEWER,
+      iconName: 'json-icon',
+      navigateUrl: '/tools/json-viewer',
+    },
+    {
       applicationId: 'htmlformatter',
       displayText: AppDisplayNames.HTML_FORMATTER,
       iconName: 'html-icon',

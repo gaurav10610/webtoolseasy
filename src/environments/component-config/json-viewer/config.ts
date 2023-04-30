@@ -4,14 +4,14 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online JSON Viewer',
-  subHeading: 'JSON Visualizer / JSON Tree Viewer',
+  subHeading: 'JSON Visualizer / Tree Viewer',
   navigationUrl: '/tools/json-viewer',
-  pageTitle: 'Best Online JSON Viewer',
+  pageTitle: 'Best JSON Viewer and JSON Beautifier',
   metaTags: [
     {
       name: 'description',
       content:
-        'Online JSON Viewer | JSON Tree Viewer | JSON Reader | JSON Visualizer | JSON File Viewer',
+        'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to pretty print JSON data.',
     },
     {
       name: 'author',
@@ -20,12 +20,11 @@ export const componentConfig: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'js formatter',
-    'js beautifier',
-    'string format javascript',
-    'javascript prettify',
-    'javascript formatter',
-    'javascript beautifier',
+    'json viewer',
+    'json formatter',
+    'json beautifier',
+    'json prettify',
+    'json validator',
   ],
   icons: [
     {
@@ -52,6 +51,10 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'css-icon',
       iconRelativeUrl: 'css.svg',
     },
+    {
+      iconName: 'js-icon',
+      iconRelativeUrl: 'js-icon.svg',
+    },
   ],
   relatedTools: [
     {
@@ -67,6 +70,12 @@ export const componentConfig: ApplicationConfig = {
       navigateUrl: '/tools/html-formatter',
     },
     {
+      applicationId: 'jsformatter',
+      displayText: AppDisplayNames.JS_FORMATTER,
+      iconName: 'js-icon',
+      navigateUrl: '/tools/js-formatter',
+    },
+    {
       applicationId: 'cssformatter',
       displayText: AppDisplayNames.CSS_FORMATTER,
       iconName: 'css-icon',
@@ -77,13 +86,14 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use Javascript Formatter / Beautifier?',
+    heading: 'How to use JSON Viewer / Beautifier / Validator?',
     listData: [
-      `Paste unformatted / minified Javascript in unformatted Javascript block and code it be formatted / beautified automatically.`,
+      `Paste unformatted / minified JSON in JSON block and JSON will be validated and JSON Tree view will be rendered automatically.`,
     ],
   },
   {
-    heading: 'Why choose our Online JavaScript Formatter / Beautifier Tool?',
+    heading:
+      'Why choose our Online JavaScript Viewer / Beautifier / Validator Tool?',
     listData: [
       `Improves readability: Clean and organized code is easier to read and understand, making it easier for you or your team to work with.`,
       `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
@@ -92,35 +102,38 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: `What is Javascript?`,
+    heading: 'What is JSON or JavaScript Object Notation?',
     blockData: [
-      `JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions. While it is most well-known as the scripting language for Web pages, many non-browser environments also use it, such as Node.js, Apache CouchDB and Adobe Acrobat. JavaScript is a prototype-based, multi-paradigm, single-threaded, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.`,
-      `JavaScript's dynamic capabilities include runtime object construction, variable parameter lists, function variables, dynamic script creation (via eval), object introspection (via for...in and Object utilities), and source-code recovery (JavaScript functions store their source text and can be retrieved through toString()).`,
+      `JSON or JavaScript Object Notation is a language-independent open data format that uses human-readable text to express data objects consisting of attribute-value pairs.`,
+      `Although originally derived from the JavaScript scripting language, JSON data can be generated and parsed with a wide variety of programming languages including JavaScript, PHP, Python, Ruby, and Java.`,
     ],
   },
   {
     heading: 'Key features',
     listData: [
-      `Easy to use: Our user-friendly interface makes it simple for anyone to format their JavaScript code with just pasting Javascript here.`,
-      `Real-time formatting: Our tool formats your Javascript in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your code into our platform and get a clean, organized, and optimized result.`,
-      `Formatted / Beautified Javascript can be saved or copied easily.`,
+      `Easy to use: Our user-friendly interface makes it simple for anyone to see JSON Tree View for a JSON with just pasting it here.`,
+      `Real-time formatting: Our tool renders JSON Tree View for your JSON in real-time, so you can see the changes as you make them.`,
+      `No need to download any software. Simply paste your JSON into our platform and get a clean and organized JSON Tree view.`,
+      `Auto validation: Once a JSON is pasted then tool will auto validate the JSON before formatting it.`,
+      `Formatted JSON can be saved or copied easily.`,
     ],
   },
   {
     heading: 'References',
     links: [
       {
-        displayText: 'Read more about Javascript at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/JavaScript',
+        displayText:
+          'Read more about JSON or JavaScript Object Notation at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/JSON',
       },
       {
-        displayText: 'Learn Javascript at w3schools.com',
-        url: 'https://www.w3schools.com/js/DEFAULT.asp',
+        displayText:
+          'RFC 8259 - The JavaScript Object Notation (JSON) Data Interchange Format',
+        url: 'https://datatracker.ietf.org/doc/html/rfc8259',
       },
       {
-        displayText: 'Read about Javascript at Mozilla Developer Docs',
-        url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+        displayText: 'json.org',
+        url: 'https://www.json.org/json-en.html',
       },
     ],
   },

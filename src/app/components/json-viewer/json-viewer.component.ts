@@ -14,7 +14,7 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { descriptionData } from 'src/environments/component-config/css-formatter/config';
+import { descriptionData } from 'src/environments/component-config/json-viewer/config';
 import { componentConfig } from 'src/environments/component-config/json-viewer/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer-scrolling';
