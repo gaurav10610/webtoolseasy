@@ -5,7 +5,7 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
-import { tools as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';

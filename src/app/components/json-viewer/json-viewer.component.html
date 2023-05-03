@@ -1,0 +1,88 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <app-header-toolbar></app-header-toolbar>
+
+  <div class="full-width y-scroll">
+    <!-- app container -->
+    <div
+      class="flex-display flex-column-flow flex-align-center base-app-container">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <div
+        class="flex-display flex-row-flow flex-align-center text-area-container full-width"
+        style="margin-bottom: 10px">
+        <!-- Text 1 div -->
+        <div
+          class="flex-display flex-column-flow text1-area-margin text-area-div">
+          <div class="flex-display flex-row-flow">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >JSON</span
+            >
+            <span>(Paste JSON Here)</span>
+          </div>
+          <div
+            class="text-content-div text1-area-margin y-scroll full-height full-width"
+            style="color: indigo"
+            (click)="onEncodedDivClick()">
+            <span
+              #text1AreaContent
+              contenteditable="true"
+              (input)="rawJsonChange()"
+              (paste)="onJsonPaste($event)"
+              class="full-height full-width"></span>
+          </div>
+
+          <div
+            class="flex-display flex-row-flow"
+            *ngIf="!isJsonValid"
+            style="margin-top: 10px">
+            <mat-icon
+              color="warn"
+              style="transform: scale(2); margin-right: 15px"
+              >error</mat-icon
+            >
+            <span class="header-font" style="color: red">json is invalid</span>
+          </div>
+        </div>
+
+        <!-- Text 2 div -->
+        <div class="flex-display flex-column-flow text-area-div">
+          <div class="flex-display flex-row-flow">
+            <span
+              class="div-label"
+              style="margin-bottom: 5px; margin-right: 5px"
+              >Formatted JSON</span
+            >
+          </div>
+          <div class="text-content-div y-scroll full-height full-width">
+            <ngx-json-viewer
+              #text2AreaContent
+              [json]="formattedJSON"
+              [expanded]="true"></ngx-json-viewer>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex-display flex-row-flow full-width copy-button"
+        style="margin-top: 10px; margin-bottom: 10px">
+        <button mat-raised-button (click)="copyFormattedJson()" color="primary">
+          <mat-icon>content_copy</mat-icon> Copy Formatted JSON
+        </button>
+      </div>
+
+      <!-- related tools -->
+      <app-related-tools class="full-width"></app-related-tools>
+
+      <!-- description -->
+      <app-description class="full-width"></app-description>
+
+      <!-- tags div -->
+      <app-tags></app-tags>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

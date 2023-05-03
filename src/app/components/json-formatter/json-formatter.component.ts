@@ -13,9 +13,13 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DOCUMENT } from '@angular/common';
-import { jsonformatter as componentConfig } from 'src/environments/component-config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/json-formatter/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { NgxJsonViewerComponent } from 'ngx-json-viewer-scrolling';
 
 @Component({
   selector: 'app-json-formatter',
@@ -33,10 +37,11 @@ export class JsonFormatterComponent
   text1AreaContent!: ElementRef;
 
   @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: ElementRef;
+  text2AreaContent!: NgxJsonViewerComponent;
 
   rawJson: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   tabSpaceValue: string = '   ';
+  formattedJSON = JSON.parse(this.rawJson);
 
   constructor(
     private clipboard: Clipboard,
@@ -65,6 +70,8 @@ export class JsonFormatterComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
+    this.appContextService.descrptionData = descriptionData;
   }
 
   ngOnInit(): void {
@@ -73,13 +80,7 @@ export class JsonFormatterComponent
 
   ngAfterViewInit(): void {
     LogUtils.info('json formatter: ngAfterViewInit');
-    const formattedJson = JSON.stringify(
-      JSON.parse(this.rawJson),
-      null,
-      this.tabSpaceValue
-    );
     this.updateRawJson(this.rawJson);
-    this.updateFormattedJson(formattedJson);
   }
 
   rawJsonChange() {
@@ -98,15 +99,10 @@ export class JsonFormatterComponent
   formatJson(rawJsonValue: string) {
     try {
       this.rawJson = rawJsonValue;
-      const formattedJson = JSON.stringify(
-        JSON.parse(rawJsonValue),
-        null,
-        this.tabSpaceValue
-      );
       this.isJsonValid = true;
-      this.updateFormattedJson(formattedJson);
+      this.updateFormattedJson(rawJsonValue);
     } catch (error) {
-      LogUtils.error(`error occured while decoding token: ${this.rawJson}`);
+      LogUtils.error(`error occured while formatting json: ${this.rawJson}`);
       this.isJsonValid = false;
     }
   }
@@ -120,14 +116,16 @@ export class JsonFormatterComponent
   }
 
   updateFormattedJson(formattedJson: string) {
-    this.renderer.setProperty(
-      this.text2AreaContent.nativeElement,
-      'innerText',
-      formattedJson
-    );
+    this.formattedJSON = JSON.parse(formattedJson);
   }
 
   copyFormattedJson() {
-    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
+    this.clipboard.copy(
+      JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue)
+    );
+  }
+
+  onEncodedDivClick() {
+    this.text1AreaContent.nativeElement.focus();
   }
 }

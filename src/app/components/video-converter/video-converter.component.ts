@@ -19,7 +19,10 @@ import { FileDataType, VideoFileData } from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { videoconverter as componentConfig } from 'src/environments/component-config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/video-converter/config';
 import { v4 } from 'uuid';
 import * as JSZip from 'jszip';
 import {
@@ -45,6 +48,7 @@ import {
   FFMPEG_SUPPORTED_INPUT_VIDEO_FORMATS,
 } from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
+import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 
 @Component({
   selector: 'app-video-converter',
@@ -110,13 +114,16 @@ export class VideoConverterComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
+    this.appContextService.descrptionData = descriptionData;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
-        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
-        LogUtils.info(`mobile view: ${this.isMobile}`);
+        this.isMobile = breakpointObserver.isMatched(
+          `(max-width: ${MOBILE_VIEW_WIDTH_THRESHOLD})`
+        );
         this.checkCompatibility();
       });
 
@@ -187,7 +194,8 @@ export class VideoConverterComponent
 
   checkCompatibility() {
     if (environment.production) {
-      this.isSupported = !this.isMobile;
+      // this.isSupported = !this.isMobile;
+      this.isSupported = true;
     }
   }
 

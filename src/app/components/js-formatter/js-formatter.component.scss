@@ -5,6 +5,7 @@
 .text-area-div {
   width: 47%;
   height: 30em;
+  font-size: larger;
 }
 
 .text-content-div {
@@ -29,7 +30,6 @@
   .text-area-div {
     height: 10em;
     width: 80%;
-    font-size: larger;
   }
   .text1-area-margin {
     margin-bottom: 20px;
@@ -37,9 +37,9 @@
   .text-area-container {
     flex-direction: column;
   }
-  .text-content-div {
-    font-size: larger;
-  }
+  // .text-content-div {
+  //   font-size: larger;
+  // }
   .copy-button {
     justify-content: center;
   }

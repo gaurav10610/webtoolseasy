@@ -7,6 +7,7 @@ import { HtmlFormatterModule } from './modules/html-formatter/html-formatter.mod
 import { ImageCompressionModule } from './modules/image-compression/image-compression.module';
 import { JsFormatterModule } from './modules/js-formatter/js-formatter.module';
 import { JsonFormatterModule } from './modules/json-formatter/json-formatter.module';
+import { JsonViewerModule } from './modules/json-viewer/json-viewer.module';
 import { JwtModule } from './modules/jwt/jwt.module';
 import { ScreenRecorderModule } from './modules/screen-recorder/screen-recorder.module';
 import { TextCompareModule } from './modules/text-compare/text-compare.module';
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'tools/screen-recorder', loadChildren: () => ScreenRecorderModule },
   { path: 'tools/text-compare', loadChildren: () => TextCompareModule },
   { path: 'tools/video-converter', loadChildren: () => VideoConverterModule },
+  { path: 'tools/json-viewer', loadChildren: () => JsonViewerModule },
 ];
 
 @NgModule({

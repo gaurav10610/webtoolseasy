@@ -25,14 +25,15 @@
             <span>(Paste Token Here)</span>
           </div>
           <div
-            class="text-content-div text1-area-margin y-scroll full-height full-width"
-            style="color: indigo">
-            <pre
+            class="text-content-div text1-area-margin y-scroll flex-full-height full-width"
+            style="color: indigo"
+            (click)="onEncodedDivClick()">
+            <span
               #text1AreaContent
               contenteditable="true"
               (input)="encodedInputChange()"
               (paste)="onTokenPaste($event)"
-              class="full-height full-width"></pre>
+              class="full-height full-width"></span>
           </div>
           <div
             class="flex-display flex-row-flow"
@@ -52,12 +53,35 @@
           <div class="flex-display flex-row-flow">
             <span
               class="div-label"
-              style="margin-bottom: 5px; margin-right: 5px"
+              style="margin-bottom: 10px; margin-right: 5px"
               >Decoded Token</span
             >
           </div>
+
+          <div class="flex-display flex-row-flow">
+            <span style="margin-bottom: 5px; font-size: small"
+              >Headers ( Algorithm & Token Type)</span
+            >
+          </div>
+
+          <!-- JWT header div -->
           <div
-            class="text-content-div y-scroll full-height full-width"
+            class="text-content-div full-width"
+            style="color: indigo; margin-bottom: 10px">
+            <pre
+              #text3AreaContent
+              contenteditable="false"
+              class="full-height full-width"></pre>
+          </div>
+
+          <div class="flex-display flex-row-flow">
+            <span style="margin-top: 5px; margin-bottom: 5px; font-size: small"
+              >Token Data</span
+            >
+          </div>
+
+          <div
+            class="text-content-div y-scroll flex-full-height full-width"
             style="color: indigo">
             <pre
               #text2AreaContent
@@ -75,54 +99,11 @@
         </button>
       </div>
 
-      <div class="flex-display flex-column-flow" style="margin: 20px">
-        <h2 style="font-weight: bold">What is JSON Web Token (JWT) ?</h2>
-        <p>
-          JSON Web Token (JWT) is an open standard (RFC 7519) that defines a
-          compact and self-contained way for securely transmitting information
-          between parties as a JSON object. It is typically used for
-          authentication and authorization purposes, as an alternative to
-          session-based authentication.
-        </p>
-        <p>
-          In a JWT, the information is encoded as a JSON object and then signed
-          using a digital signature, so that the receiver can verify that the
-          information has not been tampered with. The information in a JWT can
-          be read by anyone, but only the party that holds the secret key can
-          sign a JWT, making it secure for transmitting sensitive information.
-        </p>
-        <p>
-          JWTs are often used in conjunction with OAuth 2.0, an open standard
-          for authorization, and are often used to pass authentication
-          information between an authentication server and a resource server, or
-          between different systems. They are also used as a secure way to
-          transmit information in Single Sign-On (SSO) systems.
-        </p>
-        <p>
-          Overall, JWTs provide a lightweight and convenient way to transmit
-          information securely over the web, making them an increasingly popular
-          choice for many application development scenarios.
-        </p>
-        <h2 style="font-weight: bold">What is the need of JWT decoder?</h2>
-        <p>
-          A JWT decoder tool allows you to decode, verify, and inspect the
-          contents of a JWT. This is essential for developers and security
-          professionals who need to troubleshoot, test, or inspect the contents
-          of a JWT for security or compliance purposes.
-        </p>
-        <p>
-          With an online JWT decoder tool, you can quickly and easily decode and
-          inspect the contents of a JWT, including the header, payload, and
-          signature. This information can be used to verify the authenticity of
-          the JWT, to identify any potential security vulnerabilities, or to
-          ensure compliance with security standards.
-        </p>
-        <h2 style="font-weight: bold">Disclaimer</h2>
-        <p>
-          Only tokens which are encoded with HS256 algorithm can be decoded. JWT
-          token is being decoded locally in host browser only.
-        </p>
-      </div>
+      <!-- related tools -->
+      <app-related-tools class="full-width"></app-related-tools>
+
+      <!-- description -->
+      <app-description class="full-width"></app-description>
 
       <!-- tags div -->
       <app-tags></app-tags>

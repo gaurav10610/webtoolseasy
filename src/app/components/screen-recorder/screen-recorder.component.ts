@@ -16,13 +16,17 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { screenrecorder as componentConfig } from 'src/environments/component-config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/screen-recorder/config';
 import { clear, get, set } from 'idb-keyval';
 import { VideoStreamMerger } from 'video-stream-merger';
-import { isMobile } from 'is-mobile';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { environment } from 'src/environments/environment';
+import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -72,6 +76,7 @@ export class ScreenRecorderComponent
   showMergedVideo: boolean = false;
 
   isSupported: boolean = true;
+  isMobile!: boolean;
 
   /**
    * media recorder instance holder
@@ -109,17 +114,31 @@ export class ScreenRecorderComponent
       this.document
     );
     this.appContextService.tags = componentConfig.tags;
-    this.isSupported = !isMobile();
 
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
+    this.appContextService.descrptionData = descriptionData;
 
+    /**
+     * screen resize handler
+     */
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
-        this.isSupported = !isMobile();
+        this.isMobile = breakpointObserver.isMatched(
+          `(max-width: ${MOBILE_VIEW_WIDTH_THRESHOLD})`
+        );
+        this.checkCompatibility();
       });
+    this.checkCompatibility();
+  }
+
+  checkCompatibility() {
+    if (environment.production) {
+      this.isSupported = !this.isMobile;
+    }
   }
 
   ngOnDestroy(): void {

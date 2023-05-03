@@ -4,7 +4,8 @@
 
 .text-area-div {
   width: 47%;
-  height: 30em;
+  font-size: larger;
+  min-height: 30em;
 }
 
 .text-content-div {
@@ -27,9 +28,8 @@
 
 @media screen and (max-width: 735px) {
   .text-area-div {
-    height: 10em;
     width: 80%;
-    font-size: larger;
+    min-height: 10em;
   }
   .text1-area-margin {
     margin-bottom: 20px;

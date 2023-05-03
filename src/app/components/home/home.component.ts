@@ -5,7 +5,7 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { home as componentConfig } from 'src/environments/component-config';
+import { componentConfig } from 'src/environments/component-config/home/config';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
 
 @Component({

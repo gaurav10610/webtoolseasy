@@ -9,136 +9,155 @@
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
-      <div
-        class="flex-display app-container-div flex-align-center"
-        style="justify-content: space-around">
-        <!-- version 4 app container -->
-        <div class="flex-display flex-column-flow flex-align-center uuid-app">
-          <h2 id="heading2">Generate UUID V4</h2>
-          <!-- generate uuid -->
+      <!-- version 4 app container -->
+      <div class="flex-display flex-column-flow flex-align-center uuid-app">
+        <h2 id="heading2">Version 4 UUID Generator</h2>
+        <!-- generate uuid -->
+        <div
+          class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+          style="margin-bottom: 20px">
           <div
-            class="flex-display flex-row-flow flex-center flex-align-center uid-div"
-            style="margin-bottom: 20px">
-            <div
-              class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
-              <span class="uuid-class" style="color: #ff4081">{{
-                uuidV4
-              }}</span>
-            </div>
-            <button
-              mat-raised-button
-              (click)="copyGeneratedId('V4')"
-              color="primary">
-              <mat-icon>content_copy</mat-icon> Copy
-            </button>
+            class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+            <span class="uuid-class" style="color: #ff4081">{{ uuidV4 }}</span>
           </div>
-
-          <div class="flex-display flex-column-flow flex-align-center">
-            <button
-              mat-raised-button
-              color="primary"
-              style="margin-bottom: 20px"
-              (click)="generateUUID('V4')">
-              <mat-icon>repeat</mat-icon>
-              Generate Again
-            </button>
-            <h3 id="heading3">What is UUID Version 4?</h3>
-            <span>
-              A version 4 UUID is a randomly generated 128-bit identifier. As in
-              other UUIDs, 4 bits are used to indicate version 4, and 2 bits are
-              used to indicate the variant. Thus, 6 bits are constant, leaving
-              122 bits for the randomly generated part, for a total of 2122
-              (5.3×1036, 5.3 undecillion) possible values.
-              <a
-                target="_blank"
-                href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
-                >Read more on Wiki</a
-              ></span
-            >
-          </div>
+          <button
+            mat-raised-button
+            (click)="copyGeneratedId('V4')"
+            color="primary">
+            <mat-icon>content_copy</mat-icon> Copy
+          </button>
         </div>
 
-        <!-- version 1 app container -->
-        <div class="flex-display flex-column-flow flex-align-center uuid-app">
-          <h2 id="heading2">Generate UUID V1</h2>
-          <!-- generate uuid -->
-          <div
-            class="flex-display flex-row-flow flex-center flex-align-center uid-div"
-            style="margin-bottom: 20px">
-            <div
-              class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
-              <span class="uuid-class" style="color: #ff4081">{{
-                uuidV1
-              }}</span>
-            </div>
-            <button
-              mat-raised-button
-              (click)="copyGeneratedId('V1')"
-              color="primary">
-              <mat-icon>content_copy</mat-icon> Copy
-            </button>
-          </div>
+        <div
+          class="flex-display flex-column-flow flex-align-center"
+          style="margin-bottom: 20px">
+          <button
+            mat-raised-button
+            color="primary"
+            style="margin-bottom: 20px"
+            (click)="generateUUID('V4')">
+            <mat-icon>repeat</mat-icon>
+            Generate Again
+          </button>
+        </div>
 
-          <div class="flex-display flex-column-flow flex-align-center">
+        <div
+          class="flex-display flex-column-flow flex-align-center"
+          style="margin-bottom: 10px">
+          <span style="margin-bottom: 15px; font-size: large" class="bold-text"
+            >Bulk Version 4 UUID Generator</span
+          >
+          <mat-form-field appearance="outline">
+            <mat-label>Enter UUIDs Count</mat-label>
+            <input
+              #bulkV4Input
+              type="number"
+              matInput
+              placeholder="Max 1000"
+              value="5"
+              min="0"
+              max="1000" />
             <button
               mat-raised-button
-              color="primary"
-              style="margin-bottom: 20px"
-              (click)="generateUUID('V1')">
-              <mat-icon>repeat</mat-icon>
-              Generate Again
+              matTextSuffix=""
+              aria-label="Clear"
+              (click)="generateBulkUUID('V4')">
+              Generate
             </button>
-            <h3 id="heading3">What is UUID Version 1?</h3>
-            <span
-              >Version-1 is based on the current time and the MAC address for
-              the computer or "node" generating the UUID.
-              <a
-                target="_blank"
-                href="https://en.wikipedia.org/wiki/Universally_unique_identifier"
-                >Read more on Wiki</a
-              ></span
-            >
-          </div>
+          </mat-form-field>
+          <span *ngIf="bulkV4Error" style="color: red"
+            >*Max allowed value is 1000</span
+          >
+          <a href="#" (click)="downloadUUIDs($event, 'V4')"
+            >Download to a file</a
+          >
+        </div>
+
+        <div
+          class="flex-display flex-column-flow flex-center flex-align-center bulk-uuids y-scroll"
+          style="max-height: 200px"
+          *ngIf="v4Ids.length > 0">
+          <span *ngFor="let uuid of v4Ids"> {{ uuid }} </span>
         </div>
       </div>
 
-      <div
-        class="flex-display flex-column-flow"
-        style="margin-top: 10px; margin-left: 20px">
-        <h3 id="heading3">What is UUID ( Universally unique identifier ) ?</h3>
-        <p>
-          A UUID is a standardized method of generating unique identifiers for
-          resources or objects in a computer system. These identifiers are
-          designed to be unique across time and space, making them ideal for use
-          in a variety of applications, such as database systems, network
-          protocols, and software libraries.
-        </p>
-        <p>
-          The unique identifier generated by a UUID is typically represented as
-          a string of characters, often in the format of
-          xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where each x is a hexadecimal
-          digit. This combination of randomness and the use of a standard format
-          makes UUIDs an effective way of ensuring that identifiers are unique
-          even when generated in different systems or at different times.
-        </p>
-        <p>
-          UUIDs are especially useful in distributed systems, where multiple
-          systems need to coordinate to manage resources, and in applications
-          that need to generate unique identifiers without a centralized
-          coordination mechanism.
-        </p>
-        <p>
-          In summary, UUID is a powerful tool for resource and object
-          identification within a system, providing a standardized and effective
-          way of generating unique identifiers that are unique across time and
-          space.
-        </p>
-        <h3 id="heading3">Disclaimer</h3>
-        <p>
-          All the UUIDs are generated locally in browser only. Genearted UUIDs
-          are provided as is without any warranty.
-        </p>
+      <!-- version 1 app container -->
+      <div class="flex-display flex-column-flow flex-align-center uuid-app">
+        <h2 id="heading2">Version 1 UUID Generator</h2>
+        <!-- generate uuid -->
+        <div
+          class="flex-display flex-row-flow flex-center flex-align-center uid-div"
+          style="margin-bottom: 20px">
+          <div
+            class="uuid-container flex-display flex-column-flow flex-center flex-align-center">
+            <span class="uuid-class" style="color: #ff4081">{{ uuidV1 }}</span>
+          </div>
+          <button
+            mat-raised-button
+            (click)="copyGeneratedId('V1')"
+            color="primary">
+            <mat-icon>content_copy</mat-icon> Copy
+          </button>
+        </div>
+
+        <div
+          class="flex-display flex-column-flow flex-align-center"
+          style="margin-bottom: 20px">
+          <button
+            mat-raised-button
+            color="primary"
+            style="margin-bottom: 20px"
+            (click)="generateUUID('V1')">
+            <mat-icon>repeat</mat-icon>
+            Generate Again
+          </button>
+        </div>
+
+        <div
+          class="flex-display flex-column-flow flex-align-center"
+          style="margin-bottom: 10px">
+          <span style="margin-bottom: 15px; font-size: large" class="bold-text"
+            >Bulk Version 1 UUID Generator</span
+          >
+          <mat-form-field appearance="outline">
+            <mat-label>Enter UUIDs Count</mat-label>
+            <input
+              #bulkV1Input
+              type="number"
+              matInput
+              placeholder="Max 1000"
+              value="5"
+              min="0"
+              max="1000" />
+            <button
+              mat-raised-button
+              matTextSuffix=""
+              aria-label="Clear"
+              (click)="generateBulkUUID('V1')">
+              Generate
+            </button>
+          </mat-form-field>
+          <span *ngIf="bulkV1Error" style="color: red"
+            >*Max allowed value is 1000</span
+          >
+          <a href="#" (click)="downloadUUIDs($event, 'V1')"
+            >Download to a file</a
+          >
+        </div>
+
+        <div
+          class="flex-display flex-column-flow flex-center flex-align-center bulk-uuids y-scroll"
+          style="max-height: 200px"
+          *ngIf="v1Ids.length > 0">
+          <span *ngFor="let uuid of v1Ids"> {{ uuid }} </span>
+        </div>
       </div>
+
+      <!-- related tools -->
+      <app-related-tools class="full-width"></app-related-tools>
+
+      <!-- description -->
+      <app-description class="full-width"></app-description>
 
       <!-- tags div -->
       <app-tags></app-tags>

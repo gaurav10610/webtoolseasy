@@ -14,7 +14,10 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { css_beautify } from 'js-beautify';
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
-import { cssformatter as componentConfig } from 'src/environments/component-config';
+import {
+  componentConfig,
+  descriptionData,
+} from 'src/environments/component-config/css-formatter/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
@@ -64,6 +67,8 @@ export class CssFormatterComponent
     this.appContextService.tags = componentConfig.tags;
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
+    this.appContextService.descrptionData = descriptionData;
   }
 
   ngOnInit(): void {
@@ -118,5 +123,9 @@ export class CssFormatterComponent
 
   copyFormattedCss() {
     this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
+  }
+
+  onEncodedDivClick() {
+    this.text1AreaContent.nativeElement.focus();
   }
 }
