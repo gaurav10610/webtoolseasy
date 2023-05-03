@@ -87,7 +87,7 @@ export class PasswordGeneratorComponent
      * List of characters to be excluded from the password
      * @default ""
      */
-    exclude: '',
+    exclude: '~',
     /**
      * Password should include at least one character from each pool
      * @default false
@@ -158,10 +158,7 @@ export class PasswordGeneratorComponent
     const count = this.bulkPasswordInput.nativeElement.value;
     if (count <= 1000) {
       this.bulkPasswordError = false;
-      this.passwordList = [];
-      for (let i = 0; i < count; i++) {
-        this.passwordList.push(generate(this.options));
-      }
+      this.passwordList = generateMultiple(count, this.options);
     } else {
       LogUtils.error('more than 1000');
       this.bulkPasswordError = true;
@@ -217,6 +214,14 @@ export class PasswordGeneratorComponent
    */
   handlePasswordLengthChange(event: any) {
     this.options.length = Number(event.target.value);
+  }
+
+  /**
+   * handles excluded characters change event
+   * @param event
+   */
+  handleExcludedCharsChange(event: any) {
+    this.options.exclude = event.target.value;
   }
 
   /**

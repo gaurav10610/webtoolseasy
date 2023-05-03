@@ -88,7 +88,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Disclaimer',
     blockData: [
-      `Genearted UUIDs are provided as is without any kind of warranty.`,
+      `Generated UUIDs are provided as is without any kind of warranty.`,
     ],
   },
   {

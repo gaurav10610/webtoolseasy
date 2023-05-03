@@ -17,6 +17,12 @@ export enum AppDisplayNames {
 
 export const appDisplayConfig: AppDisplayConfig[] = [
   {
+    applicationId: 'passwordgenerator',
+    displayText: AppDisplayNames.PASSWORD_GENERATOR,
+    iconName: 'password-icon',
+    navigateUrl: '/tools/password-generator',
+  },
+  {
     applicationId: 'videoconverter',
     displayText: AppDisplayNames.VIDEO_CONVERTER,
     iconName: 'video-convert-icon',
@@ -81,11 +87,5 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.CSS_FORMATTER,
     iconName: 'css-icon',
     navigateUrl: '/tools/css-formatter',
-  },
-  {
-    applicationId: 'passwordgenerator',
-    displayText: AppDisplayNames.PASSWORD_GENERATOR,
-    iconName: 'password-icon',
-    navigateUrl: '/tools/password-generator',
   },
 ];
