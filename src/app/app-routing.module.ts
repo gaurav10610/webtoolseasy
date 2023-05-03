@@ -9,6 +9,7 @@ import { JsFormatterModule } from './modules/js-formatter/js-formatter.module';
 import { JsonFormatterModule } from './modules/json-formatter/json-formatter.module';
 import { JsonViewerModule } from './modules/json-viewer/json-viewer.module';
 import { JwtModule } from './modules/jwt/jwt.module';
+import { PasswordGeneratorModule } from './modules/password-generator/password-generator.module';
 import { ScreenRecorderModule } from './modules/screen-recorder/screen-recorder.module';
 import { TextCompareModule } from './modules/text-compare/text-compare.module';
 import { UuidModule } from './modules/uuid/uuid.module';
@@ -28,6 +29,10 @@ const routes: Routes = [
   { path: 'tools/text-compare', loadChildren: () => TextCompareModule },
   { path: 'tools/video-converter', loadChildren: () => VideoConverterModule },
   { path: 'tools/json-viewer', loadChildren: () => JsonViewerModule },
+  {
+    path: 'tools/password-generator',
+    loadChildren: () => PasswordGeneratorModule,
+  },
 ];
 
 @NgModule({

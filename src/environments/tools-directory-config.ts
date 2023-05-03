@@ -12,6 +12,7 @@ export enum AppDisplayNames {
   HTML_FORMATTER = 'HTML Formatter',
   CSS_FORMATTER = 'CSS Formatter',
   JSON_VIEWER = 'JSON Viewer',
+  PASSWORD_GENERATOR = 'Password Generator',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -80,5 +81,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.CSS_FORMATTER,
     iconName: 'css-icon',
     navigateUrl: '/tools/css-formatter',
+  },
+  {
+    applicationId: 'passwordgenerator',
+    displayText: AppDisplayNames.PASSWORD_GENERATOR,
+    iconName: 'password-icon',
+    navigateUrl: '/tools/password-generator',
   },
 ];

@@ -73,5 +73,9 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'video-convert-icon',
       iconRelativeUrl: 'video-convert.svg',
     },
+    {
+      iconName: 'password-icon',
+      iconRelativeUrl: 'password.svg',
+    },
   ],
 };
