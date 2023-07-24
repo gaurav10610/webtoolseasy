@@ -13,6 +13,7 @@ export enum AppDisplayNames {
   CSS_FORMATTER = 'CSS Formatter',
   JSON_VIEWER = 'JSON Viewer',
   PASSWORD_GENERATOR = 'Password Generator',
+  BASE64_ENCODE = 'Base64 Encode',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -87,5 +88,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.CSS_FORMATTER,
     iconName: 'css-icon',
     navigateUrl: '/tools/css-formatter',
+  },
+  {
+    applicationId: 'base64encoder',
+    displayText: AppDisplayNames.BASE64_ENCODE,
+    iconName: 'file-encode-icon',
+    navigateUrl: '/tools/base64-encode',
   },
 ];
