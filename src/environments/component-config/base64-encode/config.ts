@@ -1,16 +1,16 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'File Base64 Encoder',
+  mainHeading: 'File to Base64 Encode',
   subHeading: 'Encode File to Base64 Format',
   navigationUrl: '/tools/base64-encode',
   pageTitle: 'File to Base64 | Base64 Encode | Base64 Converter | Base64',
   metaTags: [
     {
       name: 'description',
-      content: 'Encode files to Base64 format using our free online tool.',
+      content:
+        'Free online tool to encode file to Base64. Base64 encoder. Convert any file to base64',
     },
     {
       name: 'author',
@@ -19,11 +19,10 @@ export const componentConfig: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'css formatter',
-    'css beautifier',
-    'css prettify',
-    'css formatter online',
-    'css beautifier online',
+    'base64 encode',
+    'base64 encode online',
+    'file to base64 encoder',
+    'online base64 converter',
   ],
   icons: [
     {
@@ -38,93 +37,68 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
     },
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsformatter',
-      displayText: AppDisplayNames.JS_FORMATTER,
-      iconName: 'js-icon',
-      navigateUrl: '/tools/js-formatter',
-    },
-    {
-      applicationId: 'jsonformatter',
-      displayText: AppDisplayNames.JSON_FORMATTER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
-      applicationId: 'jsonviewer',
-      displayText: AppDisplayNames.JSON_VIEWER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-viewer',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
   ],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use CSS Formatter / Beautifier?',
+    heading: 'How to Encode File to Base64?',
     listData: [
-      `Paste unformatted / minified CSS in unformatted CSS block and CSS will be formatted / beautified automatically.`,
+      `Drag and Drop or browse file in order to encode it to Base64`,
+      `File will be encoded to Base64 automatically after selecting the file`,
+      `Base64 data can be copied to clipboard using copy buttons`,
     ],
   },
   {
-    heading: 'Why choose our Online CSS Formatter Tool?',
+    heading: 'Output Formats',
     listData: [
-      `Improves readability: Clean and organized CSS is easier to read and understand, making it easier for you or your team to work with.`,
-      `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
-      `Supports collaboration: Clean, organized CSS makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
+      `Plain Base64 Text => IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
+      `Data URI => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
+    ],
+  },
+  {
+    heading: 'Why choose our Online File to Base64 Encoder?',
+    listData: [
+      `Intuitive UX: Easy to use interface to encode file to base64`,
+      `Saves time: Fast and secure file to Base64 conversion`,
+      `Cross-platform: Cross-platform file to Base64 encoding tool`,
       `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
     ],
   },
   {
-    heading: 'What is CSS or Cascading Style Sheets?',
+    heading: 'What is Base64?',
     blockData: [
-      `Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in a markup language such as HTML or XML (including XML dialects such as SVG, MathML or XHTML). CSS is a cornerstone technology of the World Wide Web, alongside HTML and JavaScript.`,
+      `Base64 is a binary-to-text encoding scheme that allows binary data to be represented as a sequence of printable ASCII characters. It is commonly used to encode binary data, such as images, audio, video, and other types of files, so that it can be transmitted over text-based protocols, like email or HTTP, which may not reliably support binary data.`,
+      `The name "Base64" comes from the fact that it uses a set of 64 different printable characters, which consist of uppercase and lowercase letters (A-Z, a-z), numbers (0-9), and two additional special characters, usually '+' and '/'. The padding character '=' is used to ensure that the encoded output is a multiple of 4 characters, as the encoding is done in groups of 3 bytes.`,
+      `The encoding process involves breaking the binary data into 6-bit chunks and converting them into their corresponding ASCII characters according to the Base64 encoding table. Each group of 3 bytes (24 bits) is then represented by 4 Base64 characters. Decoding Base64 is the reverse process, where the ASCII characters are converted back to their original binary representation.`,
+      `Base64 encoding is widely used in various applications, such as: Email attachments, Data transmission, Data storage, Web development`,
+      `It's important to note that Base64 is not a secure encryption method, as it is easily reversible. Its main purpose is to facilitate the transport and storage of binary data in environments that only support text-based formats.`,
     ],
   },
   {
     heading: 'Key features',
     listData: [
-      `Easy to use: Our user-friendly interface makes it simple for anyone to format their CSS with just pasting it here.`,
-      `Real-time formatting: Our tool formats your CSS in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your CSS into our platform and get a clean, organized, and optimized result.`,
-      `Formatted / Beautified CSS can be saved or copied easily.`,
+      `Fast and secure file to Base64 conversion`,
+      `Free tool to convert file to Base64`,
+      `Base64 encoding for all file types`,
+      `File to Base64 conversion with high data integrity`,
+      `Cross-platform file to Base64 encoding tool`,
     ],
   },
   {
     heading: 'References',
     links: [
       {
-        displayText:
-          'Read more about CSS or Cascading Style Sheet at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/CSS',
+        displayText: 'Read more about Base64 at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/Base64',
       },
       {
-        displayText: 'RFC 2318 - The text/css Media Type',
-        url: 'https://datatracker.ietf.org/doc/html/rfc2318',
+        displayText: 'RFC 4648 - Base 64 Encoding',
+        url: 'https://datatracker.ietf.org/doc/html/rfc4648#section-4',
       },
       {
-        displayText: 'CSS Introduction at w3schools.com',
-        url: 'https://www.w3schools.com/css/css_intro.asp',
+        displayText: 'Base64 Docs - Mozilla',
+        url: 'https://developer.mozilla.org/en-US/docs/Glossary/Base64',
       },
     ],
   },

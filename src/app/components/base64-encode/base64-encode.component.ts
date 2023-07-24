@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  NgZone,
   OnInit,
   PLATFORM_ID,
   Renderer2,
@@ -14,7 +13,7 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { descriptionData } from 'src/environments/component-config/css-formatter/config';
+import { descriptionData } from 'src/environments/component-config/base64-encode/config';
 import { componentConfig } from 'src/environments/component-config/base64-encode/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 
