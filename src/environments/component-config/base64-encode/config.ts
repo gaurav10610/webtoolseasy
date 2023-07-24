@@ -93,7 +93,7 @@ export const descriptionData: DescriptionBlock[] = [
         url: 'https://en.wikipedia.org/wiki/Base64',
       },
       {
-        displayText: 'RFC 4648 - Base 64 Encoding',
+        displayText: 'RFC 4648 - Base64 Encoding',
         url: 'https://datatracker.ietf.org/doc/html/rfc4648#section-4',
       },
       {
