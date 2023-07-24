@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   Inject,
+  NgZone,
   OnInit,
   PLATFORM_ID,
   Renderer2,
@@ -14,7 +15,8 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import { descriptionData } from 'src/environments/component-config/css-formatter/config';
-import { componentConfig } from 'src/environments/component-config/home/config';
+import { componentConfig } from 'src/environments/component-config/base64-encode/config';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-base64-encode',
@@ -24,6 +26,8 @@ import { componentConfig } from 'src/environments/component-config/home/config';
 export class Base64EncodeComponent extends BaseComponent implements OnInit {
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
+
+  typeDefination: string | undefined;
 
   // base64 data
   base64Data: string | undefined;
@@ -36,7 +40,8 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private clipboard: Clipboard
   ) {
     super();
     this.loadCustomIcons(
@@ -68,7 +73,7 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
   }
 
   async selectFiles(event: any) {
-    LogUtils.info(event.target.files[0]);
+    this.encodeFileToBase64(event.target.files[0]);
   }
 
   /**
@@ -78,6 +83,18 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
   async dropHandler(event: any) {
     // Prevent default behavior (Prevent file from being opened)
     event.preventDefault();
+    if (event.dataTransfer.items) {
+      // Use DataTransferItemList interface to access the file(s)
+      [...event.dataTransfer.items]
+        .filter(item => item.kind === 'file')
+        .map(item => item.getAsFile())
+        .forEach(async file => await this.encodeFileToBase64(file));
+    } else {
+      // Use DataTransfer interface to access the file(s)
+      [...event.dataTransfer.files].forEach(
+        async file => await this.encodeFileToBase64(file)
+      );
+    }
   }
 
   /**
@@ -89,5 +106,33 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
     event.preventDefault();
   }
 
-  copyBase64Data() {}
+  /**
+   * encode file to base64
+   * @param file
+   */
+  async encodeFileToBase64(file: File) {
+    const fileReader: FileReader = new FileReader();
+
+    fileReader.addEventListener(
+      'load',
+      () => {
+        this.base64Data = <string>fileReader.result;
+      },
+      false
+    );
+
+    fileReader.readAsDataURL(file);
+  }
+
+  /**
+   * copy base64 data
+   * @param type
+   */
+  copyBase64Data(type: string) {
+    if (type === 'base64') {
+      this.clipboard.copy(<string>this.base64Data?.split(',')[1]);
+    } else if (type === 'uri') {
+      this.clipboard.copy(<string>this.base64Data);
+    }
+  }
 }

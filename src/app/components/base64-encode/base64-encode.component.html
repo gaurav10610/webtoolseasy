@@ -44,10 +44,50 @@
       <div
         *ngIf="base64Data !== undefined"
         class="full-width flex-display base64-data">
-        <div class="data-div div-border flex-full-height">{{ base64Data }}</div>
-        <button mat-raised-button (click)="copyBase64Data()" color="primary">
-          <mat-icon>content_copy</mat-icon> Copy Base64
-        </button>
+        <!-- copy buttons -->
+        <div
+          class="flex-display flex-row-flow"
+          style="margin-bottom: 10px; justify-content: flex-end">
+          <!-- <button
+            mat-button
+            class="copy-button"
+            (click)="copyBase64Data('base64')">
+            copy base64
+          </button>
+          <button mat-button (click)="copyBase64Data('uri')">
+            copy data uri
+          </button> -->
+          <button
+            mat-stroked-button
+            (click)="copyBase64Data('base64')"
+            color="accent"
+            class="copy-button">
+            Copy Base64
+          </button>
+          <button
+            mat-stroked-button
+            (click)="copyBase64Data('uri')"
+            color="accent">
+            Copy Data URI
+          </button>
+        </div>
+
+        <!-- base64 data card -->
+        <mat-card style="border: 1px solid lightgrey">
+          <mat-card-header class="data-heading">
+            <mat-card-title
+              ><h3 style="font-size: 90%; font-weight: 700">
+                Base64 Data
+              </h3></mat-card-title
+            >
+          </mat-card-header>
+
+          <mat-card-content style="margin-top: 10px">
+            <div style="overflow-wrap: anywhere">
+              {{ base64Data.split(',')[1] }}
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
 
       <!-- description -->

@@ -77,5 +77,9 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'password-icon',
       iconRelativeUrl: 'password.svg',
     },
+    {
+      iconName: 'file-encode-icon',
+      iconRelativeUrl: 'file-encode.svg',
+    },
   ],
 };

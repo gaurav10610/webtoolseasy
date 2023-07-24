@@ -13,29 +13,19 @@
 
 .base64-data {
   margin-top: 20px;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-.data-div {
-  padding: 16px;
-  border-radius: 5px;
-  min-height: 100px;
-  overflow-wrap: anywhere;
+.copy-button {
+  margin-right: 10px;
 }
 
-@media screen and (min-width: 735px) {
-  .data-div {
-    margin-right: 10px;
-  }
+.data-heading {
+  border-bottom: 1px solid lightgrey;
+  background: whitesmoke;
 }
 
 @media screen and (max-width: 735px) {
-  .data-div {
-    margin-bottom: 10px;
-  }
-  .base64-data {
-    flex-direction: column;
-  }
   .file-area-width {
     width: 85%;
   }
