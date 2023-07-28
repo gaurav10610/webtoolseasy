@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { Base64EncodeRoutingModule } from './base64-encode-routing.module';
-import { Base64EncodeComponent } from 'src/app/components/base64-encode/base64-encode.component';
+import { Base64DecodeRoutingModule } from './base64-decode-routing.module';
+import { Base64DecodeComponent } from 'src/app/components/base64-decode/base64-decode.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,10 +13,10 @@ import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 
 @NgModule({
-  declarations: [Base64EncodeComponent],
+  declarations: [Base64DecodeComponent],
   imports: [
     CommonModule,
-    Base64EncodeRoutingModule,
+    Base64DecodeRoutingModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
@@ -27,4 +27,4 @@ import { DescriptionModule } from 'src/app/modules/description/description.modul
     DescriptionModule,
   ],
 })
-export class Base64EncodeModule {}
+export class Base64DecodeModule {}

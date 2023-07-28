@@ -19,6 +19,10 @@ import {
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
+
+/**
+ * @TODO use fflate instead
+ */
 import * as JSZip from 'jszip';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';

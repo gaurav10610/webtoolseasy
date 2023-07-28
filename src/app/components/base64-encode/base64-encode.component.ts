@@ -13,8 +13,10 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { descriptionData } from 'src/environments/component-config/base64-encode/config';
-import { componentConfig } from 'src/environments/component-config/base64-encode/config';
+import {
+  descriptionData,
+  componentConfig,
+} from 'src/environments/component-config/base64-encode/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
