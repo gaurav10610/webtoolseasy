@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  NgZone,
   OnInit,
   PLATFORM_ID,
   Renderer2,
@@ -57,7 +56,6 @@ export class UuidComponent
     private domSanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: string,
     private appContextService: AppContextService,
-    private zoneRef: NgZone,
     private fileService: FileService,
     private renderer: Renderer2
   ) {

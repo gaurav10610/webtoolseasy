@@ -18,9 +18,7 @@ export class HomeComponent extends BaseComponent implements OnInit {
   /**
    * application config for composing UI
    */
-  appsConfig: AppDisplayConfig[] = appDisplayConfig.filter(
-    appConfig => appConfig.applicationId !== 'soon'
-  );
+  appsConfig: AppDisplayConfig[] = appDisplayConfig;
 
   constructor(
     private titleService: Title,
