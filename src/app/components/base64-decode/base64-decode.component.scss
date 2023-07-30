@@ -1,5 +1,5 @@
-.file-drop-area {
-  padding: 30px;
+.div-label {
+  font-size: large;
 }
 
 .div-border {
@@ -7,26 +7,14 @@
   border-radius: 10px;
 }
 
-.file-area-width {
-  width: 95%;
-}
-
 .base64-data {
   margin-top: 20px;
   flex-direction: column;
 }
 
-.copy-button {
-  margin-right: 10px;
-}
-
-.data-heading {
-  border-bottom: 1px solid lightgrey;
-  background: whitesmoke;
+[contenteditable]:focus {
+  outline: 0px solid transparent;
 }
 
 @media screen and (max-width: 735px) {
-  .file-area-width {
-    width: 85%;
-  }
 }

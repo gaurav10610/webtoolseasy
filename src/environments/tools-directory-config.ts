@@ -99,7 +99,7 @@ export const appDisplayConfig: AppDisplayConfig[] = [
   {
     applicationId: 'base64decoder',
     displayText: AppDisplayNames.BASE64_DECODE,
-    iconName: 'file-encode-icon',
+    iconName: 'file-decode-icon',
     navigateUrl: '/tools/base64-decode',
   },
 ];

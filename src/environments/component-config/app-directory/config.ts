@@ -83,8 +83,8 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'file-encode.svg',
     },
     {
-      iconName: 'file-encode-icon',
-      iconRelativeUrl: 'file-encode.svg',
+      iconName: 'file-decode-icon',
+      iconRelativeUrl: 'file-decode.svg',
     },
   ],
 };

@@ -131,7 +131,7 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
    */
   copyBase64Data(type: string) {
     if (type === 'base64') {
-      this.clipboard.copy(<string>this.base64Data?.split(',')[1]);
+      this.clipboard.copy(<string>this.base64Data?.split(',').pop());
     } else if (type === 'uri') {
       this.clipboard.copy(<string>this.base64Data);
     }

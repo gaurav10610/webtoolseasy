@@ -50,16 +50,16 @@
           style="margin-bottom: 10px; justify-content: flex-end">
           <button
             mat-stroked-button
-            (click)="copyBase64Data('base64')"
+            (click)="copyBase64Data('uri')"
             color="accent"
             class="copy-button">
-            Copy Base64
+            Copy Base64 Data URI
           </button>
           <button
             mat-stroked-button
-            (click)="copyBase64Data('uri')"
+            (click)="copyBase64Data('base64')"
             color="accent">
-            Copy Data URI
+            Copy Base64
           </button>
         </div>
 
@@ -73,9 +73,11 @@
             >
           </mat-card-header>
 
-          <mat-card-content style="margin-top: 10px">
+          <mat-card-content
+            style="margin-top: 10px; max-height: 200px"
+            class="y-scroll">
             <div style="overflow-wrap: anywhere">
-              {{ base64Data.split(',')[1] }}
+              {{ base64Data }}
             </div>
           </mat-card-content>
         </mat-card>
