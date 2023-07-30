@@ -65,6 +65,7 @@ export class Base64DecodeComponent extends BaseComponent implements OnInit {
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.descrptionData = descriptionData;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
   }
 
   ngOnInit(): void {
@@ -93,7 +94,7 @@ export class Base64DecodeComponent extends BaseComponent implements OnInit {
 
   async decodeBase64(): Promise<void> {
     /**
-     * base64 content in format data:application/pdf:base64,assafcasfewfewf
+     * base64 content in format data:text/csv;base64,assafcasfewfewf
      */
     const base64Content: string =
       this.text1AreaContent.nativeElement.innerText.trim();
