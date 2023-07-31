@@ -84,6 +84,11 @@ export class VideoConverterComponent
   subscriptions: Subscription[];
   conversionLogs: string[];
 
+  /**
+   * valid video formats
+   */
+  validVideoFormats: string = '.mp4,.webm,.ogv,.mkv,.ogm';
+
   constructor(
     private titleService: Title,
     private metaService: Meta,

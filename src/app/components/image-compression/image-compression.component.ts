@@ -58,6 +58,11 @@ export class ImageCompressionComponent
   activeDialog: MatDialogRef<any> | undefined;
   appId: string = 'imagecompress';
 
+  /**
+   * valid image formats
+   */
+  validImageFormats: string = '.jpg,.jpeg,.png';
+
   constructor(
     private titleService: Title,
     private metaService: Meta,

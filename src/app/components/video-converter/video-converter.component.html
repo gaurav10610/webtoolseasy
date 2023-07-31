@@ -15,7 +15,8 @@
         type="file"
         style="display: none"
         multiple
-        (change)="selectFiles($event)" />
+        (change)="selectFiles($event)"
+        [accept]="validVideoFormats" />
 
       <!-- file drop area -->
       <div
