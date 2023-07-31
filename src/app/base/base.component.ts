@@ -14,7 +14,7 @@ export abstract class BaseComponent {
     this.tags = componentConfig.tags;
   }
 
-  loadCustomIcons(
+  async loadCustomIcons(
     icons: IconConfig[],
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
@@ -49,7 +49,7 @@ export abstract class BaseComponent {
    * 2. meta
    * 3. canonical url
    */
-  updatePageMetaData(
+  async updatePageMetaData(
     applicationConfig: ApplicationConfig,
     titleService: Title,
     metaService: Meta,
