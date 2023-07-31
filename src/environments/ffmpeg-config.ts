@@ -1,13 +1,5 @@
 import { FFMpegOutputConfig } from 'src/app/@types/ffmpeg';
 
-export const FFMPEG_SUPPORTED_INPUT_VIDEO_FORMATS = [
-  'mp4',
-  'webm',
-  'ogv',
-  'mkv',
-  'ogm',
-];
-
 export const FFMPEG_OUTPUT_CONFIG: FFMpegOutputConfig = {
   audio: [
     {

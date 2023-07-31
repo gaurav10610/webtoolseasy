@@ -4,7 +4,6 @@ export interface BaseFileData {
   inProgress: boolean;
   type: FileDataType;
   name: string;
-  isValid: boolean;
   error?: string;
 }
 

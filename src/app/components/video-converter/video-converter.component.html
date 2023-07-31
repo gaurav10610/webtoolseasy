@@ -161,7 +161,7 @@
                 appearance="outline"
                 color="primary"
                 style="margin-right: 10px; margin-bottom: -1.25em"
-                *ngIf="file.isValid && !file.inProgress && !isMobile">
+                *ngIf="!file.inProgress && !isMobile">
                 <mat-label>Select format</mat-label>
                 <mat-select
                   disableRipple
@@ -179,14 +179,13 @@
                 svgIcon="settings-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="file.isValid && isMobile && !file.inProgress"
+                *ngIf="isMobile && !file.inProgress"
                 matTooltip="change conversion settings"
                 (click)="openSettings(file)"></mat-icon>
               <mat-icon
                 svgIcon="play-icon"
                 class="pointer-cursor"
                 *ngIf="
-                  file.isValid &&
                   !file.inProgress &&
                   !file.convertedFileData.has(file.targetFormat)
                 "
@@ -200,7 +199,7 @@
                 matTooltip="download converted video"></mat-icon>
               <mat-icon
                 class="pointer-cursor"
-                *ngIf="!file.isValid"
+                *ngIf="file.error"
                 color="warn"
                 matTooltip="only limited video formats can be converted"
                 style="transform: scale(1.5)"

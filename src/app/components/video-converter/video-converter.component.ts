@@ -43,10 +43,7 @@ import {
 } from 'src/app/@types/popup-form';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PopupFormComponent } from 'src/app/components/popup-form/popup-form.component';
-import {
-  FFMPEG_OUTPUT_CONFIG,
-  FFMPEG_SUPPORTED_INPUT_VIDEO_FORMATS,
-} from 'src/environments/ffmpeg-config';
+import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 
@@ -323,13 +320,9 @@ export class VideoConverterComponent
         name: `${this.ffmpegService.getPlainFileName(
           formattedName
         )}_${id}.${extension}`,
-        isValid: this.isValidFileFormat(extension),
         convertProgress: 0,
         targetFormat: 'mp3',
         convertedFileData: new Map(),
-        error: this.isValidFileFormat(extension)
-          ? undefined
-          : this.ERROR_MESSAGE,
         conversionErrors: new Map(),
       };
       this.fileStore.set(videoFileData.id, videoFileData);
@@ -343,7 +336,6 @@ export class VideoConverterComponent
   async convertAllVideos() {
     for (let videoFileData of this.fileStore.values()) {
       if (
-        videoFileData.isValid &&
         !videoFileData.inProgress &&
         !videoFileData.convertedFileData.has(videoFileData.targetFormat)
       ) {
@@ -374,7 +366,6 @@ export class VideoConverterComponent
   async downloadAll(): Promise<void> {
     for (let videoFileData of this.fileStore.values()) {
       if (
-        videoFileData.isValid &&
         !videoFileData.inProgress &&
         videoFileData.convertedFileData.has(videoFileData.targetFormat)
       ) {
@@ -437,34 +428,6 @@ export class VideoConverterComponent
     );
     this.renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
-  }
-
-  /**
-   * validate if video file is of valid format or not
-   * @param fileExtension
-   * @returns
-   */
-  isValidFileFormat(fileExtension: string): boolean {
-    return FFMPEG_SUPPORTED_INPUT_VIDEO_FORMATS.includes(
-      fileExtension.toLowerCase()
-    );
-  }
-
-  /**
-   * sorting the list to keep invalid files at one end
-   */
-  async sortFiles() {
-    this.fileDisplayList = this.fileDisplayList.sort((value1, value2) => {
-      if (value2.isValid) {
-        return 1;
-      }
-
-      if (value1.isValid) {
-        return -1;
-      }
-
-      return 0;
-    });
   }
 
   /**
@@ -576,7 +539,6 @@ export class VideoConverterComponent
     for (const file of event.target.files) {
       await this.addFileToConvert(file);
     }
-    await this.sortFiles();
   }
 
   openFileDialog() {
@@ -614,6 +576,5 @@ export class VideoConverterComponent
         async file => await this.addFileToConvert(file)
       );
     }
-    await this.sortFiles();
   }
 }

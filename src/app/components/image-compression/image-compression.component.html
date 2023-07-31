@@ -122,14 +122,13 @@
                 svgIcon="settings-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="file.isValid"
                 matTooltip="change compression settings"
                 (click)="openSettingsDialog(file)"></mat-icon>
               <mat-icon
                 svgIcon="play-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="!file.isCompressed && file.isValid"
+                *ngIf="!file.isCompressed"
                 (click)="compressImage(file)"
                 matTooltip="compress image"></mat-icon>
               <mat-icon
@@ -140,7 +139,7 @@
                 matTooltip="download compressed image"></mat-icon>
               <mat-icon
                 class="pointer-cursor"
-                *ngIf="!file.isValid"
+                *ngIf="file.error"
                 color="warn"
                 matTooltip="only image files can be compressed"
                 style="transform: scale(1.5)"
