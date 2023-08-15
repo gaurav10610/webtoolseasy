@@ -13,9 +13,18 @@ import { VideoFileData } from 'src/app/@types/file';
 import { QueueStorage } from 'src/app/custom-datastructures/QueueStorage';
 import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { FSNode } from '@ffmpeg/ffmpeg/dist/esm/types';
-import { toBlobURL, fetchFile } from '@ffmpeg/util';
+import { FFmpeg } from 'src/app/packages/ffmpeg/src';
+import { fetchFile, toBlobURL } from 'src/app/packages/util/src';
+import { FSNode } from 'src/app/packages/ffmpeg/src/types';
+// import { FFmpeg } from '@ffmpeg/ffmpeg';
+// import { toBlobURL, fetchFile, importScript } from '@ffmpeg/util';
+// import { FSNode } from '@ffmpeg/ffmpeg/dist/esm/types';
+
+// declare var FFmpeg: any;
+// declare var toBlobURL: any;
+// declare var FSNode: any;
+// declare var fetchFile: any;
+// declare var importScript: any;
 
 @Injectable({
   providedIn: 'root',
