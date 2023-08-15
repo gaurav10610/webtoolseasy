@@ -15,6 +15,7 @@ import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { FSNode } from '@ffmpeg/ffmpeg/dist/esm/types';
+import { toBlobURL, fetchFile } from '@ffmpeg/util';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +63,7 @@ export class FfmpegService {
 
     this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
 
-    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/umd';
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm';
     await this.ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
       wasmURL: await toBlobURL(
@@ -269,7 +270,7 @@ export class FfmpegService {
    * @param videoFileData
    */
   async writeFileInFFMpegBuffer(videoFileData: VideoFileData): Promise<void> {
-    this.ffmpeg.writeFile(
+    await this.ffmpeg.writeFile(
       videoFileData.name,
       await fetchFile(videoFileData.file)
     );
@@ -305,17 +306,4 @@ export class FfmpegService {
     }
     return FFMpegMediaFormatType.VIDEO;
   }
-}
-function toBlobURL(
-  arg0: string,
-  arg1: string
-): string | PromiseLike<string | undefined> | undefined {
-  throw new Error('Function not implemented.');
-}
-function fetchFile(
-  file: File
-):
-  | import('@ffmpeg/ffmpeg/dist/esm/types').FileData
-  | PromiseLike<import('@ffmpeg/ffmpeg/dist/esm/types').FileData> {
-  throw new Error('Function not implemented.');
 }
