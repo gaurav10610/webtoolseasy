@@ -93,7 +93,7 @@ export class FfmpegService {
    * flush ffmpeg file system
    */
   async flushBuffer() {
-    if (this.ffmpeg && this.ffmpeg.loaded) {
+    if (this.ffmpeg) {
       const files: FSNode[] = await this.ffmpeg.listDir('/');
       for (const fileNode of files) {
         LogUtils.info(`removing ffmpeg file: ${fileNode.name}`);
@@ -106,7 +106,7 @@ export class FfmpegService {
    * handle conversion logs
    * @param logParams
    */
-  handleLogs(logParams: LogEvent) {
+  async handleLogs(logParams: LogEvent) {
     this.convertLogEvent.emit({
       ...logParams,
     });
@@ -123,8 +123,8 @@ export class FfmpegService {
       });
 
       // free up the buffer memory
-      this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
-      this.ffmpeg.deleteFile(this.currentFile!.name);
+      await this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
+      await this.ffmpeg.deleteFile(this.currentFile!.name);
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -169,8 +169,8 @@ export class FfmpegService {
       });
 
       // free up the buffer memory
-      this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
-      this.ffmpeg.deleteFile(this.currentFile!.name);
+      await this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
+      await this.ffmpeg.deleteFile(this.currentFile!.name);
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -311,7 +311,7 @@ export class FfmpegService {
    * @param fileName
    */
   async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
-    return <Uint8Array>await this.ffmpeg.readFile('readFile', fileName);
+    return <Uint8Array>await this.ffmpeg.readFile(fileName);
   }
 
   /**

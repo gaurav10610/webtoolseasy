@@ -182,7 +182,7 @@ export class VideoConverterComponent
     this.zipBuilder = new JSZip();
   }
 
-  ngOnDestroy() {
+  async ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
 
@@ -191,7 +191,7 @@ export class VideoConverterComponent
      */
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions = [];
-    this.ffmpegService.flushBuffer();
+    await this.ffmpegService.flushBuffer();
   }
 
   checkCompatibility() {
@@ -263,7 +263,7 @@ export class VideoConverterComponent
       this.zoneRef.run(() => {
         this.isDownloadAllActive = true;
       });
-      LogUtils.info(`converted file received with id: ${eventData.fileId}`);
+      // LogUtils.info(`converted file received with id: ${eventData.fileId}`);
       this.fileStore
         .get(eventData.fileId)!
         .convertedFileData.set(eventData.targetFormat, eventData.fileData);
