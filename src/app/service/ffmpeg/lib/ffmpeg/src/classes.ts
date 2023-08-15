@@ -16,6 +16,7 @@ import {
 } from './types';
 import { getMessageID } from './utils';
 import { ERROR_TERMINATED, ERROR_NOT_LOADED } from './errors';
+import { environment } from 'src/environments/environment';
 
 /**
  * Provides APIs to interact with ffmpeg web worker.
@@ -165,7 +166,7 @@ export class FFmpeg {
       //   type: 'module',
       // });
       this.#worker = new Worker(
-        'http://localhost:4200/assets/@ffmpeg/ffmpeg/dist/esm/worker.js',
+        `${environment.hostname}assets/@ffmpeg/ffmpeg/dist/esm/worker.js`,
         {
           type: 'module',
         }

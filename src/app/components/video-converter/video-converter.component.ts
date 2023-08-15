@@ -236,7 +236,9 @@ export class VideoConverterComponent
    */
   async handleConverionProgress(eventData: ConvertProgressEvent) {
     this.zoneRef.run(() => {
-      LogUtils.info(`file progress event for file id: ${eventData.fileId}`);
+      LogUtils.info(
+        `[conversion progress] ( progress: ${eventData.progress}, file id: ${eventData.fileId})`
+      );
       const videoFileData: VideoFileData = this.fileStore.get(
         eventData.fileId
       )!;
@@ -285,7 +287,9 @@ export class VideoConverterComponent
    * @param logParams
    */
   handleFFMpegLog(logParams: ConvertLogEvent) {
-    LogUtils.info(`FFMPEG LOGS => ${logParams.message}`);
+    LogUtils.info(
+      `[FMPEG LOGS]: ( type: ${logParams.type}, message: ${logParams.message} )`
+    );
     if (this.isMobile) {
       this.conversionLogs.push(logParams.message);
     }

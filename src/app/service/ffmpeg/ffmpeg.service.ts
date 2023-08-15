@@ -13,9 +13,13 @@ import { VideoFileData } from 'src/app/@types/file';
 import { QueueStorage } from 'src/app/custom-datastructures/QueueStorage';
 import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
-import { FFmpeg } from 'src/app/packages/ffmpeg/src';
-import { fetchFile, toBlobURL } from 'src/app/packages/util/src';
-import { FSNode } from 'src/app/packages/ffmpeg/src/types';
+import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg/src';
+import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util/src';
+import {
+  FSNode,
+  LogEvent,
+  ProgressEvent,
+} from 'src/app/service/ffmpeg/lib/ffmpeg/src/types';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +64,6 @@ export class FfmpegService {
     this.ffmpeg = new FFmpeg();
 
     this.ffmpeg.on('log', this.handleLogs.bind(this));
-
     this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
 
     // const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm';
@@ -86,10 +89,16 @@ export class FfmpegService {
     });
   }
 
+  /**
+   * flush ffmpeg file system
+   */
   async flushBuffer() {
     if (this.ffmpeg && this.ffmpeg.loaded) {
       const files: FSNode[] = await this.ffmpeg.listDir('/');
-      files.forEach(fileNode => this.ffmpeg.deleteFile(fileNode.name));
+      for (const fileNode of files) {
+        LogUtils.info(`removing ffmpeg file: ${fileNode.name}`);
+        await this.ffmpeg.deleteFile(fileNode.name);
+      }
     }
   }
 
@@ -97,7 +106,7 @@ export class FfmpegService {
    * handle conversion logs
    * @param logParams
    */
-  handleLogs(logParams: any) {
+  handleLogs(logParams: LogEvent) {
     this.convertLogEvent.emit({
       ...logParams,
     });
@@ -136,8 +145,8 @@ export class FfmpegService {
    * handles file progress
    * @param progressParams
    */
-  async handleFFMpegProgress(progressParams: any) {
-    const progress: number = Number((progressParams.ratio * 100).toFixed(2));
+  async handleFFMpegProgress(progressParams: ProgressEvent) {
+    const progress: number = Number((progressParams.progress * 100).toFixed(2));
     this.progressEvent.emit({
       fileId: this.currentFile!.id,
       progress,
