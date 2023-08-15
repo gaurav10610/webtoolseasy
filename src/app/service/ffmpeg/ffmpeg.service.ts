@@ -16,15 +16,6 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { FFmpeg } from 'src/app/packages/ffmpeg/src';
 import { fetchFile, toBlobURL } from 'src/app/packages/util/src';
 import { FSNode } from 'src/app/packages/ffmpeg/src/types';
-// import { FFmpeg } from '@ffmpeg/ffmpeg';
-// import { toBlobURL, fetchFile, importScript } from '@ffmpeg/util';
-// import { FSNode } from '@ffmpeg/ffmpeg/dist/esm/types';
-
-// declare var FFmpeg: any;
-// declare var toBlobURL: any;
-// declare var FSNode: any;
-// declare var fetchFile: any;
-// declare var importScript: any;
 
 @Injectable({
   providedIn: 'root',
@@ -72,12 +63,25 @@ export class FfmpegService {
 
     this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
 
-    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm';
+    // const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm';
+    // await this.ffmpeg.load({
+    //   coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+    //   wasmURL: await toBlobURL(
+    //     `${baseURL}/ffmpeg-core.wasm`,
+    //     'application/wasm'
+    //   ),
+    // });
+
+    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm';
     await this.ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
       wasmURL: await toBlobURL(
         `${baseURL}/ffmpeg-core.wasm`,
         'application/wasm'
+      ),
+      workerURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.worker.js`,
+        'text/javascript'
       ),
     });
   }
