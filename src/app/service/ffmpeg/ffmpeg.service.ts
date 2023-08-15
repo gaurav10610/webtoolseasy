@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { createFFmpeg, fetchFile, FFmpeg } from '@ffmpeg/ffmpeg';
 import {
   ConvertEvent,
   ConvertEventType,
@@ -14,6 +13,8 @@ import { VideoFileData } from 'src/app/@types/file';
 import { QueueStorage } from 'src/app/custom-datastructures/QueueStorage';
 import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { FSNode } from '@ffmpeg/ffmpeg/dist/esm/types';
 
 @Injectable({
   providedIn: 'root',
@@ -55,20 +56,26 @@ export class FfmpegService {
   }
 
   async initializeFFMpeg() {
-    this.ffmpeg = createFFmpeg({
-      log: false,
+    this.ffmpeg = new FFmpeg();
+
+    this.ffmpeg.on('log', this.handleLogs.bind(this));
+
+    this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
+
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/umd';
+    await this.ffmpeg.load({
+      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+      wasmURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.wasm`,
+        'application/wasm'
+      ),
     });
-
-    this.ffmpeg.setLogger(this.handleLogs.bind(this));
-
-    this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
-    await this.ffmpeg.load();
   }
 
   async flushBuffer() {
-    if (this.ffmpeg && this.ffmpeg.isLoaded()) {
-      const files: string[] = this.ffmpeg.FS('readdir', '/');
-      files.forEach(fileName => this.ffmpeg.FS('unlink', fileName));
+    if (this.ffmpeg && this.ffmpeg.loaded) {
+      const files: FSNode[] = await this.ffmpeg.listDir('/');
+      files.forEach(fileNode => this.ffmpeg.deleteFile(fileNode.name));
     }
   }
 
@@ -93,8 +100,8 @@ export class FfmpegService {
       });
 
       // free up the buffer memory
-      this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
-      this.ffmpeg.FS('unlink', this.currentFile!.name);
+      this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
+      this.ffmpeg.deleteFile(this.currentFile!.name);
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -115,7 +122,7 @@ export class FfmpegService {
    * handles file progress
    * @param progressParams
    */
-  handleFFMpegProgress(progressParams: any) {
+  async handleFFMpegProgress(progressParams: any) {
     const progress: number = Number((progressParams.ratio * 100).toFixed(2));
     this.progressEvent.emit({
       fileId: this.currentFile!.id,
@@ -132,13 +139,15 @@ export class FfmpegService {
       this.convertEvent.emit({
         fileId: this.currentFile!.id,
         type: ConvertEventType.END,
-        fileData: this.ffmpeg.FS('readFile', this.currentFile!.targetFileName!),
+        fileData: <Uint8Array>(
+          await this.ffmpeg.readFile(this.currentFile!.targetFileName!)
+        ),
         targetFormat: this.currentFile!.targetFormat,
       });
 
       // free up the buffer memory
-      this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
-      this.ffmpeg.FS('unlink', this.currentFile!.name);
+      this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
+      this.ffmpeg.deleteFile(this.currentFile!.name);
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -252,7 +261,7 @@ export class FfmpegService {
     /**
      * initiate video file conversion process by running command
      */
-    await this.ffmpeg.run(...ffmpegCommand);
+    await this.ffmpeg.exec(ffmpegCommand);
   }
 
   /**
@@ -260,8 +269,7 @@ export class FfmpegService {
    * @param videoFileData
    */
   async writeFileInFFMpegBuffer(videoFileData: VideoFileData): Promise<void> {
-    this.ffmpeg.FS(
-      'writeFile',
+    this.ffmpeg.writeFile(
       videoFileData.name,
       await fetchFile(videoFileData.file)
     );
@@ -280,7 +288,7 @@ export class FfmpegService {
    * @param fileName
    */
   async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
-    return this.ffmpeg.FS('readFile', fileName);
+    return <Uint8Array>await this.ffmpeg.readFile('readFile', fileName);
   }
 
   /**
@@ -297,4 +305,17 @@ export class FfmpegService {
     }
     return FFMpegMediaFormatType.VIDEO;
   }
+}
+function toBlobURL(
+  arg0: string,
+  arg1: string
+): string | PromiseLike<string | undefined> | undefined {
+  throw new Error('Function not implemented.');
+}
+function fetchFile(
+  file: File
+):
+  | import('@ffmpeg/ffmpeg/dist/esm/types').FileData
+  | PromiseLike<import('@ffmpeg/ffmpeg/dist/esm/types').FileData> {
+  throw new Error('Function not implemented.');
 }
