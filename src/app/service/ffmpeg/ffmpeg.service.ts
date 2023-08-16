@@ -20,6 +20,7 @@ import {
   LogEvent,
   ProgressEvent,
 } from 'src/app/service/ffmpeg/lib/ffmpeg/src/types';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -58,39 +59,36 @@ export class FfmpegService {
     this.fileLoadedEvent = new EventEmitter();
     this.convertLogEvent = new EventEmitter();
     this.ffmpegStateEvent = new EventEmitter();
-  }
 
-  async initializeFFMpeg() {
     this.ffmpeg = new FFmpeg();
 
     this.ffmpeg.on('log', this.handleLogs.bind(this));
     this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
+  }
 
-    // const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm';
-    // await this.ffmpeg.load({
-    //   coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-    //   wasmURL: await toBlobURL(
-    //     `${baseURL}/ffmpeg-core.wasm`,
-    //     'application/wasm'
-    //   ),
-    // });
-
-    const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm';
+  /**
+   * initialise/load ffmpeg wasm binary
+   *
+   */
+  async initializeFFMpeg() {
     await this.ffmpeg.load({
-      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+      coreURL: await toBlobURL(
+        `${environment.ffmpegBaseUrl}/ffmpeg-core.js`,
+        'text/javascript'
+      ),
       wasmURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.wasm`,
+        `${environment.ffmpegBaseUrl}/ffmpeg-core.wasm`,
         'application/wasm'
       ),
       workerURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.worker.js`,
+        `${environment.ffmpegBaseUrl}/ffmpeg-core.worker.js`,
         'text/javascript'
       ),
     });
   }
 
   /**
-   * flush ffmpeg file system
+   * flush ffmpeg file system and terminate ffmpeg instance
    */
   async flushBuffer() {
     if (this.ffmpeg) {
@@ -99,6 +97,7 @@ export class FfmpegService {
         LogUtils.info(`removing ffmpeg file: ${fileNode.name}`);
         await this.ffmpeg.deleteFile(fileNode.name);
       }
+      this.ffmpeg.terminate();
     }
   }
 
@@ -171,6 +170,8 @@ export class FfmpegService {
       // free up the buffer memory
       await this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
       await this.ffmpeg.deleteFile(this.currentFile!.name);
+
+      this.ffmpeg.terminate();
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -279,7 +280,7 @@ export class FfmpegService {
       [videoFileData.name, videoFileData.targetFileName]
     );
 
-    LogUtils.info(`running ffmpeg commad - ${ffmpegCommand.join(' ')}`);
+    LogUtils.info(`[FFMPEG Command]: ${ffmpegCommand.join(' ')}`);
 
     /**
      * initiate video file conversion process by running command

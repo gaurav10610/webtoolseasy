@@ -7,6 +7,7 @@ export const environment = {
   gaCode: 'G-XXXXX',
   hostname: 'http://localhost:4200/',
   port: 4200,
+  ffmpegBaseUrl: 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm',
 };
 
 /*

@@ -15,7 +15,11 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { FileDataType, VideoFileData } from 'src/app/@types/file';
+import {
+  FileDataType,
+  SupportedOutputFormats,
+  VideoFileData,
+} from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
@@ -43,7 +47,11 @@ import {
 } from 'src/app/@types/popup-form';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PopupFormComponent } from 'src/app/components/popup-form/popup-form.component';
-import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
+import {
+  ELIGIBLE_TARGET_FORMATS,
+  FFMPEG_FORMATS,
+  FFMPEG_OUTPUT_CONFIG,
+} from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 
@@ -287,9 +295,7 @@ export class VideoConverterComponent
    * @param logParams
    */
   handleFFMpegLog(logParams: ConvertLogEvent) {
-    LogUtils.info(
-      `[FMPEG LOGS]: ( type: ${logParams.type}, message: ${logParams.message} )`
-    );
+    LogUtils.info(`[FMPEG LOGS]: ${logParams.message}`);
     if (this.isMobile) {
       this.conversionLogs.push(logParams.message);
     }
@@ -328,10 +334,28 @@ export class VideoConverterComponent
         targetFormat: 'mp3',
         convertedFileData: new Map(),
         conversionErrors: new Map(),
+        supportedFormats: this.getSupportedTargetFormats(extension),
       };
       this.fileStore.set(videoFileData.id, videoFileData);
       this.fileDisplayList.push(videoFileData);
     });
+  }
+
+  /**
+   * get supported target formats
+   * @returns
+   */
+  getSupportedTargetFormats(extension: string): SupportedOutputFormats[] {
+    const formats: SupportedOutputFormats[] = ELIGIBLE_TARGET_FORMATS.get(
+      extension
+    )!.map(formatId => {
+      return {
+        formatId,
+        targetFormat: FFMPEG_FORMATS.get(String(formatId)).targetFormat,
+        displayName: FFMPEG_FORMATS.get(String(formatId)).displayName,
+      };
+    });
+    return formats;
   }
 
   /**

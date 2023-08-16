@@ -23,6 +23,13 @@ export interface VideoFileData extends BaseFileData {
   targetFileName?: string;
   conversionErrors: Map<string, string>;
   converterStatus?: string;
+  supportedFormats: SupportedOutputFormats[];
+}
+
+export interface SupportedOutputFormats {
+  formatId: number;
+  targetFormat: string;
+  displayName: string;
 }
 
 export interface ImageCompressSettings {
