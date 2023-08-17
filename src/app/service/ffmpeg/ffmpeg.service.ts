@@ -14,13 +14,13 @@ import {
   FFMPEG_FORMATS,
 } from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
-import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg/src';
-import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util/src';
+import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg';
+import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util';
 import {
   FSNode,
   LogEvent,
   ProgressEvent,
-} from 'src/app/service/ffmpeg/lib/ffmpeg/src/types';
+} from 'src/app/service/ffmpeg/lib/ffmpeg/types';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
