@@ -71,24 +71,31 @@ export const FFMPEG_FORMATS: Map<number, FFmpegFormat> = new Map([
       displayName: 'AVI (Video)',
     },
   ],
+  [
+    11,
+    {
+      targetFormat: 'ogm',
+      displayName: 'OGM (Video)',
+    },
+  ],
 ]);
 
 export const ELIGIBLE_TARGET_FORMATS: Map<string, number[]> = new Map(
   Object.entries({
-    mp4: [1, 2, 3, 4, 7, 8],
-    webm: [1, 2, 3, 4, 5, 6, 8],
+    mp4: [1, 4],
+    webm: [1, 3, 4],
+    ogm: [1, 4],
+    mkv: [1, 4, 5, 6],
+    avi: [1, 3, 4],
     ogv: [1, 2, 3, 4, 5, 6, 7],
-    mkv: [1, 2, 3, 4, 5, 6, 7, 8],
-    ogm: [1, 2, 3, 4, 5, 6, 7, 8],
-    avi: [1, 2, 3, 4, 5, 6, 7, 8],
   })
 );
 
 export const FFMPEG_COMMANDS: Map<number, Map<number, string>> = new Map([
-  [1, new Map([[0, '-i {0} -c:a libmp3lame {1}']])],
-  [2, new Map([[0, '-i {0} -c:a libvorbis {1}']])],
-  [3, new Map([[0, '-i {0} -c:a libopus {1}']])],
-  [4, new Map([[0, '-i {0} -c:a libfdk_aac {1}']])],
+  [1, new Map([[0, '-i {0} {1}']])],
+  [2, new Map([[0, '-i {0} {1}']])],
+  [3, new Map([[0, '-i {0} {1}']])],
+  [4, new Map([[0, '-i {0} {1}']])],
   [
     5,
     new Map([
@@ -103,6 +110,39 @@ export const FFMPEG_COMMANDS: Map<number, Map<number, string>> = new Map([
       [9, '-i {0} -codec copy {1}'],
     ]),
   ],
-  [7, new Map([[0, '-i {0} -c:v libvpx {1}']])],
-  [8, new Map([[0, '-i {0} -c:v libtheora {1}']])],
+  [7, new Map([[0, '-i {0} {1}']])],
+  [8, new Map([[0, '-i {0} {1}']])],
+  [
+    9,
+    new Map([
+      [0, '-i {0} {1}'],
+      [5, '-i {0} -codec copy {1}'],
+      [6, '-i {0} -codec copy {1}'],
+    ]),
+  ],
+  [10, new Map([[0, '-i {0} {1}']])],
+  [11, new Map([[0, '-i {0} {1}']])],
 ]);
+
+// export const FFMPEG_COMMANDS: Map<number, Map<number, string>> = new Map([
+//   [1, new Map([[0, '-i {0} -c:a libmp3lame {1}']])],
+//   [2, new Map([[0, '-i {0} -c:a libvorbis {1}']])],
+//   [3, new Map([[0, '-i {0} -c:a libopus {1}']])],
+//   [4, new Map([[0, '-i {0} -c:a libfdk_aac {1}']])],
+//   [
+//     5,
+//     new Map([
+//       [0, '-i {0} -c:v libx264 {1}'],
+//       [9, '-i {0} -codec copy {1}'],
+//     ]),
+//   ],
+//   [
+//     6,
+//     new Map([
+//       [0, '-i {0} -c:v libx265 {1}'],
+//       [9, '-i {0} -codec copy {1}'],
+//     ]),
+//   ],
+//   [7, new Map([[0, '-i {0} -c:v libvpx {1}']])],
+//   [8, new Map([[0, '-i {0} -c:v libtheora {1}']])],
+// ]);

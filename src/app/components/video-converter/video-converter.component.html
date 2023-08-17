@@ -119,9 +119,13 @@
                 >{{ file.conversionErrors.get(file.targetFormat) }}</span
               >
               <span
-                *ngIf="file.inProgress && file.convertProgress === 0"
+                *ngIf="
+                  file.converterStatus &&
+                  file.inProgress &&
+                  file.convertProgress === 0
+                "
                 class="bold-text"
-                style="margin-top: 5px"
+                style="margin-top: 10px"
                 >Converter State: {{ file.converterStatus }}</span
               >
               <span
