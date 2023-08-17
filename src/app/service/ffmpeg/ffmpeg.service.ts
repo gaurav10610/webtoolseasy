@@ -5,13 +5,14 @@ import {
   ConvertLogEvent,
   ConvertProgressEvent,
   FFMpegLoadingStatus,
-  FFMpegMediaFormatConfig,
-  FFMpegMediaFormatType,
   FileLoadedEvent,
 } from 'src/app/@types/ffmpeg';
 import { VideoFileData } from 'src/app/@types/file';
 import { QueueStorage } from 'src/app/custom-datastructures/QueueStorage';
-import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
+import {
+  FFMPEG_COMMANDS,
+  FFMPEG_FORMATS,
+} from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
 import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg/src';
 import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util/src';
@@ -38,7 +39,7 @@ export class FfmpegService {
   /**
    * fileId -> targetFormat
    */
-  private fileMap!: Map<string, string>;
+  private fileMap!: Map<string, number>;
 
   progressEvent!: EventEmitter<ConvertProgressEvent>;
   convertEvent!: EventEmitter<ConvertEvent>;
@@ -203,11 +204,24 @@ export class FfmpegService {
    * @param args
    * @returns
    */
-  buildFFMpegCommand(targetFormat: string, args: string[]): string[] {
-    const mediaType = this.getMediaType(targetFormat);
-    let command = FFMPEG_OUTPUT_CONFIG[mediaType].find(
-      config => config.targetFormat === targetFormat
-    )?.command!;
+  buildFFMpegCommand(
+    fileFormat: number,
+    targetFormat: number,
+    args: string[]
+  ): string[] {
+    let command;
+
+    /**
+     * check if the default command has been overridden based on input file format
+     *
+     * if not then use default command
+     */
+    if (FFMPEG_COMMANDS.get(targetFormat)!.has(fileFormat)) {
+      command = FFMPEG_COMMANDS.get(targetFormat)!.get(fileFormat)!;
+    } else {
+      command = FFMPEG_COMMANDS.get(targetFormat)!.get(0)!;
+    }
+
     for (let i = 0; i < args.length; i++) {
       command = command.split(`{${i}}`).join(args[i]);
     }
@@ -270,12 +284,15 @@ export class FfmpegService {
      */
     videoFileData.targetFileName = `${this.getPlainFileName(
       videoFileData.name
-    )}_converted.${videoFileData.targetFormat}`;
+    )}_converted.${
+      FFMPEG_FORMATS.get(videoFileData.targetFormat)!.targetFormat
+    }`;
 
     /**
      * prepare ffmpeg command
      */
     const ffmpegCommand: string[] = this.buildFFMpegCommand(
+      videoFileData.fileFormat!,
       videoFileData.targetFormat,
       [videoFileData.name, videoFileData.targetFileName]
     );
@@ -313,20 +330,5 @@ export class FfmpegService {
    */
   async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
     return <Uint8Array>await this.ffmpeg.readFile(fileName);
-  }
-
-  /**
-   * get media type
-   * @param targetFormat
-   */
-  getMediaType(targetFormat: string): FFMpegMediaFormatType {
-    let config: FFMpegMediaFormatConfig | undefined;
-    config = FFMPEG_OUTPUT_CONFIG.audio.find(
-      mediaConfig => mediaConfig.targetFormat === targetFormat
-    );
-    if (config) {
-      return FFMpegMediaFormatType.AUDIO;
-    }
-    return FFMpegMediaFormatType.VIDEO;
   }
 }

@@ -167,7 +167,7 @@
                   [value]="file.targetFormat"
                   (valueChange)="changeTargetFormat(file.id, $event)">
                   <mat-option
-                    [value]="option.targetFormat"
+                    [value]="option.formatId"
                     *ngFor="let option of file.supportedFormats"
                     >{{ option.displayName }}</mat-option
                   >
