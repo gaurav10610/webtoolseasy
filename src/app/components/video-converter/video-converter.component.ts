@@ -15,7 +15,11 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { FileDataType, VideoFileData } from 'src/app/@types/file';
+import {
+  FileDataType,
+  SupportedOutputFormats,
+  VideoFileData,
+} from 'src/app/@types/file';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
@@ -31,7 +35,6 @@ import {
   ConvertLogEvent,
   ConvertProgressEvent,
   FFMpegLoadingStatus,
-  FFMpegMediaFormatConfig,
   FileLoadedEvent,
 } from 'src/app/@types/ffmpeg';
 import { FfmpegService } from 'src/app/service/ffmpeg/ffmpeg.service';
@@ -43,7 +46,10 @@ import {
 } from 'src/app/@types/popup-form';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PopupFormComponent } from 'src/app/components/popup-form/popup-form.component';
-import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
+import {
+  ELIGIBLE_TARGET_FORMATS,
+  FFMPEG_FORMATS,
+} from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 
@@ -73,18 +79,13 @@ export class VideoConverterComponent
 
   isSupported: boolean = true;
 
-  /**
-   * ffmpeg wasm supported formats
-   */
-  supportedOutputFormats: FFMpegMediaFormatConfig[];
-
   subscriptions: Subscription[];
   conversionLogs: string[];
 
   /**
    * valid video formats
    */
-  validVideoFormats: string = '.mp4,.webm,.ogv,.mkv,.ogm';
+  validVideoFormats: string = '.mp4,.webm,.ogv,.mkv,.ogm,.avi';
 
   constructor(
     private titleService: Title,
@@ -164,10 +165,6 @@ export class VideoConverterComponent
       )
     );
 
-    this.supportedOutputFormats = [];
-    this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.audio);
-    this.supportedOutputFormats.push(...FFMPEG_OUTPUT_CONFIG.video);
-
     this.conversionLogs = [];
 
     this.checkCompatibility();
@@ -182,7 +179,7 @@ export class VideoConverterComponent
     this.zipBuilder = new JSZip();
   }
 
-  ngOnDestroy() {
+  async ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
 
@@ -191,12 +188,11 @@ export class VideoConverterComponent
      */
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions = [];
-    this.ffmpegService.flushBuffer();
+    await this.ffmpegService.flushBuffer();
   }
 
   checkCompatibility() {
     if (environment.production) {
-      // this.isSupported = !this.isMobile;
       this.isSupported = true;
     }
   }
@@ -236,7 +232,9 @@ export class VideoConverterComponent
    */
   async handleConverionProgress(eventData: ConvertProgressEvent) {
     this.zoneRef.run(() => {
-      LogUtils.info(`file progress event for file id: ${eventData.fileId}`);
+      LogUtils.info(
+        `[conversion progress] ( progress: ${eventData.progress}, file id: ${eventData.fileId})`
+      );
       const videoFileData: VideoFileData = this.fileStore.get(
         eventData.fileId
       )!;
@@ -261,7 +259,7 @@ export class VideoConverterComponent
       this.zoneRef.run(() => {
         this.isDownloadAllActive = true;
       });
-      LogUtils.info(`converted file received with id: ${eventData.fileId}`);
+      // LogUtils.info(`converted file received with id: ${eventData.fileId}`);
       this.fileStore
         .get(eventData.fileId)!
         .convertedFileData.set(eventData.targetFormat, eventData.fileData);
@@ -285,7 +283,7 @@ export class VideoConverterComponent
    * @param logParams
    */
   handleFFMpegLog(logParams: ConvertLogEvent) {
-    LogUtils.info(`FFMPEG LOGS => ${logParams.message}`);
+    LogUtils.info(`[FMPEG LOGS]: ${logParams.message}`);
     if (this.isMobile) {
       this.conversionLogs.push(logParams.message);
     }
@@ -321,13 +319,46 @@ export class VideoConverterComponent
           formattedName
         )}_${id}.${extension}`,
         convertProgress: 0,
-        targetFormat: 'mp3',
+        targetFormat: 1,
         convertedFileData: new Map(),
         conversionErrors: new Map(),
+        supportedFormats: this.getSupportedTargetFormats(extension),
+        fileFormat: this.resolveFileFormatId(extension),
       };
       this.fileStore.set(videoFileData.id, videoFileData);
       this.fileDisplayList.push(videoFileData);
     });
+  }
+
+  /**
+   * resolve file format id
+   * @param fileExtension
+   * @returns
+   */
+  resolveFileFormatId(fileExtension: string): number {
+    for (const [formatId, ffmpegFormat] of FFMPEG_FORMATS.entries()) {
+      if (ffmpegFormat.targetFormat === fileExtension) {
+        return formatId;
+      }
+    }
+    return 6; // default for mp4
+  }
+
+  /**
+   * get supported target formats
+   * @returns
+   */
+  getSupportedTargetFormats(extension: string): SupportedOutputFormats[] {
+    const formats: SupportedOutputFormats[] = ELIGIBLE_TARGET_FORMATS.get(
+      extension
+    )!.map(formatId => {
+      return {
+        formatId,
+        targetFormat: FFMPEG_FORMATS.get(formatId)!.targetFormat,
+        displayName: FFMPEG_FORMATS.get(formatId)!.displayName,
+      };
+    });
+    return formats;
   }
 
   /**
@@ -373,7 +404,9 @@ export class VideoConverterComponent
           videoFileData.name
         );
         this.zipBuilder.file(
-          `${fileName}_converted.${videoFileData.targetFormat}`,
+          `${fileName}_converted.${
+            FFMPEG_FORMATS.get(videoFileData.targetFormat)!.targetFormat
+          }`,
           new Blob(
             [videoFileData.convertedFileData!.get(videoFileData.targetFormat)!],
             {
@@ -397,7 +430,9 @@ export class VideoConverterComponent
       videoFileData.name
     );
     await this.downloadFile(
-      `${fileName}_converted.${videoFileData.targetFormat}`,
+      `${fileName}_converted.${
+        FFMPEG_FORMATS.get(videoFileData.targetFormat)!.targetFormat
+      }`,
       new Blob(
         [videoFileData.convertedFileData!.get(videoFileData.targetFormat)!],
         {
@@ -412,11 +447,13 @@ export class VideoConverterComponent
    * @param targetFormat
    * @returns
    */
-  getMimeType(targetFormat: string) {
-    if (targetFormat === 'mp4' || targetFormat === 'webm') {
-      return `video/${targetFormat}`;
+  getMimeType(targetFormat: number) {
+    const targetFormatName: string =
+      FFMPEG_FORMATS.get(targetFormat)!.targetFormat;
+    if (targetFormatName === 'mp4' || targetFormatName === 'webm') {
+      return `video/${targetFormatName}`;
     }
-    return `audio/${targetFormat}`;
+    return `audio/${targetFormatName}`;
   }
 
   async downloadFile(fileName: string, fileContent: Blob): Promise<void> {
@@ -435,11 +472,13 @@ export class VideoConverterComponent
    * @param fileId identifier of file
    * @param targetFormat
    */
-  changeTargetFormat(fileId: string, targetFormat: string) {
+  changeTargetFormat(fileId: string, targetFormat: number) {
     const videoFileData = this.fileStore.get(fileId)!;
     if (videoFileData.targetFormat !== targetFormat) {
       LogUtils.info(
-        `changing target format of file with id: ${fileId} to ${targetFormat}`
+        `changing target format of file with id: ${fileId} to ${FFMPEG_FORMATS.get(
+          targetFormat
+        )!}`
       );
       this.fileStore.get(fileId)!.targetFormat = targetFormat;
     }
@@ -476,6 +515,12 @@ export class VideoConverterComponent
    */
   openSettings(videoFileData: VideoFileData) {
     this.closeDialog();
+
+    const formattedName = this.formatFileName(videoFileData.file.name);
+    const extension = formattedName.split('.').pop()!;
+    const formatOptions: SupportedOutputFormats[] =
+      this.getSupportedTargetFormats(extension);
+
     const context: PopupFormContext = {
       referenceId: videoFileData.id,
       type: PopupFormType.VIDEO_CONVERT_SETTINGS,
@@ -486,10 +531,10 @@ export class VideoConverterComponent
               type: PopupFormElementType.DROPDOWN,
               propertyName: 'targetFormat',
               data: {
-                options: this.supportedOutputFormats.map(option => {
+                options: formatOptions.map(option => {
                   return {
                     displayName: option.displayName,
-                    value: option.targetFormat,
+                    value: option.formatId,
                   };
                 }),
                 targetFormat: videoFileData.targetFormat,

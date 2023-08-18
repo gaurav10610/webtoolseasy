@@ -120,10 +120,13 @@
               >
               <span
                 *ngIf="
-                  isMobile && file.inProgress && file.convertProgress === 0
+                  file.converterStatus &&
+                  file.inProgress &&
+                  file.convertProgress === 0
                 "
                 class="bold-text"
-                >Converter Status: {{ file.converterStatus }}</span
+                style="margin-top: 10px"
+                >Converter State: {{ file.converterStatus }}</span
               >
               <span
                 *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
@@ -168,8 +171,8 @@
                   [value]="file.targetFormat"
                   (valueChange)="changeTargetFormat(file.id, $event)">
                   <mat-option
-                    [value]="option.targetFormat"
-                    *ngFor="let option of supportedOutputFormats"
+                    [value]="option.formatId"
+                    *ngFor="let option of file.supportedFormats"
                     >{{ option.displayName }}</mat-option
                   >
                 </mat-select>

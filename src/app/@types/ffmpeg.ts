@@ -1,17 +1,6 @@
-export enum FFMpegMediaFormatType {
-  VIDEO = 'video',
-  AUDIO = 'audio',
-}
-
-export interface FFMpegMediaFormatConfig {
+export interface FFmpegFormat {
   displayName: string;
-  command: string;
   targetFormat: string;
-}
-
-export interface FFMpegOutputConfig {
-  audio: FFMpegMediaFormatConfig[];
-  video: FFMpegMediaFormatConfig[];
 }
 
 export enum ConvertEventType {
@@ -27,7 +16,7 @@ export interface FFMpegBaseFileEvent {
 export interface ConvertEvent extends FFMpegBaseFileEvent {
   type: ConvertEventType;
   fileData?: Uint8Array;
-  targetFormat: string;
+  targetFormat: number;
 }
 
 export interface ConvertProgressEvent extends FFMpegBaseFileEvent {

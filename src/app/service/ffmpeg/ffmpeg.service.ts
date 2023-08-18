@@ -1,19 +1,27 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { createFFmpeg, fetchFile, FFmpeg } from '@ffmpeg/ffmpeg';
 import {
   ConvertEvent,
   ConvertEventType,
   ConvertLogEvent,
   ConvertProgressEvent,
   FFMpegLoadingStatus,
-  FFMpegMediaFormatConfig,
-  FFMpegMediaFormatType,
   FileLoadedEvent,
 } from 'src/app/@types/ffmpeg';
 import { VideoFileData } from 'src/app/@types/file';
 import { QueueStorage } from 'src/app/custom-datastructures/QueueStorage';
-import { FFMPEG_OUTPUT_CONFIG } from 'src/environments/ffmpeg-config';
+import {
+  FFMPEG_COMMANDS,
+  FFMPEG_FORMATS,
+} from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
+import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg';
+import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util';
+import {
+  FSNode,
+  LogEvent,
+  ProgressEvent,
+} from 'src/app/service/ffmpeg/lib/ffmpeg/types';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +39,7 @@ export class FfmpegService {
   /**
    * fileId -> targetFormat
    */
-  private fileMap!: Map<string, string>;
+  private fileMap!: Map<string, number>;
 
   progressEvent!: EventEmitter<ConvertProgressEvent>;
   convertEvent!: EventEmitter<ConvertEvent>;
@@ -52,23 +60,45 @@ export class FfmpegService {
     this.fileLoadedEvent = new EventEmitter();
     this.convertLogEvent = new EventEmitter();
     this.ffmpegStateEvent = new EventEmitter();
+
+    this.ffmpeg = new FFmpeg();
+
+    this.ffmpeg.on('log', this.handleLogs.bind(this));
+    this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
   }
 
+  /**
+   * initialise/load ffmpeg wasm binary
+   *
+   */
   async initializeFFMpeg() {
-    this.ffmpeg = createFFmpeg({
-      log: false,
+    await this.ffmpeg.load({
+      coreURL: await toBlobURL(
+        `${environment.ffmpegBaseUrl}/ffmpeg-core.js`,
+        'text/javascript'
+      ),
+      wasmURL: await toBlobURL(
+        `${environment.ffmpegBaseUrl}/ffmpeg-core.wasm`,
+        'application/wasm'
+      ),
+      workerURL: await toBlobURL(
+        `${environment.ffmpegBaseUrl}/ffmpeg-core.worker.js`,
+        'text/javascript'
+      ),
     });
-
-    this.ffmpeg.setLogger(this.handleLogs.bind(this));
-
-    this.ffmpeg.setProgress(this.handleFFMpegProgress.bind(this));
-    await this.ffmpeg.load();
   }
 
+  /**
+   * flush ffmpeg file system and terminate ffmpeg instance
+   */
   async flushBuffer() {
-    if (this.ffmpeg && this.ffmpeg.isLoaded()) {
-      const files: string[] = this.ffmpeg.FS('readdir', '/');
-      files.forEach(fileName => this.ffmpeg.FS('unlink', fileName));
+    if (this.ffmpeg) {
+      const files: FSNode[] = await this.ffmpeg.listDir('/');
+      for (const fileNode of files) {
+        LogUtils.info(`removing ffmpeg file: ${fileNode.name}`);
+        await this.ffmpeg.deleteFile(fileNode.name);
+      }
+      this.ffmpeg.terminate();
     }
   }
 
@@ -76,7 +106,7 @@ export class FfmpegService {
    * handle conversion logs
    * @param logParams
    */
-  handleLogs(logParams: any) {
+  async handleLogs(logParams: LogEvent) {
     this.convertLogEvent.emit({
       ...logParams,
     });
@@ -93,8 +123,8 @@ export class FfmpegService {
       });
 
       // free up the buffer memory
-      this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
-      this.ffmpeg.FS('unlink', this.currentFile!.name);
+      await this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
+      await this.ffmpeg.deleteFile(this.currentFile!.name);
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -115,8 +145,8 @@ export class FfmpegService {
    * handles file progress
    * @param progressParams
    */
-  handleFFMpegProgress(progressParams: any) {
-    const progress: number = Number((progressParams.ratio * 100).toFixed(2));
+  async handleFFMpegProgress(progressParams: ProgressEvent) {
+    const progress: number = Number((progressParams.progress * 100).toFixed(2));
     this.progressEvent.emit({
       fileId: this.currentFile!.id,
       progress,
@@ -132,13 +162,17 @@ export class FfmpegService {
       this.convertEvent.emit({
         fileId: this.currentFile!.id,
         type: ConvertEventType.END,
-        fileData: this.ffmpeg.FS('readFile', this.currentFile!.targetFileName!),
+        fileData: <Uint8Array>(
+          await this.ffmpeg.readFile(this.currentFile!.targetFileName!)
+        ),
         targetFormat: this.currentFile!.targetFormat,
       });
 
       // free up the buffer memory
-      this.ffmpeg.FS('unlink', this.currentFile!.targetFileName!);
-      this.ffmpeg.FS('unlink', this.currentFile!.name);
+      await this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
+      await this.ffmpeg.deleteFile(this.currentFile!.name);
+
+      this.ffmpeg.terminate();
 
       this.currentFile = undefined;
       this.isConverting = false;
@@ -170,11 +204,24 @@ export class FfmpegService {
    * @param args
    * @returns
    */
-  buildFFMpegCommand(targetFormat: string, args: string[]): string[] {
-    const mediaType = this.getMediaType(targetFormat);
-    let command = FFMPEG_OUTPUT_CONFIG[mediaType].find(
-      config => config.targetFormat === targetFormat
-    )?.command!;
+  buildFFMpegCommand(
+    fileFormat: number,
+    targetFormat: number,
+    args: string[]
+  ): string[] {
+    let command;
+
+    /**
+     * check if the default command has been overridden based on input file format
+     *
+     * if not then use default command
+     */
+    if (FFMPEG_COMMANDS.get(targetFormat)!.has(fileFormat)) {
+      command = FFMPEG_COMMANDS.get(targetFormat)!.get(fileFormat)!;
+    } else {
+      command = FFMPEG_COMMANDS.get(targetFormat)!.get(0)!;
+    }
+
     for (let i = 0; i < args.length; i++) {
       command = command.split(`{${i}}`).join(args[i]);
     }
@@ -237,22 +284,25 @@ export class FfmpegService {
      */
     videoFileData.targetFileName = `${this.getPlainFileName(
       videoFileData.name
-    )}_converted.${videoFileData.targetFormat}`;
+    )}_converted.${
+      FFMPEG_FORMATS.get(videoFileData.targetFormat)!.targetFormat
+    }`;
 
     /**
      * prepare ffmpeg command
      */
     const ffmpegCommand: string[] = this.buildFFMpegCommand(
+      videoFileData.fileFormat!,
       videoFileData.targetFormat,
       [videoFileData.name, videoFileData.targetFileName]
     );
 
-    LogUtils.info(`running ffmpeg commad - ${ffmpegCommand.join(' ')}`);
+    LogUtils.info(`[FFMPEG Command]: ${ffmpegCommand.join(' ')}`);
 
     /**
      * initiate video file conversion process by running command
      */
-    await this.ffmpeg.run(...ffmpegCommand);
+    await this.ffmpeg.exec(ffmpegCommand);
   }
 
   /**
@@ -260,8 +310,7 @@ export class FfmpegService {
    * @param videoFileData
    */
   async writeFileInFFMpegBuffer(videoFileData: VideoFileData): Promise<void> {
-    this.ffmpeg.FS(
-      'writeFile',
+    await this.ffmpeg.writeFile(
       videoFileData.name,
       await fetchFile(videoFileData.file)
     );
@@ -280,21 +329,6 @@ export class FfmpegService {
    * @param fileName
    */
   async readFileInFFMpegBuffer(fileName: string): Promise<Uint8Array> {
-    return this.ffmpeg.FS('readFile', fileName);
-  }
-
-  /**
-   * get media type
-   * @param targetFormat
-   */
-  getMediaType(targetFormat: string): FFMpegMediaFormatType {
-    let config: FFMpegMediaFormatConfig | undefined;
-    config = FFMPEG_OUTPUT_CONFIG.audio.find(
-      mediaConfig => mediaConfig.targetFormat === targetFormat
-    );
-    if (config) {
-      return FFMpegMediaFormatType.AUDIO;
-    }
-    return FFMpegMediaFormatType.VIDEO;
+    return <Uint8Array>await this.ffmpeg.readFile(fileName);
   }
 }
