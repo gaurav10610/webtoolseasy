@@ -118,7 +118,7 @@
                 style="color: red"
                 >{{ file.conversionErrors.get(file.targetFormat) }}</span
               >
-              <span
+              <!-- <span
                 *ngIf="
                   file.converterStatus &&
                   file.inProgress &&
@@ -127,7 +127,7 @@
                 class="bold-text"
                 style="margin-top: 10px"
                 >Converter State: {{ file.converterStatus }}</span
-              >
+              > -->
               <span
                 *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
                 class="bold-text"
@@ -140,12 +140,11 @@
             <!-- file icons div -->
             <div
               class="flex-display flex-row-flow flex-align-center flex-center">
-              <span
+              <!-- file is queued spinner -->
+              <mat-spinner
                 *ngIf="file.inProgress && file.convertProgress === 0"
-                style="margin-right: 10px"
-                class="bold-text"
-                >queued</span
-              >
+                diameter="32"
+                color="accent"></mat-spinner>
               <span
                 *ngIf="!isMobile && file.inProgress && file.convertProgress > 0"
                 style="margin-right: 10px"
