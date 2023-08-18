@@ -143,8 +143,7 @@
               <!-- file is queued spinner -->
               <mat-spinner
                 *ngIf="file.inProgress && file.convertProgress === 0"
-                diameter="32"
-                color="accent"></mat-spinner>
+                diameter="32"></mat-spinner>
               <span
                 *ngIf="!isMobile && file.inProgress && file.convertProgress > 0"
                 style="margin-right: 10px"

@@ -60,11 +60,6 @@ export class FfmpegService {
     this.fileLoadedEvent = new EventEmitter();
     this.convertLogEvent = new EventEmitter();
     this.ffmpegStateEvent = new EventEmitter();
-
-    this.ffmpeg = new FFmpeg();
-
-    this.ffmpeg.on('log', this.handleLogs.bind(this));
-    this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
   }
 
   /**
@@ -72,6 +67,11 @@ export class FfmpegService {
    *
    */
   async initializeFFMpeg() {
+    this.ffmpeg = new FFmpeg();
+
+    this.ffmpeg.on('log', this.handleLogs.bind(this));
+    this.ffmpeg.on('progress', this.handleFFMpegProgress.bind(this));
+
     await this.ffmpeg.load({
       coreURL: await toBlobURL(
         `${environment.ffmpegBaseUrl}/ffmpeg-core.js`,
