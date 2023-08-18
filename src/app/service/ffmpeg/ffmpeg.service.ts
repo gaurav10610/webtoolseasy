@@ -110,34 +110,35 @@ export class FfmpegService {
     this.convertLogEvent.emit({
       ...logParams,
     });
+  }
 
-    const { message } = logParams;
-    if (message === 'Conversion failed!') {
-      /**
-       * emit conversion failed event
-       */
-      this.convertEvent.emit({
-        fileId: this.currentFile!.id,
-        type: ConvertEventType.FAILED,
-        targetFormat: this.currentFile!.targetFormat,
-      });
+  /**
+   * handle file conversion failure
+   */
+  async handleConversionFailure(): Promise<void> {
+    /**
+     * emit conversion failed event
+     */
+    this.convertEvent.emit({
+      fileId: this.currentFile!.id,
+      type: ConvertEventType.FAILED,
+      targetFormat: this.currentFile!.targetFormat,
+    });
 
-      // free up the buffer memory
-      await this.ffmpeg.deleteFile(this.currentFile!.targetFileName!);
-      await this.ffmpeg.deleteFile(this.currentFile!.name);
+    // free up the buffer memory
+    await this.ffmpeg.deleteFile(this.currentFile!.name);
 
-      this.currentFile = undefined;
-      this.isConverting = false;
+    this.currentFile = undefined;
+    this.isConverting = false;
 
-      /**
-       * if file queue is not empty then schedule next file for conversion
-       */
-      if (!this.fileQueue.isEmpty() && !this.isConverting) {
-        this.isConverting = true;
-        const videoFileData: VideoFileData = this.fileQueue.dequeue();
-        this.currentFile = videoFileData;
-        this.convertVideoFile(videoFileData);
-      }
+    /**
+     * if file queue is not empty then schedule next file for conversion
+     */
+    if (!this.fileQueue.isEmpty() && !this.isConverting) {
+      this.isConverting = true;
+      const videoFileData: VideoFileData = this.fileQueue.dequeue();
+      this.currentFile = videoFileData;
+      this.convertVideoFile(videoFileData);
     }
   }
 
@@ -302,7 +303,10 @@ export class FfmpegService {
     /**
      * initiate video file conversion process by running command
      */
-    await this.ffmpeg.exec(ffmpegCommand);
+    const result = await this.ffmpeg.exec(ffmpegCommand);
+    if (result !== 0) {
+      this.handleConversionFailure();
+    }
   }
 
   /**

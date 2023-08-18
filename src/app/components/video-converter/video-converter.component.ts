@@ -271,7 +271,7 @@ export class VideoConverterComponent
         )!;
         videoFileData.conversionErrors.set(
           eventData.targetFormat,
-          'conversion failed!'
+          'conversion failed! try converting in some other format'
         );
         videoFileData.inProgress = false;
       });
