@@ -3,7 +3,7 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Video to Audio Converter',
+  mainHeading: 'Online Video to Audio Converter',
   subHeading: 'Convert Videos to Audio For Free',
   navigationUrl: '/tools/video-converter',
   pageTitle:
