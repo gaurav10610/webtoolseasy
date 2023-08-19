@@ -41,6 +41,11 @@ export class ScreenRecorderComponent
   isRecording: boolean = false;
   isProcessingStream: boolean = false;
 
+  /**
+   * recording paused flag
+   */
+  isRecPaused: boolean = false;
+
   timerIntervalFunctionId: any;
   timeCounter: number = 0;
 
@@ -59,7 +64,7 @@ export class ScreenRecorderComponent
     height: 150,
   };
 
-  static RECORDING_START_DELAY = 3000;
+  static RECORDING_START_DELAY = 5000;
 
   /**
    * recording options
@@ -171,7 +176,6 @@ export class ScreenRecorderComponent
 
   startRecording() {
     this.zoneRef.run(async () => {
-      this.isRecording = true;
       this.resetContextVariables();
       this.resetTimer();
 
@@ -191,6 +195,7 @@ export class ScreenRecorderComponent
          * stream using native stop sharing button
          */
         this.configureStreamStopListener(this.screenStream);
+        this.isRecording = true;
       } catch (error) {
         LogUtils.error(`error occured while capturing screen stream`);
         LogUtils.error(error);
@@ -297,9 +302,12 @@ export class ScreenRecorderComponent
     return streamMerger.result;
   }
 
+  /**
+   * configure media stream recorder
+   * @param mediaStream
+   */
   configureStreamRecorder(mediaStream: MediaStream) {
     LogUtils.info(`configuring media stream recorder`);
-    LogUtils.info(mediaStream);
 
     this.mediaStreamRecorder = new MediaRecorder(
       mediaStream,
@@ -309,27 +317,22 @@ export class ScreenRecorderComponent
     this.mediaStreamRecorder.ondataavailable = (event: BlobEvent) => {
       set(this.videoChunksCounter, event.data);
       this.videoChunksCounter++;
+
+      //set timer
+      this.timeCounter++;
+      let date = new Date(0);
+      date.setSeconds(this.timeCounter); // specify value for SECONDS here
+      this.renderer.setProperty(
+        this.timer.nativeElement,
+        'textContent',
+        date.toISOString().substring(11, 19)
+      );
     };
 
     /**
      * Need video stream slices of 1 second each
      */
     this.mediaStreamRecorder.start(1000);
-    this.configureTimer();
-  }
-
-  configureTimer() {
-    this.timeCounter = 0;
-    this.zoneRef.runOutsideAngular(() => {
-      this.timerIntervalFunctionId = setInterval(() => {
-        this.timeCounter = this.timeCounter + 1;
-        this.renderer.setProperty(
-          this.timer.nativeElement,
-          'textContent',
-          new Date(this.timeCounter * 1000).toISOString().substring(11, 16)
-        );
-      }, 1);
-    });
   }
 
   /**
@@ -360,13 +363,27 @@ export class ScreenRecorderComponent
     return navigator.mediaDevices.getUserMedia(getUserMediaOptions);
   }
 
+  /**
+   * pause media stream recording
+   */
+  pauseRecording() {
+    this.mediaStreamRecorder?.pause();
+    this.isRecPaused = true;
+  }
+
+  /**
+   * resume media stream recoring
+   */
+  resumeRecording() {
+    this.mediaStreamRecorder?.resume();
+    this.isRecPaused = false;
+  }
+
+  /**
+   * stop media stream recording
+   */
   stopRecording() {
-    this.isRecording = false;
     this.mediaStreamRecorder?.stop();
-    this.timeCounter = 0;
-    if (this.timerIntervalFunctionId) {
-      clearInterval(this.timerIntervalFunctionId);
-    }
     this.screenStream?.getTracks().forEach(track => track.stop());
     this.webcamStream?.getTracks().forEach(track => track.stop());
     this.mergedMediaStream?.getTracks().forEach(track => track.stop());
@@ -374,6 +391,7 @@ export class ScreenRecorderComponent
     if (this.screenStream && this.mergedMediaStream) {
       this.processMediaStream();
     }
+    this.isRecording = false;
   }
 
   processMediaStream() {
