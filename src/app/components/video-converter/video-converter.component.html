@@ -73,15 +73,6 @@
           (click)="convertAllVideos()">
           <mat-icon>play_arrow</mat-icon> Convert All
         </button>
-        <button
-          mat-raised-button
-          color="primary"
-          style="margin-left: 10px"
-          matTooltip="download all videos"
-          *ngIf="isDownloadAllActive && !isMobile"
-          (click)="downloadAll()">
-          <mat-icon>file_download</mat-icon> Download Zip
-        </button>
       </div>
 
       <!-- list of files -->

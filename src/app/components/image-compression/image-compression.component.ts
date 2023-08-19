@@ -19,11 +19,6 @@ import {
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
-
-/**
- * @TODO use fflate instead
- */
-import * as JSZip from 'jszip';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -48,7 +43,6 @@ export class ImageCompressionComponent
 {
   isMobile!: boolean;
   fileList: ImageFileData[] = [];
-  zipBuilder!: JSZip;
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
@@ -56,7 +50,6 @@ export class ImageCompressionComponent
   destroyed = new Subject<void>();
   isDownloadAllActive: boolean = false;
   activeDialog: MatDialogRef<any> | undefined;
-  appId: string = 'imagecompress';
 
   /**
    * valid image formats
@@ -104,11 +97,11 @@ export class ImageCompressionComponent
   }
 
   ngOnInit(): void {
-    LogUtils.info('image compression component has rendered');
+    LogUtils.info('ngOnInit: image compression component has rendered');
   }
 
   ngAfterViewInit(): void {
-    this.zipBuilder = new JSZip();
+    LogUtils.info('ngOnInit: image compression component has rendered');
   }
 
   ngOnDestroy() {
@@ -269,19 +262,6 @@ export class ImageCompressionComponent
         ImageFileData.error = '* compression error';
       }
     });
-  }
-
-  async downloadAll(): Promise<void> {
-    this.fileList.forEach(ImageFileData =>
-      this.zipBuilder.file(ImageFileData.name, ImageFileData.compressedData!, {
-        binary: true,
-      })
-    );
-
-    const zipFileData: Blob = await this.zipBuilder.generateAsync({
-      type: 'blob',
-    });
-    this.downloadFile('compress-images.zip', zipFileData);
   }
 
   async downloadImage(imageFileData: ImageFileData): Promise<void> {

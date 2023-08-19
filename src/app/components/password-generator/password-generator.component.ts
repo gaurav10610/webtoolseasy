@@ -216,7 +216,8 @@ export class PasswordGeneratorComponent
    * @param event
    */
   handlePasswordLengthChange(event: any) {
-    this.options.length = Number(event.target.value);
+    const passwordLength: number = Number(event.target.value);
+    this.options.length = 30 < passwordLength ? 30 : passwordLength;
   }
 
   /**
