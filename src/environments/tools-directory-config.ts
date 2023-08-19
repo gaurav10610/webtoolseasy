@@ -14,6 +14,7 @@ export enum AppDisplayNames {
   JSON_VIEWER = 'JSON Viewer',
   PASSWORD_GENERATOR = 'Password Generator',
   BASE64_ENCODE = 'Base64 Encode',
+  BASE64_DECODE = 'Base64 Decode',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -94,5 +95,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.BASE64_ENCODE,
     iconName: 'file-encode-icon',
     navigateUrl: '/tools/base64-encode',
+  },
+  {
+    applicationId: 'base64decoder',
+    displayText: AppDisplayNames.BASE64_DECODE,
+    iconName: 'file-decode-icon',
+    navigateUrl: '/tools/base64-decode',
   },
 ];

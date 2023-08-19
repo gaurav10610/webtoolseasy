@@ -3,12 +3,12 @@ import { ApplicationConfig } from 'src/app/@types/config';
 export const componentConfig: ApplicationConfig = {
   navigationUrl: '/tools',
   mainHeading: 'Web Tools Directory',
-  pageTitle: 'Free Web Tools - Tools Home',
+  pageTitle: 'Free Online Web Tools - webtoolseasy.com',
   metaTags: [
     {
       name: 'description',
       content:
-        'Screen Recorder | UUID Generator | Compress JPEG, Compress PNG | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
+        'Discover a comprehensive directory of free web tools online. Find the perfect tool for your needs and streamline your online experience.',
     },
     {
       name: 'author',
@@ -81,6 +81,10 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'file-encode-icon',
       iconRelativeUrl: 'file-encode.svg',
+    },
+    {
+      iconName: 'file-decode-icon',
+      iconRelativeUrl: 'file-decode.svg',
     },
   ],
 };

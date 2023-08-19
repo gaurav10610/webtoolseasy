@@ -15,7 +15,8 @@
         type="file"
         style="display: none"
         multiple
-        (change)="selectFiles($event)" />
+        (change)="selectFiles($event)"
+        [accept]="validImageFormats" />
 
       <!-- file drop area -->
       <div
@@ -34,7 +35,7 @@
         >
 
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           (click)="openFileDialog()"
           matTooltip="select images to compress">
@@ -51,7 +52,7 @@
         }"
         *ngIf="fileList.length > 0">
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           (click)="openFileDialog()"
           style="margin-right: 10px"
@@ -59,20 +60,11 @@
           <mat-icon>file_upload</mat-icon> Select Files
         </button>
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           matTooltip="convert all images"
           (click)="startCompressAll()">
           <mat-icon>play_arrow</mat-icon> Convert All
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          style="margin-left: 10px"
-          matTooltip="download all images"
-          *ngIf="isDownloadAllActive && !isMobile"
-          (click)="downloadAll()">
-          <mat-icon>file_download</mat-icon> Download Zip
         </button>
       </div>
 
@@ -121,14 +113,13 @@
                 svgIcon="settings-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="file.isValid"
                 matTooltip="change compression settings"
                 (click)="openSettingsDialog(file)"></mat-icon>
               <mat-icon
                 svgIcon="play-icon"
                 class="pointer-cursor"
                 style="margin-right: 10px"
-                *ngIf="!file.isCompressed && file.isValid"
+                *ngIf="!file.isCompressed"
                 (click)="compressImage(file)"
                 matTooltip="compress image"></mat-icon>
               <mat-icon
@@ -139,7 +130,7 @@
                 matTooltip="download compressed image"></mat-icon>
               <mat-icon
                 class="pointer-cursor"
-                *ngIf="!file.isValid"
+                *ngIf="file.error"
                 color="warn"
                 matTooltip="only image files can be compressed"
                 style="transform: scale(1.5)"

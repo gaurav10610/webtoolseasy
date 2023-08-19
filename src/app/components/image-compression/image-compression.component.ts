@@ -19,7 +19,6 @@ import {
 import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
-import * as JSZip from 'jszip';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -44,7 +43,6 @@ export class ImageCompressionComponent
 {
   isMobile!: boolean;
   fileList: ImageFileData[] = [];
-  zipBuilder!: JSZip;
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
@@ -52,7 +50,11 @@ export class ImageCompressionComponent
   destroyed = new Subject<void>();
   isDownloadAllActive: boolean = false;
   activeDialog: MatDialogRef<any> | undefined;
-  appId: string = 'imagecompress';
+
+  /**
+   * valid image formats
+   */
+  validImageFormats: string = '.jpg,.jpeg,.png';
 
   constructor(
     private titleService: Title,
@@ -95,11 +97,11 @@ export class ImageCompressionComponent
   }
 
   ngOnInit(): void {
-    LogUtils.info('image compression component has rendered');
+    LogUtils.info('ngOnInit: image compression component has rendered');
   }
 
   ngAfterViewInit(): void {
-    this.zipBuilder = new JSZip();
+    LogUtils.info('ngOnInit: image compression component has rendered');
   }
 
   ngOnDestroy() {
@@ -192,7 +194,6 @@ export class ImageCompressionComponent
         async file => await this.addFileToCompress(file)
       );
     }
-    await this.sortFiles();
   }
 
   /**
@@ -202,23 +203,6 @@ export class ImageCompressionComponent
   async dragOverHandler(event: any) {
     // Prevent default behavior (Prevent file from being opened)
     event.preventDefault();
-  }
-
-  async sortFiles() {
-    /**
-     * sorting the list to keep invalid files at one end
-     */
-    this.fileList = this.fileList.sort((value1, value2) => {
-      if (value2.isValid) {
-        return 1;
-      }
-
-      if (value1.isValid) {
-        return -1;
-      }
-
-      return 0;
-    });
   }
 
   async addFileToCompress(file: File) {
@@ -231,10 +215,6 @@ export class ImageCompressionComponent
         compressProgress: 0,
         isCompressed: false,
         name: file.name,
-        isValid: this.isValidFileFormat(file),
-        error: this.isValidFileFormat(file)
-          ? undefined
-          : '* error: invalid file type',
         compressOptions: {
           signal: new AbortController().signal,
           maxSizeMB: (0.9 * file.size) / 1024 / 1024,
@@ -249,13 +229,10 @@ export class ImageCompressionComponent
     for (const file of event.target.files) {
       await this.addFileToCompress(file);
     }
-    await this.sortFiles();
   }
 
   async startCompressAll() {
-    this.fileList
-      .filter(ImageFileData => ImageFileData.isValid)
-      .forEach(ImageFileData => this.compressImage(ImageFileData));
+    this.fileList.forEach(ImageFileData => this.compressImage(ImageFileData));
   }
 
   async compressImage(ImageFileData: ImageFileData) {
@@ -287,25 +264,6 @@ export class ImageCompressionComponent
     });
   }
 
-  async downloadAll(): Promise<void> {
-    this.fileList
-      .filter(ImageFileData => ImageFileData.isValid)
-      .forEach(ImageFileData =>
-        this.zipBuilder.file(
-          ImageFileData.name,
-          ImageFileData.compressedData!,
-          {
-            binary: true,
-          }
-        )
-      );
-
-    const zipFileData: Blob = await this.zipBuilder.generateAsync({
-      type: 'blob',
-    });
-    this.downloadFile('compress-images.zip', zipFileData);
-  }
-
   async downloadImage(imageFileData: ImageFileData): Promise<void> {
     const fileName: string =
       imageFileData.name.substring(
@@ -328,10 +286,6 @@ export class ImageCompressionComponent
     );
     this.renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
-  }
-
-  isValidFileFormat(file: File): boolean {
-    return ['image/jpeg', 'image/png'].includes(file.type);
   }
 
   /**

@@ -3,15 +3,16 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Video Converter',
-  subHeading: 'Convert Videos For Free',
+  mainHeading: 'Online Video to Audio Converter',
+  subHeading: 'Convert Videos to Audio For Free',
   navigationUrl: '/tools/video-converter',
-  pageTitle: 'Free Video Converter - Convert Video to MP4, WEBM, MP3 and More',
+  pageTitle:
+    'Online Video to Audio Converter - Convert MP4, MKV, WEBM, AVI, OGM',
   metaTags: [
     {
       name: 'description',
       content:
-        'This is a free online video converter tool that lets you convert video files. Change the video format to MP4, WEBM, MP3, OGV, OPUS and more. Convert your videos straight from your browser.',
+        'Convert your videos to high-quality audio files with our free online video to audio converter. No software installation required. Convert MP4, MKV, WEBM, AVI, OGM. Try it now!',
     },
     {
       name: 'author',
@@ -20,7 +21,7 @@ export const componentConfig: ApplicationConfig = {
     { name: 'robots', content: 'index, follow' },
   ],
   tags: [
-    'video converter',
+    'video to audio converter',
     'mp4 to mp3',
     'webm to mp4',
     'mp4 to webm',
@@ -73,7 +74,7 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use Video Converter Tool?',
+    heading: 'How to use Video to Audio Converter Tool?',
     listData: [
       `Drag & drop or select video files to convert.`,
       `All video files will be listed. An error will be shown for invalid file types.`,
@@ -84,7 +85,7 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: 'What is the need of a Video Converter Tool?',
+    heading: 'What is the need of a Video to Audio Converter Tool?',
     listData: [
       `Compatibility: Different devices and applications often support different video formats. By using an online video conversion tool, you can convert your video file into a format that is compatible with the device or application you want to use it on.`,
       `File size: Large video files can take up a lot of storage space on your device or take a long time to upload or download. By using a video conversion tool, you can reduce the file size of your video without compromising on quality, making it easier to store and share.`,
@@ -95,9 +96,9 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Video conversion is 100% free`,
-      `Video conversion is 100% secure as whole processing is being done at client side only (in host browser)`,
-      `Unlimited videos can be converted for free`,
+      `Video to Audio conversion is 100% free`,
+      `Video to Audio conversion is 100% secure as whole processing is being done at client side only (in host browser)`,
+      `Unlimited videos can be converted to Audio for free`,
       `Supports wide range of input video formats - MP4, WEBM, OGV, MKV, OGM`,
       `Supports wide range of output media formats - MP3, OGG, OPUS, AAC, MP4 x264, MP4 x265, WEBM, OGV`,
     ],

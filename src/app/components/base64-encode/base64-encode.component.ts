@@ -13,8 +13,10 @@ import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
-import { descriptionData } from 'src/environments/component-config/base64-encode/config';
-import { componentConfig } from 'src/environments/component-config/base64-encode/config';
+import {
+  descriptionData,
+  componentConfig,
+} from 'src/environments/component-config/base64-encode/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -59,6 +61,7 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.descrptionData = descriptionData;
+    this.appContextService.relatedTools = componentConfig.relatedTools;
   }
 
   ngOnInit(): void {
@@ -129,7 +132,7 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
    */
   copyBase64Data(type: string) {
     if (type === 'base64') {
-      this.clipboard.copy(<string>this.base64Data?.split(',')[1]);
+      this.clipboard.copy(<string>this.base64Data?.split(',').pop());
     } else if (type === 'uri') {
       this.clipboard.copy(<string>this.base64Data);
     }

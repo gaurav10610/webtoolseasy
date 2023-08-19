@@ -1,5 +1,6 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'File to Base64 Encode',
@@ -24,6 +25,14 @@ export const componentConfig: ApplicationConfig = {
     'file to base64 encoder',
     'online base64 converter',
   ],
+  relatedTools: [
+    {
+      applicationId: 'base64decoder',
+      displayText: AppDisplayNames.BASE64_DECODE,
+      iconName: 'file-decode-icon',
+      navigateUrl: '/tools/base64-decode',
+    },
+  ],
   icons: [
     {
       iconName: 'app-icon',
@@ -36,6 +45,10 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
+    },
+    {
+      iconName: 'file-decode-icon',
+      iconRelativeUrl: 'file-decode.svg',
     },
   ],
 };

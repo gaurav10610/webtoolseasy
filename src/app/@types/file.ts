@@ -4,8 +4,8 @@ export interface BaseFileData {
   inProgress: boolean;
   type: FileDataType;
   name: string;
-  isValid: boolean;
   error?: string;
+  fileFormat?: number; // file format identifier
 }
 
 export interface ImageFileData extends BaseFileData {
@@ -19,11 +19,18 @@ export interface ImageFileData extends BaseFileData {
 
 export interface VideoFileData extends BaseFileData {
   convertProgress: number;
-  targetFormat: string;
-  convertedFileData: Map<string, Uint8Array | undefined>;
+  targetFormat: number;
+  convertedFileData: Map<number, Uint8Array | undefined>;
   targetFileName?: string;
-  conversionErrors: Map<string, string>;
+  conversionErrors: Map<number, string>;
   converterStatus?: string;
+  supportedFormats: SupportedOutputFormats[];
+}
+
+export interface SupportedOutputFormats {
+  formatId: number;
+  targetFormat: string;
+  displayName: string;
 }
 
 export interface ImageCompressSettings {

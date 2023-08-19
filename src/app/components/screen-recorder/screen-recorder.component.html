@@ -33,22 +33,40 @@
           >
         </section>
 
-        <button
-          mat-raised-button
-          aria-label="start recording button"
-          *ngIf="!isRecording && !isProcessingStream && isSupported"
-          color="primary"
-          (click)="startRecording()">
-          <mat-icon>play_arrow</mat-icon> Start Recording
-        </button>
-        <button
-          mat-raised-button
-          aria-label="stop recording button"
-          *ngIf="isRecording && !isProcessingStream && isSupported"
-          color="warn"
-          (click)="stopRecording()">
-          <mat-icon>stop</mat-icon> Stop Recording
-        </button>
+        <div class="flex-display flex-row-flow" style="gap: 10px">
+          <button
+            mat-stroked-button
+            aria-label="start recording button"
+            *ngIf="!isRecording && !isProcessingStream && isSupported"
+            color="primary"
+            (click)="startRecording()">
+            <mat-icon>play_arrow</mat-icon> Start Recording
+          </button>
+          <button
+            mat-stroked-button
+            aria-label="pause recording button"
+            *ngIf="isRecording && !isRecPaused"
+            color="warn"
+            (click)="pauseRecording()">
+            <mat-icon>pause</mat-icon> Pause Recording
+          </button>
+          <button
+            mat-stroked-button
+            aria-label="resume recording button"
+            *ngIf="isRecording && isRecPaused"
+            color="accent"
+            (click)="resumeRecording()">
+            <mat-icon>play_arrow</mat-icon> Resume Recording
+          </button>
+          <button
+            mat-raised-button
+            aria-label="stop recording button"
+            *ngIf="isRecording && !isProcessingStream && isSupported"
+            color="warn"
+            (click)="stopRecording()">
+            <mat-icon>stop</mat-icon> Stop Recording
+          </button>
+        </div>
 
         <span #timer class="timer" *ngIf="isSupported">00:00</span>
 

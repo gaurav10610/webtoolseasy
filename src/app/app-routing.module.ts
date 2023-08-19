@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AppDirectoryModule } from './modules/app-directory/app-directory.module';
+import { Base64DecodeModule } from './modules/base64-decode/base64-decode.module';
 import { Base64EncodeModule } from './modules/base64-encode/base64-encode.module';
 import { CssFormatterModule } from './modules/css-formatter/css-formatter.module';
 import { HtmlFormatterModule } from './modules/html-formatter/html-formatter.module';
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'tools/base64-encode',
     loadChildren: () => Base64EncodeModule,
+  },
+  {
+    path: 'tools/base64-decode',
+    loadChildren: () => Base64DecodeModule,
   },
 ];
 

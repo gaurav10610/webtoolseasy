@@ -7,7 +7,7 @@ export const componentConfig: ApplicationConfig = {
     {
       name: 'description',
       content:
-        'Online Web Tools | Screen Recorder | UUID Generator | Image Compressor | JWT Decode | JS Formatter | JSON Formatter | CSS Formatter | HTML Formatter',
+        'Discover a range of free online web tools that can simplify your work and boost productivity. Try them out today!',
     },
     {
       name: 'author',
@@ -80,6 +80,10 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'file-encode-icon',
       iconRelativeUrl: 'file-encode.svg',
+    },
+    {
+      iconName: 'file-decode-icon',
+      iconRelativeUrl: 'file-decode.svg',
     },
   ],
 };
