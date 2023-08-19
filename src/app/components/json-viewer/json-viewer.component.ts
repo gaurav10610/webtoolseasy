@@ -17,7 +17,7 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { descriptionData } from 'src/environments/component-config/json-viewer/config';
 import { componentConfig } from 'src/environments/component-config/json-viewer/config';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { NgxJsonViewerComponent } from 'ngx-json-viewer-scrolling';
+import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-json-viewer',
@@ -115,6 +115,7 @@ export class JsonViewerComponent
 
   updateJsonTree(formattedJson: string) {
     this.formattedJSON = JSON.parse(formattedJson);
+    this.document.getElementsByTagName("ngx-json-viewer")[0].firstChild.style['overflow-y'] = 'scroll';
   }
 
   copyFormattedJson() {

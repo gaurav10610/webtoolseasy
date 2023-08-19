@@ -31,10 +31,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'jwt-icon.svg',
     },
     {
-      iconName: 'soon-icon',
-      iconRelativeUrl: 'soon-icon.svg',
-    },
-    {
       iconName: 'json-icon',
       iconRelativeUrl: 'json-icon.svg',
     },

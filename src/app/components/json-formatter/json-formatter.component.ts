@@ -19,7 +19,7 @@ import {
 } from 'src/environments/component-config/json-formatter/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { NgxJsonViewerComponent } from 'ngx-json-viewer-scrolling';
+import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-json-formatter',
@@ -117,6 +117,7 @@ export class JsonFormatterComponent
 
   updateFormattedJson(formattedJson: string) {
     this.formattedJSON = JSON.parse(formattedJson);
+    this.document.getElementsByTagName("ngx-json-viewer")[0].firstChild.style['overflow-y'] = 'scroll';
   }
 
   copyFormattedJson() {
