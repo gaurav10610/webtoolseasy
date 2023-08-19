@@ -40,6 +40,10 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'facebook.svg',
     },
     {
+      iconName: 'json-icon',
+      iconRelativeUrl: 'json-icon.svg',
+    },
+    {
       iconName: 'js-icon',
       iconRelativeUrl: 'js-icon.svg',
     },

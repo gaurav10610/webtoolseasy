@@ -20,6 +20,7 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { decodeJwt, decodeProtectedHeader } from 'jose';
+import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-jwt',
@@ -28,9 +29,7 @@ import { decodeJwt, decodeProtectedHeader } from 'jose';
 })
 export class JwtComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit
-{
-  appId: string = 'jwt';
+  implements OnInit, AfterViewInit {
   isTokenValid: boolean = true;
   tabSpaceValue: string = '  ';
 
@@ -44,13 +43,16 @@ export class JwtComponent
    * decoded token
    */
   @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: ElementRef;
+  text2AreaContent!: NgxJsonViewerComponent;
 
   /**
    * token header
    */
   @ViewChild('text3AreaContent', { static: false })
-  text3AreaContent!: ElementRef;
+  text3AreaContent!: NgxJsonViewerComponent;
+
+  decodedHeaders: any;
+  decodedToken: any;
 
   encodedToken: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
@@ -84,6 +86,13 @@ export class JwtComponent
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.descrptionData = descriptionData;
     this.appContextService.relatedTools = componentConfig.relatedTools;
+
+    this.decodedToken = decodeJwt(this.encodedToken);
+
+    /**
+     * decoded JWT token headers
+     */
+    this.decodedHeaders = decodeProtectedHeader(this.encodedToken);
   }
 
   ngOnInit(): void {
@@ -93,7 +102,6 @@ export class JwtComponent
   ngAfterViewInit(): void {
     LogUtils.info('jwt component: ngAfterViewInit');
     this.updateEncodedToken(this.encodedToken);
-    this.decodeUpdatedToken(this.encodedToken);
   }
 
   encodedInputChange() {
@@ -123,18 +131,9 @@ export class JwtComponent
        */
       const tokenHeadersValue = decodeProtectedHeader(encodedTokenValue);
       this.isTokenValid = true;
-      const decodedToken = JSON.stringify(
-        decodedTokenValue,
-        null,
-        this.tabSpaceValue
-      );
-      const tokenHeaders = JSON.stringify(
-        tokenHeadersValue,
-        null,
-        this.tabSpaceValue
-      );
-      this.updateDecodedToken(decodedToken);
-      this.updateTokenHeaders(tokenHeaders);
+
+      this.updateDecodedToken(decodedTokenValue);
+      this.updateTokenHeaders(tokenHeadersValue);
     } catch (error) {
       LogUtils.error(
         `error occured while decoding token: ${this.encodedToken}`
@@ -152,24 +151,16 @@ export class JwtComponent
     );
   }
 
-  updateDecodedToken(decodedToken: string) {
-    this.renderer.setProperty(
-      this.text2AreaContent.nativeElement,
-      'innerText',
-      decodedToken
-    );
+  updateDecodedToken(decodedToken: any) {
+    this.decodedToken = decodedToken;
   }
 
-  updateTokenHeaders(tokeanHeaders: string) {
-    this.renderer.setProperty(
-      this.text3AreaContent.nativeElement,
-      'innerText',
-      tokeanHeaders
-    );
+  updateTokenHeaders(tokeanHeaders: any) {
+    this.decodedHeaders = tokeanHeaders;
   }
 
   copyDecodedToken() {
-    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
+    this.clipboard.copy(JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue));
   }
 
   onEncodedDivClick() {

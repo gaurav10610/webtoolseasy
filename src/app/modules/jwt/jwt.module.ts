@@ -11,12 +11,14 @@ import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @NgModule({
   declarations: [JwtComponent],
   imports: [
     CommonModule,
     JwtRoutingModule,
+    NgxJsonViewerModule,
     MatIconModule,
     MatButtonModule,
     ClipboardModule,
