@@ -37,8 +37,6 @@ export class PasswordGeneratorComponent
   implements OnInit, AfterViewInit
 {
   password: string;
-  appId: string = 'passwordgenerator';
-
   passwordList: string[] = [];
 
   @ViewChild('passwordLengthInput', { static: false })
@@ -48,6 +46,11 @@ export class PasswordGeneratorComponent
   bulkPasswordInput!: ElementRef;
 
   bulkPasswordError: boolean = false;
+
+  /**
+   * flag to decide whether to show password or hide
+   */
+  passwordVisibility: boolean = false;
 
   /**
    * password generator options
@@ -245,5 +248,12 @@ export class PasswordGeneratorComponent
         this.options.uppercase = event.checked;
         break;
     }
+  }
+
+  /**
+   * toggle password visibility flag
+   */
+  togglePassVisibility() {
+    this.passwordVisibility = !this.passwordVisibility;
   }
 }

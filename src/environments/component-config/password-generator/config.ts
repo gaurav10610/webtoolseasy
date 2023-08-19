@@ -3,15 +3,16 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Password Generator',
-  subHeading: 'Create Strong, Random & Secure Passwords',
+  mainHeading: 'Online Random Password Generator',
+  subHeading: 'Generate Strong, Random & Secure Passwords',
   navigationUrl: '/tools/password-generator',
-  pageTitle: 'Password Generator - Generate Strong, Random & Secure Passwords',
+  pageTitle:
+    'Random Password Generator - Generate Strong, Random & Secure Passwords',
   metaTags: [
     {
       name: 'description',
       content:
-        'Quickly and easily generate individual or bulk strong, random and secure passwords using our passwod generator tool',
+        'Quickly and easily generate single or bulk strong, random and secure passwords using our free passwod generator tool',
     },
     {
       name: 'author',

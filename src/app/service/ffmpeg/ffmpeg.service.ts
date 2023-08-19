@@ -92,12 +92,7 @@ export class FfmpegService {
    * flush ffmpeg file system and terminate ffmpeg instance
    */
   async flushBuffer() {
-    if (this.ffmpeg) {
-      const files: FSNode[] = await this.ffmpeg.listDir('/');
-      for (const fileNode of files) {
-        LogUtils.info(`removing ffmpeg file: ${fileNode.name}`);
-        await this.ffmpeg.deleteFile(fileNode.name);
-      }
+    if (this.ffmpeg && this.ffmpeg.loaded) {
       this.ffmpeg.terminate();
     }
   }
