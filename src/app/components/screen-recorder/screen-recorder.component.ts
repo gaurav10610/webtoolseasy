@@ -64,7 +64,10 @@ export class ScreenRecorderComponent
     height: 150,
   };
 
-  static RECORDING_START_DELAY = 5000;
+  static RECORDING_START_DELAY_MS = 5000;
+
+  // timeslice in ms
+  static RECORDER_TIME_SLICE_MS = 50;
 
   /**
    * recording options
@@ -162,10 +165,6 @@ export class ScreenRecorderComponent
     LogUtils.info('screen recorder component: ngAfterViewInit');
   }
 
-  resetTimer() {
-    this.renderer.setProperty(this.timer.nativeElement, 'textContent', '00:00');
-  }
-
   resetContextVariables() {
     this.screenStream = undefined;
     this.webcamStream = undefined;
@@ -174,10 +173,17 @@ export class ScreenRecorderComponent
     this.videoChunksCounter = 0;
   }
 
+  /**
+   * start screen recording
+   */
   startRecording() {
     this.zoneRef.run(async () => {
       this.resetContextVariables();
-      this.resetTimer();
+      this.renderer.setProperty(
+        this.timer.nativeElement,
+        'textContent',
+        '00:00'
+      );
 
       // clear all buffer data from index db
       await clear();
@@ -315,24 +321,30 @@ export class ScreenRecorderComponent
     );
 
     this.mediaStreamRecorder.ondataavailable = (event: BlobEvent) => {
-      set(this.videoChunksCounter, event.data);
       this.videoChunksCounter++;
-
       //set timer
-      this.timeCounter++;
+      this.timeCounter = this.timeCounter + 50;
       let date = new Date(0);
-      date.setSeconds(this.timeCounter); // specify value for SECONDS here
+      date.setSeconds(this.timeCounter / 1000);
+      // date.setMilliseconds(this.timeCounter);
       this.renderer.setProperty(
         this.timer.nativeElement,
         'textContent',
         date.toISOString().substring(11, 19)
       );
+
+      /**
+       * write data in index db
+       */
+      set(this.videoChunksCounter, event.data);
     };
 
     /**
      * Need video stream slices of 1 second each
      */
-    this.mediaStreamRecorder.start(1000);
+    this.mediaStreamRecorder.start(
+      ScreenRecorderComponent.RECORDER_TIME_SLICE_MS
+    );
   }
 
   /**
@@ -418,7 +430,7 @@ export class ScreenRecorderComponent
         LogUtils.error(error);
         this.zoneRef.run(() => (this.isProcessingStream = false));
       }
-    }, ScreenRecorderComponent.RECORDING_START_DELAY);
+    }, ScreenRecorderComponent.RECORDING_START_DELAY_MS);
   }
 
   /**
