@@ -68,10 +68,10 @@
           <div
             class="text-content-div full-width"
             style="color: indigo; margin-bottom: 10px">
-            <pre
+              <ngx-json-viewer
               #text3AreaContent
-              contenteditable="false"
-              class="full-height full-width"></pre>
+              [json]="decodedHeaders"
+              [expanded]="true"></ngx-json-viewer>
           </div>
 
           <div class="flex-display flex-row-flow">
@@ -81,12 +81,11 @@
           </div>
 
           <div
-            class="text-content-div y-scroll flex-full-height full-width"
-            style="color: indigo">
-            <pre
+            class="text-content-div y-scroll flex-full-height full-width">
+              <ngx-json-viewer
               #text2AreaContent
-              contenteditable="false"
-              class="full-height full-width"></pre>
+              [json]="decodedToken"
+              [expanded]="true"></ngx-json-viewer>
           </div>
         </div>
       </div>
