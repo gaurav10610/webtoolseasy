@@ -26,6 +26,10 @@
   justify-content: flex-end;
 }
 
+ngx-json-viewer section {
+  overflow-y: scroll;
+}
+
 @media screen and (max-width: 735px) {
   .text-area-div {
     height: 10em;

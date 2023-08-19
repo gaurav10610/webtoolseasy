@@ -26,17 +26,24 @@
   justify-content: flex-end;
 }
 
+ngx-json-viewer .ngx-json-viewer {
+  overflow-y: scroll;
+}
+
 @media screen and (max-width: 735px) {
   .text-area-div {
     height: 10em;
     width: 80%;
   }
+
   .text1-area-margin {
     margin-bottom: 20px;
   }
+
   .text-area-container {
     flex-direction: column;
   }
+
   // .text-content-div {
   //   font-size: larger;
   // }
