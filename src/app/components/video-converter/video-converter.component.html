@@ -35,7 +35,7 @@
         >
 
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           (click)="openFileDialog()"
           matTooltip="select video to convert">
@@ -59,16 +59,16 @@
         }"
         *ngIf="fileDisplayList.length > 0">
         <button
-          mat-raised-button
-          color="primary"
+          mat-stroked-button
+          color="accent"
           (click)="openFileDialog()"
           style="margin-right: 10px"
           matTooltip="select videos to convert">
           <mat-icon>file_upload</mat-icon> Select Files
         </button>
         <button
-          mat-raised-button
-          color="primary"
+          mat-stroked-button
+          color="accent"
           matTooltip="convert all videos"
           (click)="convertAllVideos()">
           <mat-icon>play_arrow</mat-icon> Convert All

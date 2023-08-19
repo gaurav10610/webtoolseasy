@@ -35,7 +35,7 @@
         >
 
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           (click)="openFileDialog()"
           matTooltip="select images to compress">
@@ -52,7 +52,7 @@
         }"
         *ngIf="fileList.length > 0">
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           (click)="openFileDialog()"
           style="margin-right: 10px"
@@ -60,7 +60,7 @@
           <mat-icon>file_upload</mat-icon> Select Files
         </button>
         <button
-          mat-raised-button
+          mat-stroked-button
           color="primary"
           matTooltip="convert all images"
           (click)="startCompressAll()">

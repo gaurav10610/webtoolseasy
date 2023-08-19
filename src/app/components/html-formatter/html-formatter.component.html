@@ -59,7 +59,10 @@
       <div
         class="flex-display flex-row-flow full-width copy-button"
         style="margin-top: 10px; margin-bottom: 10px">
-        <button mat-raised-button (click)="copyFormattedHtml()" color="primary">
+        <button
+          mat-stroked-button
+          (click)="copyFormattedHtml()"
+          color="primary">
           <mat-icon>content_copy</mat-icon> Copy Formatted HTML
         </button>
       </div>
