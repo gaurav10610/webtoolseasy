@@ -8,9 +8,8 @@ describe('TextCompareComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextCompareComponent ]
-    })
-    .compileComponents();
+      declarations: [TextCompareComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TextCompareComponent);
     component = fixture.componentInstance;

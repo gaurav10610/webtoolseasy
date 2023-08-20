@@ -117,7 +117,9 @@ export class JsonFormatterComponent
 
   updateFormattedJson(formattedJson: string) {
     this.formattedJSON = JSON.parse(formattedJson);
-    this.document.getElementsByTagName("ngx-json-viewer")[0].firstChild.style['overflow-y'] = 'scroll';
+    this.document.getElementsByTagName('ngx-json-viewer')[0].firstChild.style[
+      'overflow-y'
+    ] = 'scroll';
   }
 
   copyFormattedJson() {

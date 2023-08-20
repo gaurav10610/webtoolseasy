@@ -29,7 +29,8 @@ import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 })
 export class JwtComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit {
+  implements OnInit, AfterViewInit
+{
   isTokenValid: boolean = true;
   tabSpaceValue: string = '  ';
 
@@ -160,7 +161,9 @@ export class JwtComponent
   }
 
   copyDecodedToken() {
-    this.clipboard.copy(JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue));
+    this.clipboard.copy(
+      JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue)
+    );
   }
 
   onEncodedDivClick() {

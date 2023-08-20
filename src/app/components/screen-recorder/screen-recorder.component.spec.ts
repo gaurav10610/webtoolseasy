@@ -8,9 +8,8 @@ describe('ScreenRecorderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScreenRecorderComponent ]
-    })
-    .compileComponents();
+      declarations: [ScreenRecorderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ScreenRecorderComponent);
     component = fixture.componentInstance;

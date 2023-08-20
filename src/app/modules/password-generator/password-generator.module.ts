@@ -14,12 +14,14 @@ import { PasswordGeneratorRoutingModule } from './password-generator-routing.mod
 import { PasswordGeneratorComponent } from 'src/app/components/password-generator/password-generator.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [PasswordGeneratorComponent],
   imports: [
     CommonModule,
     PasswordGeneratorRoutingModule,
+    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,

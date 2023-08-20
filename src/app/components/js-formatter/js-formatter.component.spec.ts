@@ -8,9 +8,8 @@ describe('JsFormatterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ JsFormatterComponent ]
-    })
-    .compileComponents();
+      declarations: [JsFormatterComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(JsFormatterComponent);
     component = fixture.componentInstance;

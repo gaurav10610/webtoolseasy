@@ -8,9 +8,8 @@ describe('HtmlFormatterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HtmlFormatterComponent ]
-    })
-    .compileComponents();
+      declarations: [HtmlFormatterComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HtmlFormatterComponent);
     component = fixture.componentInstance;
