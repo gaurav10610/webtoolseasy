@@ -2,7 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
-import { ApplicationConfig, IconConfig } from '../@types/config';
+import { ApplicationConfig, IconConfig } from 'src/app/@types/config';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 export abstract class BaseComponent {
   iconsPath = `${environment.hostname}/assets/images/icons/`;
@@ -18,7 +19,8 @@ export abstract class BaseComponent {
     icons: IconConfig[],
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
-    platformId: string
+    platformId: string,
+    appContextService: AppContextService
   ) {
     if (isPlatformBrowser(platformId)) {
       /**
@@ -32,14 +34,22 @@ export abstract class BaseComponent {
       this.iconsPath = `http://localhost:${environment.port}/assets/images/icons/`;
     }
 
-    icons.forEach(iconConfig =>
-      matIconRegistry.addSvgIcon(
-        iconConfig.iconName,
-        domSanitizer.bypassSecurityTrustResourceUrl(
-          this.iconsPath + iconConfig.iconRelativeUrl
-        )
+    /**
+     * load only those icons which are not already registered
+     */
+    icons
+      .filter(
+        iconConfig => !appContextService.svgIcons.has(iconConfig.iconName)
       )
-    );
+      .forEach(iconConfig => {
+        matIconRegistry.addSvgIcon(
+          iconConfig.iconName,
+          domSanitizer.bypassSecurityTrustResourceUrl(
+            this.iconsPath + iconConfig.iconRelativeUrl
+          )
+        );
+        appContextService.svgIcons.set(iconConfig.iconName, true);
+      });
   }
 
   /**
@@ -48,6 +58,7 @@ export abstract class BaseComponent {
    * 1. title
    * 2. meta
    * 3. canonical url
+   * 4. og:graph meta tags
    */
   async updatePageMetaData(
     applicationConfig: ApplicationConfig,
@@ -57,10 +68,6 @@ export abstract class BaseComponent {
   ) {
     titleService.setTitle(applicationConfig.pageTitle);
     applicationConfig.metaTags.forEach(metaDefinition => {
-      // if (metaDefinition.name) {
-      //   metaService.removeTag(`name=${metaDefinition.name}`);
-      // }
-
       metaService.updateTag(metaDefinition);
     });
 

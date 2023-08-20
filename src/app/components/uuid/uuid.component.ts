@@ -64,7 +64,8 @@ export class UuidComponent
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId
+      this.platformId,
+      this.appContextService
     );
     this.updatePageMetaData(
       componentConfig,

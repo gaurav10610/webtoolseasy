@@ -74,7 +74,8 @@ export class ImageCompressionComponent
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId
+      this.platformId,
+      this.appContextService
     );
     this.updatePageMetaData(
       componentConfig,

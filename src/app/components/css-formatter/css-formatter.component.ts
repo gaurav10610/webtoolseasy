@@ -56,7 +56,8 @@ export class CssFormatterComponent
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId
+      this.platformId,
+      appContextService
     );
     this.updatePageMetaData(
       componentConfig,

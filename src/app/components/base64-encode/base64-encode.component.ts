@@ -49,7 +49,8 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId
+      this.platformId,
+      appContextService
     );
     this.updatePageMetaData(
       componentConfig,
