@@ -7,12 +7,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [AppDirectoryComponent],
   imports: [
     CommonModule,
     AppDirectoryRoutingModule,
+    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
     HeaderToolbarModule,

@@ -13,12 +13,14 @@ import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [ScreenRecorderComponent],
   imports: [
     CommonModule,
     ScreenRecorderRoutingModule,
+    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,

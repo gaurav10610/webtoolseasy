@@ -18,12 +18,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupFormModule } from 'src/app/modules/popup-form/popup-form.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [VideoConverterComponent],
   imports: [
     CommonModule,
     VideoConverterRoutingModule,
+    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,

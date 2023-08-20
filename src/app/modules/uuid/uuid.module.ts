@@ -12,12 +12,14 @@ import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { MatInputModule } from '@angular/material/input';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [UuidComponent],
   imports: [
     CommonModule,
     UuidRoutingModule,
+    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
     ClipboardModule,

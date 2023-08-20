@@ -15,12 +15,14 @@ import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.mod
 import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [ImageCompressionComponent, CompressSettingsComponent],
   imports: [
     CommonModule,
     ImageCompressionRoutingModule,
+    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,

@@ -55,6 +55,18 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'facebook-icon',
       iconRelativeUrl: 'facebook.svg',
     },
+    {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
   ],
 };
 
