@@ -99,5 +99,13 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'file-decode-icon',
       iconRelativeUrl: 'file-decode.svg',
     },
+    {
+      iconName: 'share-whatsapp',
+      iconRelativeUrl: 'share-whatsapp.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
   ],
 };
