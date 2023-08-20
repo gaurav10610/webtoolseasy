@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/css-formatter';
+const pageTitle = 'Best CSS Formatter / Beautifier';
+const pageDescription =
+  'CSS Formatter | CSS Beautifier | CSS Prettify | CSS Formatter Online | CSS Beautifier Online';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'CSS Formatter',
   subHeading: 'Online CSS Beautifier',
-  navigationUrl: '/tools/css-formatter',
-  pageTitle: 'Best CSS Formatter / Beautifier',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'CSS Formatter | CSS Beautifier | CSS Prettify | CSS Formatter Online | CSS Beautifier Online',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'css formatter',

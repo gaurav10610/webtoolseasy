@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/js-formatter';
+const pageTitle = 'Best Online Javascript Beautifier / Formatter';
+const pageDescription =
+  'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Javascript Formatter',
   subHeading: 'Javascript Beautifier',
-  navigationUrl: '/tools/js-formatter',
-  pageTitle: 'Best Online Javascript Beautifier / Formatter',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'js formatter',

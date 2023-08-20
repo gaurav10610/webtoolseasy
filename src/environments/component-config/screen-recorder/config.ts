@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/screen-recorder';
+const pageTitle = 'Free Online Screen Recorder | Online Video Recorder';
+const pageDescription =
+  'Easily Capture your Screen via Best Free Online Screen Recorder with or without audio, video from microphone and webcam | No download, No Watermark with Lag free recording for PCs ( Windows/ MAC/ Ubuntu )';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Screen Recorder',
   subHeading: 'Record Screen With Audio, Video for Free',
-  navigationUrl: '/tools/screen-recorder',
-  pageTitle: 'Free Online Screen Recorder | Online Video Recorder',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Easily Capture your Screen via Best Free Online Screen Recorder with or without audio, video from microphone and webcam | No download, No Watermark with Lag free recording for PCs ( Windows/ MAC/ Ubuntu )',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'screen recorder',

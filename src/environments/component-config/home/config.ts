@@ -1,19 +1,33 @@
 import { ApplicationConfig } from 'src/app/@types/config';
+import { environment } from 'src/environments/environment';
+
+const navigationUrl = '';
+const pageTitle = 'Free Web Tools - webtoolseasy.com';
+const pageDescription =
+  'Discover a range of free online web tools that can simplify your work and boost productivity. Try them out today!';
 
 export const componentConfig: ApplicationConfig = {
-  navigationUrl: '',
-  pageTitle: 'Free Web Tools - webtoolseasy.com',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Discover a range of free online web tools that can simplify your work and boost productivity. Try them out today!',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [],
   icons: [

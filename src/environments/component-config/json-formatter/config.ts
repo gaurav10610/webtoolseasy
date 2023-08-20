@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/json-formatter';
+const pageTitle = 'Best JSON Formatter / Beautifier and JSON Validator';
+const pageDescription =
+  'Online JSON Formatter / Beautifier and JSON Validator will format JSON data, and helps to validate. Save and Copy JSON';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JSON Formatter',
   subHeading: 'Online JSON Beautifier',
-  navigationUrl: '/tools/json-formatter',
-  pageTitle: 'Best JSON Formatter / Beautifier and JSON Validator',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Online JSON Formatter / Beautifier and JSON Validator will format JSON data, and helps to validate. Save and Copy JSON',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'json formatter',

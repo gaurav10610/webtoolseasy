@@ -163,7 +163,7 @@ export class FFmpeg {
   public load = (config: FFMessageLoadConfig = {}): Promise<IsFirst> => {
     if (!this.#worker) {
       this.#worker = new Worker(
-        `${environment.hostname}assets/@ffmpeg/worker.js`,
+        `${environment.hostname}/assets/@ffmpeg/worker.js`,
         {
           type: 'module',
         }

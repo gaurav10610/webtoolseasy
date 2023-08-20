@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { ApplicationConfig, IconConfig } from '../@types/config';
 
 export abstract class BaseComponent {
-  iconsPath = `${environment.hostname}assets/images/icons/`;
+  iconsPath = `${environment.hostname}/assets/images/icons/`;
   tags: string[] = [];
 
   constructor() {}
@@ -24,7 +24,7 @@ export abstract class BaseComponent {
       /**
        * set assets path when executed in browser
        */
-      this.iconsPath = `${environment.hostname}assets/images/icons/`;
+      this.iconsPath = `${environment.hostname}/assets/images/icons/`;
     } else {
       /**
        * set assets path when executed on server
@@ -57,8 +57,11 @@ export abstract class BaseComponent {
   ) {
     titleService.setTitle(applicationConfig.pageTitle);
     applicationConfig.metaTags.forEach(metaDefinition => {
-      metaService.removeTag(`name=${metaDefinition.name}`);
-      metaService.addTag(metaDefinition);
+      // if (metaDefinition.name) {
+      //   metaService.removeTag(`name=${metaDefinition.name}`);
+      // }
+
+      metaService.updateTag(metaDefinition);
     });
 
     /**

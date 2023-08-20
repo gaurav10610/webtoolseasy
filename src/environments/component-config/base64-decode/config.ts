@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/base64-decode';
+const pageTitle = 'Base64 to File | Base64 Decode | Base64 Converter | Base64';
+const pageDescription =
+  'Free online tool to decode base64 to file. Base64 decoder. Convert any base64 data uri to file';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Base64 to File Decode',
   subHeading: 'Decode Base64 to File',
-  navigationUrl: '/tools/base64-decode',
-  pageTitle: 'Base64 to File | Base64 Decode | Base64 Converter | Base64',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Free online tool to decode base64 to file. Base64 decoder. Convert any base64 data uri to file',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   relatedTools: [
     {

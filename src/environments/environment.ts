@@ -5,9 +5,10 @@
 export const environment = {
   production: false,
   gaCode: 'G-XXXXX',
-  hostname: 'http://localhost:4200/',
+  hostname: 'http://localhost:4200',
   port: 4200,
   ffmpegBaseUrl: 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm',
+  appIconUrl: 'http://localhost:4200/assets/images/icons/app-share-image.jpeg',
 };
 
 /*

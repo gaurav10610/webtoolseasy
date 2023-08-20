@@ -1,22 +1,36 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
+
+const navigationUrl = '/tools/image-compress';
+const pageTitle = 'Best Online Image Compressor, Image File Size Reducer';
+const pageDescription =
+  'Online Image Compressor is the Best Image Optimzer Tool to Compress your images in JPEG and PNG formats to the minimum possible size for free.';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Image Compressor',
   subHeading: 'Compress JPEG, PNG images for free',
-  navigationUrl: '/tools/image-compress',
-  pageTitle: 'Best Online Image Compressor, Image File Size Reducer',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Online Image Compressor is the Best Image Optimzer Tool to Compress your images in JPEG and PNG formats to the minimum possible size for free.',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'image compressor',

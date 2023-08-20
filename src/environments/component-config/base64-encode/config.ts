@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/base64-encode';
+const pageTitle = 'File to Base64 | Base64 Encode | Base64 Converter | Base64';
+const pageDescription =
+  'Free online tool to encode file to Base64. Base64 encoder. Convert any file to base64';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'File to Base64 Encode',
   subHeading: 'Encode File to Base64 Format',
-  navigationUrl: '/tools/base64-encode',
-  pageTitle: 'File to Base64 | Base64 Encode | Base64 Converter | Base64',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Free online tool to encode file to Base64. Base64 encoder. Convert any file to base64',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'base64 encode',

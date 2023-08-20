@@ -1,23 +1,37 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/uuid';
+const pageTitle = 'Online UUID Generator';
+const pageDescription =
+  'Quickly and easily generate individual or bulk sets of universally unique identifiers (UUIDs)';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
   subHeading: 'Individual or Bulk UUID V4 & V1 Generator',
-  navigationUrl: '/tools/uuid',
-  pageTitle: 'Online UUID Generator',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Quickly and easily generate individual or bulk sets of universally unique identifiers (UUIDs)',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'uuid',
