@@ -34,6 +34,8 @@ export abstract class BaseComponent {
       this.iconsPath = `http://localhost:${environment.port}/assets/images/icons/`;
     }
 
+    const epochMS: number = Date.now();
+
     /**
      * load only those icons which are not already registered
      */
@@ -44,9 +46,8 @@ export abstract class BaseComponent {
       .forEach(iconConfig => {
         matIconRegistry.addSvgIcon(
           iconConfig.iconName,
-          domSanitizer.bypassSecurityTrustResourceUrl(
-            this.iconsPath + iconConfig.iconRelativeUrl
-          )
+          domSanitizer.bypassSecurityTrustResourceUrl(`
+            ${this.iconsPath}${iconConfig.iconRelativeUrl}?${epochMS}`)
         );
         appContextService.svgIcons.set(iconConfig.iconName, true);
       });
