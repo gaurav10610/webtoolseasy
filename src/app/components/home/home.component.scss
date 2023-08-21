@@ -6,11 +6,10 @@
   transform: scale(10);
 }
 
-@media screen and (min-width: 735px) { 
+@media screen and (min-width: 735px) {
   .app-parent-div {
     margin: 10px;
     border: 1px solid lightgrey;
-    // border-radius: 10px;
     padding: 5px;
     padding-right: 10px;
   }
@@ -22,7 +21,7 @@
   }
 }
 
-#subheading{
+#subheading {
   font-family: monospace, 'Courier New', Courier;
 }
 
@@ -33,7 +32,7 @@
   .icon-div mat-icon {
     transform: scale(5);
   }
-  #subheading{
+  #subheading {
     font-size: larger;
   }
   .app-links {

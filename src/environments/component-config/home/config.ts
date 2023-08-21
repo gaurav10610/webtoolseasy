@@ -102,6 +102,18 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'file-decode.svg',
     },
     {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
       iconName: 'share-whatsapp',
       iconRelativeUrl: 'share-whatsapp.svg',
     },
