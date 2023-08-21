@@ -84,10 +84,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'share-twitter.svg',
     },
     {
-      iconName: 'share-whatsapp',
-      iconRelativeUrl: 'share-whatsapp.svg',
-    },
-    {
       iconName: 'share-copy',
       iconRelativeUrl: 'share-copy.svg',
     },

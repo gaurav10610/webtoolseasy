@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -23,7 +22,6 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     HttpClientModule,
     NgxGoogleAnalyticsModule.forRoot(environment.gaCode),
     NgxGoogleAnalyticsRouterModule,
-    ShareButtonsModule,
     MatIconModule,
     MatButtonModule,
   ],
