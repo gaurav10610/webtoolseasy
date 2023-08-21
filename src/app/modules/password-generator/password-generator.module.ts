@@ -15,6 +15,7 @@ import { PasswordGeneratorComponent } from 'src/app/components/password-generato
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [PasswordGeneratorComponent],
@@ -22,6 +23,7 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     CommonModule,
     PasswordGeneratorRoutingModule,
     ShareButtonsModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,

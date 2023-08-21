@@ -19,6 +19,7 @@ import { PopupFormModule } from 'src/app/modules/popup-form/popup-form.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [VideoConverterComponent],
@@ -26,6 +27,7 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     CommonModule,
     VideoConverterRoutingModule,
     ShareButtonsModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,

@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -22,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
     HttpClientModule,
     NgxGoogleAnalyticsModule.forRoot(environment.gaCode),
     NgxGoogleAnalyticsRouterModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
   ],

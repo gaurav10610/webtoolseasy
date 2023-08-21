@@ -70,14 +70,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'css.svg',
     },
     {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
-    },
-    {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
     },

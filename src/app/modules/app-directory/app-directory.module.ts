@@ -8,6 +8,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [AppDirectoryComponent],
@@ -15,6 +16,8 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     CommonModule,
     AppDirectoryRoutingModule,
     ShareButtonsModule,
+    FollowButtonsModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
     HeaderToolbarModule,

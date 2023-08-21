@@ -13,6 +13,7 @@ import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [JsonFormatterComponent],
@@ -20,6 +21,7 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     CommonModule,
     JsonFormatterRoutingModule,
     ShareButtonsModule,
+    FollowButtonsModule,
     NgxJsonViewerModule,
     MatIconModule,
     MatButtonModule,

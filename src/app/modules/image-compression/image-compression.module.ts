@@ -16,6 +16,7 @@ import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [ImageCompressionComponent, CompressSettingsComponent],
@@ -23,6 +24,7 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     CommonModule,
     ImageCompressionRoutingModule,
     ShareButtonsModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,

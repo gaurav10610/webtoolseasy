@@ -77,14 +77,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'comparison.svg',
     },
     {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
-    },
-    {
       iconName: 'video-convert-icon',
       iconRelativeUrl: 'video-convert.svg',
     },
@@ -115,6 +107,10 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'share-copy',
       iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
 };

@@ -13,6 +13,7 @@ import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [Base64EncodeComponent],
@@ -20,6 +21,7 @@ import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.
     CommonModule,
     Base64EncodeRoutingModule,
     ShareButtonsModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
