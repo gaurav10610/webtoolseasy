@@ -7,6 +7,7 @@ const navigationUrl = '/tools/jwt';
 const pageTitle = 'JWT Decoder';
 const pageDescription =
   'JSON Web Token (JWT) Decode. JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is digitally signed using JSON Web Signature (JWS).';
+const imageUrl = `${environment.screenshotsBaseUrl}/jwt-decoder.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

@@ -5,6 +5,7 @@ const navigationUrl = '/tools';
 const pageTitle = 'Free Online Web Tools - webtoolseasy.com';
 const pageDescription =
   'Discover a comprehensive directory of free web tools online. Find the perfect tool for your needs and streamline your online experience.';
+const imageUrl = `${environment.screenshotsBaseUrl}/tools-directory.png`;
 
 export const componentConfig: ApplicationConfig = {
   navigationUrl,
@@ -26,7 +27,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

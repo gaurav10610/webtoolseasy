@@ -6,6 +6,7 @@ const navigationUrl = '/tools/image-compress';
 const pageTitle = 'Best Online Image Compressor, Image File Size Reducer';
 const pageDescription =
   'Online Image Compressor is the Best Image Optimzer Tool to Compress your images in JPEG and PNG formats to the minimum possible size for free.';
+const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Image Compressor',
@@ -28,7 +29,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

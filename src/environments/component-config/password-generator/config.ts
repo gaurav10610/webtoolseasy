@@ -8,6 +8,7 @@ const pageTitle =
   'Random Password Generator - Generate Strong, Random & Secure Passwords';
 const pageDescription =
   'Quickly and easily generate single or bulk strong, random and secure passwords using our free passwod generator tool';
+const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Random Password Generator',
@@ -30,7 +31,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

@@ -7,6 +7,7 @@ const navigationUrl = '/tools/html-formatter';
 const pageTitle = 'Best HTML Formatter / Beautifier';
 const pageDescription =
   'HTML Formatter | HTML Beautifier | HTML Formatter Online | HTML Code Formatter';
+const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'HTML Formatter',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

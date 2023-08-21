@@ -7,6 +7,7 @@ const navigationUrl = '/tools/screen-recorder';
 const pageTitle = 'Free Online Screen Recorder | Online Video Recorder';
 const pageDescription =
   'Easily Capture your Screen via Best Free Online Screen Recorder with or without audio, video from microphone and webcam | No download, No Watermark with Lag free recording for PCs ( Windows/ MAC/ Ubuntu )';
+const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Screen Recorder',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

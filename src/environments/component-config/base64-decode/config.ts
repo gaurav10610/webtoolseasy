@@ -7,6 +7,7 @@ const navigationUrl = '/tools/base64-decode';
 const pageTitle = 'Base64 to File | Base64 Decode | Base64 Converter | Base64';
 const pageDescription =
   'Free online tool to decode base64 to file. Base64 decoder. Convert any base64 data uri to file';
+const imageUrl = `${environment.screenshotsBaseUrl}/base64-decode.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Base64 to File Decode',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

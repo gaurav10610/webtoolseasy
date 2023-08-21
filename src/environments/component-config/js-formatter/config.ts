@@ -7,6 +7,7 @@ const navigationUrl = '/tools/js-formatter';
 const pageTitle = 'Best Online Javascript Beautifier / Formatter';
 const pageDescription =
   'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free';
+const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Javascript Formatter',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

@@ -4,6 +4,5 @@ export const environment = {
   hostname: 'https://webtoolseasy.com',
   port: 9898,
   ffmpegBaseUrl: 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm',
-  appIconUrl:
-    'https://webtoolseasy.com/assets/images/icons/app-share-image.jpeg',
+  screenshotsBaseUrl: 'https://webtoolseasy.com/assets/images/screenshots',
 };

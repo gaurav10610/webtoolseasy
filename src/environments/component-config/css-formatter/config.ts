@@ -7,6 +7,7 @@ const navigationUrl = '/tools/css-formatter';
 const pageTitle = 'Best CSS Formatter / Beautifier';
 const pageDescription =
   'CSS Formatter | CSS Beautifier | CSS Prettify | CSS Formatter Online | CSS Beautifier Online';
+const imageUrl = `${environment.screenshotsBaseUrl}/css-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'CSS Formatter',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

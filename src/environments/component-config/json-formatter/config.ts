@@ -7,6 +7,7 @@ const navigationUrl = '/tools/json-formatter';
 const pageTitle = 'Best JSON Formatter / Beautifier and JSON Validator';
 const pageDescription =
   'Online JSON Formatter / Beautifier and JSON Validator will format JSON data, and helps to validate. Save and Copy JSON';
+const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JSON Formatter',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

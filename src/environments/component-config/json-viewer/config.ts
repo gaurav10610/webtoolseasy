@@ -7,6 +7,7 @@ const navigationUrl = '/tools/json-viewer';
 const pageTitle = 'Best JSON Viewer and JSON Beautifier';
 const pageDescription =
   'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to pretty print JSON data.';
+const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online JSON Viewer',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

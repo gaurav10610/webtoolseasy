@@ -7,6 +7,7 @@ const navigationUrl = '/tools/uuid';
 const pageTitle = 'Online UUID Generator';
 const pageDescription =
   'Quickly and easily generate individual or bulk sets of universally unique identifiers (UUIDs)';
+const imageUrl = `${environment.screenshotsBaseUrl}/uuid-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

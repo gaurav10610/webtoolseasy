@@ -5,6 +5,7 @@ const navigationUrl = '';
 const pageTitle = 'Free Web Tools - webtoolseasy.com';
 const pageDescription =
   'Discover a range of free online web tools that can simplify your work and boost productivity. Try them out today!';
+const imageUrl = `${environment.screenshotsBaseUrl}/home-page.png`;
 
 export const componentConfig: ApplicationConfig = {
   navigationUrl,
@@ -25,7 +26,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],

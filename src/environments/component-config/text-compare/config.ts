@@ -7,6 +7,7 @@ const pageTitle =
   'Compare text online to find the difference between two text files';
 const pageDescription =
   'Text File Difference tool will compare text to find the difference between two text files. Just paste your files and Find Difference!';
+const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Text File Difference',
@@ -29,7 +30,8 @@ export const componentConfig: ApplicationConfig = {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
-    { property: 'og:image', content: environment.appIconUrl },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
