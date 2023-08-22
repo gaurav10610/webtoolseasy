@@ -6,7 +6,6 @@ import {
   Inject,
   OnInit,
   PLATFORM_ID,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -30,19 +29,22 @@ export class CssFormatterComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  appId: string = 'cssformatter';
+  rawCode: string = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
 
-  @ViewChild('text1AreaContent', { static: false })
-  text1AreaContent!: ElementRef;
+  formattedCode!: string;
 
-  @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: ElementRef;
-
-  rawCss: string = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
+  /**
+   * monaco editor options
+   */
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'css',
+    formatOnPaste: true,
+    formatOnType: true,
+  };
 
   constructor(
     private clipboard: Clipboard,
-    private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
     @Inject(DOCUMENT) private document: any,
@@ -74,59 +76,18 @@ export class CssFormatterComponent
 
   ngOnInit(): void {
     LogUtils.info('css formatter component: ngOnInit');
+    this.formattedCode = css_beautify(this.rawCode);
   }
 
   ngAfterViewInit(): void {
     LogUtils.info('css formatter component: ngAfterViewInit');
-    this.updateRawCss(this.rawCss);
-    const formattedCss = css_beautify(this.rawCss);
-    this.updateFormattedCss(formattedCss);
   }
 
-  updateRawCss(rawCss: string) {
-    this.renderer.setProperty(
-      this.text1AreaContent.nativeElement,
-      'innerText',
-      rawCss
-    );
+  onRawCodeChange() {
+    this.formattedCode = css_beautify(this.rawCode);
   }
 
-  updateFormattedCss(formattedCss: string) {
-    this.renderer.setProperty(
-      this.text2AreaContent.nativeElement,
-      'innerText',
-      formattedCss
-    );
-  }
-
-  formatCss(rawCssValue: string) {
-    try {
-      this.rawCss = rawCssValue;
-      const formattedCss = css_beautify(rawCssValue);
-      this.updateFormattedCss(formattedCss);
-    } catch (e) {
-      LogUtils.error(`error occured while decoding token: ${rawCssValue}`);
-    }
-  }
-
-  rawCssChange() {
-    this.formatCss(this.text1AreaContent.nativeElement.innerText);
-  }
-
-  onCssPaste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-    this.updateRawCss(pastedData);
-    this.formatCss(pastedData);
-  }
-
-  copyFormattedCss() {
-    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
-  }
-
-  onEncodedDivClick() {
-    this.text1AreaContent.nativeElement.focus();
+  copyFormattedCode() {
+    this.clipboard.copy(this.formattedCode);
   }
 }

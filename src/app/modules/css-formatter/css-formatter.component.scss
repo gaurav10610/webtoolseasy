@@ -8,18 +8,8 @@
   font-size: larger;
 }
 
-.text-content-div {
-  border: 1px solid lightgrey;
-  border-radius: 10px;
-  padding: 10px;
-}
-
 .text-area-container {
-  justify-content: space-around;
-}
-
-[contenteditable]:focus {
-  outline: 0px solid transparent;
+  justify-content: space-between;
 }
 
 .copy-button {
@@ -28,18 +18,13 @@
 
 @media screen and (max-width: 735px) {
   .text-area-div {
-    height: 10em;
+    height: 25em;
     width: 80%;
-  }
-  .text1-area-margin {
-    margin-bottom: 20px;
   }
   .text-area-container {
     flex-direction: column;
+    gap: 10px;
   }
-  // .text-content-div {
-  //   font-size: larger;
-  // }
   .copy-button {
     justify-content: center;
   }
