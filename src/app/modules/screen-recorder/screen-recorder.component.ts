@@ -27,6 +27,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
+import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -49,6 +50,8 @@ export class ScreenRecorderComponent
   timerIntervalFunctionId: any;
   timeCounter: number = 0;
 
+  videoChunksIds: number[] = [];
+
   videoFileExtention: string = 'webm';
   recorderOptionConfig: any = {
     webm: {
@@ -67,7 +70,7 @@ export class ScreenRecorderComponent
   static RECORDING_START_DELAY_MS = 5000;
 
   // timeslice in ms
-  static RECORDER_TIME_SLICE_MS = 50;
+  static RECORDER_TIME_SLICE_MS = 100;
 
   /**
    * recording options
@@ -81,8 +84,6 @@ export class ScreenRecorderComponent
   mergedMediaStream: MediaStream | undefined;
   videoChunksCounter = 0;
 
-  showMergedVideo: boolean = false;
-
   isSupported: boolean = true;
   isMobile!: boolean;
 
@@ -91,10 +92,14 @@ export class ScreenRecorderComponent
    */
   mediaStreamRecorder: MediaRecorder | undefined;
 
-  @ViewChild('timer', { static: false })
-  timer!: ElementRef;
-
   destroyed = new Subject<void>();
+
+  config: CountdownConfig = {
+    demand: false,
+  };
+
+  @ViewChild('cd', { static: false })
+  countdown!: CountdownComponent;
 
   constructor(
     private titleService: Title,
@@ -172,6 +177,7 @@ export class ScreenRecorderComponent
     this.mergedMediaStream = undefined;
     this.mediaStreamRecorder = undefined;
     this.videoChunksCounter = 0;
+    this.videoChunksIds = [];
   }
 
   /**
@@ -179,12 +185,9 @@ export class ScreenRecorderComponent
    */
   startRecording() {
     this.zoneRef.run(async () => {
+      this.isRecording = true;
+      this.countdown.restart();
       this.resetContextVariables();
-      this.renderer.setProperty(
-        this.timer.nativeElement,
-        'textContent',
-        '00:00'
-      );
 
       // clear all buffer data from index db
       await clear();
@@ -202,7 +205,6 @@ export class ScreenRecorderComponent
          * stream using native stop sharing button
          */
         this.configureStreamStopListener(this.screenStream);
-        this.isRecording = true;
       } catch (error) {
         LogUtils.error(`error occured while capturing screen stream`);
         LogUtils.error(error);
@@ -322,22 +324,12 @@ export class ScreenRecorderComponent
     );
 
     this.mediaStreamRecorder.ondataavailable = (event: BlobEvent) => {
-      this.videoChunksCounter++;
-      //set timer
-      this.timeCounter = this.timeCounter + 50;
-      let date = new Date(0);
-      date.setSeconds(this.timeCounter / 1000);
-      // date.setMilliseconds(this.timeCounter);
-      this.renderer.setProperty(
-        this.timer.nativeElement,
-        'textContent',
-        date.toISOString().substring(11, 19)
-      );
-
+      const id = Date.now();
       /**
        * write data in index db
        */
-      set(this.videoChunksCounter, event.data);
+      set(id, event.data);
+      this.videoChunksIds.push(id);
     };
 
     /**
@@ -346,6 +338,7 @@ export class ScreenRecorderComponent
     this.mediaStreamRecorder.start(
       ScreenRecorderComponent.RECORDER_TIME_SLICE_MS
     );
+    this.countdown.begin();
   }
 
   /**
@@ -382,6 +375,7 @@ export class ScreenRecorderComponent
   pauseRecording() {
     this.mediaStreamRecorder?.pause();
     this.isRecPaused = true;
+    this.countdown.pause();
   }
 
   /**
@@ -390,6 +384,7 @@ export class ScreenRecorderComponent
   resumeRecording() {
     this.mediaStreamRecorder?.resume();
     this.isRecPaused = false;
+    this.countdown.resume();
   }
 
   /**
@@ -405,6 +400,7 @@ export class ScreenRecorderComponent
       this.processMediaStream();
     }
     this.isRecording = false;
+    this.countdown.stop();
   }
 
   processMediaStream() {
@@ -413,8 +409,14 @@ export class ScreenRecorderComponent
       try {
         const videoFileBuffer = [];
 
-        for (let index = 0; index < this.videoChunksCounter; index++) {
-          videoFileBuffer.push(await get(index));
+        this.videoChunksIds.sort(function (a, b) {
+          return a - b;
+        });
+
+        const totalChunks = this.videoChunksIds.length;
+
+        for (let index = 0; index < totalChunks; index++) {
+          videoFileBuffer.push(await get(this.videoChunksIds[index]));
         }
 
         await this.downloadVideoFile(

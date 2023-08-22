@@ -6,27 +6,11 @@
   transform: scale(10);
 }
 
-.timer {
-  margin-top: 20px;
-  font-size: xx-large;
-  color: red;
-}
-
 .error {
   color: red;
   font-size: large;
   font-style: italic;
   font-weight: bold;
-}
-
-.description {
-  margin-top: 20px;
-}
-
-@media screen and (min-width: 735px) {
-  .description {
-    margin: 20px;
-  }
 }
 
 @media screen and (max-width: 735px) {
@@ -35,9 +19,6 @@
   }
   .icon-div mat-icon {
     transform: scale(5);
-  }
-  .timer {
-    font-size: x-large;
   }
   .recoder-options {
     flex-direction: column;

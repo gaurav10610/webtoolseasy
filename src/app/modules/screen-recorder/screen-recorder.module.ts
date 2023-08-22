@@ -15,6 +15,7 @@ import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
+import { CountdownModule } from 'ngx-countdown';
 
 @NgModule({
   declarations: [ScreenRecorderComponent],
@@ -33,6 +34,7 @@ import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-butto
     FooterModule,
     RelatedToolsModule,
     DescriptionModule,
+    CountdownModule,
   ],
 })
 export class ScreenRecorderModule {}
