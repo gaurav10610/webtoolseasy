@@ -3,14 +3,14 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/image-compress';
-const pageTitle = 'Best Online Image Compressor, Image File Size Reducer';
+const pageTitle = 'Best Online Image Compressor | Image File Size Reducer';
 const pageDescription =
-  'Online Image Compressor is the Best Image Optimzer Tool to Compress your images in JPEG and PNG formats to the minimum possible size for free.';
+  'Online Image Compressor is the Best Image Optimzer Tool to Compress your images in JPEG, PNG, WEBBP and BMP formats to the minimum possible size for free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Image Compressor',
-  subHeading: 'Compress JPEG, PNG images for free',
+  subHeading: 'Compress JPEG, PNG, WEBP & BMP Images for free',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -90,10 +90,10 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'How to Compress Images using Image Compressor Tool?',
     listData: [
-      `Drag & drop or select image files (JPEG, PNG only) to compress.`,
-      `All image files will be listed. An error will be shown for invalid file types (files other than JPEG, PNG).`,
+      `Drag & drop or select image files (JPEG, PNG, WEBP, BMP only) to compress.`,
+      `All image files will be listed.`,
       `For compressing images either use compress button corresponding to the image file or use compress all button.`,
-      `By default images will be compressed by 20% of their original size. Use settings button to customize compression level.`,
+      `By default images will be compressed by 20% of their original size. To compress further, use settings button to customize compression level .`,
       `Use download button corresponding to an image file to download compressed image.`,
       `Use download zip button to download all compressed images at once.`,
     ],
@@ -116,17 +116,20 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Unlimited images can be compressed. Online Image Compressor is completely free.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to compress their images with just a few clicks.`,
       `High-quality compression: Our tool uses advanced compression algorithms to reduce image file size while preserving image quality.`,
       `Batch processing: Compress multiple images at once, saving you time and effort.`,
-      `Supports JPEG and PNG formats: Our tool works with both JPEG and PNG image formats, providing versatile compression options.`,
+      `Supports JPEG, PNG, WEBP and BMP format: Our tool works with JPEG, PNG, WEBP and BMP image formats, providing versatile compression options.`,
       `Secure: Image compression will be performed in host browser only. We don't store any of the images.`,
       `No need to download any software. Simply upload your images to our platform and get your compressed images in no time.`,
     ],
   },
   {
     heading: 'Disclaimer',
-    blockData: ['Only JPEG & PNG image can be compressed as of now.'],
+    blockData: [
+      'Only JPEG, PNG, WEBP and BMP images can be compressed as of now.',
+    ],
   },
   {
     heading: 'References',

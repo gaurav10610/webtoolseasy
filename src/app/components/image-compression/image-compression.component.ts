@@ -54,7 +54,7 @@ export class ImageCompressionComponent
   /**
    * valid image formats
    */
-  validImageFormats: string = '.jpg,.jpeg,.png';
+  validImageFormats: string = '.jpg,.jpeg,.png,.webp,.bmp';
 
   constructor(
     private titleService: Title,
