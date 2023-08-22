@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Base64DecodeRoutingModule } from './base64-decode-routing.module';
-import { Base64DecodeComponent } from 'src/app/components/base64-decode/base64-decode.component';
+import { Base64DecodeComponent } from './base64-decode.component';
 import { MatButtonModule } from '@angular/material/button';
 import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolbar.module';
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';

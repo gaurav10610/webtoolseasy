@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToolHeadingComponent } from 'src/app/components/tool-heading/tool-heading.component';
+import { ToolHeadingComponent } from './tool-heading.component';
 
 @NgModule({
   declarations: [ToolHeadingComponent],

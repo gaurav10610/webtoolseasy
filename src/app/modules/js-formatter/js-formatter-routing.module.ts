@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { JsFormatterComponent } from 'src/app/components/js-formatter/js-formatter.component';
+import { JsFormatterComponent } from './js-formatter.component';
 
 const routes: Routes = [{ path: '', component: JsFormatterComponent }];
 

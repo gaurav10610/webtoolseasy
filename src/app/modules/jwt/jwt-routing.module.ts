@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { JwtComponent } from 'src/app/components/jwt/jwt.component';
+import { JwtComponent } from './jwt.component';
 
 const routes: Routes = [{ path: '', component: JwtComponent }];
 

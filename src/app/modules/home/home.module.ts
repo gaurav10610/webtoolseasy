@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { HomeRoutingModule } from './home-routing.module';
-import { HomeComponent } from 'src/app/components/home/home.component';
+import { HomeComponent } from './home.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';

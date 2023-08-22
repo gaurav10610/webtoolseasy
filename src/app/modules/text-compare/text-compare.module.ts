@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TextCompareRoutingModule } from './text-compare-routing.module';
-import { TextCompareComponent } from 'src/app/components/text-compare/text-compare.component';
+import { TextCompareComponent } from './text-compare.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';

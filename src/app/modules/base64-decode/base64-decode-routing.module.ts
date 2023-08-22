@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Base64DecodeComponent } from 'src/app/components/base64-decode/base64-decode.component';
+import { Base64DecodeComponent } from './base64-decode.component';
 
 const routes: Routes = [{ path: '', component: Base64DecodeComponent }];
 

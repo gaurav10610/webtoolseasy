@@ -44,7 +44,7 @@ import {
   PopupFormType,
 } from 'src/app/@types/popup-form';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { PopupFormComponent } from 'src/app/components/popup-form/popup-form.component';
+import { PopupFormComponent } from 'src/app/modules/popup-form/popup-form.component';
 import {
   ELIGIBLE_TARGET_FORMATS,
   FFMPEG_FORMATS,

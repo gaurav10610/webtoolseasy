@@ -22,7 +22,7 @@ import { default as imageCompression } from 'browser-image-compression';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CompressSettingsComponent } from 'src/app/components/compress-settings/compress-settings.component';
+import { CompressSettingsComponent } from 'src/app/modules/image-compression/compress-settings/compress-settings.component';
 import { v4 } from 'uuid';
 import { DOCUMENT } from '@angular/common';
 import {

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { JsonViewerRoutingModule } from './json-viewer-routing.module';
-import { JsonViewerComponent } from 'src/app/components/json-viewer/json-viewer.component';
+import { JsonViewerComponent } from './json-viewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatButtonModule } from '@angular/material/button';

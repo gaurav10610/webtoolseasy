@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Base64EncodeRoutingModule } from './base64-encode-routing.module';
-import { Base64EncodeComponent } from 'src/app/components/base64-encode/base64-encode.component';
+import { Base64EncodeComponent } from './base64-encode.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';

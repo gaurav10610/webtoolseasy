@@ -11,7 +11,7 @@ import { DescriptionModule } from 'src/app/modules/description/description.modul
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 
 import { PasswordGeneratorRoutingModule } from './password-generator-routing.module';
-import { PasswordGeneratorComponent } from 'src/app/components/password-generator/password-generator.component';
+import { PasswordGeneratorComponent } from './password-generator.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
