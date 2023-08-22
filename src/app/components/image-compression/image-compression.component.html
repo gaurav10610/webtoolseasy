@@ -81,47 +81,49 @@
           <div
             class="flex-display flex-row-flow flex-align-center"
             style="margin: 15px">
-            <mat-icon
-              svgIcon="image-file-icon"
-              class="app-icon pointer-cursor"></mat-icon>
+            <!-- file icon and name -->
+            <div class="flex-display flex-row-flow flex-gap-medium">
+              <mat-icon
+                svgIcon="image-file-icon"
+                class="app-icon pointer-cursor"></mat-icon>
 
-            <!-- file name & size div -->
-            <div
-              class="flex-display flex-column-flow header-font file-name-div">
-              <span class="bold-text">{{ file.name }}</span>
-              <span
-                *ngIf="file.isCompressed"
-                class="bold-text header-font"
-                style="color: #ff4081"
-                >{{ formatBytes(file.file.size) }} ->
-                {{ formatBytes(file.compressedData?.size!) }}</span
-              >
-              <span
-                *ngIf="file.error !== undefined"
-                class="bold-text"
-                style="color: red"
-                >{{ file.error }}</span
-              >
+              <!-- file name & size div -->
+              <div
+                class="flex-display flex-column-flow header-font file-name-div">
+                <span class="bold-text">{{ file.name }}</span>
+                <span
+                  *ngIf="file.isCompressed"
+                  class="bold-text header-font"
+                  style="color: #ff4081"
+                  >{{ formatBytes(file.file.size) }} ->
+                  {{ formatBytes(file.compressedData?.size!) }}</span
+                >
+                <span
+                  *ngIf="file.error !== undefined"
+                  class="bold-text"
+                  style="color: red"
+                  >{{ file.error }}</span
+                >
+              </div>
             </div>
+
             <span class="flex-full-height"></span>
 
             <!-- file icons div -->
             <div
-              class="flex-display flex-row-flow flex-align-center flex-center">
-              <span *ngIf="file.inProgress" style="margin-right: 10px"
+              class="flex-display flex-row-flow flex-align-center flex-center flex-gap-medium">
+              <span *ngIf="file.inProgress"
                 >Progress: {{ file.compressProgress }} %</span
               >
 
               <mat-icon
                 svgIcon="settings-icon"
                 class="pointer-cursor"
-                style="margin-right: 10px"
                 matTooltip="change compression settings"
                 (click)="openSettingsDialog(file)"></mat-icon>
               <mat-icon
                 svgIcon="play-icon"
                 class="pointer-cursor"
-                style="margin-right: 10px"
                 *ngIf="!file.isCompressed"
                 (click)="compressImage(file)"
                 matTooltip="compress image"></mat-icon>

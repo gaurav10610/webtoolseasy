@@ -219,6 +219,7 @@ export class ImageCompressionComponent
         compressOptions: {
           signal: new AbortController().signal,
           maxSizeMB: (0.9 * file.size) / 1024 / 1024,
+          useWebWorker: true,
         },
         compressionRate: 10,
         maxFileSize: 0.9 * file.size,
@@ -236,31 +237,31 @@ export class ImageCompressionComponent
     this.fileList.forEach(ImageFileData => this.compressImage(ImageFileData));
   }
 
-  async compressImage(ImageFileData: ImageFileData) {
+  async compressImage(imageFileData: ImageFileData) {
     this.zoneRef.run(async () => {
-      ImageFileData.inProgress = true;
-      ImageFileData.compressProgress = 0;
-      ImageFileData.error = undefined;
+      imageFileData.inProgress = true;
+      imageFileData.compressProgress = 0;
+      imageFileData.error = undefined;
       try {
-        ImageFileData.compressedData = await imageCompression(
-          ImageFileData.file,
+        imageFileData.compressedData = await imageCompression(
+          imageFileData.file,
           {
-            ...ImageFileData.compressOptions,
+            ...imageFileData.compressOptions,
             onProgress: progress => {
-              ImageFileData.compressProgress = progress;
+              imageFileData.compressProgress = progress;
             },
           }
         );
-        ImageFileData.isCompressed = true;
-        ImageFileData.inProgress = false;
+        imageFileData.isCompressed = true;
+        imageFileData.inProgress = false;
         this.isDownloadAllActive = true;
       } catch (error) {
         LogUtils.error(
-          `error while compressing image with name: ${ImageFileData.file.name}`
+          `error while compressing image with name: ${imageFileData.file.name}`
         );
-        ImageFileData.inProgress = false;
-        ImageFileData.isCompressed = false;
-        ImageFileData.error = '* compression error';
+        imageFileData.inProgress = false;
+        imageFileData.isCompressed = false;
+        imageFileData.error = '* compression error';
       }
     });
   }
