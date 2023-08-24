@@ -5,7 +5,7 @@
   <div class="full-width y-scroll flex-display flex-column-flow">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -21,18 +21,14 @@
 
       <!-- file drop area -->
       <div
-        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width div-border"
+        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area div-border border-grey full-width flex-gap-medium"
         (drop)="dropHandler($event)"
         (dragover)="dragOverHandler($event)">
-        <mat-icon style="transform: scale(2); margin-bottom: 10px"
-          >collections</mat-icon
-        >
-        <span class="header-font" style="margin-bottom: 20px; font-size: large"
+        <mat-icon style="transform: scale(2)">collections</mat-icon>
+        <span class="header-font" style="font-size: large"
           >Drag & drop file here</span
         >
-        <span class="header-font" style="margin-bottom: 10px; font-size: large"
-          >or</span
-        >
+        <span class="header-font" style="font-size: large">or</span>
 
         <button
           mat-stroked-button
@@ -46,11 +42,11 @@
       <!-- encoded base64 data -->
       <div
         *ngIf="base64Data !== undefined"
-        class="full-width flex-display base64-data">
+        class="full-width flex-display flex-column-flow flex-gap-medium">
         <!-- copy buttons -->
         <div
           class="flex-display flex-row-flow"
-          style="margin-bottom: 10px; justify-content: flex-end">
+          style="justify-content: flex-end">
           <button
             mat-stroked-button
             (click)="copyBase64Data('uri')"
@@ -76,9 +72,7 @@
             >
           </mat-card-header>
 
-          <mat-card-content
-            style="margin-top: 10px; max-height: 200px"
-            class="y-scroll">
+          <mat-card-content style="max-height: 200px" class="y-scroll">
             <div style="overflow-wrap: anywhere">
               {{ base64Data }}
             </div>
