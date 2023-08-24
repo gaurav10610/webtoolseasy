@@ -5,7 +5,7 @@
   <div class="full-width y-scroll flex-display flex-column-flow">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -13,16 +13,11 @@
       <app-share-buttons class="full-width"></app-share-buttons>
 
       <div
-        class="flex-display flex-column-flow full-width"
+        class="flex-display flex-column-flow full-width flex-gap-medium"
         style="min-height: 200px; max-height: 200px">
-        <div class="flex-display flex-row-flow">
-          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
-            >Base64 to File</span
-          >
-          <span>(Paste Base64 Data URI Here)</span>
-        </div>
+        <span class="div-label">Base64 to File (Paste Base64 Data URI)</span>
         <div
-          class="y-scroll full-height div-border"
+          class="y-scroll full-height div-border border-grey"
           style="padding: 10px; color: indigo"
           (click)="onEncodedDivClick()">
           <span
@@ -33,17 +28,12 @@
         </div>
       </div>
 
-      <button
-        mat-stroked-button
-        color="primary"
-        style="margin-top: 20px"
-        (click)="decodeBase64()">
+      <button mat-stroked-button color="primary" (click)="decodeBase64()">
         Decode Base64 to File
       </button>
 
       <a
         mat-button
-        style="margin-top: 20px"
         *ngIf="decodeFileData.name !== null"
         color="accent"
         (click)="downloadDecodedFile()"
