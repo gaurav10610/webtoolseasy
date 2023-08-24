@@ -15,29 +15,17 @@
 
 .uuid-app {
   padding: 15px;
-  border: 1px solid lightgrey;
   border-radius: 10px;
-  margin-bottom: 20px;
 }
 
 .bulk-uuids {
   padding: 15px;
-  border: 1px solid lightgrey;
   border-radius: 10px;
-}
-
-@media screen and (min-width: 735px) {
-  .uuid-container {
-    margin-right: 10px;
-  }
 }
 
 @media screen and (max-width: 735px) {
   .uid-div {
     flex-direction: column;
-  }
-  .uuid-container {
-    margin-bottom: 10px;
   }
   .uuid-class {
     font-size: larger;
