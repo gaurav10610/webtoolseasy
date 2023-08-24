@@ -2,12 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   Inject,
   OnInit,
   PLATFORM_ID,
-  Renderer2,
-  ViewChild,
 } from '@angular/core';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
@@ -30,19 +27,21 @@ export class JsFormatterComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  appId: string = 'jsformatter';
+  rawCode: string = `if(value==='webtoolseasy'){formatjs();}else{console.log('this is awesome');}`;
 
-  @ViewChild('text1AreaContent', { static: false })
-  text1AreaContent!: ElementRef;
+  formattedCode!: string;
 
-  @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: ElementRef;
-
-  rawJs: string = `if(value==='webtoolseasy'){formatjs();}else{console.log('this is awesome');}`;
+  /**
+   * monaco editor options
+   */
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'javascript',
+    fontSize: 17,
+  };
 
   constructor(
     private clipboard: Clipboard,
-    private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
     @Inject(DOCUMENT) private document: any,
@@ -74,61 +73,18 @@ export class JsFormatterComponent
 
   ngOnInit(): void {
     LogUtils.info('js formatter component: ngOnInit');
+    this.formattedCode = js_beautify(this.rawCode);
   }
 
   ngAfterViewInit(): void {
     LogUtils.info('js formatter component: ngAfterViewInit');
-    this.updateRawJs(this.rawJs);
-    const formattedJs = js_beautify(this.rawJs);
-    this.updateFormattedJs(formattedJs);
   }
 
-  updateRawJs(rawJs: string) {
-    this.renderer.setProperty(
-      this.text1AreaContent.nativeElement,
-      'innerText',
-      rawJs
-    );
+  onRawCodeChange() {
+    this.formattedCode = js_beautify(this.rawCode);
   }
 
-  updateFormattedJs(formattedJs: string) {
-    this.renderer.setProperty(
-      this.text2AreaContent.nativeElement,
-      'innerText',
-      formattedJs
-    );
-  }
-
-  formatJs(rawJsValue: string) {
-    try {
-      this.rawJs = rawJsValue;
-      const formattedJs = js_beautify(rawJsValue);
-      this.updateFormattedJs(formattedJs);
-    } catch (e) {
-      LogUtils.error(`error occured while decoding token: ${rawJsValue}`);
-    }
-  }
-
-  rawJsChange() {
-    const rawJs = this.text1AreaContent.nativeElement.innerText;
-    LogUtils.info(`raw js has changed with value: ${rawJs}`);
-    this.formatJs(rawJs);
-  }
-
-  onJsPaste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-    this.updateRawJs(pastedData);
-    this.formatJs(pastedData);
-  }
-
-  copyFormattedJs() {
-    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
-  }
-
-  onEncodedDivClick() {
-    this.text1AreaContent.nativeElement.focus();
+  copyFormattedCode() {
+    this.clipboard.copy(this.formattedCode);
   }
 }

@@ -2,11 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   Inject,
   OnInit,
   PLATFORM_ID,
-  ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
@@ -39,8 +37,7 @@ export class CssFormatterComponent
   editorOptions = {
     theme: 'vs-dark',
     language: 'css',
-    formatOnPaste: true,
-    formatOnType: true,
+    fontSize: 17,
   };
 
   constructor(

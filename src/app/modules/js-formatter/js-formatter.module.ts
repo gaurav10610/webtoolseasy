@@ -14,6 +14,8 @@ import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.
 import { DescriptionModule } from 'src/app/modules/description/description.module';
 import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
 import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
+import { FormsModule } from '@angular/forms';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 @NgModule({
   declarations: [JsFormatterComponent],
@@ -31,6 +33,8 @@ import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-butto
     FooterModule,
     RelatedToolsModule,
     DescriptionModule,
+    FormsModule,
+    MonacoEditorModule.forRoot(),
   ],
 })
 export class JsFormatterModule {}
