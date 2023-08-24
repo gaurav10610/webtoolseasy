@@ -5,7 +5,7 @@
   <div class="full-width y-scroll flex-display flex-column-flow">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -23,19 +23,15 @@
 
       <!-- file drop area -->
       <div
-        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width"
+        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width flex-gap-medium full-width"
         (drop)="dropHandler($event)"
         (dragover)="dragOverHandler($event)"
         *ngIf="fileDisplayList.length === 0 && isSupported">
-        <mat-icon style="transform: scale(2); margin-bottom: 10px"
-          >collections</mat-icon
-        >
-        <span class="header-font" style="margin-bottom: 20px; font-size: large"
+        <mat-icon style="transform: scale(2)">collections</mat-icon>
+        <span class="header-font" style="font-size: large"
           >Drag & drop files here</span
         >
-        <span class="header-font" style="margin-bottom: 10px; font-size: large"
-          >or</span
-        >
+        <span class="header-font" style="font-size: large">or</span>
 
         <button
           mat-stroked-button
@@ -55,7 +51,7 @@
 
       <!-- select, compress all, download all buttons -->
       <div
-        class="flex-display flex-row-flow flex-center full-width"
+        class="flex-display flex-row-flow flex-center full-width flex-gap-medium"
         [ngStyle]="{
           padding: '10px',
           'justify-content': fileDisplayList.length > 0 ? 'end' : 'center'
@@ -65,7 +61,6 @@
           mat-stroked-button
           color="accent"
           (click)="openFileDialog()"
-          style="margin-right: 10px"
           matTooltip="select videos to convert">
           <mat-icon>file_upload</mat-icon> Select Files
         </button>
@@ -80,14 +75,18 @@
 
       <!-- list of files -->
       <div
-        class="flex-display flex-column-flow y-scroll file-drop-area file-area-width file-list-div"
+        class="flex-display flex-column-flow y-scroll file-drop-area file-area-width file-list-div flex-gap-medium full-width"
         *ngIf="fileDisplayList.length > 0">
         <mat-card
           *ngFor="let file of fileDisplayList"
-          style="margin-bottom: 10px; border: 1px solid lightgrey">
+          style="
+            border: 1px solid lightgrey;
+            margin-left: 10px;
+            margin-right: 10px;
+          ">
           <div
-            class="flex-display flex-row-flow flex-align-center"
-            style="margin: 15px">
+            class="flex-display flex-row-flow flex-align-center flex-gap-large"
+            style="margin: 10px">
             <mat-icon
               svgIcon="video-convert-icon"
               class="app-icon pointer-cursor"
@@ -112,16 +111,6 @@
                 style="color: red"
                 >{{ file.conversionErrors.get(file.targetFormat) }}</span
               >
-              <!-- <span
-                *ngIf="
-                  file.converterStatus &&
-                  file.inProgress &&
-                  file.convertProgress === 0
-                "
-                class="bold-text"
-                style="margin-top: 10px"
-                >Converter State: {{ file.converterStatus }}</span
-              > -->
               <span
                 *ngIf="isMobile && file.inProgress && file.convertProgress > 0"
                 class="bold-text"
@@ -133,20 +122,18 @@
 
             <!-- file icons div -->
             <div
-              class="flex-display flex-row-flow flex-align-center flex-center">
+              class="flex-display flex-row-flow flex-align-center flex-center flex-gap-medium">
               <!-- file is queued spinner -->
               <mat-spinner
                 *ngIf="file.inProgress && file.convertProgress === 0"
                 diameter="32"></mat-spinner>
               <span
                 *ngIf="!isMobile && file.inProgress && file.convertProgress > 0"
-                style="margin-right: 10px"
                 class="bold-text"
                 >Progress: {{ file.convertProgress }}%</span
               >
 
               <mat-spinner
-                style="margin-right: 10px"
                 diameter="32"
                 *ngIf="file.inProgress && file.convertProgress > 0"
                 mode="determinate"
@@ -155,7 +142,7 @@
               <mat-form-field
                 appearance="outline"
                 color="primary"
-                style="margin-right: 10px; margin-bottom: -1.25em"
+                style="margin-bottom: -1.25em"
                 *ngIf="!file.inProgress && !isMobile">
                 <mat-label>Select format</mat-label>
                 <mat-select
@@ -173,7 +160,6 @@
               <mat-icon
                 svgIcon="settings-icon"
                 class="pointer-cursor"
-                style="margin-right: 10px"
                 *ngIf="isMobile && !file.inProgress"
                 matTooltip="change conversion settings"
                 (click)="openSettings(file)"></mat-icon>
@@ -197,7 +183,6 @@
                 *ngIf="file.error"
                 color="warn"
                 matTooltip="only limited video formats can be converted"
-                style="transform: scale(1.5)"
                 >error</mat-icon
               >
             </div>

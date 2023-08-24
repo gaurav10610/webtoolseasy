@@ -1,11 +1,11 @@
 .file-drop-area {
-  padding: 30px;
   border: 1px solid lightgrey;
   border-radius: 10px;
 }
 
 .file-area-width {
-  width: 95%;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .file-list-div {
@@ -13,9 +13,6 @@
 }
 
 @media screen and (max-width: 735px) {
-  .file-area-width {
-    width: 85%;
-  }
   .file-list-div {
     max-height: 300px;
   }
