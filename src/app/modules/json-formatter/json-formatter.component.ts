@@ -1,12 +1,10 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   Inject,
   OnInit,
   PLATFORM_ID,
   Renderer2,
-  ViewChild,
 } from '@angular/core';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
@@ -19,7 +17,6 @@ import {
 } from 'src/environments/component-config/json-formatter/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 
 @Component({
   selector: 'app-json-formatter',
@@ -30,18 +27,18 @@ export class JsonFormatterComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  appId: string = 'jsonformatter';
-  isJsonValid: boolean = true;
-
-  @ViewChild('text1AreaContent', { static: false })
-  text1AreaContent!: ElementRef;
-
-  @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: NgxJsonViewerComponent;
-
-  rawJson: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
+  rawCode: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   tabSpaceValue: string = '   ';
-  formattedJSON = JSON.parse(this.rawJson);
+  formattedCode!: string;
+
+  /**
+   * monaco editor options
+   */
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'json',
+    fontSize: 17,
+  };
 
   constructor(
     private clipboard: Clipboard,
@@ -77,59 +74,26 @@ export class JsonFormatterComponent
 
   ngOnInit(): void {
     LogUtils.info('json formatter: ngOnInit');
+    this.formattedCode = JSON.stringify(
+      JSON.parse(this.rawCode),
+      null,
+      this.tabSpaceValue
+    );
   }
 
   ngAfterViewInit(): void {
     LogUtils.info('json formatter: ngAfterViewInit');
-    this.updateRawJson(this.rawJson);
   }
 
-  rawJsonChange() {
-    this.formatJson(this.text1AreaContent.nativeElement.innerText);
-  }
-
-  onJsonPaste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-    this.updateRawJson(pastedData);
-    this.formatJson(pastedData);
-  }
-
-  formatJson(rawJsonValue: string) {
-    try {
-      this.rawJson = rawJsonValue;
-      this.isJsonValid = true;
-      this.updateFormattedJson(rawJsonValue);
-    } catch (error) {
-      LogUtils.error(`error occured while formatting json: ${this.rawJson}`);
-      this.isJsonValid = false;
-    }
-  }
-
-  updateRawJson(rawJson: string) {
-    this.renderer.setProperty(
-      this.text1AreaContent.nativeElement,
-      'innerText',
-      rawJson
+  onRawCodeChange() {
+    this.formattedCode = JSON.stringify(
+      JSON.parse(this.rawCode),
+      null,
+      this.tabSpaceValue
     );
   }
 
-  updateFormattedJson(formattedJson: string) {
-    this.formattedJSON = JSON.parse(formattedJson);
-    this.document.getElementsByTagName('ngx-json-viewer')[0].firstChild.style[
-      'overflow-y'
-    ] = 'scroll';
-  }
-
-  copyFormattedJson() {
-    this.clipboard.copy(
-      JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue)
-    );
-  }
-
-  onEncodedDivClick() {
-    this.text1AreaContent.nativeElement.focus();
+  copyFormattedCode() {
+    this.clipboard.copy(this.formattedCode);
   }
 }

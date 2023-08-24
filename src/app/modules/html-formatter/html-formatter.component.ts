@@ -2,12 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   Inject,
   OnInit,
   PLATFORM_ID,
-  Renderer2,
-  ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
@@ -30,20 +27,22 @@ export class HtmlFormatterComponent
   extends BaseComponent
   implements OnInit, AfterViewInit
 {
-  appId: string = 'htmlformatter';
+  rawCode: string =
+    '<html><head><title>Online HTML Formatter</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
 
-  @ViewChild('text1AreaContent', { static: false })
-  text1AreaContent!: ElementRef;
+  formattedCode!: string;
 
-  @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: ElementRef;
-
-  rawHtml: string =
-    '<html><head><title>Example of Paragraph tag</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
+  /**
+   * monaco editor options
+   */
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'html',
+    fontSize: 17,
+  };
 
   constructor(
     private clipboard: Clipboard,
-    private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
     @Inject(DOCUMENT) private document: any,
@@ -75,59 +74,18 @@ export class HtmlFormatterComponent
 
   ngOnInit(): void {
     LogUtils.info('html formatter component: ngOnInit');
+    this.formattedCode = html_beautify(this.rawCode);
   }
 
   ngAfterViewInit(): void {
     LogUtils.info('html formatter component: ngAfterViewInit');
-    this.updateRawHtml(this.rawHtml);
-    const formattedHtml = html_beautify(this.rawHtml);
-    this.updateFormattedHtml(formattedHtml);
   }
 
-  updateRawHtml(rawHtml: string) {
-    this.renderer.setProperty(
-      this.text1AreaContent.nativeElement,
-      'innerText',
-      rawHtml
-    );
+  onRawCodeChange() {
+    this.formattedCode = html_beautify(this.rawCode);
   }
 
-  updateFormattedHtml(formattedHtml: string) {
-    this.renderer.setProperty(
-      this.text2AreaContent.nativeElement,
-      'innerText',
-      formattedHtml
-    );
-  }
-
-  formatHtml(rawHtmlValue: string) {
-    try {
-      this.rawHtml = rawHtmlValue;
-      const formattedHtml = html_beautify(rawHtmlValue);
-      this.updateFormattedHtml(formattedHtml);
-    } catch (e) {
-      LogUtils.error(`error occured while decoding token: ${rawHtmlValue}`);
-    }
-  }
-
-  rawHtmlChange() {
-    this.formatHtml(this.text1AreaContent.nativeElement.innerText);
-  }
-
-  onHtmlPaste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-    this.updateRawHtml(pastedData);
-    this.formatHtml(pastedData);
-  }
-
-  copyFormattedHtml() {
-    this.clipboard.copy(this.text2AreaContent.nativeElement.innerText);
-  }
-
-  onEncodedDivClick() {
-    this.text1AreaContent.nativeElement.focus();
+  copyFormattedCode() {
+    this.clipboard.copy(this.formattedCode);
   }
 }

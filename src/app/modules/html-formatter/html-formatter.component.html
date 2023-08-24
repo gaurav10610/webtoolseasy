@@ -5,7 +5,7 @@
   <div class="full-width y-scroll">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -13,58 +13,45 @@
       <app-share-buttons class="full-width"></app-share-buttons>
 
       <div
-        class="flex-display flex-row-flow flex-align-center text-area-container full-width"
-        style="margin-bottom: 10px">
+        class="flex-display flex-row-flow flex-align-center full-width text-area-container">
         <!-- Text 1 div -->
         <div
-          class="flex-display flex-column-flow text1-area-margin text-area-div">
-          <div class="flex-display flex-row-flow">
-            <span
-              class="div-label"
-              style="margin-bottom: 5px; margin-right: 5px"
-              >Unformatted HTML</span
-            >
+          class="flex-display flex-column-flow text-area-div flex-gap-medium">
+          <div class="flex-display flex-row-flow flex-gap-small">
+            <span class="div-label">Unformatted HTML</span>
             <span>(Paste HTML Here)</span>
           </div>
-          <div
-            class="text-content-div text1-area-margin y-scroll full-height full-width"
-            style="color: indigo"
-            (click)="onEncodedDivClick()">
-            <span
-              #text1AreaContent
-              contenteditable="true"
-              (input)="rawHtmlChange()"
-              (paste)="onHtmlPaste($event)"
-              class="full-height full-width"></span>
+          <div class="full-height full-width">
+            <!-- unformatted code editor -->
+            <ngx-monaco-editor
+              style="height: 100%"
+              [options]="editorOptions"
+              (input)="onRawCodeChange()"
+              (paste)="onRawCodeChange()"
+              [(ngModel)]="rawCode"></ngx-monaco-editor>
           </div>
         </div>
 
         <!-- Text 2 div -->
-        <div class="flex-display flex-column-flow text-area-div">
-          <div class="flex-display flex-row-flow">
-            <span
-              class="div-label"
-              style="margin-bottom: 5px; margin-right: 5px"
-              >Formatted HTML</span
-            >
+        <div
+          class="flex-display flex-column-flow text-area-div flex-gap-medium">
+          <div class="flex-display flex-row-flow flex-gap-small">
+            <span class="div-label">Formatted HTML</span>
           </div>
-          <div
-            class="text-content-div y-scroll full-height full-width"
-            style="color: indigo">
-            <pre
-              #text2AreaContent
-              contenteditable="false"
-              class="full-height full-width"></pre>
+          <div class="full-height full-width">
+            <!-- formatted code editor -->
+            <ngx-monaco-editor
+              style="height: 100%"
+              [options]="editorOptions"
+              [(ngModel)]="formattedCode"></ngx-monaco-editor>
           </div>
         </div>
       </div>
 
-      <div
-        class="flex-display flex-row-flow full-width copy-button"
-        style="margin-top: 10px; margin-bottom: 10px">
+      <div class="flex-display flex-row-flow full-width copy-button">
         <button
           mat-stroked-button
-          (click)="copyFormattedHtml()"
+          (click)="copyFormattedCode()"
           color="primary">
           <mat-icon>content_copy</mat-icon> Copy Formatted HTML
         </button>
@@ -82,6 +69,7 @@
       <!-- follow buttons -->
       <app-follow-buttons></app-follow-buttons>
     </div>
+
     <app-footer></app-footer>
   </div>
 </div>

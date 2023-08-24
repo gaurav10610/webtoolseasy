@@ -37,7 +37,7 @@ export class JsonViewerComponent
   @ViewChild('text2AreaContent', { static: false })
   text2AreaContent!: NgxJsonViewerComponent;
 
-  rawJson: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
+  rawJson: string = `{"role":"admin","issuer":"online json viewer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   tabSpaceValue: string = '   ';
   formattedJSON = JSON.parse(this.rawJson);
 
