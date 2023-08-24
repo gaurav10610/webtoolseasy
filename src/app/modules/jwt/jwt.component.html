@@ -2,11 +2,11 @@
   <!-- profile header -->
   <app-header-toolbar></app-header-toolbar>
 
-  <div class="full-width y-scroll">
+  <div
+    class="y-scroll no-x-scroll flex-full-height flex-display flex-column-flow">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center no-x-scroll"
-      style="padding: 10px">
+      class="base-app-container flex-display flex-column-flow flex-full-height flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -14,21 +14,14 @@
       <app-share-buttons class="full-width"></app-share-buttons>
 
       <div
-        class="flex-display flex-row-flow flex-align-center text-area-container full-width"
-        style="margin-bottom: 10px">
+        class="flex-display flex-row-flow flex-align-center text-area-container full-width flex-gap-large">
         <!-- Text 1 div -->
         <div
-          class="flex-display flex-column-flow text1-area-margin text-area-div">
-          <div class="flex-display flex-row-flow">
-            <span
-              class="div-label"
-              style="margin-bottom: 5px; margin-right: 5px"
-              >Encoded Token</span
-            >
-            <span>(Paste Token Here)</span>
-          </div>
+          class="flex-display flex-column-flow text-area-div flex-gap-medium">
+          <span class="div-label">Encoded Token (Paste Token Here)</span>
+
           <div
-            class="text-content-div text1-area-margin y-scroll flex-full-height full-width"
+            class="text-content-div y-scroll flex-full-height full-width border-grey"
             style="color: indigo"
             (click)="onEncodedDivClick()">
             <span
@@ -36,39 +29,28 @@
               contenteditable="true"
               (input)="encodedInputChange()"
               (paste)="onTokenPaste($event)"
-              class="full-height full-width"></span>
+              class="full-height full-width"
+              style="margin: 10px"></span>
           </div>
           <div
-            class="flex-display flex-row-flow"
-            *ngIf="!isTokenValid"
-            style="margin-top: 10px">
-            <mat-icon
-              color="warn"
-              style="transform: scale(2); margin-right: 15px"
-              >error</mat-icon
-            >
+            class="flex-display flex-row-flow flex-gap-small"
+            *ngIf="!isTokenValid">
+            <mat-icon color="warn" style="transform: scale(2)">error</mat-icon>
             <span class="header-font" style="color: red">token is invalid</span>
           </div>
         </div>
 
         <!-- Text 2 div -->
-        <div class="flex-display flex-column-flow text-area-div">
-          <div class="flex-display flex-row-flow">
-            <span
-              class="div-label"
-              style="margin-bottom: 10px; margin-right: 5px"
-              >Decoded Token</span
-            >
-          </div>
+        <div
+          class="flex-display flex-column-flow text-area-div flex-gap-medium">
+          <span class="div-label">Decoded Token</span>
 
-          <div class="flex-display flex-row-flow">
-            <span style="margin-bottom: 5px; font-size: small"
-              >Headers ( Algorithm & Token Type)</span
-            >
-          </div>
+          <span style="font-size: small"
+            >Headers ( Algorithm & Token Type)</span
+          >
 
           <!-- JWT header div -->
-          <div class="text-content-div full-width" style="margin-bottom: 10px">
+          <div class="text-content-div full-width border-grey">
             <ngx-json-viewer
               #text3AreaContent
               [json]="decodedHeaders"
@@ -76,12 +58,11 @@
           </div>
 
           <div class="flex-display flex-row-flow">
-            <span style="margin-top: 5px; margin-bottom: 5px; font-size: small"
-              >Token Data</span
-            >
+            <span style="font-size: small">Token Data</span>
           </div>
 
-          <div class="text-content-div y-scroll flex-full-height full-width">
+          <div
+            class="text-content-div y-scroll flex-full-height full-width border-grey">
             <ngx-json-viewer
               #text2AreaContent
               [json]="decodedToken"
@@ -90,9 +71,7 @@
         </div>
       </div>
 
-      <div
-        class="flex-display flex-row-flow full-width copy-button"
-        style="margin-top: 10px; margin-bottom: 10px">
+      <div class="flex-display flex-row-flow full-width copy-button">
         <button mat-stroked-button (click)="copyDecodedToken()" color="primary">
           <mat-icon>content_copy</mat-icon> Copy Decoded Token
         </button>
