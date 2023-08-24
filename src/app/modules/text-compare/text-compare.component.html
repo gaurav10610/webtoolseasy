@@ -5,15 +5,16 @@
   <div class="full-width y-scroll">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
       <!-- share buttons -->
       <app-share-buttons class="full-width"></app-share-buttons>
 
-      <div class="flex-display flex-column-flow flex-align-center full-width">
-        <!-- file imput -->
+      <div
+        class="flex-display flex-column-flow flex-align-center full-width flex-gap-large">
+        <!-- file input -->
         <input
           #inputFiles
           type="file"
@@ -22,60 +23,52 @@
 
         <!-- difference div -->
         <div
-          class="flex-display flex-column-flow diff-parent-div"
-          style="margin: 20px">
-          <span class="div-label" style="margin-bottom: 5px; margin-right: 5px"
-            >Difference</span
-          >
+          class="flex-display flex-column-flow diff-parent-div flex-gap-small">
+          <span class="div-label">Difference</span>
           <div
-            class="text-content-div y-scroll full-height full-width"
+            class="text-content-div y-scroll full-height full-width border-grey"
             contenteditable="false"
             style="color: deeppink">
-            <pre #diffBlock></pre>
+            <pre #diffBlock style="margin: 10px"></pre>
           </div>
         </div>
 
-        <div class="flex-display color-coding" style="margin: 20px">
-          <div class="flex-display flex-row-flow flex-align-center color-code">
-            <mat-icon style="margin-right: 5px; color: grey"
-              >rectangle</mat-icon
-            >
+        <div class="flex-display color-coding flex-gap-medium">
+          <div
+            class="flex-display flex-row-flow flex-align-center flex-gap-small">
+            <mat-icon style="color: grey">rectangle</mat-icon>
             <span>part which is common</span>
           </div>
-          <div class="flex-display flex-row-flow flex-align-center color-code">
-            <mat-icon style="margin-right: 5px; color: red">rectangle</mat-icon>
+          <div
+            class="flex-display flex-row-flow flex-align-center flex-gap-small">
+            <mat-icon style="color: red">rectangle</mat-icon>
             <span>part which is removed</span>
           </div>
-          <div class="flex-display flex-row-flow flex-align-center">
-            <mat-icon style="margin-right: 5px; color: green"
-              >rectangle</mat-icon
-            >
+          <div
+            class="flex-display flex-row-flow flex-align-center flex-gap-small">
+            <mat-icon style="color: green">rectangle</mat-icon>
             <span>part which is added</span>
           </div>
         </div>
 
         <div
-          class="flex-display flex-row-flow flex-align-center text-area-container full-width"
-          style="margin-bottom: 10px">
+          class="flex-display flex-row-flow flex-align-center text-area-container full-width">
           <!-- Text 1 div -->
           <div
-            class="flex-display flex-column-flow text1-area-margin text-area-div">
-            <div class="flex-display flex-row-flow">
-              <span
-                class="div-label"
-                style="margin-bottom: 5px; margin-right: 5px"
-                >Text 1</span
-              >
+            class="flex-display flex-column-flow text1-area-margin text-area-div flex-gap-medium">
+            <div class="flex-display flex-row-flow flex-gap-small">
+              <span class="div-label">Text 1</span>
               <span>(Paste original text here)</span>
             </div>
             <div
-              class="text-content-div text1-area-margin y-scroll full-height full-width"
-              style="color: indigo; margin-bottom: 10px">
+              class="text-content-div text1-area-margin y-scroll full-height full-width border-grey"
+              style="color: indigo">
               <pre
                 #text1AreaContent
                 contenteditable="true"
                 (input)="onText1Change()"
                 (paste)="onText1Paste($event)"
+                style="margin: 10px"
                 class="full-height full-width"></pre>
             </div>
             <div>
@@ -90,23 +83,21 @@
           </div>
 
           <!-- Text 2 div -->
-          <div class="flex-display flex-column-flow text-area-div">
-            <div class="flex-display flex-row-flow">
-              <span
-                class="div-label"
-                style="margin-bottom: 5px; margin-right: 5px"
-                >Text 2</span
-              >
+          <div
+            class="flex-display flex-column-flow text-area-div flex-gap-medium">
+            <div class="flex-display flex-row-flow flex-gap-small">
+              <span class="div-label">Text 2</span>
               <span>(Paste target text here)</span>
             </div>
             <div
-              class="text-content-div y-scroll full-height full-width"
-              style="color: indigo; margin-bottom: 10px">
+              class="text-content-div y-scroll full-height full-width border-grey"
+              style="color: indigo">
               <pre
                 #text2AreaContent
                 contenteditable="true"
                 (input)="onText2Change()"
                 (paste)="onText2Paste($event)"
+                style="margin: 10px"
                 class="full-height full-width"></pre>
             </div>
             <div>
@@ -121,9 +112,7 @@
           </div>
         </div>
 
-        <div
-          style="margin-bottom: 20px; margin-top: 20px"
-          class="flex-display flex-column-flow">
+        <div class="flex-display flex-column-flow">
           <mat-form-field appearance="outline" color="primary">
             <mat-label>Select comparison type</mat-label>
             <mat-select

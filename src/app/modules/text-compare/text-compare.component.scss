@@ -9,36 +9,27 @@
 }
 
 .text-content-div {
-  border: 1px solid lightgrey;
   border-radius: 10px;
-  padding: 10px;
 }
 
 .text-area-container {
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 [contenteditable]:focus {
   outline: 0px solid transparent;
 }
 
-.diff-parent-div {
-  max-width: 80%;
-}
-
 @media screen and (min-width: 735px) {
   .color-coding {
     flex-direction: row;
-  }
-  .color-code {
-    margin-right: 10px;
   }
 }
 
 @media screen and (max-width: 735px) {
   .text-area-div {
     height: 10em;
-    width: 80%;
+    width: 100%;
   }
   .text1-area-margin {
     margin-bottom: 20px;
@@ -50,9 +41,7 @@
     font-size: larger;
   }
   .diff-parent-div {
-    height: 10em;
-    width: 80%;
-    font-size: larger;
+    width: 100%;
   }
   .color-coding {
     flex-direction: column;
