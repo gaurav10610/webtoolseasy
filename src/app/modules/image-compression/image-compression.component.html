@@ -5,7 +5,7 @@
   <div class="full-width y-scroll flex-display flex-column-flow">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
@@ -23,19 +23,15 @@
 
       <!-- file drop area -->
       <div
-        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width"
+        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area border-grey full-width flex-gap-medium"
         (drop)="dropHandler($event)"
         (dragover)="dragOverHandler($event)"
         *ngIf="fileList.length === 0">
-        <mat-icon style="transform: scale(2); margin-bottom: 10px"
-          >collections</mat-icon
-        >
-        <span class="header-font" style="margin-bottom: 20px; font-size: large"
+        <mat-icon style="transform: scale(2)">collections</mat-icon>
+        <span class="header-font" style="font-size: large"
           >Drag & drop files here</span
         >
-        <span class="header-font" style="margin-bottom: 10px; font-size: large"
-          >or</span
-        >
+        <span class="header-font" style="font-size: large">or</span>
 
         <button
           mat-stroked-button
@@ -48,7 +44,7 @@
 
       <!-- select, compress all, download all buttons -->
       <div
-        class="flex-display flex-row-flow flex-center full-width"
+        class="flex-display flex-row-flow flex-center full-width flex-gap-medium"
         [ngStyle]="{
           padding: '10px',
           'justify-content': fileList.length > 0 ? 'end' : 'center'
@@ -58,7 +54,6 @@
           mat-stroked-button
           color="primary"
           (click)="openFileDialog()"
-          style="margin-right: 10px"
           matTooltip="select images to compress">
           <mat-icon>file_upload</mat-icon> Select Files
         </button>
@@ -73,38 +68,41 @@
 
       <!-- list of files -->
       <div
-        class="flex-display flex-column-flow y-scroll file-drop-area file-area-width file-list-div"
+        class="flex-display flex-column-flow y-scroll file-drop-area file-list-div full-width border-grey flex-gap-medium"
         *ngIf="fileList.length > 0">
         <mat-card
           *ngFor="let file of fileList"
-          style="margin-bottom: 10px; border: 1px solid lightgrey">
+          style="
+            border: 1px solid lightgrey;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 10px;
+          ">
           <div
-            class="flex-display flex-row-flow flex-align-center"
-            style="margin: 15px">
+            class="flex-display flex-row-flow flex-align-center flex-gap-large"
+            style="margin: 10px">
             <!-- file icon and name -->
-            <div class="flex-display flex-row-flow flex-gap-medium">
-              <mat-icon
-                svgIcon="image-file-icon"
-                class="app-icon pointer-cursor"></mat-icon>
+            <mat-icon
+              svgIcon="image-file-icon"
+              class="app-icon pointer-cursor"></mat-icon>
 
-              <!-- file name & size div -->
-              <div
-                class="flex-display flex-column-flow header-font file-name-div">
-                <span class="bold-text">{{ file.name }}</span>
-                <span
-                  *ngIf="file.isCompressed"
-                  class="bold-text header-font"
-                  style="color: #ff4081"
-                  >{{ formatBytes(file.file.size) }} ->
-                  {{ formatBytes(file.compressedData?.size!) }}</span
-                >
-                <span
-                  *ngIf="file.error !== undefined"
-                  class="bold-text"
-                  style="color: red"
-                  >{{ file.error }}</span
-                >
-              </div>
+            <!-- file name & size div -->
+            <div
+              class="flex-display flex-column-flow header-font file-name-div">
+              <span class="bold-text">{{ file.name }}</span>
+              <span
+                *ngIf="file.isCompressed"
+                class="bold-text header-font"
+                style="color: #ff4081"
+                >{{ formatBytes(file.file.size) }} ->
+                {{ formatBytes(file.compressedData?.size!) }}</span
+              >
+              <span
+                *ngIf="file.error !== undefined"
+                class="bold-text"
+                style="color: red"
+                >{{ file.error }}</span
+              >
             </div>
 
             <span class="flex-full-height"></span>
