@@ -13,7 +13,7 @@
 }
 
 .text-area-container {
-  justify-content: space-between;
+  height: 40em;
 }
 
 [contenteditable]:focus {
@@ -27,15 +27,15 @@
 }
 
 @media screen and (max-width: 735px) {
+  .text-area-container {
+    height: 25em;
+  }
   .text-area-div {
     height: 10em;
     width: 100%;
   }
   .text1-area-margin {
     margin-bottom: 20px;
-  }
-  .text-area-container {
-    flex-direction: column;
   }
   .text-content-div {
     font-size: larger;

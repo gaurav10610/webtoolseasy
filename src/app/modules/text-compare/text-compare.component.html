@@ -12,134 +12,49 @@
       <!-- share buttons -->
       <app-share-buttons class="full-width"></app-share-buttons>
 
+      <!-- file input -->
+      <input
+        #inputFiles
+        type="file"
+        style="display: none"
+        (change)="selectFiles($event)" />
+
       <div
-        class="flex-display flex-column-flow flex-align-center full-width flex-gap-large">
-        <!-- file input -->
-        <input
-          #inputFiles
-          type="file"
-          style="display: none"
-          (change)="selectFiles($event)" />
-
-        <!-- difference div -->
+        class="flex-display flex-column-flow flex-align-center text-area-container full-width flex-gap-medium">
         <div
-          class="flex-display flex-column-flow diff-parent-div flex-gap-small">
-          <span class="div-label">Difference</span>
-          <div
-            class="text-content-div y-scroll full-height full-width border-grey"
-            contenteditable="false"
-            style="color: deeppink">
-            <pre #diffBlock style="margin: 10px"></pre>
-          </div>
+          class="flex-display flex-row-flow full-width"
+          style="justify-content: space-around">
+          <span class="div-label">Original Data</span>
+          <span class="div-label">Modified Data</span>
         </div>
+        <ngx-monaco-diff-editor
+          #diffEdior
+          [options]="editorOptions"
+          [modifiedModel]="modifiedModel"
+          [originalModel]="originalModel"
+          style="
+            height: 100%;
+            width: 100%;
+            border: 1px solid lightgrey;
+          "></ngx-monaco-diff-editor>
 
-        <div class="flex-display color-coding flex-gap-medium">
-          <div
-            class="flex-display flex-row-flow flex-align-center flex-gap-small">
-            <mat-icon style="color: grey">rectangle</mat-icon>
-            <span>part which is common</span>
-          </div>
-          <div
-            class="flex-display flex-row-flow flex-align-center flex-gap-small">
-            <mat-icon style="color: red">rectangle</mat-icon>
-            <span>part which is removed</span>
-          </div>
-          <div
-            class="flex-display flex-row-flow flex-align-center flex-gap-small">
-            <mat-icon style="color: green">rectangle</mat-icon>
-            <span>part which is added</span>
-          </div>
-        </div>
-
+        <!-- import file buttons -->
         <div
-          class="flex-display flex-row-flow flex-align-center text-area-container full-width">
-          <!-- Text 1 div -->
-          <div
-            class="flex-display flex-column-flow text1-area-margin text-area-div flex-gap-medium">
-            <div class="flex-display flex-row-flow flex-gap-small">
-              <span class="div-label">Text 1</span>
-              <span>(Paste original text here)</span>
-            </div>
-            <div
-              class="text-content-div text1-area-margin y-scroll full-height full-width border-grey"
-              style="color: indigo">
-              <pre
-                #text1AreaContent
-                contenteditable="true"
-                (input)="onText1Change()"
-                (paste)="onText1Paste($event)"
-                style="margin: 10px"
-                class="full-height full-width"></pre>
-            </div>
-            <div>
-              <button
-                mat-stroked-button
-                aria-label="switch_text_button"
-                color="primary"
-                (click)="openFileDialog('text1')">
-                <mat-icon>file_upload</mat-icon>Select File 1
-              </button>
-            </div>
-          </div>
-
-          <!-- Text 2 div -->
-          <div
-            class="flex-display flex-column-flow text-area-div flex-gap-medium">
-            <div class="flex-display flex-row-flow flex-gap-small">
-              <span class="div-label">Text 2</span>
-              <span>(Paste target text here)</span>
-            </div>
-            <div
-              class="text-content-div y-scroll full-height full-width border-grey"
-              style="color: indigo">
-              <pre
-                #text2AreaContent
-                contenteditable="true"
-                (input)="onText2Change()"
-                (paste)="onText2Paste($event)"
-                style="margin: 10px"
-                class="full-height full-width"></pre>
-            </div>
-            <div>
-              <button
-                mat-stroked-button
-                aria-label="switch_text_button"
-                color="primary"
-                (click)="openFileDialog('text2')">
-                <mat-icon>file_upload</mat-icon>Select File 2
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex-display flex-column-flow">
-          <mat-form-field appearance="outline" color="primary">
-            <mat-label>Select comparison type</mat-label>
-            <mat-select
-              disableRipple
-              value="char"
-              (valueChange)="changeComparisonType($event)">
-              <mat-option value="char">Character by character</mat-option>
-              <mat-option value="word">Word by word</mat-option>
-              <mat-option value="line">Line by line</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <section>
-            <mat-checkbox (change)="compareOptionsChange($event, 'case')"
-              >ignore case</mat-checkbox
-            >
-            <mat-checkbox
-              (change)="compareOptionsChange($event, 'whitespace')"
-              *ngIf="comparisonType !== 'char'"
-              >ignore whitespace</mat-checkbox
-            >
-          </section>
+          class="flex-display flex-row-flow full-width"
+          style="justify-content: space-around">
           <button
-            mat-raised-button
+            mat-stroked-button
             aria-label="switch_text_button"
             color="primary"
-            (click)="switchTexts()">
-            <mat-icon>swap_horiz</mat-icon>Switch texts
+            (click)="openFileDialog('original')">
+            <mat-icon>file_upload</mat-icon>Select File 1
+          </button>
+          <button
+            mat-stroked-button
+            aria-label="switch_text_button"
+            color="primary"
+            (click)="openFileDialog('modified')">
+            <mat-icon>file_upload</mat-icon>Select File 2
           </button>
         </div>
       </div>

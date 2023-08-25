@@ -1,9 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
+  NgZone,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -11,45 +11,43 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
-import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/text-compare/config';
-import { diffChars, Change, diffWords, diffLines } from 'diff';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
+import { DiffEditorComponent, DiffEditorModel } from 'ngx-monaco-editor-v2';
+import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-text-compare',
   templateUrl: './text-compare.component.html',
   styleUrls: ['./text-compare.component.scss'],
 })
-export class TextCompareComponent
-  extends BaseComponent
-  implements AfterViewInit
-{
-  text1: string = 'webtoolseasy is awesome';
-  text2: string = 'webtoolseasy is super cool';
-
-  @ViewChild('text1AreaContent', { static: false })
-  text1AreaContent!: ElementRef;
-
-  @ViewChild('text2AreaContent', { static: false })
-  text2AreaContent!: ElementRef;
-
-  @ViewChild('diffBlock', { static: false })
-  diffBlock!: ElementRef;
-
+export class TextCompareComponent extends BaseComponent {
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
-  ignoreCase: boolean = false;
-  ignoreWhitespace: boolean = false;
-  comparisonType: string = 'char';
+  @ViewChild('diffEdior', { static: false })
+  diffEdior!: DiffEditorComponent;
 
   currentFileDialogId!: string;
+
+  editorOptions = {
+    originalEditable: true,
+    fontSize: 17,
+  };
+
+  originalModel: DiffEditorModel = {
+    code: `This was original data!\nwebtoolseasy is awesome`,
+    language: 'text/plain',
+  };
+
+  modifiedModel: DiffEditorModel = {
+    code: `This was modified data!\nwebtoolseasy is super cool`,
+    language: 'text/plain',
+  };
 
   constructor(
     private titleService: Title,
@@ -60,7 +58,8 @@ export class TextCompareComponent
     @Inject(PLATFORM_ID) private platformId: string,
     private renderer: Renderer2,
     private appContextService: AppContextService,
-    private fileService: FileService
+    private fileService: FileService,
+    private zoneRef: NgZone
   ) {
     super();
     this.loadCustomIcons(
@@ -82,151 +81,35 @@ export class TextCompareComponent
     this.appContextService.descrptionData = descriptionData;
   }
 
-  ngAfterViewInit(): void {
-    this.updateText1(this.text1);
-    this.updateText2(this.text2);
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  async onText1Change() {
-    this.text1 = this.text1AreaContent.nativeElement.innerText;
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  async onText1Paste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-
-    this.text1 = pastedData;
-    this.updateText1(pastedData);
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  updateText1(text1: string) {
-    this.renderer.setProperty(
-      this.text1AreaContent.nativeElement,
-      'innerText',
-      text1
-    );
-  }
-
-  async onText2Change() {
-    this.text2 = this.text2AreaContent.nativeElement.innerText;
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  async onText2Paste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-
-    this.text2 = pastedData;
-    this.updateText2(pastedData);
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  updateText2(text2: string) {
-    this.renderer.setProperty(
-      this.text2AreaContent.nativeElement,
-      'innerText',
-      text2
-    );
-  }
-
-  /**
-   * evaluate and show the difference
-   * @param text1
-   * @param text2
-   */
-  async evaluateDifference(text1: string, text2: string) {
-    let diffChecker: any;
-    switch (this.comparisonType) {
-      case 'char':
-        diffChecker = diffChars;
-        break;
-      case 'word':
-        diffChecker = diffWords;
-        break;
-      case 'line':
-        diffChecker = diffLines;
-    }
-    const diffs: Change[] = diffChecker(text1, text2, {
-      ignoreCase: this.ignoreCase,
-      ignoreWhitespace: this.ignoreWhitespace,
-    });
-
-    if (diffs.length > 0) {
-      const childElements = this.diffBlock.nativeElement.children;
-      for (const child of childElements) {
-        this.renderer.removeChild(this.diffBlock.nativeElement, child);
-      }
-    }
-
-    const fragment: DocumentFragment = this.document.createDocumentFragment();
-
-    diffs.forEach(part => {
-      // green for additions, red for deletions
-      // grey for common parts
-      const color = part.added ? 'green' : part.removed ? 'red' : 'grey';
-      const span = this.renderer.createElement('span');
-      span.style.color = color;
-      this.renderer.appendChild(span, this.renderer.createText(part.value));
-      this.renderer.appendChild(fragment, span);
-    });
-
-    this.renderer.appendChild(this.diffBlock.nativeElement, fragment);
-  }
-
-  async compareOptionsChange(event: MatCheckboxChange, comparisonType: string) {
-    switch (comparisonType) {
-      case 'case':
-        this.ignoreCase = event.checked;
-        break;
-      case 'whitespace':
-        this.ignoreWhitespace = event.checked;
-    }
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  async switchTexts() {
-    const bufferText = this.text1;
-    this.text1 = this.text2;
-    this.text2 = bufferText;
-    this.updateText1(this.text1);
-    this.updateText2(this.text2);
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
-  changeComparisonType(selectValue: string) {
-    this.comparisonType = selectValue;
-    LogUtils.info(`comparison type changed: ${selectValue}`);
-    this.evaluateDifference(this.text1, this.text2);
-  }
-
   async selectFiles(event: any) {
     const file: File = event.target.files[0];
-    if (this.currentFileDialogId === 'text1') {
+    if (this.currentFileDialogId === 'original') {
       this.fileService.readFileAsText(file, this.onTextFile1Upload.bind(this));
     }
-    if (this.currentFileDialogId === 'text2') {
+    if (this.currentFileDialogId === 'modified') {
       this.fileService.readFileAsText(file, this.onTextFile2Upload.bind(this));
     }
     event.target.value = null;
   }
 
   async onTextFile1Upload(textContent: string) {
-    this.text1 = textContent;
-    this.updateText1(this.text1);
-    this.evaluateDifference(this.text1, this.text2);
+    this.zoneRef.run(() => {
+      const dataModel: DiffEditorModel = {
+        code: textContent,
+        language: 'text/plain',
+      };
+      this.diffEdior.originalModel = dataModel;
+    });
   }
 
   async onTextFile2Upload(textContent: string) {
-    this.text2 = textContent;
-    this.updateText2(this.text2);
-    this.evaluateDifference(this.text1, this.text2);
+    this.zoneRef.run(() => {
+      const dataModel: DiffEditorModel = {
+        code: textContent,
+        language: 'text/plain',
+      };
+      this.diffEdior.modifiedModel = dataModel;
+    });
   }
 
   /**
