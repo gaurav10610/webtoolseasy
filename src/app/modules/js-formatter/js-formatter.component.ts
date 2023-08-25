@@ -17,6 +17,9 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   styleUrls: ['./js-formatter.component.scss'],
 })
 export class JsFormatterComponent extends BaseComponent {
+  // @ViewChild('formattedEditor', { static: false })
+  // formattedEditor!: EditorComponent;
+
   rawCode: string = `if(value==='webtoolseasy'){formatjs();}else{console.log('this is awesome');}`;
 
   formattedCode!: string;
@@ -60,10 +63,23 @@ export class JsFormatterComponent extends BaseComponent {
     this.appContextService.relatedTools = componentConfig.relatedTools;
     this.appContextService.descrptionData = descriptionData;
     this.formattedCode = js_beautify(this.rawCode);
+    // this.formattedCode = this.rawCode;
+  }
+
+  onFormattedEditorLoad(event: any) {
+    // setTimeout(() => {
+    //   LogUtils.info(this.formattedEditor);
+    //   LogUtils.info(
+    //     event.languageConfigurationService.getLanguageConfiguration()
+    //   );
+    //   event._actions.get('editor.action.formatDocument').run();
+    // }, 1000);
   }
 
   onRawCodeChange() {
     this.formattedCode = js_beautify(this.rawCode);
+    // this.formattedCode = this.rawCode;
+    // this.formattedEditor.getAction('editor.action.formatDocument').run();
   }
 
   copyFormattedCode() {

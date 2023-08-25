@@ -38,9 +38,11 @@
           <div class="full-height full-width">
             <!-- formatted code editor -->
             <ngx-monaco-editor
+              #formattedEditor
               style="height: 100%"
               [options]="editorOptions"
-              [(ngModel)]="formattedCode"></ngx-monaco-editor>
+              [(ngModel)]="formattedCode"
+              (onInit)="onFormattedEditorLoad($event)"></ngx-monaco-editor>
           </div>
         </div>
       </div>
