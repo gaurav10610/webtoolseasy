@@ -2,48 +2,12 @@
   font-size: large;
 }
 
-.text-area-div {
-  width: 47%;
-  height: 30em;
-  font-size: larger;
-}
-
-.text-content-div {
-  border-radius: 10px;
-}
-
 .text-area-container {
   height: 40em;
-}
-
-[contenteditable]:focus {
-  outline: 0px solid transparent;
-}
-
-@media screen and (min-width: 735px) {
-  .color-coding {
-    flex-direction: row;
-  }
 }
 
 @media screen and (max-width: 735px) {
   .text-area-container {
     height: 25em;
-  }
-  .text-area-div {
-    height: 10em;
-    width: 100%;
-  }
-  .text1-area-margin {
-    margin-bottom: 20px;
-  }
-  .text-content-div {
-    font-size: larger;
-  }
-  .diff-parent-div {
-    width: 100%;
-  }
-  .color-coding {
-    flex-direction: column;
   }
 }
