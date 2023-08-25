@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -12,7 +11,6 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { LogUtils } from 'src/app/service/util/logger';
 import {
   descriptionData,
   componentConfig,
@@ -24,7 +22,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
   templateUrl: './base64-encode.component.html',
   styleUrls: ['./base64-encode.component.scss'],
 })
-export class Base64EncodeComponent extends BaseComponent implements OnInit {
+export class Base64EncodeComponent extends BaseComponent {
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
@@ -63,10 +61,6 @@ export class Base64EncodeComponent extends BaseComponent implements OnInit {
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.descrptionData = descriptionData;
     this.appContextService.relatedTools = componentConfig.relatedTools;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('base64 encode component has rendered');
   }
 
   async openFileDialog() {

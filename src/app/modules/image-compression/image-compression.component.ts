@@ -1,11 +1,9 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
   NgZone,
   OnDestroy,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -39,7 +37,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
 })
 export class ImageCompressionComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnDestroy
 {
   isMobile!: boolean;
   fileList: ImageFileData[] = [];
@@ -95,14 +93,6 @@ export class ImageCompressionComponent
         this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('ngOnInit: image compression component has rendered');
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('ngOnInit: image compression component has rendered');
   }
 
   ngOnDestroy() {

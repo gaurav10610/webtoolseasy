@@ -1,14 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  Renderer2,
-} from '@angular/core';
+import { Component, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
-import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -23,10 +15,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   templateUrl: './json-formatter.component.html',
   styleUrls: ['./json-formatter.component.scss'],
 })
-export class JsonFormatterComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class JsonFormatterComponent extends BaseComponent {
   rawCode: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   tabSpaceValue: string = '   ';
   formattedCode!: string;
@@ -70,19 +59,11 @@ export class JsonFormatterComponent
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.relatedTools = componentConfig.relatedTools;
     this.appContextService.descrptionData = descriptionData;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('json formatter: ngOnInit');
     this.formattedCode = JSON.stringify(
       JSON.parse(this.rawCode),
       null,
       this.tabSpaceValue
     );
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('json formatter: ngAfterViewInit');
   }
 
   onRawCodeChange() {

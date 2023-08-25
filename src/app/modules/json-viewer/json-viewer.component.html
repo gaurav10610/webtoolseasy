@@ -13,7 +13,7 @@
       <app-share-buttons class="full-width"></app-share-buttons>
 
       <div
-        class="flex-display flex-row-flow flex-align-center text-area-container full-width">
+        class="flex-display flex-row-flow flex-align-center text-area-container full-width flex-gap-large">
         <!-- Text 1 div -->
         <div
           class="flex-display flex-column-flow text-area-div flex-gap-medium">
@@ -54,7 +54,10 @@
       </div>
 
       <div class="flex-display flex-row-flow full-width copy-button">
-        <button mat-raised-button (click)="copyFormattedJson()" color="primary">
+        <button
+          mat-stroked-button
+          (click)="copyFormattedJson()"
+          color="primary">
           <mat-icon>content_copy</mat-icon> Copy Formatted JSON
         </button>
       </div>

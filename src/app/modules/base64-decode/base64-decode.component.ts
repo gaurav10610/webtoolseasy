@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -24,7 +23,7 @@ import {
   templateUrl: './base64-decode.component.html',
   styleUrls: ['./base64-decode.component.scss'],
 })
-export class Base64DecodeComponent extends BaseComponent implements OnInit {
+export class Base64DecodeComponent extends BaseComponent {
   // base64 data
   base64Data: string | undefined;
 
@@ -67,10 +66,6 @@ export class Base64DecodeComponent extends BaseComponent implements OnInit {
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.descrptionData = descriptionData;
     this.appContextService.relatedTools = componentConfig.relatedTools;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('ngOnInit: base64 decode component has rendered');
   }
 
   async updateBase64(base64: string) {

@@ -1,16 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { css_beautify } from 'js-beautify';
 import { BaseComponent } from 'src/app/base/base.component';
-import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
   descriptionData,
@@ -23,10 +16,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   templateUrl: './css-formatter.component.html',
   styleUrls: ['./css-formatter.component.scss'],
 })
-export class CssFormatterComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class CssFormatterComponent extends BaseComponent {
   rawCode: string = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
 
   formattedCode!: string;
@@ -69,15 +59,7 @@ export class CssFormatterComponent
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.relatedTools = componentConfig.relatedTools;
     this.appContextService.descrptionData = descriptionData;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('css formatter component: ngOnInit');
     this.formattedCode = css_beautify(this.rawCode);
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('css formatter component: ngAfterViewInit');
   }
 
   onRawCodeChange() {

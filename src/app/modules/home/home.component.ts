@@ -1,11 +1,10 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { LogUtils } from 'src/app/service/util/logger';
 import { componentConfig } from 'src/environments/component-config/home/config';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
 
@@ -14,8 +13,7 @@ import { appDisplayConfig } from 'src/environments/tools-directory-config';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent extends BaseComponent implements OnInit {
-  appId: string = 'home';
+export class HomeComponent extends BaseComponent {
   /**
    * application config for composing UI
    */
@@ -44,9 +42,5 @@ export class HomeComponent extends BaseComponent implements OnInit {
       this.metaService,
       this.document
     );
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('home component has been rendered');
   }
 }

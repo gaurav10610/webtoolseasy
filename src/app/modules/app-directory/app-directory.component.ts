@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppDisplayConfig } from 'src/app/@types/config';
 import { BaseComponent } from 'src/app/base/base.component';
-import { LogUtils } from 'src/app/service/util/logger';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
@@ -15,7 +14,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   templateUrl: './app-directory.component.html',
   styleUrls: ['./app-directory.component.scss'],
 })
-export class AppDirectoryComponent extends BaseComponent implements OnInit {
+export class AppDirectoryComponent extends BaseComponent {
   /**
    * application config for composing UI
    */
@@ -49,10 +48,6 @@ export class AppDirectoryComponent extends BaseComponent implements OnInit {
     );
     this.appContextService.mainHeading = componentConfig.mainHeading!;
     this.appContextService.subHeading = componentConfig.subHeading;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('app directory component has been rendered');
   }
 
   navigateByAppId(applicationId: string) {

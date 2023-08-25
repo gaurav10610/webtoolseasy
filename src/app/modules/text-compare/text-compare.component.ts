@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -29,7 +28,7 @@ import { FileService } from 'src/app/service/file/file.service';
 })
 export class TextCompareComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit
+  implements AfterViewInit
 {
   text1: string = 'webtoolseasy is awesome';
   text2: string = 'webtoolseasy is super cool';
@@ -83,12 +82,7 @@ export class TextCompareComponent
     this.appContextService.descrptionData = descriptionData;
   }
 
-  ngOnInit(): void {
-    LogUtils.info('text compare component: ngOnInit');
-  }
-
   ngAfterViewInit(): void {
-    LogUtils.info('text compare component: ngAfterViewInit');
     this.updateText1(this.text1);
     this.updateText2(this.text2);
     this.evaluateDifference(this.text1, this.text2);
@@ -148,7 +142,6 @@ export class TextCompareComponent
    * @param text2
    */
   async evaluateDifference(text1: string, text2: string) {
-    LogUtils.info(`evaluating difference between the two texts`);
     let diffChecker: any;
     switch (this.comparisonType) {
       case 'char':

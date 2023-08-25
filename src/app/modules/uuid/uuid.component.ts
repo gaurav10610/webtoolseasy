@@ -1,9 +1,7 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -11,7 +9,6 @@ import {
 import { BaseComponent } from 'src/app/base/base.component';
 import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { LogUtils } from 'src/app/service/util/logger';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -27,10 +24,7 @@ import { FileService } from 'src/app/service/file/file.service';
   templateUrl: './uuid.component.html',
   styleUrls: ['./uuid.component.scss'],
 })
-export class UuidComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class UuidComponent extends BaseComponent {
   uuidV1: string;
   uuidV4: string;
   appId: string = 'uuid';
@@ -83,14 +77,6 @@ export class UuidComponent
     this.uuidV4 = v4();
   }
 
-  ngOnInit(): void {
-    LogUtils.info('uuid component: ngOnInit');
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('uuid component: ngAfterViewInit');
-  }
-
   generateUUID(version: string) {
     switch (version) {
       case 'V1':
@@ -126,7 +112,6 @@ export class UuidComponent
           this.v4Ids.push(v4());
         }
       } else {
-        LogUtils.error('more than 1000');
         this.bulkV4Error = true;
       }
     } else if (version === 'V1') {
@@ -138,7 +123,6 @@ export class UuidComponent
           this.v1Ids.push(v1());
         }
       } else {
-        LogUtils.error('more than 1000');
         this.bulkV1Error = true;
       }
     }

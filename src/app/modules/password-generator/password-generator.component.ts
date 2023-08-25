@@ -1,10 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -32,10 +30,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   templateUrl: './password-generator.component.html',
   styleUrls: ['./password-generator.component.scss'],
 })
-export class PasswordGeneratorComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class PasswordGeneratorComponent extends BaseComponent {
   password: string;
   passwordList: string[] = [];
 
@@ -133,14 +128,6 @@ export class PasswordGeneratorComponent
     this.password = generate(this.options);
   }
 
-  ngOnInit(): void {
-    LogUtils.info('passwordgenerator component: ngOnInit');
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('passwordgenerator component: ngAfterViewInit');
-  }
-
   /**
    * generate a random password
    */
@@ -164,7 +151,6 @@ export class PasswordGeneratorComponent
       this.bulkPasswordError = false;
       this.passwordList = generateMultiple(count, this.options);
     } else {
-      LogUtils.error('more than 1000');
       this.bulkPasswordError = true;
     }
   }

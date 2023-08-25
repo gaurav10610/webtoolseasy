@@ -1,13 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
   NgZone,
   OnDestroy,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -59,7 +57,7 @@ import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 })
 export class VideoConverterComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnDestroy
 {
   fileStore: Map<string, VideoFileData>;
   fileDisplayList: VideoFileData[];
@@ -167,14 +165,6 @@ export class VideoConverterComponent
     this.conversionLogs = [];
 
     this.checkCompatibility();
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('video converter: ngOnInit');
-  }
-
-  ngAfterViewInit() {
-    LogUtils.info('video converter: ngAfterViewInit');
   }
 
   async ngOnDestroy() {

@@ -1,12 +1,9 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   Inject,
   NgZone,
   OnDestroy,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -36,7 +33,7 @@ import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 })
 export class ScreenRecorderComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnDestroy
 {
   appId: string = 'imagecompress';
   isRecording: boolean = false;
@@ -161,14 +158,6 @@ export class ScreenRecorderComponent
     }
     this.destroyed.next();
     this.destroyed.complete();
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('screen recorder component: ngOnInit');
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('screen recorder component: ngAfterViewInit');
   }
 
   resetContextVariables() {

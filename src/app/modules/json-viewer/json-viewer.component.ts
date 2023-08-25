@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -13,7 +12,6 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { LogUtils } from 'src/app/service/util/logger';
 import { descriptionData } from 'src/environments/component-config/json-viewer/config';
 import { componentConfig } from 'src/environments/component-config/json-viewer/config';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -26,7 +24,7 @@ import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 })
 export class JsonViewerComponent
   extends BaseComponent
-  implements OnInit, AfterViewInit
+  implements AfterViewInit
 {
   appId: string = 'jsonviewer';
   isJsonValid: boolean = true;
@@ -73,12 +71,7 @@ export class JsonViewerComponent
     this.appContextService.descrptionData = descriptionData;
   }
 
-  ngOnInit(): void {
-    LogUtils.info('json viewer: ngOnInit');
-  }
-
   ngAfterViewInit(): void {
-    LogUtils.info('json viewer: ngAfterViewInit');
     this.updateRawJson(this.rawJson);
   }
 
@@ -101,7 +94,6 @@ export class JsonViewerComponent
       this.isJsonValid = true;
       this.updateJsonTree(rawJsonValue);
     } catch (error) {
-      LogUtils.error(`error occured while formatting json: ${this.rawJson}`);
       this.isJsonValid = false;
     }
   }

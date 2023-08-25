@@ -4,8 +4,7 @@
 
 .text-area-div {
   width: 49%;
-  height: 30em;
-  font-size: larger;
+  height: 40em;
 }
 
 .text-area-container {
@@ -19,13 +18,10 @@
 @media screen and (max-width: 735px) {
   .text-area-div {
     height: 25em;
-    width: 80%;
+    width: 100%;
   }
   .text-area-container {
     flex-direction: column;
     gap: 10px;
-  }
-  .copy-button {
-    justify-content: center;
   }
 }

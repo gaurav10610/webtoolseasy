@@ -1,14 +1,7 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/base/base.component';
-import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { js_beautify } from 'js-beautify';
 import {
@@ -23,10 +16,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   templateUrl: './js-formatter.component.html',
   styleUrls: ['./js-formatter.component.scss'],
 })
-export class JsFormatterComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class JsFormatterComponent extends BaseComponent {
   rawCode: string = `if(value==='webtoolseasy'){formatjs();}else{console.log('this is awesome');}`;
 
   formattedCode!: string;
@@ -69,15 +59,7 @@ export class JsFormatterComponent
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.relatedTools = componentConfig.relatedTools;
     this.appContextService.descrptionData = descriptionData;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('js formatter component: ngOnInit');
     this.formattedCode = js_beautify(this.rawCode);
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('js formatter component: ngAfterViewInit');
   }
 
   onRawCodeChange() {

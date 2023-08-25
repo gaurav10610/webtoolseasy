@@ -1,16 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { html_beautify } from 'js-beautify';
 import { BaseComponent } from 'src/app/base/base.component';
-import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
@@ -23,10 +16,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   templateUrl: './html-formatter.component.html',
   styleUrls: ['./html-formatter.component.scss'],
 })
-export class HtmlFormatterComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class HtmlFormatterComponent extends BaseComponent {
   rawCode: string =
     '<html><head><title>Online HTML Formatter</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
 
@@ -70,15 +60,7 @@ export class HtmlFormatterComponent
     this.appContextService.subHeading = componentConfig.subHeading;
     this.appContextService.relatedTools = componentConfig.relatedTools;
     this.appContextService.descrptionData = descriptionData;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('html formatter component: ngOnInit');
     this.formattedCode = html_beautify(this.rawCode);
-  }
-
-  ngAfterViewInit(): void {
-    LogUtils.info('html formatter component: ngAfterViewInit');
   }
 
   onRawCodeChange() {

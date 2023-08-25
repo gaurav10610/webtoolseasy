@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
   PLATFORM_ID,
   Renderer2,
   ViewChild,
@@ -27,10 +26,7 @@ import { NgxJsonViewerComponent } from 'ngx-json-viewer';
   templateUrl: './jwt.component.html',
   styleUrls: ['./jwt.component.scss'],
 })
-export class JwtComponent
-  extends BaseComponent
-  implements OnInit, AfterViewInit
-{
+export class JwtComponent extends BaseComponent implements AfterViewInit {
   isTokenValid: boolean = true;
   tabSpaceValue: string = '  ';
 
@@ -97,12 +93,7 @@ export class JwtComponent
     this.decodedHeaders = decodeProtectedHeader(this.encodedToken);
   }
 
-  ngOnInit(): void {
-    LogUtils.info('jwt component: ngOnInit');
-  }
-
   ngAfterViewInit(): void {
-    LogUtils.info('jwt component: ngAfterViewInit');
     this.updateEncodedToken(this.encodedToken);
   }
 
