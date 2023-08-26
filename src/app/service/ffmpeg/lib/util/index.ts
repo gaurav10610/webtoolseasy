@@ -79,7 +79,7 @@ export const fetchFile = async (
  * Example:
  *
  * ```ts
- * await importScript("http://localhost:3000/ffmpeg.js");
+ * await importScript("http://localhost:3000/ffmpeg");
  * ```
  */
 export const importScript = async (url: string): Promise<void> =>
@@ -163,7 +163,7 @@ export const downloadWithProgress = async (
  * Example:
  *
  * ```ts
- * await toBlobURL("http://localhost:3000/ffmpeg.js", "text/javascript");
+ * await toBlobURL("http://localhost:3000/ffmpeg", "text/javascript");
  * ```
  */
 export const toBlobURL = async (
