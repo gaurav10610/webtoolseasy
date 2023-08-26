@@ -24,7 +24,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
-import { CountdownComponent, CountdownConfig } from 'ngx-countdown';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -90,13 +89,6 @@ export class ScreenRecorderComponent
   mediaStreamRecorder: MediaRecorder | undefined;
 
   destroyed = new Subject<void>();
-
-  config: CountdownConfig = {
-    demand: false,
-  };
-
-  @ViewChild('cd', { static: false })
-  countdown!: CountdownComponent;
 
   constructor(
     private titleService: Title,
@@ -175,7 +167,6 @@ export class ScreenRecorderComponent
   startRecording() {
     this.zoneRef.run(async () => {
       this.isRecording = true;
-      this.countdown.restart();
       this.resetContextVariables();
 
       // clear all buffer data from index db
@@ -327,7 +318,6 @@ export class ScreenRecorderComponent
     this.mediaStreamRecorder.start(
       ScreenRecorderComponent.RECORDER_TIME_SLICE_MS
     );
-    this.countdown.begin();
   }
 
   /**
@@ -364,7 +354,6 @@ export class ScreenRecorderComponent
   pauseRecording() {
     this.mediaStreamRecorder?.pause();
     this.isRecPaused = true;
-    this.countdown.pause();
   }
 
   /**
@@ -373,7 +362,6 @@ export class ScreenRecorderComponent
   resumeRecording() {
     this.mediaStreamRecorder?.resume();
     this.isRecPaused = false;
-    this.countdown.resume();
   }
 
   /**
@@ -389,7 +377,6 @@ export class ScreenRecorderComponent
       this.processMediaStream();
     }
     this.isRecording = false;
-    this.countdown.stop();
   }
 
   processMediaStream() {
