@@ -1,0 +1,29 @@
+.icon-div {
+  height: 300px;
+}
+
+.icon-div mat-icon {
+  transform: scale(10);
+}
+
+.error {
+  color: red;
+  font-size: large;
+  font-style: italic;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 735px) {
+  .icon-div {
+    height: 150px;
+  }
+  .icon-div mat-icon {
+    transform: scale(5);
+  }
+  .recoder-options {
+    flex-direction: column;
+  }
+  .error {
+    font-size: small;
+  }
+}

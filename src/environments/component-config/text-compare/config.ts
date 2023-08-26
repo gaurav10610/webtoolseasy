@@ -1,23 +1,39 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
+
+const navigationUrl = '/tools/text-compare';
+const pageTitle =
+  'Compare text online to find the difference between two text files';
+const pageDescription =
+  'Text File Difference tool will compare text to find the difference between two text files. Just paste your files and Find Difference!';
+const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Text File Difference',
   subHeading: 'Compare Text Files Online',
-  navigationUrl: '/tools/text-compare',
-  pageTitle:
-    'Compare text online to find the difference between two text files',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Text File Difference tool will compare text to find the difference between two text files. Just paste your files and Find Difference!',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'diff checker',
@@ -32,12 +48,24 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'app-icon.svg',
     },
     {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
     },
     {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
 };

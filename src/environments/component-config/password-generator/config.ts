@@ -1,24 +1,40 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/password-generator';
+const pageTitle =
+  'Random Password Generator - Generate Strong, Random & Secure Passwords';
+const pageDescription =
+  'Quickly and easily generate single or bulk strong, random and secure passwords using our free passwod generator tool';
+const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Random Password Generator',
   subHeading: 'Generate Strong, Random & Secure Passwords',
-  navigationUrl: '/tools/password-generator',
-  pageTitle:
-    'Random Password Generator - Generate Strong, Random & Secure Passwords',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Quickly and easily generate single or bulk strong, random and secure passwords using our free passwod generator tool',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'password generator',
@@ -33,20 +49,32 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'app-icon.svg',
     },
     {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
-    },
-    {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
     },
     {
       iconName: 'uuid-icon',
       iconRelativeUrl: 'uuid-icon.svg',
+    },
+    {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [

@@ -1,0 +1,38 @@
+.div-label {
+  font-size: large;
+}
+
+.text-area-div {
+  width: 49%;
+  height: 40em;
+}
+
+.text-content-div {
+  border-radius: 10px;
+}
+
+.text-area-container {
+  justify-content: space-around;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.copy-button {
+  justify-content: flex-end;
+}
+
+ngx-json-viewer section {
+  overflow-y: scroll;
+}
+
+@media screen and (max-width: 735px) {
+  .text-area-div {
+    height: 25em;
+    width: 100%;
+  }
+  .text-area-container {
+    flex-direction: column;
+  }
+}

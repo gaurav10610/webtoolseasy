@@ -123,26 +123,3 @@ export const FFMPEG_COMMANDS: Map<number, Map<number, string>> = new Map([
   [10, new Map([[0, '-i {0} {1}']])],
   [11, new Map([[0, '-i {0} {1}']])],
 ]);
-
-// export const FFMPEG_COMMANDS: Map<number, Map<number, string>> = new Map([
-//   [1, new Map([[0, '-i {0} -c:a libmp3lame {1}']])],
-//   [2, new Map([[0, '-i {0} -c:a libvorbis {1}']])],
-//   [3, new Map([[0, '-i {0} -c:a libopus {1}']])],
-//   [4, new Map([[0, '-i {0} -c:a libfdk_aac {1}']])],
-//   [
-//     5,
-//     new Map([
-//       [0, '-i {0} -c:v libx264 {1}'],
-//       [9, '-i {0} -codec copy {1}'],
-//     ]),
-//   ],
-//   [
-//     6,
-//     new Map([
-//       [0, '-i {0} -c:v libx265 {1}'],
-//       [9, '-i {0} -codec copy {1}'],
-//     ]),
-//   ],
-//   [7, new Map([[0, '-i {0} -c:v libvpx {1}']])],
-//   [8, new Map([[0, '-i {0} -c:v libtheora {1}']])],
-// ]);

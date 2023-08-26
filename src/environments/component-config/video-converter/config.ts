@@ -1,24 +1,40 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/video-converter';
+const pageTitle =
+  'Online Video to Audio Converter - Convert MP4, MKV, WEBM, AVI, OGM';
+const pageDescription =
+  'Convert your videos to high-quality audio files with our free online video to audio converter. No software installation required. Convert MP4, MKV, WEBM, AVI, OGM. Try it now!';
+const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Video to Audio Converter',
   subHeading: 'Convert Videos to Audio For Free',
-  navigationUrl: '/tools/video-converter',
-  pageTitle:
-    'Online Video to Audio Converter - Convert MP4, MKV, WEBM, AVI, OGM',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Convert your videos to high-quality audio files with our free online video to audio converter. No software installation required. Convert MP4, MKV, WEBM, AVI, OGM. Try it now!',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'video to audio converter',
@@ -32,14 +48,6 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'app-icon',
       iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
     },
     {
       iconName: 'video-convert-icon',
@@ -60,6 +68,26 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
+    },
+    {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [

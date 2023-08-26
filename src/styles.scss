@@ -13,6 +13,10 @@ body {
   font-size: xx-large;
 }
 
+.border-grey {
+  border: 1px solid lightgrey;
+}
+
 @media screen and (max-width: 735px) {
   .heading-font {
     font-size: large;
@@ -25,7 +29,6 @@ body {
 
 .app-icon {
   transform: scale(1.5);
-  padding-right: 10px;
 }
 
 .y-scroll {
@@ -58,6 +61,22 @@ body {
 
 .flex-full-height {
   flex-grow: 1;
+}
+
+.flex-gap-small {
+  gap: 5px;
+}
+
+.flex-gap-medium {
+  gap: 10px;
+}
+
+.flex-gap-large {
+  gap: 15px;
+}
+
+.flex-gap-xlarge {
+  gap: 20px;
 }
 
 .flex-wrap {

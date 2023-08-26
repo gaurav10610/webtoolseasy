@@ -1,0 +1,17 @@
+#heading1 {
+  font-family: monospace, 'Courier New', Courier;
+  font-size: xxx-large;
+  font-weight: bold;
+  text-align: center;
+}
+
+#heading2 {
+  font-size: large;
+  text-align: center;
+}
+
+@media screen and (max-width: 735px) {
+  #heading1 {
+    font-size: x-large;
+  }
+}

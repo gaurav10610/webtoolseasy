@@ -1,0 +1,97 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <app-header-toolbar></app-header-toolbar>
+
+  <div class="full-width y-scroll flex-display flex-column-flow">
+    <!-- app container -->
+    <div
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <!-- share buttons -->
+      <app-share-buttons class="full-width"></app-share-buttons>
+
+      <!-- file input -->
+      <input
+        #inputFiles
+        type="file"
+        style="display: none"
+        (change)="selectFiles($event)" />
+
+      <!-- file drop area -->
+      <div
+        class="flex-display flex-column-flow flex-center flex-align-center file-drop-area div-border border-grey full-width flex-gap-medium"
+        (drop)="dropHandler($event)"
+        (dragover)="dragOverHandler($event)">
+        <mat-icon style="transform: scale(2)">collections</mat-icon>
+        <span class="header-font" style="font-size: large"
+          >Drag & drop file here</span
+        >
+        <span class="header-font" style="font-size: large">or</span>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openFileDialog()"
+          matTooltip="select file to encode">
+          <mat-icon>file_upload</mat-icon> Browse for file
+        </button>
+      </div>
+
+      <!-- encoded base64 data -->
+      <div
+        *ngIf="base64Data !== undefined"
+        class="full-width flex-display flex-column-flow flex-gap-medium">
+        <!-- copy buttons -->
+        <div
+          class="flex-display flex-row-flow"
+          style="justify-content: flex-end">
+          <button
+            mat-stroked-button
+            (click)="copyBase64Data('uri')"
+            color="accent"
+            class="copy-button">
+            Copy Base64 Data URI
+          </button>
+          <button
+            mat-stroked-button
+            (click)="copyBase64Data('base64')"
+            color="accent">
+            Copy Base64
+          </button>
+        </div>
+
+        <!-- base64 data card -->
+        <mat-card style="border: 1px solid lightgrey">
+          <mat-card-header class="data-heading">
+            <mat-card-title
+              ><h3 style="font-size: 90%; font-weight: 700">
+                Base64 Data
+              </h3></mat-card-title
+            >
+          </mat-card-header>
+
+          <mat-card-content style="max-height: 200px" class="y-scroll">
+            <div style="overflow-wrap: anywhere">
+              {{ base64Data }}
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- related tools -->
+      <app-related-tools class="full-width"></app-related-tools>
+
+      <!-- description -->
+      <app-description class="full-width"></app-description>
+
+      <!-- tags div -->
+      <app-tags></app-tags>
+
+      <!-- follow buttons -->
+      <app-follow-buttons></app-follow-buttons>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

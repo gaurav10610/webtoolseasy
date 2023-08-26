@@ -147,9 +147,13 @@ export class FFmpeg {
     callback: LogEventCallback | ProgressEventCallback
   ) {
     if (event === 'log') {
-      this.#logEventCallbacks.filter(f => f !== callback);
+      this.#logEventCallbacks = this.#logEventCallbacks.filter(
+        f => f !== callback
+      );
     } else if (event === 'progress') {
-      this.#progressEventCallbacks.filter(f => f !== callback);
+      this.#progressEventCallbacks = this.#progressEventCallbacks.filter(
+        f => f !== callback
+      );
     }
   }
 
@@ -163,7 +167,7 @@ export class FFmpeg {
   public load = (config: FFMessageLoadConfig = {}): Promise<IsFirst> => {
     if (!this.#worker) {
       this.#worker = new Worker(
-        `${environment.hostname}assets/@ffmpeg/worker.js`,
+        `${environment.hostname}/assets/@ffmpeg/worker.js`,
         {
           type: 'module',
         }

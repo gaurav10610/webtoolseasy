@@ -1,20 +1,38 @@
 import { ApplicationConfig } from 'src/app/@types/config';
+import { environment } from 'src/environments/environment';
+
+const navigationUrl = '/tools';
+const pageTitle = 'Free Online Web Tools - webtoolseasy.com';
+const pageDescription =
+  'Discover a comprehensive directory of free web tools online. Find the perfect tool for your needs and streamline your online experience.';
+const imageUrl = `${environment.screenshotsBaseUrl}/tools-directory.png`;
 
 export const componentConfig: ApplicationConfig = {
-  navigationUrl: '/tools',
+  navigationUrl,
   mainHeading: 'Web Tools Directory',
-  pageTitle: 'Free Online Web Tools - webtoolseasy.com',
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Discover a comprehensive directory of free web tools online. Find the perfect tool for your needs and streamline your online experience.',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
+    { property: 'og:image:width', content: '1640' },
+    { property: 'og:image:height', content: '856' },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [],
   icons: [
@@ -59,14 +77,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'comparison.svg',
     },
     {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
-    },
-    {
       iconName: 'video-convert-icon',
       iconRelativeUrl: 'video-convert.svg',
     },
@@ -81,6 +91,26 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'file-decode-icon',
       iconRelativeUrl: 'file-decode.svg',
+    },
+    {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
 };

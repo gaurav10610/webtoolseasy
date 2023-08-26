@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { JsonViewerRoutingModule } from './json-viewer-routing.module';
-import { JsonViewerComponent } from 'src/app/components/json-viewer/json-viewer.component';
+import { JsonViewerComponent } from './json-viewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,12 +13,16 @@ import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [JsonViewerComponent],
   imports: [
     CommonModule,
     JsonViewerRoutingModule,
+    ShareButtonsModule,
+    FollowButtonsModule,
     NgxJsonViewerModule,
     MatIconModule,
     MatButtonModule,

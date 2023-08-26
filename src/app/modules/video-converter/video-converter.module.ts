@@ -7,7 +7,7 @@ import { HeaderToolbarModule } from 'src/app/modules/header-toolbar/header-toolb
 import { ToolHeadingModule } from 'src/app/modules/tool-heading/tool-heading.module';
 import { TagsModule } from 'src/app/modules/tags/tags.module';
 import { FooterModule } from 'src/app/modules/footer/footer-module';
-import { VideoConverterComponent } from 'src/app/components/video-converter/video-converter.component';
+import { VideoConverterComponent } from './video-converter.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -18,12 +18,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupFormModule } from 'src/app/modules/popup-form/popup-form.module';
 import { RelatedToolsModule } from 'src/app/modules/related-tools/related-tools.module';
 import { DescriptionModule } from 'src/app/modules/description/description.module';
+import { ShareButtonsModule } from 'src/app/modules/share-buttons/share-buttons.module';
+import { FollowButtonsModule } from 'src/app/modules/follow-buttons/follow-buttons.module';
 
 @NgModule({
   declarations: [VideoConverterComponent],
   imports: [
     CommonModule,
     VideoConverterRoutingModule,
+    ShareButtonsModule,
+    FollowButtonsModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,

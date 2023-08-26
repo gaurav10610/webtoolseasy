@@ -1,0 +1,33 @@
+.uuid-container {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#heading3 {
+  margin-bottom: 10px;
+  font-size: large;
+  font-weight: bold;
+}
+
+.uuid-class {
+  font-size: xx-large;
+}
+
+.uuid-app {
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.bulk-uuids {
+  padding: 15px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 735px) {
+  .uid-div {
+    flex-direction: column;
+  }
+  .uuid-class {
+    font-size: larger;
+  }
+}

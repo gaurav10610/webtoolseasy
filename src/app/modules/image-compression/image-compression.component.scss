@@ -1,0 +1,19 @@
+.file-drop-area {
+  border-radius: 10px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.file-list-div {
+  max-height: 400px;
+}
+
+@media screen and (max-width: 735px) {
+  .file-name-div {
+    width: 60%;
+    overflow-x: hidden;
+  }
+  .file-list-div {
+    max-height: 300px;
+  }
+}

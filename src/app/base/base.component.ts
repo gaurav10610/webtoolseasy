@@ -2,10 +2,11 @@ import { isPlatformBrowser } from '@angular/common';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
-import { ApplicationConfig, IconConfig } from '../@types/config';
+import { ApplicationConfig, IconConfig } from 'src/app/@types/config';
+import { AppContextService } from 'src/app/service/app-context/app-context.service';
 
 export abstract class BaseComponent {
-  iconsPath = `${environment.hostname}assets/images/icons/`;
+  iconsPath = `${environment.hostname}/assets/images/icons/`;
   tags: string[] = [];
 
   constructor() {}
@@ -18,13 +19,14 @@ export abstract class BaseComponent {
     icons: IconConfig[],
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer,
-    platformId: string
+    platformId: string,
+    appContextService: AppContextService
   ) {
     if (isPlatformBrowser(platformId)) {
       /**
        * set assets path when executed in browser
        */
-      this.iconsPath = `${environment.hostname}assets/images/icons/`;
+      this.iconsPath = `${environment.hostname}/assets/images/icons/`;
     } else {
       /**
        * set assets path when executed on server
@@ -32,14 +34,23 @@ export abstract class BaseComponent {
       this.iconsPath = `http://localhost:${environment.port}/assets/images/icons/`;
     }
 
-    icons.forEach(iconConfig =>
-      matIconRegistry.addSvgIcon(
-        iconConfig.iconName,
-        domSanitizer.bypassSecurityTrustResourceUrl(
-          this.iconsPath + iconConfig.iconRelativeUrl
-        )
+    const epochMS: number = Date.now();
+
+    /**
+     * load only those icons which are not already registered
+     */
+    icons
+      .filter(
+        iconConfig => !appContextService.svgIcons.has(iconConfig.iconName)
       )
-    );
+      .forEach(iconConfig => {
+        matIconRegistry.addSvgIcon(
+          iconConfig.iconName,
+          domSanitizer.bypassSecurityTrustResourceUrl(`
+            ${this.iconsPath}${iconConfig.iconRelativeUrl}?${epochMS}`)
+        );
+        appContextService.svgIcons.set(iconConfig.iconName, true);
+      });
   }
 
   /**
@@ -48,6 +59,7 @@ export abstract class BaseComponent {
    * 1. title
    * 2. meta
    * 3. canonical url
+   * 4. og:graph meta tags
    */
   async updatePageMetaData(
     applicationConfig: ApplicationConfig,
@@ -57,8 +69,7 @@ export abstract class BaseComponent {
   ) {
     titleService.setTitle(applicationConfig.pageTitle);
     applicationConfig.metaTags.forEach(metaDefinition => {
-      metaService.removeTag(`name=${metaDefinition.name}`);
-      metaService.addTag(metaDefinition);
+      metaService.updateTag(metaDefinition);
     });
 
     /**

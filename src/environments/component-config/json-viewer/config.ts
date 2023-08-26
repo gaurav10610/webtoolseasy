@@ -1,23 +1,39 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/json-viewer';
+const pageTitle = 'Best JSON Viewer and JSON Beautifier';
+const pageDescription =
+  'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to pretty print JSON data.';
+const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online JSON Viewer',
   subHeading: 'JSON Visualizer / Tree Viewer',
-  navigationUrl: '/tools/json-viewer',
-  pageTitle: 'Best JSON Viewer and JSON Beautifier',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to pretty print JSON data.',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'json viewer',
@@ -30,14 +46,6 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'app-icon',
       iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
     },
     {
       iconName: 'json-icon',
@@ -54,6 +62,26 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'js-icon',
       iconRelativeUrl: 'js-icon.svg',
+    },
+    {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [

@@ -1,0 +1,21 @@
+.tag-class {
+  margin: 5px;
+  background: #e0e0e0;
+  border-radius: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+@media screen and (min-width: 735px) {
+  .tags-display {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .tags-display {
+    justify-content: start;
+  }
+}

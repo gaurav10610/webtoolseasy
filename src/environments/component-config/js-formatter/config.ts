@@ -1,23 +1,39 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
+
+const navigationUrl = '/tools/js-formatter';
+const pageTitle = 'Best Online Javascript Beautifier / Formatter';
+const pageDescription =
+  'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free';
+const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Javascript Formatter',
   subHeading: 'Javascript Beautifier',
-  navigationUrl: '/tools/js-formatter',
-  pageTitle: 'Best Online Javascript Beautifier / Formatter',
+  navigationUrl,
+  pageTitle,
   metaTags: [
     {
       name: 'description',
-      content:
-        'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free',
+      content: pageDescription,
     },
     {
       name: 'author',
       content: 'Gaurav Kumar Yadav',
     },
     { name: 'robots', content: 'index, follow' },
+    {
+      property: 'og:title',
+      content: pageTitle,
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
+    { property: 'og:image', content: imageUrl },
+    { property: 'og:image:secure_url', content: imageUrl },
+    { property: 'og:description', content: pageDescription },
+    { property: 'og:site_name', content: 'WebToolsEasy' },
   ],
   tags: [
     'js formatter',
@@ -33,14 +49,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'app-icon.svg',
     },
     {
-      iconName: 'linkedin-icon',
-      iconRelativeUrl: 'linkedin-icon.svg',
-    },
-    {
-      iconName: 'facebook-icon',
-      iconRelativeUrl: 'facebook.svg',
-    },
-    {
       iconName: 'json-icon',
       iconRelativeUrl: 'json-icon.svg',
     },
@@ -51,6 +59,26 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'css-icon',
       iconRelativeUrl: 'css.svg',
+    },
+    {
+      iconName: 'share-fb',
+      iconRelativeUrl: 'share-fb.svg',
+    },
+    {
+      iconName: 'share-linkedin',
+      iconRelativeUrl: 'share-linkedin.svg',
+    },
+    {
+      iconName: 'share-twitter',
+      iconRelativeUrl: 'share-twitter.svg',
+    },
+    {
+      iconName: 'share-copy',
+      iconRelativeUrl: 'share-copy.svg',
+    },
+    {
+      iconName: 'home-icon',
+      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [

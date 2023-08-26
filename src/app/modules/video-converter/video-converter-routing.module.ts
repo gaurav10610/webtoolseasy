@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VideoConverterComponent } from 'src/app/components/video-converter/video-converter.component';
+import { VideoConverterComponent } from './video-converter.component';
 
 const routes: Routes = [{ path: '', component: VideoConverterComponent }];
 

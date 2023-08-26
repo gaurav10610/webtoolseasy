@@ -1,0 +1,35 @@
+.div-label {
+  font-size: large;
+}
+
+.text-area-div {
+  width: 49%;
+  font-size: larger;
+  min-height: 30em;
+}
+
+.text-content-div {
+  border-radius: 10px;
+}
+
+.text-area-container {
+  justify-content: space-between;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.copy-button {
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 735px) {
+  .text-area-div {
+    width: 100%;
+    min-height: 10em;
+  }
+  .text-area-container {
+    flex-direction: column;
+  }
+}

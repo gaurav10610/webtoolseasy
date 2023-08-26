@@ -1,0 +1,44 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <app-header-toolbar></app-header-toolbar>
+
+  <div
+    class="full-width flex-display flex-column-flow flex-full-height main-div y-scroll">
+    <!-- app container -->
+    <div
+      class="flex-display flex-column-flow flex-align-center flex-full-height base-app-container">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <!-- share buttons -->
+      <app-share-buttons class="full-width"></app-share-buttons>
+
+      <!-- applications container -->
+      <div id="apps-container" class="apps-container flex-center">
+        <div
+          class="application shadow-grey"
+          *ngFor="let application of appsConfig"
+          (click)="navigateByAppId(application.applicationId)">
+          <!-- <mat-card> -->
+          <div
+            class="flex-display flex-column-flow flex-center flex-align-center app-card flex-gap-medium pointer-cursor">
+            <mat-icon
+              svgIcon="{{ application.iconName }}"
+              class="app-icon"></mat-icon>
+            <a
+              [replaceUrl]="true"
+              routerLink="{{ application.navigateUrl }}"
+              (click)="onAppClick($event)"
+              >{{ application.displayText }}</a
+            >
+          </div>
+          <!-- </mat-card> -->
+        </div>
+      </div>
+
+      <!-- follow buttons -->
+      <app-follow-buttons></app-follow-buttons>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>
