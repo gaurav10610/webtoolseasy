@@ -10,6 +10,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-json-formatter',
@@ -39,7 +40,8 @@ export class JsonFormatterComponent {
     private domSanitizer: DomSanitizer,
     private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
+    private iconConfigService: IconConfigService,
+    public platformMetadataService: PlatformMetadataService
   ) {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,

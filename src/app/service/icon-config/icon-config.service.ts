@@ -4,13 +4,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { IconConfig } from 'src/app/@types/config';
 import { environment } from 'src/environments/environment';
 import { AppContextService } from '../app-context/app-context.service';
-import { PlatformMetadataService } from '../platform-metadata/platform-metadata.service';
-
 @Injectable({
   providedIn: 'root',
 })
 export class IconConfigService {
-  constructor(private platformService: PlatformMetadataService) {}
+  // constructor(private platformService: PlatformMetadataService) {}
 
   iconsPath = `${environment.hostname}/assets/images/icons/`;
 
@@ -20,17 +18,17 @@ export class IconConfigService {
     domSanitizer: DomSanitizer,
     appContextService: AppContextService
   ) {
-    if (this.platformService.isPlatformBrowser) {
-      /**
-       * set assets path when executed in browser
-       */
-      this.iconsPath = `${environment.hostname}/assets/images/icons/`;
-    } else {
-      /**
-       * set assets path when executed on server
-       */
-      this.iconsPath = `http://localhost:${environment.port}/assets/images/icons/`;
-    }
+    // if (this.platformService.isPlatformBrowser) {
+    //   /**
+    //    * set assets path when executed in browser
+    //    */
+    this.iconsPath = `${environment.hostname}/assets/images/icons/`;
+    // } else {
+    //   /**
+    //    * set assets path when executed on server
+    //    */
+    //   this.iconsPath = `http://localhost:${environment.port}/assets/images/icons/`;
+    // }
 
     const epochMS: number = Date.now();
 

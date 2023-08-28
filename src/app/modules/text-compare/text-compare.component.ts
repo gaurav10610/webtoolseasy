@@ -18,6 +18,7 @@ import { FileService } from 'src/app/service/file/file.service';
 import { DiffEditorComponent, DiffEditorModel } from 'ngx-monaco-editor-v2';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-text-compare',
@@ -59,7 +60,8 @@ export class TextCompareComponent {
     private fileService: FileService,
     private zoneRef: NgZone,
     private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
+    private iconConfigService: IconConfigService,
+    public platformMetadataService: PlatformMetadataService
   ) {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
