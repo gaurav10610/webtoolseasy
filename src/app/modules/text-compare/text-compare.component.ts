@@ -4,13 +4,11 @@ import {
   ElementRef,
   Inject,
   NgZone,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { BaseComponent } from 'src/app/base/base.component';
 import {
   componentConfig,
   descriptionData,
@@ -18,14 +16,15 @@ import {
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
 import { DiffEditorComponent, DiffEditorModel } from 'ngx-monaco-editor-v2';
-import { LogUtils } from 'src/app/service/util/logger';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-text-compare',
   templateUrl: './text-compare.component.html',
   styleUrls: ['./text-compare.component.scss'],
 })
-export class TextCompareComponent extends BaseComponent {
+export class TextCompareComponent {
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
@@ -55,21 +54,20 @@ export class TextCompareComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: Document,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
     private renderer: Renderer2,
     private appContextService: AppContextService,
     private fileService: FileService,
-    private zoneRef: NgZone
+    private zoneRef: NgZone,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

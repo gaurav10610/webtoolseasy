@@ -1,22 +1,23 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { html_beautify } from 'js-beautify';
-import { BaseComponent } from 'src/app/base/base.component';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/html-formatter/config';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-html-formatter',
   templateUrl: './html-formatter.component.html',
   styleUrls: ['./html-formatter.component.scss'],
 })
-export class HtmlFormatterComponent extends BaseComponent {
+export class HtmlFormatterComponent {
   rawCode: string =
     '<html><head><title>Online HTML Formatter</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
 
@@ -38,18 +39,17 @@ export class HtmlFormatterComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

@@ -1,26 +1,25 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppDisplayConfig } from 'src/app/@types/config';
-import { BaseComponent } from 'src/app/base/base.component';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 
 @Component({
   selector: 'app-app-directory',
   templateUrl: './app-directory.component.html',
   styleUrls: ['./app-directory.component.scss'],
 })
-export class AppDirectoryComponent extends BaseComponent {
+export class AppDirectoryComponent {
   /**
    * application config for composing UI
    */
   appsConfig: AppDisplayConfig[] = appDisplayConfig;
-
-  appId: string = 'tools';
 
   constructor(
     private router: Router,
@@ -29,18 +28,17 @@ export class AppDirectoryComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

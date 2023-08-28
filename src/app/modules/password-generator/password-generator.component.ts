@@ -3,13 +3,11 @@ import {
   Component,
   ElementRef,
   Inject,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
 import { LogUtils } from 'src/app/service/util/logger';
@@ -24,13 +22,15 @@ import {
   GenerateOptions,
 } from 'generate-password-browser';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-password-generator',
   templateUrl: './password-generator.component.html',
   styleUrls: ['./password-generator.component.scss'],
 })
-export class PasswordGeneratorComponent extends BaseComponent {
+export class PasswordGeneratorComponent {
   password: string;
   passwordList: string[] = [];
 
@@ -100,20 +100,19 @@ export class PasswordGeneratorComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
     private appContextService: AppContextService,
     private fileService: FileService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

@@ -4,29 +4,25 @@ import {
   Component,
   ElementRef,
   Inject,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { descriptionData } from 'src/environments/component-config/json-viewer/config';
 import { componentConfig } from 'src/environments/component-config/json-viewer/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-json-viewer',
   templateUrl: './json-viewer.component.html',
   styleUrls: ['./json-viewer.component.scss'],
 })
-export class JsonViewerComponent
-  extends BaseComponent
-  implements AfterViewInit
-{
-  appId: string = 'jsonviewer';
+export class JsonViewerComponent implements AfterViewInit {
   isJsonValid: boolean = true;
 
   @ViewChild('text1AreaContent', { static: false })
@@ -46,19 +42,18 @@ export class JsonViewerComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
     private appContextService: AppContextService,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

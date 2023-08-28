@@ -1,17 +1,8 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import {
-  Component,
-  Inject,
-  NgZone,
-  OnDestroy,
-  PLATFORM_ID,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, NgZone, OnDestroy, Renderer2 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
@@ -24,17 +15,16 @@ import { Subject, takeUntil } from 'rxjs';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-screen-recorder',
   templateUrl: './screen-recorder.component.html',
   styleUrls: ['./screen-recorder.component.scss'],
 })
-export class ScreenRecorderComponent
-  extends BaseComponent
-  implements OnDestroy
-{
-  appId: string = 'imagecompress';
+export class ScreenRecorderComponent implements OnDestroy {
   isRecording: boolean = false;
   isProcessingStream: boolean = false;
 
@@ -96,21 +86,21 @@ export class ScreenRecorderComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService,
+    private platformMetaDataService: PlatformMetadataService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,
@@ -145,7 +135,7 @@ export class ScreenRecorderComponent
   }
 
   ngOnDestroy(): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.platformMetaDataService.isPlatformBrowser) {
       clear();
     }
     this.destroyed.next();

@@ -4,7 +4,6 @@ import {
   Inject,
   NgZone,
   OnDestroy,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -14,7 +13,6 @@ import {
   FileDataType,
   ImageCompressSettings,
 } from 'src/app/@types/file';
-import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { default as imageCompression } from 'browser-image-compression';
 import { Subject, takeUntil } from 'rxjs';
@@ -29,16 +27,15 @@ import {
 } from 'src/environments/component-config/image-compression/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-image-compression',
   templateUrl: './image-compression.component.html',
   styleUrls: ['./image-compression.component.scss'],
 })
-export class ImageCompressionComponent
-  extends BaseComponent
-  implements OnDestroy
-{
+export class ImageCompressionComponent implements OnDestroy {
   isMobile!: boolean;
   fileList: ImageFileData[] = [];
 
@@ -64,18 +61,17 @@ export class ImageCompressionComponent
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,
