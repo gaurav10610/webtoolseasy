@@ -28,6 +28,7 @@
           <span class="div-label">Modified Data</span>
         </div>
         <ngx-monaco-diff-editor
+          *ngIf="platformMetadataService.isPlatformBrowser"
           #diffEdior
           [options]="editorOptions"
           [modifiedModel]="modifiedModel"
