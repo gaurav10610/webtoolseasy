@@ -3,26 +3,26 @@ import {
   Component,
   ElementRef,
   Inject,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import {
   descriptionData,
   componentConfig,
 } from 'src/environments/component-config/base64-encode/config';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-base64-encode',
   templateUrl: './base64-encode.component.html',
   styleUrls: ['./base64-encode.component.scss'],
 })
-export class Base64EncodeComponent extends BaseComponent {
+export class Base64EncodeComponent {
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
@@ -38,19 +38,18 @@ export class Base64EncodeComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
     private appContextService: AppContextService,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
-      appContextService
+      this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

@@ -6,7 +6,6 @@ import {
   Inject,
   NgZone,
   OnDestroy,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -18,7 +17,6 @@ import {
   SupportedOutputFormats,
   VideoFileData,
 } from 'src/app/@types/file';
-import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
@@ -49,16 +47,15 @@ import {
 } from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-video-converter',
   templateUrl: './video-converter.component.html',
   styleUrls: ['./video-converter.component.scss'],
 })
-export class VideoConverterComponent
-  extends BaseComponent
-  implements OnDestroy
-{
+export class VideoConverterComponent implements OnDestroy {
   fileStore: Map<string, VideoFileData>;
   fileDisplayList: VideoFileData[];
 
@@ -90,22 +87,21 @@ export class VideoConverterComponent
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private dialog: MatDialog,
-    @Inject(PLATFORM_ID) private platformId: string,
     private appContextService: AppContextService,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private ffmpegService: FfmpegService
+    private ffmpegService: FfmpegService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

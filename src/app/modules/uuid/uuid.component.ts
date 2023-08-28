@@ -6,7 +6,6 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { BaseComponent } from 'src/app/base/base.component';
 import { v1, v4 } from 'uuid';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
@@ -18,16 +17,17 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-uuid',
   templateUrl: './uuid.component.html',
   styleUrls: ['./uuid.component.scss'],
 })
-export class UuidComponent extends BaseComponent {
+export class UuidComponent {
   uuidV1: string;
   uuidV4: string;
-  appId: string = 'uuid';
 
   v1Ids: string[] = [];
   v4Ids: string[] = [];
@@ -48,20 +48,19 @@ export class UuidComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
     private appContextService: AppContextService,
     private fileService: FileService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

@@ -3,11 +3,9 @@ import {
   Component,
   ElementRef,
   Inject,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { BaseComponent } from 'src/app/base/base.component';
 import { LogUtils } from 'src/app/service/util/logger';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
@@ -20,13 +18,15 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { decodeJwt, decodeProtectedHeader } from 'jose';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-jwt',
   templateUrl: './jwt.component.html',
   styleUrls: ['./jwt.component.scss'],
 })
-export class JwtComponent extends BaseComponent implements AfterViewInit {
+export class JwtComponent implements AfterViewInit {
   isTokenValid: boolean = true;
   tabSpaceValue: string = '  ';
 
@@ -62,18 +62,17 @@ export class JwtComponent extends BaseComponent implements AfterViewInit {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

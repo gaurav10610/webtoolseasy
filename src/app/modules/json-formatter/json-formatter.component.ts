@@ -1,6 +1,5 @@
-import { Component, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
-import { BaseComponent } from 'src/app/base/base.component';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -9,13 +8,16 @@ import {
 } from 'src/environments/component-config/json-formatter/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-json-formatter',
   templateUrl: './json-formatter.component.html',
   styleUrls: ['./json-formatter.component.scss'],
 })
-export class JsonFormatterComponent extends BaseComponent {
+export class JsonFormatterComponent {
   rawCode: string = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
   tabSpaceValue: string = '   ';
   formattedCode!: string;
@@ -31,24 +33,23 @@ export class JsonFormatterComponent extends BaseComponent {
 
   constructor(
     private clipboard: Clipboard,
-    private renderer: Renderer2,
     private titleService: Title,
     private metaService: Meta,
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService,
+    public platformMetadataService: PlatformMetadataService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
       this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,
