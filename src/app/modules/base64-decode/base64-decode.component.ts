@@ -3,15 +3,15 @@ import {
   Component,
   ElementRef,
   Inject,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { Observable, Observer } from 'rxjs';
-import { BaseComponent } from 'src/app/base/base.component';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
   descriptionData,
@@ -23,7 +23,7 @@ import {
   templateUrl: './base64-decode.component.html',
   styleUrls: ['./base64-decode.component.scss'],
 })
-export class Base64DecodeComponent extends BaseComponent {
+export class Base64DecodeComponent {
   // base64 data
   base64Data: string | undefined;
 
@@ -44,18 +44,17 @@ export class Base64DecodeComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
-      appContextService
+      this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,

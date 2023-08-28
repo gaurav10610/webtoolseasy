@@ -1,22 +1,23 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { css_beautify } from 'js-beautify';
-import { BaseComponent } from 'src/app/base/base.component';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/css-formatter/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 
 @Component({
   selector: 'app-css-formatter',
   templateUrl: './css-formatter.component.html',
   styleUrls: ['./css-formatter.component.scss'],
 })
-export class CssFormatterComponent extends BaseComponent {
+export class CssFormatterComponent {
   rawCode: string = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
 
   formattedCode!: string;
@@ -37,18 +38,17 @@ export class CssFormatterComponent extends BaseComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: string,
-    private appContextService: AppContextService
+    private appContextService: AppContextService,
+    private metaConfigService: MetaConfigService,
+    private iconConfigService: IconConfigService
   ) {
-    super();
-    this.loadCustomIcons(
+    this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer,
-      this.platformId,
-      appContextService
+      this.appContextService
     );
-    this.updatePageMetaData(
+    this.metaConfigService.updatePageMetaData(
       componentConfig,
       this.titleService,
       this.metaService,
