@@ -19,6 +19,10 @@ export class ColorContribution extends Disposable {
         super.dispose();
     }
     onMouseDown(mouseEvent) {
+        const colorDecoratorsActivatedOn = this._editor.getOption(145 /* EditorOption.colorDecoratorsActivatedOn */);
+        if (colorDecoratorsActivatedOn !== 'click' && colorDecoratorsActivatedOn !== 'clickAndHover') {
+            return;
+        }
         const target = mouseEvent.target;
         if (target.type !== 6 /* MouseTargetType.CONTENT_TEXT */) {
             return;
@@ -36,9 +40,9 @@ export class ColorContribution extends Disposable {
         if (!hoverController) {
             return;
         }
-        if (!hoverController.isColorPickerVisible()) {
+        if (!hoverController.isColorPickerVisible) {
             const range = new Range(target.range.startLineNumber, target.range.startColumn + 1, target.range.endLineNumber, target.range.endColumn + 1);
-            hoverController.showContentHover(range, 1 /* HoverStartMode.Immediate */, 0 /* HoverStartSource.Mouse */, false);
+            hoverController.showContentHover(range, 1 /* HoverStartMode.Immediate */, 0 /* HoverStartSource.Mouse */, false, true);
         }
     }
 }

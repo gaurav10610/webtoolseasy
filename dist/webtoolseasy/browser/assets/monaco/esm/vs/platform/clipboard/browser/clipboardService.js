@@ -26,14 +26,14 @@ import { DeferredPromise } from '../../../base/common/async.js';
 import { Disposable } from '../../../base/common/lifecycle.js';
 import { ILayoutService } from '../../layout/browser/layoutService.js';
 import { ILogService } from '../../log/common/log.js';
-export let BrowserClipboardService = class BrowserClipboardService extends Disposable {
+let BrowserClipboardService = class BrowserClipboardService extends Disposable {
     constructor(layoutService, logService) {
         super();
         this.layoutService = layoutService;
         this.logService = logService;
         this.mapTextToType = new Map(); // unsupported in web (only in-memory)
         this.findText = ''; // unsupported in web (only in-memory)
-        this.resources = [];
+        this.resources = []; // unsupported in web (only in-memory)
         if (isSafari || isWebkitWebView) {
             this.installWebKitWriteTextWorkaround();
         }
@@ -142,6 +142,11 @@ export let BrowserClipboardService = class BrowserClipboardService extends Dispo
             this.findText = text;
         });
     }
+    writeResources(resources) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.resources = resources;
+        });
+    }
     readResources() {
         return __awaiter(this, void 0, void 0, function* () {
             return this.resources;
@@ -152,3 +157,4 @@ BrowserClipboardService = __decorate([
     __param(0, ILayoutService),
     __param(1, ILogService)
 ], BrowserClipboardService);
+export { BrowserClipboardService };

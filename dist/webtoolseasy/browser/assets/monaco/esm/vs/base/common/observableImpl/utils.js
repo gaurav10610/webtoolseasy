@@ -2,7 +2,9 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import { BaseObservable, transaction, ConvenientObservable, getFunctionName } from './base.js';
+import { toDisposable } from '../lifecycle.js';
+import { autorun } from './autorun.js';
+import { BaseObservable, ConvenientObservable, getFunctionName, transaction } from './base.js';
 import { getLogger } from './logging.js';
 export function constObservable(value) {
     return new ConstObservable(value);
@@ -27,6 +29,28 @@ class ConstObservable extends ConvenientObservable {
     toString() {
         return `Const: ${this.value}`;
     }
+}
+export function waitForState(observable, predicate) {
+    return new Promise(resolve => {
+        let didRun = false;
+        let shouldDispose = false;
+        const d = autorun('waitForState', reader => {
+            const currentState = observable.read(reader);
+            if (predicate(currentState)) {
+                if (!didRun) {
+                    shouldDispose = true;
+                }
+                else {
+                    d.dispose();
+                }
+                resolve(currentState);
+            }
+        });
+        didRun = true;
+        if (shouldDispose) {
+            d.dispose();
+        }
+    });
 }
 export function observableFromEvent(event, getValue) {
     return new FromEventObservable(event, getValue);
@@ -119,6 +143,9 @@ class FromEventObservableSignal extends BaseObservable {
         // NO OP
     }
 }
+/**
+ * Creates a signal that can be triggered to invalidate observers.
+ */
 export function observableSignal(debugName) {
     return new ObservableSignal(debugName);
 }
@@ -140,6 +167,47 @@ class ObservableSignal extends BaseObservable {
         }
     }
     get() {
+        // NO OP
+    }
+}
+// TODO@hediet: Have `keepCacheAlive` and `recomputeOnChange` instead of forceRecompute
+/**
+ * This ensures the observable is being observed.
+ * Observed observables (such as {@link derived}s) can maintain a cache, as they receive invalidation events.
+ * Unobserved observables are forced to recompute their value from scratch every time they are read.
+ *
+ * @param observable the observable to keep alive
+ * @param forceRecompute if true, the observable will be eagerly recomputed after it changed.
+ * Use this if recomputing the observables causes side-effects.
+*/
+export function keepAlive(observable, forceRecompute) {
+    const o = new KeepAliveObserver(forceRecompute !== null && forceRecompute !== void 0 ? forceRecompute : false);
+    observable.addObserver(o);
+    if (forceRecompute) {
+        observable.reportChanges();
+    }
+    return toDisposable(() => {
+        observable.removeObserver(o);
+    });
+}
+class KeepAliveObserver {
+    constructor(forceRecompute) {
+        this.forceRecompute = forceRecompute;
+        this.counter = 0;
+    }
+    beginUpdate(observable) {
+        this.counter++;
+    }
+    endUpdate(observable) {
+        this.counter--;
+        if (this.counter === 0 && this.forceRecompute) {
+            observable.reportChanges();
+        }
+    }
+    handlePossibleChange(observable) {
+        // NO OP
+    }
+    handleChange(observable, change) {
         // NO OP
     }
 }

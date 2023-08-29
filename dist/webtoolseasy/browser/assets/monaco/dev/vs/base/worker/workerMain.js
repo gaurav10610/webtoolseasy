@@ -1,12 +1,12 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.38.0(0e330ae453813de4e6cf272460fb79c7117073d0)
+ * Version: 0.41.0(38e1e3d097f84e336c311d071a9ffb5191d4ffd1)
  * Released under the MIT license
  * https://github.com/microsoft/vscode/blob/main/LICENSE.txt
  *-----------------------------------------------------------*/
 
 (function() {
-var __m = ["require","exports","vs/editor/common/core/range","vs/editor/common/core/position","vs/base/common/errors","vs/base/common/strings","vs/editor/common/core/offsetRange","vs/editor/common/diff/algorithms/diffAlgorithm","vs/base/common/platform","vs/base/common/event","vs/base/common/assert","vs/base/common/lifecycle","vs/base/common/objects","vs/base/common/uri","vs/base/common/functional","vs/base/common/iterator","vs/base/common/linkedList","vs/base/common/diff/diff","vs/base/common/types","vs/base/common/uint","vs/editor/common/core/characterClassifier","vs/editor/common/core/lineRange","vs/editor/common/core/wordHelper","vs/editor/common/diff/linesDiffComputer","vs/base/common/stopwatch","vs/nls","vs/base/common/arrays","vs/base/common/cache","vs/base/common/color","vs/base/common/diff/diffChange","vs/base/common/keyCodes","vs/base/common/lazy","vs/base/common/hash","vs/base/common/codicons","vs/editor/common/core/selection","vs/editor/common/core/wordCharacterClassifier","vs/editor/common/diff/algorithms/joinSequenceDiffs","vs/editor/common/diff/algorithms/myersDiffAlgorithm","vs/editor/common/diff/algorithms/utils","vs/editor/common/diff/algorithms/dynamicProgrammingDiffing","vs/editor/common/diff/smartLinesDiffComputer","vs/editor/common/diff/standardLinesDiffComputer","vs/editor/common/diff/linesDiffComputers","vs/editor/common/languages/defaultDocumentColorsComputer","vs/editor/common/languages/linkComputer","vs/editor/common/languages/supports/inplaceReplaceSupport","vs/editor/common/model","vs/editor/common/model/prefixSumComputer","vs/editor/common/model/mirrorTextModel","vs/editor/common/model/textModelSearch","vs/editor/common/services/unicodeTextModelHighlighter","vs/editor/common/standalone/standaloneEnums","vs/nls!vs/base/common/platform","vs/base/common/process","vs/base/common/path","vs/base/common/cancellation","vs/editor/common/tokenizationRegistry","vs/editor/common/languages","vs/editor/common/services/editorBaseApi","vs/nls!vs/base/common/worker/simpleWorker","vs/base/common/worker/simpleWorker","vs/editor/common/services/editorSimpleWorker"];
+var __m = ["require","exports","vs/editor/common/core/range","vs/editor/common/core/position","vs/base/common/errors","vs/base/common/strings","vs/editor/common/core/offsetRange","vs/base/common/event","vs/editor/common/diff/algorithms/diffAlgorithm","vs/base/common/assert","vs/base/common/lifecycle","vs/base/common/objects","vs/editor/common/core/lineRange","vs/base/common/platform","vs/base/common/uri","vs/nls","vs/base/common/functional","vs/base/common/iterator","vs/base/common/linkedList","vs/base/common/stopwatch","vs/base/common/diff/diff","vs/base/common/types","vs/base/common/uint","vs/editor/common/core/characterClassifier","vs/editor/common/core/wordHelper","vs/editor/common/diff/linesDiffComputer","vs/base/common/arrays","vs/base/common/cache","vs/base/common/color","vs/base/common/diff/diffChange","vs/base/common/keyCodes","vs/base/common/lazy","vs/base/common/cancellation","vs/base/common/hash","vs/base/common/codicons","vs/editor/common/core/selection","vs/editor/common/core/wordCharacterClassifier","vs/editor/common/diff/algorithms/joinSequenceDiffs","vs/editor/common/diff/algorithms/myersDiffAlgorithm","vs/editor/common/diff/algorithms/utils","vs/editor/common/diff/algorithms/dynamicProgrammingDiffing","vs/editor/common/diff/smartLinesDiffComputer","vs/editor/common/diff/standardLinesDiffComputer","vs/editor/common/diff/linesDiffComputers","vs/editor/common/languages/defaultDocumentColorsComputer","vs/editor/common/languages/linkComputer","vs/editor/common/languages/supports/inplaceReplaceSupport","vs/editor/common/model","vs/editor/common/model/prefixSumComputer","vs/editor/common/model/mirrorTextModel","vs/editor/common/model/textModelSearch","vs/editor/common/services/unicodeTextModelHighlighter","vs/editor/common/standalone/standaloneEnums","vs/editor/common/tokenizationRegistry","vs/nls!vs/base/common/platform","vs/nls!vs/base/common/worker/simpleWorker","vs/base/common/process","vs/base/common/path","vs/nls!vs/editor/common/languages","vs/editor/common/languages","vs/editor/common/services/editorBaseApi","vs/base/common/worker/simpleWorker","vs/editor/common/services/editorSimpleWorker"];
 var __M = function(deps) {
   var result = [];
   for (var i = 0, len = deps.length; i < len; i++) {
@@ -38,60 +38,60 @@ const _amdLoaderGlobal = this;
 const _commonjsGlobal = typeof global === 'object' ? global : {};
 var AMDLoader;
 (function (AMDLoader) {
-    AMDLoader.global = _amdLoaderGlobal;
-    class Environment {
-        get isWindows() {
-            this._detect();
-            return this._isWindows;
-        }
-        get isNode() {
-            this._detect();
-            return this._isNode;
-        }
-        get isElectronRenderer() {
-            this._detect();
-            return this._isElectronRenderer;
-        }
-        get isWebWorker() {
-            this._detect();
-            return this._isWebWorker;
-        }
-        get isElectronNodeIntegrationWebWorker() {
-            this._detect();
-            return this._isElectronNodeIntegrationWebWorker;
-        }
-        constructor() {
-            this._detected = false;
-            this._isWindows = false;
-            this._isNode = false;
-            this._isElectronRenderer = false;
-            this._isWebWorker = false;
-            this._isElectronNodeIntegrationWebWorker = false;
-        }
-        _detect() {
-            if (this._detected) {
-                return;
-            }
-            this._detected = true;
-            this._isWindows = Environment._isWindows();
-            this._isNode = (typeof module !== 'undefined' && !!module.exports);
-            this._isElectronRenderer = (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'renderer');
-            this._isWebWorker = (typeof AMDLoader.global.importScripts === 'function');
-            this._isElectronNodeIntegrationWebWorker = this._isWebWorker && (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'worker');
-        }
-        static _isWindows() {
-            if (typeof navigator !== 'undefined') {
-                if (navigator.userAgent && navigator.userAgent.indexOf('Windows') >= 0) {
-                    return true;
-                }
-            }
-            if (typeof process !== 'undefined') {
-                return (process.platform === 'win32');
-            }
-            return false;
-        }
-    }
-    AMDLoader.Environment = Environment;
+	AMDLoader.global = _amdLoaderGlobal;
+	class Environment {
+		get isWindows() {
+			this._detect();
+			return this._isWindows;
+		}
+		get isNode() {
+			this._detect();
+			return this._isNode;
+		}
+		get isElectronRenderer() {
+			this._detect();
+			return this._isElectronRenderer;
+		}
+		get isWebWorker() {
+			this._detect();
+			return this._isWebWorker;
+		}
+		get isElectronNodeIntegrationWebWorker() {
+			this._detect();
+			return this._isElectronNodeIntegrationWebWorker;
+		}
+		constructor() {
+			this._detected = false;
+			this._isWindows = false;
+			this._isNode = false;
+			this._isElectronRenderer = false;
+			this._isWebWorker = false;
+			this._isElectronNodeIntegrationWebWorker = false;
+		}
+		_detect() {
+			if (this._detected) {
+				return;
+			}
+			this._detected = true;
+			this._isWindows = Environment._isWindows();
+			this._isNode = (typeof module !== 'undefined' && !!module.exports);
+			this._isElectronRenderer = (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'renderer');
+			this._isWebWorker = (typeof AMDLoader.global.importScripts === 'function');
+			this._isElectronNodeIntegrationWebWorker = this._isWebWorker && (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'worker');
+		}
+		static _isWindows() {
+			if (typeof navigator !== 'undefined') {
+				if (navigator.userAgent && navigator.userAgent.indexOf('Windows') >= 0) {
+					return true;
+				}
+			}
+			if (typeof process !== 'undefined') {
+				return (process.platform === 'win32');
+			}
+			return false;
+		}
+	}
+	AMDLoader.Environment = Environment;
 })(AMDLoader || (AMDLoader = {}));
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -99,36 +99,36 @@ var AMDLoader;
  *--------------------------------------------------------------------------------------------*/
 var AMDLoader;
 (function (AMDLoader) {
-    class LoaderEvent {
-        constructor(type, detail, timestamp) {
-            this.type = type;
-            this.detail = detail;
-            this.timestamp = timestamp;
-        }
-    }
-    AMDLoader.LoaderEvent = LoaderEvent;
-    class LoaderEventRecorder {
-        constructor(loaderAvailableTimestamp) {
-            this._events = [new LoaderEvent(1 /* LoaderEventType.LoaderAvailable */, '', loaderAvailableTimestamp)];
-        }
-        record(type, detail) {
-            this._events.push(new LoaderEvent(type, detail, AMDLoader.Utilities.getHighPerformanceTimestamp()));
-        }
-        getEvents() {
-            return this._events;
-        }
-    }
-    AMDLoader.LoaderEventRecorder = LoaderEventRecorder;
-    class NullLoaderEventRecorder {
-        record(type, detail) {
-            // Nothing to do
-        }
-        getEvents() {
-            return [];
-        }
-    }
-    NullLoaderEventRecorder.INSTANCE = new NullLoaderEventRecorder();
-    AMDLoader.NullLoaderEventRecorder = NullLoaderEventRecorder;
+	class LoaderEvent {
+		constructor(type, detail, timestamp) {
+			this.type = type;
+			this.detail = detail;
+			this.timestamp = timestamp;
+		}
+	}
+	AMDLoader.LoaderEvent = LoaderEvent;
+	class LoaderEventRecorder {
+		constructor(loaderAvailableTimestamp) {
+			this._events = [new LoaderEvent(1 /* LoaderEventType.LoaderAvailable */, '', loaderAvailableTimestamp)];
+		}
+		record(type, detail) {
+			this._events.push(new LoaderEvent(type, detail, AMDLoader.Utilities.getHighPerformanceTimestamp()));
+		}
+		getEvents() {
+			return this._events;
+		}
+	}
+	AMDLoader.LoaderEventRecorder = LoaderEventRecorder;
+	class NullLoaderEventRecorder {
+		record(type, detail) {
+			// Nothing to do
+		}
+		getEvents() {
+			return [];
+		}
+	}
+	NullLoaderEventRecorder.INSTANCE = new NullLoaderEventRecorder();
+	AMDLoader.NullLoaderEventRecorder = NullLoaderEventRecorder;
 })(AMDLoader || (AMDLoader = {}));
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -136,99 +136,99 @@ var AMDLoader;
  *--------------------------------------------------------------------------------------------*/
 var AMDLoader;
 (function (AMDLoader) {
-    class Utilities {
-        /**
-         * This method does not take care of / vs \
-         */
-        static fileUriToFilePath(isWindows, uri) {
-            uri = decodeURI(uri).replace(/%23/g, '#');
-            if (isWindows) {
-                if (/^file:\/\/\//.test(uri)) {
-                    // This is a URI without a hostname => return only the path segment
-                    return uri.substr(8);
-                }
-                if (/^file:\/\//.test(uri)) {
-                    return uri.substr(5);
-                }
-            }
-            else {
-                if (/^file:\/\//.test(uri)) {
-                    return uri.substr(7);
-                }
-            }
-            // Not sure...
-            return uri;
-        }
-        static startsWith(haystack, needle) {
-            return haystack.length >= needle.length && haystack.substr(0, needle.length) === needle;
-        }
-        static endsWith(haystack, needle) {
-            return haystack.length >= needle.length && haystack.substr(haystack.length - needle.length) === needle;
-        }
-        // only check for "?" before "#" to ensure that there is a real Query-String
-        static containsQueryString(url) {
-            return /^[^\#]*\?/gi.test(url);
-        }
-        /**
-         * Does `url` start with http:// or https:// or file:// or / ?
-         */
-        static isAbsolutePath(url) {
-            return /^((http:\/\/)|(https:\/\/)|(file:\/\/)|(\/))/.test(url);
-        }
-        static forEachProperty(obj, callback) {
-            if (obj) {
-                let key;
-                for (key in obj) {
-                    if (obj.hasOwnProperty(key)) {
-                        callback(key, obj[key]);
-                    }
-                }
-            }
-        }
-        static isEmpty(obj) {
-            let isEmpty = true;
-            Utilities.forEachProperty(obj, () => {
-                isEmpty = false;
-            });
-            return isEmpty;
-        }
-        static recursiveClone(obj) {
-            if (!obj || typeof obj !== 'object' || obj instanceof RegExp) {
-                return obj;
-            }
-            if (!Array.isArray(obj) && Object.getPrototypeOf(obj) !== Object.prototype) {
-                // only clone "simple" objects
-                return obj;
-            }
-            let result = Array.isArray(obj) ? [] : {};
-            Utilities.forEachProperty(obj, (key, value) => {
-                if (value && typeof value === 'object') {
-                    result[key] = Utilities.recursiveClone(value);
-                }
-                else {
-                    result[key] = value;
-                }
-            });
-            return result;
-        }
-        static generateAnonymousModule() {
-            return '===anonymous' + (Utilities.NEXT_ANONYMOUS_ID++) + '===';
-        }
-        static isAnonymousModule(id) {
-            return Utilities.startsWith(id, '===anonymous');
-        }
-        static getHighPerformanceTimestamp() {
-            if (!this.PERFORMANCE_NOW_PROBED) {
-                this.PERFORMANCE_NOW_PROBED = true;
-                this.HAS_PERFORMANCE_NOW = (AMDLoader.global.performance && typeof AMDLoader.global.performance.now === 'function');
-            }
-            return (this.HAS_PERFORMANCE_NOW ? AMDLoader.global.performance.now() : Date.now());
-        }
-    }
-    Utilities.NEXT_ANONYMOUS_ID = 1;
-    Utilities.PERFORMANCE_NOW_PROBED = false;
-    Utilities.HAS_PERFORMANCE_NOW = false;
-    AMDLoader.Utilities = Utilities;
+	class Utilities {
+		/**
+		 * This method does not take care of / vs \
+		 */
+		static fileUriToFilePath(isWindows, uri) {
+			uri = decodeURI(uri).replace(/%23/g, '#');
+			if (isWindows) {
+				if (/^file:\/\/\//.test(uri)) {
+					// This is a URI without a hostname => return only the path segment
+					return uri.substr(8);
+				}
+				if (/^file:\/\//.test(uri)) {
+					return uri.substr(5);
+				}
+			}
+			else {
+				if (/^file:\/\//.test(uri)) {
+					return uri.substr(7);
+				}
+			}
+			// Not sure...
+			return uri;
+		}
+		static startsWith(haystack, needle) {
+			return haystack.length >= needle.length && haystack.substr(0, needle.length) === needle;
+		}
+		static endsWith(haystack, needle) {
+			return haystack.length >= needle.length && haystack.substr(haystack.length - needle.length) === needle;
+		}
+		// only check for "?" before "#" to ensure that there is a real Query-String
+		static containsQueryString(url) {
+			return /^[^\#]*\?/gi.test(url);
+		}
+		/**
+		 * Does `url` start with http:// or https:// or file:// or / ?
+		 */
+		static isAbsolutePath(url) {
+			return /^((http:\/\/)|(https:\/\/)|(file:\/\/)|(\/))/.test(url);
+		}
+		static forEachProperty(obj, callback) {
+			if (obj) {
+				let key;
+				for (key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						callback(key, obj[key]);
+					}
+				}
+			}
+		}
+		static isEmpty(obj) {
+			let isEmpty = true;
+			Utilities.forEachProperty(obj, () => {
+				isEmpty = false;
+			});
+			return isEmpty;
+		}
+		static recursiveClone(obj) {
+			if (!obj || typeof obj !== 'object' || obj instanceof RegExp) {
+				return obj;
+			}
+			if (!Array.isArray(obj) && Object.getPrototypeOf(obj) !== Object.prototype) {
+				// only clone "simple" objects
+				return obj;
+			}
+			let result = Array.isArray(obj) ? [] : {};
+			Utilities.forEachProperty(obj, (key, value) => {
+				if (value && typeof value === 'object') {
+					result[key] = Utilities.recursiveClone(value);
+				}
+				else {
+					result[key] = value;
+				}
+			});
+			return result;
+		}
+		static generateAnonymousModule() {
+			return '===anonymous' + (Utilities.NEXT_ANONYMOUS_ID++) + '===';
+		}
+		static isAnonymousModule(id) {
+			return Utilities.startsWith(id, '===anonymous');
+		}
+		static getHighPerformanceTimestamp() {
+			if (!this.PERFORMANCE_NOW_PROBED) {
+				this.PERFORMANCE_NOW_PROBED = true;
+				this.HAS_PERFORMANCE_NOW = (AMDLoader.global.performance && typeof AMDLoader.global.performance.now === 'function');
+			}
+			return (this.HAS_PERFORMANCE_NOW ? AMDLoader.global.performance.now() : Date.now());
+		}
+	}
+	Utilities.NEXT_ANONYMOUS_ID = 1;
+	Utilities.PERFORMANCE_NOW_PROBED = false;
+	Utilities.HAS_PERFORMANCE_NOW = false;
+	AMDLoader.Utilities = Utilities;
 })(AMDLoader || (AMDLoader = {}));
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -236,318 +236,318 @@ var AMDLoader;
  *--------------------------------------------------------------------------------------------*/
 var AMDLoader;
 (function (AMDLoader) {
-    function ensureError(err) {
-        if (err instanceof Error) {
-            return err;
-        }
-        const result = new Error(err.message || String(err) || 'Unknown Error');
-        if (err.stack) {
-            result.stack = err.stack;
-        }
-        return result;
-    }
-    AMDLoader.ensureError = ensureError;
-    ;
-    class ConfigurationOptionsUtil {
-        /**
-         * Ensure configuration options make sense
-         */
-        static validateConfigurationOptions(options) {
-            function defaultOnError(err) {
-                if (err.phase === 'loading') {
-                    console.error('Loading "' + err.moduleId + '" failed');
-                    console.error(err);
-                    console.error('Here are the modules that depend on it:');
-                    console.error(err.neededBy);
-                    return;
-                }
-                if (err.phase === 'factory') {
-                    console.error('The factory function of "' + err.moduleId + '" has thrown an exception');
-                    console.error(err);
-                    console.error('Here are the modules that depend on it:');
-                    console.error(err.neededBy);
-                    return;
-                }
-            }
-            options = options || {};
-            if (typeof options.baseUrl !== 'string') {
-                options.baseUrl = '';
-            }
-            if (typeof options.isBuild !== 'boolean') {
-                options.isBuild = false;
-            }
-            if (typeof options.paths !== 'object') {
-                options.paths = {};
-            }
-            if (typeof options.config !== 'object') {
-                options.config = {};
-            }
-            if (typeof options.catchError === 'undefined') {
-                options.catchError = false;
-            }
-            if (typeof options.recordStats === 'undefined') {
-                options.recordStats = false;
-            }
-            if (typeof options.urlArgs !== 'string') {
-                options.urlArgs = '';
-            }
-            if (typeof options.onError !== 'function') {
-                options.onError = defaultOnError;
-            }
-            if (!Array.isArray(options.ignoreDuplicateModules)) {
-                options.ignoreDuplicateModules = [];
-            }
-            if (options.baseUrl.length > 0) {
-                if (!AMDLoader.Utilities.endsWith(options.baseUrl, '/')) {
-                    options.baseUrl += '/';
-                }
-            }
-            if (typeof options.cspNonce !== 'string') {
-                options.cspNonce = '';
-            }
-            if (typeof options.preferScriptTags === 'undefined') {
-                options.preferScriptTags = false;
-            }
-            if (options.nodeCachedData && typeof options.nodeCachedData === 'object') {
-                if (typeof options.nodeCachedData.seed !== 'string') {
-                    options.nodeCachedData.seed = 'seed';
-                }
-                if (typeof options.nodeCachedData.writeDelay !== 'number' || options.nodeCachedData.writeDelay < 0) {
-                    options.nodeCachedData.writeDelay = 1000 * 7;
-                }
-                if (!options.nodeCachedData.path || typeof options.nodeCachedData.path !== 'string') {
-                    const err = ensureError(new Error('INVALID cached data configuration, \'path\' MUST be set'));
-                    err.phase = 'configuration';
-                    options.onError(err);
-                    options.nodeCachedData = undefined;
-                }
-            }
-            return options;
-        }
-        static mergeConfigurationOptions(overwrite = null, base = null) {
-            let result = AMDLoader.Utilities.recursiveClone(base || {});
-            // Merge known properties and overwrite the unknown ones
-            AMDLoader.Utilities.forEachProperty(overwrite, (key, value) => {
-                if (key === 'ignoreDuplicateModules' && typeof result.ignoreDuplicateModules !== 'undefined') {
-                    result.ignoreDuplicateModules = result.ignoreDuplicateModules.concat(value);
-                }
-                else if (key === 'paths' && typeof result.paths !== 'undefined') {
-                    AMDLoader.Utilities.forEachProperty(value, (key2, value2) => result.paths[key2] = value2);
-                }
-                else if (key === 'config' && typeof result.config !== 'undefined') {
-                    AMDLoader.Utilities.forEachProperty(value, (key2, value2) => result.config[key2] = value2);
-                }
-                else {
-                    result[key] = AMDLoader.Utilities.recursiveClone(value);
-                }
-            });
-            return ConfigurationOptionsUtil.validateConfigurationOptions(result);
-        }
-    }
-    AMDLoader.ConfigurationOptionsUtil = ConfigurationOptionsUtil;
-    class Configuration {
-        constructor(env, options) {
-            this._env = env;
-            this.options = ConfigurationOptionsUtil.mergeConfigurationOptions(options);
-            this._createIgnoreDuplicateModulesMap();
-            this._createSortedPathsRules();
-            if (this.options.baseUrl === '') {
-                if (this.options.nodeRequire && this.options.nodeRequire.main && this.options.nodeRequire.main.filename && this._env.isNode) {
-                    let nodeMain = this.options.nodeRequire.main.filename;
-                    let dirnameIndex = Math.max(nodeMain.lastIndexOf('/'), nodeMain.lastIndexOf('\\'));
-                    this.options.baseUrl = nodeMain.substring(0, dirnameIndex + 1);
-                }
-            }
-        }
-        _createIgnoreDuplicateModulesMap() {
-            // Build a map out of the ignoreDuplicateModules array
-            this.ignoreDuplicateModulesMap = {};
-            for (let i = 0; i < this.options.ignoreDuplicateModules.length; i++) {
-                this.ignoreDuplicateModulesMap[this.options.ignoreDuplicateModules[i]] = true;
-            }
-        }
-        _createSortedPathsRules() {
-            // Create an array our of the paths rules, sorted descending by length to
-            // result in a more specific -> less specific order
-            this.sortedPathsRules = [];
-            AMDLoader.Utilities.forEachProperty(this.options.paths, (from, to) => {
-                if (!Array.isArray(to)) {
-                    this.sortedPathsRules.push({
-                        from: from,
-                        to: [to]
-                    });
-                }
-                else {
-                    this.sortedPathsRules.push({
-                        from: from,
-                        to: to
-                    });
-                }
-            });
-            this.sortedPathsRules.sort((a, b) => {
-                return b.from.length - a.from.length;
-            });
-        }
-        /**
-         * Clone current configuration and overwrite options selectively.
-         * @param options The selective options to overwrite with.
-         * @result A new configuration
-         */
-        cloneAndMerge(options) {
-            return new Configuration(this._env, ConfigurationOptionsUtil.mergeConfigurationOptions(options, this.options));
-        }
-        /**
-         * Get current options bag. Useful for passing it forward to plugins.
-         */
-        getOptionsLiteral() {
-            return this.options;
-        }
-        _applyPaths(moduleId) {
-            let pathRule;
-            for (let i = 0, len = this.sortedPathsRules.length; i < len; i++) {
-                pathRule = this.sortedPathsRules[i];
-                if (AMDLoader.Utilities.startsWith(moduleId, pathRule.from)) {
-                    let result = [];
-                    for (let j = 0, lenJ = pathRule.to.length; j < lenJ; j++) {
-                        result.push(pathRule.to[j] + moduleId.substr(pathRule.from.length));
-                    }
-                    return result;
-                }
-            }
-            return [moduleId];
-        }
-        _addUrlArgsToUrl(url) {
-            if (AMDLoader.Utilities.containsQueryString(url)) {
-                return url + '&' + this.options.urlArgs;
-            }
-            else {
-                return url + '?' + this.options.urlArgs;
-            }
-        }
-        _addUrlArgsIfNecessaryToUrl(url) {
-            if (this.options.urlArgs) {
-                return this._addUrlArgsToUrl(url);
-            }
-            return url;
-        }
-        _addUrlArgsIfNecessaryToUrls(urls) {
-            if (this.options.urlArgs) {
-                for (let i = 0, len = urls.length; i < len; i++) {
-                    urls[i] = this._addUrlArgsToUrl(urls[i]);
-                }
-            }
-            return urls;
-        }
-        /**
-         * Transform a module id to a location. Appends .js to module ids
-         */
-        moduleIdToPaths(moduleId) {
-            if (this._env.isNode) {
-                const isNodeModule = (this.options.amdModulesPattern instanceof RegExp
-                    && !this.options.amdModulesPattern.test(moduleId));
-                if (isNodeModule) {
-                    // This is a node module...
-                    if (this.isBuild()) {
-                        // ...and we are at build time, drop it
-                        return ['empty:'];
-                    }
-                    else {
-                        // ...and at runtime we create a `shortcut`-path
-                        return ['node|' + moduleId];
-                    }
-                }
-            }
-            let result = moduleId;
-            let results;
-            if (!AMDLoader.Utilities.endsWith(result, '.js') && !AMDLoader.Utilities.isAbsolutePath(result)) {
-                results = this._applyPaths(result);
-                for (let i = 0, len = results.length; i < len; i++) {
-                    if (this.isBuild() && results[i] === 'empty:') {
-                        continue;
-                    }
-                    if (!AMDLoader.Utilities.isAbsolutePath(results[i])) {
-                        results[i] = this.options.baseUrl + results[i];
-                    }
-                    if (!AMDLoader.Utilities.endsWith(results[i], '.js') && !AMDLoader.Utilities.containsQueryString(results[i])) {
-                        results[i] = results[i] + '.js';
-                    }
-                }
-            }
-            else {
-                if (!AMDLoader.Utilities.endsWith(result, '.js') && !AMDLoader.Utilities.containsQueryString(result)) {
-                    result = result + '.js';
-                }
-                results = [result];
-            }
-            return this._addUrlArgsIfNecessaryToUrls(results);
-        }
-        /**
-         * Transform a module id or url to a location.
-         */
-        requireToUrl(url) {
-            let result = url;
-            if (!AMDLoader.Utilities.isAbsolutePath(result)) {
-                result = this._applyPaths(result)[0];
-                if (!AMDLoader.Utilities.isAbsolutePath(result)) {
-                    result = this.options.baseUrl + result;
-                }
-            }
-            return this._addUrlArgsIfNecessaryToUrl(result);
-        }
-        /**
-         * Flag to indicate if current execution is as part of a build.
-         */
-        isBuild() {
-            return this.options.isBuild;
-        }
-        shouldInvokeFactory(strModuleId) {
-            if (!this.options.isBuild) {
-                // outside of a build, all factories should be invoked
-                return true;
-            }
-            // during a build, only explicitly marked or anonymous modules get their factories invoked
-            if (AMDLoader.Utilities.isAnonymousModule(strModuleId)) {
-                return true;
-            }
-            if (this.options.buildForceInvokeFactory && this.options.buildForceInvokeFactory[strModuleId]) {
-                return true;
-            }
-            return false;
-        }
-        /**
-         * Test if module `moduleId` is expected to be defined multiple times
-         */
-        isDuplicateMessageIgnoredFor(moduleId) {
-            return this.ignoreDuplicateModulesMap.hasOwnProperty(moduleId);
-        }
-        /**
-         * Get the configuration settings for the provided module id
-         */
-        getConfigForModule(moduleId) {
-            if (this.options.config) {
-                return this.options.config[moduleId];
-            }
-        }
-        /**
-         * Should errors be caught when executing module factories?
-         */
-        shouldCatchError() {
-            return this.options.catchError;
-        }
-        /**
-         * Should statistics be recorded?
-         */
-        shouldRecordStats() {
-            return this.options.recordStats;
-        }
-        /**
-         * Forward an error to the error handler.
-         */
-        onError(err) {
-            this.options.onError(err);
-        }
-    }
-    AMDLoader.Configuration = Configuration;
+	function ensureError(err) {
+		if (err instanceof Error) {
+			return err;
+		}
+		const result = new Error(err.message || String(err) || 'Unknown Error');
+		if (err.stack) {
+			result.stack = err.stack;
+		}
+		return result;
+	}
+	AMDLoader.ensureError = ensureError;
+	;
+	class ConfigurationOptionsUtil {
+		/**
+		 * Ensure configuration options make sense
+		 */
+		static validateConfigurationOptions(options) {
+			function defaultOnError(err) {
+				if (err.phase === 'loading') {
+					console.error('Loading "' + err.moduleId + '" failed');
+					console.error(err);
+					console.error('Here are the modules that depend on it:');
+					console.error(err.neededBy);
+					return;
+				}
+				if (err.phase === 'factory') {
+					console.error('The factory function of "' + err.moduleId + '" has thrown an exception');
+					console.error(err);
+					console.error('Here are the modules that depend on it:');
+					console.error(err.neededBy);
+					return;
+				}
+			}
+			options = options || {};
+			if (typeof options.baseUrl !== 'string') {
+				options.baseUrl = '';
+			}
+			if (typeof options.isBuild !== 'boolean') {
+				options.isBuild = false;
+			}
+			if (typeof options.paths !== 'object') {
+				options.paths = {};
+			}
+			if (typeof options.config !== 'object') {
+				options.config = {};
+			}
+			if (typeof options.catchError === 'undefined') {
+				options.catchError = false;
+			}
+			if (typeof options.recordStats === 'undefined') {
+				options.recordStats = false;
+			}
+			if (typeof options.urlArgs !== 'string') {
+				options.urlArgs = '';
+			}
+			if (typeof options.onError !== 'function') {
+				options.onError = defaultOnError;
+			}
+			if (!Array.isArray(options.ignoreDuplicateModules)) {
+				options.ignoreDuplicateModules = [];
+			}
+			if (options.baseUrl.length > 0) {
+				if (!AMDLoader.Utilities.endsWith(options.baseUrl, '/')) {
+					options.baseUrl += '/';
+				}
+			}
+			if (typeof options.cspNonce !== 'string') {
+				options.cspNonce = '';
+			}
+			if (typeof options.preferScriptTags === 'undefined') {
+				options.preferScriptTags = false;
+			}
+			if (options.nodeCachedData && typeof options.nodeCachedData === 'object') {
+				if (typeof options.nodeCachedData.seed !== 'string') {
+					options.nodeCachedData.seed = 'seed';
+				}
+				if (typeof options.nodeCachedData.writeDelay !== 'number' || options.nodeCachedData.writeDelay < 0) {
+					options.nodeCachedData.writeDelay = 1000 * 7;
+				}
+				if (!options.nodeCachedData.path || typeof options.nodeCachedData.path !== 'string') {
+					const err = ensureError(new Error('INVALID cached data configuration, \'path\' MUST be set'));
+					err.phase = 'configuration';
+					options.onError(err);
+					options.nodeCachedData = undefined;
+				}
+			}
+			return options;
+		}
+		static mergeConfigurationOptions(overwrite = null, base = null) {
+			let result = AMDLoader.Utilities.recursiveClone(base || {});
+			// Merge known properties and overwrite the unknown ones
+			AMDLoader.Utilities.forEachProperty(overwrite, (key, value) => {
+				if (key === 'ignoreDuplicateModules' && typeof result.ignoreDuplicateModules !== 'undefined') {
+					result.ignoreDuplicateModules = result.ignoreDuplicateModules.concat(value);
+				}
+				else if (key === 'paths' && typeof result.paths !== 'undefined') {
+					AMDLoader.Utilities.forEachProperty(value, (key2, value2) => result.paths[key2] = value2);
+				}
+				else if (key === 'config' && typeof result.config !== 'undefined') {
+					AMDLoader.Utilities.forEachProperty(value, (key2, value2) => result.config[key2] = value2);
+				}
+				else {
+					result[key] = AMDLoader.Utilities.recursiveClone(value);
+				}
+			});
+			return ConfigurationOptionsUtil.validateConfigurationOptions(result);
+		}
+	}
+	AMDLoader.ConfigurationOptionsUtil = ConfigurationOptionsUtil;
+	class Configuration {
+		constructor(env, options) {
+			this._env = env;
+			this.options = ConfigurationOptionsUtil.mergeConfigurationOptions(options);
+			this._createIgnoreDuplicateModulesMap();
+			this._createSortedPathsRules();
+			if (this.options.baseUrl === '') {
+				if (this.options.nodeRequire && this.options.nodeRequire.main && this.options.nodeRequire.main.filename && this._env.isNode) {
+					let nodeMain = this.options.nodeRequire.main.filename;
+					let dirnameIndex = Math.max(nodeMain.lastIndexOf('/'), nodeMain.lastIndexOf('\\'));
+					this.options.baseUrl = nodeMain.substring(0, dirnameIndex + 1);
+				}
+			}
+		}
+		_createIgnoreDuplicateModulesMap() {
+			// Build a map out of the ignoreDuplicateModules array
+			this.ignoreDuplicateModulesMap = {};
+			for (let i = 0; i < this.options.ignoreDuplicateModules.length; i++) {
+				this.ignoreDuplicateModulesMap[this.options.ignoreDuplicateModules[i]] = true;
+			}
+		}
+		_createSortedPathsRules() {
+			// Create an array our of the paths rules, sorted descending by length to
+			// result in a more specific -> less specific order
+			this.sortedPathsRules = [];
+			AMDLoader.Utilities.forEachProperty(this.options.paths, (from, to) => {
+				if (!Array.isArray(to)) {
+					this.sortedPathsRules.push({
+						from: from,
+						to: [to]
+					});
+				}
+				else {
+					this.sortedPathsRules.push({
+						from: from,
+						to: to
+					});
+				}
+			});
+			this.sortedPathsRules.sort((a, b) => {
+				return b.from.length - a.from.length;
+			});
+		}
+		/**
+		 * Clone current configuration and overwrite options selectively.
+		 * @param options The selective options to overwrite with.
+		 * @result A new configuration
+		 */
+		cloneAndMerge(options) {
+			return new Configuration(this._env, ConfigurationOptionsUtil.mergeConfigurationOptions(options, this.options));
+		}
+		/**
+		 * Get current options bag. Useful for passing it forward to plugins.
+		 */
+		getOptionsLiteral() {
+			return this.options;
+		}
+		_applyPaths(moduleId) {
+			let pathRule;
+			for (let i = 0, len = this.sortedPathsRules.length; i < len; i++) {
+				pathRule = this.sortedPathsRules[i];
+				if (AMDLoader.Utilities.startsWith(moduleId, pathRule.from)) {
+					let result = [];
+					for (let j = 0, lenJ = pathRule.to.length; j < lenJ; j++) {
+						result.push(pathRule.to[j] + moduleId.substr(pathRule.from.length));
+					}
+					return result;
+				}
+			}
+			return [moduleId];
+		}
+		_addUrlArgsToUrl(url) {
+			if (AMDLoader.Utilities.containsQueryString(url)) {
+				return url + '&' + this.options.urlArgs;
+			}
+			else {
+				return url + '?' + this.options.urlArgs;
+			}
+		}
+		_addUrlArgsIfNecessaryToUrl(url) {
+			if (this.options.urlArgs) {
+				return this._addUrlArgsToUrl(url);
+			}
+			return url;
+		}
+		_addUrlArgsIfNecessaryToUrls(urls) {
+			if (this.options.urlArgs) {
+				for (let i = 0, len = urls.length; i < len; i++) {
+					urls[i] = this._addUrlArgsToUrl(urls[i]);
+				}
+			}
+			return urls;
+		}
+		/**
+		 * Transform a module id to a location. Appends .js to module ids
+		 */
+		moduleIdToPaths(moduleId) {
+			if (this._env.isNode) {
+				const isNodeModule = (this.options.amdModulesPattern instanceof RegExp
+					&& !this.options.amdModulesPattern.test(moduleId));
+				if (isNodeModule) {
+					// This is a node module...
+					if (this.isBuild()) {
+						// ...and we are at build time, drop it
+						return ['empty:'];
+					}
+					else {
+						// ...and at runtime we create a `shortcut`-path
+						return ['node|' + moduleId];
+					}
+				}
+			}
+			let result = moduleId;
+			let results;
+			if (!AMDLoader.Utilities.endsWith(result, '.js') && !AMDLoader.Utilities.isAbsolutePath(result)) {
+				results = this._applyPaths(result);
+				for (let i = 0, len = results.length; i < len; i++) {
+					if (this.isBuild() && results[i] === 'empty:') {
+						continue;
+					}
+					if (!AMDLoader.Utilities.isAbsolutePath(results[i])) {
+						results[i] = this.options.baseUrl + results[i];
+					}
+					if (!AMDLoader.Utilities.endsWith(results[i], '.js') && !AMDLoader.Utilities.containsQueryString(results[i])) {
+						results[i] = results[i] + '.js';
+					}
+				}
+			}
+			else {
+				if (!AMDLoader.Utilities.endsWith(result, '.js') && !AMDLoader.Utilities.containsQueryString(result)) {
+					result = result + '.js';
+				}
+				results = [result];
+			}
+			return this._addUrlArgsIfNecessaryToUrls(results);
+		}
+		/**
+		 * Transform a module id or url to a location.
+		 */
+		requireToUrl(url) {
+			let result = url;
+			if (!AMDLoader.Utilities.isAbsolutePath(result)) {
+				result = this._applyPaths(result)[0];
+				if (!AMDLoader.Utilities.isAbsolutePath(result)) {
+					result = this.options.baseUrl + result;
+				}
+			}
+			return this._addUrlArgsIfNecessaryToUrl(result);
+		}
+		/**
+		 * Flag to indicate if current execution is as part of a build.
+		 */
+		isBuild() {
+			return this.options.isBuild;
+		}
+		shouldInvokeFactory(strModuleId) {
+			if (!this.options.isBuild) {
+				// outside of a build, all factories should be invoked
+				return true;
+			}
+			// during a build, only explicitly marked or anonymous modules get their factories invoked
+			if (AMDLoader.Utilities.isAnonymousModule(strModuleId)) {
+				return true;
+			}
+			if (this.options.buildForceInvokeFactory && this.options.buildForceInvokeFactory[strModuleId]) {
+				return true;
+			}
+			return false;
+		}
+		/**
+		 * Test if module `moduleId` is expected to be defined multiple times
+		 */
+		isDuplicateMessageIgnoredFor(moduleId) {
+			return this.ignoreDuplicateModulesMap.hasOwnProperty(moduleId);
+		}
+		/**
+		 * Get the configuration settings for the provided module id
+		 */
+		getConfigForModule(moduleId) {
+			if (this.options.config) {
+				return this.options.config[moduleId];
+			}
+		}
+		/**
+		 * Should errors be caught when executing module factories?
+		 */
+		shouldCatchError() {
+			return this.options.catchError;
+		}
+		/**
+		 * Should statistics be recorded?
+		 */
+		shouldRecordStats() {
+			return this.options.recordStats;
+		}
+		/**
+		 * Forward an error to the error handler.
+		 */
+		onError(err) {
+			this.options.onError(err);
+		}
+	}
+	AMDLoader.Configuration = Configuration;
 })(AMDLoader || (AMDLoader = {}));
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -555,501 +555,503 @@ var AMDLoader;
  *--------------------------------------------------------------------------------------------*/
 var AMDLoader;
 (function (AMDLoader) {
-    /**
-     * Load `scriptSrc` only once (avoid multiple <script> tags)
-     */
-    class OnlyOnceScriptLoader {
-        constructor(env) {
-            this._env = env;
-            this._scriptLoader = null;
-            this._callbackMap = {};
-        }
-        load(moduleManager, scriptSrc, callback, errorback) {
-            if (!this._scriptLoader) {
-                if (this._env.isWebWorker) {
-                    this._scriptLoader = new WorkerScriptLoader();
-                }
-                else if (this._env.isElectronRenderer) {
-                    const { preferScriptTags } = moduleManager.getConfig().getOptionsLiteral();
-                    if (preferScriptTags) {
-                        this._scriptLoader = new BrowserScriptLoader();
-                    }
-                    else {
-                        this._scriptLoader = new NodeScriptLoader(this._env);
-                    }
-                }
-                else if (this._env.isNode) {
-                    this._scriptLoader = new NodeScriptLoader(this._env);
-                }
-                else {
-                    this._scriptLoader = new BrowserScriptLoader();
-                }
-            }
-            let scriptCallbacks = {
-                callback: callback,
-                errorback: errorback
-            };
-            if (this._callbackMap.hasOwnProperty(scriptSrc)) {
-                this._callbackMap[scriptSrc].push(scriptCallbacks);
-                return;
-            }
-            this._callbackMap[scriptSrc] = [scriptCallbacks];
-            this._scriptLoader.load(moduleManager, scriptSrc, () => this.triggerCallback(scriptSrc), (err) => this.triggerErrorback(scriptSrc, err));
-        }
-        triggerCallback(scriptSrc) {
-            let scriptCallbacks = this._callbackMap[scriptSrc];
-            delete this._callbackMap[scriptSrc];
-            for (let i = 0; i < scriptCallbacks.length; i++) {
-                scriptCallbacks[i].callback();
-            }
-        }
-        triggerErrorback(scriptSrc, err) {
-            let scriptCallbacks = this._callbackMap[scriptSrc];
-            delete this._callbackMap[scriptSrc];
-            for (let i = 0; i < scriptCallbacks.length; i++) {
-                scriptCallbacks[i].errorback(err);
-            }
-        }
-    }
-    class BrowserScriptLoader {
-        /**
-         * Attach load / error listeners to a script element and remove them when either one has fired.
-         * Implemented for browsers supporting HTML5 standard 'load' and 'error' events.
-         */
-        attachListeners(script, callback, errorback) {
-            let unbind = () => {
-                script.removeEventListener('load', loadEventListener);
-                script.removeEventListener('error', errorEventListener);
-            };
-            let loadEventListener = (e) => {
-                unbind();
-                callback();
-            };
-            let errorEventListener = (e) => {
-                unbind();
-                errorback(e);
-            };
-            script.addEventListener('load', loadEventListener);
-            script.addEventListener('error', errorEventListener);
-        }
-        load(moduleManager, scriptSrc, callback, errorback) {
-            if (/^node\|/.test(scriptSrc)) {
-                let opts = moduleManager.getConfig().getOptionsLiteral();
-                let nodeRequire = ensureRecordedNodeRequire(moduleManager.getRecorder(), (opts.nodeRequire || AMDLoader.global.nodeRequire));
-                let pieces = scriptSrc.split('|');
-                let moduleExports = null;
-                try {
-                    moduleExports = nodeRequire(pieces[1]);
-                }
-                catch (err) {
-                    errorback(err);
-                    return;
-                }
-                moduleManager.enqueueDefineAnonymousModule([], () => moduleExports);
-                callback();
-            }
-            else {
-                let script = document.createElement('script');
-                script.setAttribute('async', 'async');
-                script.setAttribute('type', 'text/javascript');
-                this.attachListeners(script, callback, errorback);
-                const { trustedTypesPolicy } = moduleManager.getConfig().getOptionsLiteral();
-                if (trustedTypesPolicy) {
-                    scriptSrc = trustedTypesPolicy.createScriptURL(scriptSrc);
-                }
-                script.setAttribute('src', scriptSrc);
-                // Propagate CSP nonce to dynamically created script tag.
-                const { cspNonce } = moduleManager.getConfig().getOptionsLiteral();
-                if (cspNonce) {
-                    script.setAttribute('nonce', cspNonce);
-                }
-                document.getElementsByTagName('head')[0].appendChild(script);
-            }
-        }
-    }
-    function canUseEval(moduleManager) {
-        const { trustedTypesPolicy } = moduleManager.getConfig().getOptionsLiteral();
-        try {
-            const func = (trustedTypesPolicy
-                ? self.eval(trustedTypesPolicy.createScript('', 'true'))
-                : new Function('true'));
-            func.call(self);
-            return true;
-        }
-        catch (err) {
-            return false;
-        }
-    }
-    class WorkerScriptLoader {
-        constructor() {
-            this._cachedCanUseEval = null;
-        }
-        _canUseEval(moduleManager) {
-            if (this._cachedCanUseEval === null) {
-                this._cachedCanUseEval = canUseEval(moduleManager);
-            }
-            return this._cachedCanUseEval;
-        }
-        load(moduleManager, scriptSrc, callback, errorback) {
-            if (/^node\|/.test(scriptSrc)) {
-                const opts = moduleManager.getConfig().getOptionsLiteral();
-                const nodeRequire = ensureRecordedNodeRequire(moduleManager.getRecorder(), (opts.nodeRequire || AMDLoader.global.nodeRequire));
-                const pieces = scriptSrc.split('|');
-                let moduleExports = null;
-                try {
-                    moduleExports = nodeRequire(pieces[1]);
-                }
-                catch (err) {
-                    errorback(err);
-                    return;
-                }
-                moduleManager.enqueueDefineAnonymousModule([], function () { return moduleExports; });
-                callback();
-            }
-            else {
-                const { trustedTypesPolicy } = moduleManager.getConfig().getOptionsLiteral();
-                const isCrossOrigin = (/^((http:)|(https:)|(file:))/.test(scriptSrc) && scriptSrc.substring(0, self.origin.length) !== self.origin);
-                if (!isCrossOrigin && this._canUseEval(moduleManager)) {
-                    // use `fetch` if possible because `importScripts`
-                    // is synchronous and can lead to deadlocks on Safari
-                    fetch(scriptSrc).then((response) => {
-                        if (response.status !== 200) {
-                            throw new Error(response.statusText);
-                        }
-                        return response.text();
-                    }).then((text) => {
-                        text = `${text}\n//# sourceURL=${scriptSrc}`;
-                        const func = (trustedTypesPolicy
-                            ? self.eval(trustedTypesPolicy.createScript('', text))
-                            : new Function(text));
-                        func.call(self);
-                        callback();
-                    }).then(undefined, errorback);
-                    return;
-                }
-                try {
-                    if (trustedTypesPolicy) {
-                        scriptSrc = trustedTypesPolicy.createScriptURL(scriptSrc);
-                    }
-                    importScripts(scriptSrc);
-                    callback();
-                }
-                catch (e) {
-                    errorback(e);
-                }
-            }
-        }
-    }
-    class NodeScriptLoader {
-        constructor(env) {
-            this._env = env;
-            this._didInitialize = false;
-            this._didPatchNodeRequire = false;
-        }
-        _init(nodeRequire) {
-            if (this._didInitialize) {
-                return;
-            }
-            this._didInitialize = true;
-            // capture node modules
-            this._fs = nodeRequire('fs');
-            this._vm = nodeRequire('vm');
-            this._path = nodeRequire('path');
-            this._crypto = nodeRequire('crypto');
-        }
-        // patch require-function of nodejs such that we can manually create a script
-        // from cached data. this is done by overriding the `Module._compile` function
-        _initNodeRequire(nodeRequire, moduleManager) {
-            // It is important to check for `nodeCachedData` first and then set `_didPatchNodeRequire`.
-            // That's because `nodeCachedData` is set _after_ calling this for the first time...
-            const { nodeCachedData } = moduleManager.getConfig().getOptionsLiteral();
-            if (!nodeCachedData) {
-                return;
-            }
-            if (this._didPatchNodeRequire) {
-                return;
-            }
-            this._didPatchNodeRequire = true;
-            const that = this;
-            const Module = nodeRequire('module');
-            function makeRequireFunction(mod) {
-                const Module = mod.constructor;
-                let require = function require(path) {
-                    try {
-                        return mod.require(path);
-                    }
-                    finally {
-                        // nothing
-                    }
-                };
-                require.resolve = function resolve(request, options) {
-                    return Module._resolveFilename(request, mod, false, options);
-                };
-                require.resolve.paths = function paths(request) {
-                    return Module._resolveLookupPaths(request, mod);
-                };
-                require.main = process.mainModule;
-                require.extensions = Module._extensions;
-                require.cache = Module._cache;
-                return require;
-            }
-            Module.prototype._compile = function (content, filename) {
-                // remove shebang and create wrapper function
-                const scriptSource = Module.wrap(content.replace(/^#!.*/, ''));
-                // create script
-                const recorder = moduleManager.getRecorder();
-                const cachedDataPath = that._getCachedDataPath(nodeCachedData, filename);
-                const options = { filename };
-                let hashData;
-                try {
-                    const data = that._fs.readFileSync(cachedDataPath);
-                    hashData = data.slice(0, 16);
-                    options.cachedData = data.slice(16);
-                    recorder.record(60 /* LoaderEventType.CachedDataFound */, cachedDataPath);
-                }
-                catch (_e) {
-                    recorder.record(61 /* LoaderEventType.CachedDataMissed */, cachedDataPath);
-                }
-                const script = new that._vm.Script(scriptSource, options);
-                const compileWrapper = script.runInThisContext(options);
-                // run script
-                const dirname = that._path.dirname(filename);
-                const require = makeRequireFunction(this);
-                const args = [this.exports, require, this, filename, dirname, process, _commonjsGlobal, Buffer];
-                const result = compileWrapper.apply(this.exports, args);
-                // cached data aftermath
-                that._handleCachedData(script, scriptSource, cachedDataPath, !options.cachedData, moduleManager);
-                that._verifyCachedData(script, scriptSource, cachedDataPath, hashData, moduleManager);
-                return result;
-            };
-        }
-        load(moduleManager, scriptSrc, callback, errorback) {
-            const opts = moduleManager.getConfig().getOptionsLiteral();
-            const nodeRequire = ensureRecordedNodeRequire(moduleManager.getRecorder(), (opts.nodeRequire || AMDLoader.global.nodeRequire));
-            const nodeInstrumenter = (opts.nodeInstrumenter || function (c) { return c; });
-            this._init(nodeRequire);
-            this._initNodeRequire(nodeRequire, moduleManager);
-            let recorder = moduleManager.getRecorder();
-            if (/^node\|/.test(scriptSrc)) {
-                let pieces = scriptSrc.split('|');
-                let moduleExports = null;
-                try {
-                    moduleExports = nodeRequire(pieces[1]);
-                }
-                catch (err) {
-                    errorback(err);
-                    return;
-                }
-                moduleManager.enqueueDefineAnonymousModule([], () => moduleExports);
-                callback();
-            }
-            else {
-                scriptSrc = AMDLoader.Utilities.fileUriToFilePath(this._env.isWindows, scriptSrc);
-                const normalizedScriptSrc = this._path.normalize(scriptSrc);
-                const vmScriptPathOrUri = this._getElectronRendererScriptPathOrUri(normalizedScriptSrc);
-                const wantsCachedData = Boolean(opts.nodeCachedData);
-                const cachedDataPath = wantsCachedData ? this._getCachedDataPath(opts.nodeCachedData, scriptSrc) : undefined;
-                this._readSourceAndCachedData(normalizedScriptSrc, cachedDataPath, recorder, (err, data, cachedData, hashData) => {
-                    if (err) {
-                        errorback(err);
-                        return;
-                    }
-                    let scriptSource;
-                    if (data.charCodeAt(0) === NodeScriptLoader._BOM) {
-                        scriptSource = NodeScriptLoader._PREFIX + data.substring(1) + NodeScriptLoader._SUFFIX;
-                    }
-                    else {
-                        scriptSource = NodeScriptLoader._PREFIX + data + NodeScriptLoader._SUFFIX;
-                    }
-                    scriptSource = nodeInstrumenter(scriptSource, normalizedScriptSrc);
-                    const scriptOpts = { filename: vmScriptPathOrUri, cachedData };
-                    const script = this._createAndEvalScript(moduleManager, scriptSource, scriptOpts, callback, errorback);
-                    this._handleCachedData(script, scriptSource, cachedDataPath, wantsCachedData && !cachedData, moduleManager);
-                    this._verifyCachedData(script, scriptSource, cachedDataPath, hashData, moduleManager);
-                });
-            }
-        }
-        _createAndEvalScript(moduleManager, contents, options, callback, errorback) {
-            const recorder = moduleManager.getRecorder();
-            recorder.record(31 /* LoaderEventType.NodeBeginEvaluatingScript */, options.filename);
-            const script = new this._vm.Script(contents, options);
-            const ret = script.runInThisContext(options);
-            const globalDefineFunc = moduleManager.getGlobalAMDDefineFunc();
-            let receivedDefineCall = false;
-            const localDefineFunc = function () {
-                receivedDefineCall = true;
-                return globalDefineFunc.apply(null, arguments);
-            };
-            localDefineFunc.amd = globalDefineFunc.amd;
-            ret.call(AMDLoader.global, moduleManager.getGlobalAMDRequireFunc(), localDefineFunc, options.filename, this._path.dirname(options.filename));
-            recorder.record(32 /* LoaderEventType.NodeEndEvaluatingScript */, options.filename);
-            if (receivedDefineCall) {
-                callback();
-            }
-            else {
-                errorback(new Error(`Didn't receive define call in ${options.filename}!`));
-            }
-            return script;
-        }
-        _getElectronRendererScriptPathOrUri(path) {
-            if (!this._env.isElectronRenderer) {
-                return path;
-            }
-            let driveLetterMatch = path.match(/^([a-z])\:(.*)/i);
-            if (driveLetterMatch) {
-                // windows
-                return `file:///${(driveLetterMatch[1].toUpperCase() + ':' + driveLetterMatch[2]).replace(/\\/g, '/')}`;
-            }
-            else {
-                // nix
-                return `file://${path}`;
-            }
-        }
-        _getCachedDataPath(config, filename) {
-            const hash = this._crypto.createHash('md5').update(filename, 'utf8').update(config.seed, 'utf8').update(process.arch, '').digest('hex');
-            const basename = this._path.basename(filename).replace(/\.js$/, '');
-            return this._path.join(config.path, `${basename}-${hash}.code`);
-        }
-        _handleCachedData(script, scriptSource, cachedDataPath, createCachedData, moduleManager) {
-            if (script.cachedDataRejected) {
-                // cached data got rejected -> delete and re-create
-                this._fs.unlink(cachedDataPath, err => {
-                    moduleManager.getRecorder().record(62 /* LoaderEventType.CachedDataRejected */, cachedDataPath);
-                    this._createAndWriteCachedData(script, scriptSource, cachedDataPath, moduleManager);
-                    if (err) {
-                        moduleManager.getConfig().onError(err);
-                    }
-                });
-            }
-            else if (createCachedData) {
-                // no cached data, but wanted
-                this._createAndWriteCachedData(script, scriptSource, cachedDataPath, moduleManager);
-            }
-        }
-        // Cached data format: | SOURCE_HASH | V8_CACHED_DATA |
-        // -SOURCE_HASH is the md5 hash of the JS source (always 16 bytes)
-        // -V8_CACHED_DATA is what v8 produces
-        _createAndWriteCachedData(script, scriptSource, cachedDataPath, moduleManager) {
-            let timeout = Math.ceil(moduleManager.getConfig().getOptionsLiteral().nodeCachedData.writeDelay * (1 + Math.random()));
-            let lastSize = -1;
-            let iteration = 0;
-            let hashData = undefined;
-            const createLoop = () => {
-                setTimeout(() => {
-                    if (!hashData) {
-                        hashData = this._crypto.createHash('md5').update(scriptSource, 'utf8').digest();
-                    }
-                    const cachedData = script.createCachedData();
-                    if (cachedData.length === 0 || cachedData.length === lastSize || iteration >= 5) {
-                        // done
-                        return;
-                    }
-                    if (cachedData.length < lastSize) {
-                        // less data than before: skip, try again next round
-                        createLoop();
-                        return;
-                    }
-                    lastSize = cachedData.length;
-                    this._fs.writeFile(cachedDataPath, Buffer.concat([hashData, cachedData]), err => {
-                        if (err) {
-                            moduleManager.getConfig().onError(err);
-                        }
-                        moduleManager.getRecorder().record(63 /* LoaderEventType.CachedDataCreated */, cachedDataPath);
-                        createLoop();
-                    });
-                }, timeout * (Math.pow(4, iteration++)));
-            };
-            // with some delay (`timeout`) create cached data
-            // and repeat that (with backoff delay) until the
-            // data seems to be not changing anymore
-            createLoop();
-        }
-        _readSourceAndCachedData(sourcePath, cachedDataPath, recorder, callback) {
-            if (!cachedDataPath) {
-                // no cached data case
-                this._fs.readFile(sourcePath, { encoding: 'utf8' }, callback);
-            }
-            else {
-                // cached data case: read both files in parallel
-                let source = undefined;
-                let cachedData = undefined;
-                let hashData = undefined;
-                let steps = 2;
-                const step = (err) => {
-                    if (err) {
-                        callback(err);
-                    }
-                    else if (--steps === 0) {
-                        callback(undefined, source, cachedData, hashData);
-                    }
-                };
-                this._fs.readFile(sourcePath, { encoding: 'utf8' }, (err, data) => {
-                    source = data;
-                    step(err);
-                });
-                this._fs.readFile(cachedDataPath, (err, data) => {
-                    if (!err && data && data.length > 0) {
-                        hashData = data.slice(0, 16);
-                        cachedData = data.slice(16);
-                        recorder.record(60 /* LoaderEventType.CachedDataFound */, cachedDataPath);
-                    }
-                    else {
-                        recorder.record(61 /* LoaderEventType.CachedDataMissed */, cachedDataPath);
-                    }
-                    step(); // ignored: cached data is optional
-                });
-            }
-        }
-        _verifyCachedData(script, scriptSource, cachedDataPath, hashData, moduleManager) {
-            if (!hashData) {
-                // nothing to do
-                return;
-            }
-            if (script.cachedDataRejected) {
-                // invalid anyways
-                return;
-            }
-            setTimeout(() => {
-                // check source hash - the contract is that file paths change when file content
-                // change (e.g use the commit or version id as cache path). this check is
-                // for violations of this contract.
-                const hashDataNow = this._crypto.createHash('md5').update(scriptSource, 'utf8').digest();
-                if (!hashData.equals(hashDataNow)) {
-                    moduleManager.getConfig().onError(new Error(`FAILED TO VERIFY CACHED DATA, deleting stale '${cachedDataPath}' now, but a RESTART IS REQUIRED`));
-                    this._fs.unlink(cachedDataPath, err => {
-                        if (err) {
-                            moduleManager.getConfig().onError(err);
-                        }
-                    });
-                }
-            }, Math.ceil(5000 * (1 + Math.random())));
-        }
-    }
-    NodeScriptLoader._BOM = 0xFEFF;
-    NodeScriptLoader._PREFIX = '(function (require, define, __filename, __dirname) { ';
-    NodeScriptLoader._SUFFIX = '\n});';
-    function ensureRecordedNodeRequire(recorder, _nodeRequire) {
-        if (_nodeRequire.__$__isRecorded) {
-            // it is already recorded
-            return _nodeRequire;
-        }
-        const nodeRequire = function nodeRequire(what) {
-            recorder.record(33 /* LoaderEventType.NodeBeginNativeRequire */, what);
-            try {
-                return _nodeRequire(what);
-            }
-            finally {
-                recorder.record(34 /* LoaderEventType.NodeEndNativeRequire */, what);
-            }
-        };
-        nodeRequire.__$__isRecorded = true;
-        return nodeRequire;
-    }
-    AMDLoader.ensureRecordedNodeRequire = ensureRecordedNodeRequire;
-    function createScriptLoader(env) {
-        return new OnlyOnceScriptLoader(env);
-    }
-    AMDLoader.createScriptLoader = createScriptLoader;
+	/**
+	 * Load `scriptSrc` only once (avoid multiple <script> tags)
+	 */
+	class OnlyOnceScriptLoader {
+		constructor(env) {
+			this._env = env;
+			this._scriptLoader = null;
+			this._callbackMap = {};
+		}
+		load(moduleManager, scriptSrc, callback, errorback) {
+			if (!this._scriptLoader) {
+				if (this._env.isWebWorker) {
+					this._scriptLoader = new WorkerScriptLoader();
+				}
+				else if (this._env.isElectronRenderer) {
+					const { preferScriptTags } = moduleManager.getConfig().getOptionsLiteral();
+					if (preferScriptTags) {
+						this._scriptLoader = new BrowserScriptLoader();
+					}
+					else {
+						this._scriptLoader = new NodeScriptLoader(this._env);
+					}
+				}
+				else if (this._env.isNode) {
+					this._scriptLoader = new NodeScriptLoader(this._env);
+				}
+				else {
+					this._scriptLoader = new BrowserScriptLoader();
+				}
+			}
+			let scriptCallbacks = {
+				callback: callback,
+				errorback: errorback
+			};
+			if (this._callbackMap.hasOwnProperty(scriptSrc)) {
+				this._callbackMap[scriptSrc].push(scriptCallbacks);
+				return;
+			}
+			this._callbackMap[scriptSrc] = [scriptCallbacks];
+			this._scriptLoader.load(moduleManager, scriptSrc, () => this.triggerCallback(scriptSrc), (err) => this.triggerErrorback(scriptSrc, err));
+		}
+		triggerCallback(scriptSrc) {
+			let scriptCallbacks = this._callbackMap[scriptSrc];
+			delete this._callbackMap[scriptSrc];
+			for (let i = 0; i < scriptCallbacks.length; i++) {
+				scriptCallbacks[i].callback();
+			}
+		}
+		triggerErrorback(scriptSrc, err) {
+			let scriptCallbacks = this._callbackMap[scriptSrc];
+			delete this._callbackMap[scriptSrc];
+			for (let i = 0; i < scriptCallbacks.length; i++) {
+				scriptCallbacks[i].errorback(err);
+			}
+		}
+	}
+	class BrowserScriptLoader {
+		/**
+		 * Attach load / error listeners to a script element and remove them when either one has fired.
+		 * Implemented for browsers supporting HTML5 standard 'load' and 'error' events.
+		 */
+		attachListeners(script, callback, errorback) {
+			let unbind = () => {
+				script.removeEventListener('load', loadEventListener);
+				script.removeEventListener('error', errorEventListener);
+			};
+			let loadEventListener = (e) => {
+				unbind();
+				callback();
+			};
+			let errorEventListener = (e) => {
+				unbind();
+				errorback(e);
+			};
+			script.addEventListener('load', loadEventListener);
+			script.addEventListener('error', errorEventListener);
+		}
+		load(moduleManager, scriptSrc, callback, errorback) {
+			if (/^node\|/.test(scriptSrc)) {
+				let opts = moduleManager.getConfig().getOptionsLiteral();
+				let nodeRequire = ensureRecordedNodeRequire(moduleManager.getRecorder(), (opts.nodeRequire || AMDLoader.global.nodeRequire));
+				let pieces = scriptSrc.split('|');
+				let moduleExports = null;
+				try {
+					moduleExports = nodeRequire(pieces[1]);
+				}
+				catch (err) {
+					errorback(err);
+					return;
+				}
+				moduleManager.enqueueDefineAnonymousModule([], () => moduleExports);
+				callback();
+			}
+			else {
+				let script = document.createElement('script');
+				script.setAttribute('async', 'async');
+				script.setAttribute('type', 'text/javascript');
+				this.attachListeners(script, callback, errorback);
+				const { trustedTypesPolicy } = moduleManager.getConfig().getOptionsLiteral();
+				if (trustedTypesPolicy) {
+					scriptSrc = trustedTypesPolicy.createScriptURL(scriptSrc);
+				}
+				script.setAttribute('src', scriptSrc);
+				// Propagate CSP nonce to dynamically created script tag.
+				const { cspNonce } = moduleManager.getConfig().getOptionsLiteral();
+				if (cspNonce) {
+					script.setAttribute('nonce', cspNonce);
+				}
+				document.getElementsByTagName('head')[0].appendChild(script);
+			}
+		}
+	}
+	function canUseEval(moduleManager) {
+		const { trustedTypesPolicy } = moduleManager.getConfig().getOptionsLiteral();
+		try {
+			const func = (trustedTypesPolicy
+				? self.eval(trustedTypesPolicy.createScript('', 'true')) // CodeQL [SM01632] the loader is responsible with loading code, fetch + eval is used on the web worker instead of importScripts if possible because importScripts is synchronous and we observed deadlocks on Safari
+				: new Function('true') // CodeQL [SM01632] the loader is responsible with loading code, fetch + eval is used on the web worker instead of importScripts if possible because importScripts is synchronous and we observed deadlocks on Safari
+			);
+			func.call(self);
+			return true;
+		}
+		catch (err) {
+			return false;
+		}
+	}
+	class WorkerScriptLoader {
+		constructor() {
+			this._cachedCanUseEval = null;
+		}
+		_canUseEval(moduleManager) {
+			if (this._cachedCanUseEval === null) {
+				this._cachedCanUseEval = canUseEval(moduleManager);
+			}
+			return this._cachedCanUseEval;
+		}
+		load(moduleManager, scriptSrc, callback, errorback) {
+			if (/^node\|/.test(scriptSrc)) {
+				const opts = moduleManager.getConfig().getOptionsLiteral();
+				const nodeRequire = ensureRecordedNodeRequire(moduleManager.getRecorder(), (opts.nodeRequire || AMDLoader.global.nodeRequire));
+				const pieces = scriptSrc.split('|');
+				let moduleExports = null;
+				try {
+					moduleExports = nodeRequire(pieces[1]);
+				}
+				catch (err) {
+					errorback(err);
+					return;
+				}
+				moduleManager.enqueueDefineAnonymousModule([], function () { return moduleExports; });
+				callback();
+			}
+			else {
+				const { trustedTypesPolicy } = moduleManager.getConfig().getOptionsLiteral();
+				const isCrossOrigin = (/^((http:)|(https:)|(file:))/.test(scriptSrc) && scriptSrc.substring(0, self.origin.length) !== self.origin);
+				if (!isCrossOrigin && this._canUseEval(moduleManager)) {
+					// use `fetch` if possible because `importScripts`
+					// is synchronous and can lead to deadlocks on Safari
+					fetch(scriptSrc).then((response) => {
+						if (response.status !== 200) {
+							throw new Error(response.statusText);
+						}
+						return response.text();
+					}).then((text) => {
+						text = `${text}\n//# sourceURL=${scriptSrc}`;
+						const func = (trustedTypesPolicy
+							? self.eval(trustedTypesPolicy.createScript('', text))
+							: new Function(text) // CodeQL [SM01632] the loader is responsible with loading code, fetch + eval is used on the web worker instead of importScripts if possible because importScripts is synchronous and we observed deadlocks on Safari
+						);
+						func.call(self);
+						callback();
+					}).then(undefined, errorback);
+					return;
+				}
+				try {
+					if (trustedTypesPolicy) {
+						scriptSrc = trustedTypesPolicy.createScriptURL(scriptSrc);
+					}
+					importScripts(scriptSrc);
+					callback();
+				}
+				catch (e) {
+					errorback(e);
+				}
+			}
+		}
+	}
+	class NodeScriptLoader {
+		constructor(env) {
+			this._env = env;
+			this._didInitialize = false;
+			this._didPatchNodeRequire = false;
+		}
+		_init(nodeRequire) {
+			if (this._didInitialize) {
+				return;
+			}
+			this._didInitialize = true;
+			// capture node modules
+			this._fs = nodeRequire('fs');
+			this._vm = nodeRequire('vm');
+			this._path = nodeRequire('path');
+			this._crypto = nodeRequire('crypto');
+		}
+		// patch require-function of nodejs such that we can manually create a script
+		// from cached data. this is done by overriding the `Module._compile` function
+		_initNodeRequire(nodeRequire, moduleManager) {
+			// It is important to check for `nodeCachedData` first and then set `_didPatchNodeRequire`.
+			// That's because `nodeCachedData` is set _after_ calling this for the first time...
+			const { nodeCachedData } = moduleManager.getConfig().getOptionsLiteral();
+			if (!nodeCachedData) {
+				return;
+			}
+			if (this._didPatchNodeRequire) {
+				return;
+			}
+			this._didPatchNodeRequire = true;
+			const that = this;
+			const Module = nodeRequire('module');
+			function makeRequireFunction(mod) {
+				const Module = mod.constructor;
+				let require = function require(path) {
+					try {
+						return mod.require(path);
+					}
+					finally {
+						// nothing
+					}
+				};
+				require.resolve = function resolve(request, options) {
+					return Module._resolveFilename(request, mod, false, options);
+				};
+				require.resolve.paths = function paths(request) {
+					return Module._resolveLookupPaths(request, mod);
+				};
+				require.main = process.mainModule;
+				require.extensions = Module._extensions;
+				require.cache = Module._cache;
+				return require;
+			}
+			Module.prototype._compile = function (content, filename) {
+				// remove shebang and create wrapper function
+				const scriptSource = Module.wrap(content.replace(/^#!.*/, ''));
+				// create script
+				const recorder = moduleManager.getRecorder();
+				const cachedDataPath = that._getCachedDataPath(nodeCachedData, filename);
+				const options = { filename };
+				let hashData;
+				try {
+					const data = that._fs.readFileSync(cachedDataPath);
+					hashData = data.slice(0, 16);
+					options.cachedData = data.slice(16);
+					recorder.record(60 /* LoaderEventType.CachedDataFound */, cachedDataPath);
+				}
+				catch (_e) {
+					recorder.record(61 /* LoaderEventType.CachedDataMissed */, cachedDataPath);
+				}
+				const script = new that._vm.Script(scriptSource, options);
+				const compileWrapper = script.runInThisContext(options);
+				// run script
+				const dirname = that._path.dirname(filename);
+				const require = makeRequireFunction(this);
+				const args = [this.exports, require, this, filename, dirname, process, _commonjsGlobal, Buffer];
+				const result = compileWrapper.apply(this.exports, args);
+				// cached data aftermath
+				that._handleCachedData(script, scriptSource, cachedDataPath, !options.cachedData, moduleManager);
+				that._verifyCachedData(script, scriptSource, cachedDataPath, hashData, moduleManager);
+				return result;
+			};
+		}
+		load(moduleManager, scriptSrc, callback, errorback) {
+			const opts = moduleManager.getConfig().getOptionsLiteral();
+			const nodeRequire = ensureRecordedNodeRequire(moduleManager.getRecorder(), (opts.nodeRequire || AMDLoader.global.nodeRequire));
+			const nodeInstrumenter = (opts.nodeInstrumenter || function (c) { return c; });
+			this._init(nodeRequire);
+			this._initNodeRequire(nodeRequire, moduleManager);
+			let recorder = moduleManager.getRecorder();
+			if (/^node\|/.test(scriptSrc)) {
+				let pieces = scriptSrc.split('|');
+				let moduleExports = null;
+				try {
+					moduleExports = nodeRequire(pieces[1]);
+				}
+				catch (err) {
+					errorback(err);
+					return;
+				}
+				moduleManager.enqueueDefineAnonymousModule([], () => moduleExports);
+				callback();
+			}
+			else {
+				scriptSrc = AMDLoader.Utilities.fileUriToFilePath(this._env.isWindows, scriptSrc);
+				const normalizedScriptSrc = this._path.normalize(scriptSrc);
+				const vmScriptPathOrUri = this._getElectronRendererScriptPathOrUri(normalizedScriptSrc);
+				const wantsCachedData = Boolean(opts.nodeCachedData);
+				const cachedDataPath = wantsCachedData ? this._getCachedDataPath(opts.nodeCachedData, scriptSrc) : undefined;
+				this._readSourceAndCachedData(normalizedScriptSrc, cachedDataPath, recorder, (err, data, cachedData, hashData) => {
+					if (err) {
+						errorback(err);
+						return;
+					}
+					let scriptSource;
+					if (data.charCodeAt(0) === NodeScriptLoader._BOM) {
+						scriptSource = NodeScriptLoader._PREFIX + data.substring(1) + NodeScriptLoader._SUFFIX;
+					}
+					else {
+						scriptSource = NodeScriptLoader._PREFIX + data + NodeScriptLoader._SUFFIX;
+					}
+					scriptSource = nodeInstrumenter(scriptSource, normalizedScriptSrc);
+					const scriptOpts = { filename: vmScriptPathOrUri, cachedData };
+					const script = this._createAndEvalScript(moduleManager, scriptSource, scriptOpts, callback, errorback);
+					this._handleCachedData(script, scriptSource, cachedDataPath, wantsCachedData && !cachedData, moduleManager);
+					this._verifyCachedData(script, scriptSource, cachedDataPath, hashData, moduleManager);
+				});
+			}
+		}
+		_createAndEvalScript(moduleManager, contents, options, callback, errorback) {
+			const recorder = moduleManager.getRecorder();
+			recorder.record(31 /* LoaderEventType.NodeBeginEvaluatingScript */, options.filename);
+			const script = new this._vm.Script(contents, options);
+			const ret = script.runInThisContext(options);
+			const globalDefineFunc = moduleManager.getGlobalAMDDefineFunc();
+			let receivedDefineCall = false;
+			const localDefineFunc = function () {
+				receivedDefineCall = true;
+				return globalDefineFunc.apply(null, arguments);
+			};
+			localDefineFunc.amd = globalDefineFunc.amd;
+			ret.call(AMDLoader.global, moduleManager.getGlobalAMDRequireFunc(), localDefineFunc, options.filename, this._path.dirname(options.filename));
+			recorder.record(32 /* LoaderEventType.NodeEndEvaluatingScript */, options.filename);
+			if (receivedDefineCall) {
+				callback();
+			}
+			else {
+				errorback(new Error(`Didn't receive define call in ${options.filename}!`));
+			}
+			return script;
+		}
+		_getElectronRendererScriptPathOrUri(path) {
+			if (!this._env.isElectronRenderer) {
+				return path;
+			}
+			let driveLetterMatch = path.match(/^([a-z])\:(.*)/i);
+			if (driveLetterMatch) {
+				// windows
+				return `file:///${(driveLetterMatch[1].toUpperCase() + ':' + driveLetterMatch[2]).replace(/\\/g, '/')}`;
+			}
+			else {
+				// nix
+				return `file://${path}`;
+			}
+		}
+		_getCachedDataPath(config, filename) {
+			const hash = this._crypto.createHash('md5').update(filename, 'utf8').update(config.seed, 'utf8').update(process.arch, '').digest('hex');
+			const basename = this._path.basename(filename).replace(/\.js$/, '');
+			return this._path.join(config.path, `${basename}-${hash}.code`);
+		}
+		_handleCachedData(script, scriptSource, cachedDataPath, createCachedData, moduleManager) {
+			if (script.cachedDataRejected) {
+				// cached data got rejected -> delete and re-create
+				this._fs.unlink(cachedDataPath, err => {
+					moduleManager.getRecorder().record(62 /* LoaderEventType.CachedDataRejected */, cachedDataPath);
+					this._createAndWriteCachedData(script, scriptSource, cachedDataPath, moduleManager);
+					if (err) {
+						moduleManager.getConfig().onError(err);
+					}
+				});
+			}
+			else if (createCachedData) {
+				// no cached data, but wanted
+				this._createAndWriteCachedData(script, scriptSource, cachedDataPath, moduleManager);
+			}
+		}
+		// Cached data format: | SOURCE_HASH | V8_CACHED_DATA |
+		// -SOURCE_HASH is the md5 hash of the JS source (always 16 bytes)
+		// -V8_CACHED_DATA is what v8 produces
+		_createAndWriteCachedData(script, scriptSource, cachedDataPath, moduleManager) {
+			let timeout = Math.ceil(moduleManager.getConfig().getOptionsLiteral().nodeCachedData.writeDelay * (1 + Math.random()));
+			let lastSize = -1;
+			let iteration = 0;
+			let hashData = undefined;
+			const createLoop = () => {
+				setTimeout(() => {
+					if (!hashData) {
+						hashData = this._crypto.createHash('md5').update(scriptSource, 'utf8').digest();
+					}
+					const cachedData = script.createCachedData();
+					if (cachedData.length === 0 || cachedData.length === lastSize || iteration >= 5) {
+						// done
+						return;
+					}
+					if (cachedData.length < lastSize) {
+						// less data than before: skip, try again next round
+						createLoop();
+						return;
+					}
+					lastSize = cachedData.length;
+					this._fs.writeFile(cachedDataPath, Buffer.concat([hashData, cachedData]), err => {
+						if (err) {
+							moduleManager.getConfig().onError(err);
+						}
+						moduleManager.getRecorder().record(63 /* LoaderEventType.CachedDataCreated */, cachedDataPath);
+						createLoop();
+					});
+				}, timeout * (Math.pow(4, iteration++)));
+			};
+			// with some delay (`timeout`) create cached data
+			// and repeat that (with backoff delay) until the
+			// data seems to be not changing anymore
+			createLoop();
+		}
+		_readSourceAndCachedData(sourcePath, cachedDataPath, recorder, callback) {
+			if (!cachedDataPath) {
+				// no cached data case
+				this._fs.readFile(sourcePath, { encoding: 'utf8' }, callback);
+			}
+			else {
+				// cached data case: read both files in parallel
+				let source = undefined;
+				let cachedData = undefined;
+				let hashData = undefined;
+				let steps = 2;
+				const step = (err) => {
+					if (err) {
+						callback(err);
+					}
+					else if (--steps === 0) {
+						callback(undefined, source, cachedData, hashData);
+					}
+				};
+				this._fs.readFile(sourcePath, { encoding: 'utf8' }, (err, data) => {
+					source = data;
+					step(err);
+				});
+				this._fs.readFile(cachedDataPath, (err, data) => {
+					if (!err && data && data.length > 0) {
+						hashData = data.slice(0, 16);
+						cachedData = data.slice(16);
+						recorder.record(60 /* LoaderEventType.CachedDataFound */, cachedDataPath);
+					}
+					else {
+						recorder.record(61 /* LoaderEventType.CachedDataMissed */, cachedDataPath);
+					}
+					step(); // ignored: cached data is optional
+				});
+			}
+		}
+		_verifyCachedData(script, scriptSource, cachedDataPath, hashData, moduleManager) {
+			if (!hashData) {
+				// nothing to do
+				return;
+			}
+			if (script.cachedDataRejected) {
+				// invalid anyways
+				return;
+			}
+			setTimeout(() => {
+				// check source hash - the contract is that file paths change when file content
+				// change (e.g use the commit or version id as cache path). this check is
+				// for violations of this contract.
+				const hashDataNow = this._crypto.createHash('md5').update(scriptSource, 'utf8').digest();
+				if (!hashData.equals(hashDataNow)) {
+					moduleManager.getConfig().onError(new Error(`FAILED TO VERIFY CACHED DATA, deleting stale '${cachedDataPath}' now, but a RESTART IS REQUIRED`));
+					this._fs.unlink(cachedDataPath, err => {
+						if (err) {
+							moduleManager.getConfig().onError(err);
+						}
+					});
+				}
+			}, Math.ceil(5000 * (1 + Math.random())));
+		}
+	}
+	NodeScriptLoader._BOM = 0xFEFF;
+	NodeScriptLoader._PREFIX = '(function (require, define, __filename, __dirname) { ';
+	NodeScriptLoader._SUFFIX = '\n});';
+	function ensureRecordedNodeRequire(recorder, _nodeRequire) {
+		if (_nodeRequire.__$__isRecorded) {
+			// it is already recorded
+			return _nodeRequire;
+		}
+		const nodeRequire = function nodeRequire(what) {
+			recorder.record(33 /* LoaderEventType.NodeBeginNativeRequire */, what);
+			try {
+				return _nodeRequire(what);
+			}
+			finally {
+				recorder.record(34 /* LoaderEventType.NodeEndNativeRequire */, what);
+			}
+		};
+		nodeRequire.__$__isRecorded = true;
+		return nodeRequire;
+	}
+	AMDLoader.ensureRecordedNodeRequire = ensureRecordedNodeRequire;
+	function createScriptLoader(env) {
+		return new OnlyOnceScriptLoader(env);
+	}
+	AMDLoader.createScriptLoader = createScriptLoader;
 })(AMDLoader || (AMDLoader = {}));
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1057,850 +1059,850 @@ var AMDLoader;
  *--------------------------------------------------------------------------------------------*/
 var AMDLoader;
 (function (AMDLoader) {
-    // ------------------------------------------------------------------------
-    // ModuleIdResolver
-    class ModuleIdResolver {
-        constructor(fromModuleId) {
-            let lastSlash = fromModuleId.lastIndexOf('/');
-            if (lastSlash !== -1) {
-                this.fromModulePath = fromModuleId.substr(0, lastSlash + 1);
-            }
-            else {
-                this.fromModulePath = '';
-            }
-        }
-        /**
-         * Normalize 'a/../name' to 'name', etc.
-         */
-        static _normalizeModuleId(moduleId) {
-            let r = moduleId, pattern;
-            // replace /./ => /
-            pattern = /\/\.\//;
-            while (pattern.test(r)) {
-                r = r.replace(pattern, '/');
-            }
-            // replace ^./ => nothing
-            r = r.replace(/^\.\//g, '');
-            // replace /aa/../ => / (BUT IGNORE /../../)
-            pattern = /\/(([^\/])|([^\/][^\/\.])|([^\/\.][^\/])|([^\/][^\/][^\/]+))\/\.\.\//;
-            while (pattern.test(r)) {
-                r = r.replace(pattern, '/');
-            }
-            // replace ^aa/../ => nothing (BUT IGNORE ../../)
-            r = r.replace(/^(([^\/])|([^\/][^\/\.])|([^\/\.][^\/])|([^\/][^\/][^\/]+))\/\.\.\//, '');
-            return r;
-        }
-        /**
-         * Resolve relative module ids
-         */
-        resolveModule(moduleId) {
-            let result = moduleId;
-            if (!AMDLoader.Utilities.isAbsolutePath(result)) {
-                if (AMDLoader.Utilities.startsWith(result, './') || AMDLoader.Utilities.startsWith(result, '../')) {
-                    result = ModuleIdResolver._normalizeModuleId(this.fromModulePath + result);
-                }
-            }
-            return result;
-        }
-    }
-    ModuleIdResolver.ROOT = new ModuleIdResolver('');
-    AMDLoader.ModuleIdResolver = ModuleIdResolver;
-    // ------------------------------------------------------------------------
-    // Module
-    class Module {
-        constructor(id, strId, dependencies, callback, errorback, moduleIdResolver) {
-            this.id = id;
-            this.strId = strId;
-            this.dependencies = dependencies;
-            this._callback = callback;
-            this._errorback = errorback;
-            this.moduleIdResolver = moduleIdResolver;
-            this.exports = {};
-            this.error = null;
-            this.exportsPassedIn = false;
-            this.unresolvedDependenciesCount = this.dependencies.length;
-            this._isComplete = false;
-        }
-        static _safeInvokeFunction(callback, args) {
-            try {
-                return {
-                    returnedValue: callback.apply(AMDLoader.global, args),
-                    producedError: null
-                };
-            }
-            catch (e) {
-                return {
-                    returnedValue: null,
-                    producedError: e
-                };
-            }
-        }
-        static _invokeFactory(config, strModuleId, callback, dependenciesValues) {
-            if (!config.shouldInvokeFactory(strModuleId)) {
-                return {
-                    returnedValue: null,
-                    producedError: null
-                };
-            }
-            if (config.shouldCatchError()) {
-                return this._safeInvokeFunction(callback, dependenciesValues);
-            }
-            return {
-                returnedValue: callback.apply(AMDLoader.global, dependenciesValues),
-                producedError: null
-            };
-        }
-        complete(recorder, config, dependenciesValues, inversedependenciesProvider) {
-            this._isComplete = true;
-            let producedError = null;
-            if (this._callback) {
-                if (typeof this._callback === 'function') {
-                    recorder.record(21 /* LoaderEventType.BeginInvokeFactory */, this.strId);
-                    let r = Module._invokeFactory(config, this.strId, this._callback, dependenciesValues);
-                    producedError = r.producedError;
-                    recorder.record(22 /* LoaderEventType.EndInvokeFactory */, this.strId);
-                    if (!producedError && typeof r.returnedValue !== 'undefined' && (!this.exportsPassedIn || AMDLoader.Utilities.isEmpty(this.exports))) {
-                        this.exports = r.returnedValue;
-                    }
-                }
-                else {
-                    this.exports = this._callback;
-                }
-            }
-            if (producedError) {
-                let err = AMDLoader.ensureError(producedError);
-                err.phase = 'factory';
-                err.moduleId = this.strId;
-                err.neededBy = inversedependenciesProvider(this.id);
-                this.error = err;
-                config.onError(err);
-            }
-            this.dependencies = null;
-            this._callback = null;
-            this._errorback = null;
-            this.moduleIdResolver = null;
-        }
-        /**
-         * One of the direct dependencies or a transitive dependency has failed to load.
-         */
-        onDependencyError(err) {
-            this._isComplete = true;
-            this.error = err;
-            if (this._errorback) {
-                this._errorback(err);
-                return true;
-            }
-            return false;
-        }
-        /**
-         * Is the current module complete?
-         */
-        isComplete() {
-            return this._isComplete;
-        }
-    }
-    AMDLoader.Module = Module;
-    class ModuleIdProvider {
-        constructor() {
-            this._nextId = 0;
-            this._strModuleIdToIntModuleId = new Map();
-            this._intModuleIdToStrModuleId = [];
-            // Ensure values 0, 1, 2 are assigned accordingly with ModuleId
-            this.getModuleId('exports');
-            this.getModuleId('module');
-            this.getModuleId('require');
-        }
-        getMaxModuleId() {
-            return this._nextId;
-        }
-        getModuleId(strModuleId) {
-            let id = this._strModuleIdToIntModuleId.get(strModuleId);
-            if (typeof id === 'undefined') {
-                id = this._nextId++;
-                this._strModuleIdToIntModuleId.set(strModuleId, id);
-                this._intModuleIdToStrModuleId[id] = strModuleId;
-            }
-            return id;
-        }
-        getStrModuleId(moduleId) {
-            return this._intModuleIdToStrModuleId[moduleId];
-        }
-    }
-    class RegularDependency {
-        constructor(id) {
-            this.id = id;
-        }
-    }
-    RegularDependency.EXPORTS = new RegularDependency(0 /* ModuleId.EXPORTS */);
-    RegularDependency.MODULE = new RegularDependency(1 /* ModuleId.MODULE */);
-    RegularDependency.REQUIRE = new RegularDependency(2 /* ModuleId.REQUIRE */);
-    AMDLoader.RegularDependency = RegularDependency;
-    class PluginDependency {
-        constructor(id, pluginId, pluginParam) {
-            this.id = id;
-            this.pluginId = pluginId;
-            this.pluginParam = pluginParam;
-        }
-    }
-    AMDLoader.PluginDependency = PluginDependency;
-    class ModuleManager {
-        constructor(env, scriptLoader, defineFunc, requireFunc, loaderAvailableTimestamp = 0) {
-            this._env = env;
-            this._scriptLoader = scriptLoader;
-            this._loaderAvailableTimestamp = loaderAvailableTimestamp;
-            this._defineFunc = defineFunc;
-            this._requireFunc = requireFunc;
-            this._moduleIdProvider = new ModuleIdProvider();
-            this._config = new AMDLoader.Configuration(this._env);
-            this._hasDependencyCycle = false;
-            this._modules2 = [];
-            this._knownModules2 = [];
-            this._inverseDependencies2 = [];
-            this._inversePluginDependencies2 = new Map();
-            this._currentAnonymousDefineCall = null;
-            this._recorder = null;
-            this._buildInfoPath = [];
-            this._buildInfoDefineStack = [];
-            this._buildInfoDependencies = [];
-        }
-        reset() {
-            return new ModuleManager(this._env, this._scriptLoader, this._defineFunc, this._requireFunc, this._loaderAvailableTimestamp);
-        }
-        getGlobalAMDDefineFunc() {
-            return this._defineFunc;
-        }
-        getGlobalAMDRequireFunc() {
-            return this._requireFunc;
-        }
-        static _findRelevantLocationInStack(needle, stack) {
-            let normalize = (str) => str.replace(/\\/g, '/');
-            let normalizedPath = normalize(needle);
-            let stackPieces = stack.split(/\n/);
-            for (let i = 0; i < stackPieces.length; i++) {
-                let m = stackPieces[i].match(/(.*):(\d+):(\d+)\)?$/);
-                if (m) {
-                    let stackPath = m[1];
-                    let stackLine = m[2];
-                    let stackColumn = m[3];
-                    let trimPathOffset = Math.max(stackPath.lastIndexOf(' ') + 1, stackPath.lastIndexOf('(') + 1);
-                    stackPath = stackPath.substr(trimPathOffset);
-                    stackPath = normalize(stackPath);
-                    if (stackPath === normalizedPath) {
-                        let r = {
-                            line: parseInt(stackLine, 10),
-                            col: parseInt(stackColumn, 10)
-                        };
-                        if (r.line === 1) {
-                            r.col -= '(function (require, define, __filename, __dirname) { '.length;
-                        }
-                        return r;
-                    }
-                }
-            }
-            throw new Error('Could not correlate define call site for needle ' + needle);
-        }
-        getBuildInfo() {
-            if (!this._config.isBuild()) {
-                return null;
-            }
-            let result = [], resultLen = 0;
-            for (let i = 0, len = this._modules2.length; i < len; i++) {
-                let m = this._modules2[i];
-                if (!m) {
-                    continue;
-                }
-                let location = this._buildInfoPath[m.id] || null;
-                let defineStack = this._buildInfoDefineStack[m.id] || null;
-                let dependencies = this._buildInfoDependencies[m.id];
-                result[resultLen++] = {
-                    id: m.strId,
-                    path: location,
-                    defineLocation: (location && defineStack ? ModuleManager._findRelevantLocationInStack(location, defineStack) : null),
-                    dependencies: dependencies,
-                    shim: null,
-                    exports: m.exports
-                };
-            }
-            return result;
-        }
-        getRecorder() {
-            if (!this._recorder) {
-                if (this._config.shouldRecordStats()) {
-                    this._recorder = new AMDLoader.LoaderEventRecorder(this._loaderAvailableTimestamp);
-                }
-                else {
-                    this._recorder = AMDLoader.NullLoaderEventRecorder.INSTANCE;
-                }
-            }
-            return this._recorder;
-        }
-        getLoaderEvents() {
-            return this.getRecorder().getEvents();
-        }
-        /**
-         * Defines an anonymous module (without an id). Its name will be resolved as we receive a callback from the scriptLoader.
-         * @param dependencies @see defineModule
-         * @param callback @see defineModule
-         */
-        enqueueDefineAnonymousModule(dependencies, callback) {
-            if (this._currentAnonymousDefineCall !== null) {
-                throw new Error('Can only have one anonymous define call per script file');
-            }
-            let stack = null;
-            if (this._config.isBuild()) {
-                stack = new Error('StackLocation').stack || null;
-            }
-            this._currentAnonymousDefineCall = {
-                stack: stack,
-                dependencies: dependencies,
-                callback: callback
-            };
-        }
-        /**
-         * Creates a module and stores it in _modules. The manager will immediately begin resolving its dependencies.
-         * @param strModuleId An unique and absolute id of the module. This must not collide with another module's id
-         * @param dependencies An array with the dependencies of the module. Special keys are: "require", "exports" and "module"
-         * @param callback if callback is a function, it will be called with the resolved dependencies. if callback is an object, it will be considered as the exports of the module.
-         */
-        defineModule(strModuleId, dependencies, callback, errorback, stack, moduleIdResolver = new ModuleIdResolver(strModuleId)) {
-            let moduleId = this._moduleIdProvider.getModuleId(strModuleId);
-            if (this._modules2[moduleId]) {
-                if (!this._config.isDuplicateMessageIgnoredFor(strModuleId)) {
-                    console.warn('Duplicate definition of module \'' + strModuleId + '\'');
-                }
-                // Super important! Completely ignore duplicate module definition
-                return;
-            }
-            let m = new Module(moduleId, strModuleId, this._normalizeDependencies(dependencies, moduleIdResolver), callback, errorback, moduleIdResolver);
-            this._modules2[moduleId] = m;
-            if (this._config.isBuild()) {
-                this._buildInfoDefineStack[moduleId] = stack;
-                this._buildInfoDependencies[moduleId] = (m.dependencies || []).map(dep => this._moduleIdProvider.getStrModuleId(dep.id));
-            }
-            // Resolving of dependencies is immediate (not in a timeout). If there's a need to support a packer that concatenates in an
-            // unordered manner, in order to finish processing the file, execute the following method in a timeout
-            this._resolve(m);
-        }
-        _normalizeDependency(dependency, moduleIdResolver) {
-            if (dependency === 'exports') {
-                return RegularDependency.EXPORTS;
-            }
-            if (dependency === 'module') {
-                return RegularDependency.MODULE;
-            }
-            if (dependency === 'require') {
-                return RegularDependency.REQUIRE;
-            }
-            // Normalize dependency and then request it from the manager
-            let bangIndex = dependency.indexOf('!');
-            if (bangIndex >= 0) {
-                let strPluginId = moduleIdResolver.resolveModule(dependency.substr(0, bangIndex));
-                let pluginParam = moduleIdResolver.resolveModule(dependency.substr(bangIndex + 1));
-                let dependencyId = this._moduleIdProvider.getModuleId(strPluginId + '!' + pluginParam);
-                let pluginId = this._moduleIdProvider.getModuleId(strPluginId);
-                return new PluginDependency(dependencyId, pluginId, pluginParam);
-            }
-            return new RegularDependency(this._moduleIdProvider.getModuleId(moduleIdResolver.resolveModule(dependency)));
-        }
-        _normalizeDependencies(dependencies, moduleIdResolver) {
-            let result = [], resultLen = 0;
-            for (let i = 0, len = dependencies.length; i < len; i++) {
-                result[resultLen++] = this._normalizeDependency(dependencies[i], moduleIdResolver);
-            }
-            return result;
-        }
-        _relativeRequire(moduleIdResolver, dependencies, callback, errorback) {
-            if (typeof dependencies === 'string') {
-                return this.synchronousRequire(dependencies, moduleIdResolver);
-            }
-            this.defineModule(AMDLoader.Utilities.generateAnonymousModule(), dependencies, callback, errorback, null, moduleIdResolver);
-        }
-        /**
-         * Require synchronously a module by its absolute id. If the module is not loaded, an exception will be thrown.
-         * @param id The unique and absolute id of the required module
-         * @return The exports of module 'id'
-         */
-        synchronousRequire(_strModuleId, moduleIdResolver = new ModuleIdResolver(_strModuleId)) {
-            let dependency = this._normalizeDependency(_strModuleId, moduleIdResolver);
-            let m = this._modules2[dependency.id];
-            if (!m) {
-                throw new Error('Check dependency list! Synchronous require cannot resolve module \'' + _strModuleId + '\'. This is the first mention of this module!');
-            }
-            if (!m.isComplete()) {
-                throw new Error('Check dependency list! Synchronous require cannot resolve module \'' + _strModuleId + '\'. This module has not been resolved completely yet.');
-            }
-            if (m.error) {
-                throw m.error;
-            }
-            return m.exports;
-        }
-        configure(params, shouldOverwrite) {
-            let oldShouldRecordStats = this._config.shouldRecordStats();
-            if (shouldOverwrite) {
-                this._config = new AMDLoader.Configuration(this._env, params);
-            }
-            else {
-                this._config = this._config.cloneAndMerge(params);
-            }
-            if (this._config.shouldRecordStats() && !oldShouldRecordStats) {
-                this._recorder = null;
-            }
-        }
-        getConfig() {
-            return this._config;
-        }
-        /**
-         * Callback from the scriptLoader when a module has been loaded.
-         * This means its code is available and has been executed.
-         */
-        _onLoad(moduleId) {
-            if (this._currentAnonymousDefineCall !== null) {
-                let defineCall = this._currentAnonymousDefineCall;
-                this._currentAnonymousDefineCall = null;
-                // Hit an anonymous define call
-                this.defineModule(this._moduleIdProvider.getStrModuleId(moduleId), defineCall.dependencies, defineCall.callback, null, defineCall.stack);
-            }
-        }
-        _createLoadError(moduleId, _err) {
-            let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
-            let neededBy = (this._inverseDependencies2[moduleId] || []).map((intModuleId) => this._moduleIdProvider.getStrModuleId(intModuleId));
-            const err = AMDLoader.ensureError(_err);
-            err.phase = 'loading';
-            err.moduleId = strModuleId;
-            err.neededBy = neededBy;
-            return err;
-        }
-        /**
-         * Callback from the scriptLoader when a module hasn't been loaded.
-         * This means that the script was not found (e.g. 404) or there was an error in the script.
-         */
-        _onLoadError(moduleId, err) {
-            const error = this._createLoadError(moduleId, err);
-            if (!this._modules2[moduleId]) {
-                this._modules2[moduleId] = new Module(moduleId, this._moduleIdProvider.getStrModuleId(moduleId), [], () => { }, null, null);
-            }
-            // Find any 'local' error handlers, walk the entire chain of inverse dependencies if necessary.
-            let seenModuleId = [];
-            for (let i = 0, len = this._moduleIdProvider.getMaxModuleId(); i < len; i++) {
-                seenModuleId[i] = false;
-            }
-            let someoneNotified = false;
-            let queue = [];
-            queue.push(moduleId);
-            seenModuleId[moduleId] = true;
-            while (queue.length > 0) {
-                let queueElement = queue.shift();
-                let m = this._modules2[queueElement];
-                if (m) {
-                    someoneNotified = m.onDependencyError(error) || someoneNotified;
-                }
-                let inverseDeps = this._inverseDependencies2[queueElement];
-                if (inverseDeps) {
-                    for (let i = 0, len = inverseDeps.length; i < len; i++) {
-                        let inverseDep = inverseDeps[i];
-                        if (!seenModuleId[inverseDep]) {
-                            queue.push(inverseDep);
-                            seenModuleId[inverseDep] = true;
-                        }
-                    }
-                }
-            }
-            if (!someoneNotified) {
-                this._config.onError(error);
-            }
-        }
-        /**
-         * Walks (recursively) the dependencies of 'from' in search of 'to'.
-         * Returns true if there is such a path or false otherwise.
-         * @param from Module id to start at
-         * @param to Module id to look for
-         */
-        _hasDependencyPath(fromId, toId) {
-            let from = this._modules2[fromId];
-            if (!from) {
-                return false;
-            }
-            let inQueue = [];
-            for (let i = 0, len = this._moduleIdProvider.getMaxModuleId(); i < len; i++) {
-                inQueue[i] = false;
-            }
-            let queue = [];
-            // Insert 'from' in queue
-            queue.push(from);
-            inQueue[fromId] = true;
-            while (queue.length > 0) {
-                // Pop first inserted element of queue
-                let element = queue.shift();
-                let dependencies = element.dependencies;
-                if (dependencies) {
-                    // Walk the element's dependencies
-                    for (let i = 0, len = dependencies.length; i < len; i++) {
-                        let dependency = dependencies[i];
-                        if (dependency.id === toId) {
-                            // There is a path to 'to'
-                            return true;
-                        }
-                        let dependencyModule = this._modules2[dependency.id];
-                        if (dependencyModule && !inQueue[dependency.id]) {
-                            // Insert 'dependency' in queue
-                            inQueue[dependency.id] = true;
-                            queue.push(dependencyModule);
-                        }
-                    }
-                }
-            }
-            // There is no path to 'to'
-            return false;
-        }
-        /**
-         * Walks (recursively) the dependencies of 'from' in search of 'to'.
-         * Returns cycle as array.
-         * @param from Module id to start at
-         * @param to Module id to look for
-         */
-        _findCyclePath(fromId, toId, depth) {
-            if (fromId === toId || depth === 50) {
-                return [fromId];
-            }
-            let from = this._modules2[fromId];
-            if (!from) {
-                return null;
-            }
-            // Walk the element's dependencies
-            let dependencies = from.dependencies;
-            if (dependencies) {
-                for (let i = 0, len = dependencies.length; i < len; i++) {
-                    let path = this._findCyclePath(dependencies[i].id, toId, depth + 1);
-                    if (path !== null) {
-                        path.push(fromId);
-                        return path;
-                    }
-                }
-            }
-            return null;
-        }
-        /**
-         * Create the local 'require' that is passed into modules
-         */
-        _createRequire(moduleIdResolver) {
-            let result = ((dependencies, callback, errorback) => {
-                return this._relativeRequire(moduleIdResolver, dependencies, callback, errorback);
-            });
-            result.toUrl = (id) => {
-                return this._config.requireToUrl(moduleIdResolver.resolveModule(id));
-            };
-            result.getStats = () => {
-                return this.getLoaderEvents();
-            };
-            result.hasDependencyCycle = () => {
-                return this._hasDependencyCycle;
-            };
-            result.config = (params, shouldOverwrite = false) => {
-                this.configure(params, shouldOverwrite);
-            };
-            result.__$__nodeRequire = AMDLoader.global.nodeRequire;
-            return result;
-        }
-        _loadModule(moduleId) {
-            if (this._modules2[moduleId] || this._knownModules2[moduleId]) {
-                // known module
-                return;
-            }
-            this._knownModules2[moduleId] = true;
-            let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
-            let paths = this._config.moduleIdToPaths(strModuleId);
-            let scopedPackageRegex = /^@[^\/]+\/[^\/]+$/; // matches @scope/package-name
-            if (this._env.isNode && (strModuleId.indexOf('/') === -1 || scopedPackageRegex.test(strModuleId))) {
-                paths.push('node|' + strModuleId);
-            }
-            let lastPathIndex = -1;
-            let loadNextPath = (err) => {
-                lastPathIndex++;
-                if (lastPathIndex >= paths.length) {
-                    // No more paths to try
-                    this._onLoadError(moduleId, err);
-                }
-                else {
-                    let currentPath = paths[lastPathIndex];
-                    let recorder = this.getRecorder();
-                    if (this._config.isBuild() && currentPath === 'empty:') {
-                        this._buildInfoPath[moduleId] = currentPath;
-                        this.defineModule(this._moduleIdProvider.getStrModuleId(moduleId), [], null, null, null);
-                        this._onLoad(moduleId);
-                        return;
-                    }
-                    recorder.record(10 /* LoaderEventType.BeginLoadingScript */, currentPath);
-                    this._scriptLoader.load(this, currentPath, () => {
-                        if (this._config.isBuild()) {
-                            this._buildInfoPath[moduleId] = currentPath;
-                        }
-                        recorder.record(11 /* LoaderEventType.EndLoadingScriptOK */, currentPath);
-                        this._onLoad(moduleId);
-                    }, (err) => {
-                        recorder.record(12 /* LoaderEventType.EndLoadingScriptError */, currentPath);
-                        loadNextPath(err);
-                    });
-                }
-            };
-            loadNextPath(null);
-        }
-        /**
-         * Resolve a plugin dependency with the plugin loaded & complete
-         * @param module The module that has this dependency
-         * @param pluginDependency The semi-normalized dependency that appears in the module. e.g. 'vs/css!./mycssfile'. Only the plugin part (before !) is normalized
-         * @param plugin The plugin (what the plugin exports)
-         */
-        _loadPluginDependency(plugin, pluginDependency) {
-            if (this._modules2[pluginDependency.id] || this._knownModules2[pluginDependency.id]) {
-                // known module
-                return;
-            }
-            this._knownModules2[pluginDependency.id] = true;
-            // Delegate the loading of the resource to the plugin
-            let load = ((value) => {
-                this.defineModule(this._moduleIdProvider.getStrModuleId(pluginDependency.id), [], value, null, null);
-            });
-            load.error = (err) => {
-                this._config.onError(this._createLoadError(pluginDependency.id, err));
-            };
-            plugin.load(pluginDependency.pluginParam, this._createRequire(ModuleIdResolver.ROOT), load, this._config.getOptionsLiteral());
-        }
-        /**
-         * Examine the dependencies of module 'module' and resolve them as needed.
-         */
-        _resolve(module) {
-            let dependencies = module.dependencies;
-            if (dependencies) {
-                for (let i = 0, len = dependencies.length; i < len; i++) {
-                    let dependency = dependencies[i];
-                    if (dependency === RegularDependency.EXPORTS) {
-                        module.exportsPassedIn = true;
-                        module.unresolvedDependenciesCount--;
-                        continue;
-                    }
-                    if (dependency === RegularDependency.MODULE) {
-                        module.unresolvedDependenciesCount--;
-                        continue;
-                    }
-                    if (dependency === RegularDependency.REQUIRE) {
-                        module.unresolvedDependenciesCount--;
-                        continue;
-                    }
-                    let dependencyModule = this._modules2[dependency.id];
-                    if (dependencyModule && dependencyModule.isComplete()) {
-                        if (dependencyModule.error) {
-                            module.onDependencyError(dependencyModule.error);
-                            return;
-                        }
-                        module.unresolvedDependenciesCount--;
-                        continue;
-                    }
-                    if (this._hasDependencyPath(dependency.id, module.id)) {
-                        this._hasDependencyCycle = true;
-                        console.warn('There is a dependency cycle between \'' + this._moduleIdProvider.getStrModuleId(dependency.id) + '\' and \'' + this._moduleIdProvider.getStrModuleId(module.id) + '\'. The cyclic path follows:');
-                        let cyclePath = this._findCyclePath(dependency.id, module.id, 0) || [];
-                        cyclePath.reverse();
-                        cyclePath.push(dependency.id);
-                        console.warn(cyclePath.map(id => this._moduleIdProvider.getStrModuleId(id)).join(' => \n'));
-                        // Break the cycle
-                        module.unresolvedDependenciesCount--;
-                        continue;
-                    }
-                    // record inverse dependency
-                    this._inverseDependencies2[dependency.id] = this._inverseDependencies2[dependency.id] || [];
-                    this._inverseDependencies2[dependency.id].push(module.id);
-                    if (dependency instanceof PluginDependency) {
-                        let plugin = this._modules2[dependency.pluginId];
-                        if (plugin && plugin.isComplete()) {
-                            this._loadPluginDependency(plugin.exports, dependency);
-                            continue;
-                        }
-                        // Record dependency for when the plugin gets loaded
-                        let inversePluginDeps = this._inversePluginDependencies2.get(dependency.pluginId);
-                        if (!inversePluginDeps) {
-                            inversePluginDeps = [];
-                            this._inversePluginDependencies2.set(dependency.pluginId, inversePluginDeps);
-                        }
-                        inversePluginDeps.push(dependency);
-                        this._loadModule(dependency.pluginId);
-                        continue;
-                    }
-                    this._loadModule(dependency.id);
-                }
-            }
-            if (module.unresolvedDependenciesCount === 0) {
-                this._onModuleComplete(module);
-            }
-        }
-        _onModuleComplete(module) {
-            let recorder = this.getRecorder();
-            if (module.isComplete()) {
-                // already done
-                return;
-            }
-            let dependencies = module.dependencies;
-            let dependenciesValues = [];
-            if (dependencies) {
-                for (let i = 0, len = dependencies.length; i < len; i++) {
-                    let dependency = dependencies[i];
-                    if (dependency === RegularDependency.EXPORTS) {
-                        dependenciesValues[i] = module.exports;
-                        continue;
-                    }
-                    if (dependency === RegularDependency.MODULE) {
-                        dependenciesValues[i] = {
-                            id: module.strId,
-                            config: () => {
-                                return this._config.getConfigForModule(module.strId);
-                            }
-                        };
-                        continue;
-                    }
-                    if (dependency === RegularDependency.REQUIRE) {
-                        dependenciesValues[i] = this._createRequire(module.moduleIdResolver);
-                        continue;
-                    }
-                    let dependencyModule = this._modules2[dependency.id];
-                    if (dependencyModule) {
-                        dependenciesValues[i] = dependencyModule.exports;
-                        continue;
-                    }
-                    dependenciesValues[i] = null;
-                }
-            }
-            const inversedependenciesProvider = (moduleId) => {
-                return (this._inverseDependencies2[moduleId] || []).map((intModuleId) => this._moduleIdProvider.getStrModuleId(intModuleId));
-            };
-            module.complete(recorder, this._config, dependenciesValues, inversedependenciesProvider);
-            // Fetch and clear inverse dependencies
-            let inverseDeps = this._inverseDependencies2[module.id];
-            this._inverseDependencies2[module.id] = null;
-            if (inverseDeps) {
-                // Resolve one inverse dependency at a time, always
-                // on the lookout for a completed module.
-                for (let i = 0, len = inverseDeps.length; i < len; i++) {
-                    let inverseDependencyId = inverseDeps[i];
-                    let inverseDependency = this._modules2[inverseDependencyId];
-                    inverseDependency.unresolvedDependenciesCount--;
-                    if (inverseDependency.unresolvedDependenciesCount === 0) {
-                        this._onModuleComplete(inverseDependency);
-                    }
-                }
-            }
-            let inversePluginDeps = this._inversePluginDependencies2.get(module.id);
-            if (inversePluginDeps) {
-                // This module is used as a plugin at least once
-                // Fetch and clear these inverse plugin dependencies
-                this._inversePluginDependencies2.delete(module.id);
-                // Resolve plugin dependencies one at a time
-                for (let i = 0, len = inversePluginDeps.length; i < len; i++) {
-                    this._loadPluginDependency(module.exports, inversePluginDeps[i]);
-                }
-            }
-        }
-    }
-    AMDLoader.ModuleManager = ModuleManager;
+	// ------------------------------------------------------------------------
+	// ModuleIdResolver
+	class ModuleIdResolver {
+		constructor(fromModuleId) {
+			let lastSlash = fromModuleId.lastIndexOf('/');
+			if (lastSlash !== -1) {
+				this.fromModulePath = fromModuleId.substr(0, lastSlash + 1);
+			}
+			else {
+				this.fromModulePath = '';
+			}
+		}
+		/**
+		 * Normalize 'a/../name' to 'name', etc.
+		 */
+		static _normalizeModuleId(moduleId) {
+			let r = moduleId, pattern;
+			// replace /./ => /
+			pattern = /\/\.\//;
+			while (pattern.test(r)) {
+				r = r.replace(pattern, '/');
+			}
+			// replace ^./ => nothing
+			r = r.replace(/^\.\//g, '');
+			// replace /aa/../ => / (BUT IGNORE /../../)
+			pattern = /\/(([^\/])|([^\/][^\/\.])|([^\/\.][^\/])|([^\/][^\/][^\/]+))\/\.\.\//;
+			while (pattern.test(r)) {
+				r = r.replace(pattern, '/');
+			}
+			// replace ^aa/../ => nothing (BUT IGNORE ../../)
+			r = r.replace(/^(([^\/])|([^\/][^\/\.])|([^\/\.][^\/])|([^\/][^\/][^\/]+))\/\.\.\//, '');
+			return r;
+		}
+		/**
+		 * Resolve relative module ids
+		 */
+		resolveModule(moduleId) {
+			let result = moduleId;
+			if (!AMDLoader.Utilities.isAbsolutePath(result)) {
+				if (AMDLoader.Utilities.startsWith(result, './') || AMDLoader.Utilities.startsWith(result, '../')) {
+					result = ModuleIdResolver._normalizeModuleId(this.fromModulePath + result);
+				}
+			}
+			return result;
+		}
+	}
+	ModuleIdResolver.ROOT = new ModuleIdResolver('');
+	AMDLoader.ModuleIdResolver = ModuleIdResolver;
+	// ------------------------------------------------------------------------
+	// Module
+	class Module {
+		constructor(id, strId, dependencies, callback, errorback, moduleIdResolver) {
+			this.id = id;
+			this.strId = strId;
+			this.dependencies = dependencies;
+			this._callback = callback;
+			this._errorback = errorback;
+			this.moduleIdResolver = moduleIdResolver;
+			this.exports = {};
+			this.error = null;
+			this.exportsPassedIn = false;
+			this.unresolvedDependenciesCount = this.dependencies.length;
+			this._isComplete = false;
+		}
+		static _safeInvokeFunction(callback, args) {
+			try {
+				return {
+					returnedValue: callback.apply(AMDLoader.global, args),
+					producedError: null
+				};
+			}
+			catch (e) {
+				return {
+					returnedValue: null,
+					producedError: e
+				};
+			}
+		}
+		static _invokeFactory(config, strModuleId, callback, dependenciesValues) {
+			if (!config.shouldInvokeFactory(strModuleId)) {
+				return {
+					returnedValue: null,
+					producedError: null
+				};
+			}
+			if (config.shouldCatchError()) {
+				return this._safeInvokeFunction(callback, dependenciesValues);
+			}
+			return {
+				returnedValue: callback.apply(AMDLoader.global, dependenciesValues),
+				producedError: null
+			};
+		}
+		complete(recorder, config, dependenciesValues, inversedependenciesProvider) {
+			this._isComplete = true;
+			let producedError = null;
+			if (this._callback) {
+				if (typeof this._callback === 'function') {
+					recorder.record(21 /* LoaderEventType.BeginInvokeFactory */, this.strId);
+					let r = Module._invokeFactory(config, this.strId, this._callback, dependenciesValues);
+					producedError = r.producedError;
+					recorder.record(22 /* LoaderEventType.EndInvokeFactory */, this.strId);
+					if (!producedError && typeof r.returnedValue !== 'undefined' && (!this.exportsPassedIn || AMDLoader.Utilities.isEmpty(this.exports))) {
+						this.exports = r.returnedValue;
+					}
+				}
+				else {
+					this.exports = this._callback;
+				}
+			}
+			if (producedError) {
+				let err = AMDLoader.ensureError(producedError);
+				err.phase = 'factory';
+				err.moduleId = this.strId;
+				err.neededBy = inversedependenciesProvider(this.id);
+				this.error = err;
+				config.onError(err);
+			}
+			this.dependencies = null;
+			this._callback = null;
+			this._errorback = null;
+			this.moduleIdResolver = null;
+		}
+		/**
+		 * One of the direct dependencies or a transitive dependency has failed to load.
+		 */
+		onDependencyError(err) {
+			this._isComplete = true;
+			this.error = err;
+			if (this._errorback) {
+				this._errorback(err);
+				return true;
+			}
+			return false;
+		}
+		/**
+		 * Is the current module complete?
+		 */
+		isComplete() {
+			return this._isComplete;
+		}
+	}
+	AMDLoader.Module = Module;
+	class ModuleIdProvider {
+		constructor() {
+			this._nextId = 0;
+			this._strModuleIdToIntModuleId = new Map();
+			this._intModuleIdToStrModuleId = [];
+			// Ensure values 0, 1, 2 are assigned accordingly with ModuleId
+			this.getModuleId('exports');
+			this.getModuleId('module');
+			this.getModuleId('require');
+		}
+		getMaxModuleId() {
+			return this._nextId;
+		}
+		getModuleId(strModuleId) {
+			let id = this._strModuleIdToIntModuleId.get(strModuleId);
+			if (typeof id === 'undefined') {
+				id = this._nextId++;
+				this._strModuleIdToIntModuleId.set(strModuleId, id);
+				this._intModuleIdToStrModuleId[id] = strModuleId;
+			}
+			return id;
+		}
+		getStrModuleId(moduleId) {
+			return this._intModuleIdToStrModuleId[moduleId];
+		}
+	}
+	class RegularDependency {
+		constructor(id) {
+			this.id = id;
+		}
+	}
+	RegularDependency.EXPORTS = new RegularDependency(0 /* ModuleId.EXPORTS */);
+	RegularDependency.MODULE = new RegularDependency(1 /* ModuleId.MODULE */);
+	RegularDependency.REQUIRE = new RegularDependency(2 /* ModuleId.REQUIRE */);
+	AMDLoader.RegularDependency = RegularDependency;
+	class PluginDependency {
+		constructor(id, pluginId, pluginParam) {
+			this.id = id;
+			this.pluginId = pluginId;
+			this.pluginParam = pluginParam;
+		}
+	}
+	AMDLoader.PluginDependency = PluginDependency;
+	class ModuleManager {
+		constructor(env, scriptLoader, defineFunc, requireFunc, loaderAvailableTimestamp = 0) {
+			this._env = env;
+			this._scriptLoader = scriptLoader;
+			this._loaderAvailableTimestamp = loaderAvailableTimestamp;
+			this._defineFunc = defineFunc;
+			this._requireFunc = requireFunc;
+			this._moduleIdProvider = new ModuleIdProvider();
+			this._config = new AMDLoader.Configuration(this._env);
+			this._hasDependencyCycle = false;
+			this._modules2 = [];
+			this._knownModules2 = [];
+			this._inverseDependencies2 = [];
+			this._inversePluginDependencies2 = new Map();
+			this._currentAnonymousDefineCall = null;
+			this._recorder = null;
+			this._buildInfoPath = [];
+			this._buildInfoDefineStack = [];
+			this._buildInfoDependencies = [];
+		}
+		reset() {
+			return new ModuleManager(this._env, this._scriptLoader, this._defineFunc, this._requireFunc, this._loaderAvailableTimestamp);
+		}
+		getGlobalAMDDefineFunc() {
+			return this._defineFunc;
+		}
+		getGlobalAMDRequireFunc() {
+			return this._requireFunc;
+		}
+		static _findRelevantLocationInStack(needle, stack) {
+			let normalize = (str) => str.replace(/\\/g, '/');
+			let normalizedPath = normalize(needle);
+			let stackPieces = stack.split(/\n/);
+			for (let i = 0; i < stackPieces.length; i++) {
+				let m = stackPieces[i].match(/(.*):(\d+):(\d+)\)?$/);
+				if (m) {
+					let stackPath = m[1];
+					let stackLine = m[2];
+					let stackColumn = m[3];
+					let trimPathOffset = Math.max(stackPath.lastIndexOf(' ') + 1, stackPath.lastIndexOf('(') + 1);
+					stackPath = stackPath.substr(trimPathOffset);
+					stackPath = normalize(stackPath);
+					if (stackPath === normalizedPath) {
+						let r = {
+							line: parseInt(stackLine, 10),
+							col: parseInt(stackColumn, 10)
+						};
+						if (r.line === 1) {
+							r.col -= '(function (require, define, __filename, __dirname) { '.length;
+						}
+						return r;
+					}
+				}
+			}
+			throw new Error('Could not correlate define call site for needle ' + needle);
+		}
+		getBuildInfo() {
+			if (!this._config.isBuild()) {
+				return null;
+			}
+			let result = [], resultLen = 0;
+			for (let i = 0, len = this._modules2.length; i < len; i++) {
+				let m = this._modules2[i];
+				if (!m) {
+					continue;
+				}
+				let location = this._buildInfoPath[m.id] || null;
+				let defineStack = this._buildInfoDefineStack[m.id] || null;
+				let dependencies = this._buildInfoDependencies[m.id];
+				result[resultLen++] = {
+					id: m.strId,
+					path: location,
+					defineLocation: (location && defineStack ? ModuleManager._findRelevantLocationInStack(location, defineStack) : null),
+					dependencies: dependencies,
+					shim: null,
+					exports: m.exports
+				};
+			}
+			return result;
+		}
+		getRecorder() {
+			if (!this._recorder) {
+				if (this._config.shouldRecordStats()) {
+					this._recorder = new AMDLoader.LoaderEventRecorder(this._loaderAvailableTimestamp);
+				}
+				else {
+					this._recorder = AMDLoader.NullLoaderEventRecorder.INSTANCE;
+				}
+			}
+			return this._recorder;
+		}
+		getLoaderEvents() {
+			return this.getRecorder().getEvents();
+		}
+		/**
+		 * Defines an anonymous module (without an id). Its name will be resolved as we receive a callback from the scriptLoader.
+		 * @param dependencies @see defineModule
+		 * @param callback @see defineModule
+		 */
+		enqueueDefineAnonymousModule(dependencies, callback) {
+			if (this._currentAnonymousDefineCall !== null) {
+				throw new Error('Can only have one anonymous define call per script file');
+			}
+			let stack = null;
+			if (this._config.isBuild()) {
+				stack = new Error('StackLocation').stack || null;
+			}
+			this._currentAnonymousDefineCall = {
+				stack: stack,
+				dependencies: dependencies,
+				callback: callback
+			};
+		}
+		/**
+		 * Creates a module and stores it in _modules. The manager will immediately begin resolving its dependencies.
+		 * @param strModuleId An unique and absolute id of the module. This must not collide with another module's id
+		 * @param dependencies An array with the dependencies of the module. Special keys are: "require", "exports" and "module"
+		 * @param callback if callback is a function, it will be called with the resolved dependencies. if callback is an object, it will be considered as the exports of the module.
+		 */
+		defineModule(strModuleId, dependencies, callback, errorback, stack, moduleIdResolver = new ModuleIdResolver(strModuleId)) {
+			let moduleId = this._moduleIdProvider.getModuleId(strModuleId);
+			if (this._modules2[moduleId]) {
+				if (!this._config.isDuplicateMessageIgnoredFor(strModuleId)) {
+					console.warn('Duplicate definition of module \'' + strModuleId + '\'');
+				}
+				// Super important! Completely ignore duplicate module definition
+				return;
+			}
+			let m = new Module(moduleId, strModuleId, this._normalizeDependencies(dependencies, moduleIdResolver), callback, errorback, moduleIdResolver);
+			this._modules2[moduleId] = m;
+			if (this._config.isBuild()) {
+				this._buildInfoDefineStack[moduleId] = stack;
+				this._buildInfoDependencies[moduleId] = (m.dependencies || []).map(dep => this._moduleIdProvider.getStrModuleId(dep.id));
+			}
+			// Resolving of dependencies is immediate (not in a timeout). If there's a need to support a packer that concatenates in an
+			// unordered manner, in order to finish processing the file, execute the following method in a timeout
+			this._resolve(m);
+		}
+		_normalizeDependency(dependency, moduleIdResolver) {
+			if (dependency === 'exports') {
+				return RegularDependency.EXPORTS;
+			}
+			if (dependency === 'module') {
+				return RegularDependency.MODULE;
+			}
+			if (dependency === 'require') {
+				return RegularDependency.REQUIRE;
+			}
+			// Normalize dependency and then request it from the manager
+			let bangIndex = dependency.indexOf('!');
+			if (bangIndex >= 0) {
+				let strPluginId = moduleIdResolver.resolveModule(dependency.substr(0, bangIndex));
+				let pluginParam = moduleIdResolver.resolveModule(dependency.substr(bangIndex + 1));
+				let dependencyId = this._moduleIdProvider.getModuleId(strPluginId + '!' + pluginParam);
+				let pluginId = this._moduleIdProvider.getModuleId(strPluginId);
+				return new PluginDependency(dependencyId, pluginId, pluginParam);
+			}
+			return new RegularDependency(this._moduleIdProvider.getModuleId(moduleIdResolver.resolveModule(dependency)));
+		}
+		_normalizeDependencies(dependencies, moduleIdResolver) {
+			let result = [], resultLen = 0;
+			for (let i = 0, len = dependencies.length; i < len; i++) {
+				result[resultLen++] = this._normalizeDependency(dependencies[i], moduleIdResolver);
+			}
+			return result;
+		}
+		_relativeRequire(moduleIdResolver, dependencies, callback, errorback) {
+			if (typeof dependencies === 'string') {
+				return this.synchronousRequire(dependencies, moduleIdResolver);
+			}
+			this.defineModule(AMDLoader.Utilities.generateAnonymousModule(), dependencies, callback, errorback, null, moduleIdResolver);
+		}
+		/**
+		 * Require synchronously a module by its absolute id. If the module is not loaded, an exception will be thrown.
+		 * @param id The unique and absolute id of the required module
+		 * @return The exports of module 'id'
+		 */
+		synchronousRequire(_strModuleId, moduleIdResolver = new ModuleIdResolver(_strModuleId)) {
+			let dependency = this._normalizeDependency(_strModuleId, moduleIdResolver);
+			let m = this._modules2[dependency.id];
+			if (!m) {
+				throw new Error('Check dependency list! Synchronous require cannot resolve module \'' + _strModuleId + '\'. This is the first mention of this module!');
+			}
+			if (!m.isComplete()) {
+				throw new Error('Check dependency list! Synchronous require cannot resolve module \'' + _strModuleId + '\'. This module has not been resolved completely yet.');
+			}
+			if (m.error) {
+				throw m.error;
+			}
+			return m.exports;
+		}
+		configure(params, shouldOverwrite) {
+			let oldShouldRecordStats = this._config.shouldRecordStats();
+			if (shouldOverwrite) {
+				this._config = new AMDLoader.Configuration(this._env, params);
+			}
+			else {
+				this._config = this._config.cloneAndMerge(params);
+			}
+			if (this._config.shouldRecordStats() && !oldShouldRecordStats) {
+				this._recorder = null;
+			}
+		}
+		getConfig() {
+			return this._config;
+		}
+		/**
+		 * Callback from the scriptLoader when a module has been loaded.
+		 * This means its code is available and has been executed.
+		 */
+		_onLoad(moduleId) {
+			if (this._currentAnonymousDefineCall !== null) {
+				let defineCall = this._currentAnonymousDefineCall;
+				this._currentAnonymousDefineCall = null;
+				// Hit an anonymous define call
+				this.defineModule(this._moduleIdProvider.getStrModuleId(moduleId), defineCall.dependencies, defineCall.callback, null, defineCall.stack);
+			}
+		}
+		_createLoadError(moduleId, _err) {
+			let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
+			let neededBy = (this._inverseDependencies2[moduleId] || []).map((intModuleId) => this._moduleIdProvider.getStrModuleId(intModuleId));
+			const err = AMDLoader.ensureError(_err);
+			err.phase = 'loading';
+			err.moduleId = strModuleId;
+			err.neededBy = neededBy;
+			return err;
+		}
+		/**
+		 * Callback from the scriptLoader when a module hasn't been loaded.
+		 * This means that the script was not found (e.g. 404) or there was an error in the script.
+		 */
+		_onLoadError(moduleId, err) {
+			const error = this._createLoadError(moduleId, err);
+			if (!this._modules2[moduleId]) {
+				this._modules2[moduleId] = new Module(moduleId, this._moduleIdProvider.getStrModuleId(moduleId), [], () => { }, null, null);
+			}
+			// Find any 'local' error handlers, walk the entire chain of inverse dependencies if necessary.
+			let seenModuleId = [];
+			for (let i = 0, len = this._moduleIdProvider.getMaxModuleId(); i < len; i++) {
+				seenModuleId[i] = false;
+			}
+			let someoneNotified = false;
+			let queue = [];
+			queue.push(moduleId);
+			seenModuleId[moduleId] = true;
+			while (queue.length > 0) {
+				let queueElement = queue.shift();
+				let m = this._modules2[queueElement];
+				if (m) {
+					someoneNotified = m.onDependencyError(error) || someoneNotified;
+				}
+				let inverseDeps = this._inverseDependencies2[queueElement];
+				if (inverseDeps) {
+					for (let i = 0, len = inverseDeps.length; i < len; i++) {
+						let inverseDep = inverseDeps[i];
+						if (!seenModuleId[inverseDep]) {
+							queue.push(inverseDep);
+							seenModuleId[inverseDep] = true;
+						}
+					}
+				}
+			}
+			if (!someoneNotified) {
+				this._config.onError(error);
+			}
+		}
+		/**
+		 * Walks (recursively) the dependencies of 'from' in search of 'to'.
+		 * Returns true if there is such a path or false otherwise.
+		 * @param from Module id to start at
+		 * @param to Module id to look for
+		 */
+		_hasDependencyPath(fromId, toId) {
+			let from = this._modules2[fromId];
+			if (!from) {
+				return false;
+			}
+			let inQueue = [];
+			for (let i = 0, len = this._moduleIdProvider.getMaxModuleId(); i < len; i++) {
+				inQueue[i] = false;
+			}
+			let queue = [];
+			// Insert 'from' in queue
+			queue.push(from);
+			inQueue[fromId] = true;
+			while (queue.length > 0) {
+				// Pop first inserted element of queue
+				let element = queue.shift();
+				let dependencies = element.dependencies;
+				if (dependencies) {
+					// Walk the element's dependencies
+					for (let i = 0, len = dependencies.length; i < len; i++) {
+						let dependency = dependencies[i];
+						if (dependency.id === toId) {
+							// There is a path to 'to'
+							return true;
+						}
+						let dependencyModule = this._modules2[dependency.id];
+						if (dependencyModule && !inQueue[dependency.id]) {
+							// Insert 'dependency' in queue
+							inQueue[dependency.id] = true;
+							queue.push(dependencyModule);
+						}
+					}
+				}
+			}
+			// There is no path to 'to'
+			return false;
+		}
+		/**
+		 * Walks (recursively) the dependencies of 'from' in search of 'to'.
+		 * Returns cycle as array.
+		 * @param from Module id to start at
+		 * @param to Module id to look for
+		 */
+		_findCyclePath(fromId, toId, depth) {
+			if (fromId === toId || depth === 50) {
+				return [fromId];
+			}
+			let from = this._modules2[fromId];
+			if (!from) {
+				return null;
+			}
+			// Walk the element's dependencies
+			let dependencies = from.dependencies;
+			if (dependencies) {
+				for (let i = 0, len = dependencies.length; i < len; i++) {
+					let path = this._findCyclePath(dependencies[i].id, toId, depth + 1);
+					if (path !== null) {
+						path.push(fromId);
+						return path;
+					}
+				}
+			}
+			return null;
+		}
+		/**
+		 * Create the local 'require' that is passed into modules
+		 */
+		_createRequire(moduleIdResolver) {
+			let result = ((dependencies, callback, errorback) => {
+				return this._relativeRequire(moduleIdResolver, dependencies, callback, errorback);
+			});
+			result.toUrl = (id) => {
+				return this._config.requireToUrl(moduleIdResolver.resolveModule(id));
+			};
+			result.getStats = () => {
+				return this.getLoaderEvents();
+			};
+			result.hasDependencyCycle = () => {
+				return this._hasDependencyCycle;
+			};
+			result.config = (params, shouldOverwrite = false) => {
+				this.configure(params, shouldOverwrite);
+			};
+			result.__$__nodeRequire = AMDLoader.global.nodeRequire;
+			return result;
+		}
+		_loadModule(moduleId) {
+			if (this._modules2[moduleId] || this._knownModules2[moduleId]) {
+				// known module
+				return;
+			}
+			this._knownModules2[moduleId] = true;
+			let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
+			let paths = this._config.moduleIdToPaths(strModuleId);
+			let scopedPackageRegex = /^@[^\/]+\/[^\/]+$/; // matches @scope/package-name
+			if (this._env.isNode && (strModuleId.indexOf('/') === -1 || scopedPackageRegex.test(strModuleId))) {
+				paths.push('node|' + strModuleId);
+			}
+			let lastPathIndex = -1;
+			let loadNextPath = (err) => {
+				lastPathIndex++;
+				if (lastPathIndex >= paths.length) {
+					// No more paths to try
+					this._onLoadError(moduleId, err);
+				}
+				else {
+					let currentPath = paths[lastPathIndex];
+					let recorder = this.getRecorder();
+					if (this._config.isBuild() && currentPath === 'empty:') {
+						this._buildInfoPath[moduleId] = currentPath;
+						this.defineModule(this._moduleIdProvider.getStrModuleId(moduleId), [], null, null, null);
+						this._onLoad(moduleId);
+						return;
+					}
+					recorder.record(10 /* LoaderEventType.BeginLoadingScript */, currentPath);
+					this._scriptLoader.load(this, currentPath, () => {
+						if (this._config.isBuild()) {
+							this._buildInfoPath[moduleId] = currentPath;
+						}
+						recorder.record(11 /* LoaderEventType.EndLoadingScriptOK */, currentPath);
+						this._onLoad(moduleId);
+					}, (err) => {
+						recorder.record(12 /* LoaderEventType.EndLoadingScriptError */, currentPath);
+						loadNextPath(err);
+					});
+				}
+			};
+			loadNextPath(null);
+		}
+		/**
+		 * Resolve a plugin dependency with the plugin loaded & complete
+		 * @param module The module that has this dependency
+		 * @param pluginDependency The semi-normalized dependency that appears in the module. e.g. 'vs/css!./mycssfile'. Only the plugin part (before !) is normalized
+		 * @param plugin The plugin (what the plugin exports)
+		 */
+		_loadPluginDependency(plugin, pluginDependency) {
+			if (this._modules2[pluginDependency.id] || this._knownModules2[pluginDependency.id]) {
+				// known module
+				return;
+			}
+			this._knownModules2[pluginDependency.id] = true;
+			// Delegate the loading of the resource to the plugin
+			let load = ((value) => {
+				this.defineModule(this._moduleIdProvider.getStrModuleId(pluginDependency.id), [], value, null, null);
+			});
+			load.error = (err) => {
+				this._config.onError(this._createLoadError(pluginDependency.id, err));
+			};
+			plugin.load(pluginDependency.pluginParam, this._createRequire(ModuleIdResolver.ROOT), load, this._config.getOptionsLiteral());
+		}
+		/**
+		 * Examine the dependencies of module 'module' and resolve them as needed.
+		 */
+		_resolve(module) {
+			let dependencies = module.dependencies;
+			if (dependencies) {
+				for (let i = 0, len = dependencies.length; i < len; i++) {
+					let dependency = dependencies[i];
+					if (dependency === RegularDependency.EXPORTS) {
+						module.exportsPassedIn = true;
+						module.unresolvedDependenciesCount--;
+						continue;
+					}
+					if (dependency === RegularDependency.MODULE) {
+						module.unresolvedDependenciesCount--;
+						continue;
+					}
+					if (dependency === RegularDependency.REQUIRE) {
+						module.unresolvedDependenciesCount--;
+						continue;
+					}
+					let dependencyModule = this._modules2[dependency.id];
+					if (dependencyModule && dependencyModule.isComplete()) {
+						if (dependencyModule.error) {
+							module.onDependencyError(dependencyModule.error);
+							return;
+						}
+						module.unresolvedDependenciesCount--;
+						continue;
+					}
+					if (this._hasDependencyPath(dependency.id, module.id)) {
+						this._hasDependencyCycle = true;
+						console.warn('There is a dependency cycle between \'' + this._moduleIdProvider.getStrModuleId(dependency.id) + '\' and \'' + this._moduleIdProvider.getStrModuleId(module.id) + '\'. The cyclic path follows:');
+						let cyclePath = this._findCyclePath(dependency.id, module.id, 0) || [];
+						cyclePath.reverse();
+						cyclePath.push(dependency.id);
+						console.warn(cyclePath.map(id => this._moduleIdProvider.getStrModuleId(id)).join(' => \n'));
+						// Break the cycle
+						module.unresolvedDependenciesCount--;
+						continue;
+					}
+					// record inverse dependency
+					this._inverseDependencies2[dependency.id] = this._inverseDependencies2[dependency.id] || [];
+					this._inverseDependencies2[dependency.id].push(module.id);
+					if (dependency instanceof PluginDependency) {
+						let plugin = this._modules2[dependency.pluginId];
+						if (plugin && plugin.isComplete()) {
+							this._loadPluginDependency(plugin.exports, dependency);
+							continue;
+						}
+						// Record dependency for when the plugin gets loaded
+						let inversePluginDeps = this._inversePluginDependencies2.get(dependency.pluginId);
+						if (!inversePluginDeps) {
+							inversePluginDeps = [];
+							this._inversePluginDependencies2.set(dependency.pluginId, inversePluginDeps);
+						}
+						inversePluginDeps.push(dependency);
+						this._loadModule(dependency.pluginId);
+						continue;
+					}
+					this._loadModule(dependency.id);
+				}
+			}
+			if (module.unresolvedDependenciesCount === 0) {
+				this._onModuleComplete(module);
+			}
+		}
+		_onModuleComplete(module) {
+			let recorder = this.getRecorder();
+			if (module.isComplete()) {
+				// already done
+				return;
+			}
+			let dependencies = module.dependencies;
+			let dependenciesValues = [];
+			if (dependencies) {
+				for (let i = 0, len = dependencies.length; i < len; i++) {
+					let dependency = dependencies[i];
+					if (dependency === RegularDependency.EXPORTS) {
+						dependenciesValues[i] = module.exports;
+						continue;
+					}
+					if (dependency === RegularDependency.MODULE) {
+						dependenciesValues[i] = {
+							id: module.strId,
+							config: () => {
+								return this._config.getConfigForModule(module.strId);
+							}
+						};
+						continue;
+					}
+					if (dependency === RegularDependency.REQUIRE) {
+						dependenciesValues[i] = this._createRequire(module.moduleIdResolver);
+						continue;
+					}
+					let dependencyModule = this._modules2[dependency.id];
+					if (dependencyModule) {
+						dependenciesValues[i] = dependencyModule.exports;
+						continue;
+					}
+					dependenciesValues[i] = null;
+				}
+			}
+			const inversedependenciesProvider = (moduleId) => {
+				return (this._inverseDependencies2[moduleId] || []).map((intModuleId) => this._moduleIdProvider.getStrModuleId(intModuleId));
+			};
+			module.complete(recorder, this._config, dependenciesValues, inversedependenciesProvider);
+			// Fetch and clear inverse dependencies
+			let inverseDeps = this._inverseDependencies2[module.id];
+			this._inverseDependencies2[module.id] = null;
+			if (inverseDeps) {
+				// Resolve one inverse dependency at a time, always
+				// on the lookout for a completed module.
+				for (let i = 0, len = inverseDeps.length; i < len; i++) {
+					let inverseDependencyId = inverseDeps[i];
+					let inverseDependency = this._modules2[inverseDependencyId];
+					inverseDependency.unresolvedDependenciesCount--;
+					if (inverseDependency.unresolvedDependenciesCount === 0) {
+						this._onModuleComplete(inverseDependency);
+					}
+				}
+			}
+			let inversePluginDeps = this._inversePluginDependencies2.get(module.id);
+			if (inversePluginDeps) {
+				// This module is used as a plugin at least once
+				// Fetch and clear these inverse plugin dependencies
+				this._inversePluginDependencies2.delete(module.id);
+				// Resolve plugin dependencies one at a time
+				for (let i = 0, len = inversePluginDeps.length; i < len; i++) {
+					this._loadPluginDependency(module.exports, inversePluginDeps[i]);
+				}
+			}
+		}
+	}
+	AMDLoader.ModuleManager = ModuleManager;
 })(AMDLoader || (AMDLoader = {}));
 var define;
 var AMDLoader;
 (function (AMDLoader) {
-    const env = new AMDLoader.Environment();
-    let moduleManager = null;
-    const DefineFunc = function (id, dependencies, callback) {
-        if (typeof id !== 'string') {
-            callback = dependencies;
-            dependencies = id;
-            id = null;
-        }
-        if (typeof dependencies !== 'object' || !Array.isArray(dependencies)) {
-            callback = dependencies;
-            dependencies = null;
-        }
-        if (!dependencies) {
-            dependencies = ['require', 'exports', 'module'];
-        }
-        if (id) {
-            moduleManager.defineModule(id, dependencies, callback, null, null);
-        }
-        else {
-            moduleManager.enqueueDefineAnonymousModule(dependencies, callback);
-        }
-    };
-    DefineFunc.amd = {
-        jQuery: true
-    };
-    const _requireFunc_config = function (params, shouldOverwrite = false) {
-        moduleManager.configure(params, shouldOverwrite);
-    };
-    const RequireFunc = function () {
-        if (arguments.length === 1) {
-            if ((arguments[0] instanceof Object) && !Array.isArray(arguments[0])) {
-                _requireFunc_config(arguments[0]);
-                return;
-            }
-            if (typeof arguments[0] === 'string') {
-                return moduleManager.synchronousRequire(arguments[0]);
-            }
-        }
-        if (arguments.length === 2 || arguments.length === 3) {
-            if (Array.isArray(arguments[0])) {
-                moduleManager.defineModule(AMDLoader.Utilities.generateAnonymousModule(), arguments[0], arguments[1], arguments[2], null);
-                return;
-            }
-        }
-        throw new Error('Unrecognized require call');
-    };
-    RequireFunc.config = _requireFunc_config;
-    RequireFunc.getConfig = function () {
-        return moduleManager.getConfig().getOptionsLiteral();
-    };
-    RequireFunc.reset = function () {
-        moduleManager = moduleManager.reset();
-    };
-    RequireFunc.getBuildInfo = function () {
-        return moduleManager.getBuildInfo();
-    };
-    RequireFunc.getStats = function () {
-        return moduleManager.getLoaderEvents();
-    };
-    RequireFunc.define = DefineFunc;
-    function init() {
-        if (typeof AMDLoader.global.require !== 'undefined' || typeof require !== 'undefined') {
-            const _nodeRequire = (AMDLoader.global.require || require);
-            if (typeof _nodeRequire === 'function' && typeof _nodeRequire.resolve === 'function') {
-                // re-expose node's require function
-                const nodeRequire = AMDLoader.ensureRecordedNodeRequire(moduleManager.getRecorder(), _nodeRequire);
-                AMDLoader.global.nodeRequire = nodeRequire;
-                RequireFunc.nodeRequire = nodeRequire;
-                RequireFunc.__$__nodeRequire = nodeRequire;
-            }
-        }
-        if (env.isNode && !env.isElectronRenderer && !env.isElectronNodeIntegrationWebWorker) {
-            module.exports = RequireFunc;
-        }
-        else {
-            if (!env.isElectronRenderer) {
-                AMDLoader.global.define = DefineFunc;
-            }
-            AMDLoader.global.require = RequireFunc;
-        }
-    }
-    AMDLoader.init = init;
-    if (typeof AMDLoader.global.define !== 'function' || !AMDLoader.global.define.amd) {
-        moduleManager = new AMDLoader.ModuleManager(env, AMDLoader.createScriptLoader(env), DefineFunc, RequireFunc, AMDLoader.Utilities.getHighPerformanceTimestamp());
-        // The global variable require can configure the loader
-        if (typeof AMDLoader.global.require !== 'undefined' && typeof AMDLoader.global.require !== 'function') {
-            RequireFunc.config(AMDLoader.global.require);
-        }
-        // This define is for the local closure defined in node in the case that the loader is concatenated
-        define = function () {
-            return DefineFunc.apply(null, arguments);
-        };
-        define.amd = DefineFunc.amd;
-        if (typeof doNotInitLoader === 'undefined') {
-            init();
-        }
-    }
+	const env = new AMDLoader.Environment();
+	let moduleManager = null;
+	const DefineFunc = function (id, dependencies, callback) {
+		if (typeof id !== 'string') {
+			callback = dependencies;
+			dependencies = id;
+			id = null;
+		}
+		if (typeof dependencies !== 'object' || !Array.isArray(dependencies)) {
+			callback = dependencies;
+			dependencies = null;
+		}
+		if (!dependencies) {
+			dependencies = ['require', 'exports', 'module'];
+		}
+		if (id) {
+			moduleManager.defineModule(id, dependencies, callback, null, null);
+		}
+		else {
+			moduleManager.enqueueDefineAnonymousModule(dependencies, callback);
+		}
+	};
+	DefineFunc.amd = {
+		jQuery: true
+	};
+	const _requireFunc_config = function (params, shouldOverwrite = false) {
+		moduleManager.configure(params, shouldOverwrite);
+	};
+	const RequireFunc = function () {
+		if (arguments.length === 1) {
+			if ((arguments[0] instanceof Object) && !Array.isArray(arguments[0])) {
+				_requireFunc_config(arguments[0]);
+				return;
+			}
+			if (typeof arguments[0] === 'string') {
+				return moduleManager.synchronousRequire(arguments[0]);
+			}
+		}
+		if (arguments.length === 2 || arguments.length === 3) {
+			if (Array.isArray(arguments[0])) {
+				moduleManager.defineModule(AMDLoader.Utilities.generateAnonymousModule(), arguments[0], arguments[1], arguments[2], null);
+				return;
+			}
+		}
+		throw new Error('Unrecognized require call');
+	};
+	RequireFunc.config = _requireFunc_config;
+	RequireFunc.getConfig = function () {
+		return moduleManager.getConfig().getOptionsLiteral();
+	};
+	RequireFunc.reset = function () {
+		moduleManager = moduleManager.reset();
+	};
+	RequireFunc.getBuildInfo = function () {
+		return moduleManager.getBuildInfo();
+	};
+	RequireFunc.getStats = function () {
+		return moduleManager.getLoaderEvents();
+	};
+	RequireFunc.define = DefineFunc;
+	function init() {
+		if (typeof AMDLoader.global.require !== 'undefined' || typeof require !== 'undefined') {
+			const _nodeRequire = (AMDLoader.global.require || require);
+			if (typeof _nodeRequire === 'function' && typeof _nodeRequire.resolve === 'function') {
+				// re-expose node's require function
+				const nodeRequire = AMDLoader.ensureRecordedNodeRequire(moduleManager.getRecorder(), _nodeRequire);
+				AMDLoader.global.nodeRequire = nodeRequire;
+				RequireFunc.nodeRequire = nodeRequire;
+				RequireFunc.__$__nodeRequire = nodeRequire;
+			}
+		}
+		if (env.isNode && !env.isElectronRenderer && !env.isElectronNodeIntegrationWebWorker) {
+			module.exports = RequireFunc;
+		}
+		else {
+			if (!env.isElectronRenderer) {
+				AMDLoader.global.define = DefineFunc;
+			}
+			AMDLoader.global.require = RequireFunc;
+		}
+	}
+	AMDLoader.init = init;
+	if (typeof AMDLoader.global.define !== 'function' || !AMDLoader.global.define.amd) {
+		moduleManager = new AMDLoader.ModuleManager(env, AMDLoader.createScriptLoader(env), DefineFunc, RequireFunc, AMDLoader.Utilities.getHighPerformanceTimestamp());
+		// The global variable require can configure the loader
+		if (typeof AMDLoader.global.require !== 'undefined' && typeof AMDLoader.global.require !== 'function') {
+			RequireFunc.config(AMDLoader.global.require);
+		}
+		// This define is for the local closure defined in node in the case that the loader is concatenated
+		define = function () {
+			return DefineFunc.apply(null, arguments);
+		};
+		define.amd = DefineFunc.amd;
+		if (typeof doNotInitLoader === 'undefined') {
+			init();
+		}
+	}
 })(AMDLoader || (AMDLoader = {}));
 
 /*---------------------------------------------------------------------------------------------
@@ -1916,7 +1918,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-define(__m[25/*vs/nls*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[15/*vs/nls*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.load = exports.create = exports.setPseudoTranslation = exports.getConfiguredDefaultLocale = exports.localize = void 0;
@@ -1981,22 +1983,32 @@ define(__m[25/*vs/nls*/], __M([0/*require*/,1/*exports*/]), function (require, e
             return _format(scope[idx], restArgs);
         };
     }
+    /**
+     * @skipMangle
+     */
     function localize(data, message, ...args) {
         return _format(message, args);
     }
     exports.localize = localize;
+    /**
+     * @skipMangle
+     */
     function getConfiguredDefaultLocale(_) {
         // This returns undefined because this implementation isn't used and is overwritten by the loader
         // when loaded.
         return undefined;
     }
     exports.getConfiguredDefaultLocale = getConfiguredDefaultLocale;
+    /**
+     * @skipMangle
+     */
     function setPseudoTranslation(value) {
         isPseudo = value;
     }
     exports.setPseudoTranslation = setPseudoTranslation;
     /**
      * Invoked in a built product at run-time
+     * @skipMangle
      */
     function create(key, data) {
         var _a;
@@ -2008,11 +2020,13 @@ define(__m[25/*vs/nls*/], __M([0/*require*/,1/*exports*/]), function (require, e
     exports.create = create;
     /**
      * Invoked by the loader at run-time
+     * @skipMangle
      */
     function load(name, req, load, config) {
         var _a;
         const pluginConfig = (_a = config['vs/nls']) !== null && _a !== void 0 ? _a : {};
         if (!name || name.length === 0) {
+            // TODO: We need to give back the mangled names here
             return load({
                 localize: localize,
                 getConfiguredDefaultLocale: () => { var _a; return (_a = pluginConfig.availableLanguages) === null || _a === void 0 ? void 0 : _a['*']; }
@@ -2096,28 +2110,45 @@ define(__m[25/*vs/nls*/], __M([0/*require*/,1/*exports*/]), function (require, e
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 (function () {
-    var _a, _b;
-    const MonacoEnvironment = globalThis.MonacoEnvironment;
-    const monacoBaseUrl = MonacoEnvironment && MonacoEnvironment.baseUrl ? MonacoEnvironment.baseUrl : '../../../';
-    const trustedTypesPolicy = (typeof ((_a = self.trustedTypes) === null || _a === void 0 ? void 0 : _a.createPolicy) === 'function'
-        ? (_b = self.trustedTypes) === null || _b === void 0 ? void 0 : _b.createPolicy('amdLoader', {
-            createScriptURL: value => value,
-            createScript: (_, ...args) => {
-                // workaround a chrome issue not allowing to create new functions
-                // see https://github.com/w3c/webappsec-trusted-types/wiki/Trusted-Types-for-function-constructor
-                const fnArgs = args.slice(0, -1).join(',');
-                const fnBody = args.pop().toString();
-                // Do not add a new line to fnBody, as this will confuse source maps.
-                const body = `(function anonymous(${fnArgs}) { ${fnBody}\n})`;
-                return body;
+    const monacoEnvironment = globalThis.MonacoEnvironment;
+    const monacoBaseUrl = monacoEnvironment && monacoEnvironment.baseUrl ? monacoEnvironment.baseUrl : '../../../';
+    function createTrustedTypesPolicy(policyName, policyOptions) {
+        var _a;
+        if (monacoEnvironment === null || monacoEnvironment === void 0 ? void 0 : monacoEnvironment.createTrustedTypesPolicy) {
+            try {
+                return monacoEnvironment.createTrustedTypesPolicy(policyName, policyOptions);
             }
-        })
-        : undefined);
+            catch (err) {
+                console.warn(err);
+                return undefined;
+            }
+        }
+        try {
+            return (_a = self.trustedTypes) === null || _a === void 0 ? void 0 : _a.createPolicy(policyName, policyOptions);
+        }
+        catch (err) {
+            console.warn(err);
+            return undefined;
+        }
+    }
+    const trustedTypesPolicy = createTrustedTypesPolicy('amdLoader', {
+        createScriptURL: value => value,
+        createScript: (_, ...args) => {
+            // workaround a chrome issue not allowing to create new functions
+            // see https://github.com/w3c/webappsec-trusted-types/wiki/Trusted-Types-for-function-constructor
+            const fnArgs = args.slice(0, -1).join(',');
+            const fnBody = args.pop().toString();
+            // Do not add a new line to fnBody, as this will confuse source maps.
+            const body = `(function anonymous(${fnArgs}) { ${fnBody}\n})`;
+            return body;
+        }
+    });
     function canUseEval() {
         try {
             const func = (trustedTypesPolicy
-                ? globalThis.eval(trustedTypesPolicy.createScript('', 'true'))
-                : new Function('true'));
+                ? globalThis.eval(trustedTypesPolicy.createScript('', 'true')) // CodeQL [SM01632] fetch + eval is used on the web worker instead of importScripts if possible because importScripts is synchronous and we observed deadlocks on Safari
+                : new Function('true') // CodeQL [SM01632] fetch + eval is used on the web worker instead of importScripts if possible because importScripts is synchronous and we observed deadlocks on Safari
+            );
             func.call(globalThis);
             return true;
         }
@@ -2144,7 +2175,8 @@ define(__m[25/*vs/nls*/], __M([0/*require*/,1/*exports*/]), function (require, e
                     text = `${text}\n//# sourceURL=${loaderSrc}`;
                     const func = (trustedTypesPolicy
                         ? globalThis.eval(trustedTypesPolicy.createScript('', text))
-                        : new Function(text));
+                        : new Function(text) // CodeQL [SM01632] fetch + eval is used on the web worker instead of importScripts if possible because importScripts is synchronous and we observed deadlocks on Safari
+                    );
                     func.call(globalThis);
                     resolve();
                 }).then(undefined, reject);
@@ -3462,7 +3494,7 @@ define(__m[4/*vs/base/common/errors*/], __M([0/*require*/,1/*exports*/]), functi
             // Because we know for sure only buggy code throws this,
             // we definitely want to break here and fix the bug.
             // eslint-disable-next-line no-debugger
-            debugger;
+            // debugger;
         }
     }
     exports.BugIndicatingError = BugIndicatingError;
@@ -3472,7 +3504,7 @@ define(__m[4/*vs/base/common/errors*/], __M([0/*require*/,1/*exports*/]), functi
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[10/*vs/base/common/assert*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/]), function (require, exports, errors_1) {
+define(__m[9/*vs/base/common/assert*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/]), function (require, exports, errors_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.checkAdjacentItems = exports.assertFn = exports.assertNever = exports.ok = void 0;
@@ -3532,7 +3564,7 @@ define(__m[10/*vs/base/common/assert*/], __M([0/*require*/,1/*exports*/,4/*vs/ba
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[14/*vs/base/common/functional*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[16/*vs/base/common/functional*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.once = void 0;
@@ -3556,7 +3588,7 @@ define(__m[14/*vs/base/common/functional*/], __M([0/*require*/,1/*exports*/]), f
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[15/*vs/base/common/iterator*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[17/*vs/base/common/iterator*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Iterable = void 0;
@@ -3734,7 +3766,7 @@ define(__m[30/*vs/base/common/keyCodes*/], __M([0/*require*/,1/*exports*/]), fun
     }
     (function () {
         // See https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-        // See https://github.com/microsoft/node-native-keymap/blob/master/deps/chromium/keyboard_codes_win.h
+        // See https://github.com/microsoft/node-native-keymap/blob/88c0b0e5/deps/chromium/keyboard_codes_win.h
         const empty = '';
         const mappings = [
             // immutable, scanCode, scanCodeStr, keyCode, keyCodeStr, eventKeyCode, vkey, usUserSettingsLabel, generalUserSettingsLabel
@@ -3855,11 +3887,11 @@ define(__m[30/*vs/base/common/keyCodes*/], __M([0/*require*/,1/*exports*/]), fun
             [1, 114 /* ScanCode.F17 */, 'F17', 75 /* KeyCode.F17 */, 'F17', 128, 'VK_F17', empty, empty],
             [1, 115 /* ScanCode.F18 */, 'F18', 76 /* KeyCode.F18 */, 'F18', 129, 'VK_F18', empty, empty],
             [1, 116 /* ScanCode.F19 */, 'F19', 77 /* KeyCode.F19 */, 'F19', 130, 'VK_F19', empty, empty],
-            [1, 117 /* ScanCode.F20 */, 'F20', 78 /* KeyCode.F20 */, 'F20', 0, 'VK_F20', empty, empty],
-            [1, 118 /* ScanCode.F21 */, 'F21', 79 /* KeyCode.F21 */, 'F21', 0, 'VK_F21', empty, empty],
-            [1, 119 /* ScanCode.F22 */, 'F22', 80 /* KeyCode.F22 */, 'F22', 0, 'VK_F22', empty, empty],
-            [1, 120 /* ScanCode.F23 */, 'F23', 81 /* KeyCode.F23 */, 'F23', 0, 'VK_F23', empty, empty],
-            [1, 121 /* ScanCode.F24 */, 'F24', 82 /* KeyCode.F24 */, 'F24', 0, 'VK_F24', empty, empty],
+            [1, 117 /* ScanCode.F20 */, 'F20', 78 /* KeyCode.F20 */, 'F20', 131, 'VK_F20', empty, empty],
+            [1, 118 /* ScanCode.F21 */, 'F21', 79 /* KeyCode.F21 */, 'F21', 132, 'VK_F21', empty, empty],
+            [1, 119 /* ScanCode.F22 */, 'F22', 80 /* KeyCode.F22 */, 'F22', 133, 'VK_F22', empty, empty],
+            [1, 120 /* ScanCode.F23 */, 'F23', 81 /* KeyCode.F23 */, 'F23', 134, 'VK_F23', empty, empty],
+            [1, 121 /* ScanCode.F24 */, 'F24', 82 /* KeyCode.F24 */, 'F24', 135, 'VK_F24', empty, empty],
             [1, 122 /* ScanCode.Open */, 'Open', 0 /* KeyCode.Unknown */, empty, 0, empty, empty, empty],
             [1, 123 /* ScanCode.Help */, 'Help', 0 /* KeyCode.Unknown */, empty, 0, empty, empty, empty],
             [1, 124 /* ScanCode.Select */, 'Select', 0 /* KeyCode.Unknown */, empty, 0, empty, empty, empty],
@@ -4113,10 +4145,10 @@ define(__m[31/*vs/base/common/lazy*/], __M([0/*require*/,1/*exports*/]), functio
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[11/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,14/*vs/base/common/functional*/,15/*vs/base/common/iterator*/]), function (require, exports, functional_1, iterator_1) {
+define(__m[10/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,16/*vs/base/common/functional*/,17/*vs/base/common/iterator*/]), function (require, exports, functional_1, iterator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DisposableMap = exports.ImmortalReference = exports.SafeDisposable = exports.RefCountedDisposable = exports.MutableDisposable = exports.Disposable = exports.DisposableStore = exports.toDisposable = exports.combinedDisposable = exports.dispose = exports.isDisposable = exports.markAsSingleton = exports.setDisposableTracker = void 0;
+    exports.DisposableMap = exports.ImmortalReference = exports.RefCountedDisposable = exports.MutableDisposable = exports.Disposable = exports.DisposableStore = exports.toDisposable = exports.combinedDisposable = exports.dispose = exports.isDisposable = exports.markAsSingleton = exports.setDisposableTracker = void 0;
     // #region Disposable Tracking
     /**
      * Enables logging of potentially leaked disposables.
@@ -4236,6 +4268,8 @@ define(__m[11/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,14/*v
     exports.combinedDisposable = combinedDisposable;
     /**
      * Turn a function that implements dispose into an {@link IDisposable}.
+     *
+     * @param fn Clean up function, guaranteed to be called only **once**.
      */
     function toDisposable(fn) {
         const self = trackDisposable({
@@ -4406,32 +4440,6 @@ define(__m[11/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,14/*v
         }
     }
     exports.RefCountedDisposable = RefCountedDisposable;
-    /**
-     * A safe disposable can be `unset` so that a leaked reference (listener)
-     * can be cut-off.
-     */
-    class SafeDisposable {
-        constructor() {
-            this.dispose = () => { };
-            this.unset = () => { };
-            this.isset = () => false;
-            trackDisposable(this);
-        }
-        set(fn) {
-            let callback = fn;
-            this.unset = () => callback = undefined;
-            this.isset = () => callback !== undefined;
-            this.dispose = () => {
-                if (callback) {
-                    callback();
-                    callback = undefined;
-                    markAsDisposed(this);
-                }
-            };
-            return this;
-        }
-    }
-    exports.SafeDisposable = SafeDisposable;
     class ImmortalReference {
         constructor(object) {
             this.object = object;
@@ -4504,7 +4512,7 @@ define(__m[11/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,14/*v
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[16/*vs/base/common/linkedList*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[18/*vs/base/common/linkedList*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LinkedList = void 0;
@@ -4629,6 +4637,1268 @@ define(__m[16/*vs/base/common/linkedList*/], __M([0/*require*/,1/*exports*/]), f
         }
     }
     exports.LinkedList = LinkedList;
+});
+
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+define(__m[19/*vs/base/common/stopwatch*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.StopWatch = void 0;
+    const hasPerformanceNow = (globalThis.performance && typeof globalThis.performance.now === 'function');
+    class StopWatch {
+        static create(highResolution) {
+            return new StopWatch(highResolution);
+        }
+        constructor(highResolution) {
+            this._now = hasPerformanceNow && highResolution === false ? Date.now : globalThis.performance.now.bind(globalThis.performance);
+            this._startTime = this._now();
+            this._stopTime = -1;
+        }
+        stop() {
+            this._stopTime = this._now();
+        }
+        elapsed() {
+            if (this._stopTime !== -1) {
+                return this._stopTime - this._startTime;
+            }
+            return this._now() - this._startTime;
+        }
+    }
+    exports.StopWatch = StopWatch;
+});
+
+define(__m[7/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,16/*vs/base/common/functional*/,10/*vs/base/common/lifecycle*/,18/*vs/base/common/linkedList*/,19/*vs/base/common/stopwatch*/]), function (require, exports, errors_1, functional_1, lifecycle_1, linkedList_1, stopwatch_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Relay = exports.EventBufferer = exports.EventMultiplexer = exports.MicrotaskEmitter = exports.DebounceEmitter = exports.PauseableEmitter = exports.createEventDeliveryQueue = exports.Emitter = exports.EventProfiling = exports.Event = void 0;
+    // -----------------------------------------------------------------------------------------------------------------------
+    // Uncomment the next line to print warnings whenever an emitter with listeners is disposed. That is a sign of code smell.
+    // -----------------------------------------------------------------------------------------------------------------------
+    const _enableDisposeWithListenerWarning = false;
+    // _enableDisposeWithListenerWarning = Boolean("TRUE"); // causes a linter warning so that it cannot be pushed
+    // -----------------------------------------------------------------------------------------------------------------------
+    // Uncomment the next line to print warnings whenever a snapshotted event is used repeatedly without cleanup.
+    // See https://github.com/microsoft/vscode/issues/142851
+    // -----------------------------------------------------------------------------------------------------------------------
+    const _enableSnapshotPotentialLeakWarning = false;
+    var Event;
+    (function (Event) {
+        Event.None = () => lifecycle_1.Disposable.None;
+        function _addLeakageTraceLogic(options) {
+            if (_enableSnapshotPotentialLeakWarning) {
+                const { onDidAddListener: origListenerDidAdd } = options;
+                const stack = Stacktrace.create();
+                let count = 0;
+                options.onDidAddListener = () => {
+                    if (++count === 2) {
+                        console.warn('snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here');
+                        stack.print();
+                    }
+                    origListenerDidAdd === null || origListenerDidAdd === void 0 ? void 0 : origListenerDidAdd();
+                };
+            }
+        }
+        /**
+         * Given an event, returns another event which debounces calls and defers the listeners to a later task via a shared
+         * `setTimeout`. The event is converted into a signal (`Event<void>`) to avoid additional object creation as a
+         * result of merging events and to try prevent race conditions that could arise when using related deferred and
+         * non-deferred events.
+         *
+         * This is useful for deferring non-critical work (eg. general UI updates) to ensure it does not block critical work
+         * (eg. latency of keypress to text rendered).
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         *
+         * @param event The event source for the new event.
+         * @param disposable A disposable store to add the new EventEmitter to.
+         */
+        function defer(event, disposable) {
+            return debounce(event, () => void 0, 0, undefined, true, undefined, disposable);
+        }
+        Event.defer = defer;
+        /**
+         * Given an event, returns another event which only fires once.
+         *
+         * @param event The event source for the new event.
+         */
+        function once(event) {
+            return (listener, thisArgs = null, disposables) => {
+                // we need this, in case the event fires during the listener call
+                let didFire = false;
+                let result = undefined;
+                result = event(e => {
+                    if (didFire) {
+                        return;
+                    }
+                    else if (result) {
+                        result.dispose();
+                    }
+                    else {
+                        didFire = true;
+                    }
+                    return listener.call(thisArgs, e);
+                }, null, disposables);
+                if (didFire) {
+                    result.dispose();
+                }
+                return result;
+            };
+        }
+        Event.once = once;
+        /**
+         * Maps an event of one type into an event of another type using a mapping function, similar to how
+         * `Array.prototype.map` works.
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         *
+         * @param event The event source for the new event.
+         * @param map The mapping function.
+         * @param disposable A disposable store to add the new EventEmitter to.
+         */
+        function map(event, map, disposable) {
+            return snapshot((listener, thisArgs = null, disposables) => event(i => listener.call(thisArgs, map(i)), null, disposables), disposable);
+        }
+        Event.map = map;
+        /**
+         * Wraps an event in another event that performs some function on the event object before firing.
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         *
+         * @param event The event source for the new event.
+         * @param each The function to perform on the event object.
+         * @param disposable A disposable store to add the new EventEmitter to.
+         */
+        function forEach(event, each, disposable) {
+            return snapshot((listener, thisArgs = null, disposables) => event(i => { each(i); listener.call(thisArgs, i); }, null, disposables), disposable);
+        }
+        Event.forEach = forEach;
+        function filter(event, filter, disposable) {
+            return snapshot((listener, thisArgs = null, disposables) => event(e => filter(e) && listener.call(thisArgs, e), null, disposables), disposable);
+        }
+        Event.filter = filter;
+        /**
+         * Given an event, returns the same event but typed as `Event<void>`.
+         */
+        function signal(event) {
+            return event;
+        }
+        Event.signal = signal;
+        function any(...events) {
+            return (listener, thisArgs = null, disposables) => (0, lifecycle_1.combinedDisposable)(...events.map(event => event(e => listener.call(thisArgs, e), null, disposables)));
+        }
+        Event.any = any;
+        /**
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         */
+        function reduce(event, merge, initial, disposable) {
+            let output = initial;
+            return map(event, e => {
+                output = merge(output, e);
+                return output;
+            }, disposable);
+        }
+        Event.reduce = reduce;
+        function snapshot(event, disposable) {
+            let listener;
+            const options = {
+                onWillAddFirstListener() {
+                    listener = event(emitter.fire, emitter);
+                },
+                onDidRemoveLastListener() {
+                    listener === null || listener === void 0 ? void 0 : listener.dispose();
+                }
+            };
+            if (!disposable) {
+                _addLeakageTraceLogic(options);
+            }
+            const emitter = new Emitter(options);
+            disposable === null || disposable === void 0 ? void 0 : disposable.add(emitter);
+            return emitter.event;
+        }
+        function debounce(event, merge, delay = 100, leading = false, flushOnListenerRemove = false, leakWarningThreshold, disposable) {
+            let subscription;
+            let output = undefined;
+            let handle = undefined;
+            let numDebouncedCalls = 0;
+            let doFire;
+            const options = {
+                leakWarningThreshold,
+                onWillAddFirstListener() {
+                    subscription = event(cur => {
+                        numDebouncedCalls++;
+                        output = merge(output, cur);
+                        if (leading && !handle) {
+                            emitter.fire(output);
+                            output = undefined;
+                        }
+                        doFire = () => {
+                            const _output = output;
+                            output = undefined;
+                            handle = undefined;
+                            if (!leading || numDebouncedCalls > 1) {
+                                emitter.fire(_output);
+                            }
+                            numDebouncedCalls = 0;
+                        };
+                        if (typeof delay === 'number') {
+                            clearTimeout(handle);
+                            handle = setTimeout(doFire, delay);
+                        }
+                        else {
+                            if (handle === undefined) {
+                                handle = 0;
+                                queueMicrotask(doFire);
+                            }
+                        }
+                    });
+                },
+                onWillRemoveListener() {
+                    if (flushOnListenerRemove && numDebouncedCalls > 0) {
+                        doFire === null || doFire === void 0 ? void 0 : doFire();
+                    }
+                },
+                onDidRemoveLastListener() {
+                    doFire = undefined;
+                    subscription.dispose();
+                }
+            };
+            if (!disposable) {
+                _addLeakageTraceLogic(options);
+            }
+            const emitter = new Emitter(options);
+            disposable === null || disposable === void 0 ? void 0 : disposable.add(emitter);
+            return emitter.event;
+        }
+        Event.debounce = debounce;
+        /**
+         * Debounces an event, firing after some delay (default=0) with an array of all event original objects.
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         */
+        function accumulate(event, delay = 0, disposable) {
+            return Event.debounce(event, (last, e) => {
+                if (!last) {
+                    return [e];
+                }
+                last.push(e);
+                return last;
+            }, delay, undefined, true, undefined, disposable);
+        }
+        Event.accumulate = accumulate;
+        /**
+         * Filters an event such that some condition is _not_ met more than once in a row, effectively ensuring duplicate
+         * event objects from different sources do not fire the same event object.
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         *
+         * @param event The event source for the new event.
+         * @param equals The equality condition.
+         * @param disposable A disposable store to add the new EventEmitter to.
+         *
+         * @example
+         * ```
+         * // Fire only one time when a single window is opened or focused
+         * Event.latch(Event.any(onDidOpenWindow, onDidFocusWindow))
+         * ```
+         */
+        function latch(event, equals = (a, b) => a === b, disposable) {
+            let firstCall = true;
+            let cache;
+            return filter(event, value => {
+                const shouldEmit = firstCall || !equals(value, cache);
+                firstCall = false;
+                cache = value;
+                return shouldEmit;
+            }, disposable);
+        }
+        Event.latch = latch;
+        /**
+         * Splits an event whose parameter is a union type into 2 separate events for each type in the union.
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         *
+         * @example
+         * ```
+         * const event = new EventEmitter<number | undefined>().event;
+         * const [numberEvent, undefinedEvent] = Event.split(event, isUndefined);
+         * ```
+         *
+         * @param event The event source for the new event.
+         * @param isT A function that determines what event is of the first type.
+         * @param disposable A disposable store to add the new EventEmitter to.
+         */
+        function split(event, isT, disposable) {
+            return [
+                Event.filter(event, isT, disposable),
+                Event.filter(event, e => !isT(e), disposable),
+            ];
+        }
+        Event.split = split;
+        /**
+         * Buffers an event until it has a listener attached.
+         *
+         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
+         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
+         * returned event causes this utility to leak a listener on the original event.
+         *
+         * @param event The event source for the new event.
+         * @param flushAfterTimeout Determines whether to flush the buffer after a timeout immediately or after a
+         * `setTimeout` when the first event listener is added.
+         * @param _buffer Internal: A source event array used for tests.
+         *
+         * @example
+         * ```
+         * // Start accumulating events, when the first listener is attached, flush
+         * // the event after a timeout such that multiple listeners attached before
+         * // the timeout would receive the event
+         * this.onInstallExtension = Event.buffer(service.onInstallExtension, true);
+         * ```
+         */
+        function buffer(event, flushAfterTimeout = false, _buffer = []) {
+            let buffer = _buffer.slice();
+            let listener = event(e => {
+                if (buffer) {
+                    buffer.push(e);
+                }
+                else {
+                    emitter.fire(e);
+                }
+            });
+            const flush = () => {
+                buffer === null || buffer === void 0 ? void 0 : buffer.forEach(e => emitter.fire(e));
+                buffer = null;
+            };
+            const emitter = new Emitter({
+                onWillAddFirstListener() {
+                    if (!listener) {
+                        listener = event(e => emitter.fire(e));
+                    }
+                },
+                onDidAddFirstListener() {
+                    if (buffer) {
+                        if (flushAfterTimeout) {
+                            setTimeout(flush);
+                        }
+                        else {
+                            flush();
+                        }
+                    }
+                },
+                onDidRemoveLastListener() {
+                    if (listener) {
+                        listener.dispose();
+                    }
+                    listener = null;
+                }
+            });
+            return emitter.event;
+        }
+        Event.buffer = buffer;
+        class ChainableEvent {
+            constructor(event) {
+                this.event = event;
+                this.disposables = new lifecycle_1.DisposableStore();
+            }
+            /** @see {@link Event.map} */
+            map(fn) {
+                return new ChainableEvent(map(this.event, fn, this.disposables));
+            }
+            /** @see {@link Event.forEach} */
+            forEach(fn) {
+                return new ChainableEvent(forEach(this.event, fn, this.disposables));
+            }
+            filter(fn) {
+                return new ChainableEvent(filter(this.event, fn, this.disposables));
+            }
+            /** @see {@link Event.reduce} */
+            reduce(merge, initial) {
+                return new ChainableEvent(reduce(this.event, merge, initial, this.disposables));
+            }
+            /** @see {@link Event.reduce} */
+            latch() {
+                return new ChainableEvent(latch(this.event, undefined, this.disposables));
+            }
+            debounce(merge, delay = 100, leading = false, flushOnListenerRemove = false, leakWarningThreshold) {
+                return new ChainableEvent(debounce(this.event, merge, delay, leading, flushOnListenerRemove, leakWarningThreshold, this.disposables));
+            }
+            /**
+             * Attach a listener to the event.
+             */
+            on(listener, thisArgs, disposables) {
+                return this.event(listener, thisArgs, disposables);
+            }
+            /** @see {@link Event.once} */
+            once(listener, thisArgs, disposables) {
+                return once(this.event)(listener, thisArgs, disposables);
+            }
+            dispose() {
+                this.disposables.dispose();
+            }
+        }
+        /**
+         * Wraps the event in an {@link IChainableEvent}, allowing a more functional programming style.
+         *
+         * @example
+         * ```
+         * // Normal
+         * const onEnterPressNormal = Event.filter(
+         *   Event.map(onKeyPress.event, e => new StandardKeyboardEvent(e)),
+         *   e.keyCode === KeyCode.Enter
+         * ).event;
+         *
+         * // Using chain
+         * const onEnterPressChain = Event.chain(onKeyPress.event)
+         *   .map(e => new StandardKeyboardEvent(e))
+         *   .filter(e => e.keyCode === KeyCode.Enter)
+         *   .event;
+         * ```
+         */
+        function chain(event) {
+            return new ChainableEvent(event);
+        }
+        Event.chain = chain;
+        /**
+         * Creates an {@link Event} from a node event emitter.
+         */
+        function fromNodeEventEmitter(emitter, eventName, map = id => id) {
+            const fn = (...args) => result.fire(map(...args));
+            const onFirstListenerAdd = () => emitter.on(eventName, fn);
+            const onLastListenerRemove = () => emitter.removeListener(eventName, fn);
+            const result = new Emitter({ onWillAddFirstListener: onFirstListenerAdd, onDidRemoveLastListener: onLastListenerRemove });
+            return result.event;
+        }
+        Event.fromNodeEventEmitter = fromNodeEventEmitter;
+        /**
+         * Creates an {@link Event} from a DOM event emitter.
+         */
+        function fromDOMEventEmitter(emitter, eventName, map = id => id) {
+            const fn = (...args) => result.fire(map(...args));
+            const onFirstListenerAdd = () => emitter.addEventListener(eventName, fn);
+            const onLastListenerRemove = () => emitter.removeEventListener(eventName, fn);
+            const result = new Emitter({ onWillAddFirstListener: onFirstListenerAdd, onDidRemoveLastListener: onLastListenerRemove });
+            return result.event;
+        }
+        Event.fromDOMEventEmitter = fromDOMEventEmitter;
+        /**
+         * Creates a promise out of an event, using the {@link Event.once} helper.
+         */
+        function toPromise(event) {
+            return new Promise(resolve => once(event)(resolve));
+        }
+        Event.toPromise = toPromise;
+        /**
+         * Adds a listener to an event and calls the listener immediately with undefined as the event object.
+         *
+         * @example
+         * ```
+         * // Initialize the UI and update it when dataChangeEvent fires
+         * runAndSubscribe(dataChangeEvent, () => this._updateUI());
+         * ```
+         */
+        function runAndSubscribe(event, handler) {
+            handler(undefined);
+            return event(e => handler(e));
+        }
+        Event.runAndSubscribe = runAndSubscribe;
+        /**
+         * Adds a listener to an event and calls the listener immediately with undefined as the event object. A new
+         * {@link DisposableStore} is passed to the listener which is disposed when the returned disposable is disposed.
+         */
+        function runAndSubscribeWithStore(event, handler) {
+            let store = null;
+            function run(e) {
+                store === null || store === void 0 ? void 0 : store.dispose();
+                store = new lifecycle_1.DisposableStore();
+                handler(e, store);
+            }
+            run(undefined);
+            const disposable = event(e => run(e));
+            return (0, lifecycle_1.toDisposable)(() => {
+                disposable.dispose();
+                store === null || store === void 0 ? void 0 : store.dispose();
+            });
+        }
+        Event.runAndSubscribeWithStore = runAndSubscribeWithStore;
+        class EmitterObserver {
+            constructor(_observable, store) {
+                this._observable = _observable;
+                this._counter = 0;
+                this._hasChanged = false;
+                const options = {
+                    onWillAddFirstListener: () => {
+                        _observable.addObserver(this);
+                    },
+                    onDidRemoveLastListener: () => {
+                        _observable.removeObserver(this);
+                    }
+                };
+                if (!store) {
+                    _addLeakageTraceLogic(options);
+                }
+                this.emitter = new Emitter(options);
+                if (store) {
+                    store.add(this.emitter);
+                }
+            }
+            beginUpdate(_observable) {
+                // assert(_observable === this.obs);
+                this._counter++;
+            }
+            handlePossibleChange(_observable) {
+                // assert(_observable === this.obs);
+            }
+            handleChange(_observable, _change) {
+                // assert(_observable === this.obs);
+                this._hasChanged = true;
+            }
+            endUpdate(_observable) {
+                // assert(_observable === this.obs);
+                this._counter--;
+                if (this._counter === 0) {
+                    this._observable.reportChanges();
+                    if (this._hasChanged) {
+                        this._hasChanged = false;
+                        this.emitter.fire(this._observable.get());
+                    }
+                }
+            }
+        }
+        /**
+         * Creates an event emitter that is fired when the observable changes.
+         * Each listeners subscribes to the emitter.
+         */
+        function fromObservable(obs, store) {
+            const observer = new EmitterObserver(obs, store);
+            return observer.emitter.event;
+        }
+        Event.fromObservable = fromObservable;
+        /**
+         * Each listener is attached to the observable directly.
+         */
+        function fromObservableLight(observable) {
+            return (listener) => {
+                let count = 0;
+                let didChange = false;
+                const observer = {
+                    beginUpdate() {
+                        count++;
+                    },
+                    endUpdate() {
+                        count--;
+                        if (count === 0) {
+                            observable.reportChanges();
+                            if (didChange) {
+                                didChange = false;
+                                listener();
+                            }
+                        }
+                    },
+                    handlePossibleChange() {
+                        // noop
+                    },
+                    handleChange() {
+                        didChange = true;
+                    }
+                };
+                observable.addObserver(observer);
+                observable.reportChanges();
+                return {
+                    dispose() {
+                        observable.removeObserver(observer);
+                    }
+                };
+            };
+        }
+        Event.fromObservableLight = fromObservableLight;
+    })(Event || (exports.Event = Event = {}));
+    class EventProfiling {
+        constructor(name) {
+            this.listenerCount = 0;
+            this.invocationCount = 0;
+            this.elapsedOverall = 0;
+            this.durations = [];
+            this.name = `${name}_${EventProfiling._idPool++}`;
+            EventProfiling.all.add(this);
+        }
+        start(listenerCount) {
+            this._stopWatch = new stopwatch_1.StopWatch();
+            this.listenerCount = listenerCount;
+        }
+        stop() {
+            if (this._stopWatch) {
+                const elapsed = this._stopWatch.elapsed();
+                this.durations.push(elapsed);
+                this.elapsedOverall += elapsed;
+                this.invocationCount += 1;
+                this._stopWatch = undefined;
+            }
+        }
+    }
+    exports.EventProfiling = EventProfiling;
+    EventProfiling.all = new Set();
+    EventProfiling._idPool = 0;
+    let _globalLeakWarningThreshold = -1;
+    class LeakageMonitor {
+        constructor(threshold, name = Math.random().toString(18).slice(2, 5)) {
+            this.threshold = threshold;
+            this.name = name;
+            this._warnCountdown = 0;
+        }
+        dispose() {
+            var _a;
+            (_a = this._stacks) === null || _a === void 0 ? void 0 : _a.clear();
+        }
+        check(stack, listenerCount) {
+            const threshold = this.threshold;
+            if (threshold <= 0 || listenerCount < threshold) {
+                return undefined;
+            }
+            if (!this._stacks) {
+                this._stacks = new Map();
+            }
+            const count = (this._stacks.get(stack.value) || 0);
+            this._stacks.set(stack.value, count + 1);
+            this._warnCountdown -= 1;
+            if (this._warnCountdown <= 0) {
+                // only warn on first exceed and then every time the limit
+                // is exceeded by 50% again
+                this._warnCountdown = threshold * 0.5;
+                // find most frequent listener and print warning
+                let topStack;
+                let topCount = 0;
+                for (const [stack, count] of this._stacks) {
+                    if (!topStack || topCount < count) {
+                        topStack = stack;
+                        topCount = count;
+                    }
+                }
+                console.warn(`[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`);
+                console.warn(topStack);
+            }
+            return () => {
+                const count = (this._stacks.get(stack.value) || 0);
+                this._stacks.set(stack.value, count - 1);
+            };
+        }
+    }
+    class Stacktrace {
+        static create() {
+            var _a;
+            return new Stacktrace((_a = new Error().stack) !== null && _a !== void 0 ? _a : '');
+        }
+        constructor(value) {
+            this.value = value;
+        }
+        print() {
+            console.warn(this.value.split('\n').slice(2).join('\n'));
+        }
+    }
+    class UniqueContainer {
+        constructor(value) {
+            this.value = value;
+        }
+    }
+    const compactionThreshold = 2;
+    const forEachListener = (listeners, fn) => {
+        if (listeners instanceof UniqueContainer) {
+            fn(listeners);
+        }
+        else {
+            for (let i = 0; i < listeners.length; i++) {
+                const l = listeners[i];
+                if (l) {
+                    fn(l);
+                }
+            }
+        }
+    };
+    /**
+     * The Emitter can be used to expose an Event to the public
+     * to fire it from the insides.
+     * Sample:
+        class Document {
+    
+            private readonly _onDidChange = new Emitter<(value:string)=>any>();
+    
+            public onDidChange = this._onDidChange.event;
+    
+            // getter-style
+            // get onDidChange(): Event<(value:string)=>any> {
+            // 	return this._onDidChange.event;
+            // }
+    
+            private _doIt() {
+                //...
+                this._onDidChange.fire(value);
+            }
+        }
+     */
+    class Emitter {
+        constructor(options) {
+            var _a, _b, _c, _d, _e;
+            this._size = 0;
+            this._options = options;
+            this._leakageMon = _globalLeakWarningThreshold > 0 || ((_a = this._options) === null || _a === void 0 ? void 0 : _a.leakWarningThreshold) ? new LeakageMonitor((_c = (_b = this._options) === null || _b === void 0 ? void 0 : _b.leakWarningThreshold) !== null && _c !== void 0 ? _c : _globalLeakWarningThreshold) : undefined;
+            this._perfMon = ((_d = this._options) === null || _d === void 0 ? void 0 : _d._profName) ? new EventProfiling(this._options._profName) : undefined;
+            this._deliveryQueue = (_e = this._options) === null || _e === void 0 ? void 0 : _e.deliveryQueue;
+        }
+        dispose() {
+            var _a, _b, _c, _d;
+            if (!this._disposed) {
+                this._disposed = true;
+                // It is bad to have listeners at the time of disposing an emitter, it is worst to have listeners keep the emitter
+                // alive via the reference that's embedded in their disposables. Therefore we loop over all remaining listeners and
+                // unset their subscriptions/disposables. Looping and blaming remaining listeners is done on next tick because the
+                // the following programming pattern is very popular:
+                //
+                // const someModel = this._disposables.add(new ModelObject()); // (1) create and register model
+                // this._disposables.add(someModel.onDidChange(() => { ... }); // (2) subscribe and register model-event listener
+                // ...later...
+                // this._disposables.dispose(); disposes (1) then (2): don't warn after (1) but after the "overall dispose" is done
+                if (((_a = this._deliveryQueue) === null || _a === void 0 ? void 0 : _a.current) === this) {
+                    this._deliveryQueue.reset();
+                }
+                if (this._listeners) {
+                    if (_enableDisposeWithListenerWarning) {
+                        const listeners = this._listeners;
+                        queueMicrotask(() => {
+                            forEachListener(listeners, l => { var _a; return (_a = l.stack) === null || _a === void 0 ? void 0 : _a.print(); });
+                        });
+                    }
+                    this._listeners = undefined;
+                    this._size = 0;
+                }
+                (_c = (_b = this._options) === null || _b === void 0 ? void 0 : _b.onDidRemoveLastListener) === null || _c === void 0 ? void 0 : _c.call(_b);
+                (_d = this._leakageMon) === null || _d === void 0 ? void 0 : _d.dispose();
+            }
+        }
+        /**
+         * For the public to allow to subscribe
+         * to events from this Emitter
+         */
+        get event() {
+            var _a;
+            (_a = this._event) !== null && _a !== void 0 ? _a : (this._event = (callback, thisArgs, disposables) => {
+                var _a, _b, _c, _d, _e;
+                if (this._leakageMon && this._size > this._leakageMon.threshold * 3) {
+                    console.warn(`[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far`);
+                    return lifecycle_1.Disposable.None;
+                }
+                if (this._disposed) {
+                    // todo: should we warn if a listener is added to a disposed emitter? This happens often
+                    return lifecycle_1.Disposable.None;
+                }
+                if (thisArgs) {
+                    callback = callback.bind(thisArgs);
+                }
+                const contained = new UniqueContainer(callback);
+                let removeMonitor;
+                let stack;
+                if (this._leakageMon && this._size >= Math.ceil(this._leakageMon.threshold * 0.2)) {
+                    // check and record this emitter for potential leakage
+                    contained.stack = Stacktrace.create();
+                    removeMonitor = this._leakageMon.check(contained.stack, this._size + 1);
+                }
+                if (_enableDisposeWithListenerWarning) {
+                    contained.stack = stack !== null && stack !== void 0 ? stack : Stacktrace.create();
+                }
+                if (!this._listeners) {
+                    (_b = (_a = this._options) === null || _a === void 0 ? void 0 : _a.onWillAddFirstListener) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+                    this._listeners = contained;
+                    (_d = (_c = this._options) === null || _c === void 0 ? void 0 : _c.onDidAddFirstListener) === null || _d === void 0 ? void 0 : _d.call(_c, this);
+                }
+                else if (this._listeners instanceof UniqueContainer) {
+                    (_e = this._deliveryQueue) !== null && _e !== void 0 ? _e : (this._deliveryQueue = new EventDeliveryQueuePrivate());
+                    this._listeners = [this._listeners, contained];
+                }
+                else {
+                    this._listeners.push(contained);
+                }
+                this._size++;
+                const result = (0, lifecycle_1.toDisposable)(() => { removeMonitor === null || removeMonitor === void 0 ? void 0 : removeMonitor(); this._removeListener(contained); });
+                if (disposables instanceof lifecycle_1.DisposableStore) {
+                    disposables.add(result);
+                }
+                else if (Array.isArray(disposables)) {
+                    disposables.push(result);
+                }
+                return result;
+            });
+            return this._event;
+        }
+        _removeListener(listener) {
+            var _a, _b, _c, _d;
+            (_b = (_a = this._options) === null || _a === void 0 ? void 0 : _a.onWillRemoveListener) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+            if (!this._listeners) {
+                return; // expected if a listener gets disposed
+            }
+            if (this._size === 1) {
+                this._listeners = undefined;
+                (_d = (_c = this._options) === null || _c === void 0 ? void 0 : _c.onDidRemoveLastListener) === null || _d === void 0 ? void 0 : _d.call(_c, this);
+                this._size = 0;
+                return;
+            }
+            // size > 1 which requires that listeners be a list:
+            const listeners = this._listeners;
+            const index = listeners.indexOf(listener);
+            if (index === -1) {
+                console.log('disposed?', this._disposed);
+                console.log('size?', this._size);
+                console.log('arr?', JSON.stringify(this._listeners));
+                throw new Error('Attempted to dispose unknown listener');
+            }
+            this._size--;
+            listeners[index] = undefined;
+            const adjustDeliveryQueue = this._deliveryQueue.current === this;
+            if (this._size * compactionThreshold <= listeners.length) {
+                let n = 0;
+                for (let i = 0; i < listeners.length; i++) {
+                    if (listeners[i]) {
+                        listeners[n++] = listeners[i];
+                    }
+                    else if (adjustDeliveryQueue) {
+                        this._deliveryQueue.end--;
+                        if (n < this._deliveryQueue.i) {
+                            this._deliveryQueue.i--;
+                        }
+                    }
+                }
+                listeners.length = n;
+            }
+        }
+        _deliver(listener, value) {
+            var _a;
+            if (!listener) {
+                return;
+            }
+            const errorHandler = ((_a = this._options) === null || _a === void 0 ? void 0 : _a.onListenerError) || errors_1.onUnexpectedError;
+            if (!errorHandler) {
+                listener.value(value);
+                return;
+            }
+            try {
+                listener.value(value);
+            }
+            catch (e) {
+                errorHandler(e);
+            }
+        }
+        /** Delivers items in the queue. Assumes the queue is ready to go. */
+        _deliverQueue(dq) {
+            const listeners = dq.current._listeners;
+            while (dq.i < dq.end) {
+                // important: dq.i is incremented before calling deliver() because it might reenter deliverQueue()
+                this._deliver(listeners[dq.i++], dq.value);
+            }
+            dq.reset();
+        }
+        /**
+         * To be kept private to fire an event to
+         * subscribers
+         */
+        fire(event) {
+            var _a, _b, _c, _d;
+            if ((_a = this._deliveryQueue) === null || _a === void 0 ? void 0 : _a.current) {
+                this._deliverQueue(this._deliveryQueue);
+                (_b = this._perfMon) === null || _b === void 0 ? void 0 : _b.stop(); // last fire() will have starting perfmon, stop it before starting the next dispatch
+            }
+            (_c = this._perfMon) === null || _c === void 0 ? void 0 : _c.start(this._size);
+            if (!this._listeners) {
+                // no-op
+            }
+            else if (this._listeners instanceof UniqueContainer) {
+                this._deliver(this._listeners, event);
+            }
+            else {
+                const dq = this._deliveryQueue;
+                dq.enqueue(this, event, this._listeners.length);
+                this._deliverQueue(dq);
+            }
+            (_d = this._perfMon) === null || _d === void 0 ? void 0 : _d.stop();
+        }
+        hasListeners() {
+            return this._size > 0;
+        }
+    }
+    exports.Emitter = Emitter;
+    const createEventDeliveryQueue = () => new EventDeliveryQueuePrivate();
+    exports.createEventDeliveryQueue = createEventDeliveryQueue;
+    class EventDeliveryQueuePrivate {
+        constructor() {
+            /**
+             * Index in current's listener list.
+             */
+            this.i = -1;
+            /**
+             * The last index in the listener's list to deliver.
+             */
+            this.end = 0;
+        }
+        enqueue(emitter, value, end) {
+            this.i = 0;
+            this.end = end;
+            this.current = emitter;
+            this.value = value;
+        }
+        reset() {
+            this.i = this.end; // force any current emission loop to stop, mainly for during dispose
+            this.current = undefined;
+            this.value = undefined;
+        }
+    }
+    class PauseableEmitter extends Emitter {
+        constructor(options) {
+            super(options);
+            this._isPaused = 0;
+            this._eventQueue = new linkedList_1.LinkedList();
+            this._mergeFn = options === null || options === void 0 ? void 0 : options.merge;
+        }
+        pause() {
+            this._isPaused++;
+        }
+        resume() {
+            if (this._isPaused !== 0 && --this._isPaused === 0) {
+                if (this._mergeFn) {
+                    // use the merge function to create a single composite
+                    // event. make a copy in case firing pauses this emitter
+                    if (this._eventQueue.size > 0) {
+                        const events = Array.from(this._eventQueue);
+                        this._eventQueue.clear();
+                        super.fire(this._mergeFn(events));
+                    }
+                }
+                else {
+                    // no merging, fire each event individually and test
+                    // that this emitter isn't paused halfway through
+                    while (!this._isPaused && this._eventQueue.size !== 0) {
+                        super.fire(this._eventQueue.shift());
+                    }
+                }
+            }
+        }
+        fire(event) {
+            if (this._size) {
+                if (this._isPaused !== 0) {
+                    this._eventQueue.push(event);
+                }
+                else {
+                    super.fire(event);
+                }
+            }
+        }
+    }
+    exports.PauseableEmitter = PauseableEmitter;
+    class DebounceEmitter extends PauseableEmitter {
+        constructor(options) {
+            var _a;
+            super(options);
+            this._delay = (_a = options.delay) !== null && _a !== void 0 ? _a : 100;
+        }
+        fire(event) {
+            if (!this._handle) {
+                this.pause();
+                this._handle = setTimeout(() => {
+                    this._handle = undefined;
+                    this.resume();
+                }, this._delay);
+            }
+            super.fire(event);
+        }
+    }
+    exports.DebounceEmitter = DebounceEmitter;
+    /**
+     * An emitter which queue all events and then process them at the
+     * end of the event loop.
+     */
+    class MicrotaskEmitter extends Emitter {
+        constructor(options) {
+            super(options);
+            this._queuedEvents = [];
+            this._mergeFn = options === null || options === void 0 ? void 0 : options.merge;
+        }
+        fire(event) {
+            if (!this.hasListeners()) {
+                return;
+            }
+            this._queuedEvents.push(event);
+            if (this._queuedEvents.length === 1) {
+                queueMicrotask(() => {
+                    if (this._mergeFn) {
+                        super.fire(this._mergeFn(this._queuedEvents));
+                    }
+                    else {
+                        this._queuedEvents.forEach(e => super.fire(e));
+                    }
+                    this._queuedEvents = [];
+                });
+            }
+        }
+    }
+    exports.MicrotaskEmitter = MicrotaskEmitter;
+    class EventMultiplexer {
+        constructor() {
+            this.hasListeners = false;
+            this.events = [];
+            this.emitter = new Emitter({
+                onWillAddFirstListener: () => this.onFirstListenerAdd(),
+                onDidRemoveLastListener: () => this.onLastListenerRemove()
+            });
+        }
+        get event() {
+            return this.emitter.event;
+        }
+        add(event) {
+            const e = { event: event, listener: null };
+            this.events.push(e);
+            if (this.hasListeners) {
+                this.hook(e);
+            }
+            const dispose = () => {
+                if (this.hasListeners) {
+                    this.unhook(e);
+                }
+                const idx = this.events.indexOf(e);
+                this.events.splice(idx, 1);
+            };
+            return (0, lifecycle_1.toDisposable)((0, functional_1.once)(dispose));
+        }
+        onFirstListenerAdd() {
+            this.hasListeners = true;
+            this.events.forEach(e => this.hook(e));
+        }
+        onLastListenerRemove() {
+            this.hasListeners = false;
+            this.events.forEach(e => this.unhook(e));
+        }
+        hook(e) {
+            e.listener = e.event(r => this.emitter.fire(r));
+        }
+        unhook(e) {
+            if (e.listener) {
+                e.listener.dispose();
+            }
+            e.listener = null;
+        }
+        dispose() {
+            this.emitter.dispose();
+        }
+    }
+    exports.EventMultiplexer = EventMultiplexer;
+    /**
+     * The EventBufferer is useful in situations in which you want
+     * to delay firing your events during some code.
+     * You can wrap that code and be sure that the event will not
+     * be fired during that wrap.
+     *
+     * ```
+     * const emitter: Emitter;
+     * const delayer = new EventDelayer();
+     * const delayedEvent = delayer.wrapEvent(emitter.event);
+     *
+     * delayedEvent(console.log);
+     *
+     * delayer.bufferEvents(() => {
+     *   emitter.fire(); // event will not be fired yet
+     * });
+     *
+     * // event will only be fired at this point
+     * ```
+     */
+    class EventBufferer {
+        constructor() {
+            this.buffers = [];
+        }
+        wrapEvent(event) {
+            return (listener, thisArgs, disposables) => {
+                return event(i => {
+                    const buffer = this.buffers[this.buffers.length - 1];
+                    if (buffer) {
+                        buffer.push(() => listener.call(thisArgs, i));
+                    }
+                    else {
+                        listener.call(thisArgs, i);
+                    }
+                }, undefined, disposables);
+            };
+        }
+        bufferEvents(fn) {
+            const buffer = [];
+            this.buffers.push(buffer);
+            const r = fn();
+            this.buffers.pop();
+            buffer.forEach(flush => flush());
+            return r;
+        }
+    }
+    exports.EventBufferer = EventBufferer;
+    /**
+     * A Relay is an event forwarder which functions as a replugabble event pipe.
+     * Once created, you can connect an input event to it and it will simply forward
+     * events from that input event through its own `event` property. The `input`
+     * can be changed at any point in time.
+     */
+    class Relay {
+        constructor() {
+            this.listening = false;
+            this.inputEvent = Event.None;
+            this.inputEventListener = lifecycle_1.Disposable.None;
+            this.emitter = new Emitter({
+                onDidAddFirstListener: () => {
+                    this.listening = true;
+                    this.inputEventListener = this.inputEvent(this.emitter.fire, this.emitter);
+                },
+                onDidRemoveLastListener: () => {
+                    this.listening = false;
+                    this.inputEventListener.dispose();
+                }
+            });
+            this.event = this.emitter.event;
+        }
+        set input(event) {
+            this.inputEvent = event;
+            if (this.listening) {
+                this.inputEventListener.dispose();
+                this.inputEventListener = event(this.emitter.fire, this.emitter);
+            }
+        }
+        dispose() {
+            this.inputEventListener.dispose();
+            this.emitter.dispose();
+        }
+    }
+    exports.Relay = Relay;
+});
+
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+define(__m[32/*vs/base/common/cancellation*/], __M([0/*require*/,1/*exports*/,7/*vs/base/common/event*/]), function (require, exports, event_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CancellationTokenSource = exports.CancellationToken = void 0;
+    const shortcutEvent = Object.freeze(function (callback, context) {
+        const handle = setTimeout(callback.bind(context), 0);
+        return { dispose() { clearTimeout(handle); } };
+    });
+    var CancellationToken;
+    (function (CancellationToken) {
+        function isCancellationToken(thing) {
+            if (thing === CancellationToken.None || thing === CancellationToken.Cancelled) {
+                return true;
+            }
+            if (thing instanceof MutableToken) {
+                return true;
+            }
+            if (!thing || typeof thing !== 'object') {
+                return false;
+            }
+            return typeof thing.isCancellationRequested === 'boolean'
+                && typeof thing.onCancellationRequested === 'function';
+        }
+        CancellationToken.isCancellationToken = isCancellationToken;
+        CancellationToken.None = Object.freeze({
+            isCancellationRequested: false,
+            onCancellationRequested: event_1.Event.None
+        });
+        CancellationToken.Cancelled = Object.freeze({
+            isCancellationRequested: true,
+            onCancellationRequested: shortcutEvent
+        });
+    })(CancellationToken || (exports.CancellationToken = CancellationToken = {}));
+    class MutableToken {
+        constructor() {
+            this._isCancelled = false;
+            this._emitter = null;
+        }
+        cancel() {
+            if (!this._isCancelled) {
+                this._isCancelled = true;
+                if (this._emitter) {
+                    this._emitter.fire(undefined);
+                    this.dispose();
+                }
+            }
+        }
+        get isCancellationRequested() {
+            return this._isCancelled;
+        }
+        get onCancellationRequested() {
+            if (this._isCancelled) {
+                return shortcutEvent;
+            }
+            if (!this._emitter) {
+                this._emitter = new event_1.Emitter();
+            }
+            return this._emitter.event;
+        }
+        dispose() {
+            if (this._emitter) {
+                this._emitter.dispose();
+                this._emitter = null;
+            }
+        }
+    }
+    class CancellationTokenSource {
+        constructor(parent) {
+            this._token = undefined;
+            this._parentListener = undefined;
+            this._parentListener = parent && parent.onCancellationRequested(this.cancel, this);
+        }
+        get token() {
+            if (!this._token) {
+                // be lazy and create the token only when
+                // actually needed
+                this._token = new MutableToken();
+            }
+            return this._token;
+        }
+        cancel() {
+            if (!this._token) {
+                // save an object by returning the default
+                // cancelled token when cancellation happens
+                // before someone asks for the token
+                this._token = CancellationToken.Cancelled;
+            }
+            else if (this._token instanceof MutableToken) {
+                // actually cancel
+                this._token.cancel();
+            }
+        }
+        dispose(cancel = false) {
+            var _a;
+            if (cancel) {
+                this.cancel();
+            }
+            (_a = this._parentListener) === null || _a === void 0 ? void 0 : _a.dispose();
+            if (!this._token) {
+                // ensure to initialize with an empty token if we had none
+                this._token = CancellationToken.None;
+            }
+            else if (this._token instanceof MutableToken) {
+                // actually dispose
+                this._token.dispose();
+            }
+        }
+    }
+    exports.CancellationTokenSource = CancellationTokenSource;
 });
 
 /*---------------------------------------------------------------------------------------------
@@ -5508,7 +6778,7 @@ define(__m[5/*vs/base/common/strings*/], __M([0/*require*/,1/*exports*/,27/*vs/b
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[32/*vs/base/common/hash*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/]), function (require, exports, strings) {
+define(__m[33/*vs/base/common/hash*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/]), function (require, exports, strings) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringSHA1 = exports.toHexString = exports.stringHash = exports.numberHash = exports.doHash = exports.hash = void 0;
@@ -5777,7 +7047,7 @@ define(__m[32/*vs/base/common/hash*/], __M([0/*require*/,1/*exports*/,5/*vs/base
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[17/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,29/*vs/base/common/diff/diffChange*/,32/*vs/base/common/hash*/]), function (require, exports, diffChange_1, hash_1) {
+define(__m[20/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,29/*vs/base/common/diff/diffChange*/,33/*vs/base/common/hash*/]), function (require, exports, diffChange_1, hash_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LcsDiff = exports.stringDiff = exports.StringDiffSequence = void 0;
@@ -6683,7 +7953,7 @@ define(__m[17/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,29/*v
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[18/*vs/base/common/types*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[21/*vs/base/common/types*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.withUndefinedAsNull = exports.withNullAsUndefined = exports.validateConstraint = exports.validateConstraints = exports.isFunction = exports.assertIsDefined = exports.assertType = exports.isUndefinedOrNull = exports.isDefined = exports.isUndefined = exports.isBoolean = exports.isIterable = exports.isNumber = exports.isTypedArray = exports.isObject = exports.isString = void 0;
@@ -6832,7 +8102,7 @@ define(__m[18/*vs/base/common/types*/], __M([0/*require*/,1/*exports*/]), functi
     exports.withUndefinedAsNull = withUndefinedAsNull;
 });
 
-define(__m[33/*vs/base/common/codicons*/], __M([0/*require*/,1/*exports*/,18/*vs/base/common/types*/]), function (require, exports, types_1) {
+define(__m[34/*vs/base/common/codicons*/], __M([0/*require*/,1/*exports*/,21/*vs/base/common/types*/]), function (require, exports, types_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Codicon = exports.getCodiconFontCharacters = void 0;
@@ -7410,7 +8680,7 @@ define(__m[33/*vs/base/common/codicons*/], __M([0/*require*/,1/*exports*/,18/*vs
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[12/*vs/base/common/objects*/], __M([0/*require*/,1/*exports*/,18/*vs/base/common/types*/]), function (require, exports, types_1) {
+define(__m[11/*vs/base/common/objects*/], __M([0/*require*/,1/*exports*/,21/*vs/base/common/types*/]), function (require, exports, types_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createProxyObject = exports.getAllMethodNames = exports.getAllPropertyNames = exports.equals = exports.mixin = exports.cloneAndChange = exports.deepFreeze = exports.deepClone = void 0;
@@ -7565,10 +8835,9 @@ define(__m[12/*vs/base/common/objects*/], __M([0/*require*/,1/*exports*/,18/*vs/
     exports.equals = equals;
     function getAllPropertyNames(obj) {
         let res = [];
-        let proto = Object.getPrototypeOf(obj);
-        while (Object.prototype !== proto) {
-            res = res.concat(Object.getOwnPropertyNames(proto));
-            proto = Object.getPrototypeOf(proto);
+        while (Object.prototype !== obj) {
+            res = res.concat(Object.getOwnPropertyNames(obj));
+            obj = Object.getPrototypeOf(obj);
         }
         return res;
     }
@@ -7603,7 +8872,7 @@ define(__m[12/*vs/base/common/objects*/], __M([0/*require*/,1/*exports*/,18/*vs/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[19/*vs/base/common/uint*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[22/*vs/base/common/uint*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.toUint32 = exports.toUint8 = void 0;
@@ -7633,7 +8902,7 @@ define(__m[19/*vs/base/common/uint*/], __M([0/*require*/,1/*exports*/]), functio
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[20/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1/*exports*/,19/*vs/base/common/uint*/]), function (require, exports, uint_1) {
+define(__m[23/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1/*exports*/,22/*vs/base/common/uint*/]), function (require, exports, uint_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CharacterSet = exports.CharacterClassifier = void 0;
@@ -7696,150 +8965,6 @@ define(__m[20/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[21/*vs/editor/common/core/lineRange*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/]), function (require, exports, errors_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.LineRange = void 0;
-    /**
-     * A range of lines (1-based).
-     */
-    class LineRange {
-        /**
-         * @param lineRanges An array of sorted line ranges.
-         */
-        static joinMany(lineRanges) {
-            if (lineRanges.length === 0) {
-                return [];
-            }
-            let result = lineRanges[0];
-            for (let i = 1; i < lineRanges.length; i++) {
-                result = this.join(result, lineRanges[i]);
-            }
-            return result;
-        }
-        /**
-         * @param lineRanges1 Must be sorted.
-         * @param lineRanges2 Must be sorted.
-         */
-        static join(lineRanges1, lineRanges2) {
-            if (lineRanges1.length === 0) {
-                return lineRanges2;
-            }
-            if (lineRanges2.length === 0) {
-                return lineRanges1;
-            }
-            const result = [];
-            let i1 = 0;
-            let i2 = 0;
-            let current = null;
-            while (i1 < lineRanges1.length || i2 < lineRanges2.length) {
-                let next = null;
-                if (i1 < lineRanges1.length && i2 < lineRanges2.length) {
-                    const lineRange1 = lineRanges1[i1];
-                    const lineRange2 = lineRanges2[i2];
-                    if (lineRange1.startLineNumber < lineRange2.startLineNumber) {
-                        next = lineRange1;
-                        i1++;
-                    }
-                    else {
-                        next = lineRange2;
-                        i2++;
-                    }
-                }
-                else if (i1 < lineRanges1.length) {
-                    next = lineRanges1[i1];
-                    i1++;
-                }
-                else {
-                    next = lineRanges2[i2];
-                    i2++;
-                }
-                if (current === null) {
-                    current = next;
-                }
-                else {
-                    if (current.endLineNumberExclusive >= next.startLineNumber) {
-                        // merge
-                        current = new LineRange(current.startLineNumber, Math.max(current.endLineNumberExclusive, next.endLineNumberExclusive));
-                    }
-                    else {
-                        // push
-                        result.push(current);
-                        current = next;
-                    }
-                }
-            }
-            if (current !== null) {
-                result.push(current);
-            }
-            return result;
-        }
-        constructor(startLineNumber, endLineNumberExclusive) {
-            if (startLineNumber > endLineNumberExclusive) {
-                throw new errors_1.BugIndicatingError(`startLineNumber ${startLineNumber} cannot be after endLineNumberExclusive ${endLineNumberExclusive}`);
-            }
-            this.startLineNumber = startLineNumber;
-            this.endLineNumberExclusive = endLineNumberExclusive;
-        }
-        /**
-         * Indicates if this line range contains the given line number.
-         */
-        contains(lineNumber) {
-            return this.startLineNumber <= lineNumber && lineNumber < this.endLineNumberExclusive;
-        }
-        /**
-         * Indicates if this line range is empty.
-         */
-        get isEmpty() {
-            return this.startLineNumber === this.endLineNumberExclusive;
-        }
-        /**
-         * Moves this line range by the given offset of line numbers.
-         */
-        delta(offset) {
-            return new LineRange(this.startLineNumber + offset, this.endLineNumberExclusive + offset);
-        }
-        /**
-         * The number of lines this line range spans.
-         */
-        get length() {
-            return this.endLineNumberExclusive - this.startLineNumber;
-        }
-        /**
-         * Creates a line range that combines this and the given line range.
-         */
-        join(other) {
-            return new LineRange(Math.min(this.startLineNumber, other.startLineNumber), Math.max(this.endLineNumberExclusive, other.endLineNumberExclusive));
-        }
-        toString() {
-            return `[${this.startLineNumber},${this.endLineNumberExclusive})`;
-        }
-        /**
-         * The resulting range is empty if the ranges do not intersect, but touch.
-         * If the ranges don't even touch, the result is undefined.
-         */
-        intersect(other) {
-            const startLineNumber = Math.max(this.startLineNumber, other.startLineNumber);
-            const endLineNumberExclusive = Math.min(this.endLineNumberExclusive, other.endLineNumberExclusive);
-            if (startLineNumber <= endLineNumberExclusive) {
-                return new LineRange(startLineNumber, endLineNumberExclusive);
-            }
-            return undefined;
-        }
-        overlapOrTouch(other) {
-            return this.startLineNumber <= other.endLineNumberExclusive && other.startLineNumber <= this.endLineNumberExclusive;
-        }
-        equals(b) {
-            return this.startLineNumber === b.startLineNumber && this.endLineNumberExclusive === b.endLineNumberExclusive;
-        }
-    }
-    exports.LineRange = LineRange;
-});
-
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
 define(__m[6/*vs/editor/common/core/offsetRange*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/]), function (require, exports, errors_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7896,6 +9021,9 @@ define(__m[6/*vs/editor/common/core/offsetRange*/], __M([0/*require*/,1/*exports
         }
         containsRange(other) {
             return this.start <= other.start && other.endExclusive <= this.endExclusive;
+        }
+        contains(offset) {
+            return this.start <= offset && offset < this.endExclusive;
         }
         /**
          * for all numbers n: range1.contains(n) or range2.contains(n) => range1.join(range2).contains(n)
@@ -8473,7 +9601,216 @@ define(__m[2/*vs/editor/common/core/range*/], __M([0/*require*/,1/*exports*/,3/*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[34/*vs/editor/common/core/selection*/], __M([0/*require*/,1/*exports*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/]), function (require, exports, position_1, range_1) {
+define(__m[12/*vs/editor/common/core/lineRange*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,2/*vs/editor/common/core/range*/]), function (require, exports, errors_1, range_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LineRange = void 0;
+    /**
+     * A range of lines (1-based).
+     */
+    class LineRange {
+        static fromRange(range) {
+            return new LineRange(range.startLineNumber, range.endLineNumber);
+        }
+        static subtract(a, b) {
+            if (!b) {
+                return [a];
+            }
+            if (a.startLineNumber < b.startLineNumber && b.endLineNumberExclusive < a.endLineNumberExclusive) {
+                return [
+                    new LineRange(a.startLineNumber, b.startLineNumber),
+                    new LineRange(b.endLineNumberExclusive, a.endLineNumberExclusive)
+                ];
+            }
+            else if (b.startLineNumber <= a.startLineNumber && a.endLineNumberExclusive <= b.endLineNumberExclusive) {
+                return [];
+            }
+            else if (b.endLineNumberExclusive < a.endLineNumberExclusive) {
+                return [new LineRange(Math.max(b.endLineNumberExclusive, a.startLineNumber), a.endLineNumberExclusive)];
+            }
+            else {
+                return [new LineRange(a.startLineNumber, Math.min(b.startLineNumber, a.endLineNumberExclusive))];
+            }
+        }
+        /**
+         * @param lineRanges An array of sorted line ranges.
+         */
+        static joinMany(lineRanges) {
+            if (lineRanges.length === 0) {
+                return [];
+            }
+            let result = lineRanges[0];
+            for (let i = 1; i < lineRanges.length; i++) {
+                result = this.join(result, lineRanges[i]);
+            }
+            return result;
+        }
+        /**
+         * @param lineRanges1 Must be sorted.
+         * @param lineRanges2 Must be sorted.
+         */
+        static join(lineRanges1, lineRanges2) {
+            if (lineRanges1.length === 0) {
+                return lineRanges2;
+            }
+            if (lineRanges2.length === 0) {
+                return lineRanges1;
+            }
+            const result = [];
+            let i1 = 0;
+            let i2 = 0;
+            let current = null;
+            while (i1 < lineRanges1.length || i2 < lineRanges2.length) {
+                let next = null;
+                if (i1 < lineRanges1.length && i2 < lineRanges2.length) {
+                    const lineRange1 = lineRanges1[i1];
+                    const lineRange2 = lineRanges2[i2];
+                    if (lineRange1.startLineNumber < lineRange2.startLineNumber) {
+                        next = lineRange1;
+                        i1++;
+                    }
+                    else {
+                        next = lineRange2;
+                        i2++;
+                    }
+                }
+                else if (i1 < lineRanges1.length) {
+                    next = lineRanges1[i1];
+                    i1++;
+                }
+                else {
+                    next = lineRanges2[i2];
+                    i2++;
+                }
+                if (current === null) {
+                    current = next;
+                }
+                else {
+                    if (current.endLineNumberExclusive >= next.startLineNumber) {
+                        // merge
+                        current = new LineRange(current.startLineNumber, Math.max(current.endLineNumberExclusive, next.endLineNumberExclusive));
+                    }
+                    else {
+                        // push
+                        result.push(current);
+                        current = next;
+                    }
+                }
+            }
+            if (current !== null) {
+                result.push(current);
+            }
+            return result;
+        }
+        static ofLength(startLineNumber, length) {
+            return new LineRange(startLineNumber, startLineNumber + length);
+        }
+        /**
+         * @internal
+         */
+        static deserialize(lineRange) {
+            return new LineRange(lineRange[0], lineRange[1]);
+        }
+        constructor(startLineNumber, endLineNumberExclusive) {
+            if (startLineNumber > endLineNumberExclusive) {
+                throw new errors_1.BugIndicatingError(`startLineNumber ${startLineNumber} cannot be after endLineNumberExclusive ${endLineNumberExclusive}`);
+            }
+            this.startLineNumber = startLineNumber;
+            this.endLineNumberExclusive = endLineNumberExclusive;
+        }
+        /**
+         * Indicates if this line range contains the given line number.
+         */
+        contains(lineNumber) {
+            return this.startLineNumber <= lineNumber && lineNumber < this.endLineNumberExclusive;
+        }
+        /**
+         * Indicates if this line range is empty.
+         */
+        get isEmpty() {
+            return this.startLineNumber === this.endLineNumberExclusive;
+        }
+        /**
+         * Moves this line range by the given offset of line numbers.
+         */
+        delta(offset) {
+            return new LineRange(this.startLineNumber + offset, this.endLineNumberExclusive + offset);
+        }
+        /**
+         * The number of lines this line range spans.
+         */
+        get length() {
+            return this.endLineNumberExclusive - this.startLineNumber;
+        }
+        /**
+         * Creates a line range that combines this and the given line range.
+         */
+        join(other) {
+            return new LineRange(Math.min(this.startLineNumber, other.startLineNumber), Math.max(this.endLineNumberExclusive, other.endLineNumberExclusive));
+        }
+        toString() {
+            return `[${this.startLineNumber},${this.endLineNumberExclusive})`;
+        }
+        /**
+         * The resulting range is empty if the ranges do not intersect, but touch.
+         * If the ranges don't even touch, the result is undefined.
+         */
+        intersect(other) {
+            const startLineNumber = Math.max(this.startLineNumber, other.startLineNumber);
+            const endLineNumberExclusive = Math.min(this.endLineNumberExclusive, other.endLineNumberExclusive);
+            if (startLineNumber <= endLineNumberExclusive) {
+                return new LineRange(startLineNumber, endLineNumberExclusive);
+            }
+            return undefined;
+        }
+        intersectsStrict(other) {
+            return this.startLineNumber < other.endLineNumberExclusive && other.startLineNumber < this.endLineNumberExclusive;
+        }
+        overlapOrTouch(other) {
+            return this.startLineNumber <= other.endLineNumberExclusive && other.startLineNumber <= this.endLineNumberExclusive;
+        }
+        equals(b) {
+            return this.startLineNumber === b.startLineNumber && this.endLineNumberExclusive === b.endLineNumberExclusive;
+        }
+        toInclusiveRange() {
+            if (this.isEmpty) {
+                return null;
+            }
+            return new range_1.Range(this.startLineNumber, 1, this.endLineNumberExclusive - 1, Number.MAX_SAFE_INTEGER);
+        }
+        toExclusiveRange() {
+            return new range_1.Range(this.startLineNumber, 1, this.endLineNumberExclusive, 1);
+        }
+        mapToLineArray(f) {
+            const result = [];
+            for (let lineNumber = this.startLineNumber; lineNumber < this.endLineNumberExclusive; lineNumber++) {
+                result.push(f(lineNumber));
+            }
+            return result;
+        }
+        forEach(f) {
+            for (let lineNumber = this.startLineNumber; lineNumber < this.endLineNumberExclusive; lineNumber++) {
+                f(lineNumber);
+            }
+        }
+        /**
+         * @internal
+         */
+        serialize() {
+            return [this.startLineNumber, this.endLineNumberExclusive];
+        }
+        includes(lineNumber) {
+            return this.startLineNumber <= lineNumber && lineNumber < this.endLineNumberExclusive;
+        }
+    }
+    exports.LineRange = LineRange;
+});
+
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+define(__m[35/*vs/editor/common/core/selection*/], __M([0/*require*/,1/*exports*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/]), function (require, exports, position_1, range_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Selection = void 0;
@@ -8620,7 +9957,7 @@ define(__m[34/*vs/editor/common/core/selection*/], __M([0/*require*/,1/*exports*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[35/*vs/editor/common/core/wordCharacterClassifier*/], __M([0/*require*/,1/*exports*/,20/*vs/editor/common/core/characterClassifier*/]), function (require, exports, characterClassifier_1) {
+define(__m[36/*vs/editor/common/core/wordCharacterClassifier*/], __M([0/*require*/,1/*exports*/,23/*vs/editor/common/core/characterClassifier*/]), function (require, exports, characterClassifier_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getMapForWordSeparators = exports.WordCharacterClassifier = void 0;
@@ -8651,7 +9988,7 @@ define(__m[35/*vs/editor/common/core/wordCharacterClassifier*/], __M([0/*require
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[22/*vs/editor/common/core/wordHelper*/], __M([0/*require*/,1/*exports*/,15/*vs/base/common/iterator*/,16/*vs/base/common/linkedList*/]), function (require, exports, iterator_1, linkedList_1) {
+define(__m[24/*vs/editor/common/core/wordHelper*/], __M([0/*require*/,1/*exports*/,17/*vs/base/common/iterator*/,18/*vs/base/common/linkedList*/]), function (require, exports, iterator_1, linkedList_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getWordAtText = exports.ensureValidWordDefinition = exports.DEFAULT_WORD_REGEXP = exports.USUAL_WORD_SEPARATORS = void 0;
@@ -8779,7 +10116,7 @@ define(__m[22/*vs/editor/common/core/wordHelper*/], __M([0/*require*/,1/*exports
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[7/*vs/editor/common/diff/algorithms/diffAlgorithm*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,6/*vs/editor/common/core/offsetRange*/]), function (require, exports, errors_1, offsetRange_1) {
+define(__m[8/*vs/editor/common/diff/algorithms/diffAlgorithm*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,6/*vs/editor/common/core/offsetRange*/]), function (require, exports, errors_1, offsetRange_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DateTimeout = exports.InfiniteTimeout = exports.SequenceDiff = exports.DiffAlgorithmResult = void 0;
@@ -8814,6 +10151,12 @@ define(__m[7/*vs/editor/common/diff/algorithms/diffAlgorithm*/], __M([0/*require
         }
         join(other) {
             return new SequenceDiff(this.seq1Range.join(other.seq1Range), this.seq2Range.join(other.seq2Range));
+        }
+        delta(offset) {
+            if (offset === 0) {
+                return this;
+            }
+            return new SequenceDiff(this.seq1Range.delta(offset), this.seq2Range.delta(offset));
         }
     }
     exports.SequenceDiff = SequenceDiff;
@@ -8851,10 +10194,10 @@ define(__m[7/*vs/editor/common/diff/algorithms/diffAlgorithm*/], __M([0/*require
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*require*/,1/*exports*/,6/*vs/editor/common/core/offsetRange*/,7/*vs/editor/common/diff/algorithms/diffAlgorithm*/]), function (require, exports, offsetRange_1, diffAlgorithm_1) {
+define(__m[37/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*require*/,1/*exports*/,6/*vs/editor/common/core/offsetRange*/,8/*vs/editor/common/diff/algorithms/diffAlgorithm*/]), function (require, exports, offsetRange_1, diffAlgorithm_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.shiftSequenceDiffs = exports.joinSequenceDiffs = exports.smoothenSequenceDiffs = exports.optimizeSequenceDiffs = void 0;
+    exports.shiftSequenceDiffs = exports.joinSequenceDiffs = exports.removeRandomMatches = exports.smoothenSequenceDiffs = exports.optimizeSequenceDiffs = void 0;
     function optimizeSequenceDiffs(sequence1, sequence2, sequenceDiffs) {
         let result = sequenceDiffs;
         result = joinSequenceDiffs(sequence1, sequence2, result);
@@ -8880,6 +10223,64 @@ define(__m[36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*re
         return result;
     }
     exports.smoothenSequenceDiffs = smoothenSequenceDiffs;
+    function removeRandomMatches(sequence1, sequence2, sequenceDiffs) {
+        let diffs = sequenceDiffs;
+        if (diffs.length === 0) {
+            return diffs;
+        }
+        let counter = 0;
+        let shouldRepeat;
+        do {
+            shouldRepeat = false;
+            const result = [
+                diffs[0]
+            ];
+            for (let i = 1; i < diffs.length; i++) {
+                const cur = diffs[i];
+                const lastResult = result[result.length - 1];
+                function shouldJoinDiffs(before, after) {
+                    const unchangedRange = new offsetRange_1.OffsetRange(lastResult.seq1Range.endExclusive, cur.seq1Range.start);
+                    const unchangedLineCount = sequence1.countLinesIn(unchangedRange);
+                    if (unchangedLineCount > 5 || unchangedRange.length > 500) {
+                        return false;
+                    }
+                    const unchangedText = sequence1.getText(unchangedRange).trim();
+                    if (unchangedText.length > 20 || unchangedText.split(/\r\n|\r|\n/).length > 1) {
+                        return false;
+                    }
+                    const beforeLineCount1 = sequence1.countLinesIn(before.seq1Range);
+                    const beforeSeq1Length = before.seq1Range.length;
+                    const beforeLineCount2 = sequence2.countLinesIn(before.seq2Range);
+                    const beforeSeq2Length = before.seq2Range.length;
+                    const afterLineCount1 = sequence1.countLinesIn(after.seq1Range);
+                    const afterSeq1Length = after.seq1Range.length;
+                    const afterLineCount2 = sequence2.countLinesIn(after.seq2Range);
+                    const afterSeq2Length = after.seq2Range.length;
+                    // TODO: Maybe a neural net can be used to derive the result from these numbers
+                    const max = 2 * 40 + 50;
+                    function cap(v) {
+                        return Math.min(v, max);
+                    }
+                    if (Math.pow(Math.pow(cap(beforeLineCount1 * 40 + beforeSeq1Length), 1.5) + Math.pow(cap(beforeLineCount2 * 40 + beforeSeq2Length), 1.5), 1.5)
+                        + Math.pow(Math.pow(cap(afterLineCount1 * 40 + afterSeq1Length), 1.5) + Math.pow(cap(afterLineCount2 * 40 + afterSeq2Length), 1.5), 1.5) > (Math.pow((Math.pow(max, 1.5)), 1.5)) * 1.3) {
+                        return true;
+                    }
+                    return false;
+                }
+                const shouldJoin = shouldJoinDiffs(lastResult, cur);
+                if (shouldJoin) {
+                    shouldRepeat = true;
+                    result[result.length - 1] = result[result.length - 1].join(cur);
+                }
+                else {
+                    result.push(cur);
+                }
+            }
+            diffs = result;
+        } while (counter++ < 10 && shouldRepeat);
+        return diffs;
+    }
+    exports.removeRandomMatches = removeRandomMatches;
     /**
      * This function fixes issues like this:
      * ```
@@ -8893,31 +10294,63 @@ define(__m[36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*re
      * Improved diff: [{Add ", Foo" after Bar}]
      */
     function joinSequenceDiffs(sequence1, sequence2, sequenceDiffs) {
-        const result = [];
-        if (sequenceDiffs.length > 0) {
-            result.push(sequenceDiffs[0]);
+        if (sequenceDiffs.length === 0) {
+            return sequenceDiffs;
         }
+        const result = [];
+        result.push(sequenceDiffs[0]);
+        // First move them all to the left as much as possible and join them if possible
         for (let i = 1; i < sequenceDiffs.length; i++) {
-            const lastResult = result[result.length - 1];
-            const cur = sequenceDiffs[i];
-            if (cur.seq1Range.isEmpty) {
-                let all = true;
-                const length = cur.seq1Range.start - lastResult.seq1Range.endExclusive;
-                for (let i = 1; i <= length; i++) {
-                    if (sequence2.getElement(cur.seq2Range.start - i) !== sequence2.getElement(cur.seq2Range.endExclusive - i)) {
-                        all = false;
+            const prevResult = result[result.length - 1];
+            let cur = sequenceDiffs[i];
+            if (cur.seq1Range.isEmpty || cur.seq2Range.isEmpty) {
+                const length = cur.seq1Range.start - prevResult.seq1Range.endExclusive;
+                let d;
+                for (d = 1; d <= length; d++) {
+                    if (sequence1.getElement(cur.seq1Range.start - d) !== sequence1.getElement(cur.seq1Range.endExclusive - d) ||
+                        sequence2.getElement(cur.seq2Range.start - d) !== sequence2.getElement(cur.seq2Range.endExclusive - d)) {
                         break;
                     }
                 }
-                if (all) {
+                d--;
+                if (d === length) {
                     // Merge previous and current diff
-                    result[result.length - 1] = new diffAlgorithm_1.SequenceDiff(lastResult.seq1Range, new offsetRange_1.OffsetRange(lastResult.seq2Range.start, cur.seq2Range.endExclusive - length));
+                    result[result.length - 1] = new diffAlgorithm_1.SequenceDiff(new offsetRange_1.OffsetRange(prevResult.seq1Range.start, cur.seq1Range.endExclusive - length), new offsetRange_1.OffsetRange(prevResult.seq2Range.start, cur.seq2Range.endExclusive - length));
                     continue;
                 }
+                cur = cur.delta(-d);
             }
             result.push(cur);
         }
-        return result;
+        const result2 = [];
+        // Then move them all to the right and join them again if possible
+        for (let i = 0; i < result.length - 1; i++) {
+            const nextResult = result[i + 1];
+            let cur = result[i];
+            if (cur.seq1Range.isEmpty || cur.seq2Range.isEmpty) {
+                const length = nextResult.seq1Range.start - cur.seq1Range.endExclusive;
+                let d;
+                for (d = 0; d < length; d++) {
+                    if (sequence1.getElement(cur.seq1Range.start + d) !== sequence1.getElement(cur.seq1Range.endExclusive + d) ||
+                        sequence2.getElement(cur.seq2Range.start + d) !== sequence2.getElement(cur.seq2Range.endExclusive + d)) {
+                        break;
+                    }
+                }
+                if (d === length) {
+                    // Merge previous and current diff, write to result!
+                    result[i + 1] = new diffAlgorithm_1.SequenceDiff(new offsetRange_1.OffsetRange(cur.seq1Range.start + length, nextResult.seq1Range.endExclusive), new offsetRange_1.OffsetRange(cur.seq2Range.start + length, nextResult.seq2Range.endExclusive));
+                    continue;
+                }
+                if (d > 0) {
+                    cur = cur.delta(d);
+                }
+            }
+            result2.push(cur);
+        }
+        if (result.length > 0) {
+            result2.push(result[result.length - 1]);
+        }
+        return result2;
     }
     exports.joinSequenceDiffs = joinSequenceDiffs;
     // align character level diffs at whitespace characters
@@ -8938,33 +10371,35 @@ define(__m[36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*re
             return sequenceDiffs;
         }
         for (let i = 0; i < sequenceDiffs.length; i++) {
+            const prevDiff = (i > 0 ? sequenceDiffs[i - 1] : undefined);
             const diff = sequenceDiffs[i];
+            const nextDiff = (i + 1 < sequenceDiffs.length ? sequenceDiffs[i + 1] : undefined);
+            const seq1ValidRange = new offsetRange_1.OffsetRange(prevDiff ? prevDiff.seq1Range.start + 1 : 0, nextDiff ? nextDiff.seq1Range.endExclusive - 1 : sequence1.length);
+            const seq2ValidRange = new offsetRange_1.OffsetRange(prevDiff ? prevDiff.seq2Range.start + 1 : 0, nextDiff ? nextDiff.seq2Range.endExclusive - 1 : sequence2.length);
             if (diff.seq1Range.isEmpty) {
-                const seq2PrevEndExclusive = (i > 0 ? sequenceDiffs[i - 1].seq2Range.endExclusive : -1);
-                const seq2NextStart = (i + 1 < sequenceDiffs.length ? sequenceDiffs[i + 1].seq2Range.start : sequence2.length);
-                sequenceDiffs[i] = shiftDiffToBetterPosition(diff, sequence1, sequence2, seq2NextStart, seq2PrevEndExclusive);
+                sequenceDiffs[i] = shiftDiffToBetterPosition(diff, sequence1, sequence2, seq1ValidRange, seq2ValidRange);
             }
             else if (diff.seq2Range.isEmpty) {
-                const seq1PrevEndExclusive = (i > 0 ? sequenceDiffs[i - 1].seq1Range.endExclusive : -1);
-                const seq1NextStart = (i + 1 < sequenceDiffs.length ? sequenceDiffs[i + 1].seq1Range.start : sequence1.length);
-                sequenceDiffs[i] = shiftDiffToBetterPosition(diff.reverse(), sequence2, sequence1, seq1NextStart, seq1PrevEndExclusive).reverse();
+                sequenceDiffs[i] = shiftDiffToBetterPosition(diff.reverse(), sequence2, sequence1, seq2ValidRange, seq1ValidRange).reverse();
             }
         }
         return sequenceDiffs;
     }
     exports.shiftSequenceDiffs = shiftSequenceDiffs;
-    function shiftDiffToBetterPosition(diff, sequence1, sequence2, seq2NextStart, seq2PrevEndExclusive) {
-        const maxShiftLimit = 20; // To prevent performance issues
+    function shiftDiffToBetterPosition(diff, sequence1, sequence2, seq1ValidRange, seq2ValidRange) {
+        const maxShiftLimit = 100; // To prevent performance issues
         // don't touch previous or next!
         let deltaBefore = 1;
-        while (diff.seq2Range.start - deltaBefore > seq2PrevEndExclusive &&
+        while (diff.seq1Range.start - deltaBefore >= seq1ValidRange.start &&
+            diff.seq2Range.start - deltaBefore >= seq2ValidRange.start &&
             sequence2.getElement(diff.seq2Range.start - deltaBefore) ===
                 sequence2.getElement(diff.seq2Range.endExclusive - deltaBefore) && deltaBefore < maxShiftLimit) {
             deltaBefore++;
         }
         deltaBefore--;
         let deltaAfter = 0;
-        while (diff.seq2Range.start + deltaAfter < seq2NextStart &&
+        while (diff.seq1Range.start + deltaAfter < seq1ValidRange.endExclusive &&
+            diff.seq2Range.endExclusive + deltaAfter < seq2ValidRange.endExclusive &&
             sequence2.getElement(diff.seq2Range.start + deltaAfter) ===
                 sequence2.getElement(diff.seq2Range.endExclusive + deltaAfter) && deltaAfter < maxShiftLimit) {
             deltaAfter++;
@@ -8987,10 +10422,7 @@ define(__m[36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*re
                 bestDelta = delta;
             }
         }
-        if (bestDelta !== 0) {
-            return new diffAlgorithm_1.SequenceDiff(diff.seq1Range.delta(bestDelta), diff.seq2Range.delta(bestDelta));
-        }
-        return diff;
+        return diff.delta(bestDelta);
     }
 });
 
@@ -8998,7 +10430,7 @@ define(__m[36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/], __M([0/*re
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[37/*vs/editor/common/diff/algorithms/myersDiffAlgorithm*/], __M([0/*require*/,1/*exports*/,6/*vs/editor/common/core/offsetRange*/,7/*vs/editor/common/diff/algorithms/diffAlgorithm*/]), function (require, exports, offsetRange_1, diffAlgorithm_1) {
+define(__m[38/*vs/editor/common/diff/algorithms/myersDiffAlgorithm*/], __M([0/*require*/,1/*exports*/,6/*vs/editor/common/core/offsetRange*/,8/*vs/editor/common/diff/algorithms/diffAlgorithm*/]), function (require, exports, offsetRange_1, diffAlgorithm_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyersDiffAlgorithm = void 0;
@@ -9030,14 +10462,23 @@ define(__m[37/*vs/editor/common/diff/algorithms/myersDiffAlgorithm*/], __M([0/*r
             let k = 0;
             loop: while (true) {
                 d++;
-                for (k = -d; k <= d; k += 2) {
-                    if (!timeout.isValid()) {
-                        return diffAlgorithm_1.DiffAlgorithmResult.trivialTimedOut(seq1, seq2);
-                    }
-                    const maxXofDLineTop = k === d ? -1 : V.get(k + 1); // We take a vertical non-diagonal
-                    const maxXofDLineLeft = k === -d ? -1 : V.get(k - 1) + 1; // We take a horizontal non-diagonal (+1 x)
+                if (!timeout.isValid()) {
+                    return diffAlgorithm_1.DiffAlgorithmResult.trivialTimedOut(seq1, seq2);
+                }
+                // The paper has `for (k = -d; k <= d; k += 2)`, but we can ignore diagonals that cannot influence the result.
+                const lowerBound = -Math.min(d, seq2.length + (d % 2));
+                const upperBound = Math.min(d, seq1.length + (d % 2));
+                for (k = lowerBound; k <= upperBound; k += 2) {
+                    // We can use the X values of (d-1)-lines to compute X value of the longest d-lines.
+                    const maxXofDLineTop = k === upperBound ? -1 : V.get(k + 1); // We take a vertical non-diagonal (add a symbol in seq1)
+                    const maxXofDLineLeft = k === lowerBound ? -1 : V.get(k - 1) + 1; // We take a horizontal non-diagonal (+1 x) (delete a symbol in seq1)
                     const x = Math.min(Math.max(maxXofDLineTop, maxXofDLineLeft), seq1.length);
                     const y = x - k;
+                    if (x > seq1.length || y > seq2.length) {
+                        // This diagonal is irrelevant for the result.
+                        // TODO: Don't pay the cost for this in the next iteration.
+                        continue;
+                    }
                     const newMaxX = getXAfterSnake(x, y);
                     V.set(k, newMaxX);
                     const lastPath = x === maxXofDLineTop ? paths.get(k + 1) : paths.get(k - 1);
@@ -9147,7 +10588,7 @@ define(__m[37/*vs/editor/common/diff/algorithms/myersDiffAlgorithm*/], __M([0/*r
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[38/*vs/editor/common/diff/algorithms/utils*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[39/*vs/editor/common/diff/algorithms/utils*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Array2D = void 0;
@@ -9172,7 +10613,7 @@ define(__m[38/*vs/editor/common/diff/algorithms/utils*/], __M([0/*require*/,1/*e
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[39/*vs/editor/common/diff/algorithms/dynamicProgrammingDiffing*/], __M([0/*require*/,1/*exports*/,6/*vs/editor/common/core/offsetRange*/,7/*vs/editor/common/diff/algorithms/diffAlgorithm*/,38/*vs/editor/common/diff/algorithms/utils*/]), function (require, exports, offsetRange_1, diffAlgorithm_1, utils_1) {
+define(__m[40/*vs/editor/common/diff/algorithms/dynamicProgrammingDiffing*/], __M([0/*require*/,1/*exports*/,6/*vs/editor/common/core/offsetRange*/,8/*vs/editor/common/diff/algorithms/diffAlgorithm*/,39/*vs/editor/common/diff/algorithms/utils*/]), function (require, exports, offsetRange_1, diffAlgorithm_1, utils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DynamicProgrammingDiffing = void 0;
@@ -9274,18 +10715,24 @@ define(__m[39/*vs/editor/common/diff/algorithms/dynamicProgrammingDiffing*/], __
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[23/*vs/editor/common/diff/linesDiffComputer*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[25/*vs/editor/common/diff/linesDiffComputer*/], __M([0/*require*/,1/*exports*/,12/*vs/editor/common/core/lineRange*/]), function (require, exports, lineRange_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RangeMapping = exports.LineRangeMapping = exports.LinesDiff = void 0;
+    exports.MovedText = exports.SimpleLineRangeMapping = exports.RangeMapping = exports.LineRangeMapping = exports.LinesDiff = void 0;
     class LinesDiff {
         constructor(changes, 
+        /**
+         * Sorted by original line ranges.
+         * The original line ranges and the modified line ranges must be disjoint (but can be touching).
+         */
+        moves, 
         /**
          * Indicates if the time out was reached.
          * In that case, the diffs might be an approximation and the user should be asked to rerun the diff with more time.
          */
         hitTimeout) {
             this.changes = changes;
+            this.moves = moves;
             this.hitTimeout = hitTimeout;
         }
     }
@@ -9294,6 +10741,24 @@ define(__m[23/*vs/editor/common/diff/linesDiffComputer*/], __M([0/*require*/,1/*
      * Maps a line range in the original text model to a line range in the modified text model.
      */
     class LineRangeMapping {
+        static inverse(mapping, originalLineCount, modifiedLineCount) {
+            const result = [];
+            let lastOriginalEndLineNumber = 1;
+            let lastModifiedEndLineNumber = 1;
+            for (const m of mapping) {
+                const r = new LineRangeMapping(new lineRange_1.LineRange(lastOriginalEndLineNumber, m.originalRange.startLineNumber), new lineRange_1.LineRange(lastModifiedEndLineNumber, m.modifiedRange.startLineNumber), undefined);
+                if (!r.modifiedRange.isEmpty) {
+                    result.push(r);
+                }
+                lastOriginalEndLineNumber = m.originalRange.endLineNumberExclusive;
+                lastModifiedEndLineNumber = m.modifiedRange.endLineNumberExclusive;
+            }
+            const r = new LineRangeMapping(new lineRange_1.LineRange(lastOriginalEndLineNumber, originalLineCount + 1), new lineRange_1.LineRange(lastModifiedEndLineNumber, modifiedLineCount + 1), undefined);
+            if (!r.modifiedRange.isEmpty) {
+                result.push(r);
+            }
+            return result;
+        }
         constructor(originalRange, modifiedRange, innerChanges) {
             this.originalRange = originalRange;
             this.modifiedRange = modifiedRange;
@@ -9304,6 +10769,10 @@ define(__m[23/*vs/editor/common/diff/linesDiffComputer*/], __M([0/*require*/,1/*
         }
         get changedLineCount() {
             return Math.max(this.originalRange.length, this.modifiedRange.length);
+        }
+        flip() {
+            var _a;
+            return new LineRangeMapping(this.modifiedRange, this.originalRange, (_a = this.innerChanges) === null || _a === void 0 ? void 0 : _a.map(c => c.flip()));
         }
     }
     exports.LineRangeMapping = LineRangeMapping;
@@ -9318,15 +10787,42 @@ define(__m[23/*vs/editor/common/diff/linesDiffComputer*/], __M([0/*require*/,1/*
         toString() {
             return `{${this.originalRange.toString()}->${this.modifiedRange.toString()}}`;
         }
+        flip() {
+            return new RangeMapping(this.modifiedRange, this.originalRange);
+        }
     }
     exports.RangeMapping = RangeMapping;
+    // TODO@hediet: Make LineRangeMapping extend from this!
+    class SimpleLineRangeMapping {
+        constructor(original, modified) {
+            this.original = original;
+            this.modified = modified;
+        }
+        toString() {
+            return `{${this.original.toString()}->${this.modified.toString()}}`;
+        }
+        flip() {
+            return new SimpleLineRangeMapping(this.modified, this.original);
+        }
+    }
+    exports.SimpleLineRangeMapping = SimpleLineRangeMapping;
+    class MovedText {
+        constructor(lineRangeMapping, changes) {
+            this.lineRangeMapping = lineRangeMapping;
+            this.changes = changes;
+        }
+        flip() {
+            return new MovedText(this.lineRangeMapping.flip(), this.changes.map(c => c.flip()));
+        }
+    }
+    exports.MovedText = MovedText;
 });
 
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[40/*vs/editor/common/diff/smartLinesDiffComputer*/], __M([0/*require*/,1/*exports*/,17/*vs/base/common/diff/diff*/,23/*vs/editor/common/diff/linesDiffComputer*/,5/*vs/base/common/strings*/,2/*vs/editor/common/core/range*/,10/*vs/base/common/assert*/,21/*vs/editor/common/core/lineRange*/]), function (require, exports, diff_1, linesDiffComputer_1, strings, range_1, assert_1, lineRange_1) {
+define(__m[41/*vs/editor/common/diff/smartLinesDiffComputer*/], __M([0/*require*/,1/*exports*/,20/*vs/base/common/diff/diff*/,25/*vs/editor/common/diff/linesDiffComputer*/,5/*vs/base/common/strings*/,2/*vs/editor/common/core/range*/,9/*vs/base/common/assert*/,12/*vs/editor/common/core/lineRange*/]), function (require, exports, diff_1, linesDiffComputer_1, strings, range_1, assert_1, lineRange_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiffComputer = exports.SmartLinesDiffComputer = void 0;
@@ -9380,7 +10876,7 @@ define(__m[40/*vs/editor/common/diff/smartLinesDiffComputer*/], __M([0/*require*
                     m1.originalRange.endLineNumberExclusive < m2.originalRange.startLineNumber &&
                     m1.modifiedRange.endLineNumberExclusive < m2.modifiedRange.startLineNumber);
             });
-            return new linesDiffComputer_1.LinesDiff(changes, result.quitEarly);
+            return new linesDiffComputer_1.LinesDiff(changes, [], result.quitEarly);
         }
     }
     exports.SmartLinesDiffComputer = SmartLinesDiffComputer;
@@ -9793,16 +11289,27 @@ define(__m[40/*vs/editor/common/diff/smartLinesDiffComputer*/], __M([0/*require*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*require*/,1/*exports*/,10/*vs/base/common/assert*/,21/*vs/editor/common/core/lineRange*/,6/*vs/editor/common/core/offsetRange*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,7/*vs/editor/common/diff/algorithms/diffAlgorithm*/,39/*vs/editor/common/diff/algorithms/dynamicProgrammingDiffing*/,36/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/,37/*vs/editor/common/diff/algorithms/myersDiffAlgorithm*/,23/*vs/editor/common/diff/linesDiffComputer*/]), function (require, exports, assert_1, lineRange_1, offsetRange_1, position_1, range_1, diffAlgorithm_1, dynamicProgrammingDiffing_1, joinSequenceDiffs_1, myersDiffAlgorithm_1, linesDiffComputer_1) {
+define(__m[42/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*require*/,1/*exports*/,9/*vs/base/common/assert*/,12/*vs/editor/common/core/lineRange*/,6/*vs/editor/common/core/offsetRange*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,8/*vs/editor/common/diff/algorithms/diffAlgorithm*/,40/*vs/editor/common/diff/algorithms/dynamicProgrammingDiffing*/,37/*vs/editor/common/diff/algorithms/joinSequenceDiffs*/,38/*vs/editor/common/diff/algorithms/myersDiffAlgorithm*/,25/*vs/editor/common/diff/linesDiffComputer*/]), function (require, exports, assert_1, lineRange_1, offsetRange_1, position_1, range_1, diffAlgorithm_1, dynamicProgrammingDiffing_1, joinSequenceDiffs_1, myersDiffAlgorithm_1, linesDiffComputer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.LineSequence = exports.getLineRangeMapping = exports.lineRangeMappingFromRangeMappings = exports.StandardLinesDiffComputer = void 0;
+    exports.LinesSliceCharSequence = exports.LineSequence = exports.getLineRangeMapping = exports.lineRangeMappingFromRangeMappings = exports.StandardLinesDiffComputer = void 0;
     class StandardLinesDiffComputer {
         constructor() {
             this.dynamicProgrammingDiffing = new dynamicProgrammingDiffing_1.DynamicProgrammingDiffing();
             this.myersDiffingAlgorithm = new myersDiffAlgorithm_1.MyersDiffAlgorithm();
         }
         computeDiff(originalLines, modifiedLines, options) {
+            if (originalLines.length === 1 && originalLines[0].length === 0 || modifiedLines.length === 1 && modifiedLines[0].length === 0) {
+                return {
+                    changes: [
+                        new linesDiffComputer_1.LineRangeMapping(new lineRange_1.LineRange(1, originalLines.length + 1), new lineRange_1.LineRange(1, modifiedLines.length + 1), [
+                            new linesDiffComputer_1.RangeMapping(new range_1.Range(1, 1, originalLines.length, originalLines[0].length + 1), new range_1.Range(1, 1, modifiedLines.length, modifiedLines[0].length + 1))
+                        ])
+                    ],
+                    hitTimeout: false,
+                    moves: [],
+                };
+            }
             const timeout = options.maxComputationTimeMs === 0 ? diffAlgorithm_1.InfiniteTimeout.instance : new diffAlgorithm_1.DateTimeout(options.maxComputationTimeMs);
             const considerWhitespaceChanges = !options.ignoreTrimWhitespace;
             const perfectHashes = new Map();
@@ -9870,19 +11377,84 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
             }
             scanForWhitespaceChanges(originalLines.length - seq1LastStart);
             const changes = lineRangeMappingFromRangeMappings(alignments, originalLines, modifiedLines);
-            return new linesDiffComputer_1.LinesDiff(changes, hitTimeout);
+            const moves = [];
+            if (options.computeMoves) {
+                const deletions = changes
+                    .filter(c => c.modifiedRange.isEmpty && c.originalRange.length >= 3)
+                    .map(d => new LineRangeFragment(d.originalRange, originalLines));
+                const insertions = new Set(changes
+                    .filter(c => c.originalRange.isEmpty && c.modifiedRange.length >= 3)
+                    .map(d => new LineRangeFragment(d.modifiedRange, modifiedLines)));
+                for (const deletion of deletions) {
+                    let highestSimilarity = -1;
+                    let best;
+                    for (const insertion of insertions) {
+                        const similarity = deletion.computeSimilarity(insertion);
+                        if (similarity > highestSimilarity) {
+                            highestSimilarity = similarity;
+                            best = insertion;
+                        }
+                    }
+                    if (highestSimilarity > 0.90 && best) {
+                        const moveChanges = this.refineDiff(originalLines, modifiedLines, new diffAlgorithm_1.SequenceDiff(new offsetRange_1.OffsetRange(deletion.range.startLineNumber - 1, deletion.range.endLineNumberExclusive - 1), new offsetRange_1.OffsetRange(best.range.startLineNumber - 1, best.range.endLineNumberExclusive - 1)), timeout, considerWhitespaceChanges);
+                        const mappings = lineRangeMappingFromRangeMappings(moveChanges.mappings, originalLines, modifiedLines, true);
+                        insertions.delete(best);
+                        moves.push(new linesDiffComputer_1.MovedText(new linesDiffComputer_1.SimpleLineRangeMapping(deletion.range, best.range), mappings));
+                    }
+                }
+            }
+            // Make sure all ranges are valid
+            (0, assert_1.assertFn)(() => {
+                function validatePosition(pos, lines) {
+                    if (pos.lineNumber < 1 || pos.lineNumber > lines.length) {
+                        return false;
+                    }
+                    const line = lines[pos.lineNumber - 1];
+                    if (pos.column < 1 || pos.column > line.length + 1) {
+                        return false;
+                    }
+                    return true;
+                }
+                function validateRange(range, lines) {
+                    if (range.startLineNumber < 1 || range.startLineNumber > lines.length + 1) {
+                        return false;
+                    }
+                    if (range.endLineNumberExclusive < 1 || range.endLineNumberExclusive > lines.length + 1) {
+                        return false;
+                    }
+                    return true;
+                }
+                for (const c of changes) {
+                    if (!c.innerChanges) {
+                        return false;
+                    }
+                    for (const ic of c.innerChanges) {
+                        const valid = validatePosition(ic.modifiedRange.getStartPosition(), modifiedLines) && validatePosition(ic.modifiedRange.getEndPosition(), modifiedLines) &&
+                            validatePosition(ic.originalRange.getStartPosition(), originalLines) && validatePosition(ic.originalRange.getEndPosition(), originalLines);
+                        if (!valid) {
+                            return false;
+                        }
+                    }
+                    if (!validateRange(c.modifiedRange, modifiedLines) || !validateRange(c.originalRange, originalLines)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+            return new linesDiffComputer_1.LinesDiff(changes, moves, hitTimeout);
         }
         refineDiff(originalLines, modifiedLines, diff, timeout, considerWhitespaceChanges) {
-            const sourceSlice = new Slice(originalLines, diff.seq1Range, considerWhitespaceChanges);
-            const targetSlice = new Slice(modifiedLines, diff.seq2Range, considerWhitespaceChanges);
-            const diffResult = sourceSlice.length + targetSlice.length < 500
-                ? this.dynamicProgrammingDiffing.compute(sourceSlice, targetSlice, timeout)
-                : this.myersDiffingAlgorithm.compute(sourceSlice, targetSlice, timeout);
+            const slice1 = new LinesSliceCharSequence(originalLines, diff.seq1Range, considerWhitespaceChanges);
+            const slice2 = new LinesSliceCharSequence(modifiedLines, diff.seq2Range, considerWhitespaceChanges);
+            const diffResult = slice1.length + slice2.length < 500
+                ? this.dynamicProgrammingDiffing.compute(slice1, slice2, timeout)
+                : this.myersDiffingAlgorithm.compute(slice1, slice2, timeout);
             let diffs = diffResult.diffs;
-            diffs = (0, joinSequenceDiffs_1.optimizeSequenceDiffs)(sourceSlice, targetSlice, diffs);
-            diffs = coverFullWords(sourceSlice, targetSlice, diffs);
-            diffs = (0, joinSequenceDiffs_1.smoothenSequenceDiffs)(sourceSlice, targetSlice, diffs);
-            const result = diffs.map((d) => new linesDiffComputer_1.RangeMapping(sourceSlice.translateRange(d.seq1Range), targetSlice.translateRange(d.seq2Range)));
+            diffs = (0, joinSequenceDiffs_1.optimizeSequenceDiffs)(slice1, slice2, diffs);
+            diffs = coverFullWords(slice1, slice2, diffs);
+            diffs = (0, joinSequenceDiffs_1.smoothenSequenceDiffs)(slice1, slice2, diffs);
+            diffs = (0, joinSequenceDiffs_1.removeRandomMatches)(slice1, slice2, diffs);
+            const result = diffs.map((d) => new linesDiffComputer_1.RangeMapping(slice1.translateRange(d.seq1Range), slice2.translateRange(d.seq2Range)));
             // Assert: result applied on original should be the same as diff applied to original
             return {
                 mappings: result,
@@ -9972,7 +11544,7 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
         }
         return result;
     }
-    function lineRangeMappingFromRangeMappings(alignments, originalLines, modifiedLines) {
+    function lineRangeMappingFromRangeMappings(alignments, originalLines, modifiedLines, dontAssertStartLine = false) {
         const changes = [];
         for (const g of group(alignments.map(a => getLineRangeMapping(a, originalLines, modifiedLines)), (a1, a2) => a1.originalRange.overlapOrTouch(a2.originalRange)
             || a1.modifiedRange.overlapOrTouch(a2.modifiedRange))) {
@@ -9981,6 +11553,11 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
             changes.push(new linesDiffComputer_1.LineRangeMapping(first.originalRange.join(last.originalRange), first.modifiedRange.join(last.modifiedRange), g.map(a => a.innerChanges[0])));
         }
         (0, assert_1.assertFn)(() => {
+            if (!dontAssertStartLine) {
+                if (changes.length > 0 && changes[0].originalRange.startLineNumber !== changes[0].modifiedRange.startLineNumber) {
+                    return false;
+                }
+            }
             return (0, assert_1.checkAdjacentItems)(changes, (m1, m2) => m2.originalRange.startLineNumber - m1.originalRange.endLineNumberExclusive === m2.modifiedRange.startLineNumber - m1.modifiedRange.endLineNumberExclusive &&
                 // There has to be an unchanged line in between (otherwise both diffs should have been joined)
                 m1.originalRange.endLineNumberExclusive < m2.originalRange.startLineNumber &&
@@ -9993,18 +11570,22 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
         let lineStartDelta = 0;
         let lineEndDelta = 0;
         // rangeMapping describes the edit that replaces `rangeMapping.originalRange` with `newText := getText(modifiedLines, rangeMapping.modifiedRange)`.
-        // original: xxx[ \n <- this line is not modified
-        // modified: xxx[ \n
-        if (rangeMapping.modifiedRange.startColumn - 1 >= modifiedLines[rangeMapping.modifiedRange.startLineNumber - 1].length
-            && rangeMapping.originalRange.startColumn - 1 >= originalLines[rangeMapping.originalRange.startLineNumber - 1].length) {
-            lineStartDelta = 1; // +1 is always possible, as startLineNumber < endLineNumber + 1
-        }
         // original: ]xxx \n <- this line is not modified
         // modified: ]xx  \n
         if (rangeMapping.modifiedRange.endColumn === 1 && rangeMapping.originalRange.endColumn === 1
             && rangeMapping.originalRange.startLineNumber + lineStartDelta <= rangeMapping.originalRange.endLineNumber
             && rangeMapping.modifiedRange.startLineNumber + lineStartDelta <= rangeMapping.modifiedRange.endLineNumber) {
-            lineEndDelta = -1; // We can only do this if the range is not empty yet
+            // We can only do this if the range is not empty yet
+            lineEndDelta = -1;
+        }
+        // original: xxx[ \n <- this line is not modified
+        // modified: xxx[ \n
+        if (rangeMapping.modifiedRange.startColumn - 1 >= modifiedLines[rangeMapping.modifiedRange.startLineNumber - 1].length
+            && rangeMapping.originalRange.startColumn - 1 >= originalLines[rangeMapping.originalRange.startLineNumber - 1].length
+            && rangeMapping.originalRange.startLineNumber <= rangeMapping.originalRange.endLineNumber + lineEndDelta
+            && rangeMapping.modifiedRange.startLineNumber <= rangeMapping.modifiedRange.endLineNumber + lineEndDelta) {
+            // We can only do this if the range is not empty yet
+            lineStartDelta = 1;
         }
         const originalLineRange = new lineRange_1.LineRange(rangeMapping.originalRange.startLineNumber + lineStartDelta, rangeMapping.originalRange.endLineNumber + 1 + lineEndDelta);
         const modifiedLineRange = new lineRange_1.LineRange(rangeMapping.modifiedRange.startLineNumber + lineStartDelta, rangeMapping.modifiedRange.endLineNumber + 1 + lineEndDelta);
@@ -10055,7 +11636,7 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
         }
         return i;
     }
-    class Slice {
+    class LinesSliceCharSequence {
         constructor(lines, lineRange, considerWhitespaceChanges) {
             // This slice has to have lineRange.length many \n! (otherwise diffing against an empty slice will be problematic)
             // (Unless it covers the entire document, in that case the other slice also has to cover the entire document ands it's okay)
@@ -10102,7 +11683,10 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
             return `Slice: "${this.text}"`;
         }
         get text() {
-            return [...this.elements].map(e => String.fromCharCode(e)).join('');
+            return this.getText(new offsetRange_1.OffsetRange(0, this.length));
+        }
+        getText(range) {
+            return this.elements.slice(range.start, range.endExclusive).map(e => String.fromCharCode(e)).join('');
         }
         getElement(offset) {
             return this.elements[offset];
@@ -10146,8 +11730,8 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
                     i = k + 1;
                 }
             }
-            const offsetOfPrevLineBreak = i === 0 ? 0 : this.firstCharOffsetByLineMinusOne[i - 1];
-            return new position_1.Position(this.lineRange.start + i + 1, offset - offsetOfPrevLineBreak + 1 + this.offsetByLine[i]);
+            const offsetOfFirstCharInLine = i === 0 ? 0 : this.firstCharOffsetByLineMinusOne[i - 1];
+            return new position_1.Position(this.lineRange.start + i + 1, offset - offsetOfFirstCharInLine + 1 + this.offsetByLine[i]);
         }
         translateRange(range) {
             return range_1.Range.fromPositions(this.translateOffset(range.start), this.translateOffset(range.endExclusive));
@@ -10174,7 +11758,11 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
             }
             return new offsetRange_1.OffsetRange(start, end);
         }
+        countLinesIn(range) {
+            return this.translateOffset(range.endExclusive).lineNumber - this.translateOffset(range.start).lineNumber;
+        }
     }
+    exports.LinesSliceCharSequence = LinesSliceCharSequence;
     function isWordChar(charCode) {
         return charCode >= 97 /* CharCode.a */ && charCode <= 122 /* CharCode.z */
             || charCode >= 65 /* CharCode.A */ && charCode <= 90 /* CharCode.Z */
@@ -10222,23 +11810,62 @@ define(__m[41/*vs/editor/common/diff/standardLinesDiffComputer*/], __M([0/*requi
     function isSpace(charCode) {
         return charCode === 32 /* CharCode.Space */ || charCode === 9 /* CharCode.Tab */;
     }
+    const chrKeys = new Map();
+    function getKey(chr) {
+        let key = chrKeys.get(chr);
+        if (key === undefined) {
+            key = chrKeys.size;
+            chrKeys.set(chr, key);
+        }
+        return key;
+    }
+    class LineRangeFragment {
+        constructor(range, lines) {
+            this.range = range;
+            this.lines = lines;
+            this.histogram = [];
+            let counter = 0;
+            for (let i = range.startLineNumber - 1; i < range.endLineNumberExclusive - 1; i++) {
+                const line = lines[i];
+                for (let j = 0; j < line.length; j++) {
+                    counter++;
+                    const chr = line[j];
+                    const key = getKey(chr);
+                    this.histogram[key] = (this.histogram[key] || 0) + 1;
+                }
+                counter++;
+                const key = getKey('\n');
+                this.histogram[key] = (this.histogram[key] || 0) + 1;
+            }
+            this.totalCount = counter;
+        }
+        computeSimilarity(other) {
+            var _a, _b;
+            let sumDifferences = 0;
+            const maxLength = Math.max(this.histogram.length, other.histogram.length);
+            for (let i = 0; i < maxLength; i++) {
+                sumDifferences += Math.abs(((_a = this.histogram[i]) !== null && _a !== void 0 ? _a : 0) - ((_b = other.histogram[i]) !== null && _b !== void 0 ? _b : 0));
+            }
+            return 1 - (sumDifferences / (this.totalCount + other.totalCount));
+        }
+    }
 });
 
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[42/*vs/editor/common/diff/linesDiffComputers*/], __M([0/*require*/,1/*exports*/,40/*vs/editor/common/diff/smartLinesDiffComputer*/,41/*vs/editor/common/diff/standardLinesDiffComputer*/]), function (require, exports, smartLinesDiffComputer_1, standardLinesDiffComputer_1) {
+define(__m[43/*vs/editor/common/diff/linesDiffComputers*/], __M([0/*require*/,1/*exports*/,41/*vs/editor/common/diff/smartLinesDiffComputer*/,42/*vs/editor/common/diff/standardLinesDiffComputer*/]), function (require, exports, smartLinesDiffComputer_1, standardLinesDiffComputer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.linesDiffComputers = void 0;
     exports.linesDiffComputers = {
-        legacy: new smartLinesDiffComputer_1.SmartLinesDiffComputer(),
-        advanced: new standardLinesDiffComputer_1.StandardLinesDiffComputer(),
+        getLegacy: () => new smartLinesDiffComputer_1.SmartLinesDiffComputer(),
+        getAdvanced: () => new standardLinesDiffComputer_1.StandardLinesDiffComputer(),
     };
 });
 
-define(__m[43/*vs/editor/common/languages/defaultDocumentColorsComputer*/], __M([0/*require*/,1/*exports*/,28/*vs/base/common/color*/]), function (require, exports, color_1) {
+define(__m[44/*vs/editor/common/languages/defaultDocumentColorsComputer*/], __M([0/*require*/,1/*exports*/,28/*vs/base/common/color*/]), function (require, exports, color_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.computeDefaultDocumentColors = void 0;
@@ -10324,7 +11951,7 @@ define(__m[43/*vs/editor/common/languages/defaultDocumentColorsComputer*/], __M(
     function computeColors(model) {
         const result = [];
         // Early validation for RGB and HSL
-        const initialValidationRegex = /\b(rgb|rgba|hsl|hsla)(\([0-9\s,.\%]*\))|(#)([A-Fa-f0-9]{6})\b|(#)([A-Fa-f0-9]{8})\b/gm;
+        const initialValidationRegex = /\b(rgb|rgba|hsl|hsla)(\([0-9\s,.\%]*\))|(#)([A-Fa-f0-9]{3})\b|(#)([A-Fa-f0-9]{4})\b|(#)([A-Fa-f0-9]{6})\b|(#)([A-Fa-f0-9]{8})\b/gm;
         const initialValidationMatches = _findMatches(model, initialValidationRegex);
         // Potential colors have been found, validate the parameters
         if (initialValidationMatches.length > 0) {
@@ -10379,7 +12006,7 @@ define(__m[43/*vs/editor/common/languages/defaultDocumentColorsComputer*/], __M(
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[44/*vs/editor/common/languages/linkComputer*/], __M([0/*require*/,1/*exports*/,20/*vs/editor/common/core/characterClassifier*/]), function (require, exports, characterClassifier_1) {
+define(__m[45/*vs/editor/common/languages/linkComputer*/], __M([0/*require*/,1/*exports*/,23/*vs/editor/common/core/characterClassifier*/]), function (require, exports, characterClassifier_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.computeLinks = exports.LinkComputer = exports.StateMachine = void 0;
@@ -10657,7 +12284,7 @@ define(__m[44/*vs/editor/common/languages/linkComputer*/], __M([0/*require*/,1/*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[45/*vs/editor/common/languages/supports/inplaceReplaceSupport*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[46/*vs/editor/common/languages/supports/inplaceReplaceSupport*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BasicInplaceReplace = void 0;
@@ -10749,7 +12376,7 @@ define(__m[45/*vs/editor/common/languages/supports/inplaceReplaceSupport*/], __M
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[46/*vs/editor/common/model*/], __M([0/*require*/,1/*exports*/,12/*vs/base/common/objects*/]), function (require, exports, objects_1) {
+define(__m[47/*vs/editor/common/model*/], __M([0/*require*/,1/*exports*/,11/*vs/base/common/objects*/]), function (require, exports, objects_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.shouldSynchronizeModel = exports.ApplyEditsResult = exports.SearchData = exports.ValidAnnotatedEditOperation = exports.isITextSnapshot = exports.FindMatch = exports.TextModelResolvedOptions = exports.InjectedTextCursorStops = exports.MinimapPosition = exports.GlyphMarginLane = exports.OverviewRulerLane = void 0;
@@ -10901,7 +12528,7 @@ define(__m[46/*vs/editor/common/model*/], __M([0/*require*/,1/*exports*/,12/*vs/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[47/*vs/editor/common/model/prefixSumComputer*/], __M([0/*require*/,1/*exports*/,26/*vs/base/common/arrays*/,19/*vs/base/common/uint*/]), function (require, exports, arrays_1, uint_1) {
+define(__m[48/*vs/editor/common/model/prefixSumComputer*/], __M([0/*require*/,1/*exports*/,26/*vs/base/common/arrays*/,22/*vs/base/common/uint*/]), function (require, exports, arrays_1, uint_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PrefixSumIndexOfResult = exports.ConstantTimePrefixSumComputer = exports.PrefixSumComputer = void 0;
@@ -11131,7 +12758,7 @@ define(__m[47/*vs/editor/common/model/prefixSumComputer*/], __M([0/*require*/,1/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[48/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/,3/*vs/editor/common/core/position*/,47/*vs/editor/common/model/prefixSumComputer*/]), function (require, exports, strings_1, position_1, prefixSumComputer_1) {
+define(__m[49/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/,3/*vs/editor/common/core/position*/,48/*vs/editor/common/model/prefixSumComputer*/]), function (require, exports, strings_1, position_1, prefixSumComputer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MirrorTextModel = void 0;
@@ -11249,7 +12876,7 @@ define(__m[48/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*e
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[49/*vs/editor/common/model/textModelSearch*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/,35/*vs/editor/common/core/wordCharacterClassifier*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,46/*vs/editor/common/model*/]), function (require, exports, strings, wordCharacterClassifier_1, position_1, range_1, model_1) {
+define(__m[50/*vs/editor/common/model/textModelSearch*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/,36/*vs/editor/common/core/wordCharacterClassifier*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,47/*vs/editor/common/model*/]), function (require, exports, strings, wordCharacterClassifier_1, position_1, range_1, model_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Searcher = exports.isValidMatch = exports.TextModelSearch = exports.createFindMatch = exports.isMultilineRegexSource = exports.SearchParams = void 0;
@@ -11708,7 +13335,7 @@ define(__m[49/*vs/editor/common/model/textModelSearch*/], __M([0/*require*/,1/*e
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[50/*vs/editor/common/services/unicodeTextModelHighlighter*/], __M([0/*require*/,1/*exports*/,2/*vs/editor/common/core/range*/,49/*vs/editor/common/model/textModelSearch*/,5/*vs/base/common/strings*/,10/*vs/base/common/assert*/,22/*vs/editor/common/core/wordHelper*/]), function (require, exports, range_1, textModelSearch_1, strings, assert_1, wordHelper_1) {
+define(__m[51/*vs/editor/common/services/unicodeTextModelHighlighter*/], __M([0/*require*/,1/*exports*/,2/*vs/editor/common/core/range*/,50/*vs/editor/common/model/textModelSearch*/,5/*vs/base/common/strings*/,9/*vs/base/common/assert*/,24/*vs/editor/common/core/wordHelper*/]), function (require, exports, range_1, textModelSearch_1, strings, assert_1, wordHelper_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.UnicodeTextModelHighlighter = void 0;
@@ -11895,7 +13522,7 @@ define(__m[50/*vs/editor/common/services/unicodeTextModelHighlighter*/], __M([0/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[51/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[52/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.WrappingIndent = exports.TrackedRangeStickiness = exports.TextEditorCursorStyle = exports.TextEditorCursorBlinkingStyle = exports.SymbolTag = exports.SymbolKind = exports.SignatureHelpTriggerKind = exports.SelectionDirection = exports.ScrollbarVisibility = exports.ScrollType = exports.RenderMinimap = exports.RenderLineNumbersType = exports.PositionAffinity = exports.OverviewRulerLane = exports.OverlayWidgetPositionPreference = exports.MouseTargetType = exports.MinimapPosition = exports.MarkerTag = exports.MarkerSeverity = exports.KeyCode = exports.InlineCompletionTriggerKind = exports.InlayHintKind = exports.InjectedTextCursorStops = exports.IndentAction = exports.GlyphMarginLane = exports.EndOfLineSequence = exports.EndOfLinePreference = exports.EditorOption = exports.EditorAutoIndentStrategy = exports.DocumentHighlightKind = exports.DefaultEndOfLine = exports.CursorChangeReason = exports.ContentWidgetPositionPreference = exports.CompletionTriggerKind = exports.CompletionItemTag = exports.CompletionItemKind = exports.CompletionItemInsertTextRule = exports.CodeActionTriggerType = exports.AccessibilitySupport = void 0;
@@ -12073,143 +13700,147 @@ define(__m[51/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/
         EditorOption[EditorOption["accessibilitySupport"] = 2] = "accessibilitySupport";
         EditorOption[EditorOption["accessibilityPageSize"] = 3] = "accessibilityPageSize";
         EditorOption[EditorOption["ariaLabel"] = 4] = "ariaLabel";
-        EditorOption[EditorOption["autoClosingBrackets"] = 5] = "autoClosingBrackets";
-        EditorOption[EditorOption["screenReaderAnnounceInlineSuggestion"] = 6] = "screenReaderAnnounceInlineSuggestion";
-        EditorOption[EditorOption["autoClosingDelete"] = 7] = "autoClosingDelete";
-        EditorOption[EditorOption["autoClosingOvertype"] = 8] = "autoClosingOvertype";
-        EditorOption[EditorOption["autoClosingQuotes"] = 9] = "autoClosingQuotes";
-        EditorOption[EditorOption["autoIndent"] = 10] = "autoIndent";
-        EditorOption[EditorOption["automaticLayout"] = 11] = "automaticLayout";
-        EditorOption[EditorOption["autoSurround"] = 12] = "autoSurround";
-        EditorOption[EditorOption["bracketPairColorization"] = 13] = "bracketPairColorization";
-        EditorOption[EditorOption["guides"] = 14] = "guides";
-        EditorOption[EditorOption["codeLens"] = 15] = "codeLens";
-        EditorOption[EditorOption["codeLensFontFamily"] = 16] = "codeLensFontFamily";
-        EditorOption[EditorOption["codeLensFontSize"] = 17] = "codeLensFontSize";
-        EditorOption[EditorOption["colorDecorators"] = 18] = "colorDecorators";
-        EditorOption[EditorOption["colorDecoratorsLimit"] = 19] = "colorDecoratorsLimit";
-        EditorOption[EditorOption["columnSelection"] = 20] = "columnSelection";
-        EditorOption[EditorOption["comments"] = 21] = "comments";
-        EditorOption[EditorOption["contextmenu"] = 22] = "contextmenu";
-        EditorOption[EditorOption["copyWithSyntaxHighlighting"] = 23] = "copyWithSyntaxHighlighting";
-        EditorOption[EditorOption["cursorBlinking"] = 24] = "cursorBlinking";
-        EditorOption[EditorOption["cursorSmoothCaretAnimation"] = 25] = "cursorSmoothCaretAnimation";
-        EditorOption[EditorOption["cursorStyle"] = 26] = "cursorStyle";
-        EditorOption[EditorOption["cursorSurroundingLines"] = 27] = "cursorSurroundingLines";
-        EditorOption[EditorOption["cursorSurroundingLinesStyle"] = 28] = "cursorSurroundingLinesStyle";
-        EditorOption[EditorOption["cursorWidth"] = 29] = "cursorWidth";
-        EditorOption[EditorOption["disableLayerHinting"] = 30] = "disableLayerHinting";
-        EditorOption[EditorOption["disableMonospaceOptimizations"] = 31] = "disableMonospaceOptimizations";
-        EditorOption[EditorOption["domReadOnly"] = 32] = "domReadOnly";
-        EditorOption[EditorOption["dragAndDrop"] = 33] = "dragAndDrop";
-        EditorOption[EditorOption["dropIntoEditor"] = 34] = "dropIntoEditor";
-        EditorOption[EditorOption["emptySelectionClipboard"] = 35] = "emptySelectionClipboard";
-        EditorOption[EditorOption["experimentalWhitespaceRendering"] = 36] = "experimentalWhitespaceRendering";
-        EditorOption[EditorOption["extraEditorClassName"] = 37] = "extraEditorClassName";
-        EditorOption[EditorOption["fastScrollSensitivity"] = 38] = "fastScrollSensitivity";
-        EditorOption[EditorOption["find"] = 39] = "find";
-        EditorOption[EditorOption["fixedOverflowWidgets"] = 40] = "fixedOverflowWidgets";
-        EditorOption[EditorOption["folding"] = 41] = "folding";
-        EditorOption[EditorOption["foldingStrategy"] = 42] = "foldingStrategy";
-        EditorOption[EditorOption["foldingHighlight"] = 43] = "foldingHighlight";
-        EditorOption[EditorOption["foldingImportsByDefault"] = 44] = "foldingImportsByDefault";
-        EditorOption[EditorOption["foldingMaximumRegions"] = 45] = "foldingMaximumRegions";
-        EditorOption[EditorOption["unfoldOnClickAfterEndOfLine"] = 46] = "unfoldOnClickAfterEndOfLine";
-        EditorOption[EditorOption["fontFamily"] = 47] = "fontFamily";
-        EditorOption[EditorOption["fontInfo"] = 48] = "fontInfo";
-        EditorOption[EditorOption["fontLigatures"] = 49] = "fontLigatures";
-        EditorOption[EditorOption["fontSize"] = 50] = "fontSize";
-        EditorOption[EditorOption["fontWeight"] = 51] = "fontWeight";
-        EditorOption[EditorOption["fontVariations"] = 52] = "fontVariations";
-        EditorOption[EditorOption["formatOnPaste"] = 53] = "formatOnPaste";
-        EditorOption[EditorOption["formatOnType"] = 54] = "formatOnType";
-        EditorOption[EditorOption["glyphMargin"] = 55] = "glyphMargin";
-        EditorOption[EditorOption["gotoLocation"] = 56] = "gotoLocation";
-        EditorOption[EditorOption["hideCursorInOverviewRuler"] = 57] = "hideCursorInOverviewRuler";
-        EditorOption[EditorOption["hover"] = 58] = "hover";
-        EditorOption[EditorOption["inDiffEditor"] = 59] = "inDiffEditor";
-        EditorOption[EditorOption["inlineSuggest"] = 60] = "inlineSuggest";
-        EditorOption[EditorOption["letterSpacing"] = 61] = "letterSpacing";
-        EditorOption[EditorOption["lightbulb"] = 62] = "lightbulb";
-        EditorOption[EditorOption["lineDecorationsWidth"] = 63] = "lineDecorationsWidth";
-        EditorOption[EditorOption["lineHeight"] = 64] = "lineHeight";
-        EditorOption[EditorOption["lineNumbers"] = 65] = "lineNumbers";
-        EditorOption[EditorOption["lineNumbersMinChars"] = 66] = "lineNumbersMinChars";
-        EditorOption[EditorOption["linkedEditing"] = 67] = "linkedEditing";
-        EditorOption[EditorOption["links"] = 68] = "links";
-        EditorOption[EditorOption["matchBrackets"] = 69] = "matchBrackets";
-        EditorOption[EditorOption["minimap"] = 70] = "minimap";
-        EditorOption[EditorOption["mouseStyle"] = 71] = "mouseStyle";
-        EditorOption[EditorOption["mouseWheelScrollSensitivity"] = 72] = "mouseWheelScrollSensitivity";
-        EditorOption[EditorOption["mouseWheelZoom"] = 73] = "mouseWheelZoom";
-        EditorOption[EditorOption["multiCursorMergeOverlapping"] = 74] = "multiCursorMergeOverlapping";
-        EditorOption[EditorOption["multiCursorModifier"] = 75] = "multiCursorModifier";
-        EditorOption[EditorOption["multiCursorPaste"] = 76] = "multiCursorPaste";
-        EditorOption[EditorOption["multiCursorLimit"] = 77] = "multiCursorLimit";
-        EditorOption[EditorOption["occurrencesHighlight"] = 78] = "occurrencesHighlight";
-        EditorOption[EditorOption["overviewRulerBorder"] = 79] = "overviewRulerBorder";
-        EditorOption[EditorOption["overviewRulerLanes"] = 80] = "overviewRulerLanes";
-        EditorOption[EditorOption["padding"] = 81] = "padding";
-        EditorOption[EditorOption["parameterHints"] = 82] = "parameterHints";
-        EditorOption[EditorOption["peekWidgetDefaultFocus"] = 83] = "peekWidgetDefaultFocus";
-        EditorOption[EditorOption["definitionLinkOpensInPeek"] = 84] = "definitionLinkOpensInPeek";
-        EditorOption[EditorOption["quickSuggestions"] = 85] = "quickSuggestions";
-        EditorOption[EditorOption["quickSuggestionsDelay"] = 86] = "quickSuggestionsDelay";
-        EditorOption[EditorOption["readOnly"] = 87] = "readOnly";
-        EditorOption[EditorOption["renameOnType"] = 88] = "renameOnType";
-        EditorOption[EditorOption["renderControlCharacters"] = 89] = "renderControlCharacters";
-        EditorOption[EditorOption["renderFinalNewline"] = 90] = "renderFinalNewline";
-        EditorOption[EditorOption["renderLineHighlight"] = 91] = "renderLineHighlight";
-        EditorOption[EditorOption["renderLineHighlightOnlyWhenFocus"] = 92] = "renderLineHighlightOnlyWhenFocus";
-        EditorOption[EditorOption["renderValidationDecorations"] = 93] = "renderValidationDecorations";
-        EditorOption[EditorOption["renderWhitespace"] = 94] = "renderWhitespace";
-        EditorOption[EditorOption["revealHorizontalRightPadding"] = 95] = "revealHorizontalRightPadding";
-        EditorOption[EditorOption["roundedSelection"] = 96] = "roundedSelection";
-        EditorOption[EditorOption["rulers"] = 97] = "rulers";
-        EditorOption[EditorOption["scrollbar"] = 98] = "scrollbar";
-        EditorOption[EditorOption["scrollBeyondLastColumn"] = 99] = "scrollBeyondLastColumn";
-        EditorOption[EditorOption["scrollBeyondLastLine"] = 100] = "scrollBeyondLastLine";
-        EditorOption[EditorOption["scrollPredominantAxis"] = 101] = "scrollPredominantAxis";
-        EditorOption[EditorOption["selectionClipboard"] = 102] = "selectionClipboard";
-        EditorOption[EditorOption["selectionHighlight"] = 103] = "selectionHighlight";
-        EditorOption[EditorOption["selectOnLineNumbers"] = 104] = "selectOnLineNumbers";
-        EditorOption[EditorOption["showFoldingControls"] = 105] = "showFoldingControls";
-        EditorOption[EditorOption["showUnused"] = 106] = "showUnused";
-        EditorOption[EditorOption["snippetSuggestions"] = 107] = "snippetSuggestions";
-        EditorOption[EditorOption["smartSelect"] = 108] = "smartSelect";
-        EditorOption[EditorOption["smoothScrolling"] = 109] = "smoothScrolling";
-        EditorOption[EditorOption["stickyScroll"] = 110] = "stickyScroll";
-        EditorOption[EditorOption["stickyTabStops"] = 111] = "stickyTabStops";
-        EditorOption[EditorOption["stopRenderingLineAfter"] = 112] = "stopRenderingLineAfter";
-        EditorOption[EditorOption["suggest"] = 113] = "suggest";
-        EditorOption[EditorOption["suggestFontSize"] = 114] = "suggestFontSize";
-        EditorOption[EditorOption["suggestLineHeight"] = 115] = "suggestLineHeight";
-        EditorOption[EditorOption["suggestOnTriggerCharacters"] = 116] = "suggestOnTriggerCharacters";
-        EditorOption[EditorOption["suggestSelection"] = 117] = "suggestSelection";
-        EditorOption[EditorOption["tabCompletion"] = 118] = "tabCompletion";
-        EditorOption[EditorOption["tabIndex"] = 119] = "tabIndex";
-        EditorOption[EditorOption["unicodeHighlighting"] = 120] = "unicodeHighlighting";
-        EditorOption[EditorOption["unusualLineTerminators"] = 121] = "unusualLineTerminators";
-        EditorOption[EditorOption["useShadowDOM"] = 122] = "useShadowDOM";
-        EditorOption[EditorOption["useTabStops"] = 123] = "useTabStops";
-        EditorOption[EditorOption["wordBreak"] = 124] = "wordBreak";
-        EditorOption[EditorOption["wordSeparators"] = 125] = "wordSeparators";
-        EditorOption[EditorOption["wordWrap"] = 126] = "wordWrap";
-        EditorOption[EditorOption["wordWrapBreakAfterCharacters"] = 127] = "wordWrapBreakAfterCharacters";
-        EditorOption[EditorOption["wordWrapBreakBeforeCharacters"] = 128] = "wordWrapBreakBeforeCharacters";
-        EditorOption[EditorOption["wordWrapColumn"] = 129] = "wordWrapColumn";
-        EditorOption[EditorOption["wordWrapOverride1"] = 130] = "wordWrapOverride1";
-        EditorOption[EditorOption["wordWrapOverride2"] = 131] = "wordWrapOverride2";
-        EditorOption[EditorOption["wrappingIndent"] = 132] = "wrappingIndent";
-        EditorOption[EditorOption["wrappingStrategy"] = 133] = "wrappingStrategy";
-        EditorOption[EditorOption["showDeprecated"] = 134] = "showDeprecated";
-        EditorOption[EditorOption["inlayHints"] = 135] = "inlayHints";
-        EditorOption[EditorOption["editorClassName"] = 136] = "editorClassName";
-        EditorOption[EditorOption["pixelRatio"] = 137] = "pixelRatio";
-        EditorOption[EditorOption["tabFocusMode"] = 138] = "tabFocusMode";
-        EditorOption[EditorOption["layoutInfo"] = 139] = "layoutInfo";
-        EditorOption[EditorOption["wrappingInfo"] = 140] = "wrappingInfo";
-        EditorOption[EditorOption["defaultColorDecorators"] = 141] = "defaultColorDecorators";
+        EditorOption[EditorOption["ariaRequired"] = 5] = "ariaRequired";
+        EditorOption[EditorOption["autoClosingBrackets"] = 6] = "autoClosingBrackets";
+        EditorOption[EditorOption["screenReaderAnnounceInlineSuggestion"] = 7] = "screenReaderAnnounceInlineSuggestion";
+        EditorOption[EditorOption["autoClosingDelete"] = 8] = "autoClosingDelete";
+        EditorOption[EditorOption["autoClosingOvertype"] = 9] = "autoClosingOvertype";
+        EditorOption[EditorOption["autoClosingQuotes"] = 10] = "autoClosingQuotes";
+        EditorOption[EditorOption["autoIndent"] = 11] = "autoIndent";
+        EditorOption[EditorOption["automaticLayout"] = 12] = "automaticLayout";
+        EditorOption[EditorOption["autoSurround"] = 13] = "autoSurround";
+        EditorOption[EditorOption["bracketPairColorization"] = 14] = "bracketPairColorization";
+        EditorOption[EditorOption["guides"] = 15] = "guides";
+        EditorOption[EditorOption["codeLens"] = 16] = "codeLens";
+        EditorOption[EditorOption["codeLensFontFamily"] = 17] = "codeLensFontFamily";
+        EditorOption[EditorOption["codeLensFontSize"] = 18] = "codeLensFontSize";
+        EditorOption[EditorOption["colorDecorators"] = 19] = "colorDecorators";
+        EditorOption[EditorOption["colorDecoratorsLimit"] = 20] = "colorDecoratorsLimit";
+        EditorOption[EditorOption["columnSelection"] = 21] = "columnSelection";
+        EditorOption[EditorOption["comments"] = 22] = "comments";
+        EditorOption[EditorOption["contextmenu"] = 23] = "contextmenu";
+        EditorOption[EditorOption["copyWithSyntaxHighlighting"] = 24] = "copyWithSyntaxHighlighting";
+        EditorOption[EditorOption["cursorBlinking"] = 25] = "cursorBlinking";
+        EditorOption[EditorOption["cursorSmoothCaretAnimation"] = 26] = "cursorSmoothCaretAnimation";
+        EditorOption[EditorOption["cursorStyle"] = 27] = "cursorStyle";
+        EditorOption[EditorOption["cursorSurroundingLines"] = 28] = "cursorSurroundingLines";
+        EditorOption[EditorOption["cursorSurroundingLinesStyle"] = 29] = "cursorSurroundingLinesStyle";
+        EditorOption[EditorOption["cursorWidth"] = 30] = "cursorWidth";
+        EditorOption[EditorOption["disableLayerHinting"] = 31] = "disableLayerHinting";
+        EditorOption[EditorOption["disableMonospaceOptimizations"] = 32] = "disableMonospaceOptimizations";
+        EditorOption[EditorOption["domReadOnly"] = 33] = "domReadOnly";
+        EditorOption[EditorOption["dragAndDrop"] = 34] = "dragAndDrop";
+        EditorOption[EditorOption["dropIntoEditor"] = 35] = "dropIntoEditor";
+        EditorOption[EditorOption["emptySelectionClipboard"] = 36] = "emptySelectionClipboard";
+        EditorOption[EditorOption["experimentalWhitespaceRendering"] = 37] = "experimentalWhitespaceRendering";
+        EditorOption[EditorOption["extraEditorClassName"] = 38] = "extraEditorClassName";
+        EditorOption[EditorOption["fastScrollSensitivity"] = 39] = "fastScrollSensitivity";
+        EditorOption[EditorOption["find"] = 40] = "find";
+        EditorOption[EditorOption["fixedOverflowWidgets"] = 41] = "fixedOverflowWidgets";
+        EditorOption[EditorOption["folding"] = 42] = "folding";
+        EditorOption[EditorOption["foldingStrategy"] = 43] = "foldingStrategy";
+        EditorOption[EditorOption["foldingHighlight"] = 44] = "foldingHighlight";
+        EditorOption[EditorOption["foldingImportsByDefault"] = 45] = "foldingImportsByDefault";
+        EditorOption[EditorOption["foldingMaximumRegions"] = 46] = "foldingMaximumRegions";
+        EditorOption[EditorOption["unfoldOnClickAfterEndOfLine"] = 47] = "unfoldOnClickAfterEndOfLine";
+        EditorOption[EditorOption["fontFamily"] = 48] = "fontFamily";
+        EditorOption[EditorOption["fontInfo"] = 49] = "fontInfo";
+        EditorOption[EditorOption["fontLigatures"] = 50] = "fontLigatures";
+        EditorOption[EditorOption["fontSize"] = 51] = "fontSize";
+        EditorOption[EditorOption["fontWeight"] = 52] = "fontWeight";
+        EditorOption[EditorOption["fontVariations"] = 53] = "fontVariations";
+        EditorOption[EditorOption["formatOnPaste"] = 54] = "formatOnPaste";
+        EditorOption[EditorOption["formatOnType"] = 55] = "formatOnType";
+        EditorOption[EditorOption["glyphMargin"] = 56] = "glyphMargin";
+        EditorOption[EditorOption["gotoLocation"] = 57] = "gotoLocation";
+        EditorOption[EditorOption["hideCursorInOverviewRuler"] = 58] = "hideCursorInOverviewRuler";
+        EditorOption[EditorOption["hover"] = 59] = "hover";
+        EditorOption[EditorOption["inDiffEditor"] = 60] = "inDiffEditor";
+        EditorOption[EditorOption["inlineSuggest"] = 61] = "inlineSuggest";
+        EditorOption[EditorOption["letterSpacing"] = 62] = "letterSpacing";
+        EditorOption[EditorOption["lightbulb"] = 63] = "lightbulb";
+        EditorOption[EditorOption["lineDecorationsWidth"] = 64] = "lineDecorationsWidth";
+        EditorOption[EditorOption["lineHeight"] = 65] = "lineHeight";
+        EditorOption[EditorOption["lineNumbers"] = 66] = "lineNumbers";
+        EditorOption[EditorOption["lineNumbersMinChars"] = 67] = "lineNumbersMinChars";
+        EditorOption[EditorOption["linkedEditing"] = 68] = "linkedEditing";
+        EditorOption[EditorOption["links"] = 69] = "links";
+        EditorOption[EditorOption["matchBrackets"] = 70] = "matchBrackets";
+        EditorOption[EditorOption["minimap"] = 71] = "minimap";
+        EditorOption[EditorOption["mouseStyle"] = 72] = "mouseStyle";
+        EditorOption[EditorOption["mouseWheelScrollSensitivity"] = 73] = "mouseWheelScrollSensitivity";
+        EditorOption[EditorOption["mouseWheelZoom"] = 74] = "mouseWheelZoom";
+        EditorOption[EditorOption["multiCursorMergeOverlapping"] = 75] = "multiCursorMergeOverlapping";
+        EditorOption[EditorOption["multiCursorModifier"] = 76] = "multiCursorModifier";
+        EditorOption[EditorOption["multiCursorPaste"] = 77] = "multiCursorPaste";
+        EditorOption[EditorOption["multiCursorLimit"] = 78] = "multiCursorLimit";
+        EditorOption[EditorOption["occurrencesHighlight"] = 79] = "occurrencesHighlight";
+        EditorOption[EditorOption["overviewRulerBorder"] = 80] = "overviewRulerBorder";
+        EditorOption[EditorOption["overviewRulerLanes"] = 81] = "overviewRulerLanes";
+        EditorOption[EditorOption["padding"] = 82] = "padding";
+        EditorOption[EditorOption["pasteAs"] = 83] = "pasteAs";
+        EditorOption[EditorOption["parameterHints"] = 84] = "parameterHints";
+        EditorOption[EditorOption["peekWidgetDefaultFocus"] = 85] = "peekWidgetDefaultFocus";
+        EditorOption[EditorOption["definitionLinkOpensInPeek"] = 86] = "definitionLinkOpensInPeek";
+        EditorOption[EditorOption["quickSuggestions"] = 87] = "quickSuggestions";
+        EditorOption[EditorOption["quickSuggestionsDelay"] = 88] = "quickSuggestionsDelay";
+        EditorOption[EditorOption["readOnly"] = 89] = "readOnly";
+        EditorOption[EditorOption["readOnlyMessage"] = 90] = "readOnlyMessage";
+        EditorOption[EditorOption["renameOnType"] = 91] = "renameOnType";
+        EditorOption[EditorOption["renderControlCharacters"] = 92] = "renderControlCharacters";
+        EditorOption[EditorOption["renderFinalNewline"] = 93] = "renderFinalNewline";
+        EditorOption[EditorOption["renderLineHighlight"] = 94] = "renderLineHighlight";
+        EditorOption[EditorOption["renderLineHighlightOnlyWhenFocus"] = 95] = "renderLineHighlightOnlyWhenFocus";
+        EditorOption[EditorOption["renderValidationDecorations"] = 96] = "renderValidationDecorations";
+        EditorOption[EditorOption["renderWhitespace"] = 97] = "renderWhitespace";
+        EditorOption[EditorOption["revealHorizontalRightPadding"] = 98] = "revealHorizontalRightPadding";
+        EditorOption[EditorOption["roundedSelection"] = 99] = "roundedSelection";
+        EditorOption[EditorOption["rulers"] = 100] = "rulers";
+        EditorOption[EditorOption["scrollbar"] = 101] = "scrollbar";
+        EditorOption[EditorOption["scrollBeyondLastColumn"] = 102] = "scrollBeyondLastColumn";
+        EditorOption[EditorOption["scrollBeyondLastLine"] = 103] = "scrollBeyondLastLine";
+        EditorOption[EditorOption["scrollPredominantAxis"] = 104] = "scrollPredominantAxis";
+        EditorOption[EditorOption["selectionClipboard"] = 105] = "selectionClipboard";
+        EditorOption[EditorOption["selectionHighlight"] = 106] = "selectionHighlight";
+        EditorOption[EditorOption["selectOnLineNumbers"] = 107] = "selectOnLineNumbers";
+        EditorOption[EditorOption["showFoldingControls"] = 108] = "showFoldingControls";
+        EditorOption[EditorOption["showUnused"] = 109] = "showUnused";
+        EditorOption[EditorOption["snippetSuggestions"] = 110] = "snippetSuggestions";
+        EditorOption[EditorOption["smartSelect"] = 111] = "smartSelect";
+        EditorOption[EditorOption["smoothScrolling"] = 112] = "smoothScrolling";
+        EditorOption[EditorOption["stickyScroll"] = 113] = "stickyScroll";
+        EditorOption[EditorOption["stickyTabStops"] = 114] = "stickyTabStops";
+        EditorOption[EditorOption["stopRenderingLineAfter"] = 115] = "stopRenderingLineAfter";
+        EditorOption[EditorOption["suggest"] = 116] = "suggest";
+        EditorOption[EditorOption["suggestFontSize"] = 117] = "suggestFontSize";
+        EditorOption[EditorOption["suggestLineHeight"] = 118] = "suggestLineHeight";
+        EditorOption[EditorOption["suggestOnTriggerCharacters"] = 119] = "suggestOnTriggerCharacters";
+        EditorOption[EditorOption["suggestSelection"] = 120] = "suggestSelection";
+        EditorOption[EditorOption["tabCompletion"] = 121] = "tabCompletion";
+        EditorOption[EditorOption["tabIndex"] = 122] = "tabIndex";
+        EditorOption[EditorOption["unicodeHighlighting"] = 123] = "unicodeHighlighting";
+        EditorOption[EditorOption["unusualLineTerminators"] = 124] = "unusualLineTerminators";
+        EditorOption[EditorOption["useShadowDOM"] = 125] = "useShadowDOM";
+        EditorOption[EditorOption["useTabStops"] = 126] = "useTabStops";
+        EditorOption[EditorOption["wordBreak"] = 127] = "wordBreak";
+        EditorOption[EditorOption["wordSeparators"] = 128] = "wordSeparators";
+        EditorOption[EditorOption["wordWrap"] = 129] = "wordWrap";
+        EditorOption[EditorOption["wordWrapBreakAfterCharacters"] = 130] = "wordWrapBreakAfterCharacters";
+        EditorOption[EditorOption["wordWrapBreakBeforeCharacters"] = 131] = "wordWrapBreakBeforeCharacters";
+        EditorOption[EditorOption["wordWrapColumn"] = 132] = "wordWrapColumn";
+        EditorOption[EditorOption["wordWrapOverride1"] = 133] = "wordWrapOverride1";
+        EditorOption[EditorOption["wordWrapOverride2"] = 134] = "wordWrapOverride2";
+        EditorOption[EditorOption["wrappingIndent"] = 135] = "wrappingIndent";
+        EditorOption[EditorOption["wrappingStrategy"] = 136] = "wrappingStrategy";
+        EditorOption[EditorOption["showDeprecated"] = 137] = "showDeprecated";
+        EditorOption[EditorOption["inlayHints"] = 138] = "inlayHints";
+        EditorOption[EditorOption["editorClassName"] = 139] = "editorClassName";
+        EditorOption[EditorOption["pixelRatio"] = 140] = "pixelRatio";
+        EditorOption[EditorOption["tabFocusMode"] = 141] = "tabFocusMode";
+        EditorOption[EditorOption["layoutInfo"] = 142] = "layoutInfo";
+        EditorOption[EditorOption["wrappingInfo"] = 143] = "wrappingInfo";
+        EditorOption[EditorOption["defaultColorDecorators"] = 144] = "defaultColorDecorators";
+        EditorOption[EditorOption["colorDecoratorsActivatedOn"] = 145] = "colorDecoratorsActivatedOn";
     })(EditorOption || (exports.EditorOption = EditorOption = {}));
     /**
      * End of line character preference.
@@ -12817,8 +14448,149 @@ define(__m[51/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/
     })(WrappingIndent || (exports.WrappingIndent = WrappingIndent = {}));
 });
 
-define(__m[52/*vs/nls!vs/base/common/platform*/], __M([25/*vs/nls*/,59/*vs/nls!vs/base/common/worker/simpleWorker*/]), function(nls, data) { return nls.create("vs/base/common/platform", data); });
-define(__m[8/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/,52/*vs/nls!vs/base/common/platform*/]), function (require, exports, nls) {
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+define(__m[53/*vs/editor/common/tokenizationRegistry*/], __M([0/*require*/,1/*exports*/,7/*vs/base/common/event*/,10/*vs/base/common/lifecycle*/]), function (require, exports, event_1, lifecycle_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TokenizationRegistry = void 0;
+    class TokenizationRegistry {
+        constructor() {
+            this._tokenizationSupports = new Map();
+            this._factories = new Map();
+            this._onDidChange = new event_1.Emitter();
+            this.onDidChange = this._onDidChange.event;
+            this._colorMap = null;
+        }
+        handleChange(languageIds) {
+            this._onDidChange.fire({
+                changedLanguages: languageIds,
+                changedColorMap: false
+            });
+        }
+        register(languageId, support) {
+            this._tokenizationSupports.set(languageId, support);
+            this.handleChange([languageId]);
+            return (0, lifecycle_1.toDisposable)(() => {
+                if (this._tokenizationSupports.get(languageId) !== support) {
+                    return;
+                }
+                this._tokenizationSupports.delete(languageId);
+                this.handleChange([languageId]);
+            });
+        }
+        get(languageId) {
+            return this._tokenizationSupports.get(languageId) || null;
+        }
+        registerFactory(languageId, factory) {
+            var _a;
+            (_a = this._factories.get(languageId)) === null || _a === void 0 ? void 0 : _a.dispose();
+            const myData = new TokenizationSupportFactoryData(this, languageId, factory);
+            this._factories.set(languageId, myData);
+            return (0, lifecycle_1.toDisposable)(() => {
+                const v = this._factories.get(languageId);
+                if (!v || v !== myData) {
+                    return;
+                }
+                this._factories.delete(languageId);
+                v.dispose();
+            });
+        }
+        getOrCreate(languageId) {
+            return __awaiter(this, void 0, void 0, function* () {
+                // check first if the support is already set
+                const tokenizationSupport = this.get(languageId);
+                if (tokenizationSupport) {
+                    return tokenizationSupport;
+                }
+                const factory = this._factories.get(languageId);
+                if (!factory || factory.isResolved) {
+                    // no factory or factory.resolve already finished
+                    return null;
+                }
+                yield factory.resolve();
+                return this.get(languageId);
+            });
+        }
+        isResolved(languageId) {
+            const tokenizationSupport = this.get(languageId);
+            if (tokenizationSupport) {
+                return true;
+            }
+            const factory = this._factories.get(languageId);
+            if (!factory || factory.isResolved) {
+                return true;
+            }
+            return false;
+        }
+        setColorMap(colorMap) {
+            this._colorMap = colorMap;
+            this._onDidChange.fire({
+                changedLanguages: Array.from(this._tokenizationSupports.keys()),
+                changedColorMap: true
+            });
+        }
+        getColorMap() {
+            return this._colorMap;
+        }
+        getDefaultBackground() {
+            if (this._colorMap && this._colorMap.length > 2 /* ColorId.DefaultBackground */) {
+                return this._colorMap[2 /* ColorId.DefaultBackground */];
+            }
+            return null;
+        }
+    }
+    exports.TokenizationRegistry = TokenizationRegistry;
+    class TokenizationSupportFactoryData extends lifecycle_1.Disposable {
+        get isResolved() {
+            return this._isResolved;
+        }
+        constructor(_registry, _languageId, _factory) {
+            super();
+            this._registry = _registry;
+            this._languageId = _languageId;
+            this._factory = _factory;
+            this._isDisposed = false;
+            this._resolvePromise = null;
+            this._isResolved = false;
+        }
+        dispose() {
+            this._isDisposed = true;
+            super.dispose();
+        }
+        resolve() {
+            return __awaiter(this, void 0, void 0, function* () {
+                if (!this._resolvePromise) {
+                    this._resolvePromise = this._create();
+                }
+                return this._resolvePromise;
+            });
+        }
+        _create() {
+            return __awaiter(this, void 0, void 0, function* () {
+                const value = yield this._factory.tokenizationSupport;
+                this._isResolved = true;
+                if (value && !this._isDisposed) {
+                    this._register(this._registry.register(this._languageId, value));
+                }
+            });
+        }
+    }
+});
+
+define(__m[54/*vs/nls!vs/base/common/platform*/], __M([15/*vs/nls*/,55/*vs/nls!vs/base/common/worker/simpleWorker*/]), function(nls, data) { return nls.create("vs/base/common/platform", data); });
+define(__m[13/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/,54/*vs/nls!vs/base/common/platform*/]), function (require, exports, nls) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12988,7 +14760,7 @@ define(__m[8/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/,52/*vs/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[53/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,8/*vs/base/common/platform*/]), function (require, exports, platform_1) {
+define(__m[56/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,13/*vs/base/common/platform*/]), function (require, exports, platform_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.platform = exports.env = exports.cwd = void 0;
@@ -13028,6 +14800,8 @@ define(__m[53/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,8/*vs/b
      * environments.
      *
      * Note: in web, this property is hardcoded to be `/`.
+     *
+     * @skipMangle
      */
     exports.cwd = safeProcess.cwd;
     /**
@@ -13048,7 +14822,7 @@ define(__m[53/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,8/*vs/b
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[54/*vs/base/common/path*/], __M([0/*require*/,1/*exports*/,53/*vs/base/common/process*/]), function (require, exports, process) {
+define(__m[57/*vs/base/common/path*/], __M([0/*require*/,1/*exports*/,56/*vs/base/common/process*/]), function (require, exports, process) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.sep = exports.extname = exports.basename = exports.dirname = exports.relative = exports.resolve = exports.normalize = exports.posix = exports.win32 = void 0;
@@ -14422,1234 +16196,7 @@ define(__m[54/*vs/base/common/path*/], __M([0/*require*/,1/*exports*/,53/*vs/bas
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[24/*vs/base/common/stopwatch*/], __M([0/*require*/,1/*exports*/,8/*vs/base/common/platform*/]), function (require, exports, platform_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.StopWatch = void 0;
-    const hasPerformanceNow = (platform_1.globals.performance && typeof platform_1.globals.performance.now === 'function');
-    class StopWatch {
-        static create(highResolution = true) {
-            return new StopWatch(highResolution);
-        }
-        constructor(highResolution) {
-            this._highResolution = hasPerformanceNow && highResolution;
-            this._startTime = this._now();
-            this._stopTime = -1;
-        }
-        stop() {
-            this._stopTime = this._now();
-        }
-        elapsed() {
-            if (this._stopTime !== -1) {
-                return this._stopTime - this._startTime;
-            }
-            return this._now() - this._startTime;
-        }
-        _now() {
-            return this._highResolution ? platform_1.globals.performance.now() : Date.now();
-        }
-    }
-    exports.StopWatch = StopWatch;
-});
-
-define(__m[9/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,14/*vs/base/common/functional*/,11/*vs/base/common/lifecycle*/,16/*vs/base/common/linkedList*/,24/*vs/base/common/stopwatch*/]), function (require, exports, errors_1, functional_1, lifecycle_1, linkedList_1, stopwatch_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Relay = exports.EventBufferer = exports.EventMultiplexer = exports.MicrotaskEmitter = exports.DebounceEmitter = exports.PauseableEmitter = exports.EventDeliveryQueue = exports.Emitter = exports.EventProfiling = exports.Event = void 0;
-    // -----------------------------------------------------------------------------------------------------------------------
-    // Uncomment the next line to print warnings whenever an emitter with listeners is disposed. That is a sign of code smell.
-    // -----------------------------------------------------------------------------------------------------------------------
-    const _enableDisposeWithListenerWarning = false;
-    // _enableDisposeWithListenerWarning = Boolean("TRUE"); // causes a linter warning so that it cannot be pushed
-    // -----------------------------------------------------------------------------------------------------------------------
-    // Uncomment the next line to print warnings whenever a snapshotted event is used repeatedly without cleanup.
-    // See https://github.com/microsoft/vscode/issues/142851
-    // -----------------------------------------------------------------------------------------------------------------------
-    const _enableSnapshotPotentialLeakWarning = false;
-    var Event;
-    (function (Event) {
-        Event.None = () => lifecycle_1.Disposable.None;
-        function _addLeakageTraceLogic(options) {
-            if (_enableSnapshotPotentialLeakWarning) {
-                const { onDidAddListener: origListenerDidAdd } = options;
-                const stack = Stacktrace.create();
-                let count = 0;
-                options.onDidAddListener = () => {
-                    if (++count === 2) {
-                        console.warn('snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here');
-                        stack.print();
-                    }
-                    origListenerDidAdd === null || origListenerDidAdd === void 0 ? void 0 : origListenerDidAdd();
-                };
-            }
-        }
-        /**
-         * Given an event, returns another event which debounces calls and defers the listeners to a later task via a shared
-         * `setTimeout`. The event is converted into a signal (`Event<void>`) to avoid additional object creation as a
-         * result of merging events and to try prevent race conditions that could arise when using related deferred and
-         * non-deferred events.
-         *
-         * This is useful for deferring non-critical work (eg. general UI updates) to ensure it does not block critical work
-         * (eg. latency of keypress to text rendered).
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         *
-         * @param event The event source for the new event.
-         * @param disposable A disposable store to add the new EventEmitter to.
-         */
-        function defer(event, disposable) {
-            return debounce(event, () => void 0, 0, undefined, true, undefined, disposable);
-        }
-        Event.defer = defer;
-        /**
-         * Given an event, returns another event which only fires once.
-         *
-         * @param event The event source for the new event.
-         */
-        function once(event) {
-            return (listener, thisArgs = null, disposables) => {
-                // we need this, in case the event fires during the listener call
-                let didFire = false;
-                let result = undefined;
-                result = event(e => {
-                    if (didFire) {
-                        return;
-                    }
-                    else if (result) {
-                        result.dispose();
-                    }
-                    else {
-                        didFire = true;
-                    }
-                    return listener.call(thisArgs, e);
-                }, null, disposables);
-                if (didFire) {
-                    result.dispose();
-                }
-                return result;
-            };
-        }
-        Event.once = once;
-        /**
-         * Maps an event of one type into an event of another type using a mapping function, similar to how
-         * `Array.prototype.map` works.
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         *
-         * @param event The event source for the new event.
-         * @param map The mapping function.
-         * @param disposable A disposable store to add the new EventEmitter to.
-         */
-        function map(event, map, disposable) {
-            return snapshot((listener, thisArgs = null, disposables) => event(i => listener.call(thisArgs, map(i)), null, disposables), disposable);
-        }
-        Event.map = map;
-        /**
-         * Wraps an event in another event that performs some function on the event object before firing.
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         *
-         * @param event The event source for the new event.
-         * @param each The function to perform on the event object.
-         * @param disposable A disposable store to add the new EventEmitter to.
-         */
-        function forEach(event, each, disposable) {
-            return snapshot((listener, thisArgs = null, disposables) => event(i => { each(i); listener.call(thisArgs, i); }, null, disposables), disposable);
-        }
-        Event.forEach = forEach;
-        function filter(event, filter, disposable) {
-            return snapshot((listener, thisArgs = null, disposables) => event(e => filter(e) && listener.call(thisArgs, e), null, disposables), disposable);
-        }
-        Event.filter = filter;
-        /**
-         * Given an event, returns the same event but typed as `Event<void>`.
-         */
-        function signal(event) {
-            return event;
-        }
-        Event.signal = signal;
-        function any(...events) {
-            return (listener, thisArgs = null, disposables) => (0, lifecycle_1.combinedDisposable)(...events.map(event => event(e => listener.call(thisArgs, e), null, disposables)));
-        }
-        Event.any = any;
-        /**
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         */
-        function reduce(event, merge, initial, disposable) {
-            let output = initial;
-            return map(event, e => {
-                output = merge(output, e);
-                return output;
-            }, disposable);
-        }
-        Event.reduce = reduce;
-        function snapshot(event, disposable) {
-            let listener;
-            const options = {
-                onWillAddFirstListener() {
-                    listener = event(emitter.fire, emitter);
-                },
-                onDidRemoveLastListener() {
-                    listener === null || listener === void 0 ? void 0 : listener.dispose();
-                }
-            };
-            if (!disposable) {
-                _addLeakageTraceLogic(options);
-            }
-            const emitter = new Emitter(options);
-            disposable === null || disposable === void 0 ? void 0 : disposable.add(emitter);
-            return emitter.event;
-        }
-        function debounce(event, merge, delay = 100, leading = false, flushOnListenerRemove = false, leakWarningThreshold, disposable) {
-            let subscription;
-            let output = undefined;
-            let handle = undefined;
-            let numDebouncedCalls = 0;
-            let doFire;
-            const options = {
-                leakWarningThreshold,
-                onWillAddFirstListener() {
-                    subscription = event(cur => {
-                        numDebouncedCalls++;
-                        output = merge(output, cur);
-                        if (leading && !handle) {
-                            emitter.fire(output);
-                            output = undefined;
-                        }
-                        doFire = () => {
-                            const _output = output;
-                            output = undefined;
-                            handle = undefined;
-                            if (!leading || numDebouncedCalls > 1) {
-                                emitter.fire(_output);
-                            }
-                            numDebouncedCalls = 0;
-                        };
-                        if (typeof delay === 'number') {
-                            clearTimeout(handle);
-                            handle = setTimeout(doFire, delay);
-                        }
-                        else {
-                            if (handle === undefined) {
-                                handle = 0;
-                                queueMicrotask(doFire);
-                            }
-                        }
-                    });
-                },
-                onWillRemoveListener() {
-                    if (flushOnListenerRemove && numDebouncedCalls > 0) {
-                        doFire === null || doFire === void 0 ? void 0 : doFire();
-                    }
-                },
-                onDidRemoveLastListener() {
-                    doFire = undefined;
-                    subscription.dispose();
-                }
-            };
-            if (!disposable) {
-                _addLeakageTraceLogic(options);
-            }
-            const emitter = new Emitter(options);
-            disposable === null || disposable === void 0 ? void 0 : disposable.add(emitter);
-            return emitter.event;
-        }
-        Event.debounce = debounce;
-        /**
-         * Debounces an event, firing after some delay (default=0) with an array of all event original objects.
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         */
-        function accumulate(event, delay = 0, disposable) {
-            return Event.debounce(event, (last, e) => {
-                if (!last) {
-                    return [e];
-                }
-                last.push(e);
-                return last;
-            }, delay, undefined, true, undefined, disposable);
-        }
-        Event.accumulate = accumulate;
-        /**
-         * Filters an event such that some condition is _not_ met more than once in a row, effectively ensuring duplicate
-         * event objects from different sources do not fire the same event object.
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         *
-         * @param event The event source for the new event.
-         * @param equals The equality condition.
-         * @param disposable A disposable store to add the new EventEmitter to.
-         *
-         * @example
-         * ```
-         * // Fire only one time when a single window is opened or focused
-         * Event.latch(Event.any(onDidOpenWindow, onDidFocusWindow))
-         * ```
-         */
-        function latch(event, equals = (a, b) => a === b, disposable) {
-            let firstCall = true;
-            let cache;
-            return filter(event, value => {
-                const shouldEmit = firstCall || !equals(value, cache);
-                firstCall = false;
-                cache = value;
-                return shouldEmit;
-            }, disposable);
-        }
-        Event.latch = latch;
-        /**
-         * Splits an event whose parameter is a union type into 2 separate events for each type in the union.
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         *
-         * @example
-         * ```
-         * const event = new EventEmitter<number | undefined>().event;
-         * const [numberEvent, undefinedEvent] = Event.split(event, isUndefined);
-         * ```
-         *
-         * @param event The event source for the new event.
-         * @param isT A function that determines what event is of the first type.
-         * @param disposable A disposable store to add the new EventEmitter to.
-         */
-        function split(event, isT, disposable) {
-            return [
-                Event.filter(event, isT, disposable),
-                Event.filter(event, e => !isT(e), disposable),
-            ];
-        }
-        Event.split = split;
-        /**
-         * Buffers an event until it has a listener attached.
-         *
-         * *NOTE* that this function returns an `Event` and it MUST be called with a `DisposableStore` whenever the returned
-         * event is accessible to "third parties", e.g the event is a public property. Otherwise a leaked listener on the
-         * returned event causes this utility to leak a listener on the original event.
-         *
-         * @param event The event source for the new event.
-         * @param flushAfterTimeout Determines whether to flush the buffer after a timeout immediately or after a
-         * `setTimeout` when the first event listener is added.
-         * @param _buffer Internal: A source event array used for tests.
-         *
-         * @example
-         * ```
-         * // Start accumulating events, when the first listener is attached, flush
-         * // the event after a timeout such that multiple listeners attached before
-         * // the timeout would receive the event
-         * this.onInstallExtension = Event.buffer(service.onInstallExtension, true);
-         * ```
-         */
-        function buffer(event, flushAfterTimeout = false, _buffer = []) {
-            let buffer = _buffer.slice();
-            let listener = event(e => {
-                if (buffer) {
-                    buffer.push(e);
-                }
-                else {
-                    emitter.fire(e);
-                }
-            });
-            const flush = () => {
-                buffer === null || buffer === void 0 ? void 0 : buffer.forEach(e => emitter.fire(e));
-                buffer = null;
-            };
-            const emitter = new Emitter({
-                onWillAddFirstListener() {
-                    if (!listener) {
-                        listener = event(e => emitter.fire(e));
-                    }
-                },
-                onDidAddFirstListener() {
-                    if (buffer) {
-                        if (flushAfterTimeout) {
-                            setTimeout(flush);
-                        }
-                        else {
-                            flush();
-                        }
-                    }
-                },
-                onDidRemoveLastListener() {
-                    if (listener) {
-                        listener.dispose();
-                    }
-                    listener = null;
-                }
-            });
-            return emitter.event;
-        }
-        Event.buffer = buffer;
-        class ChainableEvent {
-            constructor(event) {
-                this.event = event;
-                this.disposables = new lifecycle_1.DisposableStore();
-            }
-            /** @see {@link Event.map} */
-            map(fn) {
-                return new ChainableEvent(map(this.event, fn, this.disposables));
-            }
-            /** @see {@link Event.forEach} */
-            forEach(fn) {
-                return new ChainableEvent(forEach(this.event, fn, this.disposables));
-            }
-            filter(fn) {
-                return new ChainableEvent(filter(this.event, fn, this.disposables));
-            }
-            /** @see {@link Event.reduce} */
-            reduce(merge, initial) {
-                return new ChainableEvent(reduce(this.event, merge, initial, this.disposables));
-            }
-            /** @see {@link Event.reduce} */
-            latch() {
-                return new ChainableEvent(latch(this.event, undefined, this.disposables));
-            }
-            debounce(merge, delay = 100, leading = false, flushOnListenerRemove = false, leakWarningThreshold) {
-                return new ChainableEvent(debounce(this.event, merge, delay, leading, flushOnListenerRemove, leakWarningThreshold, this.disposables));
-            }
-            /**
-             * Attach a listener to the event.
-             */
-            on(listener, thisArgs, disposables) {
-                return this.event(listener, thisArgs, disposables);
-            }
-            /** @see {@link Event.once} */
-            once(listener, thisArgs, disposables) {
-                return once(this.event)(listener, thisArgs, disposables);
-            }
-            dispose() {
-                this.disposables.dispose();
-            }
-        }
-        /**
-         * Wraps the event in an {@link IChainableEvent}, allowing a more functional programming style.
-         *
-         * @example
-         * ```
-         * // Normal
-         * const onEnterPressNormal = Event.filter(
-         *   Event.map(onKeyPress.event, e => new StandardKeyboardEvent(e)),
-         *   e.keyCode === KeyCode.Enter
-         * ).event;
-         *
-         * // Using chain
-         * const onEnterPressChain = Event.chain(onKeyPress.event)
-         *   .map(e => new StandardKeyboardEvent(e))
-         *   .filter(e => e.keyCode === KeyCode.Enter)
-         *   .event;
-         * ```
-         */
-        function chain(event) {
-            return new ChainableEvent(event);
-        }
-        Event.chain = chain;
-        /**
-         * Creates an {@link Event} from a node event emitter.
-         */
-        function fromNodeEventEmitter(emitter, eventName, map = id => id) {
-            const fn = (...args) => result.fire(map(...args));
-            const onFirstListenerAdd = () => emitter.on(eventName, fn);
-            const onLastListenerRemove = () => emitter.removeListener(eventName, fn);
-            const result = new Emitter({ onWillAddFirstListener: onFirstListenerAdd, onDidRemoveLastListener: onLastListenerRemove });
-            return result.event;
-        }
-        Event.fromNodeEventEmitter = fromNodeEventEmitter;
-        /**
-         * Creates an {@link Event} from a DOM event emitter.
-         */
-        function fromDOMEventEmitter(emitter, eventName, map = id => id) {
-            const fn = (...args) => result.fire(map(...args));
-            const onFirstListenerAdd = () => emitter.addEventListener(eventName, fn);
-            const onLastListenerRemove = () => emitter.removeEventListener(eventName, fn);
-            const result = new Emitter({ onWillAddFirstListener: onFirstListenerAdd, onDidRemoveLastListener: onLastListenerRemove });
-            return result.event;
-        }
-        Event.fromDOMEventEmitter = fromDOMEventEmitter;
-        /**
-         * Creates a promise out of an event, using the {@link Event.once} helper.
-         */
-        function toPromise(event) {
-            return new Promise(resolve => once(event)(resolve));
-        }
-        Event.toPromise = toPromise;
-        /**
-         * Adds a listener to an event and calls the listener immediately with undefined as the event object.
-         *
-         * @example
-         * ```
-         * // Initialize the UI and update it when dataChangeEvent fires
-         * runAndSubscribe(dataChangeEvent, () => this._updateUI());
-         * ```
-         */
-        function runAndSubscribe(event, handler) {
-            handler(undefined);
-            return event(e => handler(e));
-        }
-        Event.runAndSubscribe = runAndSubscribe;
-        /**
-         * Adds a listener to an event and calls the listener immediately with undefined as the event object. A new
-         * {@link DisposableStore} is passed to the listener which is disposed when the returned disposable is disposed.
-         */
-        function runAndSubscribeWithStore(event, handler) {
-            let store = null;
-            function run(e) {
-                store === null || store === void 0 ? void 0 : store.dispose();
-                store = new lifecycle_1.DisposableStore();
-                handler(e, store);
-            }
-            run(undefined);
-            const disposable = event(e => run(e));
-            return (0, lifecycle_1.toDisposable)(() => {
-                disposable.dispose();
-                store === null || store === void 0 ? void 0 : store.dispose();
-            });
-        }
-        Event.runAndSubscribeWithStore = runAndSubscribeWithStore;
-        class EmitterObserver {
-            constructor(_observable, store) {
-                this._observable = _observable;
-                this._counter = 0;
-                this._hasChanged = false;
-                const options = {
-                    onWillAddFirstListener: () => {
-                        _observable.addObserver(this);
-                    },
-                    onDidRemoveLastListener: () => {
-                        _observable.removeObserver(this);
-                    }
-                };
-                if (!store) {
-                    _addLeakageTraceLogic(options);
-                }
-                this.emitter = new Emitter(options);
-                if (store) {
-                    store.add(this.emitter);
-                }
-            }
-            beginUpdate(_observable) {
-                // assert(_observable === this.obs);
-                this._counter++;
-            }
-            handlePossibleChange(_observable) {
-                // assert(_observable === this.obs);
-            }
-            handleChange(_observable, _change) {
-                // assert(_observable === this.obs);
-                this._hasChanged = true;
-            }
-            endUpdate(_observable) {
-                // assert(_observable === this.obs);
-                this._counter--;
-                if (this._counter === 0) {
-                    this._observable.reportChanges();
-                    if (this._hasChanged) {
-                        this._hasChanged = false;
-                        this.emitter.fire(this._observable.get());
-                    }
-                }
-            }
-        }
-        /**
-         * Creates an event emitter that is fired when the observable changes.
-         * Each listeners subscribes to the emitter.
-         */
-        function fromObservable(obs, store) {
-            const observer = new EmitterObserver(obs, store);
-            return observer.emitter.event;
-        }
-        Event.fromObservable = fromObservable;
-        /**
-         * Each listener is attached to the observable directly.
-         */
-        function fromObservableLight(observable) {
-            return (listener) => {
-                let count = 0;
-                let didChange = false;
-                const observer = {
-                    beginUpdate() {
-                        count++;
-                    },
-                    endUpdate() {
-                        count--;
-                        if (count === 0) {
-                            observable.reportChanges();
-                            if (didChange) {
-                                didChange = false;
-                                listener();
-                            }
-                        }
-                    },
-                    handlePossibleChange() {
-                        // noop
-                    },
-                    handleChange() {
-                        didChange = true;
-                    }
-                };
-                observable.addObserver(observer);
-                return {
-                    dispose() {
-                        observable.removeObserver(observer);
-                    }
-                };
-            };
-        }
-        Event.fromObservableLight = fromObservableLight;
-    })(Event || (exports.Event = Event = {}));
-    class EventProfiling {
-        constructor(name) {
-            this.listenerCount = 0;
-            this.invocationCount = 0;
-            this.elapsedOverall = 0;
-            this.durations = [];
-            this.name = `${name}_${EventProfiling._idPool++}`;
-            EventProfiling.all.add(this);
-        }
-        start(listenerCount) {
-            this._stopWatch = new stopwatch_1.StopWatch(true);
-            this.listenerCount = listenerCount;
-        }
-        stop() {
-            if (this._stopWatch) {
-                const elapsed = this._stopWatch.elapsed();
-                this.durations.push(elapsed);
-                this.elapsedOverall += elapsed;
-                this.invocationCount += 1;
-                this._stopWatch = undefined;
-            }
-        }
-    }
-    exports.EventProfiling = EventProfiling;
-    EventProfiling.all = new Set();
-    EventProfiling._idPool = 0;
-    let _globalLeakWarningThreshold = -1;
-    class LeakageMonitor {
-        constructor(threshold, name = Math.random().toString(18).slice(2, 5)) {
-            this.threshold = threshold;
-            this.name = name;
-            this._warnCountdown = 0;
-        }
-        dispose() {
-            var _a;
-            (_a = this._stacks) === null || _a === void 0 ? void 0 : _a.clear();
-        }
-        check(stack, listenerCount) {
-            const threshold = this.threshold;
-            if (threshold <= 0 || listenerCount < threshold) {
-                return undefined;
-            }
-            if (!this._stacks) {
-                this._stacks = new Map();
-            }
-            const count = (this._stacks.get(stack.value) || 0);
-            this._stacks.set(stack.value, count + 1);
-            this._warnCountdown -= 1;
-            if (this._warnCountdown <= 0) {
-                // only warn on first exceed and then every time the limit
-                // is exceeded by 50% again
-                this._warnCountdown = threshold * 0.5;
-                // find most frequent listener and print warning
-                let topStack;
-                let topCount = 0;
-                for (const [stack, count] of this._stacks) {
-                    if (!topStack || topCount < count) {
-                        topStack = stack;
-                        topCount = count;
-                    }
-                }
-                console.warn(`[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`);
-                console.warn(topStack);
-            }
-            return () => {
-                const count = (this._stacks.get(stack.value) || 0);
-                this._stacks.set(stack.value, count - 1);
-            };
-        }
-    }
-    class Stacktrace {
-        static create() {
-            var _a;
-            return new Stacktrace((_a = new Error().stack) !== null && _a !== void 0 ? _a : '');
-        }
-        constructor(value) {
-            this.value = value;
-        }
-        print() {
-            console.warn(this.value.split('\n').slice(2).join('\n'));
-        }
-    }
-    class Listener {
-        constructor(callback, callbackThis, stack) {
-            this.callback = callback;
-            this.callbackThis = callbackThis;
-            this.stack = stack;
-            this.subscription = new lifecycle_1.SafeDisposable();
-        }
-        invoke(e) {
-            this.callback.call(this.callbackThis, e);
-        }
-    }
-    /**
-     * The Emitter can be used to expose an Event to the public
-     * to fire it from the insides.
-     * Sample:
-        class Document {
-    
-            private readonly _onDidChange = new Emitter<(value:string)=>any>();
-    
-            public onDidChange = this._onDidChange.event;
-    
-            // getter-style
-            // get onDidChange(): Event<(value:string)=>any> {
-            // 	return this._onDidChange.event;
-            // }
-    
-            private _doIt() {
-                //...
-                this._onDidChange.fire(value);
-            }
-        }
-     */
-    class Emitter {
-        constructor(options) {
-            var _a, _b, _c, _d, _e;
-            this._disposed = false;
-            this._options = options;
-            this._leakageMon = _globalLeakWarningThreshold > 0 || ((_a = this._options) === null || _a === void 0 ? void 0 : _a.leakWarningThreshold) ? new LeakageMonitor((_c = (_b = this._options) === null || _b === void 0 ? void 0 : _b.leakWarningThreshold) !== null && _c !== void 0 ? _c : _globalLeakWarningThreshold) : undefined;
-            this._perfMon = ((_d = this._options) === null || _d === void 0 ? void 0 : _d._profName) ? new EventProfiling(this._options._profName) : undefined;
-            this._deliveryQueue = (_e = this._options) === null || _e === void 0 ? void 0 : _e.deliveryQueue;
-        }
-        dispose() {
-            var _a, _b, _c, _d;
-            if (!this._disposed) {
-                this._disposed = true;
-                // It is bad to have listeners at the time of disposing an emitter, it is worst to have listeners keep the emitter
-                // alive via the reference that's embedded in their disposables. Therefore we loop over all remaining listeners and
-                // unset their subscriptions/disposables. Looping and blaming remaining listeners is done on next tick because the
-                // the following programming pattern is very popular:
-                //
-                // const someModel = this._disposables.add(new ModelObject()); // (1) create and register model
-                // this._disposables.add(someModel.onDidChange(() => { ... }); // (2) subscribe and register model-event listener
-                // ...later...
-                // this._disposables.dispose(); disposes (1) then (2): don't warn after (1) but after the "overall dispose" is done
-                if (this._listeners) {
-                    if (_enableDisposeWithListenerWarning) {
-                        const listeners = Array.from(this._listeners);
-                        queueMicrotask(() => {
-                            var _a;
-                            for (const listener of listeners) {
-                                if (listener.subscription.isset()) {
-                                    listener.subscription.unset();
-                                    (_a = listener.stack) === null || _a === void 0 ? void 0 : _a.print();
-                                }
-                            }
-                        });
-                    }
-                    this._listeners.clear();
-                }
-                (_a = this._deliveryQueue) === null || _a === void 0 ? void 0 : _a.clear(this);
-                (_c = (_b = this._options) === null || _b === void 0 ? void 0 : _b.onDidRemoveLastListener) === null || _c === void 0 ? void 0 : _c.call(_b);
-                (_d = this._leakageMon) === null || _d === void 0 ? void 0 : _d.dispose();
-            }
-        }
-        /**
-         * For the public to allow to subscribe
-         * to events from this Emitter
-         */
-        get event() {
-            if (!this._event) {
-                this._event = (callback, thisArgs, disposables) => {
-                    var _a, _b, _c;
-                    if (!this._listeners) {
-                        this._listeners = new linkedList_1.LinkedList();
-                    }
-                    if (this._leakageMon && this._listeners.size > this._leakageMon.threshold * 3) {
-                        console.warn(`[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far`);
-                        return lifecycle_1.Disposable.None;
-                    }
-                    const firstListener = this._listeners.isEmpty();
-                    if (firstListener && ((_a = this._options) === null || _a === void 0 ? void 0 : _a.onWillAddFirstListener)) {
-                        this._options.onWillAddFirstListener(this);
-                    }
-                    let removeMonitor;
-                    let stack;
-                    if (this._leakageMon && this._listeners.size >= Math.ceil(this._leakageMon.threshold * 0.2)) {
-                        // check and record this emitter for potential leakage
-                        stack = Stacktrace.create();
-                        removeMonitor = this._leakageMon.check(stack, this._listeners.size + 1);
-                    }
-                    if (_enableDisposeWithListenerWarning) {
-                        stack = stack !== null && stack !== void 0 ? stack : Stacktrace.create();
-                    }
-                    const listener = new Listener(callback, thisArgs, stack);
-                    const removeListener = this._listeners.push(listener);
-                    if (firstListener && ((_b = this._options) === null || _b === void 0 ? void 0 : _b.onDidAddFirstListener)) {
-                        this._options.onDidAddFirstListener(this);
-                    }
-                    if ((_c = this._options) === null || _c === void 0 ? void 0 : _c.onDidAddListener) {
-                        this._options.onDidAddListener(this, callback, thisArgs);
-                    }
-                    const result = listener.subscription.set(() => {
-                        var _a, _b;
-                        removeMonitor === null || removeMonitor === void 0 ? void 0 : removeMonitor();
-                        if (!this._disposed) {
-                            (_b = (_a = this._options) === null || _a === void 0 ? void 0 : _a.onWillRemoveListener) === null || _b === void 0 ? void 0 : _b.call(_a, this);
-                            removeListener();
-                            if (this._options && this._options.onDidRemoveLastListener) {
-                                const hasListeners = (this._listeners && !this._listeners.isEmpty());
-                                if (!hasListeners) {
-                                    this._options.onDidRemoveLastListener(this);
-                                }
-                            }
-                        }
-                    });
-                    if (disposables instanceof lifecycle_1.DisposableStore) {
-                        disposables.add(result);
-                    }
-                    else if (Array.isArray(disposables)) {
-                        disposables.push(result);
-                    }
-                    return result;
-                };
-            }
-            return this._event;
-        }
-        /**
-         * To be kept private to fire an event to
-         * subscribers
-         */
-        fire(event) {
-            var _a, _b, _c;
-            if (this._listeners) {
-                // put all [listener,event]-pairs into delivery queue
-                // then emit all event. an inner/nested event might be
-                // the driver of this
-                if (!this._deliveryQueue) {
-                    this._deliveryQueue = new PrivateEventDeliveryQueue((_a = this._options) === null || _a === void 0 ? void 0 : _a.onListenerError);
-                }
-                for (const listener of this._listeners) {
-                    this._deliveryQueue.push(this, listener, event);
-                }
-                // start/stop performance insight collection
-                (_b = this._perfMon) === null || _b === void 0 ? void 0 : _b.start(this._deliveryQueue.size);
-                this._deliveryQueue.deliver();
-                (_c = this._perfMon) === null || _c === void 0 ? void 0 : _c.stop();
-            }
-        }
-        hasListeners() {
-            if (!this._listeners) {
-                return false;
-            }
-            return !this._listeners.isEmpty();
-        }
-    }
-    exports.Emitter = Emitter;
-    class EventDeliveryQueue {
-        constructor(_onListenerError = errors_1.onUnexpectedError) {
-            this._onListenerError = _onListenerError;
-            this._queue = new linkedList_1.LinkedList();
-        }
-        get size() {
-            return this._queue.size;
-        }
-        push(emitter, listener, event) {
-            this._queue.push(new EventDeliveryQueueElement(emitter, listener, event));
-        }
-        clear(emitter) {
-            const newQueue = new linkedList_1.LinkedList();
-            for (const element of this._queue) {
-                if (element.emitter !== emitter) {
-                    newQueue.push(element);
-                }
-            }
-            this._queue = newQueue;
-        }
-        deliver() {
-            while (this._queue.size > 0) {
-                const element = this._queue.shift();
-                try {
-                    element.listener.invoke(element.event);
-                }
-                catch (e) {
-                    this._onListenerError(e);
-                }
-            }
-        }
-    }
-    exports.EventDeliveryQueue = EventDeliveryQueue;
-    /**
-     * An `EventDeliveryQueue` that is guaranteed to be used by a single `Emitter`.
-     */
-    class PrivateEventDeliveryQueue extends EventDeliveryQueue {
-        clear(emitter) {
-            // Here we can just clear the entire linked list because
-            // all elements are guaranteed to belong to this emitter
-            this._queue.clear();
-        }
-    }
-    class EventDeliveryQueueElement {
-        constructor(emitter, listener, event) {
-            this.emitter = emitter;
-            this.listener = listener;
-            this.event = event;
-        }
-    }
-    class PauseableEmitter extends Emitter {
-        constructor(options) {
-            super(options);
-            this._isPaused = 0;
-            this._eventQueue = new linkedList_1.LinkedList();
-            this._mergeFn = options === null || options === void 0 ? void 0 : options.merge;
-        }
-        pause() {
-            this._isPaused++;
-        }
-        resume() {
-            if (this._isPaused !== 0 && --this._isPaused === 0) {
-                if (this._mergeFn) {
-                    // use the merge function to create a single composite
-                    // event. make a copy in case firing pauses this emitter
-                    if (this._eventQueue.size > 0) {
-                        const events = Array.from(this._eventQueue);
-                        this._eventQueue.clear();
-                        super.fire(this._mergeFn(events));
-                    }
-                }
-                else {
-                    // no merging, fire each event individually and test
-                    // that this emitter isn't paused halfway through
-                    while (!this._isPaused && this._eventQueue.size !== 0) {
-                        super.fire(this._eventQueue.shift());
-                    }
-                }
-            }
-        }
-        fire(event) {
-            if (this._listeners) {
-                if (this._isPaused !== 0) {
-                    this._eventQueue.push(event);
-                }
-                else {
-                    super.fire(event);
-                }
-            }
-        }
-    }
-    exports.PauseableEmitter = PauseableEmitter;
-    class DebounceEmitter extends PauseableEmitter {
-        constructor(options) {
-            var _a;
-            super(options);
-            this._delay = (_a = options.delay) !== null && _a !== void 0 ? _a : 100;
-        }
-        fire(event) {
-            if (!this._handle) {
-                this.pause();
-                this._handle = setTimeout(() => {
-                    this._handle = undefined;
-                    this.resume();
-                }, this._delay);
-            }
-            super.fire(event);
-        }
-    }
-    exports.DebounceEmitter = DebounceEmitter;
-    /**
-     * An emitter which queue all events and then process them at the
-     * end of the event loop.
-     */
-    class MicrotaskEmitter extends Emitter {
-        constructor(options) {
-            super(options);
-            this._queuedEvents = [];
-            this._mergeFn = options === null || options === void 0 ? void 0 : options.merge;
-        }
-        fire(event) {
-            if (!this.hasListeners()) {
-                return;
-            }
-            this._queuedEvents.push(event);
-            if (this._queuedEvents.length === 1) {
-                queueMicrotask(() => {
-                    if (this._mergeFn) {
-                        super.fire(this._mergeFn(this._queuedEvents));
-                    }
-                    else {
-                        this._queuedEvents.forEach(e => super.fire(e));
-                    }
-                    this._queuedEvents = [];
-                });
-            }
-        }
-    }
-    exports.MicrotaskEmitter = MicrotaskEmitter;
-    class EventMultiplexer {
-        constructor() {
-            this.hasListeners = false;
-            this.events = [];
-            this.emitter = new Emitter({
-                onWillAddFirstListener: () => this.onFirstListenerAdd(),
-                onDidRemoveLastListener: () => this.onLastListenerRemove()
-            });
-        }
-        get event() {
-            return this.emitter.event;
-        }
-        add(event) {
-            const e = { event: event, listener: null };
-            this.events.push(e);
-            if (this.hasListeners) {
-                this.hook(e);
-            }
-            const dispose = () => {
-                if (this.hasListeners) {
-                    this.unhook(e);
-                }
-                const idx = this.events.indexOf(e);
-                this.events.splice(idx, 1);
-            };
-            return (0, lifecycle_1.toDisposable)((0, functional_1.once)(dispose));
-        }
-        onFirstListenerAdd() {
-            this.hasListeners = true;
-            this.events.forEach(e => this.hook(e));
-        }
-        onLastListenerRemove() {
-            this.hasListeners = false;
-            this.events.forEach(e => this.unhook(e));
-        }
-        hook(e) {
-            e.listener = e.event(r => this.emitter.fire(r));
-        }
-        unhook(e) {
-            if (e.listener) {
-                e.listener.dispose();
-            }
-            e.listener = null;
-        }
-        dispose() {
-            this.emitter.dispose();
-        }
-    }
-    exports.EventMultiplexer = EventMultiplexer;
-    /**
-     * The EventBufferer is useful in situations in which you want
-     * to delay firing your events during some code.
-     * You can wrap that code and be sure that the event will not
-     * be fired during that wrap.
-     *
-     * ```
-     * const emitter: Emitter;
-     * const delayer = new EventDelayer();
-     * const delayedEvent = delayer.wrapEvent(emitter.event);
-     *
-     * delayedEvent(console.log);
-     *
-     * delayer.bufferEvents(() => {
-     *   emitter.fire(); // event will not be fired yet
-     * });
-     *
-     * // event will only be fired at this point
-     * ```
-     */
-    class EventBufferer {
-        constructor() {
-            this.buffers = [];
-        }
-        wrapEvent(event) {
-            return (listener, thisArgs, disposables) => {
-                return event(i => {
-                    const buffer = this.buffers[this.buffers.length - 1];
-                    if (buffer) {
-                        buffer.push(() => listener.call(thisArgs, i));
-                    }
-                    else {
-                        listener.call(thisArgs, i);
-                    }
-                }, undefined, disposables);
-            };
-        }
-        bufferEvents(fn) {
-            const buffer = [];
-            this.buffers.push(buffer);
-            const r = fn();
-            this.buffers.pop();
-            buffer.forEach(flush => flush());
-            return r;
-        }
-    }
-    exports.EventBufferer = EventBufferer;
-    /**
-     * A Relay is an event forwarder which functions as a replugabble event pipe.
-     * Once created, you can connect an input event to it and it will simply forward
-     * events from that input event through its own `event` property. The `input`
-     * can be changed at any point in time.
-     */
-    class Relay {
-        constructor() {
-            this.listening = false;
-            this.inputEvent = Event.None;
-            this.inputEventListener = lifecycle_1.Disposable.None;
-            this.emitter = new Emitter({
-                onDidAddFirstListener: () => {
-                    this.listening = true;
-                    this.inputEventListener = this.inputEvent(this.emitter.fire, this.emitter);
-                },
-                onDidRemoveLastListener: () => {
-                    this.listening = false;
-                    this.inputEventListener.dispose();
-                }
-            });
-            this.event = this.emitter.event;
-        }
-        set input(event) {
-            this.inputEvent = event;
-            if (this.listening) {
-                this.inputEventListener.dispose();
-                this.inputEventListener = event(this.emitter.fire, this.emitter);
-            }
-        }
-        dispose() {
-            this.inputEventListener.dispose();
-            this.emitter.dispose();
-        }
-    }
-    exports.Relay = Relay;
-});
-
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-define(__m[55/*vs/base/common/cancellation*/], __M([0/*require*/,1/*exports*/,9/*vs/base/common/event*/]), function (require, exports, event_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.CancellationTokenSource = exports.CancellationToken = void 0;
-    const shortcutEvent = Object.freeze(function (callback, context) {
-        const handle = setTimeout(callback.bind(context), 0);
-        return { dispose() { clearTimeout(handle); } };
-    });
-    var CancellationToken;
-    (function (CancellationToken) {
-        function isCancellationToken(thing) {
-            if (thing === CancellationToken.None || thing === CancellationToken.Cancelled) {
-                return true;
-            }
-            if (thing instanceof MutableToken) {
-                return true;
-            }
-            if (!thing || typeof thing !== 'object') {
-                return false;
-            }
-            return typeof thing.isCancellationRequested === 'boolean'
-                && typeof thing.onCancellationRequested === 'function';
-        }
-        CancellationToken.isCancellationToken = isCancellationToken;
-        CancellationToken.None = Object.freeze({
-            isCancellationRequested: false,
-            onCancellationRequested: event_1.Event.None
-        });
-        CancellationToken.Cancelled = Object.freeze({
-            isCancellationRequested: true,
-            onCancellationRequested: shortcutEvent
-        });
-    })(CancellationToken || (exports.CancellationToken = CancellationToken = {}));
-    class MutableToken {
-        constructor() {
-            this._isCancelled = false;
-            this._emitter = null;
-        }
-        cancel() {
-            if (!this._isCancelled) {
-                this._isCancelled = true;
-                if (this._emitter) {
-                    this._emitter.fire(undefined);
-                    this.dispose();
-                }
-            }
-        }
-        get isCancellationRequested() {
-            return this._isCancelled;
-        }
-        get onCancellationRequested() {
-            if (this._isCancelled) {
-                return shortcutEvent;
-            }
-            if (!this._emitter) {
-                this._emitter = new event_1.Emitter();
-            }
-            return this._emitter.event;
-        }
-        dispose() {
-            if (this._emitter) {
-                this._emitter.dispose();
-                this._emitter = null;
-            }
-        }
-    }
-    class CancellationTokenSource {
-        constructor(parent) {
-            this._token = undefined;
-            this._parentListener = undefined;
-            this._parentListener = parent && parent.onCancellationRequested(this.cancel, this);
-        }
-        get token() {
-            if (!this._token) {
-                // be lazy and create the token only when
-                // actually needed
-                this._token = new MutableToken();
-            }
-            return this._token;
-        }
-        cancel() {
-            if (!this._token) {
-                // save an object by returning the default
-                // cancelled token when cancellation happens
-                // before someone asks for the token
-                this._token = CancellationToken.Cancelled;
-            }
-            else if (this._token instanceof MutableToken) {
-                // actually cancel
-                this._token.cancel();
-            }
-        }
-        dispose(cancel = false) {
-            var _a;
-            if (cancel) {
-                this.cancel();
-            }
-            (_a = this._parentListener) === null || _a === void 0 ? void 0 : _a.dispose();
-            if (!this._token) {
-                // ensure to initialize with an empty token if we had none
-                this._token = CancellationToken.None;
-            }
-            else if (this._token instanceof MutableToken) {
-                // actually dispose
-                this._token.dispose();
-            }
-        }
-    }
-    exports.CancellationTokenSource = CancellationTokenSource;
-});
-
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,54/*vs/base/common/path*/,8/*vs/base/common/platform*/]), function (require, exports, paths, platform_1) {
+define(__m[14/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,57/*vs/base/common/path*/,13/*vs/base/common/platform*/]), function (require, exports, paths, platform_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.uriToFsPath = exports.URI = void 0;
@@ -15907,9 +16454,15 @@ define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,54/*vs/base
             }
             return new Uri('file', authority, path, _empty, _empty);
         }
-        static from(components) {
-            const result = new Uri(components.scheme, components.authority, components.path, components.query, components.fragment);
-            _validateUri(result, true);
+        /**
+         * Creates new URI from uri components.
+         *
+         * Unless `strict` is `true` the scheme is defaults to be `file`. This function performs
+         * validation and should be used for untrusted uri components retrieved from storage,
+         * user input, command arguments etc
+         */
+        static from(components, strict) {
+            const result = new Uri(components.scheme, components.authority, components.path, components.query, components.fragment, strict);
             return result;
         }
         /**
@@ -15951,6 +16504,7 @@ define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,54/*vs/base
             return this;
         }
         static revive(data) {
+            var _a, _b;
             if (!data) {
                 return data;
             }
@@ -15959,8 +16513,8 @@ define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,54/*vs/base
             }
             else {
                 const result = new Uri(data);
-                result._formatted = data.external;
-                result._fsPath = data._sep === _pathSepMarker ? data.fsPath : null;
+                result._formatted = (_a = data.external) !== null && _a !== void 0 ? _a : null;
+                result._fsPath = data._sep === _pathSepMarker ? (_b = data.fsPath) !== null && _b !== void 0 ? _b : null : null;
                 return result;
             }
         }
@@ -16004,10 +16558,14 @@ define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,54/*vs/base
             if (this._formatted) {
                 res.external = this._formatted;
             }
-            // uri components
+            //--- uri components
             if (this.path) {
                 res.path = this.path;
             }
+            // TODO
+            // this isn't correct and can violate the UriComponents contract but
+            // this is part of the vscode.Uri API and we shouldn't change how that
+            // works anymore
             if (this.scheme) {
                 res.scheme = this.scheme;
             }
@@ -16247,7 +16805,7 @@ define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,54/*vs/base
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[60/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,9/*vs/base/common/event*/,11/*vs/base/common/lifecycle*/,12/*vs/base/common/objects*/,8/*vs/base/common/platform*/,5/*vs/base/common/strings*/]), function (require, exports, errors_1, event_1, lifecycle_1, objects_1, platform_1, strings) {
+define(__m[61/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,7/*vs/base/common/event*/,10/*vs/base/common/lifecycle*/,11/*vs/base/common/objects*/,13/*vs/base/common/platform*/,5/*vs/base/common/strings*/]), function (require, exports, errors_1, event_1, lifecycle_1, objects_1, platform_1, strings) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.create = exports.SimpleWorkerServer = exports.SimpleWorkerClient = exports.logOnceWebWorkerWarning = void 0;
@@ -16680,6 +17238,7 @@ define(__m[60/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*expor
     exports.SimpleWorkerServer = SimpleWorkerServer;
     /**
      * Called on the worker side
+     * @skipMangle
      */
     function create(postMessage) {
         return new SimpleWorkerServer(postMessage, null);
@@ -16687,151 +17246,11 @@ define(__m[60/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*expor
     exports.create = create;
 });
 
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
-
-define(__m[56/*vs/editor/common/tokenizationRegistry*/], __M([0/*require*/,1/*exports*/,9/*vs/base/common/event*/,11/*vs/base/common/lifecycle*/]), function (require, exports, event_1, lifecycle_1) {
+define(__m[58/*vs/nls!vs/editor/common/languages*/], __M([15/*vs/nls*/,55/*vs/nls!vs/base/common/worker/simpleWorker*/]), function(nls, data) { return nls.create("vs/editor/common/languages", data); });
+define(__m[59/*vs/editor/common/languages*/], __M([0/*require*/,1/*exports*/,34/*vs/base/common/codicons*/,14/*vs/base/common/uri*/,2/*vs/editor/common/core/range*/,53/*vs/editor/common/tokenizationRegistry*/,58/*vs/nls!vs/editor/common/languages*/]), function (require, exports, codicons_1, uri_1, range_1, tokenizationRegistry_1, nls_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TokenizationRegistry = void 0;
-    class TokenizationRegistry {
-        constructor() {
-            this._tokenizationSupports = new Map();
-            this._factories = new Map();
-            this._onDidChange = new event_1.Emitter();
-            this.onDidChange = this._onDidChange.event;
-            this._colorMap = null;
-        }
-        handleChange(languageIds) {
-            this._onDidChange.fire({
-                changedLanguages: languageIds,
-                changedColorMap: false
-            });
-        }
-        register(languageId, support) {
-            this._tokenizationSupports.set(languageId, support);
-            this.handleChange([languageId]);
-            return (0, lifecycle_1.toDisposable)(() => {
-                if (this._tokenizationSupports.get(languageId) !== support) {
-                    return;
-                }
-                this._tokenizationSupports.delete(languageId);
-                this.handleChange([languageId]);
-            });
-        }
-        get(languageId) {
-            return this._tokenizationSupports.get(languageId) || null;
-        }
-        registerFactory(languageId, factory) {
-            var _a;
-            (_a = this._factories.get(languageId)) === null || _a === void 0 ? void 0 : _a.dispose();
-            const myData = new TokenizationSupportFactoryData(this, languageId, factory);
-            this._factories.set(languageId, myData);
-            return (0, lifecycle_1.toDisposable)(() => {
-                const v = this._factories.get(languageId);
-                if (!v || v !== myData) {
-                    return;
-                }
-                this._factories.delete(languageId);
-                v.dispose();
-            });
-        }
-        getOrCreate(languageId) {
-            return __awaiter(this, void 0, void 0, function* () {
-                // check first if the support is already set
-                const tokenizationSupport = this.get(languageId);
-                if (tokenizationSupport) {
-                    return tokenizationSupport;
-                }
-                const factory = this._factories.get(languageId);
-                if (!factory || factory.isResolved) {
-                    // no factory or factory.resolve already finished
-                    return null;
-                }
-                yield factory.resolve();
-                return this.get(languageId);
-            });
-        }
-        isResolved(languageId) {
-            const tokenizationSupport = this.get(languageId);
-            if (tokenizationSupport) {
-                return true;
-            }
-            const factory = this._factories.get(languageId);
-            if (!factory || factory.isResolved) {
-                return true;
-            }
-            return false;
-        }
-        setColorMap(colorMap) {
-            this._colorMap = colorMap;
-            this._onDidChange.fire({
-                changedLanguages: Array.from(this._tokenizationSupports.keys()),
-                changedColorMap: true
-            });
-        }
-        getColorMap() {
-            return this._colorMap;
-        }
-        getDefaultBackground() {
-            if (this._colorMap && this._colorMap.length > 2 /* ColorId.DefaultBackground */) {
-                return this._colorMap[2 /* ColorId.DefaultBackground */];
-            }
-            return null;
-        }
-    }
-    exports.TokenizationRegistry = TokenizationRegistry;
-    class TokenizationSupportFactoryData extends lifecycle_1.Disposable {
-        get isResolved() {
-            return this._isResolved;
-        }
-        constructor(_registry, _languageId, _factory) {
-            super();
-            this._registry = _registry;
-            this._languageId = _languageId;
-            this._factory = _factory;
-            this._isDisposed = false;
-            this._resolvePromise = null;
-            this._isResolved = false;
-        }
-        dispose() {
-            this._isDisposed = true;
-            super.dispose();
-        }
-        resolve() {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (!this._resolvePromise) {
-                    this._resolvePromise = this._create();
-                }
-                return this._resolvePromise;
-            });
-        }
-        _create() {
-            return __awaiter(this, void 0, void 0, function* () {
-                const value = yield this._factory.tokenizationSupport;
-                this._isResolved = true;
-                if (value && !this._isDisposed) {
-                    this._register(this._registry.register(this._languageId, value));
-                }
-            });
-        }
-    }
-});
-
-define(__m[57/*vs/editor/common/languages*/], __M([0/*require*/,1/*exports*/,33/*vs/base/common/codicons*/,13/*vs/base/common/uri*/,2/*vs/editor/common/core/range*/,56/*vs/editor/common/tokenizationRegistry*/]), function (require, exports, codicons_1, uri_1, range_1, tokenizationRegistry_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TokenizationRegistry = exports.LazyTokenizationSupport = exports.InlayHintKind = exports.Command = exports.FoldingRangeKind = exports.SymbolKinds = exports.isLocationLink = exports.DocumentHighlightKind = exports.SignatureHelpTriggerKind = exports.SelectedSuggestionInfo = exports.InlineCompletionTriggerKind = exports.CompletionItemKinds = exports.EncodedTokenizationResult = exports.TokenizationResult = exports.Token = void 0;
+    exports.TokenizationRegistry = exports.LazyTokenizationSupport = exports.InlayHintKind = exports.Command = exports.FoldingRangeKind = exports.TextEdit = exports.SymbolKinds = exports.getAriaLabelForSymbol = exports.symbolKindNames = exports.isLocationLink = exports.DocumentHighlightKind = exports.SignatureHelpTriggerKind = exports.SelectedSuggestionInfo = exports.InlineCompletionTriggerKind = exports.CompletionItemKinds = exports.EncodedTokenizationResult = exports.TokenizationResult = exports.Token = void 0;
     class Token {
         constructor(offset, type, language) {
             this.offset = offset;
@@ -17031,6 +17450,44 @@ define(__m[57/*vs/editor/common/languages*/], __M([0/*require*/,1/*exports*/,33/
     /**
      * @internal
      */
+    exports.symbolKindNames = {
+        [17 /* SymbolKind.Array */]: (0, nls_1.localize)(0, null),
+        [16 /* SymbolKind.Boolean */]: (0, nls_1.localize)(1, null),
+        [4 /* SymbolKind.Class */]: (0, nls_1.localize)(2, null),
+        [13 /* SymbolKind.Constant */]: (0, nls_1.localize)(3, null),
+        [8 /* SymbolKind.Constructor */]: (0, nls_1.localize)(4, null),
+        [9 /* SymbolKind.Enum */]: (0, nls_1.localize)(5, null),
+        [21 /* SymbolKind.EnumMember */]: (0, nls_1.localize)(6, null),
+        [23 /* SymbolKind.Event */]: (0, nls_1.localize)(7, null),
+        [7 /* SymbolKind.Field */]: (0, nls_1.localize)(8, null),
+        [0 /* SymbolKind.File */]: (0, nls_1.localize)(9, null),
+        [11 /* SymbolKind.Function */]: (0, nls_1.localize)(10, null),
+        [10 /* SymbolKind.Interface */]: (0, nls_1.localize)(11, null),
+        [19 /* SymbolKind.Key */]: (0, nls_1.localize)(12, null),
+        [5 /* SymbolKind.Method */]: (0, nls_1.localize)(13, null),
+        [1 /* SymbolKind.Module */]: (0, nls_1.localize)(14, null),
+        [2 /* SymbolKind.Namespace */]: (0, nls_1.localize)(15, null),
+        [20 /* SymbolKind.Null */]: (0, nls_1.localize)(16, null),
+        [15 /* SymbolKind.Number */]: (0, nls_1.localize)(17, null),
+        [18 /* SymbolKind.Object */]: (0, nls_1.localize)(18, null),
+        [24 /* SymbolKind.Operator */]: (0, nls_1.localize)(19, null),
+        [3 /* SymbolKind.Package */]: (0, nls_1.localize)(20, null),
+        [6 /* SymbolKind.Property */]: (0, nls_1.localize)(21, null),
+        [14 /* SymbolKind.String */]: (0, nls_1.localize)(22, null),
+        [22 /* SymbolKind.Struct */]: (0, nls_1.localize)(23, null),
+        [25 /* SymbolKind.TypeParameter */]: (0, nls_1.localize)(24, null),
+        [12 /* SymbolKind.Variable */]: (0, nls_1.localize)(25, null),
+    };
+    /**
+     * @internal
+     */
+    function getAriaLabelForSymbol(symbolName, kind) {
+        return (0, nls_1.localize)(26, null, symbolName, exports.symbolKindNames[kind]);
+    }
+    exports.getAriaLabelForSymbol = getAriaLabelForSymbol;
+    /**
+     * @internal
+     */
     var SymbolKinds;
     (function (SymbolKinds) {
         const byKind = new Map();
@@ -17073,6 +17530,10 @@ define(__m[57/*vs/editor/common/languages*/], __M([0/*require*/,1/*exports*/,33/
         }
         SymbolKinds.toIcon = toIcon;
     })(SymbolKinds || (exports.SymbolKinds = SymbolKinds = {}));
+    /** @internal */
+    class TextEdit {
+    }
+    exports.TextEdit = TextEdit;
     class FoldingRangeKind {
         /**
          * Returns a {@link FoldingRangeKind} for the given value.
@@ -17167,7 +17628,7 @@ define(__m[57/*vs/editor/common/languages*/], __M([0/*require*/,1/*exports*/,33/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[58/*vs/editor/common/services/editorBaseApi*/], __M([0/*require*/,1/*exports*/,55/*vs/base/common/cancellation*/,9/*vs/base/common/event*/,30/*vs/base/common/keyCodes*/,13/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,34/*vs/editor/common/core/selection*/,57/*vs/editor/common/languages*/,51/*vs/editor/common/standalone/standaloneEnums*/]), function (require, exports, cancellation_1, event_1, keyCodes_1, uri_1, position_1, range_1, selection_1, languages_1, standaloneEnums) {
+define(__m[60/*vs/editor/common/services/editorBaseApi*/], __M([0/*require*/,1/*exports*/,32/*vs/base/common/cancellation*/,7/*vs/base/common/event*/,30/*vs/base/common/keyCodes*/,14/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,35/*vs/editor/common/core/selection*/,59/*vs/editor/common/languages*/,52/*vs/editor/common/standalone/standaloneEnums*/]), function (require, exports, cancellation_1, event_1, keyCodes_1, uri_1, position_1, range_1, selection_1, languages_1, standaloneEnums) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createMonacoBaseAPI = exports.KeyMod = void 0;
@@ -17215,7 +17676,7 @@ define(__m[58/*vs/editor/common/services/editorBaseApi*/], __M([0/*require*/,1/*
 
 
 
-define(__m[61/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*/,1/*exports*/,17/*vs/base/common/diff/diff*/,13/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,48/*vs/editor/common/model/mirrorTextModel*/,22/*vs/editor/common/core/wordHelper*/,44/*vs/editor/common/languages/linkComputer*/,45/*vs/editor/common/languages/supports/inplaceReplaceSupport*/,58/*vs/editor/common/services/editorBaseApi*/,24/*vs/base/common/stopwatch*/,50/*vs/editor/common/services/unicodeTextModelHighlighter*/,42/*vs/editor/common/diff/linesDiffComputers*/,12/*vs/base/common/objects*/,43/*vs/editor/common/languages/defaultDocumentColorsComputer*/]), function (require, exports, diff_1, uri_1, position_1, range_1, mirrorTextModel_1, wordHelper_1, linkComputer_1, inplaceReplaceSupport_1, editorBaseApi_1, stopwatch_1, unicodeTextModelHighlighter_1, linesDiffComputers_1, objects_1, defaultDocumentColorsComputer_1) {
+define(__m[62/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*/,1/*exports*/,20/*vs/base/common/diff/diff*/,14/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,2/*vs/editor/common/core/range*/,49/*vs/editor/common/model/mirrorTextModel*/,24/*vs/editor/common/core/wordHelper*/,45/*vs/editor/common/languages/linkComputer*/,46/*vs/editor/common/languages/supports/inplaceReplaceSupport*/,60/*vs/editor/common/services/editorBaseApi*/,19/*vs/base/common/stopwatch*/,51/*vs/editor/common/services/unicodeTextModelHighlighter*/,43/*vs/editor/common/diff/linesDiffComputers*/,11/*vs/base/common/objects*/,44/*vs/editor/common/languages/defaultDocumentColorsComputer*/]), function (require, exports, diff_1, uri_1, position_1, range_1, mirrorTextModel_1, wordHelper_1, linkComputer_1, inplaceReplaceSupport_1, editorBaseApi_1, stopwatch_1, unicodeTextModelHighlighter_1, linesDiffComputers_1, objects_1, defaultDocumentColorsComputer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.create = exports.EditorSimpleWorker = void 0;
@@ -17461,15 +17922,13 @@ define(__m[61/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
             });
         }
         static computeDiff(originalTextModel, modifiedTextModel, options, algorithm) {
-            const diffAlgorithm = algorithm === 'advanced' ? linesDiffComputers_1.linesDiffComputers.advanced : linesDiffComputers_1.linesDiffComputers.legacy;
+            const diffAlgorithm = algorithm === 'advanced' ? linesDiffComputers_1.linesDiffComputers.getAdvanced() : linesDiffComputers_1.linesDiffComputers.getLegacy();
             const originalLines = originalTextModel.getLinesContent();
             const modifiedLines = modifiedTextModel.getLinesContent();
             const result = diffAlgorithm.computeDiff(originalLines, modifiedLines, options);
             const identical = (result.changes.length > 0 ? false : this._modelsAreIdentical(originalTextModel, modifiedTextModel));
-            return {
-                identical,
-                quitEarly: result.hitTimeout,
-                changes: result.changes.map(m => {
+            function getLineChanges(changes) {
+                return changes.map(m => {
                     var _a;
                     return ([m.originalRange.startLineNumber, m.originalRange.endLineNumberExclusive, m.modifiedRange.startLineNumber, m.modifiedRange.endLineNumberExclusive, (_a = m.innerChanges) === null || _a === void 0 ? void 0 : _a.map(m => [
                             m.originalRange.startLineNumber,
@@ -17481,7 +17940,19 @@ define(__m[61/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
                             m.modifiedRange.endLineNumber,
                             m.modifiedRange.endColumn,
                         ])]);
-                })
+                });
+            }
+            return {
+                identical,
+                quitEarly: result.hitTimeout,
+                changes: getLineChanges(result.changes),
+                moves: result.moves.map(m => ([
+                    m.lineRangeMapping.original.startLineNumber,
+                    m.lineRangeMapping.original.endLineNumberExclusive,
+                    m.lineRangeMapping.modified.startLineNumber,
+                    m.lineRangeMapping.modified.endLineNumberExclusive,
+                    getLineChanges(m.changes)
+                ])),
             };
         }
         static _modelsAreIdentical(original, modified) {
@@ -17578,7 +18049,7 @@ define(__m[61/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
         }
         textualSuggest(modelUrls, leadingWord, wordDef, wordDefFlags) {
             return __awaiter(this, void 0, void 0, function* () {
-                const sw = new stopwatch_1.StopWatch(true);
+                const sw = new stopwatch_1.StopWatch();
                 const wordDefRegExp = new RegExp(wordDef, wordDefFlags);
                 const seen = new Set();
                 outer: for (const url of modelUrls) {

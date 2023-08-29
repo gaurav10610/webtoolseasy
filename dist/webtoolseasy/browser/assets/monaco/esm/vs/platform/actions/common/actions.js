@@ -103,9 +103,11 @@ MenuId.MenubarTerminalMenu = new MenuId('MenubarTerminalMenu');
 MenuId.MenubarViewMenu = new MenuId('MenubarViewMenu');
 MenuId.MenubarHomeMenu = new MenuId('MenubarHomeMenu');
 MenuId.OpenEditorsContext = new MenuId('OpenEditorsContext');
+MenuId.OpenEditorsContextShare = new MenuId('OpenEditorsContextShare');
 MenuId.ProblemsPanelContext = new MenuId('ProblemsPanelContext');
 MenuId.SCMChangeContext = new MenuId('SCMChangeContext');
 MenuId.SCMResourceContext = new MenuId('SCMResourceContext');
+MenuId.SCMResourceContextShare = new MenuId('SCMResourceContextShare');
 MenuId.SCMResourceFolderContext = new MenuId('SCMResourceFolderContext');
 MenuId.SCMResourceGroupContext = new MenuId('SCMResourceGroupContext');
 MenuId.SCMSourceControl = new MenuId('SCMSourceControl');
@@ -148,6 +150,7 @@ MenuId.InteractiveCellDelete = new MenuId('InteractiveCellDelete');
 MenuId.InteractiveCellExecute = new MenuId('InteractiveCellExecute');
 MenuId.InteractiveInputExecute = new MenuId('InteractiveInputExecute');
 MenuId.NotebookToolbar = new MenuId('NotebookToolbar');
+MenuId.NotebookStickyScrollContext = new MenuId('NotebookStickyScrollContext');
 MenuId.NotebookCellTitle = new MenuId('NotebookCellTitle');
 MenuId.NotebookCellDelete = new MenuId('NotebookCellDelete');
 MenuId.NotebookCellInsert = new MenuId('NotebookCellInsert');
@@ -184,10 +187,10 @@ MenuId.MergeInput2Toolbar = new MenuId('MergeToolbar2Toolbar');
 MenuId.MergeBaseToolbar = new MenuId('MergeBaseToolbar');
 MenuId.MergeInputResultToolbar = new MenuId('MergeToolbarResultToolbar');
 MenuId.InlineSuggestionToolbar = new MenuId('InlineSuggestionToolbar');
-MenuId.InteractiveSessionContext = new MenuId('InteractiveSessionContext');
-MenuId.InteractiveSessionCodeBlock = new MenuId('InteractiveSessionCodeblock');
-MenuId.InteractiveSessionTitle = new MenuId('InteractiveSessionTitle');
-MenuId.InteractiveSessionExecute = new MenuId('InteractiveSessionExecute');
+MenuId.ChatContext = new MenuId('ChatContext');
+MenuId.ChatCodeBlock = new MenuId('ChatCodeblock');
+MenuId.ChatMessageTitle = new MenuId('ChatMessageTitle');
+MenuId.ChatExecute = new MenuId('ChatExecute');
 export const IMenuService = createDecorator('menuService');
 class MenuRegistryChangeEvent {
     static for(id) {
@@ -297,7 +300,7 @@ export class SubmenuItemAction extends SubmenuAction {
 }
 // implements IAction, does NOT extend Action, so that no one
 // subscribes to events of Action or modified properties
-export let MenuItemAction = class MenuItemAction {
+let MenuItemAction = class MenuItemAction {
     static label(action, options) {
         return (options === null || options === void 0 ? void 0 : options.renderShortTitle) && action.shortTitle
             ? (typeof action.shortTitle === 'string' ? action.shortTitle : action.shortTitle.value)
@@ -322,7 +325,7 @@ export let MenuItemAction = class MenuItemAction {
             if (this.checked && ThemeIcon.isThemeIcon(toggled.icon)) {
                 icon = toggled.icon;
             }
-            if (toggled.title) {
+            if (this.checked && toggled.title) {
                 this.label = typeof toggled.title === 'string' ? toggled.title : toggled.title.value;
             }
         }
@@ -350,6 +353,7 @@ MenuItemAction = __decorate([
     __param(4, IContextKeyService),
     __param(5, ICommandService)
 ], MenuItemAction);
+export { MenuItemAction };
 export class Action2 {
     constructor(desc) {
         this.desc = desc;

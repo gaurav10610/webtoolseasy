@@ -24,9 +24,21 @@ Sound.terminalBell = Sound.register({ fileName: 'terminalBell.mp3' });
 Sound.diffLineInserted = Sound.register({ fileName: 'diffLineInserted.mp3' });
 Sound.diffLineDeleted = Sound.register({ fileName: 'diffLineDeleted.mp3' });
 Sound.diffLineModified = Sound.register({ fileName: 'diffLineModified.mp3' });
+Sound.chatRequestSent = Sound.register({ fileName: 'chatRequestSent.mp3' });
+Sound.chatResponsePending = Sound.register({ fileName: 'chatResponsePending.mp3' });
+Sound.chatResponseReceived1 = Sound.register({ fileName: 'chatResponseReceived1.mp3' });
+Sound.chatResponseReceived2 = Sound.register({ fileName: 'chatResponseReceived2.mp3' });
+Sound.chatResponseReceived3 = Sound.register({ fileName: 'chatResponseReceived3.mp3' });
+Sound.chatResponseReceived4 = Sound.register({ fileName: 'chatResponseReceived4.mp3' });
+export class SoundSource {
+    constructor(randomOneOf) {
+        this.randomOneOf = randomOneOf;
+    }
+}
 export class AudioCue {
     static register(options) {
-        const audioCue = new AudioCue(options.sound, options.name, options.settingsKey);
+        const soundSource = new SoundSource('randomOneOf' in options.sound ? options.sound.randomOneOf : [options.sound]);
+        const audioCue = new AudioCue(soundSource, options.name, options.settingsKey);
         AudioCue._audioCues.add(audioCue);
         return audioCue;
     }
@@ -121,4 +133,26 @@ AudioCue.diffLineModified = AudioCue.register({
     name: localize('audioCues.diffLineModified', 'Diff Line Modified'),
     sound: Sound.diffLineModified,
     settingsKey: 'audioCues.diffLineModified'
+});
+AudioCue.chatRequestSent = AudioCue.register({
+    name: localize('audioCues.chatRequestSent', 'Chat Request Sent'),
+    sound: Sound.chatRequestSent,
+    settingsKey: 'audioCues.chatRequestSent'
+});
+AudioCue.chatResponseReceived = AudioCue.register({
+    name: localize('audioCues.chatResponseReceived', 'Chat Response Received'),
+    settingsKey: 'audioCues.chatResponseReceived',
+    sound: {
+        randomOneOf: [
+            Sound.chatResponseReceived1,
+            Sound.chatResponseReceived2,
+            Sound.chatResponseReceived3,
+            Sound.chatResponseReceived4
+        ]
+    }
+});
+AudioCue.chatResponsePending = AudioCue.register({
+    name: localize('audioCues.chatResponsePending', 'Chat Response Pending'),
+    sound: Sound.chatResponsePending,
+    settingsKey: 'audioCues.chatResponsePending'
 });

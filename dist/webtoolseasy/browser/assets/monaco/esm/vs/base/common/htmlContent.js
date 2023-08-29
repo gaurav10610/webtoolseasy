@@ -29,7 +29,7 @@ export class MarkdownString {
         this.value += escapeMarkdownSyntaxTokens(this.supportThemeIcons ? escapeIcons(value) : value)
             .replace(/([ \t]+)/g, (_match, g1) => '&nbsp;'.repeat(g1.length))
             .replace(/\>/gm, '\\>')
-            .replace(/\n/g, newlineStyle === 1 /* MarkdownStringTextNewlineStyle.Break */ ? '\\\n' : '\n\n');
+            .replace(/\n/g, newlineStyle === 1 /* MarkdownStringTextNewlineStyle.Break */ ? '\\\n' : '\n\n'); // CodeQL [SM02383] The Markdown is fully sanitized after being rendered.
         return this;
     }
     appendMarkdown(value) {
@@ -106,7 +106,7 @@ export function markdownStringEqual(a, b) {
 }
 export function escapeMarkdownSyntaxTokens(text) {
     // escape markdown syntax tokens: http://daringfireball.net/projects/markdown/syntax#backslash
-    return text.replace(/[\\`*_{}[\]()#+\-!~]/g, '\\$&');
+    return text.replace(/[\\`*_{}[\]()#+\-!~]/g, '\\$&'); // CodeQL [SM02383] Backslash is escaped in the character class
 }
 export function escapeDoubleQuotes(input) {
     return input.replace(/"/g, '&quot;');

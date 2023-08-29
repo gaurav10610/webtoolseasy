@@ -98,16 +98,23 @@ export function raceCancellation(promise, token, defaultValue) {
  */
 export class Throttler {
     constructor() {
+        this.isDisposed = false;
         this.activePromise = null;
         this.queuedPromise = null;
         this.queuedPromiseFactory = null;
     }
     queue(promiseFactory) {
+        if (this.isDisposed) {
+            throw new Error('Throttler is disposed');
+        }
         if (this.activePromise) {
             this.queuedPromiseFactory = promiseFactory;
             if (!this.queuedPromise) {
                 const onComplete = () => {
                     this.queuedPromise = null;
+                    if (this.isDisposed) {
+                        return;
+                    }
                     const result = this.queue(this.queuedPromiseFactory);
                     this.queuedPromiseFactory = null;
                     return result;
@@ -130,6 +137,9 @@ export class Throttler {
                 reject(err);
             });
         });
+    }
+    dispose() {
+        this.isDisposed = true;
     }
 }
 const timeoutDeferred = (timeout, fn) => {
@@ -260,6 +270,7 @@ export class ThrottledDelayer {
     }
     dispose() {
         this.delayer.dispose();
+        this.throttler.dispose();
     }
 }
 export function timeout(millis, token) {
@@ -510,14 +521,13 @@ export class IdleValue {
  */
 export class DeferredPromise {
     get isRejected() {
-        return this.rejected;
+        var _a;
+        return ((_a = this.outcome) === null || _a === void 0 ? void 0 : _a.outcome) === 1 /* DeferredOutcome.Rejected */;
     }
     get isSettled() {
-        return this.rejected || this.resolved;
+        return !!this.outcome;
     }
     constructor() {
-        this.rejected = false;
-        this.resolved = false;
         this.p = new Promise((c, e) => {
             this.completeCallback = c;
             this.errorCallback = e;
@@ -526,16 +536,19 @@ export class DeferredPromise {
     complete(value) {
         return new Promise(resolve => {
             this.completeCallback(value);
-            this.resolved = true;
+            this.outcome = { outcome: 0 /* DeferredOutcome.Resolved */, value };
+            resolve();
+        });
+    }
+    error(err) {
+        return new Promise(resolve => {
+            this.errorCallback(err);
+            this.outcome = { outcome: 1 /* DeferredOutcome.Rejected */, value: err };
             resolve();
         });
     }
     cancel() {
-        new Promise(resolve => {
-            this.errorCallback(new CancellationError());
-            this.rejected = true;
-            resolve();
-        });
+        return this.error(new CancellationError());
     }
 }
 //#endregion
@@ -612,16 +625,11 @@ export class AsyncIterableObject {
             yield Promise.all(iterables.map((iterable) => { var _a, iterable_1, iterable_1_1; return __awaiter(this, void 0, void 0, function* () {
                 var _b, e_1, _c, _d;
                 try {
-                    for (_a = true, iterable_1 = __asyncValues(iterable); iterable_1_1 = yield iterable_1.next(), _b = iterable_1_1.done, !_b;) {
+                    for (_a = true, iterable_1 = __asyncValues(iterable); iterable_1_1 = yield iterable_1.next(), _b = iterable_1_1.done, !_b; _a = true) {
                         _d = iterable_1_1.value;
                         _a = false;
-                        try {
-                            const item = _d;
-                            emitter.emitOne(item);
-                        }
-                        finally {
-                            _a = true;
-                        }
+                        const item = _d;
+                        emitter.emitOne(item);
                     }
                 }
                 catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -682,16 +690,11 @@ export class AsyncIterableObject {
         return new AsyncIterableObject((emitter) => __awaiter(this, void 0, void 0, function* () {
             var _a, e_2, _b, _c;
             try {
-                for (var _d = true, iterable_2 = __asyncValues(iterable), iterable_2_1; iterable_2_1 = yield iterable_2.next(), _a = iterable_2_1.done, !_a;) {
+                for (var _d = true, iterable_2 = __asyncValues(iterable), iterable_2_1; iterable_2_1 = yield iterable_2.next(), _a = iterable_2_1.done, !_a; _d = true) {
                     _c = iterable_2_1.value;
                     _d = false;
-                    try {
-                        const item = _c;
-                        emitter.emitOne(mapFn(item));
-                    }
-                    finally {
-                        _d = true;
-                    }
+                    const item = _c;
+                    emitter.emitOne(mapFn(item));
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -710,17 +713,12 @@ export class AsyncIterableObject {
         return new AsyncIterableObject((emitter) => __awaiter(this, void 0, void 0, function* () {
             var _a, e_3, _b, _c;
             try {
-                for (var _d = true, iterable_3 = __asyncValues(iterable), iterable_3_1; iterable_3_1 = yield iterable_3.next(), _a = iterable_3_1.done, !_a;) {
+                for (var _d = true, iterable_3 = __asyncValues(iterable), iterable_3_1; iterable_3_1 = yield iterable_3.next(), _a = iterable_3_1.done, !_a; _d = true) {
                     _c = iterable_3_1.value;
                     _d = false;
-                    try {
-                        const item = _c;
-                        if (filterFn(item)) {
-                            emitter.emitOne(item);
-                        }
-                    }
-                    finally {
-                        _d = true;
+                    const item = _c;
+                    if (filterFn(item)) {
+                        emitter.emitOne(item);
                     }
                 }
             }
@@ -748,16 +746,11 @@ export class AsyncIterableObject {
         return __awaiter(this, void 0, void 0, function* () {
             const result = [];
             try {
-                for (_a = true, iterable_4 = __asyncValues(iterable); iterable_4_1 = yield iterable_4.next(), _b = iterable_4_1.done, !_b;) {
+                for (_a = true, iterable_4 = __asyncValues(iterable); iterable_4_1 = yield iterable_4.next(), _b = iterable_4_1.done, !_b; _a = true) {
                     _d = iterable_4_1.value;
                     _a = false;
-                    try {
-                        const item = _d;
-                        result.push(item);
-                    }
-                    finally {
-                        _a = true;
-                    }
+                    const item = _d;
+                    result.push(item);
                 }
             }
             catch (e_4_1) { e_4 = { error: e_4_1 }; }
@@ -851,20 +844,15 @@ export function createCancelableAsyncIterable(callback) {
         });
         try {
             try {
-                for (var _d = true, innerIterable_1 = __asyncValues(innerIterable), innerIterable_1_1; innerIterable_1_1 = yield innerIterable_1.next(), _a = innerIterable_1_1.done, !_a;) {
+                for (var _d = true, innerIterable_1 = __asyncValues(innerIterable), innerIterable_1_1; innerIterable_1_1 = yield innerIterable_1.next(), _a = innerIterable_1_1.done, !_a; _d = true) {
                     _c = innerIterable_1_1.value;
                     _d = false;
-                    try {
-                        const item = _c;
-                        if (source.token.isCancellationRequested) {
-                            // canceled in the meantime
-                            return;
-                        }
-                        emitter.emitOne(item);
+                    const item = _c;
+                    if (source.token.isCancellationRequested) {
+                        // canceled in the meantime
+                        return;
                     }
-                    finally {
-                        _d = true;
-                    }
+                    emitter.emitOne(item);
                 }
             }
             catch (e_5_1) { e_5 = { error: e_5_1 }; }
