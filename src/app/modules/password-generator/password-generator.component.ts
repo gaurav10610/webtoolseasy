@@ -109,8 +109,7 @@ export class PasswordGeneratorComponent {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,
