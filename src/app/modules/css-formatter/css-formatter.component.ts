@@ -2,7 +2,6 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { css_beautify } from 'js-beautify';
 import {
   componentConfig,
   descriptionData,
@@ -12,6 +11,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { css_beautify } from 'js-beautify';
 
 @Component({
   selector: 'app-css-formatter',
@@ -64,8 +64,8 @@ export class CssFormatterComponent {
     this.formattedCode = css_beautify(this.rawCode);
   }
 
-  onRawCodeChange() {
-    this.formattedCode = css_beautify(this.rawCode);
+  onRawCodeChange(updatedModel: string) {
+    this.formattedCode = css_beautify(updatedModel);
   }
 
   copyFormattedCode() {

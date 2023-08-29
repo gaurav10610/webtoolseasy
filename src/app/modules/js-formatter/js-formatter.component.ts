@@ -2,7 +2,6 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { js_beautify } from 'js-beautify';
 import {
   componentConfig,
   descriptionData,
@@ -12,6 +11,7 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { js_beautify } from 'js-beautify';
 
 @Component({
   selector: 'app-js-formatter',
@@ -62,23 +62,10 @@ export class JsFormatterComponent {
     this.appContextService.relatedTools = componentConfig.relatedTools;
     this.appContextService.descrptionData = descriptionData;
     this.formattedCode = js_beautify(this.rawCode);
-    // this.formattedCode = this.rawCode;
   }
 
-  onFormattedEditorLoad(event: any) {
-    // setTimeout(() => {
-    //   LogUtils.info(this.formattedEditor);
-    //   LogUtils.info(
-    //     event.languageConfigurationService.getLanguageConfiguration()
-    //   );
-    //   event._actions.get('editor.action.formatDocument').run();
-    // }, 1000);
-  }
-
-  onRawCodeChange() {
-    this.formattedCode = js_beautify(this.rawCode);
-    // this.formattedCode = this.rawCode;
-    // this.formattedEditor.getAction('editor.action.formatDocument').run();
+  onRawCodeChange(updatedModel: string) {
+    this.formattedCode = js_beautify(updatedModel);
   }
 
   copyFormattedCode() {
