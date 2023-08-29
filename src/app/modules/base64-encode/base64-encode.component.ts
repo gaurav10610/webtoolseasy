@@ -83,11 +83,11 @@ export class Base64EncodeComponent {
       [...event.dataTransfer.items]
         .filter(item => item.kind === 'file')
         .map(item => item.getAsFile())
-        .forEach(async file => await this.encodeFileToBase64(file));
+        .forEach(file => this.encodeFileToBase64(file));
     } else {
       // Use DataTransfer interface to access the file(s)
-      [...event.dataTransfer.files].forEach(
-        async file => await this.encodeFileToBase64(file)
+      [...event.dataTransfer.files].forEach(file =>
+        this.encodeFileToBase64(file)
       );
     }
   }
@@ -105,7 +105,7 @@ export class Base64EncodeComponent {
    * encode file to base64
    * @param file
    */
-  async encodeFileToBase64(file: File) {
+  encodeFileToBase64(file: File) {
     const fileReader: FileReader = new FileReader();
 
     fileReader.addEventListener(
