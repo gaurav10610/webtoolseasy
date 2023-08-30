@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 const navigationUrl = '/tools/image-compress';
 const pageTitle = 'Best Online Image Compressor | Image File Size Reducer';
 const pageDescription =
-  'Online Image Compressor is the Best Image Optimzer Tool to Compress your images in JPEG, PNG, WEBBP and BMP formats to the minimum possible size for free.';
+  'Our Best Online Image Compression tool lets you compress your images to reduce file storage size for free. Supports a wide range of image file formats i.e JPEG, PNG, WEBBP and BMP.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -116,11 +116,12 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Unlimited images can be compressed. Online Image Compressor is completely free.`,
+      `Unlimited images can be compressed. Online Image Compressor is completely free. No registration required. No credit card required.`,
+      `Supports customizing compression level to control the compressed image size.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to compress their images with just a few clicks.`,
       `High-quality compression: Our tool uses advanced compression algorithms to reduce image file size while preserving image quality.`,
       `Batch processing: Compress multiple images at once, saving you time and effort.`,
-      `Supports JPEG, PNG, WEBP and BMP format: Our tool works with JPEG, PNG, WEBP and BMP image formats, providing versatile compression options.`,
+      `Supports wide range of image formats: Our tool works with JPEG, PNG, WEBP and BMP image formats, providing versatile compression options.`,
       `Secure: Image compression will be performed in host browser only. We don't store any of the images.`,
       `No need to download any software. Simply upload your images to our platform and get your compressed images in no time.`,
     ],

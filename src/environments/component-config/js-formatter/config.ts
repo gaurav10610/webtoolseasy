@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/js-formatter';
-const pageTitle = 'Best Online Javascript Beautifier / Formatter';
+const pageTitle = 'Best Online Javascript Formatter | Javascript Beautifier';
 const pageDescription =
-  'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free';
+  'Our Best Online Javascript Formatter/Beautifier tool lets you beautify/format your JavaScript code for free';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Javascript Formatter',
-  subHeading: 'Javascript Beautifier',
+  subHeading: 'Online Javascript Beautifier',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -135,6 +135,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Supports online editing of your Javascript code using our inbuilt monaco code edior.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to format their JavaScript code with just pasting Javascript here.`,
       `Real-time formatting: Our tool formats your Javascript in real-time, so you can see the changes as you make them.`,
       `No need to download any software. Simply paste your code into our platform and get a clean, organized, and optimized result.`,

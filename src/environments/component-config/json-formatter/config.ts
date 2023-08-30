@@ -4,9 +4,10 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-formatter';
-const pageTitle = 'Best JSON Formatter / Beautifier and JSON Validator';
+const pageTitle =
+  'Best Online JSON Formatter | JSON Beautifier | JSON Validator';
 const pageDescription =
-  'Online JSON Formatter / Beautifier and JSON Validator will format JSON data, and helps to validate. Save and Copy JSON';
+  'Our Best Online JSON Formatter/Beautifier/Validator tool lets you format/beautify/validate your JSON for free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -138,6 +139,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Supports online editing of your JSON code using our inbuilt monaco code edior.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to format their JSON with just pasting it here.`,
       `Real-time formatting: Our tool formats your JSON in real-time, so you can see the changes as you make them.`,
       `No need to download any software. Simply paste your JSON into our platform and get a clean, organized, and optimized result.`,

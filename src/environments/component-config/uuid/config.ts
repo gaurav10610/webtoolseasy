@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/uuid';
-const pageTitle = 'Online UUID Generator';
+const pageTitle = 'Best Online UUID Generator | Bulk UUID Generator';
 const pageDescription =
-  'Quickly and easily generate individual or bulk sets of universally unique identifiers (UUIDs)';
+  'Our Best Online UUID Generator tool lets you quickly generate random universally unique identifiers (UUID) individually or in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/uuid-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
-  subHeading: 'Individual or Bulk UUID V4 & V1 Generator',
+  subHeading: 'UUID V4 Generator | UUID V1 Generator',
   navigationUrl,
   pageTitle,
   metaTags: [

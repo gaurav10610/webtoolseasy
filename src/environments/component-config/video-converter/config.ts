@@ -7,7 +7,7 @@ const navigationUrl = '/tools/video-converter';
 const pageTitle =
   'Online Video to Audio Converter - Convert MP4, MKV, WEBM, AVI, OGM';
 const pageDescription =
-  'Convert your videos to high-quality audio files with our free online video to audio converter. No software installation required. Convert MP4, MKV, WEBM, AVI, OGM. Try it now!';
+  'Our Best Online Video to Audio Converter tool lets you convert your videos to high-quality audio files. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
 const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -124,7 +124,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Video to Audio conversion is 100% free`,
+      `Video to Audio conversion is 100% free. No registration required. No credit card requied.`,
       `Video to Audio conversion is 100% secure as whole processing is being done at client side only (in host browser)`,
       `Unlimited videos can be converted to Audio for free`,
       `Supports wide range of input video formats - MP4, WEBM, OGV, MKV, OGM`,

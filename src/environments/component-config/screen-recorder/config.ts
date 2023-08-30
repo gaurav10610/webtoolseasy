@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle = 'Free Online Screen Recorder | Online Video Recorder';
+const pageTitle = 'Free Screen Recorder With No Watermark | No Time Limit';
 const pageDescription =
-  'Easily Capture your Screen via Best Free Online Screen Recorder with or without audio, video from microphone and webcam | No download, No Watermark with Lag free recording for PCs ( Windows/ MAC/ Ubuntu )';
+  'Easy HD Screen recording via our Best Free Online Screen Recorder with or without audio, video from mic and webcam. No watermark and time limit for screen recording.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Screen Recorder',
-  subHeading: 'Record Screen With Audio, Video for Free',
+  subHeading: 'HD Screen Recording With Mic & Camera',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -101,12 +101,13 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Screen recording is 100% free.`,
-      `Unlimited screen recording in HD format.`,
-      `Record screen with camera video & mic audio.`,
-      `No watermark in the recorded video.`,
+      `Screen recording is 100% free. No registration required. No credit card required.`,
+      `Unlimited screen recording in HD format i.e no time limit for recording.`,
+      `Record screen with webcam video & microphone audio.`,
+      `Pause and resume screen recording.`,
+      `HD screen recording with no watermark.`,
       `Easy to use: No software installation is needed to record screen.`,
-      `Cross platform: tool is completely web-based and can be accessed wherever you are, from any computer. It is compatible with all major browsers and OSes, including Windows, macOS, and Linux.`,
+      `Cross platform: Tool is completely web-based and can be accessed wherever you are, from any computer. It is compatible with all major browsers and OSes, including Windows, macOS, and Linux.`,
       `Secure: Screen recording is 100% secure as whole processing is being done at client side only (in host browser) and we don't store any video.`,
     ],
   },

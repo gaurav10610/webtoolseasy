@@ -4,13 +4,13 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/jwt';
-const pageTitle = 'JWT Decoder';
+const pageTitle = 'Best Online JWT Decoder';
 const pageDescription =
-  'JSON Web Token (JWT) Decode. JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is digitally signed using JSON Web Signature (JWS).';
+  'Our Best Online JWT Decoder tool lets you decode your JSON Web Token (JWT) for free. Supports wide range of JWT alogirithms i.e HS256, HS384, HS512, PS256, PS384, PS512, RS256, RS384, RS512, ES256, ES256K, ES384, ES512 & EdDSA.';
 const imageUrl = `${environment.screenshotsBaseUrl}/jwt-decoder.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'JWT Decoder',
+  mainHeading: 'Online JWT Decoder',
   subHeading: 'JSON Web Token (JWT) Decode',
   navigationUrl,
   pageTitle,

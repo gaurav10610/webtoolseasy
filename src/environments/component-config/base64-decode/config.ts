@@ -6,7 +6,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/base64-decode';
 const pageTitle = 'Base64 to File | Base64 Decode | Base64 Converter | Base64';
 const pageDescription =
-  'Free online tool to decode base64 to file. Base64 decoder. Convert any base64 data uri to file';
+  'Our Best Online Base64 tool lets you decode a base64 data uri to file.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-decode.png`;
 
 export const componentConfig: ApplicationConfig = {

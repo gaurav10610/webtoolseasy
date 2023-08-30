@@ -3,10 +3,9 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle =
-  'Compare text online to find the difference between two text files';
+const pageTitle = 'Best Online Text Difference | Side By Side Text Compare';
 const pageDescription =
-  'Text File Difference tool will compare text to find the difference between two text files. Just paste your files and Find Difference!';
+  'Our Best Online Text File Difference tool lets you compare text side by side to find the difference between two text files.';
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -94,8 +93,10 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Text file comparsion / difference tool is 100% free.`,
-      `Text file comparison / difference is 100% secure as whole processing is being done at client side only (in host browser).`,
+      `Text file comparsion/difference tool is 100% free.`,
+      `Supports online editing of text contents using inbuilt monaco editor.`,
+      `View text file difference side by side.`,
+      `Text file comparison/difference is 100% secure as whole processing is being done at client side only (in host browser).`,
       `Unlimited text file comparison.`,
       `Track down plagiarism.`,
       `Compare text files character by character, word by word or line by line`,

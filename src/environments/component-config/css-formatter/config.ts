@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/css-formatter';
-const pageTitle = 'Best CSS Formatter / Beautifier';
+const pageTitle = 'Best Online CSS Formatter | CSS Beautifier';
 const pageDescription =
-  'CSS Formatter | CSS Beautifier | CSS Prettify | CSS Formatter Online | CSS Beautifier Online';
+  'Our Best Online CSS Formatter/Beautifier tool lets you format/beautify/validate your CSS code for free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/css-format.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -133,6 +133,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Supports online editing of your CSS code using our inbuilt monaco code edior.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to format their CSS with just pasting it here.`,
       `Real-time formatting: Our tool formats your CSS in real-time, so you can see the changes as you make them.`,
       `No need to download any software. Simply paste your CSS into our platform and get a clean, organized, and optimized result.`,
