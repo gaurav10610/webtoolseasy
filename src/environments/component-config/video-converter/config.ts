@@ -35,6 +35,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'video to audio converter',
