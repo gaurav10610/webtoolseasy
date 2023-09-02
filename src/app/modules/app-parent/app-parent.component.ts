@@ -15,7 +15,7 @@ export class AppParentComponent {
     private iconConfigService: IconConfigService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService
+    public appContextService: AppContextService
   ) {
     this.iconConfigService.loadCustomIcons(
       ICON_CONFIG,

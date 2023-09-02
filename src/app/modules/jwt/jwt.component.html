@@ -1,59 +1,61 @@
-<div
-  class="flex-display flex-row-flow flex-align-center text-area-container full-width flex-gap-large">
-  <!-- Text 1 div -->
-  <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
-    <span class="div-label">Encoded Token (Paste Token Here)</span>
+<div class="flex-display flex-column-flow flex-align-center flex-gap-medium">
+  <div
+    class="flex-display flex-row-flow flex-align-center text-area-container full-width flex-gap-large">
+    <!-- Text 1 div -->
+    <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+      <span class="div-label">Encoded Token (Paste Token Here)</span>
 
-    <div
-      class="text-content-div y-scroll flex-full-height full-width border-grey"
-      style="color: indigo"
-      (click)="onEncodedDivClick()">
-      <span
-        #text1AreaContent
-        contenteditable="true"
-        (input)="encodedInputChange()"
-        (paste)="onTokenPaste($event)"
-        class="full-height full-width"
-        style="margin: 10px"></span>
+      <div
+        class="text-content-div y-scroll flex-full-height full-width border-grey"
+        style="color: indigo"
+        (click)="onEncodedDivClick()">
+        <span
+          #text1AreaContent
+          contenteditable="true"
+          (input)="encodedInputChange()"
+          (paste)="onTokenPaste($event)"
+          class="full-height full-width"
+          style="margin: 10px"></span>
+      </div>
+      <div
+        class="flex-display flex-row-flow flex-gap-small"
+        *ngIf="!isTokenValid">
+        <mat-icon color="warn" style="transform: scale(2)">error</mat-icon>
+        <span class="header-font" style="color: red">token is invalid</span>
+      </div>
     </div>
-    <div
-      class="flex-display flex-row-flow flex-gap-small"
-      *ngIf="!isTokenValid">
-      <mat-icon color="warn" style="transform: scale(2)">error</mat-icon>
-      <span class="header-font" style="color: red">token is invalid</span>
+
+    <!-- Text 2 div -->
+    <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+      <span class="div-label">Decoded Token</span>
+
+      <span style="font-size: small">Headers ( Algorithm & Token Type)</span>
+
+      <!-- JWT header div -->
+      <div class="text-content-div full-width border-grey">
+        <ngx-json-viewer
+          #text3AreaContent
+          [json]="decodedHeaders"
+          [expanded]="true"></ngx-json-viewer>
+      </div>
+
+      <div class="flex-display flex-row-flow">
+        <span style="font-size: small">Token Data</span>
+      </div>
+
+      <div
+        class="text-content-div y-scroll flex-full-height full-width border-grey">
+        <ngx-json-viewer
+          #text2AreaContent
+          [json]="decodedToken"
+          [expanded]="true"></ngx-json-viewer>
+      </div>
     </div>
   </div>
 
-  <!-- Text 2 div -->
-  <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
-    <span class="div-label">Decoded Token</span>
-
-    <span style="font-size: small">Headers ( Algorithm & Token Type)</span>
-
-    <!-- JWT header div -->
-    <div class="text-content-div full-width border-grey">
-      <ngx-json-viewer
-        #text3AreaContent
-        [json]="decodedHeaders"
-        [expanded]="true"></ngx-json-viewer>
-    </div>
-
-    <div class="flex-display flex-row-flow">
-      <span style="font-size: small">Token Data</span>
-    </div>
-
-    <div
-      class="text-content-div y-scroll flex-full-height full-width border-grey">
-      <ngx-json-viewer
-        #text2AreaContent
-        [json]="decodedToken"
-        [expanded]="true"></ngx-json-viewer>
-    </div>
+  <div class="flex-display flex-row-flow full-width copy-button">
+    <button mat-stroked-button (click)="copyDecodedToken()" color="primary">
+      <mat-icon>content_copy</mat-icon> Copy Decoded Token
+    </button>
   </div>
-</div>
-
-<div class="flex-display flex-row-flow full-width copy-button">
-  <button mat-stroked-button (click)="copyDecodedToken()" color="primary">
-    <mat-icon>content_copy</mat-icon> Copy Decoded Token
-  </button>
 </div>
