@@ -13,6 +13,7 @@ const routes: Routes = [
           import('../app-directory/app-directory.module').then(
             m => m.AppDirectoryModule
           ),
+        pathMatch: 'full',
       },
       {
         path: 'uuid',

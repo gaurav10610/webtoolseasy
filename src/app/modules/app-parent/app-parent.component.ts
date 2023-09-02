@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ApplicationConfig } from 'src/app/@types/config';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { ICON_CONFIG } from 'src/environments/component-config/app-parent/config';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-app-parent',
@@ -24,13 +26,20 @@ export class AppParentComponent {
     );
   }
 
+  /**
+   * handle application load event
+   * @param event loaded component reference
+   */
   onApplicationLoad(event: any) {
     if (event.applicationConfig) {
-      this.appContextService.tags = event.applicationConfig.tags;
-      this.appContextService.mainHeading = event.applicationConfig.mainHeading!;
-      this.appContextService.subHeading = event.applicationConfig.subHeading;
-      this.appContextService.relatedTools =
-        event.applicationConfig.relatedTools;
+      const applicationConfig: ApplicationConfig = <ApplicationConfig>(
+        event.applicationConfig
+      );
+      this.appContextService.tags = applicationConfig.tags;
+      this.appContextService.mainHeading = applicationConfig.mainHeading!;
+      this.appContextService.subHeading = applicationConfig.subHeading;
+      this.appContextService.relatedTools = applicationConfig.relatedTools;
+      this.appContextService.appUrl = `${environment.hostname}${applicationConfig.navigationUrl}`;
     }
 
     if (event.descriptionData) {

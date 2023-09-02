@@ -5,8 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './header-toolbar.component.html',
   styleUrls: ['./header-toolbar.component.scss'],
 })
-export class HeaderToolbarComponent {
-  navigateSocialLink(url: string) {
-    window.open(url, '_blank');
-  }
-}
+export class HeaderToolbarComponent {}
