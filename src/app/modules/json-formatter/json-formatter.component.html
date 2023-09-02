@@ -1,73 +1,37 @@
-<div class="full-height flex-display flex-column-flow no-y-scroll">
-  <!-- profile header -->
-  <app-header-toolbar></app-header-toolbar>
+<div
+  class="flex-display flex-row-flow flex-align-center full-width text-area-container">
+  <!-- Text 1 div -->
+  <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+    <span class="div-label">Unformatted JSON (Paste JSON Here)</span>
 
-  <div class="full-width y-scroll">
-    <!-- app container -->
-    <div
-      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
-      <!--web tool headings-->
-      <app-tool-heading></app-tool-heading>
-
-      <!-- share buttons -->
-      <app-share-buttons class="full-width"></app-share-buttons>
-
-      <div
-        class="flex-display flex-row-flow flex-align-center full-width text-area-container">
-        <!-- Text 1 div -->
-        <div
-          class="flex-display flex-column-flow text-area-div flex-gap-medium">
-          <span class="div-label">Unformatted JSON (Paste JSON Here)</span>
-
-          <div class="full-height full-width">
-            <!-- unformatted code editor -->
-            <ngx-monaco-editor
-              *ngIf="platformMetadataService.isPlatformBrowser"
-              style="height: 100%"
-              [options]="editorOptions"
-              (input)="onRawCodeChange()"
-              (paste)="onRawCodeChange()"
-              [(ngModel)]="rawCode"></ngx-monaco-editor>
-          </div>
-        </div>
-
-        <!-- Text 2 div -->
-        <div
-          class="flex-display flex-column-flow text-area-div flex-gap-medium">
-          <span class="div-label">Formatted JSON</span>
-          <div class="full-height full-width">
-            <!-- formatted code editor -->
-            <ngx-monaco-editor
-              *ngIf="platformMetadataService.isPlatformBrowser"
-              style="height: 100%"
-              [options]="editorOptions"
-              [(ngModel)]="formattedCode"></ngx-monaco-editor>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex-display flex-row-flow full-width copy-button">
-        <button
-          mat-stroked-button
-          (click)="copyFormattedCode()"
-          color="primary">
-          <mat-icon>content_copy</mat-icon> Copy Formatted JSON
-        </button>
-      </div>
-
-      <!-- related tools -->
-      <app-related-tools class="full-width"></app-related-tools>
-
-      <!-- description -->
-      <app-description class="full-width"></app-description>
-
-      <!-- tags div -->
-      <app-tags></app-tags>
-
-      <!-- follow buttons -->
-      <app-follow-buttons></app-follow-buttons>
+    <div class="full-height full-width">
+      <!-- unformatted code editor -->
+      <ngx-monaco-editor
+        *ngIf="platformMetadataService.isPlatformBrowser"
+        style="height: 100%"
+        [options]="editorOptions"
+        (input)="onRawCodeChange()"
+        (paste)="onRawCodeChange()"
+        [(ngModel)]="rawCode"></ngx-monaco-editor>
     </div>
-
-    <app-footer></app-footer>
   </div>
+
+  <!-- Text 2 div -->
+  <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+    <span class="div-label">Formatted JSON</span>
+    <div class="full-height full-width">
+      <!-- formatted code editor -->
+      <ngx-monaco-editor
+        *ngIf="platformMetadataService.isPlatformBrowser"
+        style="height: 100%"
+        [options]="editorOptions"
+        [(ngModel)]="formattedCode"></ngx-monaco-editor>
+    </div>
+  </div>
+</div>
+
+<div class="flex-display flex-row-flow full-width copy-button">
+  <button mat-stroked-button (click)="copyFormattedCode()" color="primary">
+    <mat-icon>content_copy</mat-icon> Copy Formatted JSON
+  </button>
 </div>

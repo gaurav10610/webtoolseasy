@@ -1,0 +1,32 @@
+<div class="full-height flex-display flex-column-flow no-y-scroll">
+  <!-- profile header -->
+  <app-header-toolbar></app-header-toolbar>
+
+  <div class="full-width y-scroll flex-display flex-column-flow">
+    <!-- app container -->
+    <div
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
+      <!--web tool headings-->
+      <app-tool-heading></app-tool-heading>
+
+      <!-- share buttons -->
+      <app-share-buttons class="full-width"></app-share-buttons>
+
+      <!-- apps container -->
+      <router-outlet (activate)="onApplicationLoad($event)"></router-outlet>
+
+      <!-- related tools -->
+      <app-related-tools class="full-width"></app-related-tools>
+
+      <!-- description -->
+      <app-description class="full-width"></app-description>
+
+      <!-- tags div -->
+      <app-tags></app-tags>
+
+      <!-- follow buttons -->
+      <app-follow-buttons></app-follow-buttons>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

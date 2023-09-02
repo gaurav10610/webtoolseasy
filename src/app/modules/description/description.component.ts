@@ -7,8 +7,5 @@ import { AppContextService } from 'src/app/service/app-context/app-context.servi
   styleUrls: ['./description.component.scss'],
 })
 export class DescriptionComponent {
-  descriptionData: any;
-  constructor(private appContextService: AppContextService) {
-    this.descriptionData = appContextService.descrptionData;
-  }
+  constructor(public appContextService: AppContextService) {}
 }

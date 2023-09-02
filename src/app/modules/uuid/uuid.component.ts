@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -15,10 +14,11 @@ import {
   descriptionData,
 } from 'src/environments/component-config/uuid/config';
 import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-uuid',
@@ -41,6 +41,9 @@ export class UuidComponent {
   bulkV4Error: boolean = false;
   bulkV1Error: boolean = false;
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private clipboard: Clipboard,
     private titleService: Title,
@@ -48,7 +51,6 @@ export class UuidComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private fileService: FileService,
     private renderer: Renderer2,
     private metaConfigService: MetaConfigService,
@@ -65,11 +67,6 @@ export class UuidComponent {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
 
     this.uuidV1 = v1();
     this.uuidV4 = v4();

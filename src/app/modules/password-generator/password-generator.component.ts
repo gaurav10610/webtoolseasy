@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
@@ -24,6 +23,8 @@ import {
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-password-generator',
@@ -93,6 +94,9 @@ export class PasswordGeneratorComponent {
     strict: false,
   };
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private clipboard: Clipboard,
     private titleService: Title,
@@ -100,7 +104,6 @@ export class PasswordGeneratorComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private fileService: FileService,
     private renderer: Renderer2,
     private metaConfigService: MetaConfigService,
@@ -117,11 +120,6 @@ export class PasswordGeneratorComponent {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
 
     this.password = generate(this.options);
   }
