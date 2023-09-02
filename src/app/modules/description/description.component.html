@@ -1,6 +1,6 @@
 <div class="flex-display flex-column-flow flex-gap-medium">
   <mat-card
-    *ngFor="let descriptionRecord of descriptionData"
+    *ngFor="let descriptionRecord of appContextService.descrptionData"
     class="description-block">
     <mat-card-header class="description-heading">
       <mat-card-title
@@ -18,12 +18,11 @@
         class="flex-display flex-column-flow">
         <div
           *ngFor="let line of descriptionRecord.listData"
-          class="flex-display description-font">
-          <div>
-            <mat-icon aria-hidden="false" aria-label="right pointer icon"
-              >chevron_right</mat-icon
-            >
-          </div>
+          class="flex-display description-font flex-row-flow flex-gap-small flex-align-center"
+          style="overflow-wrap: anywhere">
+          <mat-icon aria-hidden="false" aria-label="right pointer icon"
+            >chevron_right</mat-icon
+          >
           <span> {{ line }}</span>
         </div>
       </div>
@@ -31,7 +30,8 @@
       <!-- div for paragraphs -->
       <div
         *ngIf="descriptionRecord.blockData"
-        class="flex-display flex-column-flow">
+        class="flex-display flex-column-flow"
+        style="overflow-wrap: anywhere">
         <span
           *ngFor="let block of descriptionRecord.blockData"
           class="description-font">
@@ -43,12 +43,12 @@
       <div
         *ngIf="descriptionRecord.links"
         class="flex-display flex-column-flow">
-        <div *ngFor="let link of descriptionRecord.links" class="flex-display">
-          <div>
-            <mat-icon aria-hidden="false" aria-label="right pointer icon"
-              >chevron_right</mat-icon
-            >
-          </div>
+        <div
+          *ngFor="let link of descriptionRecord.links"
+          class="flex-display flex-row-flow flex-gap-small flex-align-center">
+          <mat-icon aria-hidden="false" aria-label="right pointer icon"
+            >chevron_right</mat-icon
+          >
           <a href="{{ link.url }}">
             {{ link.displayText }}
           </a>

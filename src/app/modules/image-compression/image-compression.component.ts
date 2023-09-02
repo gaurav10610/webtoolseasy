@@ -26,9 +26,10 @@ import {
   descriptionData,
 } from 'src/environments/component-config/image-compression/config';
 import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-image-compression',
@@ -51,6 +52,9 @@ export class ImageCompressionComponent implements OnDestroy {
    */
   validImageFormats: string = '.jpg,.jpeg,.png,.webp,.bmp';
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private titleService: Title,
     private metaService: Meta,
@@ -61,7 +65,6 @@ export class ImageCompressionComponent implements OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService
   ) {
@@ -76,10 +79,6 @@ export class ImageCompressionComponent implements OnDestroy {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

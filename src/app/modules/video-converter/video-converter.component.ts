@@ -17,7 +17,6 @@ import {
   SupportedOutputFormats,
   VideoFileData,
 } from 'src/app/@types/file';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
@@ -49,6 +48,8 @@ import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-video-converter',
@@ -80,6 +81,9 @@ export class VideoConverterComponent implements OnDestroy {
    */
   validVideoFormats: string = '.mp4,.webm,.ogv,.mkv,.ogm,.avi';
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private titleService: Title,
     private metaService: Meta,
@@ -87,7 +91,6 @@ export class VideoConverterComponent implements OnDestroy {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private dialog: MatDialog,
-    private appContextService: AppContextService,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
@@ -106,11 +109,6 @@ export class VideoConverterComponent implements OnDestroy {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
 
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

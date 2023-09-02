@@ -9,7 +9,8 @@ import {
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { Observable, Observer } from 'rxjs';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { LogUtils } from 'src/app/service/util/logger';
@@ -37,6 +38,9 @@ export class Base64DecodeComponent {
 
   omitMimeTypeChars: string[] = ['@'];
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private titleService: Title,
     private renderer: Renderer2,
@@ -44,7 +48,6 @@ export class Base64DecodeComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService
   ) {
@@ -59,11 +62,6 @@ export class Base64DecodeComponent {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
   }
 
   async updateBase64(base64: string) {
