@@ -1,27 +1,29 @@
-<div
-  class="flex-display flex-column-flow full-width flex-gap-medium"
-  style="min-height: 200px; max-height: 200px">
-  <span class="div-label">Base64 to File (Paste Base64 Data URI)</span>
+<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
   <div
-    class="y-scroll full-height div-border border-grey"
-    style="padding: 10px; color: indigo"
-    (click)="onEncodedDivClick()">
-    <span
-      #text1AreaContent
-      contenteditable="true"
-      class="full-height full-width"
-      (paste)="onDataPaste($event)"></span>
+    class="flex-display flex-column-flow full-width flex-gap-medium"
+    style="min-height: 200px; max-height: 200px">
+    <span class="div-label">Base64 to File (Paste Base64 Data URI)</span>
+    <div
+      class="y-scroll flex-full-height div-border border-grey"
+      style="padding: 10px; color: indigo"
+      (click)="onEncodedDivClick()">
+      <span
+        #text1AreaContent
+        contenteditable="true"
+        class="full-height full-width"
+        (paste)="onDataPaste($event)"></span>
+    </div>
   </div>
+
+  <button mat-stroked-button color="primary" (click)="decodeBase64()">
+    Decode Base64 to File
+  </button>
+
+  <a
+    mat-button
+    *ngIf="decodeFileData.name !== null"
+    color="accent"
+    (click)="downloadDecodedFile()"
+    >{{ decodeFileData.name }}</a
+  >
 </div>
-
-<button mat-stroked-button color="primary" (click)="decodeBase64()">
-  Decode Base64 to File
-</button>
-
-<a
-  mat-button
-  *ngIf="decodeFileData.name !== null"
-  color="accent"
-  (click)="downloadDecodedFile()"
-  >{{ decodeFileData.name }}</a
->

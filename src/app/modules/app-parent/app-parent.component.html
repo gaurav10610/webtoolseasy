@@ -2,18 +2,21 @@
   <!-- profile header -->
   <app-header-toolbar></app-header-toolbar>
 
-  <div class="full-width y-scroll flex-display flex-column-flow">
+  <div
+    class="full-width y-scroll flex-display flex-column-flow flex-full-height">
     <!-- app container -->
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
+      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large flex-full-height">
       <!--web tool headings-->
       <app-tool-heading></app-tool-heading>
 
       <!-- share buttons -->
       <app-share-buttons class="full-width"></app-share-buttons>
 
-      <!-- apps container -->
-      <router-outlet (activate)="onApplicationLoad($event)"></router-outlet>
+      <div class="full-width">
+        <!-- apps container -->
+        <router-outlet (activate)="onApplicationLoad($event)"></router-outlet>
+      </div>
 
       <!-- related tools -->
       <app-related-tools class="full-width"></app-related-tools>

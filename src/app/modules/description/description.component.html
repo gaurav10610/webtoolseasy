@@ -24,7 +24,7 @@
               >chevron_right</mat-icon
             >
           </div>
-          <span> {{ line }}</span>
+          <span style="overflow-wrap: break-word"> {{ line }}</span>
         </div>
       </div>
 
@@ -34,7 +34,8 @@
         class="flex-display flex-column-flow">
         <span
           *ngFor="let block of descriptionRecord.blockData"
-          class="description-font">
+          class="description-font"
+          style="overflow-wrap: break-word">
           {{ block }}
         </span>
       </div>
