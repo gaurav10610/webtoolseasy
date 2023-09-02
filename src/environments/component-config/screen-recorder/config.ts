@@ -39,11 +39,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
-    { property: 'twitter:card', content: 'summary_large_image' },
-    { property: 'twitter:site', content: '@webtoolseasy' },
-    { property: 'twitter:title', content: pageTitle },
-    { property: 'twitter:description', content: pageDescription },
-    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'screen recorder',

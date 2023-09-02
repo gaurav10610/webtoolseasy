@@ -29,8 +29,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
-    { property: 'og:image:width', content: '1640' },
-    { property: 'og:image:height', content: '856' },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
