@@ -1,37 +1,39 @@
-<div
-  class="flex-display flex-row-flow flex-align-center full-width text-area-container">
-  <!-- Text 1 div -->
-  <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
-    <span class="div-label">Unformatted CSS (Paste CSS Here)</span>
+<div class="flex-display flex-column-flow flex-align-center flex-gap-medium">
+  <div
+    class="flex-display flex-row-flow flex-align-center full-width text-area-container">
+    <!-- Text 1 div -->
+    <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+      <span class="div-label">Unformatted CSS (Paste CSS Here)</span>
 
-    <div class="full-height full-width">
-      <!-- unformatted code editor -->
-      <ngx-monaco-editor
-        *ngIf="platformMetadataService.isPlatformBrowser"
-        style="height: 100%"
-        [options]="editorOptions"
-        (ngModelChange)="onRawCodeChange($event)"
-        [(ngModel)]="rawCode"></ngx-monaco-editor>
+      <div class="full-height full-width">
+        <!-- unformatted code editor -->
+        <ngx-monaco-editor
+          *ngIf="platformMetadataService.isPlatformBrowser"
+          style="height: 100%"
+          [options]="editorOptions"
+          (ngModelChange)="onRawCodeChange($event)"
+          [(ngModel)]="rawCode"></ngx-monaco-editor>
+      </div>
+    </div>
+
+    <!-- Text 2 div -->
+    <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+      <span class="div-label">Formatted CSS</span>
+
+      <div class="full-height full-width">
+        <!-- formatted code editor -->
+        <ngx-monaco-editor
+          *ngIf="platformMetadataService.isPlatformBrowser"
+          style="height: 100%"
+          [options]="editorOptions"
+          [(ngModel)]="formattedCode"></ngx-monaco-editor>
+      </div>
     </div>
   </div>
 
-  <!-- Text 2 div -->
-  <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
-    <span class="div-label">Formatted CSS</span>
-
-    <div class="full-height full-width">
-      <!-- formatted code editor -->
-      <ngx-monaco-editor
-        *ngIf="platformMetadataService.isPlatformBrowser"
-        style="height: 100%"
-        [options]="editorOptions"
-        [(ngModel)]="formattedCode"></ngx-monaco-editor>
-    </div>
+  <div class="flex-display flex-row-flow full-width copy-button">
+    <button mat-stroked-button (click)="copyFormattedCode()" color="primary">
+      <mat-icon>content_copy</mat-icon> Copy Formatted CSS
+    </button>
   </div>
-</div>
-
-<div class="flex-display flex-row-flow full-width copy-button">
-  <button mat-stroked-button (click)="copyFormattedCode()" color="primary">
-    <mat-icon>content_copy</mat-icon> Copy Formatted CSS
-  </button>
 </div>
