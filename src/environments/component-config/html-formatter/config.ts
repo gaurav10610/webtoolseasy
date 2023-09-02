@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-formatter';
-const pageTitle = 'Best HTML Formatter / Beautifier';
+const pageTitle = 'Best Online HTML Formatter | HTML Beautifier';
 const pageDescription =
-  'HTML Formatter | HTML Beautifier | HTML Formatter Online | HTML Code Formatter';
+  'Our Best Online HTML Formatter/Beautifier tool lets you format/beautify your HTML code for free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -34,6 +34,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'html formatter',
@@ -42,10 +47,6 @@ export const componentConfig: ApplicationConfig = {
     'html code formatter',
   ],
   icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
     {
       iconName: 'json-icon',
       iconRelativeUrl: 'json-icon.svg',
@@ -57,26 +58,6 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'css-icon',
       iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [
@@ -133,6 +114,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Supports online editing of your HTML code using our inbuilt monaco code edior.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to format their HTML with just pasting it here.`,
       `Real-time formatting: Our tool formats your HTML in real-time, so you can see the changes as you make them.`,
       `No need to download any software. Simply paste your HTML into our platform and get a clean, organized, and optimized result.`,

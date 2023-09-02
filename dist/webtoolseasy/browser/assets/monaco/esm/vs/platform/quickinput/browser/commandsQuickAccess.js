@@ -35,7 +35,7 @@ import { IKeybindingService } from '../../keybinding/common/keybinding.js';
 import { PickerQuickAccessProvider } from './pickerQuickAccess.js';
 import { IStorageService } from '../../storage/common/storage.js';
 import { ITelemetryService } from '../../telemetry/common/telemetry.js';
-export let AbstractCommandsQuickAccessProvider = class AbstractCommandsQuickAccessProvider extends PickerQuickAccessProvider {
+let AbstractCommandsQuickAccessProvider = class AbstractCommandsQuickAccessProvider extends PickerQuickAccessProvider {
     constructor(options, instantiationService, keybindingService, commandService, telemetryService, dialogService) {
         super(AbstractCommandsQuickAccessProvider.PREFIX, options);
         this.instantiationService = instantiationService;
@@ -161,7 +161,7 @@ export let AbstractCommandsQuickAccessProvider = class AbstractCommandsQuickAcce
             localize('commandPickAriaLabelWithKeybinding', "{0}, {1}", commandPick.label, keybinding.getAriaLabel()) :
             commandPick.label;
         return Object.assign(Object.assign({}, commandPick), { ariaLabel, detail: this.options.showAlias && commandPick.commandAlias !== commandPick.label ? commandPick.commandAlias : undefined, keybinding, accept: () => __awaiter(this, void 0, void 0, function* () {
-                var _a;
+                var _a, _b;
                 // Add to history
                 this.commandsHistory.push(commandPick.commandId);
                 // Telementry
@@ -171,7 +171,9 @@ export let AbstractCommandsQuickAccessProvider = class AbstractCommandsQuickAcce
                 });
                 // Run
                 try {
-                    yield this.commandService.executeCommand(commandPick.commandId);
+                    ((_b = commandPick.args) === null || _b === void 0 ? void 0 : _b.length)
+                        ? yield this.commandService.executeCommand(commandPick.commandId, ...commandPick.args)
+                        : yield this.commandService.executeCommand(commandPick.commandId);
                 }
                 catch (error) {
                     if (!isCancellationError(error)) {
@@ -190,7 +192,8 @@ AbstractCommandsQuickAccessProvider = __decorate([
     __param(4, ITelemetryService),
     __param(5, IDialogService)
 ], AbstractCommandsQuickAccessProvider);
-export let CommandsHistory = class CommandsHistory extends Disposable {
+export { AbstractCommandsQuickAccessProvider };
+let CommandsHistory = class CommandsHistory extends Disposable {
     constructor(storageService, configurationService) {
         super();
         this.storageService = storageService;
@@ -275,3 +278,4 @@ CommandsHistory = __decorate([
     __param(0, IStorageService),
     __param(1, IConfigurationService)
 ], CommandsHistory);
+export { CommandsHistory };

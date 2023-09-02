@@ -3,10 +3,34 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import { BugIndicatingError } from '../../../base/common/errors.js';
+import { Range } from './range.js';
 /**
  * A range of lines (1-based).
  */
 export class LineRange {
+    static fromRange(range) {
+        return new LineRange(range.startLineNumber, range.endLineNumber);
+    }
+    static subtract(a, b) {
+        if (!b) {
+            return [a];
+        }
+        if (a.startLineNumber < b.startLineNumber && b.endLineNumberExclusive < a.endLineNumberExclusive) {
+            return [
+                new LineRange(a.startLineNumber, b.startLineNumber),
+                new LineRange(b.endLineNumberExclusive, a.endLineNumberExclusive)
+            ];
+        }
+        else if (b.startLineNumber <= a.startLineNumber && a.endLineNumberExclusive <= b.endLineNumberExclusive) {
+            return [];
+        }
+        else if (b.endLineNumberExclusive < a.endLineNumberExclusive) {
+            return [new LineRange(Math.max(b.endLineNumberExclusive, a.startLineNumber), a.endLineNumberExclusive)];
+        }
+        else {
+            return [new LineRange(a.startLineNumber, Math.min(b.startLineNumber, a.endLineNumberExclusive))];
+        }
+    }
     /**
      * @param lineRanges An array of sorted line ranges.
      */
@@ -77,6 +101,15 @@ export class LineRange {
         }
         return result;
     }
+    static ofLength(startLineNumber, length) {
+        return new LineRange(startLineNumber, startLineNumber + length);
+    }
+    /**
+     * @internal
+     */
+    static deserialize(lineRange) {
+        return new LineRange(lineRange[0], lineRange[1]);
+    }
     constructor(startLineNumber, endLineNumberExclusive) {
         if (startLineNumber > endLineNumberExclusive) {
             throw new BugIndicatingError(`startLineNumber ${startLineNumber} cannot be after endLineNumberExclusive ${endLineNumberExclusive}`);
@@ -129,10 +162,43 @@ export class LineRange {
         }
         return undefined;
     }
+    intersectsStrict(other) {
+        return this.startLineNumber < other.endLineNumberExclusive && other.startLineNumber < this.endLineNumberExclusive;
+    }
     overlapOrTouch(other) {
         return this.startLineNumber <= other.endLineNumberExclusive && other.startLineNumber <= this.endLineNumberExclusive;
     }
     equals(b) {
         return this.startLineNumber === b.startLineNumber && this.endLineNumberExclusive === b.endLineNumberExclusive;
+    }
+    toInclusiveRange() {
+        if (this.isEmpty) {
+            return null;
+        }
+        return new Range(this.startLineNumber, 1, this.endLineNumberExclusive - 1, Number.MAX_SAFE_INTEGER);
+    }
+    toExclusiveRange() {
+        return new Range(this.startLineNumber, 1, this.endLineNumberExclusive, 1);
+    }
+    mapToLineArray(f) {
+        const result = [];
+        for (let lineNumber = this.startLineNumber; lineNumber < this.endLineNumberExclusive; lineNumber++) {
+            result.push(f(lineNumber));
+        }
+        return result;
+    }
+    forEach(f) {
+        for (let lineNumber = this.startLineNumber; lineNumber < this.endLineNumberExclusive; lineNumber++) {
+            f(lineNumber);
+        }
+    }
+    /**
+     * @internal
+     */
+    serialize() {
+        return [this.startLineNumber, this.endLineNumberExclusive];
+    }
+    includes(lineNumber) {
+        return this.startLineNumber <= lineNumber && lineNumber < this.endLineNumberExclusive;
     }
 }

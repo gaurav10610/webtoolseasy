@@ -3,10 +3,9 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle =
-  'Compare text online to find the difference between two text files';
+const pageTitle = 'Best Online Text Difference | Side By Side Text Compare';
 const pageDescription =
-  'Text File Difference tool will compare text to find the difference between two text files. Just paste your files and Find Difference!';
+  'Our Best Online Text File Difference tool lets you compare text side by side to find the difference between two text files.';
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -34,6 +33,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'diff checker',
@@ -42,32 +46,7 @@ export const componentConfig: ApplicationConfig = {
     'file diff',
     'text difference checker',
   ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
+  icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [
@@ -94,8 +73,10 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Text file comparsion / difference tool is 100% free.`,
-      `Text file comparison / difference is 100% secure as whole processing is being done at client side only (in host browser).`,
+      `Text file comparsion/difference tool is 100% free.`,
+      `Supports online editing of text contents using inbuilt monaco editor.`,
+      `View text file difference side by side.`,
+      `Text file comparison/difference is 100% secure as whole processing is being done at client side only (in host browser).`,
       `Unlimited text file comparison.`,
       `Track down plagiarism.`,
       `Compare text files character by character, word by word or line by line`,

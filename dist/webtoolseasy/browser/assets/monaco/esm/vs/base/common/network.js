@@ -37,17 +37,17 @@ export var Schemas;
     Schemas.command = 'command';
     Schemas.vscodeRemote = 'vscode-remote';
     Schemas.vscodeRemoteResource = 'vscode-remote-resource';
+    Schemas.vscodeManagedRemoteResource = 'vscode-managed-remote-resource';
     Schemas.vscodeUserData = 'vscode-userdata';
     Schemas.vscodeCustomEditor = 'vscode-custom-editor';
     Schemas.vscodeNotebookCell = 'vscode-notebook-cell';
     Schemas.vscodeNotebookCellMetadata = 'vscode-notebook-cell-metadata';
     Schemas.vscodeNotebookCellOutput = 'vscode-notebook-cell-output';
-    Schemas.vscodeInteractive = 'vscode-interactive';
     Schemas.vscodeInteractiveInput = 'vscode-interactive-input';
     Schemas.vscodeSettings = 'vscode-settings';
     Schemas.vscodeWorkspaceTrust = 'vscode-workspace-trust';
     Schemas.vscodeTerminal = 'vscode-terminal';
-    Schemas.vscodeInteractiveSesssion = 'vscode-chat-editor';
+    Schemas.vscodeChatSesssion = 'vscode-chat-editor';
     /**
      * Scheme used internally for webviews that aren't linked to a resource (i.e. not custom editors)
      */

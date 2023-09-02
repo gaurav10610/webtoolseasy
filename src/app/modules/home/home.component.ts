@@ -3,7 +3,6 @@ import { Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { AppDisplayConfig } from 'src/app/@types/config';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { componentConfig } from 'src/environments/component-config/home/config';
@@ -26,15 +25,13 @@ export class HomeComponent {
     @Inject(DOCUMENT) private document: Document,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService
   ) {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,

@@ -2,16 +2,17 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { css_beautify } from 'js-beautify';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/css-formatter/config';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { css_beautify } from 'js-beautify';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-css-formatter',
@@ -32,6 +33,9 @@ export class CssFormatterComponent {
     fontSize: 17,
   };
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private clipboard: Clipboard,
     private titleService: Title,
@@ -39,7 +43,6 @@ export class CssFormatterComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService,
     public platformMetadataService: PlatformMetadataService
@@ -47,8 +50,7 @@ export class CssFormatterComponent {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,
@@ -56,16 +58,11 @@ export class CssFormatterComponent {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
     this.formattedCode = css_beautify(this.rawCode);
   }
 
-  onRawCodeChange() {
-    this.formattedCode = css_beautify(this.rawCode);
+  onRawCodeChange(updatedModel: string) {
+    this.formattedCode = css_beautify(updatedModel);
   }
 
   copyFormattedCode() {

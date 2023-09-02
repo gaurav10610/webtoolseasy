@@ -20,8 +20,10 @@ export var EditorContextKeys;
      * A context key that is set when any editor input has focus (regular editor, repl input...).
      */
     EditorContextKeys.textInputFocus = new RawContextKey('textInputFocus', false, nls.localize('textInputFocus', "Whether an editor or a rich text input has focus (cursor is blinking)"));
-    EditorContextKeys.readOnly = new RawContextKey('editorReadonly', false, nls.localize('editorReadonly', "Whether the editor is read only"));
+    EditorContextKeys.readOnly = new RawContextKey('editorReadonly', false, nls.localize('editorReadonly', "Whether the editor is read-only"));
     EditorContextKeys.inDiffEditor = new RawContextKey('inDiffEditor', false, nls.localize('inDiffEditor', "Whether the context is a diff editor"));
+    EditorContextKeys.isEmbeddedDiffEditor = new RawContextKey('isEmbeddedDiffEditor', false, nls.localize('isEmbeddedDiffEditor', "Whether the context is an embedded diff editor"));
+    EditorContextKeys.accessibleDiffViewerVisible = new RawContextKey('accessibleDiffViewerVisible', false, nls.localize('accessibleDiffViewerVisible', "Whether the accessible diff viewer is visible"));
     EditorContextKeys.columnSelection = new RawContextKey('editorColumnSelection', false, nls.localize('editorColumnSelection', "Whether `editor.columnSelection` is enabled"));
     EditorContextKeys.writable = EditorContextKeys.readOnly.toNegated();
     EditorContextKeys.hasNonEmptySelection = new RawContextKey('editorHasSelection', false, nls.localize('editorHasSelection', "Whether the editor has text selected"));

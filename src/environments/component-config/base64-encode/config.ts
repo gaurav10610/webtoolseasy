@@ -6,7 +6,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/base64-encode';
 const pageTitle = 'File to Base64 | Base64 Encode | Base64 Converter | Base64';
 const pageDescription =
-  'Free online tool to encode file to Base64. Base64 encoder. Convert any file to base64';
+  'Our Best Online Base64 Encoder tools lets you encode your any file to base64 string and base64 data uri.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -34,6 +34,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'base64 encode',
@@ -51,32 +56,8 @@ export const componentConfig: ApplicationConfig = {
   ],
   icons: [
     {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
       iconName: 'file-decode-icon',
       iconRelativeUrl: 'file-decode.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
 };

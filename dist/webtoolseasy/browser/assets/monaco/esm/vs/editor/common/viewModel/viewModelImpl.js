@@ -13,7 +13,6 @@ import { CursorsController } from '../cursor/cursor.js';
 import { CursorConfiguration } from '../cursorCommon.js';
 import { Position } from '../core/position.js';
 import { Range } from '../core/range.js';
-import { GlyphMarginLane } from '../model.js';
 import * as textModelEvents from '../textModelEvents.js';
 import { TokenizationRegistry } from '../languages.js';
 import { PLAINTEXT_LANGUAGE_ID } from '../languages/modesRegistry.js';
@@ -48,11 +47,11 @@ export class ViewModel extends Disposable {
         }
         else {
             const options = this._configuration.options;
-            const fontInfo = options.get(48 /* EditorOption.fontInfo */);
-            const wrappingStrategy = options.get(133 /* EditorOption.wrappingStrategy */);
-            const wrappingInfo = options.get(140 /* EditorOption.wrappingInfo */);
-            const wrappingIndent = options.get(132 /* EditorOption.wrappingIndent */);
-            const wordBreak = options.get(124 /* EditorOption.wordBreak */);
+            const fontInfo = options.get(49 /* EditorOption.fontInfo */);
+            const wrappingStrategy = options.get(136 /* EditorOption.wrappingStrategy */);
+            const wrappingInfo = options.get(143 /* EditorOption.wrappingInfo */);
+            const wrappingIndent = options.get(135 /* EditorOption.wrappingIndent */);
+            const wordBreak = options.get(127 /* EditorOption.wordBreak */);
             this._lines = new ViewModelLinesFromProjectedModel(this._editorId, this.model, domLineBreaksComputerFactory, monospaceLineBreaksComputerFactory, fontInfo, this.model.getOptions().tabSize, wrappingStrategy, wrappingInfo.wrappingColumn, wrappingIndent, wordBreak);
         }
         this.coordinatesConverter = this._lines.createCoordinatesConverter();
@@ -151,11 +150,11 @@ export class ViewModel extends Disposable {
     _onConfigurationChanged(eventsCollector, e) {
         const stableViewport = this._captureStableViewport();
         const options = this._configuration.options;
-        const fontInfo = options.get(48 /* EditorOption.fontInfo */);
-        const wrappingStrategy = options.get(133 /* EditorOption.wrappingStrategy */);
-        const wrappingInfo = options.get(140 /* EditorOption.wrappingInfo */);
-        const wrappingIndent = options.get(132 /* EditorOption.wrappingIndent */);
-        const wordBreak = options.get(124 /* EditorOption.wordBreak */);
+        const fontInfo = options.get(49 /* EditorOption.fontInfo */);
+        const wrappingStrategy = options.get(136 /* EditorOption.wrappingStrategy */);
+        const wrappingInfo = options.get(143 /* EditorOption.wrappingInfo */);
+        const wrappingIndent = options.get(135 /* EditorOption.wrappingIndent */);
+        const wordBreak = options.get(127 /* EditorOption.wordBreak */);
         if (this._lines.setWrappingSettings(fontInfo, wrappingStrategy, wrappingInfo.wrappingColumn, wrappingIndent, wordBreak)) {
             eventsCollector.emitViewEvent(new viewEvents.ViewFlushedEvent());
             eventsCollector.emitViewEvent(new viewEvents.ViewLineMappingChangedEvent());
@@ -165,7 +164,7 @@ export class ViewModel extends Disposable {
             this.viewLayout.onFlushed(this.getLineCount());
             this._updateConfigurationViewLineCount.schedule();
         }
-        if (e.hasChanged(87 /* EditorOption.readOnly */)) {
+        if (e.hasChanged(89 /* EditorOption.readOnly */)) {
             // Must read again all decorations due to readOnly filtering
             this._decorations.reset();
             eventsCollector.emitViewEvent(new viewEvents.ViewDecorationsChangedEvent(null));
@@ -352,44 +351,7 @@ export class ViewModel extends Disposable {
             this._eventDispatcher.emitOutgoingEvent(new ModelOptionsChangedEvent(e));
         }));
         this._register(this.model.onDidChangeDecorations((e) => {
-            var _a, _b;
             this._decorations.onModelDecorationsChanged();
-            // Determine whether we need to resize the glyph margin
-            if (e.affectsGlyphMargin) {
-                const decorations = this.model.getAllMarginDecorations();
-                let hasTwoLanes = false;
-                // Decorations are already sorted by their start position, but protect against future changes
-                decorations.sort((a, b) => Range.compareRangesUsingStarts(a.range, b.range));
-                let leftDecRange = null;
-                let rightDecRange = null;
-                for (const decoration of decorations) {
-                    const position = (_b = (_a = decoration.options.glyphMargin) === null || _a === void 0 ? void 0 : _a.position) !== null && _b !== void 0 ? _b : GlyphMarginLane.Left;
-                    if (position === GlyphMarginLane.Left && (!leftDecRange || Range.compareRangesUsingEnds(leftDecRange, decoration.range) < 0)) {
-                        // assign only if the range of `decoration` ends after, which means it has a higher chance to overlap with the other lane
-                        leftDecRange = decoration.range;
-                    }
-                    if (position === GlyphMarginLane.Right && (!rightDecRange || Range.compareRangesUsingEnds(rightDecRange, decoration.range) < 0)) {
-                        // assign only if the range of `decoration` ends after, which means it has a higher chance to overlap with the other lane
-                        rightDecRange = decoration.range;
-                    }
-                    if (leftDecRange && rightDecRange) {
-                        if (leftDecRange.endLineNumber < rightDecRange.startLineNumber) {
-                            // there's no chance for `leftDecRange` to ever intersect something going further
-                            leftDecRange = null;
-                            continue;
-                        }
-                        if (rightDecRange.endLineNumber < leftDecRange.startLineNumber) {
-                            // there's no chance for `rightDecRange` to ever intersect something going further
-                            rightDecRange = null;
-                            continue;
-                        }
-                        // leftDecRange and rightDecRange are intersecting or touching => we need two lanes
-                        hasTwoLanes = true;
-                        break;
-                    }
-                }
-                this._configuration.setGlyphMarginDecorationLaneCount(hasTwoLanes ? 2 : 1);
-            }
             this._eventDispatcher.emitSingleViewEvent(new viewEvents.ViewDecorationsChangedEvent(e));
             this._eventDispatcher.emitOutgoingEvent(new ModelDecorationsChangedEvent(e));
         }));
@@ -426,8 +388,8 @@ export class ViewModel extends Disposable {
         }
     }
     getVisibleRangesPlusViewportAboveBelow() {
-        const layoutInfo = this._configuration.options.get(139 /* EditorOption.layoutInfo */);
-        const lineHeight = this._configuration.options.get(64 /* EditorOption.lineHeight */);
+        const layoutInfo = this._configuration.options.get(142 /* EditorOption.layoutInfo */);
+        const lineHeight = this._configuration.options.get(65 /* EditorOption.lineHeight */);
         const linesAround = Math.max(20, Math.round(layoutInfo.height / lineHeight));
         const partialData = this.viewLayout.getLinesViewportData();
         const startViewLineNumber = Math.max(1, partialData.completelyVisibleStartLineNumber - linesAround);
@@ -730,7 +692,7 @@ export class ViewModel extends Disposable {
             const lineNumber = range.startLineNumber;
             range = new Range(lineNumber, this.model.getLineMinColumn(lineNumber), lineNumber, this.model.getLineMaxColumn(lineNumber));
         }
-        const fontInfo = this._configuration.options.get(48 /* EditorOption.fontInfo */);
+        const fontInfo = this._configuration.options.get(49 /* EditorOption.fontInfo */);
         const colorMap = this._getColorMap();
         const hasBadChars = (/[:;\\\/<>]/.test(fontInfo.fontFamily));
         const useDefaultFontFamily = (hasBadChars || fontInfo.fontFamily === EDITOR_FONT_DEFAULTS.fontFamily);

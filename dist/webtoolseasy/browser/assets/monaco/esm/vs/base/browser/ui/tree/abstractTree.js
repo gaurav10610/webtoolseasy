@@ -910,6 +910,9 @@ class TreeNodeListMouseController extends MouseController {
             isMonacoEditor(e.browserEvent.target)) {
             return;
         }
+        if (e.browserEvent.isHandledByList) {
+            return;
+        }
         const node = e.element;
         if (!node) {
             return super.onViewPointer(e);
@@ -939,6 +942,8 @@ class TreeNodeListMouseController extends MouseController {
             this.tree.setFocus([location]);
             this.tree.toggleCollapsed(location, recursive);
             if (expandOnlyOnTwistieClick && onTwistie) {
+                // Do not set this before calling a handler on the super class, because it will reject it as handled
+                e.browserEvent.isHandledByList = true;
                 return;
             }
         }
@@ -947,6 +952,9 @@ class TreeNodeListMouseController extends MouseController {
     onDoubleClick(e) {
         const onTwistie = e.browserEvent.target.classList.contains('monaco-tl-twistie');
         if (onTwistie || !this.tree.expandOnDoubleClick) {
+            return;
+        }
+        if (e.browserEvent.isHandledByList) {
             return;
         }
         super.onDoubleClick(e);
@@ -1020,6 +1028,7 @@ class TreeNodeList extends List {
     }
 }
 export class AbstractTree {
+    get onDidScroll() { return this.view.onDidScroll; }
     get onDidChangeFocus() { return this.eventBufferer.wrapEvent(this.focus.onDidChange); }
     get onDidChangeSelection() { return this.eventBufferer.wrapEvent(this.selection.onDidChange); }
     get onMouseDblClick() { return Event.filter(Event.map(this.view.onMouseDblClick, asTreeMouseEvent), e => e.target !== TreeMouseEventTarget.Filter); }
@@ -1140,6 +1149,12 @@ export class AbstractTree {
     }
     set scrollTop(scrollTop) {
         this.view.scrollTop = scrollTop;
+    }
+    get scrollHeight() {
+        return this.view.scrollHeight;
+    }
+    get renderHeight() {
+        return this.view.renderHeight;
     }
     domFocus() {
         this.view.domFocus();

@@ -4,9 +4,10 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-viewer';
-const pageTitle = 'Best JSON Viewer and JSON Beautifier';
+const pageTitle =
+  'Best Online JSON Viewer | JSON Beautifier | JSON Tree Viewer';
 const pageDescription =
-  'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to pretty print JSON data.';
+  'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to prettify JSON data.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -34,6 +35,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'json viewer',
@@ -43,10 +49,6 @@ export const componentConfig: ApplicationConfig = {
     'json validator',
   ],
   icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
     {
       iconName: 'json-icon',
       iconRelativeUrl: 'json-icon.svg',
@@ -62,26 +64,6 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'js-icon',
       iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [
@@ -139,6 +121,8 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Supports online editing of your JSON code using our inbuilt monaco code edior.`,
+      `JSON tree view visualizer.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to see JSON Tree View for a JSON with just pasting it here.`,
       `Real-time formatting: Our tool renders JSON Tree View for your JSON in real-time, so you can see the changes as you make them.`,
       `No need to download any software. Simply paste your JSON into our platform and get a clean and organized JSON Tree view.`,

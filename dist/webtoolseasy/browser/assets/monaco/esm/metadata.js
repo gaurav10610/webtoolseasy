@@ -1,10 +1,6 @@
 
 exports.features = [
   {
-    "label": "accessibilityHelp",
-    "entry": "vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp"
-  },
-  {
     "label": "anchorSelect",
     "entry": "vs/editor/contrib/anchorSelect/browser/anchorSelect"
   },
@@ -51,10 +47,6 @@ exports.features = [
     "entry": "vs/editor/contrib/contextmenu/browser/contextmenu"
   },
   {
-    "label": "copyPaste",
-    "entry": "vs/editor/contrib/copyPaste/browser/copyPasteContribution"
-  },
-  {
     "label": "cursorUndo",
     "entry": "vs/editor/contrib/cursorUndo/browser/cursorUndo"
   },
@@ -67,8 +59,11 @@ exports.features = [
     "entry": "vs/editor/contrib/documentSymbols/browser/documentSymbols"
   },
   {
-    "label": "dropIntoEditor",
-    "entry": "vs/editor/contrib/dropIntoEditor/browser/dropIntoEditorContribution"
+    "label": "dropOrPasteInto",
+    "entry": [
+      "vs/editor/contrib/dropOrPasteInto/browser/copyPasteContribution",
+      "vs/editor/contrib/dropOrPasteInto/browser/dropIntoEditorContribution"
+    ]
   },
   {
     "label": "find",
@@ -410,6 +405,10 @@ exports.languages = [
   {
     "label": "markdown",
     "entry": "vs/basic-languages/markdown/markdown.contribution"
+  },
+  {
+    "label": "mdx",
+    "entry": "vs/basic-languages/mdx/mdx.contribution"
   },
   {
     "label": "mips",

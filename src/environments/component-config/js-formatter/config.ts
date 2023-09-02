@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/js-formatter';
-const pageTitle = 'Best Online Javascript Beautifier / Formatter';
+const pageTitle = 'Best Online Javascript Formatter | Javascript Beautifier';
 const pageDescription =
-  'Javascript Formatter / Beautifier tool lets you beautify / format your JavaScript code for free';
+  'Our Best Online Javascript Formatter/Beautifier tool lets you beautify/format your JavaScript code for free';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Javascript Formatter',
-  subHeading: 'Javascript Beautifier',
+  subHeading: 'Online Javascript Beautifier',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,6 +34,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'js formatter',
@@ -45,10 +50,6 @@ export const componentConfig: ApplicationConfig = {
   ],
   icons: [
     {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
       iconName: 'json-icon',
       iconRelativeUrl: 'json-icon.svg',
     },
@@ -59,26 +60,6 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'css-icon',
       iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [
@@ -135,6 +116,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
+      `Supports online editing of your Javascript code using our inbuilt monaco code edior.`,
       `Easy to use: Our user-friendly interface makes it simple for anyone to format their JavaScript code with just pasting Javascript here.`,
       `Real-time formatting: Our tool formats your Javascript in real-time, so you can see the changes as you make them.`,
       `No need to download any software. Simply paste your code into our platform and get a clean, organized, and optimized result.`,

@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/uuid';
-const pageTitle = 'Online UUID Generator';
+const pageTitle = 'Best Online UUID Generator | Bulk UUID Generator';
 const pageDescription =
-  'Quickly and easily generate individual or bulk sets of universally unique identifiers (UUIDs)';
+  'Our Best Online UUID Generator tool lets you quickly generate random universally unique identifiers (UUID) individually or in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/uuid-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
-  subHeading: 'Individual or Bulk UUID V4 & V1 Generator',
+  subHeading: 'UUID V4 Generator | UUID V1 Generator',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,6 +34,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'uuid',
@@ -45,32 +50,8 @@ export const componentConfig: ApplicationConfig = {
   ],
   icons: [
     {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [

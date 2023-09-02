@@ -63,6 +63,7 @@ ParameterHintsController = __decorate([
     __param(1, IInstantiationService),
     __param(2, ILanguageFeaturesService)
 ], ParameterHintsController);
+export { ParameterHintsController };
 export class TriggerParameterHintsAction extends EditorAction {
     constructor() {
         super({

@@ -14,5 +14,4 @@ export class AppContextService {
   tags: string[] = [];
   relatedTools?: AppDisplayConfig[];
   descrptionData?: DescriptionBlock[];
-  svgIcons: Map<string, boolean> = new Map();
 }

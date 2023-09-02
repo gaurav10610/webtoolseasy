@@ -35,7 +35,7 @@ import { ILanguageConfigurationService } from '../../../common/languages/languag
 import { DefaultDocumentColorProvider } from './defaultDocumentColorProvider.js';
 import * as dom from '../../../../base/browser/dom.js';
 import './colorPicker.css';
-export let StandaloneColorPickerController = class StandaloneColorPickerController extends Disposable {
+let StandaloneColorPickerController = class StandaloneColorPickerController extends Disposable {
     constructor(_editor, _contextKeyService, _modelService, _keybindingService, _instantiationService, _languageFeatureService, _languageConfigurationService) {
         super();
         this._editor = _editor;
@@ -85,10 +85,11 @@ StandaloneColorPickerController = __decorate([
     __param(5, ILanguageFeaturesService),
     __param(6, ILanguageConfigurationService)
 ], StandaloneColorPickerController);
+export { StandaloneColorPickerController };
 registerEditorContribution(StandaloneColorPickerController.ID, StandaloneColorPickerController, 1 /* EditorContributionInstantiation.AfterFirstRender */);
 const PADDING = 8;
 const CLOSE_BUTTON_WIDTH = 22;
-export let StandaloneColorPickerWidget = class StandaloneColorPickerWidget extends Disposable {
+let StandaloneColorPickerWidget = class StandaloneColorPickerWidget extends Disposable {
     constructor(_editor, _standaloneColorPickerVisible, _standaloneColorPickerFocused, _instantiationService, _modelService, _keybindingService, _languageFeaturesService, _languageConfigurationService) {
         var _a;
         super();
@@ -99,6 +100,7 @@ export let StandaloneColorPickerWidget = class StandaloneColorPickerWidget exten
         this._keybindingService = _keybindingService;
         this._languageFeaturesService = _languageFeaturesService;
         this._languageConfigurationService = _languageConfigurationService;
+        this.allowEditorOverflow = true;
         this.body = document.createElement('div');
         this._position = undefined;
         this._colorHover = null;
@@ -107,7 +109,7 @@ export let StandaloneColorPickerWidget = class StandaloneColorPickerWidget exten
         this.onResult = this._onResult.event;
         this._standaloneColorPickerVisible.set(true);
         this._standaloneColorPickerParticipant = _instantiationService.createInstance(StandaloneColorPickerParticipant, this._editor);
-        this._position = (_a = this._editor._getViewModel()) === null || _a === void 0 ? void 0 : _a.getPrimaryCursorState().viewState.position;
+        this._position = (_a = this._editor._getViewModel()) === null || _a === void 0 ? void 0 : _a.getPrimaryCursorState().modelState.position;
         const editorSelection = this._editor.getSelection();
         const selection = editorSelection ?
             {
@@ -161,7 +163,7 @@ export let StandaloneColorPickerWidget = class StandaloneColorPickerWidget exten
         if (!this._position) {
             return null;
         }
-        const positionPreference = this._editor.getOption(58 /* EditorOption.hover */).above;
+        const positionPreference = this._editor.getOption(59 /* EditorOption.hover */).above;
         return {
             position: this._position,
             secondaryPosition: this._position,
@@ -263,6 +265,7 @@ StandaloneColorPickerWidget = __decorate([
     __param(6, ILanguageFeaturesService),
     __param(7, ILanguageConfigurationService)
 ], StandaloneColorPickerWidget);
+export { StandaloneColorPickerWidget };
 class StandaloneColorPickerResult {
     // The color picker result consists of: an array of color results and a boolean indicating if the color was found in the editor
     constructor(value, foundInEditor) {

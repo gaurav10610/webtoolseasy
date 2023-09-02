@@ -23,7 +23,7 @@ import { defaultButtonStyles, defaultCountBadgeStyles, defaultInputBoxStyles, de
 import { activeContrastBorder, asCssVariable, pickerGroupBorder, pickerGroupForeground, quickInputBackground, quickInputForeground, quickInputListFocusBackground, quickInputListFocusForeground, quickInputListFocusIconForeground, quickInputTitleBackground, widgetBorder, widgetShadow } from '../../theme/common/colorRegistry.js';
 import { IThemeService, Themable } from '../../theme/common/themeService.js';
 import { QuickInputController } from './quickInput.js';
-export let QuickInputService = class QuickInputService extends Themable {
+let QuickInputService = class QuickInputService extends Themable {
     get controller() {
         if (!this._controller) {
             this._controller = this._register(this.createController());
@@ -151,7 +151,8 @@ export let QuickInputService = class QuickInputService extends Themable {
             pickerGroup: {
                 pickerGroupBorder: asCssVariable(pickerGroupBorder),
                 pickerGroupForeground: asCssVariable(pickerGroupForeground),
-            }
+            },
+            colorScheme: this.themeService.getColorTheme().type
         };
     }
 };
@@ -161,3 +162,4 @@ QuickInputService = __decorate([
     __param(2, IThemeService),
     __param(3, ILayoutService)
 ], QuickInputService);
+export { QuickInputService };

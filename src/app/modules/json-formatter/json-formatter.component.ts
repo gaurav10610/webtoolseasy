@@ -7,10 +7,11 @@ import {
   descriptionData,
 } from 'src/environments/component-config/json-formatter/config';
 import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-json-formatter',
@@ -31,6 +32,9 @@ export class JsonFormatterComponent {
     fontSize: 17,
   };
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private clipboard: Clipboard,
     private titleService: Title,
@@ -38,7 +42,6 @@ export class JsonFormatterComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService,
     public platformMetadataService: PlatformMetadataService
@@ -46,8 +49,7 @@ export class JsonFormatterComponent {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,
@@ -55,11 +57,6 @@ export class JsonFormatterComponent {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
     this.formattedCode = JSON.stringify(
       JSON.parse(this.rawCode),
       null,

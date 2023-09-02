@@ -5,9 +5,9 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
 const pageTitle =
-  'Random Password Generator - Generate Strong, Random & Secure Passwords';
+  'Best Online Random Password Generator - Generate Strong, Random & Secure Passwords';
 const pageDescription =
-  'Quickly and easily generate single or bulk strong, random and secure passwords using our free passwod generator tool';
+  'Quickly and easily generate single or bulk strong, random and secure passwords using our best free online passwod generator tool';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -35,6 +35,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'password generator',
@@ -45,36 +50,12 @@ export const componentConfig: ApplicationConfig = {
   ],
   icons: [
     {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
     },
     {
       iconName: 'uuid-icon',
       iconRelativeUrl: 'uuid-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [

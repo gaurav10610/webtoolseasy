@@ -15,11 +15,12 @@ import {
   descriptionData,
 } from 'src/environments/component-config/jwt/config';
 import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { decodeJwt, decodeProtectedHeader } from 'jose';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-jwt',
@@ -54,6 +55,9 @@ export class JwtComponent implements AfterViewInit {
   encodedToken: string =
     'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM';
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private clipboard: Clipboard,
     private renderer: Renderer2,
@@ -62,15 +66,13 @@ export class JwtComponent implements AfterViewInit {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService
   ) {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,
@@ -78,11 +80,6 @@ export class JwtComponent implements AfterViewInit {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
 
     this.decodedToken = decodeJwt(this.encodedToken);
 

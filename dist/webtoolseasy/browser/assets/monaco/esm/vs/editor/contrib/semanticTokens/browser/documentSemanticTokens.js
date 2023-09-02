@@ -26,7 +26,7 @@ import { ILanguageFeaturesService } from '../../../common/services/languageFeatu
 import { ISemanticTokensStylingService } from '../../../common/services/semanticTokensStyling.js';
 import { registerEditorFeature } from '../../../common/editorFeatures.js';
 import { SEMANTIC_HIGHLIGHTING_SETTING_ID, isSemanticColoringEnabled } from '../common/semanticTokensConfig.js';
-export let DocumentSemanticTokensFeature = class DocumentSemanticTokensFeature extends Disposable {
+let DocumentSemanticTokensFeature = class DocumentSemanticTokensFeature extends Disposable {
     constructor(semanticTokensStylingService, modelService, themeService, configurationService, languageFeatureDebounceService, languageFeaturesService) {
         super();
         this._watchers = Object.create(null);
@@ -86,6 +86,7 @@ DocumentSemanticTokensFeature = __decorate([
     __param(4, ILanguageFeatureDebounceService),
     __param(5, ILanguageFeaturesService)
 ], DocumentSemanticTokensFeature);
+export { DocumentSemanticTokensFeature };
 let ModelSemanticColoring = class ModelSemanticColoring extends Disposable {
     constructor(model, _semanticTokensStylingService, themeService, languageFeatureDebounceService, languageFeaturesService) {
         super();
@@ -159,6 +160,8 @@ let ModelSemanticColoring = class ModelSemanticColoring extends Disposable {
             this._currentDocumentRequestCancellationTokenSource.cancel();
             this._currentDocumentRequestCancellationTokenSource = null;
         }
+        dispose(this._documentProvidersChangeListeners);
+        this._documentProvidersChangeListeners = [];
         this._setDocumentSemanticTokens(null, null, null, []);
         this._isDisposed = true;
         super.dispose();

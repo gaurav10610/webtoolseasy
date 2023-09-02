@@ -7,7 +7,7 @@ const navigationUrl = '/tools/video-converter';
 const pageTitle =
   'Online Video to Audio Converter - Convert MP4, MKV, WEBM, AVI, OGM';
 const pageDescription =
-  'Convert your videos to high-quality audio files with our free online video to audio converter. No software installation required. Convert MP4, MKV, WEBM, AVI, OGM. Try it now!';
+  'Our Best Online Video to Audio Converter tool lets you convert your videos to high-quality audio files. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
 const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -35,6 +35,11 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'video to audio converter',
@@ -45,10 +50,6 @@ export const componentConfig: ApplicationConfig = {
     'video to audio',
   ],
   icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
     {
       iconName: 'video-convert-icon',
       iconRelativeUrl: 'video-convert.svg',
@@ -68,26 +69,6 @@ export const componentConfig: ApplicationConfig = {
     {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [
@@ -124,7 +105,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Video to Audio conversion is 100% free`,
+      `Video to Audio conversion is 100% free. No registration required. No credit card requied.`,
       `Video to Audio conversion is 100% secure as whole processing is being done at client side only (in host browser)`,
       `Unlimited videos can be converted to Audio for free`,
       `Supports wide range of input video formats - MP4, WEBM, OGV, MKV, OGM`,

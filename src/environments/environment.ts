@@ -9,6 +9,7 @@ export const environment = {
   port: 4200,
   ffmpegBaseUrl: 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm',
   screenshotsBaseUrl: 'http://localhost:4200/assets/images/screenshots',
+  queryHash: 693289072854,
 };
 
 /*

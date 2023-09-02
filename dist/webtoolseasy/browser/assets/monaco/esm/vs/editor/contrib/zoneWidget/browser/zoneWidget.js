@@ -232,9 +232,10 @@ export class ZoneWidget {
             this._overlayWidget = null;
         }
         (_a = this._arrow) === null || _a === void 0 ? void 0 : _a.hide();
+        this._positionMarkerId.clear();
     }
     _decoratingElementsHeight() {
-        const lineHeight = this.editor.getOption(64 /* EditorOption.lineHeight */);
+        const lineHeight = this.editor.getOption(65 /* EditorOption.lineHeight */);
         let result = 0;
         if (this.options.showArrow) {
             const arrowHeight = Math.round(lineHeight / 3);
@@ -255,10 +256,12 @@ export class ZoneWidget {
         // Render the widget as zone (rendering) and widget (lifecycle)
         const viewZoneDomNode = document.createElement('div');
         viewZoneDomNode.style.overflow = 'hidden';
-        const lineHeight = this.editor.getOption(64 /* EditorOption.lineHeight */);
+        const lineHeight = this.editor.getOption(65 /* EditorOption.lineHeight */);
         // adjust heightInLines to viewport
-        const maxHeightInLines = Math.max(12, (this.editor.getLayoutInfo().height / lineHeight) * 0.8);
-        heightInLines = Math.min(heightInLines, maxHeightInLines);
+        if (!this.options.allowUnlimitedHeight) {
+            const maxHeightInLines = Math.max(12, (this.editor.getLayoutInfo().height / lineHeight) * 0.8);
+            heightInLines = Math.min(heightInLines, maxHeightInLines);
+        }
         let arrowHeight = 0;
         let frameThickness = 0;
         // Render the arrow one 1/3 of an editor line height
@@ -304,7 +307,7 @@ export class ZoneWidget {
         const model = this.editor.getModel();
         if (model) {
             const range = model.validateRange(new Range(where.startLineNumber, 1, where.endLineNumber + 1, 1));
-            this.revealRange(range, range.endLineNumber === model.getLineCount());
+            this.revealRange(range, range.startLineNumber === model.getLineCount());
         }
     }
     revealRange(range, isLastLine) {
@@ -363,7 +366,7 @@ export class ZoneWidget {
         }));
         this._disposables.add(this._resizeSash.onDidChange((evt) => {
             if (data) {
-                const lineDelta = (evt.currentY - data.startY) / this.editor.getOption(64 /* EditorOption.lineHeight */);
+                const lineDelta = (evt.currentY - data.startY) / this.editor.getOption(65 /* EditorOption.lineHeight */);
                 const roundedLineDelta = lineDelta < 0 ? Math.ceil(lineDelta) : Math.floor(lineDelta);
                 const newHeightInLines = data.heightInLines + roundedLineDelta;
                 if (newHeightInLines > 5 && newHeightInLines < 35) {

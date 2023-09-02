@@ -12,6 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { addDisposableListener } from '../../../base/browser/dom.js';
+import { StandardMouseEvent } from '../../../base/browser/mouseEvent.js';
 import { ToolBar } from '../../../base/browser/ui/toolbar/toolbar.js';
 import { Separator, toAction } from '../../../base/common/actions.js';
 import { coalesceInPlace } from '../../../base/common/arrays.js';
@@ -30,21 +31,22 @@ import { ITelemetryService } from '../../telemetry/common/telemetry.js';
  *
  * See {@link MenuWorkbenchToolBar} for a toolbar that is backed by a menu.
  */
-export let WorkbenchToolBar = class WorkbenchToolBar extends ToolBar {
+let WorkbenchToolBar = class WorkbenchToolBar extends ToolBar {
     constructor(container, _options, _menuService, _contextKeyService, _contextMenuService, keybindingService, telemetryService) {
         super(container, _contextMenuService, Object.assign(Object.assign({ 
             // defaults
             getKeyBinding: (action) => { var _a; return (_a = keybindingService.lookupKeybinding(action.id)) !== null && _a !== void 0 ? _a : undefined; } }, _options), { 
             // mandatory (overide options)
-            allowContextMenu: true }));
+            allowContextMenu: true, skipTelemetry: typeof (_options === null || _options === void 0 ? void 0 : _options.telemetrySource) === 'string' }));
         this._options = _options;
         this._menuService = _menuService;
         this._contextKeyService = _contextKeyService;
         this._contextMenuService = _contextMenuService;
         this._sessionDisposables = this._store.add(new DisposableStore());
         // telemetry logic
-        if (_options === null || _options === void 0 ? void 0 : _options.telemetrySource) {
-            this._store.add(this.actionBar.onDidRun(e => telemetryService.publicLog2('workbenchActionExecuted', { id: e.action.id, from: _options.telemetrySource })));
+        const telemetrySource = _options === null || _options === void 0 ? void 0 : _options.telemetrySource;
+        if (telemetrySource) {
+            this._store.add(this.actionBar.onDidRun(e => telemetryService.publicLog2('workbenchActionExecuted', { id: e.action.id, from: telemetrySource })));
         }
     }
     setActions(_primary, _secondary = [], menuIds) {
@@ -102,13 +104,14 @@ export let WorkbenchToolBar = class WorkbenchToolBar extends ToolBar {
         // add context menu for toggle actions
         if (toggleActions.length > 0) {
             this._sessionDisposables.add(addDisposableListener(this.getElement(), 'contextmenu', e => {
-                var _a, _b, _c, _d;
-                const action = this.getItemAction(e.target);
+                var _a, _b, _c, _d, _e;
+                const event = new StandardMouseEvent(e);
+                const action = this.getItemAction(event.target);
                 if (!(action)) {
                     return;
                 }
-                e.preventDefault();
-                e.stopPropagation();
+                event.preventDefault();
+                event.stopPropagation();
                 let noHide = false;
                 // last item cannot be hidden when using ignore strategy
                 if (toggleActionsCheckedCount === 1 && ((_a = this._options) === null || _a === void 0 ? void 0 : _a.hiddenItemStrategy) === 0 /* HiddenItemStrategy.Ignore */) {
@@ -158,11 +161,12 @@ export let WorkbenchToolBar = class WorkbenchToolBar extends ToolBar {
                     }));
                 }
                 this._contextMenuService.showContextMenu({
-                    getAnchor: () => e,
+                    getAnchor: () => event,
                     getActions: () => actions,
                     // add context menu actions (iff appicable)
                     menuId: (_c = this._options) === null || _c === void 0 ? void 0 : _c.contextMenu,
                     menuActionOptions: Object.assign({ renderShortTitle: true }, (_d = this._options) === null || _d === void 0 ? void 0 : _d.menuOptions),
+                    skipTelemetry: typeof ((_e = this._options) === null || _e === void 0 ? void 0 : _e.telemetrySource) === 'string',
                     contextKeyService: this._contextKeyService,
                 });
             }));
@@ -176,3 +180,4 @@ WorkbenchToolBar = __decorate([
     __param(5, IKeybindingService),
     __param(6, ITelemetryService)
 ], WorkbenchToolBar);
+export { WorkbenchToolBar };

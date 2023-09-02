@@ -1,14 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppDisplayConfig } from 'src/app/@types/config';
+import { AppDisplayConfig, ApplicationConfig } from 'src/app/@types/config';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { MatIconRegistry } from '@angular/material/icon';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-app-directory',
@@ -21,6 +21,9 @@ export class AppDirectoryComponent {
    */
   appsConfig: AppDisplayConfig[] = appDisplayConfig;
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = [];
+
   constructor(
     private router: Router,
     private titleService: Title,
@@ -28,15 +31,13 @@ export class AppDirectoryComponent {
     @Inject(DOCUMENT) private document: any,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService
   ) {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,
@@ -44,8 +45,6 @@ export class AppDirectoryComponent {
       this.metaService,
       this.document
     );
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
   }
 
   navigateByAppId(applicationId: string) {

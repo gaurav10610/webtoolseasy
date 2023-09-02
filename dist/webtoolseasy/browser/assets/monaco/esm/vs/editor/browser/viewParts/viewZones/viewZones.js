@@ -11,8 +11,8 @@ export class ViewZones extends ViewPart {
     constructor(context) {
         super(context);
         const options = this._context.configuration.options;
-        const layoutInfo = options.get(139 /* EditorOption.layoutInfo */);
-        this._lineHeight = options.get(64 /* EditorOption.lineHeight */);
+        const layoutInfo = options.get(142 /* EditorOption.layoutInfo */);
+        this._lineHeight = options.get(65 /* EditorOption.lineHeight */);
         this._contentWidth = layoutInfo.contentWidth;
         this._contentLeft = layoutInfo.contentLeft;
         this.domNode = createFastDomNode(document.createElement('div'));
@@ -58,11 +58,11 @@ export class ViewZones extends ViewPart {
     }
     onConfigurationChanged(e) {
         const options = this._context.configuration.options;
-        const layoutInfo = options.get(139 /* EditorOption.layoutInfo */);
-        this._lineHeight = options.get(64 /* EditorOption.lineHeight */);
+        const layoutInfo = options.get(142 /* EditorOption.layoutInfo */);
+        this._lineHeight = options.get(65 /* EditorOption.lineHeight */);
         this._contentWidth = layoutInfo.contentWidth;
         this._contentLeft = layoutInfo.contentLeft;
-        if (e.hasChanged(64 /* EditorOption.lineHeight */)) {
+        if (e.hasChanged(65 /* EditorOption.lineHeight */)) {
             this._recomputeWhitespacesProps();
         }
         return true;
@@ -123,7 +123,7 @@ export class ViewZones extends ViewPart {
                 column: zoneAfterModelPosition.column + 1
             });
         }
-        const viewPosition = this._context.viewModel.coordinatesConverter.convertModelPositionToViewPosition(zoneAfterModelPosition, zone.afterColumnAffinity);
+        const viewPosition = this._context.viewModel.coordinatesConverter.convertModelPositionToViewPosition(zoneAfterModelPosition, zone.afterColumnAffinity, true);
         const isVisible = zone.showInHiddenAreas || this._context.viewModel.coordinatesConverter.modelPositionIsVisible(zoneBeforeModelPosition);
         return {
             isInHiddenArea: !isVisible,

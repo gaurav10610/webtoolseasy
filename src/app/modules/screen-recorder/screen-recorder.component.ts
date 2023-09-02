@@ -12,12 +12,13 @@ import { clear, get, set } from 'idb-keyval';
 import { VideoStreamMerger } from 'video-stream-merger';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -80,6 +81,9 @@ export class ScreenRecorderComponent implements OnDestroy {
 
   destroyed = new Subject<void>();
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private titleService: Title,
     private metaService: Meta,
@@ -89,7 +93,6 @@ export class ScreenRecorderComponent implements OnDestroy {
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private appContextService: AppContextService,
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService,
     private platformMetaDataService: PlatformMetadataService
@@ -97,8 +100,7 @@ export class ScreenRecorderComponent implements OnDestroy {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
-      this.domSanitizer,
-      this.appContextService
+      this.domSanitizer
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,
@@ -106,12 +108,6 @@ export class ScreenRecorderComponent implements OnDestroy {
       this.metaService,
       this.document
     );
-    this.appContextService.tags = componentConfig.tags;
-
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
 
     /**
      * screen resize handler

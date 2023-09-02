@@ -1,74 +1,49 @@
-<div class="full-height flex-display flex-column-flow no-y-scroll">
-  <!-- profile header -->
-  <app-header-toolbar></app-header-toolbar>
+<div class="flex-display flex-column-flow flex-align-center flex-gap-medium">
+  <!-- file input -->
+  <input
+    #inputFiles
+    type="file"
+    style="display: none"
+    (change)="selectFiles($event)" />
 
-  <div class="full-width y-scroll">
-    <!-- app container -->
+  <div
+    class="flex-display flex-column-flow flex-align-center text-area-container full-width flex-gap-medium">
     <div
-      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
-      <!--web tool headings-->
-      <app-tool-heading></app-tool-heading>
-
-      <!-- share buttons -->
-      <app-share-buttons class="full-width"></app-share-buttons>
-
-      <!-- file input -->
-      <input
-        #inputFiles
-        type="file"
-        style="display: none"
-        (change)="selectFiles($event)" />
-
-      <div
-        class="flex-display flex-column-flow flex-align-center text-area-container full-width flex-gap-medium">
-        <div
-          class="flex-display flex-row-flow full-width"
-          style="justify-content: space-around">
-          <span class="div-label">Original Data</span>
-          <span class="div-label">Modified Data</span>
-        </div>
-        <ngx-monaco-diff-editor
-          *ngIf="platformMetadataService.isPlatformBrowser"
-          #diffEdior
-          [options]="editorOptions"
-          [modifiedModel]="modifiedModel"
-          [originalModel]="originalModel"
-          style="
-            height: 100%;
-            width: 100%;
-            border: 1px solid lightgrey;
-          "></ngx-monaco-diff-editor>
-
-        <!-- import file buttons -->
-        <div
-          class="flex-display flex-row-flow full-width"
-          style="justify-content: space-around">
-          <button
-            mat-stroked-button
-            aria-label="switch_text_button"
-            color="primary"
-            (click)="openFileDialog('original')">
-            <mat-icon>file_upload</mat-icon>Original Text
-          </button>
-          <button
-            mat-stroked-button
-            aria-label="switch_text_button"
-            color="primary"
-            (click)="openFileDialog('modified')">
-            <mat-icon>file_upload</mat-icon>Modified Text
-          </button>
-        </div>
-      </div>
-
-      <!-- description -->
-      <app-description class="full-width"></app-description>
-
-      <!-- tags div -->
-      <app-tags></app-tags>
-
-      <!-- follow buttons -->
-      <app-follow-buttons></app-follow-buttons>
+      class="flex-display flex-row-flow full-width"
+      style="justify-content: space-around">
+      <span class="div-label">Original Data</span>
+      <span class="div-label">Modified Data</span>
     </div>
-    <app-footer></app-footer>
+    <ngx-monaco-diff-editor
+      *ngIf="platformMetadataService.isPlatformBrowser"
+      #diffEdior
+      [options]="editorOptions"
+      [modifiedModel]="modifiedModel"
+      [originalModel]="originalModel"
+      style="
+        height: 100%;
+        width: 100%;
+        border: 1px solid lightgrey;
+      "></ngx-monaco-diff-editor>
+
+    <!-- import file buttons -->
+    <div
+      class="flex-display flex-row-flow full-width"
+      style="justify-content: space-around">
+      <button
+        mat-stroked-button
+        aria-label="switch_text_button"
+        color="primary"
+        (click)="openFileDialog('original')">
+        <mat-icon>file_upload</mat-icon>Original Text
+      </button>
+      <button
+        mat-stroked-button
+        aria-label="switch_text_button"
+        color="primary"
+        (click)="openFileDialog('modified')">
+        <mat-icon>file_upload</mat-icon>Modified Text
+      </button>
+    </div>
   </div>
 </div>

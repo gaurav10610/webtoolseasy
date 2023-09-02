@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle = 'Free Online Screen Recorder | Online Video Recorder';
+const pageTitle = 'Free Screen Recorder With No Watermark | No Time Limit';
 const pageDescription =
-  'Easily Capture your Screen via Best Free Online Screen Recorder with or without audio, video from microphone and webcam | No download, No Watermark with Lag free recording for PCs ( Windows/ MAC/ Ubuntu )';
+  'Easy HD Screen recording via our Best Free Online Screen Recorder with or without audio, video from mic and webcam. No watermark and time limit for screen recording.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Screen Recorder',
-  subHeading: 'Record Screen With Audio, Video for Free',
+  subHeading: 'HD Screen Recording With Mic & Camera',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,6 +34,16 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
     { property: 'og:site_name', content: 'WebToolsEasy' },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
+    { property: 'twitter:card', content: 'summary_large_image' },
+    { property: 'twitter:site', content: '@webtoolseasy' },
+    { property: 'twitter:title', content: pageTitle },
+    { property: 'twitter:description', content: pageDescription },
+    { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
     'screen recorder',
@@ -44,36 +54,12 @@ export const componentConfig: ApplicationConfig = {
   ],
   icons: [
     {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
     },
     {
       iconName: 'video-convert-icon',
       iconRelativeUrl: 'video-convert.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
     },
   ],
   relatedTools: [
@@ -101,12 +87,13 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Screen recording is 100% free.`,
-      `Unlimited screen recording in HD format.`,
-      `Record screen with camera video & mic audio.`,
-      `No watermark in the recorded video.`,
+      `Screen recording is 100% free. No registration required. No credit card required.`,
+      `Unlimited screen recording in HD format i.e no time limit for recording.`,
+      `Record screen with webcam video & microphone audio.`,
+      `Pause and resume screen recording.`,
+      `HD screen recording with no watermark.`,
       `Easy to use: No software installation is needed to record screen.`,
-      `Cross platform: tool is completely web-based and can be accessed wherever you are, from any computer. It is compatible with all major browsers and OSes, including Windows, macOS, and Linux.`,
+      `Cross platform: Tool is completely web-based and can be accessed wherever you are, from any computer. It is compatible with all major browsers and OSes, including Windows, macOS, and Linux.`,
       `Secure: Screen recording is 100% secure as whole processing is being done at client side only (in host browser) and we don't store any video.`,
     ],
   },

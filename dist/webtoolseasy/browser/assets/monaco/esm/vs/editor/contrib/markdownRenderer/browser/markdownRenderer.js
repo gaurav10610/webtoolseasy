@@ -20,8 +20,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a;
 import { renderMarkdown } from '../../../../base/browser/markdownRenderer.js';
+import { createTrustedTypesPolicy } from '../../../../base/browser/trustedTypes.js';
 import { onUnexpectedError } from '../../../../base/common/errors.js';
 import { Emitter } from '../../../../base/common/event.js';
 import { DisposableStore } from '../../../../base/common/lifecycle.js';
@@ -35,7 +35,7 @@ import { IOpenerService } from '../../../../platform/opener/common/opener.js';
  * Markdown renderer that can render codeblocks with the editor mechanics. This
  * renderer should always be preferred.
  */
-export let MarkdownRenderer = class MarkdownRenderer {
+let MarkdownRenderer = class MarkdownRenderer {
     constructor(_options, _languageService, _openerService) {
         this._options = _options;
         this._languageService = _languageService;
@@ -81,7 +81,7 @@ export let MarkdownRenderer = class MarkdownRenderer {
                 element.innerHTML = ((_c = (_b = MarkdownRenderer._ttpTokenizer) === null || _b === void 0 ? void 0 : _b.createHTML(html)) !== null && _c !== void 0 ? _c : html);
                 // use "good" font
                 if (this._options.editor) {
-                    const fontInfo = this._options.editor.getOption(48 /* EditorOption.fontInfo */);
+                    const fontInfo = this._options.editor.getOption(49 /* EditorOption.fontInfo */);
                     applyFontInfo(element, fontInfo);
                 }
                 else if (this._options.codeBlockFontFamily) {
@@ -100,7 +100,7 @@ export let MarkdownRenderer = class MarkdownRenderer {
         };
     }
 };
-MarkdownRenderer._ttpTokenizer = (_a = window.trustedTypes) === null || _a === void 0 ? void 0 : _a.createPolicy('tokenizeToString', {
+MarkdownRenderer._ttpTokenizer = createTrustedTypesPolicy('tokenizeToString', {
     createHTML(html) {
         return html;
     }
@@ -109,6 +109,7 @@ MarkdownRenderer = __decorate([
     __param(1, ILanguageService),
     __param(2, IOpenerService)
 ], MarkdownRenderer);
+export { MarkdownRenderer };
 export function openLinkFromMarkdown(openerService, link, isTrusted) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
