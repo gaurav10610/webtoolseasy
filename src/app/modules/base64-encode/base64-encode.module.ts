@@ -6,6 +6,7 @@ import { Base64EncodeComponent } from './base64-encode.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [Base64EncodeComponent],
@@ -15,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
+    ClipboardModule,
   ],
 })
 export class Base64EncodeModule {}

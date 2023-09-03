@@ -108,6 +108,13 @@ const routes: Routes = [
             m => m.Base64DecodeModule
           ),
       },
+      {
+        path: 'cron-expression',
+        loadChildren: () =>
+          import('../cron-generator/cron-generator.module').then(
+            m => m.CronGeneratorModule
+          ),
+      },
     ],
   },
 ];

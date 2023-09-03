@@ -3,15 +3,15 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/base64-encode';
-const pageTitle = 'File to Base64 | Base64 Encode | Base64 Converter | Base64';
+const navigationUrl = '/tools/cron-expression';
+const pageTitle = 'Best Online Cron Expression Generator';
 const pageDescription =
-  'Our Best Online Base64 Encoder tool lets you encode your any file to base64 string and base64 data uri.';
-const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
+  'Our Best Online Cron Expression Generator tool lets you graphically generate cron expression online for free';
+const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'File to Base64 Encode',
-  subHeading: 'Encode File to Base64 Format',
+  mainHeading: 'Online Cron Expression Generator',
+  subHeading: 'Graphically Generate Cron Expression Online',
   navigationUrl,
   pageTitle,
   metaTags: [

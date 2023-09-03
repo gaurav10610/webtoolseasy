@@ -15,6 +15,7 @@ export enum AppDisplayNames {
   PASSWORD_GENERATOR = 'Online Password Generator',
   BASE64_ENCODE = 'Base64 Encode',
   BASE64_DECODE = 'Base64 Decode',
+  CRON_GENERATOR = 'Cron Expression Generator',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -101,5 +102,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.BASE64_DECODE,
     iconName: 'file-decode-icon',
     navigateUrl: '/tools/base64-decode',
+  },
+  {
+    applicationId: 'crongenerator',
+    displayText: AppDisplayNames.CRON_GENERATOR,
+    iconName: 'cron-icon',
+    navigateUrl: '/tools/cron-expression',
   },
 ];

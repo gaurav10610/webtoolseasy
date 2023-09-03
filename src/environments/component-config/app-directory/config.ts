@@ -91,5 +91,9 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'file-decode-icon',
       iconRelativeUrl: 'file-decode.svg',
     },
+    {
+      iconName: 'cron-icon',
+      iconRelativeUrl: 'cron.svg',
+    },
   ],
 };
