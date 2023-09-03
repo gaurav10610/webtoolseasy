@@ -1,12 +1,11 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/cron-expression';
 const pageTitle = 'Best Online Cron Expression Generator';
 const pageDescription =
-  'Our Best Online Cron Expression Generator tool lets you graphically generate cron expression online for free';
+  'Our Best Online Cron Expression Generator tool lets you graphically generate cron expression online. Generate Quartz cron expression.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -41,86 +40,103 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
-    'base64 encode',
-    'base64 encode online',
-    'file to base64 encoder',
-    'online base64 converter',
+    'cron expression',
+    'cron expression generator',
+    'cron generator',
+    'cron online',
+    'cron expression builder',
   ],
-  relatedTools: [
-    {
-      applicationId: 'base64decoder',
-      displayText: AppDisplayNames.BASE64_DECODE,
-      iconName: 'file-decode-icon',
-      navigateUrl: '/tools/base64-decode',
-    },
-  ],
-  icons: [
-    {
-      iconName: 'file-decode-icon',
-      iconRelativeUrl: 'file-decode.svg',
-    },
-  ],
+  icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Encode File to Base64?',
-    listData: [
-      `Drag and Drop or browse file in order to encode it to Base64`,
-      `File will be encoded to Base64 automatically after selecting the file`,
-      `Base64 data can be copied to clipboard using copy buttons`,
-    ],
-  },
-  {
-    heading: 'Output Formats',
-    listData: [
-      `Plain Base64 Text => IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
-      `Data URI => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
-    ],
-  },
-  {
-    heading: 'Why choose our Online File to Base64 Encoder?',
-    listData: [
-      `Intuitive UX: Easy to use interface to encode file to base64`,
-      `Saves time: Fast and secure file to Base64 conversion`,
-      `Cross-platform: Cross-platform file to Base64 encoding tool`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: 'What is Base64?',
+    heading: 'What is a Cron Job?',
     blockData: [
-      `Base64 is a binary-to-text encoding scheme that allows binary data to be represented as a sequence of printable ASCII characters. It is commonly used to encode binary data, such as images, audio, video, and other types of files, so that it can be transmitted over text-based protocols, like email or HTTP, which may not reliably support binary data.`,
-      `The name "Base64" comes from the fact that it uses a set of 64 different printable characters, which consist of uppercase and lowercase letters (A-Z, a-z), numbers (0-9), and two additional special characters, usually '+' and '/'. The padding character '=' is used to ensure that the encoded output is a multiple of 4 characters, as the encoding is done in groups of 3 bytes.`,
-      `The encoding process involves breaking the binary data into 6-bit chunks and converting them into their corresponding ASCII characters according to the Base64 encoding table. Each group of 3 bytes (24 bits) is then represented by 4 Base64 characters. Decoding Base64 is the reverse process, where the ASCII characters are converted back to their original binary representation.`,
-      `Base64 encoding is widely used in various applications, such as: Email attachments, Data transmission, Data storage, Web development`,
-      `It's important to note that Base64 is not a secure encryption method, as it is easily reversible. Its main purpose is to facilitate the transport and storage of binary data in environments that only support text-based formats.`,
+      `A cron job is a scheduled task or job in Unix-like operating systems that is used to automate repetitive tasks at specific intervals or times. The term "cron" is derived from the Greek word "chronos," which means time. Cron jobs are named after the utility that manages them, called "cron."`,
+    ],
+  },
+  {
+    heading: 'How Cron Job works?',
+    listData: [
+      `Cron Schedule: You define a schedule for when you want a particular command or script to run. This schedule is specified using a combination of time and date fields. These fields determine when the job should execute, such as minute, hour, day of the month, month, and day of the week.`,
+      `Command or Script: You specify the command or script that you want to run on that schedule. This can be any shell command, script, or program that the operating system can execute.`,
+      `Cron Daemon: A daemon (a background process) called the "cron daemon" or simply "cron" continuously checks the cron schedule and, when a scheduled time matches the current time, it executes the specified command or script automatically.`,
+    ],
+  },
+  {
+    heading: 'What is a Cron Expression?',
+    listData: [
+      `A cron expression is a string representing a schedule for recurring tasks or jobs in Unix-like operating systems. It is used to define the timing and frequency of when a specific task, command, or script should be executed by the cron daemon. Cron expressions consist of fields that specify minute, hour, day of the month, month, and day of the week, allowing for highly customizable scheduling.`,
+      `Cron expression can be of two formats i.e Quartz cron expression or Standard Linux cron expression.`,
+    ],
+  },
+  {
+    heading: 'What is a Quartz Cron Expression?',
+    listData: [
+      `Environment: Quartz is a job scheduling library and framework primarily used in Java applications. It provides a programmatic way to schedule and manage jobs within Java applications.`,
+      `Syntax: Quartz uses a more expressive and flexible syntax for defining job schedules. Quartz expressions can specify not only the timing of jobs but also more complex schedules, such as "run every weekday except holidays" or "run every 15 minutes between 9 AM and 5 PM."`,
+      `Resolution: Quartz can schedule jobs with second-level precision, making it suitable for applications that require very fine-grained control over job timing.`,
+      `Usage: Quartz is used within Java applications and provides programmatic scheduling capabilities. Developers embed Quartz code within their applications to schedule and manage tasks.`,
+      `Complex Scheduling: Quartz supports complex scheduling scenarios, such as chaining jobs, creating dependencies between jobs, and handling misfires (e.g., jobs that were missed due to system downtime).`,
+      `Portability: Quartz is specific to Java applications and is not inherently portable to other programming languages or environments.`,
+    ],
+  },
+  {
+    heading: 'What is a Standard Linux Cron Expression?',
+    listData: [
+      `Environment: Linux cron expressions are used in Unix-like operating systems (including Linux) to schedule tasks at the system level. They are typically used to schedule system maintenance and automation tasks.`,
+      `Syntax: Linux cron expressions have a simpler syntax limited to specifying minute, hour, day of the month, month, and day of the week. While powerful for many tasks, they are less expressive when compared to Quartz.`,
+      `Resolution: Linux cron expressions typically have minute-level precision. Some cron daemons may support sub-minute scheduling, but this is less common and not as precise as Quartz.`,
+      `Usage: Linux cron expressions are used at the system level and are configured using the crontab command or system-level configuration files. They are suitable for scheduling system-related tasks and scripts.`,
+      `Complex Scheduling: While Linux cron expressions can handle basic scheduling needs, they are less capable of handling complex scheduling requirements without additional scripting or external tools.`,
+      `Portability: Linux cron expressions are more portable across Unix-like operating systems and can be used with various scripting languages like Bash, Python, or Perl.`,
+    ],
+  },
+  {
+    heading: 'Examples of Cron Expression',
+    listData: [
+      `* * * * * : Runs a job every minute, every hour, every day, every month, and every day of the week.`,
+      `0 0 * * * : Runs a job at midnight (00:00) every day.`,
+      `0 * * * * : Runs a job at the start of every hour.`,
+      `*/15 * * * * : Runs a job every 15 minutes.`,
+      `0 2 * * * : Runs a job at 2:00 AM every day.`,
+      `0 0 * * 5 : Runs a job at midnight (00:00) every Friday.`,
+      `0 0 1 * * : Runs a job at midnight (00:00) on the first day of every month.`,
+      `0 0 * * 1 : Runs a job at midnight (00:00) every Monday.`,
+      `0 0 * * 0 : Runs a job at midnight (00:00) every Sunday (0 or 7 can represent Sunday).`,
+      `0 2 * * 1,3,5 : Runs a job at 2:00 AM every Monday, Wednesday, and Friday.`,
+      `0 0 1,15 * * : Runs a job at midnight (00:00) on the 1st and 15th day of every month.`,
+      `*/2 * * * * : Runs a job every 2 minutes.`,
+      `0 */3 * * * : Runs a job every 3 hours.`,
+      `15-30 * * * * : Runs a job every minute from the 15th to the 30th minute of each hour.`,
+      `0 1,3,5 * * * : Runs a job at 1:00 AM, 3:00 AM, and 5:00 AM every day.`,
+      `0 0 L * * : Runs a job at midnight (00:00) on the last day of every month.`,
+      `0 0 * * 1-5 : Runs a job at midnight (00:00) from Monday to Friday (business days).`,
+      `0 0 * * 6,7 : Runs a job at midnight (00:00) on Saturday and Sunday (weekends).`,
     ],
   },
   {
     heading: 'Key features',
     listData: [
-      `Fast and secure file to Base64 conversion`,
-      `Free tool to convert file to Base64`,
-      `Base64 encoding for all file types`,
-      `File to Base64 conversion with high data integrity`,
-      `Cross-platform file to Base64 encoding tool`,
+      `Supports Quartz Cron Expression.`,
+      `User-Friendly Interface: Online Cron Expression Generator provides a intuitive and easy to navigate, making it accessible to users with varying levels of technical expertise.`,
+      `Interactive Scheduler: Online Cron Expression Generator provides a visual representation of the cron schedule, such as a calendar or timeline, can help users understand and visualize when their task will run.`,
+      `Field Customization: Users can customize each field of the cron expression (minute, hour, day of the month, month, and day of the week) using dropdowns, sliders, or input fields.`,
+      `Copy and Paste: Users can easily copy the generated cron expression for use in their applications or scripts.`,
+      `Cross-Platform Compatibility: Online Cron Expression Generator works well across different web browsers and operating systems.`,
     ],
   },
   {
     heading: 'References',
     links: [
       {
-        displayText: 'Read more about Base64 at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/Base64',
+        displayText: 'Read more about Cron at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/Cron',
       },
       {
-        displayText: 'RFC 4648 - Base64 Encoding',
-        url: 'https://datatracker.ietf.org/doc/html/rfc4648#section-4',
-      },
-      {
-        displayText: 'Base64 Docs - Mozilla',
-        url: 'https://developer.mozilla.org/en-US/docs/Glossary/Base64',
+        displayText: 'Read more about Quartz scheduler at Wikipedia',
+        url: 'https://en.wikipedia.org/wiki/Quartz_(scheduler)',
       },
     ],
   },
