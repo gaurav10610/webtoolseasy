@@ -1,16 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DOCUMENT } from '@angular/common';
 import {
   Component,
   ElementRef,
-  Inject,
   NgZone,
   OnDestroy,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import {
   FileDataType,
@@ -46,8 +42,6 @@ import {
 } from 'src/environments/ffmpeg-config';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 
@@ -85,31 +79,12 @@ export class VideoConverterComponent implements OnDestroy {
   descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private dialog: MatDialog,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private ffmpegService: FfmpegService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
+    private ffmpegService: FfmpegService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))

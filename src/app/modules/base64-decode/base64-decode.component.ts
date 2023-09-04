@@ -1,18 +1,7 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Inject,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
   descriptionData,
@@ -41,28 +30,7 @@ export class Base64DecodeComponent {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  constructor(
-    private titleService: Title,
-    private renderer: Renderer2,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-  }
+  constructor(private renderer: Renderer2) {}
 
   async updateBase64(base64: string) {
     this.renderer.setProperty(

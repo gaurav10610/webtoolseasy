@@ -1,11 +1,6 @@
-import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { CronOptions, CronGenComponent } from 'ngx-cron-editor';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
@@ -53,29 +48,8 @@ export class CronGeneratorComponent implements AfterViewInit {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
-    private clipboard: Clipboard
-  ) {
+  constructor(private clipboard: Clipboard) {
     this.cronForm = new FormControl(this.cronExpression);
-
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
   }
 
   ngAfterViewInit(): void {
