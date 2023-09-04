@@ -1,14 +1,9 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/html-formatter/config';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { html_beautify } from 'js-beautify';
 import { ApplicationConfig } from 'src/app/@types/config';
@@ -39,26 +34,8 @@ export class HtmlFormatterComponent {
 
   constructor(
     private clipboard: Clipboard,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
     public platformMetadataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
     this.formattedCode = html_beautify(this.rawCode);
   }
 

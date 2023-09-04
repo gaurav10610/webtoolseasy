@@ -1,20 +1,9 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Inject,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import {
   descriptionData,
   componentConfig,
 } from 'src/environments/component-config/base64-encode/config';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 
@@ -36,28 +25,9 @@ export class Base64EncodeComponent {
   descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
     private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private clipboard: Clipboard,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-  }
+    private clipboard: Clipboard
+  ) {}
 
   async openFileDialog() {
     this.renderer

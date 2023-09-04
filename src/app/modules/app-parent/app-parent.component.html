@@ -21,17 +21,20 @@
       <!-- related tools -->
       <app-related-tools
         class="full-width"
-        *ngIf="appContextService.relatedTools"></app-related-tools>
+        *ngIf="
+          appContextService.applicationConfig?.relatedTools
+        "></app-related-tools>
 
       <!-- description -->
       <app-description
         class="full-width"
-        *ngIf="appContextService.descrptionData"></app-description>
+        *ngIf="appContextService.descriptionData"></app-description>
 
       <!-- tags div -->
       <app-tags
         *ngIf="
-          appContextService.tags && appContextService.tags.length > 0
+          appContextService.applicationConfig?.tags &&
+          (appContextService.applicationConfig?.tags)!.length > 0
         "></app-tags>
 
       <!-- follow buttons -->

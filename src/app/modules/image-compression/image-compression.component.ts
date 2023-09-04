@@ -1,13 +1,11 @@
 import {
   Component,
   ElementRef,
-  Inject,
   NgZone,
   OnDestroy,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import {
   ImageFileData,
   FileDataType,
@@ -20,14 +18,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CompressSettingsComponent } from 'src/app/modules/image-compression/compress-settings/compress-settings.component';
 import { v4 } from 'uuid';
-import { DOCUMENT } from '@angular/common';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/image-compression/config';
-import { MatIconRegistry } from '@angular/material/icon';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 
@@ -56,30 +50,11 @@ export class ImageCompressionComponent implements OnDestroy {
   descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
+    private dialog: MatDialog
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))

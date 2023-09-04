@@ -1,8 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, NgZone, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, NgZone, OnDestroy, Renderer2 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
@@ -14,8 +11,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -85,30 +80,11 @@ export class ScreenRecorderComponent implements OnDestroy {
   descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
     private platformMetaDataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-
     /**
      * screen resize handler
      */
