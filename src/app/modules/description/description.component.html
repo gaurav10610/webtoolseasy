@@ -1,6 +1,6 @@
 <div class="flex-display flex-column-flow flex-gap-medium">
   <mat-card
-    *ngFor="let descriptionRecord of appContextService.descrptionData"
+    *ngFor="let descriptionRecord of appContextService.descriptionData"
     class="description-block">
     <mat-card-header class="description-heading">
       <mat-card-title
@@ -18,7 +18,7 @@
         class="flex-display flex-column-flow">
         <div
           *ngFor="let line of descriptionRecord.listData"
-          class="flex-display description-font flex-row-flow flex-gap-small flex-align-center"
+          class="flex-display description-font flex-row-flow flex-gap-small"
           style="overflow-wrap: anywhere">
           <mat-icon aria-hidden="false" aria-label="right pointer icon"
             >chevron_right</mat-icon

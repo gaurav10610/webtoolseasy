@@ -6,7 +6,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/base64-encode';
 const pageTitle = 'File to Base64 | Base64 Encode | Base64 Converter | Base64';
 const pageDescription =
-  'Our Best Online Base64 Encoder tools lets you encode your any file to base64 string and base64 data uri.';
+  'Our Best Online Base64 Encoder tool lets you encode your any file to base64 string and base64 data uri.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 export const componentConfig: ApplicationConfig = {

@@ -1,14 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ImageFileData, ImageCompressSettings } from 'src/app/@types/file';
-import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-compress-settings',
   templateUrl: './compress-settings.component.html',
   styleUrls: ['./compress-settings.component.scss'],
 })
-export class CompressSettingsComponent implements OnInit {
+export class CompressSettingsComponent {
   compressionRate: number;
   maxFileSize: number;
   oldFileSize: number;
@@ -22,10 +21,6 @@ export class CompressSettingsComponent implements OnInit {
     this.oldFileSize = data.file.size;
     this.fileId = data.id;
     this.compressionRate = data.compressionRate;
-  }
-
-  ngOnInit(): void {
-    LogUtils.info('compression settings component has been rendered');
   }
 
   onCompressionRateChange(event: any) {

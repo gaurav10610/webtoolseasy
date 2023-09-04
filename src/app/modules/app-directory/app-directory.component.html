@@ -3,7 +3,8 @@
   <div
     class="application shadow-grey"
     *ngFor="let application of appsConfig"
-    (click)="navigateByAppId(application.applicationId)">
+    [replaceUrl]="true"
+    routerLink="{{ application.navigateUrl }}">
     <div
       class="flex-display flex-column-flow flex-center flex-align-center app-card flex-gap-medium pointer-cursor">
       <mat-icon

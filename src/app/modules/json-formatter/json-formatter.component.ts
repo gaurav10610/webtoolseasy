@@ -1,14 +1,9 @@
-import { Component, Inject } from '@angular/core';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { DOCUMENT } from '@angular/common';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/json-formatter/config';
-import { MatIconRegistry } from '@angular/material/icon';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -37,26 +32,8 @@ export class JsonFormatterComponent {
 
   constructor(
     private clipboard: Clipboard,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
     public platformMetadataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
     this.formattedCode = JSON.stringify(
       JSON.parse(this.rawCode),
       null,

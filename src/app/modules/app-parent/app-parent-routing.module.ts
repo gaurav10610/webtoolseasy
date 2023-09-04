@@ -13,6 +13,7 @@ const routes: Routes = [
           import('../app-directory/app-directory.module').then(
             m => m.AppDirectoryModule
           ),
+        pathMatch: 'full',
       },
       {
         path: 'uuid',
@@ -105,6 +106,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('../base64-decode/base64-decode.module').then(
             m => m.Base64DecodeModule
+          ),
+      },
+      {
+        path: 'cron-expression',
+        loadChildren: () =>
+          import('../cron-generator/cron-generator.module').then(
+            m => m.CronGeneratorModule
           ),
       },
     ],

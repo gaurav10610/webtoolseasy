@@ -1,20 +1,21 @@
 import { AppDisplayConfig } from 'src/app/@types/config';
 
 export enum AppDisplayNames {
-  VIDEO_CONVERTER = 'Video Converter',
-  SCREEN_RECORDER = 'Screen Recorder',
-  TEXT_COMPARE = 'Text File Difference',
-  UUID_GENERATOR = 'UUID Generator',
-  JWT_DECODER = 'JWT Decoder',
-  IMAGE_COMPRESSOR = 'Image Compressor',
-  JS_FORMATTER = 'Javascript Formatter',
-  JSON_FORMATTER = 'JSON Formatter',
-  HTML_FORMATTER = 'HTML Formatter',
-  CSS_FORMATTER = 'CSS Formatter',
-  JSON_VIEWER = 'JSON Viewer',
-  PASSWORD_GENERATOR = 'Password Generator',
+  VIDEO_CONVERTER = 'Video to Audio Converter',
+  SCREEN_RECORDER = 'Online Screen Recorder',
+  TEXT_COMPARE = 'Online Text Difference',
+  UUID_GENERATOR = 'Online UUID Generator',
+  JWT_DECODER = 'Online JWT Decoder',
+  IMAGE_COMPRESSOR = 'Online Image Compressor',
+  JS_FORMATTER = 'Online Javascript Formatter',
+  JSON_FORMATTER = 'Online JSON Formatter',
+  HTML_FORMATTER = 'Online HTML Formatter',
+  CSS_FORMATTER = 'Online CSS Formatter',
+  JSON_VIEWER = 'Online JSON Viewer',
+  PASSWORD_GENERATOR = 'Online Password Generator',
   BASE64_ENCODE = 'Base64 Encode',
   BASE64_DECODE = 'Base64 Decode',
+  CRON_GENERATOR = 'Cron Expression Generator',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -101,5 +102,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.BASE64_DECODE,
     iconName: 'file-decode-icon',
     navigateUrl: '/tools/base64-decode',
+  },
+  {
+    applicationId: 'crongenerator',
+    displayText: AppDisplayNames.CRON_GENERATOR,
+    iconName: 'cron-icon',
+    navigateUrl: '/tools/cron-expression',
   },
 ];

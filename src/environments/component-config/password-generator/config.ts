@@ -5,7 +5,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
 const pageTitle =
-  'Best Online Random Password Generator - Generate Strong, Random & Secure Passwords';
+  'Best Online Password Generator - Generate Strong, Random & Secure Passwords';
 const pageDescription =
   'Quickly and easily generate single or bulk strong, random and secure passwords using our best free online passwod generator tool';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;

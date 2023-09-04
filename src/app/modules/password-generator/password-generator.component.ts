@@ -1,13 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Inject,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { FileService } from 'src/app/service/file/file.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
@@ -21,8 +12,6 @@ import {
   GenerateOptions,
 } from 'generate-password-browser';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 
@@ -99,28 +88,9 @@ export class PasswordGeneratorComponent {
 
   constructor(
     private clipboard: Clipboard,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private fileService: FileService,
-    private renderer: Renderer2,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
+    private renderer: Renderer2
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-
     this.password = generate(this.options);
   }
 
