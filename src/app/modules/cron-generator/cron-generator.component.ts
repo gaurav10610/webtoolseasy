@@ -9,6 +9,7 @@ import {
 } from 'src/environments/component-config/cron-generator/config';
 import { FormControl } from '@angular/forms';
 import { LogUtils } from 'src/app/service/util/logger';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-cron-generator',
@@ -48,13 +49,18 @@ export class CronGeneratorComponent implements AfterViewInit {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  constructor(private clipboard: Clipboard) {
+  constructor(
+    private clipboard: Clipboard,
+    public platformMetadataService: PlatformMetadataService
+  ) {
     this.cronForm = new FormControl(this.cronExpression);
   }
 
   ngAfterViewInit(): void {
-    this.cronEditor.registerOnChange(this.onCronChanged.bind(this));
-    this.cronEditor.registerOnTouched(this.onCronEditorTouched.bind(this));
+    if (this.platformMetadataService.isPlatformBrowser) {
+      this.cronEditor.registerOnChange(this.onCronChanged.bind(this));
+      this.cronEditor.registerOnTouched(this.onCronEditorTouched.bind(this));
+    }
   }
 
   onCronChanged(event: any) {
