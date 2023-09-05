@@ -28,7 +28,6 @@
     "@angular/platform-server": "16.2.1",
     "@angular/router": "16.2.1",
     "@nguniversal/express-engine": "16.2.0",
-    "browser-image-compression": "2.0.2",
     "express": "4.15.2",
     "generate-password-browser": "1.1.0",
     "idb-keyval": "6.2.1",

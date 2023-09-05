@@ -1,5 +1,3 @@
-import { Options } from 'browser-image-compression';
-
 export interface BaseFileData {
   id: string;
   file: File;
@@ -14,7 +12,7 @@ export interface ImageFileData extends BaseFileData {
   isCompressed: boolean;
   compressProgress: number;
   compressedData?: Blob;
-  compressOptions: Options;
+  compressOptions: any;
   compressionRate: number;
   maxFileSize: number;
 }

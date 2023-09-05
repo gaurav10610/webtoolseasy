@@ -12,7 +12,6 @@ import {
   ImageCompressSettings,
 } from 'src/app/@types/file';
 import { LogUtils } from 'src/app/service/util/logger';
-import { default as imageCompression } from 'browser-image-compression';
 import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -24,6 +23,10 @@ import {
 } from 'src/environments/component-config/image-compression/config';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { importScript } from 'src/app/service/ffmpeg/lib/util';
+import { environment } from 'src/environments/environment';
+
+declare var imageCompression: any;
 
 @Component({
   selector: 'app-image-compression',
@@ -62,6 +65,7 @@ export class ImageCompressionComponent implements OnDestroy {
         this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
+    importScript(environment.imageCompressionLibUrl);
   }
 
   ngOnDestroy() {
@@ -206,7 +210,7 @@ export class ImageCompressionComponent implements OnDestroy {
           imageFileData.file,
           {
             ...imageFileData.compressOptions,
-            onProgress: progress => {
+            onProgress: (progress: number) => {
               imageFileData.compressProgress = progress;
             },
           }
