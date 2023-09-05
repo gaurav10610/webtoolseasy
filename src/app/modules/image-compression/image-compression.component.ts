@@ -25,6 +25,7 @@ import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { importScript } from 'src/app/service/ffmpeg/lib/util';
 import { environment } from 'src/environments/environment';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 declare var imageCompression: any;
 
@@ -56,7 +57,8 @@ export class ImageCompressionComponent implements OnDestroy {
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private platformMetadataService: PlatformMetadataService
   ) {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
@@ -65,7 +67,10 @@ export class ImageCompressionComponent implements OnDestroy {
         this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
-    importScript(environment.imageCompressionLibUrl);
+
+    if (platformMetadataService.isPlatformBrowser) {
+      importScript(environment.imageCompressionLibUrl);
+    }
   }
 
   ngOnDestroy() {
