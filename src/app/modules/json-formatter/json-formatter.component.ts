@@ -41,9 +41,9 @@ export class JsonFormatterComponent {
     );
   }
 
-  onRawCodeChange() {
+  onRawCodeChange(updatedModel: string) {
     this.formattedCode = JSON.stringify(
-      JSON.parse(this.rawCode),
+      JSON.parse(updatedModel),
       null,
       this.tabSpaceValue
     );
