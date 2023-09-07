@@ -1,0 +1,37 @@
+<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+  <!-- file imput -->
+  <input
+    #inputFiles
+    type="file"
+    style="display: none"
+    multiple
+    (change)="selectFiles($event)"
+    [accept]="validImageFormats" />
+
+  <!-- file drop area -->
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center border-grey full-width flex-gap-medium file-drop-area"
+    (drop)="dropHandler($event)"
+    (dragover)="dragOverHandler($event)"
+    *ngIf="fileList.length === 0">
+    <mat-icon style="transform: scale(2)">collections</mat-icon>
+    <span class="header-font" style="font-size: large"
+      >Drag & drop files here</span
+    >
+    <span class="header-font" style="font-size: large">or</span>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openFileDialog()"
+      matTooltip="select images to compress">
+      <mat-icon>file_upload</mat-icon> Browse for files
+    </button>
+  </div>
+
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center border-grey full-width flex-gap-medium file-drop-area"
+    *ngIf="fileList.length > 0">
+    Selected Image Section
+  </div>
+</div>

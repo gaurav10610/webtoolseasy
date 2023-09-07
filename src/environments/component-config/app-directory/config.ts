@@ -52,8 +52,8 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'json-icon.svg',
     },
     {
-      iconName: 'image-compress-icon',
-      iconRelativeUrl: 'image-compress-icon.svg',
+      iconName: 'image-icon',
+      iconRelativeUrl: 'image-icon.svg',
     },
     {
       iconName: 'js-icon',

@@ -1,15 +1,17 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/cron-expression';
-const pageTitle = '';
-const pageDescription = '';
-const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
+const navigationUrl = '/tools/crop-image';
+const pageTitle = 'Crop Images Online For Free | Crop Photo | Crop JPG, PNG';
+const pageDescription =
+  'Crop your images/photos online for free. Crop your JPG, PNG or GIF images by dragging the corners of a crop box.';
+const imageUrl = `${environment.screenshotsBaseUrl}/image-croppper.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: '',
-  subHeading: '',
+  mainHeading: 'Crop JPG, PNG or GIF For Free',
+  subHeading: 'Crop Photos Online',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -39,13 +41,26 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
-    'cron expression',
-    'cron expression generator',
-    'cron generator',
-    'cron online',
-    'cron expression builder',
+    'photo cutting',
+    'crop photo',
+    'crop image online',
+    'crop picture online',
+    'crop and image',
   ],
-  icons: [],
+  icons: [
+    {
+      iconName: 'image-icon',
+      iconRelativeUrl: 'image-icon.svg',
+    },
+  ],
+  relatedTools: [
+    {
+      applicationId: 'imagecompress',
+      displayText: AppDisplayNames.IMAGE_COMPRESSOR,
+      iconName: 'image-icon',
+      navigateUrl: '/tools/image-compress',
+    },
+  ],
 };
 
 export const descriptionData: DescriptionBlock[] = [];
