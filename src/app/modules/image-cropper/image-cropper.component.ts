@@ -8,11 +8,15 @@ import {
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { BaseFileData, FileDataType } from 'src/app/@types/file';
+import { importScript } from 'src/app/service/ffmpeg/lib/util';
+import { FileService } from 'src/app/service/file/file.service';
+import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/image-cropper/config';
 import { v4 } from 'uuid';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-image-cropper',
@@ -27,18 +31,27 @@ export class ImageCropperComponent {
 
   fileList: BaseFileData[] = [];
 
+  currentFile: BaseFileData | undefined = undefined;
+
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
   constructor(
     private zoneRef: NgZone,
-    private renderer: Renderer2
-  ) {}
+    private renderer: Renderer2,
+    private fileService: FileService
+  ) {
+    importScript(
+      'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js'
+    );
+  }
 
   selectFiles(event: any) {
     for (const file of event.target.files) {
       this.addFileToCrop(file);
     }
+    // set first file as current file
+    this.currentFile = this.fileList[0];
   }
 
   openFileDialog() {
@@ -65,6 +78,9 @@ export class ImageCropperComponent {
       // Use DataTransfer interface to access the file(s)
       [...event.dataTransfer.files].forEach(file => this.addFileToCrop(file));
     }
+
+    // set first file as current file
+    this.currentFile = this.fileList[0];
   }
 
   /**
@@ -77,12 +93,45 @@ export class ImageCropperComponent {
   }
 
   addFileToCrop(file: File) {
-    this.fileList.push({
+    const fileData: BaseFileData = {
       id: v4(),
       file: file,
-      inProgress: false,
       type: FileDataType.IMAGE,
       name: file.name,
-    });
+    };
+
+    this.fileList.push(fileData);
+    this.fileService.readFileAsURL(
+      fileData.id,
+      file,
+      this.readImageDataURI.bind(this)
+    );
+  }
+
+  selectCurrentFile(id: string) {
+    const fileData = this.fileList.find(fileData => fileData.id === id);
+    this.currentFile = fileData;
+    if (this.currentFile?.dataURI === undefined) {
+      this.fileService.readFileAsURL(
+        id,
+        fileData!.file,
+        this.readImageDataURI.bind(this)
+      );
+    }
+  }
+
+  readImageDataURI(id: string, imageDataURI: any) {
+    const fileData = this.fileList.find(fileData => fileData.id === id);
+    fileData!.dataURI = imageDataURI;
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    LogUtils.info(event);
+  }
+
+  loadImageFailed() {
+    LogUtils.error(
+      `cropper image load failed for image with id: ${this.currentFile?.id} and name: ${this.currentFile?.name}`
+    );
   }
 }

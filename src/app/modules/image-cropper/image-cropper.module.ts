@@ -5,6 +5,7 @@ import { ImageCropperRoutingModule } from './image-cropper-routing.module';
 import { ImageCropperComponent } from './image-cropper.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ImageCropperModule as CropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [ImageCropperComponent],
@@ -13,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
     ImageCropperRoutingModule,
     MatIconModule,
     MatButtonModule,
+    CropperModule,
   ],
 })
 export class ImageCropperModule {}

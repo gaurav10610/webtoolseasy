@@ -29,9 +29,28 @@
     </button>
   </div>
 
+  <div *ngIf="currentFile">
+    <image-cropper
+      [imageFile]="currentFile.file"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 3"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (loadImageFailed)="loadImageFailed()"></image-cropper>
+  </div>
+
   <div
-    class="flex-display flex-column-flow flex-center flex-align-center border-grey full-width flex-gap-medium file-drop-area"
+    class="flex-display flex-row-flow flex-align-center full-width flex-gap-large auto-scroll"
     *ngIf="fileList.length > 0">
-    Selected Image Section
+    <div
+      class="flex-display flex-column-flow flex-align-center border-grey thumbnail-container pointer-cursor full-height flex-gap-medium"
+      *ngFor="let imageFile of fileList"
+      (click)="selectCurrentFile(imageFile.id)">
+      <img
+        src="{{ imageFile?.dataURI }}"
+        alt="selected image for crop"
+        class="thumbnail border-grey" />
+      <span>{{ imageFile?.name }}</span>
+    </div>
   </div>
 </div>

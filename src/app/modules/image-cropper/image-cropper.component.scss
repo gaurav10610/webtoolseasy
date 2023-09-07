@@ -3,3 +3,17 @@
   padding-top: 30px;
   padding-bottom: 30px;
 }
+
+.thumbnail {
+  height: 150px;
+  width: 150px;
+}
+
+.thumbnail-container {
+  padding: 10px;
+  border-radius: 10px;
+  min-width: 200px;
+  max-width: 200px;
+  min-height: 200px;
+  max-height: 200px;
+}

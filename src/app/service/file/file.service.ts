@@ -4,8 +4,6 @@ import { Injectable, Renderer2 } from '@angular/core';
   providedIn: 'root',
 })
 export class FileService {
-  constructor() {}
-
   /**
    * read file contents as text
    * @param file
@@ -15,6 +13,17 @@ export class FileService {
     const fileReader: FileReader = new FileReader();
     fileReader.onload = () => callback(fileReader.result);
     fileReader.readAsText(file);
+  }
+
+  /**
+   * read file contents as text
+   * @param file
+   * @param callback
+   */
+  async readFileAsURL(id: string, file: File, callback: any): Promise<void> {
+    const fileReader: FileReader = new FileReader();
+    fileReader.onload = () => callback(id, fileReader.result);
+    fileReader.readAsDataURL(file);
   }
 
   /**
