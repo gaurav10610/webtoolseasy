@@ -17,3 +17,13 @@
   min-height: 200px;
   max-height: 200px;
 }
+
+.cropper-container {
+  height: 500px;
+  justify-content: space-between;
+}
+
+.cropped-box {
+  width: 45%;
+  border-radius: 10px;
+}

@@ -29,28 +29,56 @@
     </button>
   </div>
 
-  <div *ngIf="currentFile">
-    <image-cropper
-      [imageFile]="currentFile.file"
-      [maintainAspectRatio]="true"
-      [aspectRatio]="4 / 3"
-      format="png"
-      (imageCropped)="imageCropped($event)"
-      (loadImageFailed)="loadImageFailed()"></image-cropper>
+  <div
+    class="flex-display flex-column-flow full-width flex-gap-medium"
+    *ngIf="fileList.length > 0">
+    <span class="header-font bold-text">Uploaded Images</span>
+    <div
+      class="flex-display flex-row-flow flex-align-center full-width flex-gap-large auto-scroll">
+      <div
+        class="flex-display flex-column-flow flex-align-center border-grey thumbnail-container pointer-cursor full-height flex-gap-medium"
+        *ngFor="let imageFile of fileList"
+        (click)="selectCurrentFile(imageFile.id)">
+        <img
+          src="{{ imageFile?.dataURI }}"
+          alt="selected image for crop"
+          class="thumbnail border-grey" />
+        <span>{{ imageFile?.name }}</span>
+      </div>
+    </div>
   </div>
 
   <div
-    class="flex-display flex-row-flow flex-align-center full-width flex-gap-large auto-scroll"
-    *ngIf="fileList.length > 0">
+    *ngIf="currentFile"
+    class="flex-display flex-row-flow flex-align-center full-width cropper-container">
     <div
-      class="flex-display flex-column-flow flex-align-center border-grey thumbnail-container pointer-cursor full-height flex-gap-medium"
-      *ngFor="let imageFile of fileList"
-      (click)="selectCurrentFile(imageFile.id)">
+      class="flex-display flex-column-flow cropped-box border-grey flex-gap-medium"
+      #imageCropper
+      style="padding: 5px">
+      <image-cropper
+        [imageFile]="currentFile.file"
+        [maintainAspectRatio]="false"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        (loadImageFailed)="loadImageFailed()"
+        (cropperReady)="cropperReady()"
+        style="max-height: 100%; max-width: 100%"></image-cropper>
+    </div>
+
+    <div
+      #croppedImageContainer
+      class="flex-display flex-column-flow cropped-box border-grey flex-gap-medium"
+      style="
+        padding-top: 13px;
+        padding-bottom: 13px;
+        padding-left: 5px;
+        padding-right: 5px;
+      ">
       <img
-        src="{{ imageFile?.dataURI }}"
-        alt="selected image for crop"
-        class="thumbnail border-grey" />
-      <span>{{ imageFile?.name }}</span>
+        #croppedImageTag
+        src="{{ croppedImage }}"
+        alt="cropped image"
+        style="max-width: 100%" />
     </div>
   </div>
 </div>
