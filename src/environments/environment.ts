@@ -13,6 +13,8 @@ export const environment = {
   imageCompressionLibUrl:
     'https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js',
   baseIconsPathUrl: 'http://localhost:4200/assets/images/icons/',
+  hammerJSPathUrl:
+    'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js',
 };
 
 /*

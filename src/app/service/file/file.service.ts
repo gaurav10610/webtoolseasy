@@ -46,4 +46,16 @@ export class FileService {
     renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
   }
+
+  getFormattedFileName(fileName: string): string {
+    return fileName.replace(/ /g, '_');
+  }
+
+  getFileExtension(formattedName: string): string {
+    return formattedName.split('.').pop()!;
+  }
+
+  getPlainFileName(fileName: string): string {
+    return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
+  }
 }

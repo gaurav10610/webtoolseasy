@@ -1,4 +1,4 @@
-<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+<div class="flex-display flex-column-flow flex-align-center flex-gap-xlarge">
   <!-- file imput -->
   <input
     #inputFiles
@@ -25,40 +25,64 @@
       color="primary"
       (click)="openFileDialog()"
       matTooltip="select images to compress">
-      <mat-icon>file_upload</mat-icon> Browse for files
+      <mat-icon>file_upload</mat-icon>Browse For Files
     </button>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow full-width"
+    style="justify-content: end"
+    *ngIf="fileList.length > 0">
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openFileDialog()"
+      matTooltip="select images to compress">
+      <mat-icon>file_upload</mat-icon>Upload More Images
+    </button>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow full-width"
+    *ngIf="fileList.length > 0">
+    <span class="header-font" style="font-size: large">Uploaded Images</span>
   </div>
 
   <div
     class="flex-display flex-column-flow full-width flex-gap-medium"
     *ngIf="fileList.length > 0">
-    <span class="header-font bold-text">Uploaded Images</span>
     <div
       class="flex-display flex-row-flow flex-align-center full-width flex-gap-large auto-scroll">
       <div
-        class="flex-display flex-column-flow flex-align-center border-grey thumbnail-container pointer-cursor full-height flex-gap-medium"
+        class="flex-display flex-column-flow flex-center border-grey shadow-grey thumbnail-container pointer-cursor"
         *ngFor="let imageFile of fileList"
         (click)="selectCurrentFile(imageFile.id)">
         <img
+          mat-card-image
           src="{{ imageFile?.dataURI }}"
-          alt="selected image for crop"
-          class="thumbnail border-grey" />
-        <span>{{ imageFile?.name }}</span>
+          alt="selected image for crop" />
+        <div class="full-width flex-display flex-row-flow flex-center">
+          <span>{{ imageFile?.name }}</span>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="flex-display flex-row-flow full-width" *ngIf="currentFile">
+    <span class="header-font" style="font-size: large">Crop & Preview</span>
   </div>
 
   <div
     *ngIf="currentFile"
     class="flex-display flex-row-flow flex-align-center full-width cropper-container">
     <div
-      class="flex-display flex-column-flow cropped-box border-grey flex-gap-medium"
+      class="flex-display flex-column-flow flex-center cropped-box border-grey"
       #imageCropper
       style="padding: 5px">
       <image-cropper
         [imageFile]="currentFile.file"
         [maintainAspectRatio]="false"
-        format="png"
+        [format]="outputFormat"
         (imageCropped)="imageCropped($event)"
         (loadImageFailed)="loadImageFailed()"
         (cropperReady)="cropperReady()"
@@ -67,7 +91,7 @@
 
     <div
       #croppedImageContainer
-      class="flex-display flex-column-flow cropped-box border-grey flex-gap-medium"
+      class="flex-display flex-column-flow cropped-box border-grey"
       style="
         padding-top: 13px;
         padding-bottom: 13px;
@@ -80,5 +104,18 @@
         alt="cropped image"
         style="max-width: 100%" />
     </div>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow full-width"
+    style="justify-content: end"
+    *ngIf="currentFile">
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="downloadCroppedImage()"
+      matTooltip="select images to compress">
+      <mat-icon>file_download</mat-icon>Download Image
+    </button>
   </div>
 </div>

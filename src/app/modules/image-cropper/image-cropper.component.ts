@@ -10,7 +10,9 @@ import {
   descriptionData,
 } from 'src/environments/component-config/image-cropper/config';
 import { v4 } from 'uuid';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { ImageCroppedEvent, OutputFormat } from 'ngx-image-cropper';
+import { environment } from 'src/environments/environment';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-image-cropper',
@@ -38,18 +40,18 @@ export class ImageCropperComponent {
   @ViewChild('croppedImageContainer', { static: false })
   croppedImageContainer!: ElementRef;
 
-  @ViewChild('croppedImageTag', { static: false })
-  croppedImageTag!: ElementRef;
-
   cropperApectRatio: number = 4 / 3;
+
+  outputFormat: OutputFormat = 'png'; // supported values - png, jpeg, webp, bmp, ico
 
   constructor(
     private renderer: Renderer2,
-    private fileService: FileService
+    private fileService: FileService,
+    private platformMetadataService: PlatformMetadataService
   ) {
-    importScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js'
-    );
+    if (platformMetadataService.isPlatformBrowser) {
+      importScript(environment.hammerJSPathUrl);
+    }
   }
 
   selectFiles(event: any) {
@@ -156,5 +158,20 @@ export class ImageCropperComponent {
     LogUtils.error(
       `cropper image load failed for image with id: ${this.currentFile?.id} and name: ${this.currentFile?.name}`
     );
+  }
+
+  async downloadCroppedImage() {
+    const formattedFileName = this.fileService.getFormattedFileName(
+      this.currentFile!.name
+    );
+    const plainFileName = this.fileService.getPlainFileName(formattedFileName);
+    const downloadAnchor = this.renderer.createElement('a');
+    this.renderer.setProperty(downloadAnchor, 'href', this.croppedImage);
+    this.renderer.setProperty(
+      downloadAnchor,
+      'download',
+      `${plainFileName}.${this.outputFormat}`
+    );
+    downloadAnchor.click();
   }
 }

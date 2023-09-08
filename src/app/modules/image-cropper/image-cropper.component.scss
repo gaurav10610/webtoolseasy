@@ -4,26 +4,31 @@
   padding-bottom: 30px;
 }
 
-.thumbnail {
-  height: 150px;
-  width: 150px;
-}
-
 .thumbnail-container {
-  padding: 10px;
-  border-radius: 10px;
-  min-width: 200px;
-  max-width: 200px;
-  min-height: 200px;
-  max-height: 200px;
-}
-
-.cropper-container {
-  height: 500px;
-  justify-content: space-between;
+  width: 198px;
+  height: 244px;
+  padding: 5px;
 }
 
 .cropped-box {
   width: 45%;
   border-radius: 10px;
+}
+
+@media screen and (min-width: 735px) {
+  .cropper-container {
+    max-height: 500px;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .cropper-container {
+    max-height: 800px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .cropped-box {
+    width: 100%;
+  }
 }
