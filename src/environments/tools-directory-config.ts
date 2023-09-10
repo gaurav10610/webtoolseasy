@@ -16,6 +16,7 @@ export enum AppDisplayNames {
   BASE64_ENCODE = 'Base64 Encode',
   BASE64_DECODE = 'Base64 Decode',
   CRON_GENERATOR = 'Cron Expression Generator',
+  IMAGE_CROPPER = 'Image Cropper',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -58,7 +59,7 @@ export const appDisplayConfig: AppDisplayConfig[] = [
   {
     applicationId: 'imagecompress',
     displayText: AppDisplayNames.IMAGE_COMPRESSOR,
-    iconName: 'image-compress-icon',
+    iconName: 'image-icon',
     navigateUrl: '/tools/image-compress',
   },
   {
@@ -108,5 +109,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.CRON_GENERATOR,
     iconName: 'cron-icon',
     navigateUrl: '/tools/cron-expression',
+  },
+  {
+    applicationId: 'imagecropper',
+    displayText: AppDisplayNames.IMAGE_CROPPER,
+    iconName: 'image-icon',
+    navigateUrl: '/tools/crop-image',
   },
 ];

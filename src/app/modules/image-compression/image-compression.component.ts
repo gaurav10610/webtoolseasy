@@ -45,9 +45,6 @@ export class ImageCompressionComponent implements OnDestroy {
   isDownloadAllActive: boolean = false;
   activeDialog: MatDialogRef<any> | undefined;
 
-  /**
-   * valid image formats
-   */
   validImageFormats: string = '.jpg,.jpeg,.png,.webp,.bmp';
 
   applicationConfig: ApplicationConfig = componentConfig;

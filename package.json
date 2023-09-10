@@ -12,7 +12,8 @@
     "build:serve": "npm run build:ssr && npm run serve:ssr",
     "serve:ssr": "PORT=9898 nodemon dist/webtoolseasy/server/main.js",
     "build:ssr": "ng build && ng run webtoolseasy:server",
-    "prerender": "ng run webtoolseasy:prerender"
+    "prerender": "ng run webtoolseasy:prerender",
+    "create:app": "ng g module --routing=true $name && ng g component --skip-import $name && APP_NAME=$name node scripts/createApp.js"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +37,7 @@
     "monaco-editor": "0.41.0",
     "ngx-cron-editor": "0.7.9",
     "ngx-google-analytics": "14.0.1",
+    "ngx-image-cropper": "7.0.2",
     "ngx-json-viewer": "3.2.1",
     "ngx-monaco-editor-v2": "16.0.1",
     "ngx-sharebuttons": "13.0.0",

@@ -51,8 +51,8 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'jwt-icon.svg',
     },
     {
-      iconName: 'image-compress-icon',
-      iconRelativeUrl: 'image-compress-icon.svg',
+      iconName: 'image-icon',
+      iconRelativeUrl: 'image-icon.svg',
     },
     {
       iconName: 'play-icon',

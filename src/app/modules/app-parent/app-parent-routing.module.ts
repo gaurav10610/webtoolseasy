@@ -115,6 +115,13 @@ const routes: Routes = [
             m => m.CronGeneratorModule
           ),
       },
+      {
+        path: 'crop-image',
+        loadChildren: () =>
+          import('../image-cropper/image-cropper.module').then(
+            m => m.ImageCropperModule
+          ),
+      },
     ],
   },
 ];
