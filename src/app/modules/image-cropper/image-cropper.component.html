@@ -45,7 +45,7 @@
   <div
     class="flex-display flex-row-flow full-width"
     *ngIf="fileList.length > 0">
-    <span class="header-font" style="font-size: large">Uploaded Images</span>
+    <span style="font-size: large">Uploaded Images</span>
   </div>
 
   <div
@@ -69,16 +69,15 @@
   </div>
 
   <div class="flex-display flex-row-flow full-width" *ngIf="currentFile">
-    <span class="header-font" style="font-size: large">Crop & Preview</span>
+    <span style="font-size: large">Crop & Preview</span>
   </div>
 
   <div
-    *ngIf="currentFile"
+    *ngIf="currentFile && platformMetadataService.isPlatformBrowser"
     class="flex-display flex-row-flow flex-align-center full-width cropper-container">
     <div
       class="flex-display flex-column-flow flex-center cropped-box border-grey"
-      #imageCropper
-      style="padding: 5px">
+      #imageCropper>
       <image-cropper
         [imageFile]="currentFile.file"
         [maintainAspectRatio]="false"
@@ -91,25 +90,31 @@
 
     <div
       #croppedImageContainer
-      class="flex-display flex-column-flow cropped-box border-grey"
-      style="
-        padding-top: 13px;
-        padding-bottom: 13px;
-        padding-left: 5px;
-        padding-right: 5px;
-      ">
-      <img
-        #croppedImageTag
-        src="{{ croppedImage }}"
-        alt="cropped image"
-        style="max-width: 100%" />
+      class="flex-display flex-column-flow cropped-box border-grey">
+      <img #croppedImageTag src="{{ croppedImage }}" alt="cropped image" />
     </div>
   </div>
 
   <div
-    class="flex-display flex-row-flow full-width"
-    style="justify-content: end"
-    *ngIf="currentFile">
+    class="flex-display flex-row-flow full-width flex-align-center flex-gap-medium"
+    style="justify-content: end; margin-top: 20px"
+    *ngIf="currentFile && platformMetadataService.isPlatformBrowser">
+    <mat-form-field
+      appearance="outline"
+      color="primary"
+      style="margin-bottom: -1.25em">
+      <mat-label>Output Format</mat-label>
+      <mat-select
+        disableRipple
+        value="png"
+        (valueChange)="onOutputFormatChange($event)">
+        <mat-option value="png">PNG</mat-option>
+        <mat-option value="jpeg">JPG</mat-option>
+        <mat-option value="webp">WEBP</mat-option>
+        <mat-option value="bmp">BMP</mat-option>
+        <mat-option value="ico">ICO</mat-option>
+      </mat-select>
+    </mat-form-field>
     <button
       mat-stroked-button
       color="primary"

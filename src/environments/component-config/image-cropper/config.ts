@@ -6,11 +6,11 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/crop-image';
 const pageTitle = 'Crop Images Online For Free | Crop Photo | Crop JPG, PNG';
 const pageDescription =
-  'Crop your images/photos online for free. Crop your JPG, PNG or GIF images by dragging the corners of a crop box.';
+  'Crop your images/photos online for free. Crop your JPG, PNG, WEBP, BMP or GIF images by dragging the corners of a crop box.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-croppper.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Crop JPG, PNG or GIF For Free',
+  mainHeading: 'Crop JPG, PNG, WEBP, BMP For Free',
   subHeading: 'Crop Photos Online',
   navigationUrl,
   pageTitle,
@@ -43,6 +43,7 @@ export const componentConfig: ApplicationConfig = {
   tags: [
     'photo cutting',
     'crop photo',
+    'crop image',
     'crop image online',
     'crop picture online',
     'crop and image',
@@ -63,4 +64,25 @@ export const componentConfig: ApplicationConfig = {
   ],
 };
 
-export const descriptionData: DescriptionBlock[] = [];
+export const descriptionData: DescriptionBlock[] = [
+  {
+    heading: 'How to Crop Image/Photo using Image Cropper Tool?',
+    listData: [],
+  },
+  {
+    heading: 'What is Image Cropping?',
+    listData: [],
+  },
+  {
+    heading: 'Why would you want to Crop Images/Photos?',
+    listData: [],
+  },
+  {
+    heading: 'Key Features',
+    listData: [],
+  },
+  {
+    heading: 'References',
+    links: [],
+  },
+];

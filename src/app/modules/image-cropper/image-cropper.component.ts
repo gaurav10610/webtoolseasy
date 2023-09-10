@@ -40,14 +40,15 @@ export class ImageCropperComponent {
   @ViewChild('croppedImageContainer', { static: false })
   croppedImageContainer!: ElementRef;
 
-  cropperApectRatio: number = 4 / 3;
+  @ViewChild('croppedImageTag', { static: false })
+  croppedImageTag!: ElementRef;
 
   outputFormat: OutputFormat = 'png'; // supported values - png, jpeg, webp, bmp, ico
 
   constructor(
     private renderer: Renderer2,
     private fileService: FileService,
-    private platformMetadataService: PlatformMetadataService
+    public platformMetadataService: PlatformMetadataService
   ) {
     if (platformMetadataService.isPlatformBrowser) {
       importScript(environment.hammerJSPathUrl);
@@ -143,6 +144,18 @@ export class ImageCropperComponent {
       'max-height',
       `${height}px`
     );
+
+    this.renderer.setStyle(
+      this.croppedImageTag.nativeElement,
+      'max-width',
+      `${width}px`
+    );
+
+    this.renderer.setStyle(
+      this.croppedImageTag.nativeElement,
+      'max-height',
+      `${height}px`
+    );
   }
 
   readImageDataURI(id: string, imageDataURI: any) {
@@ -173,5 +186,9 @@ export class ImageCropperComponent {
       `${plainFileName}.${this.outputFormat}`
     );
     downloadAnchor.click();
+  }
+
+  onOutputFormatChange(event: string) {
+    this.outputFormat = <OutputFormat>event;
   }
 }
