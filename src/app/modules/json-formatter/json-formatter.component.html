@@ -11,8 +11,7 @@
           *ngIf="platformMetadataService.isPlatformBrowser"
           style="height: 100%"
           [options]="editorOptions"
-          (input)="onRawCodeChange()"
-          (paste)="onRawCodeChange()"
+          (ngModelChange)="onRawCodeChange($event)"
           [(ngModel)]="rawCode"></ngx-monaco-editor>
       </div>
     </div>

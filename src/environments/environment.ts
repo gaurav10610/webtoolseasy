@@ -10,6 +10,11 @@ export const environment = {
   ffmpegBaseUrl: 'https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm',
   screenshotsBaseUrl: 'http://localhost:4200/assets/images/screenshots',
   queryHash: 693289072854,
+  imageCompressionLibUrl:
+    'https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js',
+  baseIconsPathUrl: 'http://localhost:4200/assets/images/icons/',
+  hammerJSPathUrl:
+    'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js',
 };
 
 /*

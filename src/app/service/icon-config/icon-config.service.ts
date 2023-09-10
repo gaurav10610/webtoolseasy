@@ -8,9 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class IconConfigService {
-  // svgIcons: Map<string, boolean> = new Map();
-
-  async loadCustomIcons(
+  loadCustomIcons(
     icons: IconConfig[],
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer
@@ -18,15 +16,20 @@ export class IconConfigService {
     /**
      * load only those icons which are not already registered
      */
-    icons
-      // .filter(iconConfig => !this.svgIcons.has(iconConfig.iconName))
-      .forEach(iconConfig => {
-        matIconRegistry.addSvgIcon(
-          iconConfig.iconName,
-          domSanitizer.bypassSecurityTrustResourceUrl(`
-          ${environment.hostname}/assets/images/icons/${iconConfig.iconRelativeUrl}?${environment.queryHash}`)
-        );
-        // this.svgIcons.set(iconConfig.iconName, true);
-      });
+    icons.forEach(iconConfig => {
+      this.loadCustomIcon(iconConfig, matIconRegistry, domSanitizer);
+    });
+  }
+
+  async loadCustomIcon(
+    iconConfig: IconConfig,
+    matIconRegistry: MatIconRegistry,
+    domSanitizer: DomSanitizer
+  ) {
+    matIconRegistry.addSvgIcon(
+      iconConfig.iconName,
+      domSanitizer.bypassSecurityTrustResourceUrl(`
+        ${environment.baseIconsPathUrl}${iconConfig.iconRelativeUrl}?${environment.queryHash}`)
+    );
   }
 }
