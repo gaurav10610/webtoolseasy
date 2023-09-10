@@ -9,10 +9,14 @@ import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/image-cropper/config';
-import { v4 } from 'uuid';
-import { ImageCroppedEvent, OutputFormat } from 'ngx-image-cropper';
+import {
+  ImageCroppedEvent,
+  OutputFormat,
+  ImageCropperComponent as CropperComponent,
+} from 'ngx-image-cropper';
 import { environment } from 'src/environments/environment';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ApplicationUtilService } from 'src/app/service/util/application-util.service';
 
 @Component({
   selector: 'app-image-cropper',
@@ -34,8 +38,11 @@ export class ImageCropperComponent {
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
+  @ViewChild('imageCropperContainer', { static: false })
+  imageCropperContainer!: ElementRef;
+
   @ViewChild('imageCropper', { static: false })
-  imageCropper!: ElementRef;
+  imageCropper!: CropperComponent;
 
   @ViewChild('croppedImageContainer', { static: false })
   croppedImageContainer!: ElementRef;
@@ -48,7 +55,8 @@ export class ImageCropperComponent {
   constructor(
     private renderer: Renderer2,
     private fileService: FileService,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetadataService: PlatformMetadataService,
+    private appUtilService: ApplicationUtilService
   ) {
     if (platformMetadataService.isPlatformBrowser) {
       importScript(environment.hammerJSPathUrl);
@@ -103,7 +111,7 @@ export class ImageCropperComponent {
 
   addFileToCrop(file: File) {
     const fileData: BaseFileData = {
-      id: v4(),
+      id: this.appUtilService.generateRandomId(),
       file: file,
       type: FileDataType.IMAGE,
       name: file.name,
@@ -129,32 +137,32 @@ export class ImageCropperComponent {
     }
   }
 
+  /**
+   * handle image cropper ready event
+   */
   cropperReady() {
-    const width = this.imageCropper.nativeElement.offsetWidth;
-    const height = this.imageCropper.nativeElement.offsetHeight;
-
     this.renderer.setStyle(
       this.croppedImageContainer.nativeElement,
       'max-width',
-      `${width}px`
+      `${this.imageCropperContainer.nativeElement.offsetWidth}px`
     );
 
     this.renderer.setStyle(
       this.croppedImageContainer.nativeElement,
       'max-height',
-      `${height}px`
+      `${this.imageCropperContainer.nativeElement.offsetHeight}px`
     );
 
     this.renderer.setStyle(
       this.croppedImageTag.nativeElement,
       'max-width',
-      `${width}px`
+      `${this.imageCropper.maxSize.width}px`
     );
 
     this.renderer.setStyle(
       this.croppedImageTag.nativeElement,
       'max-height',
-      `${height}px`
+      `${this.imageCropper.maxSize.height}px`
     );
   }
 

@@ -61,7 +61,9 @@
           mat-card-image
           src="{{ imageFile?.dataURI }}"
           alt="selected image for crop" />
-        <div class="full-width flex-display flex-row-flow flex-center">
+        <div
+          class="full-width flex-display flex-row-flow flex-center"
+          style="overflow: hidden">
           <span>{{ imageFile?.name }}</span>
         </div>
       </div>
@@ -76,9 +78,10 @@
     *ngIf="currentFile && platformMetadataService.isPlatformBrowser"
     class="flex-display flex-row-flow flex-align-center full-width cropper-container">
     <div
-      class="flex-display flex-column-flow flex-center cropped-box border-grey"
-      #imageCropper>
+      #imageCropperContainer
+      class="flex-display flex-column-flow flex-center cropped-box border-grey">
       <image-cropper
+        #imageCropper
         [imageFile]="currentFile.file"
         [maintainAspectRatio]="false"
         [format]="outputFormat"
@@ -90,7 +93,7 @@
 
     <div
       #croppedImageContainer
-      class="flex-display flex-column-flow cropped-box border-grey">
+      class="flex-display flex-column-flow flex-center flex-align-center cropped-box border-grey">
       <img #croppedImageTag src="{{ croppedImage }}" alt="cropped image" />
     </div>
   </div>
