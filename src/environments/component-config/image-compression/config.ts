@@ -76,6 +76,10 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'play-icon',
       iconRelativeUrl: 'play-icon.svg',
     },
+    {
+      iconName: 'image-icon',
+      iconRelativeUrl: 'image-icon.svg',
+    },
   ],
 };
 
