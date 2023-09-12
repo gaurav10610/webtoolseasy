@@ -4,6 +4,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { componentConfig } from 'src/environments/component-config/home/config';
 
 @Component({
@@ -19,7 +20,8 @@ export class HomeComponent {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
+    private iconConfigService: IconConfigService,
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.iconConfigService.loadCustomIcons(
       componentConfig.icons,

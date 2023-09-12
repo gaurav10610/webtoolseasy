@@ -55,7 +55,7 @@ export class ImageCompressionComponent implements OnDestroy {
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
-    private platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
@@ -65,7 +65,7 @@ export class ImageCompressionComponent implements OnDestroy {
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
 
-    if (platformMetadataService.isPlatformBrowser) {
+    if (platformMetaDataService.isPlatformBrowser) {
       importScript(environment.imageCompressionLibUrl);
     }
   }

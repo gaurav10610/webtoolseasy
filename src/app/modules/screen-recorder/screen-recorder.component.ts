@@ -83,7 +83,7 @@ export class ScreenRecorderComponent implements OnDestroy {
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private platformMetaDataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     /**
      * screen resize handler

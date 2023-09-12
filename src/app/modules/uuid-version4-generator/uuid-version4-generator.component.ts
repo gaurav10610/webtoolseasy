@@ -30,9 +30,9 @@ export class UuidVersion4GeneratorComponent {
     private clipboard: Clipboard,
     private fileService: FileService,
     private renderer: Renderer2,
-    private platformMetadataService: PlatformMetadataService
+    private platformMetaDataService: PlatformMetadataService
   ) {
-    if (platformMetadataService.isPlatformBrowser) {
+    if (platformMetaDataService.isPlatformBrowser) {
       this.currentUUID = crypto.randomUUID();
     }
   }

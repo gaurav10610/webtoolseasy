@@ -32,7 +32,7 @@ export class JsonFormatterComponent {
 
   constructor(
     private clipboard: Clipboard,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.formattedCode = JSON.stringify(
       JSON.parse(this.rawCode),

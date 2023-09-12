@@ -2,7 +2,9 @@
   class="flex-display flex-column-flow flex-align-center full-width flex-gap-large">
   <div
     class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
-    <mat-icon svgIcon="screen-icon"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="screen-icon"></mat-icon>
   </div>
 
   <span *ngIf="!isSupported" class="error"

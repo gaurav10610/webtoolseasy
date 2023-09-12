@@ -75,7 +75,7 @@
   </div>
 
   <div
-    *ngIf="currentFile && platformMetadataService.isPlatformBrowser"
+    *ngIf="currentFile && platformMetaDataService.isPlatformBrowser"
     class="flex-display flex-row-flow flex-align-center full-width cropper-container">
     <div
       #imageCropperContainer
@@ -101,7 +101,7 @@
   <div
     class="flex-display flex-row-flow full-width flex-align-center flex-gap-medium"
     style="justify-content: end; margin-top: 20px"
-    *ngIf="currentFile && platformMetadataService.isPlatformBrowser">
+    *ngIf="currentFile && platformMetaDataService.isPlatformBrowser">
     <mat-form-field
       appearance="outline"
       color="primary"

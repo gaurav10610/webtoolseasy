@@ -8,27 +8,35 @@
     aria-label="share linkedin button"
     shareButton="linkedin"
     url="{{ appContextService.appUrl }}">
-    <mat-icon svgIcon="share-linkedin"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="share-linkedin"></mat-icon>
   </button>
   <button
     mat-icon-button
     aria-label="share facebook button"
     shareButton="facebook"
     url="{{ appContextService.appUrl }}">
-    <mat-icon svgIcon="share-fb"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="share-fb"></mat-icon>
   </button>
   <button
     mat-icon-button
     aria-label="share twitter button"
     shareButton="twitter"
     url="{{ appContextService.appUrl }}">
-    <mat-icon svgIcon="share-twitter"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="share-twitter"></mat-icon>
   </button>
   <button
     mat-icon-button
     aria-label="share copy link button"
     shareButton="copy"
     url="{{ appContextService.appUrl }}">
-    <mat-icon svgIcon="share-copy"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="share-copy"></mat-icon>
   </button>
 </div>

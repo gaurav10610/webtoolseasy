@@ -8,6 +8,7 @@
     <div
       class="flex-display flex-column-flow flex-center flex-align-center app-card flex-gap-medium pointer-cursor">
       <mat-icon
+        *ngIf="platformMetaDataService.isPlatformBrowser"
         svgIcon="{{ application.iconName }}"
         class="app-icon"></mat-icon>
       <a

@@ -55,10 +55,10 @@ export class ImageCropperComponent {
   constructor(
     private renderer: Renderer2,
     private fileService: FileService,
-    public platformMetadataService: PlatformMetadataService,
+    public platformMetaDataService: PlatformMetadataService,
     private appUtilService: ApplicationUtilService
   ) {
-    if (platformMetadataService.isPlatformBrowser) {
+    if (platformMetaDataService.isPlatformBrowser) {
       importScript(environment.hammerJSPathUrl);
     }
   }

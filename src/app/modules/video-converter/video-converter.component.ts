@@ -44,6 +44,7 @@ import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-video-converter',
@@ -83,7 +84,8 @@ export class VideoConverterComponent implements OnDestroy {
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private ffmpegService: FfmpegService
+    private ffmpegService: FfmpegService,
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])

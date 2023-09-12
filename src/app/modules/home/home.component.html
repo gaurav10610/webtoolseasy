@@ -5,7 +5,9 @@
   <div class="flex-display flex-column-flow flex-align-center flex-center">
     <div
       class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
-      <mat-icon svgIcon="app-icon"></mat-icon>
+      <mat-icon
+        *ngIf="platformMetaDataService.isPlatformBrowser"
+        svgIcon="app-icon"></mat-icon>
     </div>
     <h1
       style="

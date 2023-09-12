@@ -8,7 +8,7 @@
       <div class="full-height full-width">
         <!-- unformatted code editor -->
         <ngx-monaco-editor
-          *ngIf="platformMetadataService.isPlatformBrowser"
+          *ngIf="platformMetaDataService.isPlatformBrowser"
           style="height: 100%"
           [options]="editorOptions"
           (ngModelChange)="onRawCodeChange($event)"
@@ -23,7 +23,7 @@
       <div class="full-height full-width">
         <!-- formatted code editor -->
         <ngx-monaco-editor
-          *ngIf="platformMetadataService.isPlatformBrowser"
+          *ngIf="platformMetaDataService.isPlatformBrowser"
           style="height: 100%"
           [options]="editorOptions"
           [(ngModel)]="formattedCode"></ngx-monaco-editor>

@@ -33,7 +33,7 @@ export class CssFormatterComponent {
 
   constructor(
     private clipboard: Clipboard,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.formattedCode = css_beautify(this.rawCode);
   }

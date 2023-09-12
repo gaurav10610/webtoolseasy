@@ -75,6 +75,7 @@
         class="flex-display flex-row-flow flex-align-center flex-gap-large"
         style="margin: 10px">
         <mat-icon
+          *ngIf="platformMetaDataService.isPlatformBrowser"
           svgIcon="video-convert-icon"
           class="app-icon pointer-cursor"
           style="margin-left: 10px"></mat-icon>
@@ -146,21 +147,30 @@
           <mat-icon
             svgIcon="settings-icon"
             class="pointer-cursor"
-            *ngIf="isMobile && !file.inProgress"
+            *ngIf="
+              platformMetaDataService.isPlatformBrowser &&
+              isMobile &&
+              !file.inProgress
+            "
             matTooltip="change conversion settings"
             (click)="openSettings(file)"></mat-icon>
           <mat-icon
             svgIcon="play-icon"
             class="pointer-cursor"
             *ngIf="
-              !file.inProgress && !file.convertedFileData.has(file.targetFormat)
+              platformMetaDataService.isPlatformBrowser &&
+              !file.inProgress &&
+              !file.convertedFileData.has(file.targetFormat)
             "
             (click)="convertVideoFile(file)"
             matTooltip="convert video file"></mat-icon>
           <mat-icon
             svgIcon="download-icon"
             class="pointer-cursor"
-            *ngIf="file.convertedFileData.has(file.targetFormat)"
+            *ngIf="
+              platformMetaDataService.isPlatformBrowser &&
+              file.convertedFileData.has(file.targetFormat)
+            "
             (click)="downloadVideo(file)"
             matTooltip="download converted video"></mat-icon>
           <mat-icon
