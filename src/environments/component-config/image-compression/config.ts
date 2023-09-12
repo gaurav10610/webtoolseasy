@@ -3,14 +3,14 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/image-compress';
-const pageTitle = 'Best Online Image Compressor | Image File Size Reducer';
+const pageTitle = 'Photo Size Reducer | Image Compress | Pic Size Reducer';
 const pageDescription =
-  'Our Best Online Image Compression tool lets you compress your images to reduce file storage size for free. Supports a wide range of image file formats i.e JPEG, PNG, WEBBP and BMP.';
+  'Photo size reducer tool lets you compress images or reduce resolution of image. Compress you pictures for free. Compress JPG, JPEG, PNG, WEBP & BMP Images.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Image Compressor',
-  subHeading: 'Compress JPEG, PNG, WEBP & BMP Images for free',
+  subHeading: 'Compress JPEG, PNG, WEBP & BMP Images For Free',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -40,12 +40,15 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
-    'image compressor',
-    'image size reducer',
-    'jpg size reducer',
-    'png size reducer',
-    'compress jpeg',
+    'reduce size of picture',
+    'image resolution decrease',
+    'size reduction image',
+    'picture compressor',
+    'pic compressor',
     'compress png',
+    'compress jpg',
+    'compress webp',
+    'compress bmp',
   ],
   icons: [
     {
@@ -71,7 +74,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'How to Compress Images using Image Compressor Tool?',
     listData: [
-      `Drag & drop or select image files (JPEG, PNG, WEBP, BMP only) to compress.`,
+      `Drag & drop or select image files (JPEG, PNG, WEBP, BMP) to compress.`,
       `All image files will be listed.`,
       `For compressing images either use compress button corresponding to the image file or use compress all button.`,
       `By default images will be compressed by 20% of their original size. To compress further, use settings button to customize compression level .`,

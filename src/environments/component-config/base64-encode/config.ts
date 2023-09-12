@@ -6,12 +6,12 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/base64-encode';
 const pageTitle = 'File to Base64 | Base64 Encode | Base64 Converter | Base64';
 const pageDescription =
-  'Our Best Online Base64 Encoder tool lets you encode your any file to base64 string and base64 data uri.';
+  'Base64 encoder tool lets you encode your any image/text/pdf/file to base64 string and base64 data uri online. Supports all file formats.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'File to Base64 Encode',
-  subHeading: 'Encode File to Base64 Format',
+  subHeading: 'Encode Image/Text/PDF/File to Base64',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -64,26 +64,26 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Encode File to Base64?',
+    heading: 'How to Encode Image/Text/PDF/File to Base64?',
     listData: [
-      `Drag and Drop or browse file in order to encode it to Base64`,
-      `File will be encoded to Base64 automatically after selecting the file`,
+      `Drag and Drop or browse image/text/pdf/file in order to encode it to base64`,
+      `File will be encoded to base64 automatically after selecting the file`,
       `Base64 data can be copied to clipboard using copy buttons`,
     ],
   },
   {
     heading: 'Output Formats',
     listData: [
-      `Plain Base64 Text => IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
-      `Data URI => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
+      `Plain base64 text => IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
+      `Data uri => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
     ],
   },
   {
-    heading: 'Why choose our Online File to Base64 Encoder?',
+    heading: 'Why choose our Online Image/Text/PDF/File to Base64 Encoder?',
     listData: [
-      `Intuitive UX: Easy to use interface to encode file to base64`,
-      `Saves time: Fast and secure file to Base64 conversion`,
-      `Cross-platform: Cross-platform file to Base64 encoding tool`,
+      `Intuitive UX: Easy to use interface to encode image/text/pdf/file to base64`,
+      `Saves time: Fast and secure image/text/pdf/file to base64 conversion`,
+      `Cross-platform: Cross-platform image/text/pdf/file to base64 encoding tool`,
       `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
     ],
   },
@@ -100,11 +100,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Fast and secure file to Base64 conversion`,
-      `Free tool to convert file to Base64`,
+      `Fast and secure file to base64 conversion`,
+      `Free tool to convert image/text/pdf/file to base64`,
       `Base64 encoding for all file types`,
-      `File to Base64 conversion with high data integrity`,
-      `Cross-platform file to Base64 encoding tool`,
+      `File to base64 conversion with high data integrity`,
+      `Cross-platform image/text/pdf/file to Base64 encoding tool`,
     ],
   },
   {

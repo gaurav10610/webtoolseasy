@@ -3,13 +3,13 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/cron-expression';
-const pageTitle = 'Best Online Cron Expression Generator';
+const pageTitle = 'Cron Expression Generator | Cron Expression Builder';
 const pageDescription =
-  'Our Best Online Cron Expression Generator tool lets you graphically generate cron expression online. Generate Quartz cron expression.';
+  'Cron expression generator tool lets you graphically generate cron expression online. Generate quartz cron expression. Generate spring cron expression.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Cron Expression Generator',
+  mainHeading: 'Cron Expression Generator',
   subHeading: 'Graphically Generate Cron Expression Online',
   navigationUrl,
   pageTitle,
@@ -119,12 +119,12 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Supports Quartz Cron Expression.`,
-      `User-Friendly Interface: Online Cron Expression Generator provides a intuitive and easy to navigate, making it accessible to users with varying levels of technical expertise.`,
-      `Interactive Scheduler: Online Cron Expression Generator provides a visual representation of the cron schedule, such as a calendar or timeline, can help users understand and visualize when their task will run.`,
+      `Supports quartz cron expression.`,
+      `User-Friendly Interface: Online cron expression generator provides a intuitive and easy to navigate, making it accessible to users with varying levels of technical expertise.`,
+      `Interactive Scheduler: Online cron expression generator provides a visual representation of the cron schedule, such as a calendar or timeline, can help users understand and visualize when their task will run.`,
       `Field Customization: Users can customize each field of the cron expression (minute, hour, day of the month, month, and day of the week) using dropdowns, sliders, or input fields.`,
       `Copy and Paste: Users can easily copy the generated cron expression for use in their applications or scripts.`,
-      `Cross-Platform Compatibility: Online Cron Expression Generator works well across different web browsers and operating systems.`,
+      `Cross-Platform Compatibility: Online cron expression generator works well across different web browsers and operating systems.`,
     ],
   },
   {

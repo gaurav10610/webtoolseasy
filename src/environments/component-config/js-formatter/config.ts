@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/js-formatter';
-const pageTitle = 'Best Online Javascript Formatter | Javascript Beautifier';
+const pageTitle = 'Online Javascript Formatter | Javascript Beautifier';
 const pageDescription =
-  'Our Best Online Javascript Formatter/Beautifier tool lets you beautify/format your JavaScript code for free';
+  'Javascript Formatter/Beautifier tool lets you beautify/format your JavaScript code online';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 export const componentConfig: ApplicationConfig = {

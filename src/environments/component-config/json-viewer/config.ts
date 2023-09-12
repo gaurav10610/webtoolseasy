@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-viewer';
-const pageTitle =
-  'Best Online JSON Viewer | JSON Beautifier | JSON Tree Viewer';
+const pageTitle = 'Online JSON Viewer | JSON Beautifier | JSON Tree Viewer';
 const pageDescription =
   'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to prettify JSON data.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;

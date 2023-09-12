@@ -5,9 +5,9 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/crop-image';
 const pageTitle =
-  'Crop Images Online For Free | Crop Photos | Crop JPG, PNG, WEBP, BMP';
+  'Photo Cutting | Crop Photo | Crop Image Online | Crop Picture';
 const pageDescription =
-  'Crop your images/photos/pictures online for free. Crop your JPG, PNG, WEBP, BMP or GIF images and download in multiple supported formats.';
+  'Image cropper tool lets you crop your image/photo/picture online. Crop your JPG, JPEG, PNG, WEBP, BMP or GIF images and download in multiple supported formats.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-cropper.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -84,7 +84,7 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: 'Why would you want to Crop Images/Photos?',
+    heading: 'Why would you want to Crop Image/Photo?',
     listData: [
       `Composition: Cropping can help improve the composition of an image by removing distracting or irrelevant elements. This can make the main subject more prominent and aesthetically pleasing.`,
       `Emphasis: You can use cropping to emphasize a specific part of the image, drawing the viewer's attention to that area. This is often done in portrait photography to highlight a person's face.`,

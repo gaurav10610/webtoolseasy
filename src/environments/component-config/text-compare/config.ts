@@ -3,14 +3,15 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle = 'Best Online Text Difference | Side By Side Text Compare';
+const pageTitle =
+  'Text Compare | Text to Text Comparison | Compare Text Online';
 const pageDescription =
-  'Our Best Online Text File Difference tool lets you compare text side by side to find the difference between two text files.';
+  'Diffchecker online tool lets you perform text to text comparison. Compare two text files side by side. Supports ignore whitespace.';
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Text File Difference',
-  subHeading: 'Compare Text Files Online',
+  mainHeading: 'Text Compare',
+  subHeading: 'Text to Text Comparison',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -40,18 +41,18 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: [
-    'diff checker',
-    'text to compare',
-    'text compare online',
-    'file diff',
-    'text difference checker',
+    'diffchecker online',
+    'text to text comparison',
+    'text compare',
+    'compare text online',
+    'text diff',
   ],
   icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to compare text',
+    heading: 'How to use Text Compare Tool?',
     listData: [
       `Paste original text in text 1 area or upload a file 1 to compare.`,
       `Paste target text in text 2 area or upload a file 2 to compare.`,
@@ -64,20 +65,20 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: 'What is the need of a text file comparison / difference tool?',
+    heading: 'What is the need of a Text Compare Tool?',
     listData: [
-      `An online text file comparison / difference tool is an essential tool for writers, students, researchers, and anyone who needs to compare texts quickly and easily. With this tool, you can compare different versions of a text, identify similarities and differences between texts, and highlight changes between texts.`,
+      `An online text compare tool is an essential tool for writers, students, researchers, and anyone who needs to compare texts quickly and easily. With this tool, you can compare different versions of a text, identify similarities and differences between texts, and highlight changes between texts.`,
       `This tool uses advanced algorithms to accurately compare texts, making it easy for you to identify differences, changes, and similarities. Whether you're working on an academic project, a research paper, or a business report, an online text comparison tool can help you get the job done faster and more accurately.`,
     ],
   },
   {
     heading: 'Key features',
     listData: [
-      `Text file comparsion/difference tool is 100% free.`,
+      `Text compare tool is 100% free.`,
       `Supports online editing of text contents using inbuilt monaco editor.`,
-      `View text file difference side by side.`,
-      `Text file comparison/difference is 100% secure as whole processing is being done at client side only (in host browser).`,
-      `Unlimited text file comparison.`,
+      `View text difference side by side.`,
+      `Text comparison is 100% secure as whole processing is being done at client side only (in host browser).`,
+      `Unlimited text comparison.`,
       `Track down plagiarism.`,
       `Compare text files character by character, word by word or line by line`,
       `Optionally, you can ignore whitepsace.`,

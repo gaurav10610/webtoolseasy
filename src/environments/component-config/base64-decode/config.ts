@@ -4,14 +4,14 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/base64-decode';
-const pageTitle = 'Base64 to File | Base64 Decode | Base64 Converter | Base64';
+const pageTitle = 'Base64 Decode | Decode Base64 | Decrypt Base64 | Base 64';
 const pageDescription =
-  'Our Best Online Base64 tool lets you decode a base64 data uri to file.';
+  'Base64 decoder tool lets you decode base64 to image/text/pdf/file online. Supports all file formats.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-decode.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Base64 to File Decode',
-  subHeading: 'Decode Base64 to File',
+  mainHeading: 'Base64 Decode',
+  subHeading: 'Decode Base64 to Image/Text/PDF/File',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -50,9 +50,12 @@ export const componentConfig: ApplicationConfig = {
   ],
   tags: [
     'base64 decode',
-    'base64 decode online',
-    'base64 to file decoder',
-    'online base64 decode',
+    'decode base64 online',
+    'decrypt base64',
+    'base64 to image',
+    'base64 to text',
+    'base64 to pdf',
+    'base64 to file',
   ],
   icons: [
     {
@@ -64,25 +67,25 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Decode Base64 to File?',
+    heading: 'How to Decode Base64 to Image/Text/PDF/File?',
     listData: [
-      `Paste Base64 Data URI in the text box in order to decode it to a file`,
-      `After pasting the Base64 Data URI, use decode base64 button to decode the data into a file`,
-      `After Base64 data is decoded the download link for the file will appear automatically`,
+      `Paste base64 data uri in the text box in order to decode base64`,
+      `After pasting the base64 data uri, use decode base64 button to decode the data into a image/text/pdf/file`,
+      `After base64 data is decoded the download link for the file will appear automatically`,
     ],
   },
   {
     heading: 'Example Input Format',
     blockData: [
-      `Base64 Data URI => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
+      `Base64 data uri => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
     ],
   },
   {
-    heading: 'Why choose our Online Base64 to File Decoder?',
+    heading: 'Why choose our Online Base64 to Image/Text/PDF/File Decoder?',
     listData: [
-      `Intuitive UX: Easy to use interface to decode Base64 to File`,
-      `Saves time: Fast and secure Base64 to File conversion`,
-      `Cross-platform: Cross-platform Base64 to File decoding tool`,
+      `Intuitive UX: Easy to use interface to decode base64 to File`,
+      `Saves time: Fast and secure base64 to image/text/pdf/file conversion`,
+      `Cross-platform: Cross-platform base64 to image/text/pdf/file decoding tool`,
       `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
     ],
   },
@@ -99,11 +102,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: 'Key features',
     listData: [
-      `Fast and secure Base64 to File conversion`,
-      `Free tool to convert Base64 to File`,
+      `Fast and secure base64 to image/text/pdf/file conversion`,
+      `Free tool to convert base64 to image/text/pdf/file`,
       `Base64 decoding for all file types`,
-      `Base64 to File conversion with high data integrity`,
-      `Cross-platform Base64 to File decoding tool`,
+      `Base64 to image/text/pdf/file conversion with high data integrity`,
+      `Cross-platform base64 to image/text/pdf/file decoding tool`,
     ],
   },
   {
