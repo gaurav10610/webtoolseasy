@@ -1,6 +1,7 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
+import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/image-compress';
 const pageTitle = 'Photo Size Reducer | Image Compress | Pic Size Reducer';
@@ -49,6 +50,14 @@ export const componentConfig: ApplicationConfig = {
     'compress jpg',
     'compress webp',
     'compress bmp',
+  ],
+  relatedTools: [
+    {
+      applicationId: 'imagecropper',
+      displayText: AppDisplayNames.IMAGE_CROPPER,
+      iconName: 'image-icon',
+      navigateUrl: '/tools/crop-image',
+    },
   ],
   icons: [
     {
