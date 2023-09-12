@@ -15,18 +15,7 @@
 }
 
 @media screen and (max-width: 735px) {
-  .app-card {
-    flex-direction: row;
-    padding-left: 25%;
-    justify-content: flex-start;
-  }
-  .app-card mat-icon {
-    margin-right: 20px;
-  }
   .application {
     width: 100%;
-  }
-  .main-div {
-    overflow-y: scroll;
   }
 }
