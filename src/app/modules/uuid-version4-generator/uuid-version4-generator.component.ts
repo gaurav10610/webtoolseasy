@@ -7,6 +7,7 @@ import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/uuid-version4-generator/config';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-uuid-version4-generator',
@@ -14,7 +15,7 @@ import {
   styleUrls: ['./uuid-version4-generator.component.scss'],
 })
 export class UuidVersion4GeneratorComponent {
-  currentUUID: string;
+  currentUUID: string = '';
   bulkUUIDs: string[] = [];
 
   @ViewChild('bulkUUIDInput', { static: false })
@@ -28,9 +29,12 @@ export class UuidVersion4GeneratorComponent {
   constructor(
     private clipboard: Clipboard,
     private fileService: FileService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private platformMetadataService: PlatformMetadataService
   ) {
-    this.currentUUID = crypto.randomUUID();
+    if (platformMetadataService.isPlatformBrowser) {
+      this.currentUUID = crypto.randomUUID();
+    }
   }
 
   generateUUID() {
