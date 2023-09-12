@@ -55,10 +55,22 @@ export const componentConfig: ApplicationConfig = {
   ],
   relatedTools: [
     {
-      applicationId: 'uuid',
-      displayText: AppDisplayNames.UUID_GENERATOR,
+      applicationId: 'uuidv1',
+      displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
       iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid',
+      navigateUrl: '/tools/uuid-v1-generator',
+    },
+    {
+      applicationId: 'uuidv4',
+      displayText: AppDisplayNames.UUID_VERSION4_GENERATOR,
+      iconName: 'uuid-icon',
+      navigateUrl: '/tools/uuid-v4-generator',
+    },
+    {
+      applicationId: 'guid',
+      displayText: AppDisplayNames.GUID_GENERATOR,
+      iconName: 'uuid-icon',
+      navigateUrl: '/tools/guid-generator',
     },
   ],
 };

@@ -1,5 +1,5 @@
 <div
-  class="full-height flex-display flex-column-flow y-scroll top-div"
+  class="full-height flex-display flex-column-flow flex-center top-div"
   style="gap: 20px">
   <!-- application branding -->
   <div class="flex-display flex-column-flow flex-align-center flex-center">
@@ -29,20 +29,4 @@
 
   <!-- follow buttons -->
   <app-follow-buttons></app-follow-buttons>
-
-  <div class="flex-display flex-column-flow flex-align-center app-links">
-    <h3 style="font-size: large">Top Web Tools</h3>
-    <div class="app-list">
-      <div
-        class="flex-display flex-row-flow flex-align-center app-parent-div shadow-grey"
-        *ngFor="let appConfig of appsConfig">
-        <mat-icon
-          svgIcon="{{ appConfig.iconName }}"
-          style="margin: 15px; transform: scale(1.5)"></mat-icon
-        ><a [replaceUrl]="true" routerLink="{{ appConfig.navigateUrl }}">{{
-          appConfig.displayText
-        }}</a>
-      </div>
-    </div>
-  </div>
 </div>

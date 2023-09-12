@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UuidComponent } from './uuid.component';
+import { GuidGeneratorComponent } from './guid-generator.component';
 
-const routes: Routes = [{ path: '', component: UuidComponent }];
+const routes: Routes = [{ path: '', component: GuidGeneratorComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UuidRoutingModule {}
+export class GuidGeneratorRoutingModule {}

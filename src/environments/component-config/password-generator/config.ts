@@ -55,10 +55,6 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
     },
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
   ],
   relatedTools: [
     {
@@ -66,12 +62,6 @@ export const componentConfig: ApplicationConfig = {
       displayText: AppDisplayNames.JWT_DECODER,
       iconName: 'jwt-icon',
       navigateUrl: '/tools/jwt',
-    },
-    {
-      applicationId: 'uuid',
-      displayText: AppDisplayNames.UUID_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid',
     },
   ],
 };

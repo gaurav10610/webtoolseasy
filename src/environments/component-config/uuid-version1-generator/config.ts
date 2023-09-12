@@ -3,15 +3,15 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/uuid';
+const navigationUrl = '/tools/uuid-v1-generator';
 const pageTitle = 'UUID Generator | Bulk UUID Generator | Unique Id Generation';
 const pageDescription =
-  'UUID generator tool lets you generate random/unique universally unique identifiers (UUID). Generate UUID version 4 (v4) or version 1 (v1).';
-const imageUrl = `${environment.screenshotsBaseUrl}/uuid-generator.png`;
+  'UUID generator tool lets you generate random/unique universally unique identifiers (UUID). Generate UUID version 1 (v1).';
+const imageUrl = `${environment.screenshotsBaseUrl}/uuid-v1-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online UUID Generator',
-  subHeading: 'Generate Single UUID or in Bulk',
+  subHeading: 'Generate UUID Version 1 (V1) Online',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -42,7 +42,6 @@ export const componentConfig: ApplicationConfig = {
   ],
   tags: [
     'uuid',
-    'uuid v4 generator',
     'uuid v1 generator',
     'online uuid generator',
     'generate uuid',
@@ -53,6 +52,10 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
     },
+    {
+      iconName: 'uuid-icon',
+      iconRelativeUrl: 'uuid-icon.svg',
+    },
   ],
   relatedTools: [
     {
@@ -60,6 +63,18 @@ export const componentConfig: ApplicationConfig = {
       displayText: AppDisplayNames.JWT_DECODER,
       iconName: 'jwt-icon',
       navigateUrl: '/tools/jwt',
+    },
+    {
+      applicationId: 'uuidv4',
+      displayText: AppDisplayNames.UUID_VERSION4_GENERATOR,
+      iconName: 'uuid-icon',
+      navigateUrl: '/tools/uuid-v4-generator',
+    },
+    {
+      applicationId: 'guid',
+      displayText: AppDisplayNames.GUID_GENERATOR,
+      iconName: 'uuid-icon',
+      navigateUrl: '/tools/guid-generator',
     },
   ],
 };
