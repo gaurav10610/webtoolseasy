@@ -81,12 +81,6 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'What is Version 4 UUID?',
-    blockData: [
-      `A version 4 UUID is a randomly generated 128-bit identifier. As in other UUID, 4 bits are used to indicate version 4, and 2 bits are used to indicate the variant. Thus, 6 bits are constant, leaving 122 bits for the randomly generated part, for a total of 2122 (5.3×1036, 5.3 undecillion) possible values.`,
-    ],
-  },
-  {
     heading: 'What is Version 1 UUID?',
     blockData: [
       `Version 1 is based on the current time and the MAC address for the computer or "node" generating the UUID.`,
@@ -105,7 +99,7 @@ export const descriptionData: DescriptionBlock[] = [
     heading: 'Key Features',
     listData: [
       `Unlimited UUID generation for free`,
-      `Generate UUIDs in bulk using bulk UUID generator tool and export UUIDs in a text file`,
+      `Generate UUID in bulk using bulk UUID generator tool and export UUIDs in a text file`,
       `Security: All the UUIDs are generated in host browser only`,
     ],
   },

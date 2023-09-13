@@ -87,12 +87,6 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: 'What is Version 1 UUID?',
-    blockData: [
-      `Version 1 is based on the current time and the MAC address for the computer or "node" generating the UUID.`,
-    ],
-  },
-  {
     heading: 'What is UUID ( Universally unique identifier )?',
     blockData: [
       `A UUID is a standardized method of generating unique identifiers for resources or objects in a computer system. These identifiers are designed to be unique across time and space, making them ideal for use in a variety of applications, such as database systems, network protocols, and software libraries.`,
