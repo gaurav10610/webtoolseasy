@@ -16,7 +16,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CompressSettingsComponent } from 'src/app/modules/image-compression/compress-settings/compress-settings.component';
-import { v4 } from 'uuid';
 import {
   componentConfig,
   descriptionData,
@@ -174,7 +173,7 @@ export class ImageCompressionComponent implements OnDestroy {
   async addFileToCompress(file: File) {
     this.zoneRef.run(() => {
       this.fileList.push({
-        id: v4(),
+        id: crypto.randomUUID(),
         file: file,
         type: FileDataType.IMAGE,
         inProgress: false,

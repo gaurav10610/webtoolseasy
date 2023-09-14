@@ -16,7 +16,6 @@ import {
 } from 'ngx-image-cropper';
 import { environment } from 'src/environments/environment';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
-import { ApplicationUtilService } from 'src/app/service/util/application-util.service';
 
 @Component({
   selector: 'app-image-cropper',
@@ -55,8 +54,7 @@ export class ImageCropperComponent {
   constructor(
     private renderer: Renderer2,
     private fileService: FileService,
-    public platformMetaDataService: PlatformMetadataService,
-    private appUtilService: ApplicationUtilService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     if (platformMetaDataService.isPlatformBrowser) {
       importScript(environment.hammerJSPathUrl);
@@ -111,7 +109,7 @@ export class ImageCropperComponent {
 
   addFileToCrop(file: File) {
     const fileData: BaseFileData = {
-      id: this.appUtilService.generateRandomId(),
+      id: crypto.randomUUID(),
       file: file,
       type: FileDataType.IMAGE,
       name: file.name,
