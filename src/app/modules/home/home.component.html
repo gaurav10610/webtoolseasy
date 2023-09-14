@@ -1,33 +1,31 @@
 <div
-  class="full-height flex-display flex-column-flow flex-center top-div"
-  style="gap: 20px">
+  class="full-height flex-display flex-column-flow flex-center flex-align-center flex-gap-medium">
   <!-- application branding -->
-  <div class="flex-display flex-column-flow flex-align-center flex-center">
-    <div
-      class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
-      <mat-icon
-        *ngIf="platformMetaDataService.isPlatformBrowser"
-        svgIcon="app-icon"></mat-icon>
-    </div>
-    <h1
-      style="
-        font-family: monospace, 'Courier New', Courier;
-        font-size: xx-large;
-        font-weight: bold;
-      ">
-      WebToolsEasy
-    </h1>
-    <h2 id="subheading">Free web tools to make work super easy</h2>
-    <button
-      mat-stroked-button
-      color="primary"
-      matTooltip="explore web tools button"
-      [replaceUrl]="true"
-      routerLink="/tools"
-      style="width: 200px">
-      Explore Web Tools
-    </button>
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="app-icon"
+      class="brand-icon"></mat-icon>
   </div>
+  <h1
+    style="
+      font-family: monospace, 'Courier New', Courier;
+      font-size: xx-large;
+      font-weight: bold;
+    ">
+    WebToolsEasy
+  </h1>
+  <h2 id="subheading">Free web tools to make work super easy</h2>
+  <button
+    mat-stroked-button
+    color="primary"
+    matTooltip="explore web tools button"
+    [replaceUrl]="true"
+    routerLink="/tools"
+    style="width: 200px">
+    Explore Web Tools
+  </button>
 
   <!-- follow buttons -->
   <app-follow-buttons></app-follow-buttons>

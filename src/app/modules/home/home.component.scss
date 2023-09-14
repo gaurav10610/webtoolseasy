@@ -2,23 +2,8 @@
   height: 300px;
 }
 
-.icon-div mat-icon {
+.brand-icon {
   transform: scale(10);
-}
-
-@media screen and (min-width: 735px) {
-  .app-parent-div {
-    margin: 10px;
-    border: 1px solid lightgrey;
-    padding: 5px;
-    padding-right: 10px;
-  }
-  .app-list {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
 }
 
 #subheading {
@@ -29,14 +14,11 @@
   .icon-div {
     height: 150px;
   }
-  .icon-div mat-icon {
+  .brand-icon {
     transform: scale(5);
   }
   #subheading {
     font-size: larger;
-  }
-  .app-links {
-    display: none;
   }
   .top-div {
     justify-content: center;
