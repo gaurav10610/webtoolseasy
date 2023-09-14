@@ -1,22 +1,20 @@
 <!-- applications container -->
 <div class="apps-container flex-center">
   <div
-    class="application shadow-grey"
+    class="application shadow-grey flex-display flex-column-flow flex-center flex-align-center app-card pointer-cursor flex-gap-medium"
     *ngFor="let application of appsConfig"
     [replaceUrl]="true"
     routerLink="{{ application.navigateUrl }}">
-    <div
-      class="flex-display flex-column-flow flex-center flex-align-center app-card flex-gap-medium pointer-cursor">
-      <mat-icon
-        *ngIf="platformMetaDataService.isPlatformBrowser"
-        svgIcon="{{ application.iconName }}"
-        class="app-icon"></mat-icon>
-      <a
-        [replaceUrl]="true"
-        routerLink="{{ application.navigateUrl }}"
-        (click)="onAppClick($event)"
-        >{{ application.displayText }}</a
-      >
-    </div>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="{{ application.iconName }}"
+      class="app-icon"></mat-icon>
+    <a
+      [replaceUrl]="true"
+      routerLink="{{ application.navigateUrl }}"
+      (click)="onAppClick($event)"
+      style="text-align: center"
+      >{{ application.displayText }}</a
+    >
   </div>
 </div>
