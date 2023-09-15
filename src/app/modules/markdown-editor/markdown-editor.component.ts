@@ -6,6 +6,7 @@ import {
   ViewChild,
   SecurityContext,
   Renderer2,
+  OnDestroy,
 } from '@angular/core';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -27,7 +28,7 @@ declare var EasyMDE: any;
   templateUrl: './markdown-editor.component.html',
   styleUrls: ['./markdown-editor.component.scss'],
 })
-export class MarkdownEditorComponent implements AfterViewInit {
+export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('editor', { static: false })
   editor!: ElementRef;
 
@@ -64,6 +65,8 @@ export class MarkdownEditorComponent implements AfterViewInit {
     'fullscreen',
   ];
 
+  private style?: HTMLLinkElement;
+
   constructor(
     public platformMetaDataService: PlatformMetadataService,
     @Inject(DOCUMENT) private document: any,
@@ -75,6 +78,10 @@ export class MarkdownEditorComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.platformMetaDataService.isPlatformBrowser) {
+      this.importStyle(
+        'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css'
+      );
+
       importScript(
         'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js'
       ).then(() => {
@@ -103,6 +110,12 @@ export class MarkdownEditorComponent implements AfterViewInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.platformMetaDataService.isPlatformBrowser) {
+      this.renderer.removeChild(this.document.head, this.style);
+    }
+  }
+
   copyMarkdownData() {
     this.clipboard.copy(this.mdEditor.value());
   }
@@ -110,5 +123,17 @@ export class MarkdownEditorComponent implements AfterViewInit {
   downloadMarkdown() {
     const blob = new Blob([this.mdEditor.value()], { type: 'plain/text' });
     this.fileService.downloadFile('README.md', blob, this.renderer);
+  }
+
+  async importStyle(url: string) {
+    // Create a link element via Angular's renderer to avoid SSR troubles
+    this.style = this.renderer.createElement('link') as HTMLLinkElement;
+
+    // Add the style to the head section
+    this.renderer.appendChild(this.document.head, this.style);
+
+    // Set type of the link item and path to the css file
+    this.renderer.setProperty(this.style, 'rel', 'stylesheet');
+    this.renderer.setProperty(this.style, 'href', url);
   }
 }
