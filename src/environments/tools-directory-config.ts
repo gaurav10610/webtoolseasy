@@ -19,6 +19,7 @@ export enum AppDisplayNames {
   UUID_VERSION1_GENERATOR = 'UUID V1 Generator',
   UUID_VERSION4_GENERATOR = 'UUID V4 Generator',
   GUID_GENERATOR = 'GUID Generator',
+  MARKDOWN_EDITOR = 'Markdown Editor',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
@@ -129,5 +130,11 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.GUID_GENERATOR,
     iconName: 'uuid-icon',
     navigateUrl: '/tools/guid-generator',
+  },
+  {
+    applicationId: 'markdowneditor',
+    displayText: AppDisplayNames.MARKDOWN_EDITOR,
+    iconName: 'uuid-icon',
+    navigateUrl: '/tools/markdown-editor',
   },
 ];

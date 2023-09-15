@@ -142,6 +142,13 @@ const routes: Routes = [
             m => m.GuidGeneratorModule
           ),
       },
+      {
+        path: 'markdown-editor',
+        loadChildren: () =>
+          import('../markdown-editor/markdown-editor.module').then(
+            m => m.MarkdownEditorModule
+          ),
+      },
     ],
   },
 ];
