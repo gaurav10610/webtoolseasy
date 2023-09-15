@@ -13,7 +13,7 @@
     class="flex-display flex-column-flow flex-center flex-align-center file-drop-area file-area-width flex-gap-medium full-width"
     (drop)="dropHandler($event)"
     (dragover)="dragOverHandler($event)"
-    *ngIf="fileDisplayList.length === 0 && isSupported">
+    *ngIf="fileDisplayList.length === 0">
     <mat-icon style="transform: scale(2)">collections</mat-icon>
     <span class="header-font" style="font-size: large"
       >Drag & drop files here</span
@@ -27,13 +27,6 @@
       matTooltip="select video to convert">
       <mat-icon>file_upload</mat-icon> Browse for files
     </button>
-  </div>
-
-  <div *ngIf="!isSupported">
-    <span style="color: red; font-style: italic" class="bold"
-      >Video converter currently is not supported on host platfrom. We're
-      working on it, thank you for showing interest.</span
-    >
   </div>
 
   <!-- select, compress all, download all buttons -->
