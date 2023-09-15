@@ -24,6 +24,12 @@ export enum AppDisplayNames {
 
 export const appDisplayConfig: AppDisplayConfig[] = [
   {
+    applicationId: 'markdowneditor',
+    displayText: AppDisplayNames.MARKDOWN_EDITOR,
+    iconName: 'markdown-icon',
+    navigateUrl: '/tools/markdown-editor',
+  },
+  {
     applicationId: 'passwordgenerator',
     displayText: AppDisplayNames.PASSWORD_GENERATOR,
     iconName: 'password-icon',
@@ -130,11 +136,5 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.GUID_GENERATOR,
     iconName: 'uuid-icon',
     navigateUrl: '/tools/guid-generator',
-  },
-  {
-    applicationId: 'markdowneditor',
-    displayText: AppDisplayNames.MARKDOWN_EDITOR,
-    iconName: 'uuid-icon',
-    navigateUrl: '/tools/markdown-editor',
   },
 ];

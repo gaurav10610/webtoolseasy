@@ -18,19 +18,22 @@
         class="flex-display flex-column-flow">
         <div
           *ngFor="let line of descriptionRecord.listData"
-          class="flex-display description-font flex-row-flow flex-gap-small"
+          class="flex-display flex-row-flow flex-gap-small"
           style="overflow-wrap: anywhere">
-          <mat-icon aria-hidden="false" aria-label="right pointer icon"
-            >chevron_right</mat-icon
-          >
-          <span> {{ line }}</span>
+          <div>
+            <mat-icon aria-hidden="false" aria-label="right pointer icon"
+              >chevron_right</mat-icon
+            >
+          </div>
+
+          <span class="description-font"> {{ line }}</span>
         </div>
       </div>
 
       <!-- div for paragraphs -->
       <div
         *ngIf="descriptionRecord.blockData"
-        class="flex-display flex-column-flow"
+        class="flex-display flex-column-flow flex-gap-large"
         style="overflow-wrap: anywhere">
         <span
           *ngFor="let block of descriptionRecord.blockData"
@@ -45,10 +48,13 @@
         class="flex-display flex-column-flow">
         <div
           *ngFor="let link of descriptionRecord.links"
-          class="flex-display flex-row-flow flex-gap-small flex-align-center">
-          <mat-icon aria-hidden="false" aria-label="right pointer icon"
-            >chevron_right</mat-icon
-          >
+          class="flex-display flex-row-flow flex-gap-small">
+          <div>
+            <mat-icon aria-hidden="false" aria-label="right pointer icon"
+              >chevron_right</mat-icon
+            >
+          </div>
+
           <a href="{{ link.url }}">
             {{ link.displayText }}
           </a>

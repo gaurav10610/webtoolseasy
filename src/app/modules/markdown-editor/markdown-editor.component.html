@@ -1,11 +1,14 @@
 <div class="flex-display flex-column-flow flex-align-center flex-gap-large">
-  <button
-    mat-stroked-button
-    (click)="copyMarkdownData()"
-    color="primary"
-    style="align-self: flex-end">
-    <mat-icon>content_copy</mat-icon>Copy Markdown
-  </button>
+  <div
+    class="flex-display full-width flex-gap-medium"
+    style="justify-content: flex-end">
+    <button mat-stroked-button (click)="copyMarkdownData()" color="primary">
+      <mat-icon>content_copy</mat-icon>Copy
+    </button>
+    <button mat-stroked-button (click)="downloadMarkdown()" color="primary">
+      <mat-icon>file_download</mat-icon>Download
+    </button>
+  </div>
 
   <span style="font-size: large" class="full-width"
     >Edit or Paste Markdown Code Here</span

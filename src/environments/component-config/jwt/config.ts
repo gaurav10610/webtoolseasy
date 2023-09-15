@@ -52,8 +52,18 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'uuid-icon',
       iconRelativeUrl: 'uuid-icon.svg',
     },
+    {
+      iconName: 'markdown-icon',
+      iconRelativeUrl: 'markdown.svg',
+    },
   ],
   relatedTools: [
+    {
+      applicationId: 'markdowneditor',
+      displayText: AppDisplayNames.MARKDOWN_EDITOR,
+      iconName: 'markdown-icon',
+      navigateUrl: '/tools/markdown-editor',
+    },
     {
       applicationId: 'uuidv1',
       displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
