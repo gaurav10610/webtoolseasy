@@ -1,1 +1,18 @@
-<textarea id="my-text-area"></textarea>
+<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+  <button
+    mat-stroked-button
+    (click)="copyMarkdownData()"
+    color="primary"
+    style="align-self: flex-end">
+    <mat-icon>content_copy</mat-icon>Copy Markdown
+  </button>
+
+  <span style="font-size: large" class="full-width"
+    >Edit or Paste Markdown Code Here</span
+  >
+
+  <div class="full-width">
+    <!-- text area to render editor -->
+    <textarea #editor></textarea>
+  </div>
+</div>

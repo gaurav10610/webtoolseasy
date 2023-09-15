@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/uuid-v1-generator';
-const pageTitle = 'UUID Generator | Bulk UUID Generator | Unique Id Generation';
+const pageTitle = 'UUID Generator | Bulk UUID Generator | UUID V1 Generator';
 const pageDescription =
-  'UUID generator tool lets you generate random/unique universally unique identifiers (UUID). Generate UUID version 1 (v1).';
+  'UUID generator tool lets you generate random/unique universally unique identifiers (UUID). Generate UUID version 1 (v1). Generate UUID V1 in bulk and download to file.';
 const imageUrl = `${environment.screenshotsBaseUrl}/uuid-v1-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
