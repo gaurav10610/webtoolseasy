@@ -1,35 +1,39 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, Inject } from '@angular/core';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { importScript } from 'src/app/service/ffmpeg/lib/util';
-import { environment } from 'src/environments/environment';
+import { DOCUMENT } from '@angular/common';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/markdown-editor/config';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
+declare var EasyMDE: any;
+
 @Component({
   selector: 'app-markdown-editor',
   templateUrl: './markdown-editor.component.html',
-  styleUrls: [
-    './markdown-editor.component.scss',
-    '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css',
-    '../../../../node_modules/font-awesome/css/font-awesome.min.css',
-    '../../../../node_modules/ngx-markdown-editor/assets/highlight.js/agate.min.css',
-  ],
+  styleUrls: ['./markdown-editor.component.scss'],
 })
-export class MarkdownEditorComponent {
+export class MarkdownEditorComponent implements AfterViewInit {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  constructor(public platformMetaDataService: PlatformMetadataService) {
-    if (platformMetaDataService.isPlatformBrowser) {
+  constructor(
+    public platformMetaDataService: PlatformMetadataService,
+    @Inject(DOCUMENT) private document: any
+  ) {}
+
+  ngAfterViewInit(): void {
+    if (this.platformMetaDataService.isPlatformBrowser) {
       importScript(
-        `${environment.hostname}/assets/highlight.js/highlight.min.js`
-      );
-      importScript(`${environment.hostname}/assets/marked.min.js`);
-      importScript(`${environment.hostname}/assets/ace-builds/ace.js`);
+        'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js'
+      ).then(() => {
+        const easyMDE = new EasyMDE({
+          element: this.document.getElementById('my-text-area'),
+        });
+      });
     }
   }
 }
