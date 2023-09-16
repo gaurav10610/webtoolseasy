@@ -8,8 +8,10 @@ import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
 
+const serverCache: Map<string, any> = new Map();
+
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
+export function app(serverCache: Map<string, any>): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/webtoolseasy/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
@@ -34,7 +36,7 @@ export function app(): express.Express {
     '*.*',
     express.static(distFolder, {
       maxAge: '1y',
-      setHeaders: function (res, path, stat) {
+      setHeaders: function (res) {
         res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
         res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
       },
@@ -42,14 +44,38 @@ export function app(): express.Express {
   );
 
   // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-    res.render(indexHtml, {
-      req,
-      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
-    });
-  });
+  server.get(
+    '*',
+    (req, res, next) => {
+      const cachedHtml = serverCache.get(req.url);
+      if (cachedHtml) {
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+
+        // Cache exists. Send it.
+        res.send(cachedHtml);
+      } else {
+        // Cache does not exist. Render a response using the Angular app
+        next();
+      }
+    },
+    (req, res) => {
+      res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+      res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+      res.render(
+        indexHtml,
+        {
+          req,
+          providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
+        },
+        (err: Error, html: string) => {
+          // Cache the rendered `html` for this request url to use for subsequent requests
+          serverCache.set(req.url, html);
+          res.send(html);
+        }
+      );
+    }
+  );
 
   return server;
 }
@@ -58,7 +84,7 @@ function run(): void {
   const port = process.env['PORT'] || 4200;
 
   // Start up the Node server
-  const server = app();
+  const server = app(serverCache);
   server.listen(port, () => {
     console.log(`webtoolseasy server started at port: ${port}`);
   });
