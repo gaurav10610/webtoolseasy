@@ -11,7 +11,7 @@ const imageUrl = `${environment.screenshotsBaseUrl}/markdown-editor.png`;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Online Markdown Editor',
-  subHeading: 'Edit Markdown/ReadMe in Browser',
+  subHeading: 'Edit Markdown/ReadME in Browser',
   navigationUrl,
   pageTitle,
   metaTags: [

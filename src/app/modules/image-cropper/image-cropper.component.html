@@ -42,11 +42,11 @@
     </button>
   </div>
 
-  <div
-    class="flex-display flex-row-flow full-width"
-    *ngIf="fileList.length > 0">
-    <span style="font-size: large">Uploaded Images</span>
-  </div>
+  <span
+    style="font-size: large; align-self: flex-start"
+    *ngIf="fileList.length > 0"
+    >Uploaded Images</span
+  >
 
   <div
     class="flex-display flex-column-flow full-width flex-gap-medium"
@@ -70,9 +70,9 @@
     </div>
   </div>
 
-  <div class="flex-display flex-row-flow full-width" *ngIf="currentFile">
-    <span style="font-size: large">Crop & Preview</span>
-  </div>
+  <span style="font-size: large; align-self: flex-start" *ngIf="currentFile"
+    >Crop & Preview</span
+  >
 
   <div
     *ngIf="currentFile && platformMetaDataService.isPlatformBrowser"
@@ -99,9 +99,9 @@
   </div>
 
   <div
-    class="flex-display flex-row-flow full-width flex-align-center flex-gap-medium"
-    style="justify-content: end; margin-top: 20px"
-    *ngIf="currentFile && platformMetaDataService.isPlatformBrowser">
+    class="flex-display flex-align-center flex-gap-medium"
+    style="justify-content: end; margin-top: 20px; align-self: flex-end"
+    *ngIf="currentFile">
     <mat-form-field
       appearance="outline"
       color="primary"
