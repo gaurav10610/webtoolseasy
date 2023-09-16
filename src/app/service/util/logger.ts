@@ -1,19 +1,19 @@
 import { environment } from 'src/environments/environment';
 
 export class LogUtils {
-  static info(message: any) {
+  static info(message: any, ...optionalParams: any[]) {
     if (!environment.production) {
-      console.log(message);
+      console.info(message, optionalParams);
     }
   }
 
-  static debug(message: any) {
+  static debug(message: any, ...optionalParams: any[]) {
     if (!environment.production) {
-      console.log(message);
+      console.debug(message, optionalParams);
     }
   }
 
-  static error(message: any) {
-    console.log(message);
+  static error(message: any, ...optionalParams: any[]) {
+    console.error(message, optionalParams);
   }
 }

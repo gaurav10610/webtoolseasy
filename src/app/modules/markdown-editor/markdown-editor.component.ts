@@ -20,6 +20,7 @@ import { PlatformMetadataService } from 'src/app/service/platform-metadata/platf
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/service/file/file.service';
+import { LogUtils } from 'src/app/service/util/logger';
 
 declare var EasyMDE: any;
 
@@ -45,7 +46,7 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  toolbar: string[] = [
+  toolbar: any[] = [
     'bold',
     'italic',
     'heading',
@@ -87,6 +88,7 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
       ).then(() => {
         this.mdEditor = new EasyMDE({
           element: this.editor.nativeElement,
+          spellChecker: false,
           toolbar: [
             {
               name: 'toggle-preview',
@@ -97,7 +99,7 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
             ...this.toolbar,
           ],
           renderingConfig: {
-            sanitizerFunction: (renderedHTML: any) => {
+            sanitizerFunction: (renderedHTML: string) => {
               return this.domSanitizer.sanitize(
                 SecurityContext.HTML,
                 renderedHTML
@@ -117,6 +119,7 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   copyMarkdownData() {
+    LogUtils.info(this.mdEditor.markdown());
     this.clipboard.copy(this.mdEditor.value());
   }
 

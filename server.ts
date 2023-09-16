@@ -6,6 +6,21 @@ import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
+/**
+ *
+ * fixing document is undefined error
+ */
+// const domino = require('domino');
+// const fs = require('fs');
+// const path = require('path');
+// const distFolder = join(process.cwd(), 'dist/webtoolseasy/browser');
+// const template = fs
+//   .readFileSync(path.join(distFolder, 'index.html'))
+//   .toString();
+// const win = domino.createWindow(template.toString());
+// // @ts-ignore
+// global['document'] = win.document;
+
 import { AppServerModule } from './src/main.server';
 
 const serverCache: Map<string, any> = new Map();
