@@ -65,7 +65,6 @@ export const descriptionData: DescriptionBlock[] = [
       `Looking for a quick and easy way to compare two texts for similarity and differences? Try our free online text compare tool! It's simple to use and completely free.`,
       'To use the tool, simply copy and paste your texts into the text boxes and click the "Compare" button. The tool will instantly calculate the similarity percentage between the two texts and show you the differences. You can also view a side-by-side comparison of the two texts to see how they differ.',
       `Our text compare tool is perfect for students, writers, bloggers, and anyone else who needs to check the originality of their work. It's also great for checking for plagiarism and ensuring that your work is unique.`,
-      `No matter what your needs are, our free online text compare tool is a valuable resource. Try it today and see how easy it is to use!`,
     ],
   },
   {
@@ -115,6 +114,11 @@ export const descriptionData: DescriptionBlock[] = [
       'Our tool is completely free.',
       'Our tool is accurate and reliable.',
       'Our tool is versatile and can be used for a variety of tasks, such as checking the originality of work, checking for plagiarism, and comparing two texts for similarity.',
+    ],
+  },
+  {
+    blockData: [
+      'No matter what your needs are, our free online text compare tool is a valuable resource. Try it today and see how easy it is to use!',
     ],
   },
 ];
