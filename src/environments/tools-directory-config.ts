@@ -20,9 +20,16 @@ export enum AppDisplayNames {
   UUID_VERSION4_GENERATOR = 'UUID V4 Generator',
   GUID_GENERATOR = 'GUID Generator',
   MARKDOWN_EDITOR = 'Markdown Editor',
+  WORD_COUNTER = 'Word Counter',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
+  {
+    applicationId: 'wordcounter',
+    displayText: AppDisplayNames.WORD_COUNTER,
+    iconName: 'word-icon',
+    navigateUrl: '/tools/word-counter',
+  },
   {
     applicationId: 'markdowneditor',
     displayText: AppDisplayNames.MARKDOWN_EDITOR,

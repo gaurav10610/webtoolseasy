@@ -2,7 +2,9 @@
   <div
     class="flex-display flex-column-flow"
     *ngFor="let descriptionRecord of appContextService.descriptionData">
-    <h3 style="font-size: medium; font-weight: 700">
+    <h3
+      style="font-size: medium; font-weight: 700"
+      *ngIf="descriptionRecord.heading">
       {{ descriptionRecord.heading }}
     </h3>
 

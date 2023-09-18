@@ -149,6 +149,13 @@ const routes: Routes = [
             m => m.MarkdownEditorModule
           ),
       },
+      {
+        path: 'word-counter',
+        loadChildren: () =>
+          import('../word-count/word-count.module').then(
+            m => m.WordCountModule
+          ),
+      },
     ],
   },
 ];

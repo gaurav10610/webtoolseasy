@@ -1,5 +1,5 @@
 export interface DescriptionBlock {
-  heading: string;
+  heading?: string;
   listData?: string[];
   blockData?: string[];
   links?: DescriptionLink[];

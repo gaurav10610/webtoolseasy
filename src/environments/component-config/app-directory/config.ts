@@ -99,5 +99,9 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'markdown-icon',
       iconRelativeUrl: 'markdown.svg',
     },
+    {
+      iconName: 'word-icon',
+      iconRelativeUrl: 'word.svg',
+    },
   ],
 };
