@@ -42,11 +42,11 @@
     </button>
   </div>
 
-  <div
-    class="flex-display flex-row-flow full-width"
-    *ngIf="fileList.length > 0">
-    <span style="font-size: large">Uploaded Images</span>
-  </div>
+  <span
+    style="font-size: large; align-self: flex-start"
+    *ngIf="fileList.length > 0"
+    >Uploaded Images</span
+  >
 
   <div
     class="flex-display flex-column-flow full-width flex-gap-medium"
@@ -61,24 +61,27 @@
           mat-card-image
           src="{{ imageFile?.dataURI }}"
           alt="selected image for crop" />
-        <div class="full-width flex-display flex-row-flow flex-center">
+        <div
+          class="full-width flex-display flex-row-flow flex-center"
+          style="overflow: hidden">
           <span>{{ imageFile?.name }}</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="flex-display flex-row-flow full-width" *ngIf="currentFile">
-    <span style="font-size: large">Crop & Preview</span>
-  </div>
+  <span style="font-size: large; align-self: flex-start" *ngIf="currentFile"
+    >Crop & Preview</span
+  >
 
   <div
-    *ngIf="currentFile && platformMetadataService.isPlatformBrowser"
+    *ngIf="currentFile && platformMetaDataService.isPlatformBrowser"
     class="flex-display flex-row-flow flex-align-center full-width cropper-container">
     <div
-      class="flex-display flex-column-flow flex-center cropped-box border-grey"
-      #imageCropper>
+      #imageCropperContainer
+      class="flex-display flex-column-flow flex-center cropped-box border-grey">
       <image-cropper
+        #imageCropper
         [imageFile]="currentFile.file"
         [maintainAspectRatio]="false"
         [format]="outputFormat"
@@ -90,15 +93,15 @@
 
     <div
       #croppedImageContainer
-      class="flex-display flex-column-flow cropped-box border-grey">
+      class="flex-display flex-column-flow flex-center flex-align-center cropped-box border-grey">
       <img #croppedImageTag src="{{ croppedImage }}" alt="cropped image" />
     </div>
   </div>
 
   <div
-    class="flex-display flex-row-flow full-width flex-align-center flex-gap-medium"
-    style="justify-content: end; margin-top: 20px"
-    *ngIf="currentFile && platformMetadataService.isPlatformBrowser">
+    class="flex-display flex-align-center flex-gap-medium"
+    style="justify-content: end; margin-top: 20px; align-self: flex-end"
+    *ngIf="currentFile">
     <mat-form-field
       appearance="outline"
       color="primary"

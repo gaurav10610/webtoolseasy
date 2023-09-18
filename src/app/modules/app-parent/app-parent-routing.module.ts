@@ -17,8 +17,7 @@ const routes: Routes = [
       },
       {
         path: 'uuid',
-        loadChildren: () =>
-          import('../uuid/uuid.module').then(m => m.UuidModule),
+        redirectTo: 'uuid-v4-generator',
       },
       {
         path: 'jwt',
@@ -120,6 +119,41 @@ const routes: Routes = [
         loadChildren: () =>
           import('../image-cropper/image-cropper.module').then(
             m => m.ImageCropperModule
+          ),
+      },
+      {
+        path: 'uuid-v1-generator',
+        loadChildren: () =>
+          import(
+            '../uuid-version1-generator/uuid-version1-generator.module'
+          ).then(m => m.UuidVersion1GeneratorModule),
+      },
+      {
+        path: 'uuid-v4-generator',
+        loadChildren: () =>
+          import(
+            '../uuid-version4-generator/uuid-version4-generator.module'
+          ).then(m => m.UuidVersion4GeneratorModule),
+      },
+      {
+        path: 'guid-generator',
+        loadChildren: () =>
+          import('../guid-generator/guid-generator.module').then(
+            m => m.GuidGeneratorModule
+          ),
+      },
+      {
+        path: 'markdown-editor',
+        loadChildren: () =>
+          import('../markdown-editor/markdown-editor.module').then(
+            m => m.MarkdownEditorModule
+          ),
+      },
+      {
+        path: 'word-counter',
+        loadChildren: () =>
+          import('../word-count/word-count.module').then(
+            m => m.WordCountModule
           ),
       },
     ],

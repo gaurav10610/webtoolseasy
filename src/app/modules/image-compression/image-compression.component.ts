@@ -16,7 +16,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CompressSettingsComponent } from 'src/app/modules/image-compression/compress-settings/compress-settings.component';
-import { v4 } from 'uuid';
 import {
   componentConfig,
   descriptionData,
@@ -55,7 +54,7 @@ export class ImageCompressionComponent implements OnDestroy {
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
-    private platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
@@ -65,7 +64,7 @@ export class ImageCompressionComponent implements OnDestroy {
         LogUtils.info(`mobile view: ${this.isMobile}`);
       });
 
-    if (platformMetadataService.isPlatformBrowser) {
+    if (platformMetaDataService.isPlatformBrowser) {
       importScript(environment.imageCompressionLibUrl);
     }
   }
@@ -174,7 +173,7 @@ export class ImageCompressionComponent implements OnDestroy {
   async addFileToCompress(file: File) {
     this.zoneRef.run(() => {
       this.fileList.push({
-        id: v4(),
+        id: crypto.randomUUID(),
         file: file,
         type: FileDataType.IMAGE,
         inProgress: false,

@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-formatter';
-const pageTitle = 'Best Online HTML Formatter | HTML Beautifier';
+const pageTitle = 'Online HTML Formatter | HTML Beautifier';
 const pageDescription =
-  'Our Best Online HTML Formatter/Beautifier tool lets you format/beautify your HTML code for free.';
+  'HTML Formatter/Beautifier tool lets you format/beautify your HTML code online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;
 
 export const componentConfig: ApplicationConfig = {

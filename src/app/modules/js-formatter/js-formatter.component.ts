@@ -33,7 +33,7 @@ export class JsFormatterComponent {
 
   constructor(
     private clipboard: Clipboard,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.formattedCode = js_beautify(this.rawCode);
   }

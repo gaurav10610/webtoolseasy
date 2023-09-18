@@ -5,13 +5,13 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
 const pageTitle =
-  'Best Online Password Generator - Generate Strong, Random & Secure Passwords';
+  'Password Generator | Create Random Password | Passkey Generator';
 const pageDescription =
-  'Quickly and easily generate single or bulk strong, random and secure passwords using our best free online passwod generator tool';
+  'Password generator tool lets you create/generate strong, random and secure password online. Generate single password or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Random Password Generator',
+  mainHeading: 'Online Password Generator',
   subHeading: 'Generate Strong, Random & Secure Passwords',
   navigationUrl,
   pageTitle,
@@ -43,19 +43,17 @@ export const componentConfig: ApplicationConfig = {
   ],
   tags: [
     'password generator',
-    'random password generator',
-    'strong password generator',
+    'pwd generator',
+    'passkey generator',
     'bulk password generator',
     'secure password generator',
+    'create random password',
+    'strong password generator',
   ],
   icons: [
     {
       iconName: 'jwt-icon',
       iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
     },
   ],
   relatedTools: [
@@ -64,12 +62,6 @@ export const componentConfig: ApplicationConfig = {
       displayText: AppDisplayNames.JWT_DECODER,
       iconName: 'jwt-icon',
       navigateUrl: '/tools/jwt',
-    },
-    {
-      applicationId: 'uuid',
-      displayText: AppDisplayNames.UUID_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid',
     },
   ],
 };

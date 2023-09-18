@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "npm run lint && ng build --configuration production",
+    "build:stats": "ng build --stats-json",
+    "analyze": "webpack-bundle-analyzer dist/webtoolseasy/browser/stats.json",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint --fix",
@@ -31,6 +33,7 @@
     "@nguniversal/express-engine": "16.2.0",
     "express": "4.15.2",
     "generate-password-browser": "1.1.0",
+    "guid-typescript": "1.0.9",
     "idb-keyval": "6.2.1",
     "jose": "4.14.4",
     "js-beautify": "1.14.9",
@@ -77,6 +80,7 @@
     "prettier": "3.0.2",
     "prettier-eslint": "15.0.1",
     "tslib": "2.6.2",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "webpack-bundle-analyzer": "4.9.1"
   }
 }

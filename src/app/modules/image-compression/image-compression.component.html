@@ -70,6 +70,7 @@
         style="margin: 10px">
         <!-- file icon and name -->
         <mat-icon
+          *ngIf="platformMetaDataService.isPlatformBrowser"
           svgIcon="image-file-icon"
           class="app-icon pointer-cursor"></mat-icon>
 
@@ -101,6 +102,7 @@
           >
 
           <mat-icon
+            *ngIf="platformMetaDataService.isPlatformBrowser"
             svgIcon="settings-icon"
             class="pointer-cursor"
             matTooltip="change compression settings"
@@ -108,13 +110,17 @@
           <mat-icon
             svgIcon="play-icon"
             class="pointer-cursor"
-            *ngIf="!file.isCompressed"
+            *ngIf="
+              platformMetaDataService.isPlatformBrowser && !file.isCompressed
+            "
             (click)="compressImage(file)"
             matTooltip="compress image"></mat-icon>
           <mat-icon
             svgIcon="download-icon"
             class="pointer-cursor"
-            *ngIf="file.isCompressed"
+            *ngIf="
+              platformMetaDataService.isPlatformBrowser && file.isCompressed
+            "
             (click)="downloadImage(file)"
             matTooltip="download compressed image"></mat-icon>
           <mat-icon

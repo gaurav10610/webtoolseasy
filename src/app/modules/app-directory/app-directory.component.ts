@@ -3,6 +3,7 @@ import { AppDisplayConfig, ApplicationConfig } from 'src/app/@types/config';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { appDisplayConfig } from 'src/environments/tools-directory-config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-app-directory',
@@ -17,6 +18,8 @@ export class AppDirectoryComponent {
 
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = [];
+
+  constructor(public platformMetaDataService: PlatformMetadataService) {}
 
   onAppClick(event: any) {
     event.stopPropagation();

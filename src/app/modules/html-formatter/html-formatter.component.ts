@@ -34,7 +34,7 @@ export class HtmlFormatterComponent {
 
   constructor(
     private clipboard: Clipboard,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.formattedCode = html_beautify(this.rawCode);
   }

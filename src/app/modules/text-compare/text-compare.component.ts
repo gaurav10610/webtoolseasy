@@ -51,7 +51,7 @@ export class TextCompareComponent {
     private renderer: Renderer2,
     private fileService: FileService,
     private zoneRef: NgZone,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {}
 
   async selectFiles(event: any) {

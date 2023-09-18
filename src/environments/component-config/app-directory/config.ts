@@ -95,5 +95,13 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'cron-icon',
       iconRelativeUrl: 'cron.svg',
     },
+    {
+      iconName: 'markdown-icon',
+      iconRelativeUrl: 'markdown.svg',
+    },
+    {
+      iconName: 'word-icon',
+      iconRelativeUrl: 'word.svg',
+    },
   ],
 };

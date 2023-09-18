@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   NgZone,
@@ -18,7 +19,6 @@ import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/video-converter/config';
-import { v4 } from 'uuid';
 import {
   ConvertEvent,
   ConvertEventType,
@@ -40,19 +40,19 @@ import {
   ELIGIBLE_TARGET_FORMATS,
   FFMPEG_FORMATS,
 } from 'src/environments/ffmpeg-config';
-import { environment } from 'src/environments/environment';
 import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-video-converter',
   templateUrl: './video-converter.component.html',
   styleUrls: ['./video-converter.component.scss'],
 })
-export class VideoConverterComponent implements OnDestroy {
-  fileStore: Map<string, VideoFileData>;
-  fileDisplayList: VideoFileData[];
+export class VideoConverterComponent implements AfterViewInit, OnDestroy {
+  fileStore: Map<string, VideoFileData> = new Map();
+  fileDisplayList: VideoFileData[] = [];
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
@@ -61,14 +61,10 @@ export class VideoConverterComponent implements OnDestroy {
   isMobile!: boolean;
   destroyed = new Subject<void>();
 
-  isDownloadAllActive: boolean = false;
-
   activeDialog: MatDialogRef<any> | undefined;
 
-  isSupported: boolean = true;
-
-  subscriptions: Subscription[];
-  conversionLogs: string[];
+  subscriptions: Subscription[] = [];
+  conversionLogs: string[] = [];
 
   /**
    * valid video formats
@@ -83,22 +79,19 @@ export class VideoConverterComponent implements OnDestroy {
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private ffmpegService: FfmpegService
-  ) {
+    private ffmpegService: FfmpegService,
+    public platformMetaDataService: PlatformMetadataService
+  ) {}
+
+  ngAfterViewInit(): void {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Web])
       .pipe(takeUntil(this.destroyed))
       .subscribe(result => {
-        this.isMobile = breakpointObserver.isMatched(
+        this.isMobile = this.breakpointObserver.isMatched(
           `(max-width: ${MOBILE_VIEW_WIDTH_THRESHOLD})`
         );
-        this.checkCompatibility();
       });
-
-    this.fileStore = new Map();
-    this.fileDisplayList = [];
-
-    this.subscriptions = [];
 
     this.subscriptions.push(
       this.ffmpegService.fileLoadedEvent.subscribe(
@@ -129,10 +122,6 @@ export class VideoConverterComponent implements OnDestroy {
         this.handleFFMpegStatus.bind(this)
       )
     );
-
-    this.conversionLogs = [];
-
-    this.checkCompatibility();
   }
 
   async ngOnDestroy() {
@@ -143,14 +132,7 @@ export class VideoConverterComponent implements OnDestroy {
      * unsubscribe from all the subscriptions
      */
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions = [];
     await this.ffmpegService.flushBuffer();
-  }
-
-  checkCompatibility() {
-    if (environment.production) {
-      this.isSupported = true;
-    }
   }
 
   /**
@@ -168,18 +150,14 @@ export class VideoConverterComponent implements OnDestroy {
    * @param eventData
    */
   async handleBufferFileLoad(eventData: FileLoadedEvent): Promise<void> {
-    this.zoneRef.run(() => {
-      if (eventData.loaded) {
-        // this.fileStore.get(eventData.fileId)!.isLoaded = true;
-        LogUtils.info(
-          `file with id: ${eventData.fileId} loaded in ffmpeg buffer`
-        );
-      } else {
-        LogUtils.info(
-          `fail to load file with id: ${eventData.fileId} in buffer`
-        );
-      }
-    });
+    if (eventData.loaded) {
+      // this.fileStore.get(eventData.fileId)!.isLoaded = true;
+      LogUtils.info(
+        `file with id: ${eventData.fileId} loaded in ffmpeg buffer`
+      );
+    } else {
+      LogUtils.info(`fail to load file with id: ${eventData.fileId} in buffer`);
+    }
   }
 
   /**
@@ -212,19 +190,16 @@ export class VideoConverterComponent implements OnDestroy {
    */
   async handleConvertEvent(eventData: ConvertEvent) {
     if (eventData.type === ConvertEventType.END) {
-      this.zoneRef.run(() => {
-        this.isDownloadAllActive = true;
-      });
       // LogUtils.info(`converted file received with id: ${eventData.fileId}`);
       this.fileStore
         .get(eventData.fileId)!
         .convertedFileData.set(eventData.targetFormat, eventData.fileData);
     } else if (eventData.type === ConvertEventType.FAILED) {
       LogUtils.info(`conversion failed for file with id: ${eventData.fileId}`);
+      const videoFileData: VideoFileData = this.fileStore.get(
+        eventData.fileId
+      )!;
       this.zoneRef.run(() => {
-        const videoFileData: VideoFileData = this.fileStore.get(
-          eventData.fileId
-        )!;
         videoFileData.conversionErrors.set(
           eventData.targetFormat,
           'conversion failed! try converting in some other format'
@@ -265,7 +240,7 @@ export class VideoConverterComponent implements OnDestroy {
     this.zoneRef.run(() => {
       const formattedName = this.formatFileName(file.name);
       const extension = formattedName.split('.').pop()!;
-      const id = v4();
+      const id = crypto.randomUUID();
       const videoFileData: VideoFileData = {
         id,
         file: file,

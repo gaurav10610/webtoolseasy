@@ -5,9 +5,9 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/video-converter';
 const pageTitle =
-  'Online Video to Audio Converter - Convert MP4, MKV, WEBM, AVI, OGM';
+  'Video to Audio Converter | Online Video Converter | MP4 to MP3';
 const pageDescription =
-  'Our Best Online Video to Audio Converter tool lets you convert your videos to high-quality audio files. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
+  'Video to Audio Converter tool lets you convert your videos to high-quality audio for free. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
 const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
 
 export const componentConfig: ApplicationConfig = {

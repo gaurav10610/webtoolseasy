@@ -2,24 +2,40 @@ import { AppDisplayConfig } from 'src/app/@types/config';
 
 export enum AppDisplayNames {
   VIDEO_CONVERTER = 'Video to Audio Converter',
-  SCREEN_RECORDER = 'Online Screen Recorder',
-  TEXT_COMPARE = 'Online Text Difference',
-  UUID_GENERATOR = 'Online UUID Generator',
-  JWT_DECODER = 'Online JWT Decoder',
-  IMAGE_COMPRESSOR = 'Online Image Compressor',
+  SCREEN_RECORDER = 'Free Screen Recorder',
+  TEXT_COMPARE = 'Online Text Compare',
+  JWT_DECODER = 'JWT Decoder',
+  IMAGE_COMPRESSOR = 'Free Image Compressor',
   JS_FORMATTER = 'Online Javascript Formatter',
   JSON_FORMATTER = 'Online JSON Formatter',
   HTML_FORMATTER = 'Online HTML Formatter',
   CSS_FORMATTER = 'Online CSS Formatter',
   JSON_VIEWER = 'Online JSON Viewer',
-  PASSWORD_GENERATOR = 'Online Password Generator',
-  BASE64_ENCODE = 'Base64 Encode',
-  BASE64_DECODE = 'Base64 Decode',
+  PASSWORD_GENERATOR = 'Random Password Generator',
+  BASE64_ENCODE = 'Base64 Encoder',
+  BASE64_DECODE = 'Base64 Decoder',
   CRON_GENERATOR = 'Cron Expression Generator',
-  IMAGE_CROPPER = 'Image Cropper',
+  IMAGE_CROPPER = 'Free Image Cropper',
+  UUID_VERSION1_GENERATOR = 'UUID V1 Generator',
+  UUID_VERSION4_GENERATOR = 'UUID V4 Generator',
+  GUID_GENERATOR = 'GUID Generator',
+  MARKDOWN_EDITOR = 'Markdown Editor',
+  WORD_COUNTER = 'Word Counter',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
+  {
+    applicationId: 'wordcounter',
+    displayText: AppDisplayNames.WORD_COUNTER,
+    iconName: 'word-icon',
+    navigateUrl: '/tools/word-counter',
+  },
+  {
+    applicationId: 'markdowneditor',
+    displayText: AppDisplayNames.MARKDOWN_EDITOR,
+    iconName: 'markdown-icon',
+    navigateUrl: '/tools/markdown-editor',
+  },
   {
     applicationId: 'passwordgenerator',
     displayText: AppDisplayNames.PASSWORD_GENERATOR,
@@ -43,12 +59,6 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.TEXT_COMPARE,
     iconName: 'comparison-icon',
     navigateUrl: '/tools/text-compare',
-  },
-  {
-    applicationId: 'uuid',
-    displayText: AppDisplayNames.UUID_GENERATOR,
-    iconName: 'uuid-icon',
-    navigateUrl: '/tools/uuid',
   },
   {
     applicationId: 'jwt',
@@ -115,5 +125,23 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.IMAGE_CROPPER,
     iconName: 'image-icon',
     navigateUrl: '/tools/crop-image',
+  },
+  {
+    applicationId: 'uuidv4',
+    displayText: AppDisplayNames.UUID_VERSION4_GENERATOR,
+    iconName: 'uuid-icon',
+    navigateUrl: '/tools/uuid-v4-generator',
+  },
+  {
+    applicationId: 'uuidv1',
+    displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
+    iconName: 'uuid-icon',
+    navigateUrl: '/tools/uuid-v1-generator',
+  },
+  {
+    applicationId: 'guid',
+    displayText: AppDisplayNames.GUID_GENERATOR,
+    iconName: 'uuid-icon',
+    navigateUrl: '/tools/guid-generator',
   },
 ];

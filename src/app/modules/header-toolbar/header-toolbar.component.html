@@ -4,7 +4,10 @@
     aria-label="app icon button"
     [replaceUrl]="true"
     routerLink="">
-    <mat-icon svgIcon="app-icon" class="app-icon"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="app-icon"
+      class="app-icon"></mat-icon>
   </button>
   <div
     class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
@@ -17,6 +20,9 @@
     aria-label="home icon button"
     [replaceUrl]="true"
     routerLink="/tools">
-    <mat-icon svgIcon="home-icon" class="app-icon"></mat-icon>
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="home-icon"
+      class="app-icon"></mat-icon>
   </button>
 </mat-toolbar>

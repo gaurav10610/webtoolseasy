@@ -4,10 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-formatter';
-const pageTitle =
-  'Best Online JSON Formatter | JSON Beautifier | JSON Validator';
+const pageTitle = 'Online JSON Formatter | JSON Beautifier | JSON Validator';
 const pageDescription =
-  'Our Best Online JSON Formatter/Beautifier/Validator tool lets you format/beautify/validate your JSON for free.';
+  'JSON Formatter/Beautifier/Validator tool lets you format/beautify/validate your JSON code online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;
 
 export const componentConfig: ApplicationConfig = {

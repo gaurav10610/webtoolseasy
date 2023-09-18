@@ -4,9 +4,10 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle = 'Free Screen Recorder With No Watermark | No Time Limit';
+const pageTitle =
+  'Free Screen Recorder | Screen Recorder for PC | No Watermark';
 const pageDescription =
-  'Easy HD Screen recording via our Best Free Online Screen Recorder with or without audio, video from mic and webcam. No watermark and time limit for screen recording.';
+  'Record/capture your PC screen (Windows 10, Mac OS) with microphone audio and camera video for free with no watermark and no time limit. Supports pause and resume.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
 
 export const componentConfig: ApplicationConfig = {
@@ -42,10 +43,10 @@ export const componentConfig: ApplicationConfig = {
   ],
   tags: [
     'screen recorder',
-    'screen capture',
+    'screen recorder for pc',
     'screen record on mac',
-    'screen recorder windows 10',
-    'windows screen recorder',
+    'screen and audio recorder',
+    'screen capture with audio',
   ],
   icons: [
     {
@@ -69,7 +70,7 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use Screen Recorder?',
+    heading: 'How to use Screen Recorder For PC?',
     listData: [
       `To include mic audio & camera video in the recorded video, use provided checkboxes.`,
       `Start screen recording using start recording button.`,
@@ -90,12 +91,6 @@ export const descriptionData: DescriptionBlock[] = [
       `Easy to use: No software installation is needed to record screen.`,
       `Cross platform: Tool is completely web-based and can be accessed wherever you are, from any computer. It is compatible with all major browsers and OSes, including Windows, macOS, and Linux.`,
       `Secure: Screen recording is 100% secure as whole processing is being done at client side only (in host browser) and we don't store any video.`,
-    ],
-  },
-  {
-    heading: 'Disclaimer',
-    blockData: [
-      'Recorded video will be in WEBM format. To convert in some other format like MP4 you can use our video converter tool to convert the recorded video.',
     ],
   },
 ];

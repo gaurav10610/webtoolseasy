@@ -43,62 +43,6 @@ export const componentConfig: ApplicationConfig = {
       iconRelativeUrl: 'app-icon.svg',
     },
     {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'image-icon',
-      iconRelativeUrl: 'image-icon.svg',
-    },
-    {
-      iconName: 'play-icon',
-      iconRelativeUrl: 'play-icon.svg',
-    },
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'screen-icon',
-      iconRelativeUrl: 'screen.svg',
-    },
-    {
-      iconName: 'comparison-icon',
-      iconRelativeUrl: 'comparison.svg',
-    },
-    {
-      iconName: 'video-convert-icon',
-      iconRelativeUrl: 'video-convert.svg',
-    },
-    {
-      iconName: 'password-icon',
-      iconRelativeUrl: 'password.svg',
-    },
-    {
-      iconName: 'file-encode-icon',
-      iconRelativeUrl: 'file-encode.svg',
-    },
-    {
-      iconName: 'file-decode-icon',
-      iconRelativeUrl: 'file-decode.svg',
-    },
-    {
       iconName: 'share-fb',
       iconRelativeUrl: 'share-fb.svg',
     },

@@ -4,9 +4,9 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/css-formatter';
-const pageTitle = 'Best Online CSS Formatter | CSS Beautifier';
+const pageTitle = 'Online CSS Formatter | CSS Beautifier';
 const pageDescription =
-  'Our Best Online CSS Formatter/Beautifier tool lets you format/beautify/validate your CSS code for free.';
+  'CSS formatter/beautifier tool lets you format/beautify/validate your CSS code online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/css-format.png`;
 
 export const componentConfig: ApplicationConfig = {

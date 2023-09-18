@@ -11,9 +11,6 @@
         <loc>https://webtoolseasy.com/tools</loc>
     </url>
     <url>
-        <loc>https://webtoolseasy.com/tools/uuid</loc>
-    </url>
-    <url>
         <loc>https://webtoolseasy.com/tools/jwt</loc>
     </url>
     <url>
@@ -57,5 +54,20 @@
     </url>
     <url>
         <loc>https://webtoolseasy.com/tools/crop-image</loc>
+    </url>
+    <url>
+        <loc>https://webtoolseasy.com/tools/uuid-v1-generator</loc>
+    </url>
+    <url>
+        <loc>https://webtoolseasy.com/tools/uuid-v4-generator</loc>
+    </url>
+    <url>
+        <loc>https://webtoolseasy.com/tools/guid-generator</loc>
+    </url>
+    <url>
+        <loc>https://webtoolseasy.com/tools/markdown-editor</loc>
+    </url>
+    <url>
+        <loc>https://webtoolseasy.com/tools/word-counter</loc>
     </url>
 </urlset>

@@ -15,16 +15,13 @@
       <span class="div-label">Modified Data</span>
     </div>
     <ngx-monaco-diff-editor
-      *ngIf="platformMetadataService.isPlatformBrowser"
+      *ngIf="platformMetaDataService.isPlatformBrowser"
       #diffEdior
       [options]="editorOptions"
       [modifiedModel]="modifiedModel"
       [originalModel]="originalModel"
-      style="
-        height: 100%;
-        width: 100%;
-        border: 1px solid lightgrey;
-      "></ngx-monaco-diff-editor>
+      class="full-width border-grey"
+      style="height: 100%"></ngx-monaco-diff-editor>
 
     <!-- import file buttons -->
     <div

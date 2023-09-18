@@ -51,13 +51,13 @@ export class CronGeneratorComponent implements AfterViewInit {
 
   constructor(
     private clipboard: Clipboard,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
     this.cronForm = new FormControl(this.cronExpression);
   }
 
   ngAfterViewInit(): void {
-    if (this.platformMetadataService.isPlatformBrowser) {
+    if (this.platformMetaDataService.isPlatformBrowser) {
       this.cronEditor.registerOnChange(this.onCronChanged.bind(this));
       this.cronEditor.registerOnTouched(this.onCronEditorTouched.bind(this));
     }
