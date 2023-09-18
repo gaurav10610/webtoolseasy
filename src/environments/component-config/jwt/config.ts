@@ -4,10 +4,12 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/jwt';
-const pageTitle = 'Online JWT Decoder | JWT Token Decode | JWT Token Decrypt';
+const pageTitle = 'JWT Decoder Tool - Decode JWT Tokens Online for Free';
 const pageDescription =
-  'Online jwt decoder tool lets you validate/decode/decrypt your JSON Web Token (JWT). Supports a wide range of JWT alogirithms i.e HS256, HS384 and many more.';
+  'Our free online JWT decoder tool is a quick and easy way to decode JSON Web Tokens (JWTs). Simply paste your JWT into the text box and instantly see the decoded header, payload, and signature.';
 const imageUrl = `${environment.screenshotsBaseUrl}/jwt-decoder.png`;
+const keywords =
+  'JWT decoder, JWT decoder online, JWT decoder free, JWT decoder tool, decode JWT, decode JWT online, decode JWT free, JWT debugger, JSON Web Token decoder, JSON Web Token decoder online, JSON Web Token decoder free';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder',
@@ -40,13 +42,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'jwt decode',
-    'jwt token decode',
-    'jwt token decrypt',
-    'jwt decode online',
-    'jwt online decoder',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [
     {
       iconName: 'uuid-icon',
@@ -87,33 +83,57 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'What is JSON Web Token (JWT)?',
     blockData: [
-      `JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. It is typically used for authentication and authorization purposes, as an alternative to session-based authentication.`,
-      `In a JWT, the information is encoded as a JSON object and then signed using a digital signature, so that the receiver can verify that the information has not been tampered with. The information in a JWT can be read by anyone, but only the party that holds the secret key can sign a JWT, making it secure for transmitting sensitive information.`,
-      `JWTs are often used in conjunction with OAuth 2.0, an open standard for authorization, and are often used to pass authentication information between an authentication server and a resource server, or between different systems. They are also used as a secure way to transmit information in Single Sign-On (SSO) systems.`,
-      `Overall, JWTs provide a lightweight and convenient way to transmit information securely over the web, making them an increasingly popular choice for many application development scenarios.`,
+      'JSON Web Tokens (JWTs) are a popular way to encode and transmit data securely between two parties. JWTs are used in a variety of applications, such as authentication, authorization, and data sharing.',
+      `If you need to decode a JWT, you can use our free online JWT decoder tool. It's simple to use and completely free.`,
+      'To use the tool, simply copy and paste your JWT into the text box. The tool will instantly decode the JWT and show you the header, payload, and signature.',
+      `Our JWT decoder tool is perfect for developers, testers, and anyone else who needs to decode JWTs. It's also great for learning more about JWTs and how they work.`,
+      'No matter what your needs are, our free online JWT decoder tool is a valuable resource. Try it today and see how easy it is to use!',
     ],
   },
   {
-    heading: 'What is the need of JWT decoder/validator?',
-    blockData: [
-      `A JWT decoder tool allows you to decode, verify, and inspect the contents of a JWT. This is essential for developers and security professionals who need to troubleshoot, test, or inspect the contents of a JWT for security or compliance purposes.`,
-      `With an online JWT decoder tool, you can quickly and easily decode and inspect the contents of a JWT, including the header, payload, and signature. This information can be used to verify the authenticity of the JWT, to identify any potential security vulnerabilities, or to ensure compliance with security standards.`,
-    ],
-  },
-  {
-    heading: 'Key features',
+    heading:
+      'Here are some of the benefits of using our free online JWT decoder tool:',
     listData: [
-      `Supports wide range of JWT alogirithms i.e HS256, HS384, HS512, PS256, PS384, PS512, RS256, RS384, RS512, ES256, ES256K, ES384, ES512 & EdDSA`,
-      `Secure: JSON Web Token (JWT) is being decoded in host browser only.`,
+      `It's quick and easy to use.`,
+      `It's completely free.`,
+      `It's accurate and reliable.`,
+      'It decodes JWTs into header, payload, and signature.',
+      `It's perfect for developers, testers, and anyone else who needs to decode JWTs.`,
+      `It's great for learning more about JWTs and how they work.`,
     ],
   },
   {
-    heading: 'Disclaimer',
-    blockData: [
-      `JWTs are credentials, which can grant access to resources. Be careful where you paste them! We do not record tokens.`,
+    heading:
+      'Here are some examples of how you can use our free online JWT decoder tool:',
+    listData: [
+      'Developers can use the tool to decode JWTs that they are developing or testing.',
+      'Testers can use the tool to decode JWTs that they are testing.',
+      'Anyone can use the tool to decode JWTs that they have received or need to decode for any reason.',
     ],
+  },
+  {
+    heading: 'What is a JWT?',
+    blockData: [
+      'A JSON Web Token (JWT) is an open standard (RFC 7519) for creating and verifying claims between two parties. A JWT is a string made up of three parts, separated by dots (.). The first part is the header, which contains information about the token, such as the algorithm used to sign it and the type of token. The second part is the payload, which contains the claims that are being made. The third part is the signature, which is used to verify the authenticity of the token.',
+    ],
+  },
+  {
+    heading: 'How to use our JWT decoder tool:',
+    blockData: [
+      'To use our JWT decoder tool, simply copy and paste your JWT into the text box and click the "Decode" button. The tool will instantly decode the JWT and show you the header, payload, and signature.',
+    ],
+  },
+  {
+    heading: 'Tips for using our JWT decoder tool:',
+    listData: [
+      `Make sure to copy and paste the entire JWT into the text box, including the dots (.).`,
+      `If you are having trouble decoding a JWT, you can try using a different algorithm.`,
+      `You can also use our JWT decoder tool to decode JWTs that are encoded in different ways, such as base64 encoded or URL safe encoded.`,
+    ],
+  },
+  {
+    blockData: ['We hope you find our free online JWT decoder tool helpful!'],
   },
   {
     heading: 'References',
