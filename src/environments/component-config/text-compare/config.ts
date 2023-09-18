@@ -12,7 +12,7 @@ const keywords =
   'text compare tool, text comparison tool, text diff tool, compare text online, compare text files, compare text documents, plagiarism checker, compare documents for similarity, compare two texts, text similarity checker, compare text online free, text compare online';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Text Compare',
+  mainHeading: 'Text Compare - Text to Text Comparison',
   subHeading: 'Text to Text Comparison',
   navigationUrl,
   pageTitle,

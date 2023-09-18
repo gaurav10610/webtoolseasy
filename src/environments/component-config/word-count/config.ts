@@ -14,7 +14,7 @@ const keywords =
   'word count tool, character count tool, sentence count tool, free word count tool, free character count tool, free sentence count tool, online word count tool, online character count tool, online sentence count tool, word counter, character counter, sentence counter, word count, character count, sentence count';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Word And Character Count',
+  mainHeading: 'Free Online Word, Character, and Sentence Count Tool',
   subHeading: 'Count Word, Character And Sentence Online For Free',
   navigationUrl,
   pageTitle,
