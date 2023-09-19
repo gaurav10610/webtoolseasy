@@ -3,13 +3,18 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/cron-expression';
-const pageTitle = 'Cron Expression Generator | Cron Expression Builder';
+const pageTitle =
+  'Free Online Cron Expression Generator: Easily Create Cron Expressions for Your Tasks';
 const pageDescription =
-  'Cron expression generator tool lets you graphically generate cron expression online. Generate quartz cron expression. Generate spring cron expression.';
+  'Generate cron expressions for your tasks with ease with our free online cron expression generator tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
+const keywords =
+  'online cron expression generator,generate cron expression,cron expression generator tool,cron expression,crontab,cron job,schedule task,Unix-like operating system,free cron expression generator,no download required,supports all cron expression fields,easy to use,customizable settings';
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Cron Expression Generator',
+  mainHeading:
+    'Free Online Cron Expression Generator: Easily Create Cron Expressions for Your Tasks',
   subHeading: 'Graphically Generate Cron Expression Online',
   navigationUrl,
   pageTitle,
@@ -39,58 +44,50 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'cron expression',
-    'cron expression generator',
-    'cron generator',
-    'cron online',
-    'cron expression builder',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'What is a Cron Job?',
-    blockData: [
-      `A cron job is a scheduled task or job in Unix-like operating systems that is used to automate repetitive tasks at specific intervals or times. The term "cron" is derived from the Greek word "chronos," which means time. Cron jobs are named after the utility that manages them, called "cron."`,
-    ],
-  },
-  {
-    heading: 'How Cron Job works?',
-    listData: [
-      `Cron Schedule: You define a schedule for when you want a particular command or script to run. This schedule is specified using a combination of time and date fields. These fields determine when the job should execute, such as minute, hour, day of the month, month, and day of the week.`,
-      `Command or Script: You specify the command or script that you want to run on that schedule. This can be any shell command, script, or program that the operating system can execute.`,
-      `Cron Daemon: A daemon (a background process) called the "cron daemon" or simply "cron" continuously checks the cron schedule and, when a scheduled time matches the current time, it executes the specified command or script automatically.`,
-    ],
-  },
-  {
     heading: 'What is a Cron Expression?',
-    listData: [
-      `A cron expression is a string representing a schedule for recurring tasks or jobs in Unix-like operating systems. It is used to define the timing and frequency of when a specific task, command, or script should be executed by the cron daemon. Cron expressions consist of fields that specify minute, hour, day of the month, month, and day of the week, allowing for highly customizable scheduling.`,
-      `Cron expression can be of two formats i.e Quartz cron expression or Standard Linux cron expression.`,
+    blockData: [
+      `A cron expression is a string that represents a set of times at which a task will be executed. Cron expressions are used to schedule tasks on Unix-like operating systems.`,
     ],
   },
   {
-    heading: 'What is a Quartz Cron Expression?',
+    heading: 'Why Use a Cron Expression Generator?',
     listData: [
-      `Environment: Quartz is a job scheduling library and framework primarily used in Java applications. It provides a programmatic way to schedule and manage jobs within Java applications.`,
-      `Syntax: Quartz uses a more expressive and flexible syntax for defining job schedules. Quartz expressions can specify not only the timing of jobs but also more complex schedules, such as "run every weekday except holidays" or "run every 15 minutes between 9 AM and 5 PM."`,
-      `Resolution: Quartz can schedule jobs with second-level precision, making it suitable for applications that require very fine-grained control over job timing.`,
-      `Usage: Quartz is used within Java applications and provides programmatic scheduling capabilities. Developers embed Quartz code within their applications to schedule and manage tasks.`,
-      `Complex Scheduling: Quartz supports complex scheduling scenarios, such as chaining jobs, creating dependencies between jobs, and handling misfires (e.g., jobs that were missed due to system downtime).`,
-      `Portability: Quartz is specific to Java applications and is not inherently portable to other programming languages or environments.`,
+      'To save time and effort. Cron expression generators can save you a lot of time and effort by automatically generating cron expressions for you.',
+      'To avoid errors. Cron expression generators can help you to avoid errors in your cron expressions.',
+      'To learn more about cron expressions. Cron expression generators can help you to learn more about cron expressions by providing detailed information about each field in the expression.',
     ],
   },
   {
-    heading: 'What is a Standard Linux Cron Expression?',
+    heading: 'Features of Our Online Cron Expression Generator Tool',
     listData: [
-      `Environment: Linux cron expressions are used in Unix-like operating systems (including Linux) to schedule tasks at the system level. They are typically used to schedule system maintenance and automation tasks.`,
-      `Syntax: Linux cron expressions have a simpler syntax limited to specifying minute, hour, day of the month, month, and day of the week. While powerful for many tasks, they are less expressive when compared to Quartz.`,
-      `Resolution: Linux cron expressions typically have minute-level precision. Some cron daemons may support sub-minute scheduling, but this is less common and not as precise as Quartz.`,
-      `Usage: Linux cron expressions are used at the system level and are configured using the crontab command or system-level configuration files. They are suitable for scheduling system-related tasks and scripts.`,
-      `Complex Scheduling: While Linux cron expressions can handle basic scheduling needs, they are less capable of handling complex scheduling requirements without additional scripting or external tools.`,
-      `Portability: Linux cron expressions are more portable across Unix-like operating systems and can be used with various scripting languages like Bash, Python, or Perl.`,
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Generate cron expressions directly from your web browser.',
+      'Supports all cron expression fields. Our generator supports all cron expression fields, including second, minute, hour, day of month, month, and day of week.',
+      'Easy to use. Simply select the desired execution times for your task and our generator will generate the corresponding cron expression.',
+      'Customizable settings. You can customize the settings of our generator to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online Cron Expression Generator Tool',
+    listData: [
+      'Go to our website and select the desired execution times for your task.',
+      'Click the "Generate Cron Expression" button.',
+      'View your generated cron expression in the sidebar.',
+      'Copy and paste your generated cron expression into your crontab file.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a Cron Expression Generator',
+    listData: [
+      'Use a consistent cron expression format. There are multiple cron expression formats in use. Choose a format and use it consistently throughout your project. This will make it easier to read and understand your cron expressions.',
+      'Test your cron expressions before using them in production. Once you have generated a cron expression, be sure to test it before using it in production. This will help you to identify and fix any problems with the expression.',
+      'Use comments to document your cron expressions. Adding comments to your cron expressions can help you to understand and maintain your crontab file.',
     ],
   },
   {
@@ -117,27 +114,8 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: 'Key features',
-    listData: [
-      `Supports quartz cron expression.`,
-      `User-Friendly Interface: Online cron expression generator provides a intuitive and easy to navigate, making it accessible to users with varying levels of technical expertise.`,
-      `Interactive Scheduler: Online cron expression generator provides a visual representation of the cron schedule, such as a calendar or timeline, can help users understand and visualize when their task will run.`,
-      `Field Customization: Users can customize each field of the cron expression (minute, hour, day of the month, month, and day of the week) using dropdowns, sliders, or input fields.`,
-      `Copy and Paste: Users can easily copy the generated cron expression for use in their applications or scripts.`,
-      `Cross-Platform Compatibility: Online cron expression generator works well across different web browsers and operating systems.`,
-    ],
-  },
-  {
-    heading: 'References',
-    links: [
-      {
-        displayText: 'Read more about Cron at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/Cron',
-      },
-      {
-        displayText: 'Read more about Quartz scheduler at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/Quartz_(scheduler)',
-      },
+    blockData: [
+      'Our free online cron expression generator tool is a great way to easily create cron expressions for your tasks. It is easy to use and supports all cron expression fields. With our generator, you can save time and effort, avoid errors, and learn more about cron expressions.',
     ],
   },
 ];
