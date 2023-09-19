@@ -2,7 +2,7 @@ import { ApplicationConfig } from 'src/app/@types/config';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '';
-const pageTitle = 'Free Web Tools - webtoolseasy.com';
+const pageTitle = 'Free Online Web Tools - WebToolsEasy';
 const pageDescription =
   'Discover a range of free online web tools that can simplify your work and boost productivity. Try them out today!';
 const imageUrl = `${environment.screenshotsBaseUrl}/home-page.png`;
