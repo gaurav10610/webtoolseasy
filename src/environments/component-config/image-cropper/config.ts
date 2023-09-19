@@ -4,14 +4,16 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/crop-image';
-const pageTitle =
-  'Photo Cutting | Crop Photo | Crop Image Online | Crop Picture';
+const pageTitle = 'Free Image Cropper: Crop Images Online for Free';
 const pageDescription =
-  'Image cropper tool lets you crop your image/photo/picture online. Crop your JPG, JPEG, PNG, WEBP, BMP or GIF images and download in multiple supported formats.';
+  'Crop your images online for free with our easy-to-use image cropper. No download required, no sign-up required. Crop JPG, PNG, WEBP, BMP For Free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-cropper.png`;
 
+const keywords =
+  'free image cropper,online image cropper,crop images online,crop JPEG images,crop PNG images,crop GIF images,crop BMP images,image cropping,image composition,image aspect ratio,social media image cropping,website image cropping,remove unwanted parts of an image,resize an image,create a square image';
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Crop JPG, PNG, WEBP, BMP For Free',
+  mainHeading: 'Free Image Cropper: Crop Images Online for Free',
   subHeading: 'Crop Image Online',
   navigationUrl,
   pageTitle,
@@ -41,14 +43,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'photo cutting',
-    'crop photo',
-    'crop image',
-    'crop image online',
-    'crop picture online',
-    'crop and image',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [
     {
       iconName: 'image-icon',
@@ -67,43 +62,44 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Crop Image/Photo using Image Cropper Tool?',
+    heading: 'Why Use an Image Cropper?',
     listData: [
-      'Drag & drop or select image files (JPEG, PNG, WEBP, BMP only) to crop.',
-      'Once selected images apprears in uploaded images section then select any uploaded image to crop',
-      'In crop and preview section, use drag and move freehand select area section from image cropper tool to crop certion portion from selected image/photo.',
-      'Realtime preview of cropped portion of the selected image will be updated everytime the crop area is dragged or moved.',
-      'Use output format dropdown to select the output format of cropped image.',
-      'Use download button to download cropped image in desired format.',
+      'To remove unwanted parts of an image. This can be useful for improving the composition of an image or for removing distracting elements.',
+      'To resize an image to a specific size. This can be useful for sharing images on social media or for using images on a website.',
+      'To create a square image. Square images are often preferred for social media platforms and for sharing on mobile devices.',
     ],
   },
   {
-    heading: 'What is Image Cropping?',
+    heading: 'Features of Our Free Online Image Cropper',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Crop your images directly from your web browser.',
+      'Supports multiple image formats. Crop JPEG, PNG, GIF, and BMP images.',
+      'Easy to use. Simply upload your image and drag the crop box to the desired size and location.',
+      'Save your cropped images in the desired format.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Free Online Image Cropper',
+    listData: [
+      'Go to our website and click the "Upload Image" button.',
+      'Select the image you want to crop.',
+      'Drag the crop box to the desired size and location.',
+      'Click the "Crop Image" button.',
+      'Save your cropped image.',
+    ],
+  },
+  {
+    heading: 'Tips for Using an Image Cropper',
+    listData: [
+      'Consider the composition of your image. When cropping an image, it is important to consider the composition. Try to crop your image in a way that highlights the most important elements and creates a balanced and visually appealing image.',
+      'Use the crop ratio tool. Many image croppers have a crop ratio tool that allows you to crop your image to a specific aspect ratio. This can be useful for cropping images for social media or for using images on a website.',
+      'Save a copy of the original image. Before cropping your image, it is a good idea to save a copy of the original image. This way, you can always go back to the original image if you are not happy with the cropped image.',
+    ],
+  },
+  {
     blockData: [
-      `Image cropping is a common image processing technique that involves selecting a portion of an image while discarding the rest. Essentially, it's like cutting out a specific section of an image, removing everything outside of the selected area. This process allows you to focus on a particular subject or area of interest within the image and can serve several purposes`,
-    ],
-  },
-  {
-    heading: 'Why would you want to Crop Image/Photo?',
-    listData: [
-      `Composition: Cropping can help improve the composition of an image by removing distracting or irrelevant elements. This can make the main subject more prominent and aesthetically pleasing.`,
-      `Emphasis: You can use cropping to emphasize a specific part of the image, drawing the viewer's attention to that area. This is often done in portrait photography to highlight a person's face.`,
-      `Resizing: Cropping can be used to resize an image without changing its resolution. For example, you can crop a large image to create a smaller version while maintaining the same pixel density.`,
-      `Aspect Ratio Adjustment: Cropping allows you to change the aspect ratio of an image. For example, you can convert a rectangular image into a square by cropping it accordingly.`,
-      `Eliminating Unwanted Content: If there are unwanted objects or artifacts in the image, cropping can be used to remove them.`,
-      `Zooming In: Cropping can simulate a zooming effect, making a distant subject appear closer by removing the surrounding area.`,
-    ],
-  },
-  {
-    heading: 'Key Features',
-    listData: [
-      `Upload and Import: The ability to upload images directly from your device.`,
-      `Crop Selection: Tools for selecting the area of the image you want to keep. This can include rectangular, square, freeform, or aspect ratio-specific cropping options.`,
-      `Preview: A preview of the cropped image to visualize how it will look after cropping.`,
-      `Save and Download: The ability to save the cropped image in various formats (e.g., JPEG, PNG, WEBP or BMP) and download it to your device or share it directly on social media platforms.`,
-      `Privacy and Security: Assurance that uploaded images are handled securely and that your data and edited images are protected as the whole processing will be done in client browser only.`,
-      `User-Friendly Interface: An intuitive and user-friendly interface with easy-to-understand controls and instructions.`,
-      `Mobile-Friendly: Compatibility with mobile devices, enabling users to crop images on smartphones and tablets.`,
+      'Our free online image cropper is a great way to crop your images online for free. It is easy to use and supports multiple image formats. With our image cropper, you can remove unwanted parts of an image, resize an image to a specific size, or create a square image.',
     ],
   },
 ];
