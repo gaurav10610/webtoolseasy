@@ -58,9 +58,5 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'share-copy',
       iconRelativeUrl: 'share-copy.svg',
     },
-    {
-      iconName: 'cron-icon',
-      iconRelativeUrl: 'cron.svg',
-    },
   ],
 };
