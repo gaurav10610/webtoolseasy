@@ -31,6 +31,12 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     navigateUrl: '/tools/word-counter',
   },
   {
+    applicationId: 'textcompare',
+    displayText: AppDisplayNames.TEXT_COMPARE,
+    iconName: 'comparison-icon',
+    navigateUrl: '/tools/text-compare',
+  },
+  {
     applicationId: 'markdowneditor',
     displayText: AppDisplayNames.MARKDOWN_EDITOR,
     iconName: 'markdown-icon',
@@ -55,22 +61,22 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     navigateUrl: '/tools/screen-recorder',
   },
   {
-    applicationId: 'textcompare',
-    displayText: AppDisplayNames.TEXT_COMPARE,
-    iconName: 'comparison-icon',
-    navigateUrl: '/tools/text-compare',
+    applicationId: 'imagecompress',
+    displayText: AppDisplayNames.IMAGE_COMPRESSOR,
+    iconName: 'image-icon',
+    navigateUrl: '/tools/image-compress',
+  },
+  {
+    applicationId: 'imagecropper',
+    displayText: AppDisplayNames.IMAGE_CROPPER,
+    iconName: 'image-icon',
+    navigateUrl: '/tools/crop-image',
   },
   {
     applicationId: 'jwt',
     displayText: AppDisplayNames.JWT_DECODER,
     iconName: 'jwt-icon',
     navigateUrl: '/tools/jwt',
-  },
-  {
-    applicationId: 'imagecompress',
-    displayText: AppDisplayNames.IMAGE_COMPRESSOR,
-    iconName: 'image-icon',
-    navigateUrl: '/tools/image-compress',
   },
   {
     applicationId: 'jsformatter',
@@ -119,12 +125,6 @@ export const appDisplayConfig: AppDisplayConfig[] = [
     displayText: AppDisplayNames.CRON_GENERATOR,
     iconName: 'cron-icon',
     navigateUrl: '/tools/cron-expression',
-  },
-  {
-    applicationId: 'imagecropper',
-    displayText: AppDisplayNames.IMAGE_CROPPER,
-    iconName: 'image-icon',
-    navigateUrl: '/tools/crop-image',
   },
   {
     applicationId: 'uuidv4',

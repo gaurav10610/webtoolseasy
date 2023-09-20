@@ -8,13 +8,13 @@ const pageTitle =
   'Free Word, Character, and Sentence Count Tool - Count Words, Characters, and Sentences in Seconds';
 const pageDescription =
   'Our free online word, character, and sentence count tool is quick, easy, and accurate. Simply copy and paste your text into the text box and see the number of words, characters, and sentences in your text.';
-const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
+const imageUrl = `${environment.screenshotsBaseUrl}/word-counter.png`;
 
 const keywords =
   'word count tool, character count tool, sentence count tool, free word count tool, free character count tool, free sentence count tool, online word count tool, online character count tool, online sentence count tool, word counter, character counter, sentence counter, word count, character count, sentence count';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Word And Character Count',
+  mainHeading: 'Free Online Word, Character, and Sentence Count Tool',
   subHeading: 'Count Word, Character And Sentence Online For Free',
   navigationUrl,
   pageTitle,

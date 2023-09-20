@@ -4,13 +4,18 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-formatter';
-const pageTitle = 'Online HTML Formatter | HTML Beautifier';
+const pageTitle =
+  'Free Online HTML Beautifier: Make Your HTML Code More Readable and Maintainable';
 const pageDescription =
-  'HTML Formatter/Beautifier tool lets you format/beautify your HTML code online.';
+  'Beautify your HTML code with ease with our free online HTML beautifier tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;
 
+const keywords =
+  'online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,no download required,supports all HTML features,easy to use,customizable settings,HTML code style guide,HTML code formatting errors';
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'HTML Formatter',
+  mainHeading:
+    'Free Online HTML Beautifier: Make Your HTML Code More Readable and Maintainable',
   subHeading: 'Online HTML Beautifier',
   navigationUrl,
   pageTitle,
@@ -40,12 +45,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'html formatter',
-    'html beautify',
-    'fhtml formatter online',
-    'html code formatter',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [
     {
       iconName: 'json-icon',
@@ -90,53 +90,49 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use HTML Formatter / Beautifier?',
-    listData: [
-      `Paste unformatted / minified HTML in unformatted HTML block and HTML will be formatted / beautified automatically.`,
-    ],
-  },
-  {
-    heading: 'Why choose our Online HTML Formatter / Beautifier Tool?',
-    listData: [
-      `Improves readability: Clean and organized HTML is easier to read and understand, making it easier for you or your team to work with.`,
-      `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
-      `Supports collaboration: Clean, organized HTML makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: 'What is HTML or Hypertext Markup Language?',
+    heading: 'What is an HTML Beautifier?',
     blockData: [
-      `The HyperText Markup Language or HTML is the standard markup language for documents designed to be displayed in a web browser. It is often assisted by technologies such as Cascading Style Sheets (CSS) and scripting languages such as JavaScript.`,
-      `Web browsers receive HTML documents from a web server or from local storage and render the documents into multimedia web pages. HTML describes the structure of a web page semantically and originally included cues for its appearance.`,
+      'An HTML beautifier is a tool that takes your HTML code and formats it in a consistent and readable style. This can make your code easier to read, understand, and maintain.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'Why Use an HTML Beautifier?',
     listData: [
-      `Supports online editing of your HTML code using our inbuilt monaco code edior.`,
-      `Easy to use: Our user-friendly interface makes it simple for anyone to format their HTML with just pasting it here.`,
-      `Real-time formatting: Our tool formats your HTML in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your HTML into our platform and get a clean, organized, and optimized result.`,
-      `Formatted / Beautified HTML can be saved or copied easily.`,
+      'To improve the readability of your code. Well-formatted code is easier to read and understand, which can help you to write better code and to debug your code more easily.',
+      'To make your code more consistent. An HTML beautifier can help you to format your code in a consistent style, which can make your code more readable and maintainable.',
+      'To follow code style guidelines. Many companies have code style guidelines that they require their developers to follow. An HTML beautifier can help you to format your code in accordance with these guidelines.',
     ],
   },
   {
-    heading: 'References',
-    links: [
-      {
-        displayText:
-          'Read more about HTML or Hypertext Markup Language at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/HTML',
-      },
-      {
-        displayText: 'RFC 2318 - Hypertext Markup Language - 2.0',
-        url: 'https://www.rfc-editor.org/rfc/rfc1866',
-      },
-      {
-        displayText: 'HTML Introduction at w3schools.com',
-        url: 'https://www.w3schools.com/html/html_intro.asp',
-      },
+    heading: 'Features of Our Online HTML Beautifier Tool',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Beautify your HTML code directly from your web browser.',
+      'Supports all HTML features. Our beautifier supports all the features of the HTML language, including HTML5 and HTML6.',
+      'Easy to use. Simply paste your HTML code into the editor and click the "Beautify" button.',
+      'Customizable settings. You can customize the settings of our beautifier to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online HTML Beautifier Tool',
+    listData: [
+      'Go to our website and paste your HTML code into the editor.',
+      'Click the "Beautify" button.',
+      'View your beautified HTML code in the sidebar.',
+      'Copy and paste your beautified HTML code into your project.',
+    ],
+  },
+  {
+    heading: 'Tips for Using an HTML Beautifier',
+    listData: [
+      'Use a consistent code style. Choose a code style and use it consistently throughout your project. This will make your code more readable and maintainable.',
+      'Format your code before you commit it to a repository. This will help to ensure that your code is readable and maintainable for other developers.',
+      'Use an HTML beautifier to check for formatting errors. An HTML beautifier can help you to identify and fix formatting errors in your code.',
+    ],
+  },
+  {
+    blockData: [
+      'Our free online HTML beautifier tool is a great way to beautify your HTML code with ease. It is easy to use and supports all the features of the HTML language. With our beautifier, you can improve the readability, consistency, and maintainability of your HTML code.',
     ],
   },
 ];

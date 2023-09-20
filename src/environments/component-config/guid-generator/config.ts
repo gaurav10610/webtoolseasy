@@ -4,13 +4,17 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/guid-generator';
-const pageTitle = 'GUID Generator | Bulk GUID Generator | Generate GUID Online';
+const pageTitle = 'Generate Single or Bulk GUIDs Online for Free';
 const pageDescription =
-  'GUID generator tool lets you generate random/unique GUID. Supports bulk GUID generation.';
+  'Our free online GUID generator tool is a quick and easy way to generate globally unique identifiers (GUIDs), either individually or in bulk. Simply enter the number of GUIDs you need and click the "Generate" button to generate a list of unique GUIDs.';
 const imageUrl = `${environment.screenshotsBaseUrl}/guid-generator.png`;
 
+const keywords =
+  'GUID generator, GUID generator online, GUID generator free, GUID, globally unique identifier, UUID, universally unique identifier, generate GUID, generate GUID online, generate GUID free, single GUID, bulk GUID';
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online GUID Generator',
+  mainHeading:
+    'GUID Generator Tool - Generate Single or Bulk Globally Unique Identifiers (GUIDs) Online for Free',
   subHeading: 'Generate Random GUID Online',
   navigationUrl,
   pageTitle,
@@ -40,13 +44,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'guid',
-    'online guid generator',
-    'generate guid online',
-    'generate guid',
-    'bulk uuid generator',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [
     {
       iconName: 'jwt-icon',
@@ -81,23 +79,60 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'What is Version GUID?',
     blockData: [
-      `GUID stands for "Globally Unique Identifier." It is a 128-bit hexadecimal number that is used to uniquely identify various resources or entities in computer systems. GUIDs are generated using algorithms designed to ensure their uniqueness across space and time, which means that the probability of two GUIDs being the same is extremely low, even when generated on different machines in different locations.`,
+      'Globally unique identifiers (GUIDs) are also known as universally unique identifiers (UUIDs). They are 128-bit numbers that are used to identify information in computer systems. GUIDs are generated using a variety of methods, but all GUIDs are designed to be unique.',
+      'GUIDs are used in a variety of applications, such as database identifiers, session identifiers, and file identifiers. They are also used in some security applications, such as encryption and authentication.',
+      'Our free online GUID generator tool makes it easy to generate GUIDs, whether you need one or many. To use the tool, simply enter the number of GUIDs you need in the text box and click the "Generate" button. The tool will instantly generate a list of GUIDs and show it to you. You can then copy and paste the list of GUIDs into your application.',
     ],
   },
   {
-    heading: 'Key Features',
+    heading:
+      'Here are some of the benefits of using our free online GUID generator tool:',
     listData: [
-      `Unlimited GUID generation for free`,
-      `Generate GUIDs in bulk using bulk GUID generator tool and export GUIDs in a text file`,
-      `Security: All the GUIDs are generated in host browser only`,
+      `It's quick and easy to use.`,
+      `It's completely free.`,
+      `It can generate single or bulk GUIDs.`,
+      `It generates random and unique GUIDs.`,
+      `It's perfect for developers, testers, and anyone else who needs to generate GUIDs.`,
+      `It's great for learning more about GUIDs and how they work.`,
     ],
   },
   {
-    heading: 'Disclaimer',
+    heading:
+      'Here are some examples of how you can use our free online GUID generator tool:',
+    listData: [
+      'Developers can use the tool to generate GUIDs for database identifiers, session identifiers, and file identifiers.',
+      'Testers can use the tool to generate GUIDs for test data.',
+      'Anyone can use the tool to generate GUIDs for any reason.',
+    ],
+  },
+  {
     blockData: [
-      `Generated GUIDs are provided as is without any kind of warranty.`,
+      'No matter what your needs are, our free online GUID generator tool is a valuable resource. Try it today and see how easy it is to use!',
+    ],
+  },
+  {
+    heading: 'What is a GUID?',
+    blockData: [
+      'A GUID is a globally unique identifier, also known as a universally unique identifier (UUID). It is a 128-bit number that is used to identify information in computer systems. GUIDs are generated using a variety of methods, but all GUIDs are designed to be unique.',
+    ],
+  },
+  {
+    heading: 'How to use our GUID generator tool:',
+    blockData: [
+      'To use our GUID generator tool, simply enter the number of GUIDs you need in the text box and click the "Generate" button. The tool will instantly generate a list of GUIDs and show it to you. You can then copy and paste the list of GUIDs into your application.',
+    ],
+  },
+  {
+    heading: 'Tips for using our GUID generator tool:',
+    listData: [
+      'You can generate as many GUIDs as you need.',
+      'You can also use our GUID generator tool to generate GUIDs in different formats, such as hexadecimal, base64, and URL safe.',
+    ],
+  },
+  {
+    blockData: [
+      'We hope you find our free online GUID generator tool helpful!',
     ],
   },
   {

@@ -12,7 +12,7 @@ const keywords =
   'JWT decoder, JWT decoder online, JWT decoder free, JWT decoder tool, decode JWT, decode JWT online, decode JWT free, JWT debugger, JSON Web Token decoder, JSON Web Token decoder online, JSON Web Token decoder free';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'JWT Decoder',
+  mainHeading: 'JWT Decoder - Decode and Validate JSON Web Token Online',
   subHeading: 'Decode and Validate JSON Web Token Online',
   navigationUrl,
   pageTitle,

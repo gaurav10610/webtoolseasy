@@ -4,13 +4,18 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/base64-encode';
-const pageTitle = 'File to Base64 | Base64 Encode | Base64 Converter | Base64';
+const pageTitle =
+  'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease';
 const pageDescription =
-  'Base64 encoder tool lets you encode your any image/text/pdf/file to base64 string and base64 data uri online. Supports all file formats.';
+  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
+const keywords =
+  'online file to Base64 encoder,convert file to Base64,file to Base64 encoder tool,Base64 encoding,Base64 decoding,Base64 secure,Base64 transmission,Base64 storage,free file to Base64 encoder,no download required,supports all file formats,easy to use,customizable settings,Base64 encoding scheme,store encoded data securely';
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'File to Base64 Encode',
+  mainHeading:
+    'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease',
   subHeading: 'Encode Image/Text/PDF/File to Base64',
   navigationUrl,
   pageTitle,
@@ -40,12 +45,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'base64 encode',
-    'base64 encode online',
-    'file to base64 encoder',
-    'online base64 converter',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   relatedTools: [
     {
       applicationId: 'base64decoder',
@@ -64,64 +64,49 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Encode Image/Text/PDF/File to Base64?',
-    listData: [
-      `Drag and Drop or browse image/text/pdf/file in order to encode it to base64`,
-      `File will be encoded to base64 automatically after selecting the file`,
-      `Base64 data can be copied to clipboard using copy buttons`,
-    ],
-  },
-  {
-    heading: 'Output Formats',
-    listData: [
-      `Plain base64 text => IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
-      `Data uri => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
-    ],
-  },
-  {
-    heading: 'Why choose our Online Image/Text/PDF/File to Base64 Encoder?',
-    listData: [
-      `Intuitive UX: Easy to use interface to encode image/text/pdf/file to base64`,
-      `Saves time: Fast and secure image/text/pdf/file to base64 conversion`,
-      `Cross-platform: Cross-platform image/text/pdf/file to base64 encoding tool`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: 'What is Base64?',
+    heading: 'What is Base64 Encoding?',
     blockData: [
-      `Base64 is a binary-to-text encoding scheme that allows binary data to be represented as a sequence of printable ASCII characters. It is commonly used to encode binary data, such as images, audio, video, and other types of files, so that it can be transmitted over text-based protocols, like email or HTTP, which may not reliably support binary data.`,
-      `The name "Base64" comes from the fact that it uses a set of 64 different printable characters, which consist of uppercase and lowercase letters (A-Z, a-z), numbers (0-9), and two additional special characters, usually '+' and '/'. The padding character '=' is used to ensure that the encoded output is a multiple of 4 characters, as the encoding is done in groups of 3 bytes.`,
-      `The encoding process involves breaking the binary data into 6-bit chunks and converting them into their corresponding ASCII characters according to the Base64 encoding table. Each group of 3 bytes (24 bits) is then represented by 4 Base64 characters. Decoding Base64 is the reverse process, where the ASCII characters are converted back to their original binary representation.`,
-      `Base64 encoding is widely used in various applications, such as: Email attachments, Data transmission, Data storage, Web development`,
-      `It's important to note that Base64 is not a secure encryption method, as it is easily reversible. Its main purpose is to facilitate the transport and storage of binary data in environments that only support text-based formats.`,
+      'Base64 encoding is a way to convert binary data into a string of ASCII characters. This is useful for storing and transmitting binary data in text-based formats, such as email or XML.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'Why Use a File to Base64 Encoder?',
     listData: [
-      `Fast and secure file to base64 conversion`,
-      `Free tool to convert image/text/pdf/file to base64`,
-      `Base64 encoding for all file types`,
-      `File to base64 conversion with high data integrity`,
-      `Cross-platform image/text/pdf/file to Base64 encoding tool`,
+      'To store binary files in text-based formats. Base64 encoding allows you to store binary files in text-based formats, such as email or XML. This makes it easier to store and transmit binary files.',
+      'To transmit binary files over networks. Base64 encoding can be used to transmit binary files over networks that do not support binary data. For example, you can use Base64 encoding to transmit binary files over email.',
+      'To secure binary files. Base64 encoding can be used to secure binary files by making them more difficult to read and understand. For example, you can use Base64 encoding to secure passwords or other sensitive data.',
     ],
   },
   {
-    heading: 'References',
-    links: [
-      {
-        displayText: 'Read more about Base64 at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/Base64',
-      },
-      {
-        displayText: 'RFC 4648 - Base64 Encoding',
-        url: 'https://datatracker.ietf.org/doc/html/rfc4648#section-4',
-      },
-      {
-        displayText: 'Base64 Docs - Mozilla',
-        url: 'https://developer.mozilla.org/en-US/docs/Glossary/Base64',
-      },
+    heading: 'Features of Our Online File to Base64 Encoder Tool',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Convert your files to Base64 directly from your web browser.',
+      'Supports all file formats. Our encoder supports all file formats, including text, images, videos, and audio.',
+      'Easy to use. Simply select your file and click the "Encode" button.',
+      'Customizable settings. You can customize the settings of our encoder to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online File to Base64 Encoder Tool',
+    listData: [
+      'Go to our website and select the file you want to encode.',
+      'Click the "Encode" button.',
+      'View your encoded data in the sidebar.',
+      'Copy and paste your encoded data into your project.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a File to Base64 Encoder',
+    listData: [
+      'Choose a secure file to Base64 encoder. Make sure to choose a file to Base64 encoder that is secure and that will not leak your data.',
+      'Use a consistent encoding scheme. Choose a Base64 encoding scheme and use it consistently throughout your project. This will make it easier to decode your data later.',
+      'Store your encoded data securely. Once you have encoded your data, make sure to store it securely. Encoded data is still vulnerable to attack, so it is important to store it securely.',
+    ],
+  },
+  {
+    blockData: [
+      'Our free online file to Base64 encoder tool is a great way to convert any file to Base64 with ease. It is easy to use and supports all file formats. With our encoder, you can easily store, transmit, and secure your binary files.',
     ],
   },
 ];

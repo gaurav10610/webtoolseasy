@@ -5,13 +5,16 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/video-converter';
 const pageTitle =
-  'Video to Audio Converter | Online Video Converter | MP4 to MP3';
+  'Free Online Video to Audio Converter: Extract Audio from Videos Easily';
 const pageDescription =
-  'Video to Audio Converter tool lets you convert your videos to high-quality audio for free. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
+  'Convert your videos to audio files for free with our online video to audio converter tool. No download required, no sign-up required. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
 const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
 
+const keywords =
+  'online video to audio converter,extract audio from videos,convert video to audio,convert video to MP3,reduce video file size,free video to audio converter,no download required,supports multiple video formats,high-quality MP3 files,easy to use,choose video format,check audio quality,choose audio format for needs,create podcasts,create audiobooks,listen to audio from videos';
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Video to Audio Converter',
+  mainHeading:
+    'Free Online Video to Audio Converter: Extract Audio from Videos Easily',
   subHeading: 'Convert Videos to Audio For Free',
   navigationUrl,
   pageTitle,
@@ -41,14 +44,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'video to audio converter',
-    'mp4 to mp3',
-    'webm to mp4',
-    'mp4 to webm',
-    'mkv to mp4',
-    'video to audio',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [
     {
       iconName: 'video-convert-icon',
@@ -83,33 +79,43 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use Video to Audio Converter Tool?',
+    heading: 'Why Use an Online Video to Audio Converter?',
     listData: [
-      `Drag & drop or select video files to convert.`,
-      `All video files will be listed. An error will be shown for invalid file types.`,
-      `For converting videos either use convert button corresponding to the video file or use convert all button.`,
-      `Default target format for all videos will be MP3 (Audio) and it can be changed via dropdown corresponding to each video file.`,
-      `Use download button corresponding to a video file to download converted video.`,
-      `Use download zip button to download all converted videos at once.`,
+      'To extract the audio from a video. This can be useful for creating podcasts, audiobooks, or simply for listening to the audio from a video without having to watch the video.',
+      'To convert a video to a different audio format. For example, you might want to convert a video to MP3 format so that you can listen to it on your MP3 player.',
+      'To reduce the file size of a video. Audio files are typically smaller than video files, so converting a video to audio can help to reduce the file size and make it easier to share or store.',
     ],
   },
   {
-    heading: 'What is the need of a Video to Audio Converter Tool?',
+    heading: 'Features of Our Online Video to Audio Converter Tool',
     listData: [
-      `Compatibility: Different devices and applications often support different video formats. By using an online video conversion tool, you can convert your video file into a format that is compatible with the device or application you want to use it on.`,
-      `File size: Large video files can take up a lot of storage space on your device or take a long time to upload or download. By using a video conversion tool, you can reduce the file size of your video without compromising on quality, making it easier to store and share.`,
-      `Editing: If you need to edit a video, you may need to convert it into a different format to work with the editing software you're using. An online video conversion tool can help you convert your video file into a format that's compatible with your editing software.`,
-      `Sharing: Different social media platforms and websites often have different requirements for video formats and file sizes. An online video conversion tool can help you convert your video into the appropriate format and size for sharing on different platforms.`,
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Convert your videos to audio directly from your web browser.',
+      'Supports multiple video formats. Convert MP4, AVI, MOV, WEBM, and other popular video formats to audio.',
+      'Converts videos to high-quality MP3 files. Our converter uses advanced algorithms to extract the audio from your videos in high quality.',
+      'Easy to use. Simply upload your video and click the "Convert" button.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'How to Use Our Online Video to Audio Converter Tool',
     listData: [
-      `Video to Audio conversion is 100% free. No registration required. No credit card requied.`,
-      `Video to Audio conversion is 100% secure as whole processing is being done at client side only (in host browser)`,
-      `Unlimited videos can be converted to Audio for free`,
-      `Supports wide range of input video formats - MP4, WEBM, OGV, MKV, OGM`,
-      `Supports wide range of output media formats - MP3, OGG, OPUS, AAC, MP4 x264, MP4 x265, WEBM, OGV`,
+      'Go to our website and click the "Upload Video" button.',
+      'Select the video you want to convert to audio.',
+      'Click the "Convert" button.',
+      'Download your converted audio file.',
+    ],
+  },
+  {
+    heading: 'Tips for Using an Online Video to Audio Converter',
+    listData: [
+      'Choose a video that is in a supported format. Our converter supports a wide range of video formats, but it is always best to check to make sure that your video is in a supported format before uploading it.',
+      'Make sure that your video has a good audio quality. The quality of the converted audio file will depend on the quality of the audio in the original video. If the original video has poor audio quality, the converted audio file will also have poor audio quality.',
+      'Choose the right audio format for your needs. If you are converting a video to audio to listen to it on your MP3 player, you will want to choose the MP3 audio format. If you are converting a video to audio to create a podcast, you might want to choose the AAC audio format.',
+    ],
+  },
+  {
+    blockData: [
+      'Our free online video to audio converter tool is a great way to extract the audio from your videos easily. It is easy to use and supports multiple video formats. With our converter, you can create podcasts, audiobooks, or simply listen to the audio from your videos without having to watch the video.',
     ],
   },
 ];
