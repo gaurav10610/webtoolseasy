@@ -3,19 +3,26 @@
 }
 
 .text-area-div {
-  width: 49%;
+  width: 48%;
   font-size: larger;
-  min-height: 30em;
+  min-height: 20em;
 }
 
-.text-content-div {
-  border-radius: 10px;
+.div-border {
+  border-radius: 4px;
 }
 
 .text-area-container {
   justify-content: space-between;
 }
 
+@media screen and (min-width: 735px) {
+  .encoded-div {
+    padding: 10px;
+  }
+}
+
+// to remove border from editable span or div
 [contenteditable]:focus {
   outline: 0px solid transparent;
 }

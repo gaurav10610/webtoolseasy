@@ -72,15 +72,6 @@ export class JwtComponent implements AfterViewInit {
     this.decodeUpdatedToken(this.text1AreaContent.nativeElement.innerText);
   }
 
-  onTokenPaste(event: any) {
-    event.preventDefault();
-    const pastedData = (
-      event.clipboardData || (<any>window).clipboardData
-    ).getData('text');
-    this.updateEncodedToken(pastedData);
-    this.decodeUpdatedToken(pastedData);
-  }
-
   decodeUpdatedToken(encodedTokenValue: string) {
     try {
       this.encodedToken = encodedTokenValue;

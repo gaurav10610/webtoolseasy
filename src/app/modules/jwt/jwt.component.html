@@ -1,21 +1,18 @@
 <div class="flex-display flex-column-flow flex-align-center flex-gap-medium">
   <div
-    class="flex-display flex-row-flow flex-align-center text-area-container full-width flex-gap-large">
+    class="flex-display flex-align-center text-area-container full-width flex-gap-large">
     <!-- Text 1 div -->
     <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
       <span class="div-label">Encoded Token (Paste Token Here)</span>
 
       <div
-        class="text-content-div y-scroll flex-full-height full-width border-grey"
+        class="div-border flex-full-height full-width border-grey auto-scroll encoded-div"
         style="color: indigo"
         (click)="onEncodedDivClick()">
         <span
           #text1AreaContent
           contenteditable="true"
-          (input)="encodedInputChange()"
-          (paste)="onTokenPaste($event)"
-          class="full-height full-width"
-          style="margin: 10px"></span>
+          (input)="encodedInputChange()"></span>
       </div>
     </div>
 
@@ -26,19 +23,17 @@
       <span style="font-size: small">Headers ( Algorithm & Token Type)</span>
 
       <!-- JWT header div -->
-      <div class="text-content-div full-width border-grey">
+      <div class="div-border full-width border-grey">
         <ngx-json-viewer
           #text3AreaContent
           [json]="decodedHeaders"
           [expanded]="true"></ngx-json-viewer>
       </div>
 
-      <div class="flex-display flex-row-flow">
-        <span style="font-size: small">Token Data</span>
-      </div>
+      <span style="font-size: small">Token Data</span>
 
       <div
-        class="text-content-div y-scroll flex-full-height full-width border-grey">
+        class="div-border flex-full-height full-width border-grey auto-scroll">
         <ngx-json-viewer
           #text2AreaContent
           [json]="decodedToken"
@@ -47,7 +42,10 @@
     </div>
   </div>
 
-  <span *ngIf="!isTokenValid" class="header-font" style="color: red"
+  <span
+    *ngIf="!isTokenValid"
+    class="header-font"
+    style="color: red; align-self: flex-start"
     >error: token is invalid</span
   >
 
@@ -56,6 +54,6 @@
     (click)="copyDecodedToken()"
     color="primary"
     style="align-self: flex-end">
-    <mat-icon>content_copy</mat-icon> Copy Decoded Token
+    <mat-icon>content_copy</mat-icon>Copy Decoded Token
   </button>
 </div>
