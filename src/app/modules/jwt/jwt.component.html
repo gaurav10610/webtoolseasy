@@ -17,12 +17,6 @@
           class="full-height full-width"
           style="margin: 10px"></span>
       </div>
-      <div
-        class="flex-display flex-row-flow flex-gap-small"
-        *ngIf="!isTokenValid">
-        <mat-icon color="warn" style="transform: scale(2)">error</mat-icon>
-        <span class="header-font" style="color: red">token is invalid</span>
-      </div>
     </div>
 
     <!-- Text 2 div -->
@@ -52,6 +46,10 @@
       </div>
     </div>
   </div>
+
+  <span *ngIf="!isTokenValid" class="header-font" style="color: red"
+    >error: token is invalid</span
+  >
 
   <button
     mat-stroked-button
