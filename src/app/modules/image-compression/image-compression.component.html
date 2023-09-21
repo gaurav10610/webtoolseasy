@@ -1,4 +1,4 @@
-<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+<div class="flex-display flex-column-flow flex-align-center flex-gap-xlarge">
   <!-- file imput -->
   <input
     #inputFiles
@@ -10,7 +10,7 @@
 
   <!-- file drop area -->
   <div
-    class="flex-display flex-column-flow flex-center flex-align-center file-drop-area border-grey full-width flex-gap-medium"
+    class="flex-display flex-column-flow flex-center flex-align-center border-grey full-width flex-gap-medium file-drop-area"
     (drop)="dropHandler($event)"
     (dragover)="dragOverHandler($event)"
     *ngIf="fileList.length === 0">
@@ -25,36 +25,115 @@
       color="primary"
       (click)="openFileDialog()"
       matTooltip="select images to compress">
-      <mat-icon>file_upload</mat-icon> Browse for files
+      <mat-icon>file_upload</mat-icon>Browse For Files
     </button>
   </div>
 
   <!-- select, compress all, download all buttons -->
   <div
-    class="flex-display flex-row-flow flex-center full-width flex-gap-medium"
-    [ngStyle]="{
-      padding: '10px',
-      'justify-content': fileList.length > 0 ? 'end' : 'center'
-    }"
-    *ngIf="fileList.length > 0">
+    class="flex-display flex-gap-medium"
+    *ngIf="fileList.length > 0"
+    style="align-self: flex-end">
     <button
       mat-stroked-button
       color="primary"
       (click)="openFileDialog()"
       matTooltip="select images to compress">
-      <mat-icon>file_upload</mat-icon> Select Files
+      <mat-icon>file_upload</mat-icon>Select Files
     </button>
     <button
       mat-stroked-button
       color="primary"
       matTooltip="convert all images"
       (click)="startCompressAll()">
-      <mat-icon>play_arrow</mat-icon> Convert All
+      <mat-icon>play_arrow</mat-icon>Compress All
     </button>
   </div>
 
-  <!-- list of files -->
+  <span
+    style="font-size: large; align-self: flex-start"
+    *ngIf="fileList.length > 0"
+    >Uploaded Images</span
+  >
+
   <div
+    class="flex-display flex-align-center full-width flex-gap-large auto-scroll"
+    *ngIf="fileList.length > 0">
+    <div
+      class="flex-display flex-column-flow flex-center border-grey shadow-grey thumbnail-container pointer-cursor"
+      *ngFor="let imageFile of fileList"
+      (click)="selectCurrentFile(imageFile.id)">
+      <img
+        mat-card-image
+        src="{{ imageFile!.dataURI }}"
+        alt="selected image for crop" />
+      <div
+        class="full-width flex-display flex-row-flow flex-center"
+        style="overflow: hidden">
+        <span>{{ imageFile?.name }}</span>
+      </div>
+    </div>
+  </div>
+
+  <span style="font-size: large; align-self: flex-start" *ngIf="currentFile"
+    >Compress & Preview</span
+  >
+
+  <div class="flex-display full-width preview-area" *ngIf="currentFile">
+    <!-- compression settings -->
+    <div
+      class="flex-display flex-align-center full-height preview-area-div flex-gap-medium"
+      style="flex-wrap: wrap">
+      <div class="flex-display flex-align-center flex-gap-medium">
+        <span style="margin-right: 5px">Compress %:</span>
+        <mat-slider
+          min="10"
+          max="80"
+          step="1"
+          color="primary"
+          (input)="onCompressionRateChange($event)">
+          <input matSliderThumb [value]="currentFile!.compressionRate!" />
+        </mat-slider>
+        <span>{{ currentFile!.compressionRate }}%</span>
+      </div>
+
+      <span>Original File Size: {{ formatBytes(currentFile!.file.size) }}</span>
+      <span
+        >Compressed File Size: {{ formatBytes(currentFile!.maxFileSize) }}</span
+      >
+
+      <span *ngIf="currentFile.inProgress || currentFile.isCompressed"
+        >Compress Progress: {{ currentFile!.compressProgress }} %</span
+      >
+      <button
+        mat-stroked-button
+        color="primary"
+        matTooltip="download image button"
+        (click)="downloadImage()">
+        Download Image
+      </button>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        matTooltip="compress image button"
+        (click)="compressImage()">
+        Compress Image
+      </button>
+    </div>
+
+    <!-- preview image div -->
+    <div
+      class="flex-display flex-column-flow flex-center flex-align-center full-height preview-area-div">
+      <img
+        #imagePreview
+        style="max-width: 100%; max-height: 100%"
+        src="{{ currentFile!.dataURI }}"
+        alt="cropped image" />
+    </div>
+  </div>
+
+  <!-- <div
     class="flex-display flex-column-flow y-scroll file-drop-area file-list-div full-width border-grey flex-gap-medium"
     *ngIf="fileList.length > 0">
     <mat-card
@@ -68,13 +147,11 @@
       <div
         class="flex-display flex-row-flow flex-align-center flex-gap-large"
         style="margin: 10px">
-        <!-- file icon and name -->
         <mat-icon
           *ngIf="platformMetaDataService.isPlatformBrowser"
           svgIcon="image-file-icon"
           class="app-icon pointer-cursor"></mat-icon>
 
-        <!-- file name & size div -->
         <div class="flex-display flex-column-flow header-font file-name-div">
           <span class="bold-text">{{ file.name }}</span>
           <span
@@ -94,7 +171,6 @@
 
         <span class="flex-full-height"></span>
 
-        <!-- file icons div -->
         <div
           class="flex-display flex-row-flow flex-align-center flex-center flex-gap-medium">
           <span *ngIf="file.inProgress"
@@ -134,5 +210,5 @@
         </div>
       </div>
     </mat-card>
-  </div>
+  </div> -->
 </div>
