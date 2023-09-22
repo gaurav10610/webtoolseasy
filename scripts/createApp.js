@@ -13,6 +13,8 @@ function addUrlInSitemap(newAppUrl) {
   });
 
   let jObj = parser.parse(siteMapData);
+
+  // add new tool url
   jObj.urlset.url.push({
     loc: `https://webtoolseasy.com/tools/${newAppUrl}`,
     lastmod: new Date().toISOString().split('T')[0],
@@ -44,4 +46,4 @@ function createNewAppConfig() {
 
 createNewAppConfig();
 
-//addUrlInSitemap('new-app-url');
+addUrlInSitemap(process.env.APP_NAME);

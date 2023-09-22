@@ -58,4 +58,13 @@ export class FileService {
   getPlainFileName(fileName: string): string {
     return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
   }
+
+  /**
+   * data uri to base64
+   * @param dataURI
+   * @returns
+   */
+  dataUriToBase64(dataURI: string) {
+    return dataURI.split(',')[1];
+  }
 }

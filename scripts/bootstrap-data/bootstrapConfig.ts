@@ -7,6 +7,8 @@ const pageTitle = '';
 const pageDescription = '';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
+const keywords = 'cron expression,cron expression generator';
+
 export const componentConfig: ApplicationConfig = {
   mainHeading: '',
   subHeading: '',
@@ -38,13 +40,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'cron expression',
-    'cron expression generator',
-    'cron generator',
-    'cron online',
-    'cron expression builder',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [],
 };
 
