@@ -15,6 +15,7 @@ import { toCanvas, toString, toDataURL } from 'qrcode';
 import { FileService } from 'src/app/service/file/file.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Observable, Observer } from 'rxjs';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-qr-code-generator',
@@ -33,11 +34,14 @@ export class QrCodeGeneratorComponent implements AfterViewInit {
   constructor(
     private fileService: FileService,
     private renderer: Renderer2,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private platformMetaDataService: PlatformMetadataService
   ) {}
 
   ngAfterViewInit(): void {
-    toCanvas(this.qrCanvas.nativeElement, this.qrText);
+    if (this.platformMetaDataService.isPlatformBrowser) {
+      toCanvas(this.qrCanvas.nativeElement, this.qrText);
+    }
   }
 
   onTextChange(event: any) {
