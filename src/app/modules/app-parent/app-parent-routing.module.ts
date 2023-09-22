@@ -156,6 +156,13 @@ const routes: Routes = [
             m => m.WordCountModule
           ),
       },
+      {
+        path: 'qr-code-generator',
+        loadChildren: () =>
+          import('../qr-code-generator/qr-code-generator.module').then(
+            m => m.QrCodeGeneratorModule
+          ),
+      },
     ],
   },
 ];

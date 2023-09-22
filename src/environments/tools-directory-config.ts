@@ -21,9 +21,16 @@ export enum AppDisplayNames {
   GUID_GENERATOR = 'GUID Generator',
   MARKDOWN_EDITOR = 'Markdown Editor',
   WORD_COUNTER = 'Word Counter',
+  QR_CODE_GENERATOR = 'QR Code Generator',
 }
 
 export const appDisplayConfig: AppDisplayConfig[] = [
+  {
+    applicationId: 'qrcodegenerator',
+    displayText: AppDisplayNames.QR_CODE_GENERATOR,
+    iconName: 'qr-code',
+    navigateUrl: '/tools/qr-code-generator',
+  },
   {
     applicationId: 'wordcounter',
     displayText: AppDisplayNames.WORD_COUNTER,

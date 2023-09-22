@@ -70,7 +70,7 @@ export class Base64DecodeComponent {
     const mimeType: string = this.getMimeType(base64Content);
     LogUtils.info(`mime type: ${mimeType}`);
 
-    this.dataURItoBlob(base64Data).subscribe((blob: Blob) => {
+    this.base64toBlob(base64Data).subscribe((blob: Blob) => {
       this.decodeFileData.blob = blob;
     });
 
@@ -96,7 +96,7 @@ export class Base64DecodeComponent {
   }
 
   /* Method to convert Base64Data Url as Image Blob */
-  dataURItoBlob(dataURI: string): Observable<Blob> {
+  base64toBlob(dataURI: string): Observable<Blob> {
     return Observable.create((observer: Observer<Blob>) => {
       const byteString: string = window.atob(dataURI);
       const arrayBuffer: ArrayBuffer = new ArrayBuffer(byteString.length);

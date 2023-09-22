@@ -41,6 +41,10 @@ export const componentConfig: ApplicationConfig = {
   tags: [],
   icons: [
     {
+      iconName: 'qr-code',
+      iconRelativeUrl: 'qr-code.svg',
+    },
+    {
       iconName: 'uuid-icon',
       iconRelativeUrl: 'uuid-icon.svg',
     },

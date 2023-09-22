@@ -2,15 +2,15 @@ import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
-const navigationUrl = '/tools/cron-expression';
-const pageTitle = '';
-const pageDescription = '';
+const navigationUrl = '/tools/qr-code-generator';
+const pageTitle = 'Free Qr Code Generator';
+const pageDescription = 'Generate Qr Code For Free';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 const keywords = 'cron expression,cron expression generator';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: '',
+  mainHeading: 'Free Qr Code Generator',
   subHeading: '',
   navigationUrl,
   pageTitle,
