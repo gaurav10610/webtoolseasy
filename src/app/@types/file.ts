@@ -16,6 +16,7 @@ export interface ImageFileData extends BaseFileData {
   compressOptions: any;
   compressionRate: number;
   maxFileSize: number;
+  compressedImageData?: any;
 }
 
 export interface VideoFileData extends BaseFileData {

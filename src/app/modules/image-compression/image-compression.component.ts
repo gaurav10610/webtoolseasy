@@ -1,20 +1,13 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   NgZone,
-  OnDestroy,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import {
-  ImageFileData,
-  FileDataType,
-  ImageCompressSettings,
-} from 'src/app/@types/file';
+import { ImageFileData, FileDataType } from 'src/app/@types/file';
 import { LogUtils } from 'src/app/service/util/logger';
-import { Subject, takeUntil } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   componentConfig,
   descriptionData,
@@ -27,22 +20,18 @@ import { PlatformMetadataService } from 'src/app/service/platform-metadata/platf
 import { FileService } from 'src/app/service/file/file.service';
 
 declare var imageCompression: any;
+declare var window: any;
 
 @Component({
   selector: 'app-image-compression',
   templateUrl: './image-compression.component.html',
   styleUrls: ['./image-compression.component.scss'],
 })
-export class ImageCompressionComponent implements OnDestroy {
-  isMobile!: boolean;
+export class ImageCompressionComponent implements AfterViewInit {
   fileList: ImageFileData[] = [];
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
-
-  destroyed = new Subject<void>();
-  isDownloadAllActive: boolean = false;
-  activeDialog: MatDialogRef<any> | undefined;
 
   validImageFormats: string = '.jpg,.jpeg,.png,.webp,.bmp';
 
@@ -54,68 +43,20 @@ export class ImageCompressionComponent implements OnDestroy {
   constructor(
     private renderer: Renderer2,
     private zoneRef: NgZone,
-    private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog,
     public platformMetaDataService: PlatformMetadataService,
     private fileService: FileService
-  ) {
-    this.breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.Web])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(result => {
-        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
-        LogUtils.info(`mobile view: ${this.isMobile}`);
-      });
+  ) {}
 
-    if (platformMetaDataService.isPlatformBrowser) {
+  ngAfterViewInit(): void {
+    if (this.platformMetaDataService.isPlatformBrowser) {
       importScript(environment.imageCompressionLibUrl);
     }
-  }
-
-  ngOnDestroy() {
-    this.destroyed.next();
-    this.destroyed.complete();
   }
 
   async openFileDialog() {
     this.renderer
       .selectRootElement(this.inputFiles.nativeElement, true)
       .click();
-  }
-
-  /**
-   * handle compression rate change event
-   * @param data
-   */
-  async handleSettingsChange(data: any = {}) {
-    LogUtils.info(`settings dialog closed with data: ${JSON.stringify(data)}`);
-
-    /**
-     * process only if some settings has been changed
-     */
-    if (Object.keys(data).length > 0) {
-      const compressSettings: ImageCompressSettings = <ImageCompressSettings>(
-        data
-      );
-      this.zoneRef.run(() => {
-        const ImageFileData: ImageFileData = this.fileList.find(
-          ImageFileData => ImageFileData.id === compressSettings.fileId
-        )!;
-
-        if (
-          ImageFileData.compressionRate !== compressSettings.compressionRate
-        ) {
-          ImageFileData.isCompressed = false;
-        }
-
-        ImageFileData.compressionRate = compressSettings.compressionRate;
-        ImageFileData.maxFileSize = compressSettings.maxFileSize;
-        ImageFileData.compressOptions = {
-          ...ImageFileData.compressOptions,
-          maxSizeMB: compressSettings.maxFileSize / 1024 / 1024,
-        };
-      });
-    }
   }
 
   /**
@@ -212,7 +153,11 @@ export class ImageCompressionComponent implements OnDestroy {
         );
         imageFileData.isCompressed = true;
         imageFileData.inProgress = false;
-        this.isDownloadAllActive = true;
+
+        const urlCreator = window.URL || window.webkitURL;
+        imageFileData.compressedImageData = urlCreator.createObjectURL(
+          imageFileData.compressedData
+        );
       } catch (error) {
         LogUtils.error(
           `error while compressing image with name: ${imageFileData.file.name}`
