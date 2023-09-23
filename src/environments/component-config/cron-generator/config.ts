@@ -14,7 +14,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online Cron Expression Generator: Easily Create Cron Expressions for Your Tasks',
-  subHeading: 'Graphically Generate Cron Expression Online',
   navigationUrl,
   pageTitle,
   metaTags: [

@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online Markdown Editor: Write and Preview Markdown in Real Time',
-  subHeading: 'Edit Markdown/ReadME in Browser',
   navigationUrl,
   pageTitle,
   metaTags: [

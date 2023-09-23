@@ -16,7 +16,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'UUID v1 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Based on MAC Address and Time',
-  subHeading: 'Generate UUID Version 1 (V1) Online',
   navigationUrl,
   pageTitle,
   metaTags: [

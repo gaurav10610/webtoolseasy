@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online CSS Beautifier and Formatter: Beautify and Format Your CSS Code with Ease',
-  subHeading: 'Online CSS Beautifier',
   navigationUrl,
   pageTitle,
   metaTags: [

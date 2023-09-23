@@ -14,7 +14,6 @@ const keywords =
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Free Image Cropper: Crop Images Online for Free',
-  subHeading: 'Crop Image Online',
   navigationUrl,
   pageTitle,
   metaTags: [

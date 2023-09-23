@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online JSON Viewer: View Your JSON Data in a Tree Structure',
-  subHeading: 'JSON Visualizer / Tree Viewer',
   navigationUrl,
   pageTitle,
   metaTags: [

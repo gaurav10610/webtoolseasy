@@ -14,7 +14,6 @@ const keywords =
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Free Online Word, Character, and Sentence Count Tool',
-  subHeading: 'Count Word, Character And Sentence Online For Free',
   navigationUrl,
   pageTitle,
   metaTags: [

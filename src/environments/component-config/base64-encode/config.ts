@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease',
-  subHeading: 'Encode Image/Text/PDF/File to Base64',
   navigationUrl,
   pageTitle,
   metaTags: [

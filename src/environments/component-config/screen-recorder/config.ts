@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online Screen Recorder - Record Your Screen with Audio, Webcam and No Watermark',
-  subHeading: 'HD Screen Recording With Mic & Camera',
   navigationUrl,
   pageTitle,
   metaTags: [

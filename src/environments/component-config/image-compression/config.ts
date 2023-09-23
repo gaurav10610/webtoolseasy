@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Image Compressor: Reduce Image File Size Without Losing Quality',
-  subHeading: 'Compress JPEG, PNG, WEBP & BMP Images For Free',
   navigationUrl,
   pageTitle,
   metaTags: [

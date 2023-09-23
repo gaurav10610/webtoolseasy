@@ -11,7 +11,6 @@ export interface AppDisplayConfig extends BaseAppConfig {
 
 export interface ApplicationConfig {
   mainHeading?: string;
-  subHeading?: string;
   navigationUrl: string;
   metaTags: MetaDefinition[];
   pageTitle: string;

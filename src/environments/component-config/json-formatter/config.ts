@@ -16,7 +16,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data with Ease',
-  subHeading: 'Online JSON Beautifier',
   navigationUrl,
   pageTitle,
   metaTags: [

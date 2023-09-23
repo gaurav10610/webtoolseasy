@@ -13,7 +13,6 @@ const keywords =
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Text Compare - Text to Text Comparison',
-  subHeading: 'Text to Text Comparison',
   navigationUrl,
   pageTitle,
   metaTags: [

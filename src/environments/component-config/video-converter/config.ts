@@ -14,7 +14,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online Video to Audio Converter: Extract Audio from Videos Easily',
-  subHeading: 'Convert Videos to Audio For Free',
   navigationUrl,
   pageTitle,
   metaTags: [

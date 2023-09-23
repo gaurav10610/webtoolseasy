@@ -15,7 +15,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'GUID Generator Tool - Generate Single or Bulk Globally Unique Identifiers (GUIDs) Online for Free',
-  subHeading: 'Generate Random GUID Online',
   navigationUrl,
   pageTitle,
   metaTags: [

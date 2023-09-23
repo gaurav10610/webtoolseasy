@@ -13,7 +13,6 @@ const keywords =
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Free Online QR Code Generator: Generate QR Codes in Seconds',
-  subHeading: '',
   navigationUrl,
   pageTitle,
   metaTags: [

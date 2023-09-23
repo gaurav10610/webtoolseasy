@@ -13,7 +13,6 @@ const keywords =
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder - Decode and Validate JSON Web Token Online',
-  subHeading: 'Decode and Validate JSON Web Token Online',
   navigationUrl,
   pageTitle,
   metaTags: [

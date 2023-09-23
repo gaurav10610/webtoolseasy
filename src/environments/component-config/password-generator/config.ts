@@ -16,7 +16,6 @@ const keywords =
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Strong Password Generator: Create Secure Passwords for All Your Accounts',
-  subHeading: 'Generate Strong, Random & Secure Passwords',
   navigationUrl,
   pageTitle,
   metaTags: [
