@@ -5,7 +5,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
 const pageTitle =
-  'Strong Password Generator: Create Secure Passwords for All Your Accounts';
+  'Password Generator: Create Strong, Random & Secure Passwords';
 const pageDescription =
   'Generate strong, unique passwords for all your online accounts with our free password generator tool. No sign-up required. Generate single password or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;

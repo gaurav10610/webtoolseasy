@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/crop-image';
-const pageTitle = 'Free Image Cropper: Crop Images Online for Free';
+const pageTitle = 'Free Online Image Cropper: Crop Your Photos Online for Free';
 const pageDescription =
   'Crop your images online for free with our easy-to-use image cropper. No download required, no sign-up required. Crop JPG, PNG, WEBP, BMP For Free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-cropper.png`;

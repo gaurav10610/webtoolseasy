@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/jwt';
-const pageTitle = 'JWT Decoder Tool - Decode JWT Tokens Online for Free';
+const pageTitle = 'JWT Decoder: Online Tool to Decode JSON Web Tokens';
 const pageDescription =
   'Our free online JWT decoder tool is a quick and easy way to decode JSON Web Tokens (JWTs). Simply paste your JWT into the text box and instantly see the decoded header, payload, and signature.';
 const imageUrl = `${environment.screenshotsBaseUrl}/jwt-decoder.png`;

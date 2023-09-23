@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/word-counter';
-const pageTitle =
-  'Free Word, Character, and Sentence Count Tool - Count Words, Characters, and Sentences in Seconds';
+const pageTitle = 'Free Online Word, Character, and Sentence Count Tool';
 const pageDescription =
   'Our free online word, character, and sentence count tool is quick, easy, and accurate. Simply copy and paste your text into the text box and see the number of words, characters, and sentences in your text.';
 const imageUrl = `${environment.screenshotsBaseUrl}/word-counter.png`;

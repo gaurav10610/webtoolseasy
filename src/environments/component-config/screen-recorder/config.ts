@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle =
-  'Free Online Screen Recorder - Record Your Screen with Audio and Webcam';
+const pageTitle = 'Free Screen Recorder - Record Screen with Audio and Webcam';
 const pageDescription =
   'Record your screen with audio and webcam for free with our online screen recorder. No download required, no watermark, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;

@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/base64-encode';
-const pageTitle =
-  'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease';
+const pageTitle = 'File to Base64 Encoder: Convert Any File to Base64';
 const pageDescription =
   'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;

@@ -3,8 +3,7 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/cron-expression';
-const pageTitle =
-  'Free Online Cron Expression Generator: Easily Create Cron Expressions for Your Tasks';
+const pageTitle = 'Online Cron Expression Generator: Create Cron Expressions';
 const pageDescription =
   'Generate cron expressions for your tasks with ease with our free online cron expression generator tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;

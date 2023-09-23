@@ -5,7 +5,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-formatter';
 const pageTitle =
-  'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data with Ease';
+  'JSON Beautifier and Formatter: Beautify and Format Your JSON';
 const pageDescription =
   'Beautify and format your JSON data with ease with our free online JSON beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;

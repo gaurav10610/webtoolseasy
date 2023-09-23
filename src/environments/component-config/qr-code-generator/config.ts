@@ -3,8 +3,7 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/qr-code-generator';
-const pageTitle =
-  'Free QR Code Generator: Generate QR Codes in Seconds | QR Code Builder';
+const pageTitle = 'Free QR Code Generator: Generate QR Code | QR Code Builder';
 const pageDescription =
   'Generate custom QR codes for free with our easy-to-use online QR code generator tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;

@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/markdown-editor';
-const pageTitle =
-  'Free Online Markdown Editor: Write and Preview Markdown in Real Time';
+const pageTitle = 'Free Online Markdown Editor: Preview Markdown in Real Time';
 const pageDescription =
   'Write and preview Markdown in real time with our free online Markdown editor. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/markdown-editor.png`;

@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/css-formatter';
-const pageTitle =
-  'Free Online CSS Beautifier and Formatter: Beautify and Format Your CSS Code with Ease';
+const pageTitle = 'CSS Beautifier and Formatter: Beautify and Format CSS Code';
 const pageDescription =
   'Beautify and format your CSS code with ease with our free online CSS beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/css-format.png`;

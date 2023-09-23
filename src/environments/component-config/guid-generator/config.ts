@@ -4,13 +4,13 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/guid-generator';
-const pageTitle = 'Generate Single or Bulk GUIDs Online for Free';
+const pageTitle = 'GUID Generator: Online Tool to Generate GUIDs | Bulk GUIDs';
 const pageDescription =
   'Our free online GUID generator tool is a quick and easy way to generate globally unique identifiers (GUIDs), either individually or in bulk. Simply enter the number of GUIDs you need and click the "Generate" button to generate a list of unique GUIDs.';
 const imageUrl = `${environment.screenshotsBaseUrl}/guid-generator.png`;
 
 const keywords =
-  'GUID generator, GUID generator online, GUID generator free, GUID, globally unique identifier, UUID, universally unique identifier, generate GUID, generate GUID online, generate GUID free, single GUID, bulk GUID';
+  'GUID generator, GUID generator online, GUID generator free, GUID, globally unique identifier, UUID, universally unique identifier, generate GUID, generate GUID online, generate GUID free, single GUID, bulk GUID, bulk GUID generator';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:

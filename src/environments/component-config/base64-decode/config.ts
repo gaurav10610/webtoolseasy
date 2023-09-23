@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/base64-decode';
-const pageTitle =
-  'Free Online Base64 to File Decoder: Convert Base64 to Any File Format with Ease';
+const pageTitle = 'Base64 to File Decoder: Convert Base64 to Any File Format';
 const pageDescription =
   'Convert Base64 to any file format with ease with our free online Base64 to file decoder tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-decode.png`;

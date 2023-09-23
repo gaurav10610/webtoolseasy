@@ -4,8 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-viewer';
-const pageTitle =
-  'Free Online JSON Viewer: View Your JSON Data in a Tree Structure';
+const pageTitle = 'Free Online JSON Viewer: View Your JSON in a Tree Structure';
 const pageDescription =
   'View your JSON data in a tree structure with our free online JSON viewer tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;

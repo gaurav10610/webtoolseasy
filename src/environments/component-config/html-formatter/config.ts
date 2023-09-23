@@ -5,7 +5,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-formatter';
 const pageTitle =
-  'Free Online HTML Beautifier: Make Your HTML Code More Readable and Maintainable';
+  'HTML Beautifier and Formatter: Beautify and Format HTML Code';
 const pageDescription =
   'Beautify your HTML code with ease with our free online HTML beautifier tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;

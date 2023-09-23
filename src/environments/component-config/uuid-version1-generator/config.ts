@@ -4,7 +4,8 @@ import { environment } from 'src/environments/environment';
 import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/uuid-v1-generator';
-const pageTitle = 'Generate Single or Bulk UUID v1 Online for Free';
+const pageTitle =
+  'Online UUID Version1 (v1) Generator | Bulk UUID v1 Generator';
 const pageDescription =
   'Our free online UUID v1 generator tool is a quick and easy way to generate universally unique identifiers (UUIDs) based on MAC address and time, either individually or in bulk. Simply enter the number of UUIDs you need and click the "Generate" button to generate a list of unique UUID v1s.';
 const imageUrl = `${environment.screenshotsBaseUrl}/uuid-v1-generator.png`;

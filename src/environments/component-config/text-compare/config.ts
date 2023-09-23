@@ -5,7 +5,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/text-compare';
 const pageTitle =
-  'Text Compare Tool - Compare Two Texts for Similarity and Differences';
+  'Online Text Compare Tool - Compare Two Texts for Differences';
 const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarity and differences. It's perfect for students, writers, bloggers, and anyone else who needs to check the originality of their work.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 const keywords =
