@@ -6,10 +6,10 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/jwt';
 const pageTitle = 'JWT Decoder: Online Tool to Decode JSON Web Tokens';
 const pageDescription =
-  'Our free online JWT decoder tool is a quick and easy way to decode JSON Web Tokens (JWTs). Simply paste your JWT into the text box and instantly see the decoded header, payload, and signature.';
+  'Our free online JWT decoder tool is a quick and easy way to decode JSON Web Tokens (JWTs). Decode JWT header and body. Validate JWT Token Online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/jwt-decoder.png`;
 const keywords =
-  'JWT decoder, JWT decoder online, JWT decoder free, JWT decoder tool, decode JWT, decode JWT online, decode JWT free, JWT debugger, JSON Web Token decoder, JSON Web Token decoder online, JSON Web Token decoder free';
+  'JWT decoder, JWT decoder online, JWT decoder free, JWT decoder tool, decode JWT, decode JWT online, decode JWT free, JWT debugger, JSON Web Token decoder, JSON Web Token decoder online, JSON Web Token decoder free, decode JWT header, validate JWT, validate JSON Web Token';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder - Decode and Validate JSON Web Token Online',

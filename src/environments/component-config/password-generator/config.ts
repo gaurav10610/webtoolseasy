@@ -11,7 +11,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 const keywords =
-  'password generator,strong password generator,create secure passwords,unique passwords,different passwords for all accounts,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account';
+  'password generator,strong password generator,create secure passwords,unique passwords,different passwords for all accounts,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:

@@ -13,8 +13,7 @@ const keywords =
   'online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,no download required,supports all JSON features,easy to use,customizable settings,JSON beautifier,JSON formatter,expand and collapse,search JSON data';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading:
-    'Free Online JSON Viewer: View Your JSON Data in a Tree Structure',
+  mainHeading: 'Free Online JSON Viewer: View Your JSON in a Tree Structure',
   navigationUrl,
   pageTitle,
   metaTags: [

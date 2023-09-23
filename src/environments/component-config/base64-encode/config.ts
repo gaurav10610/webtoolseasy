@@ -6,15 +6,15 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/base64-encode';
 const pageTitle = 'File to Base64 Encoder: Convert Any File to Base64';
 const pageDescription =
-  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. No download required, no sign-up required.';
+  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. Image, Text, PDF or File to Base64.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 const keywords =
-  'online file to Base64 encoder,convert file to Base64,file to Base64 encoder tool,Base64 encoding,Base64 decoding,Base64 secure,Base64 transmission,Base64 storage,free file to Base64 encoder,no download required,supports all file formats,easy to use,customizable settings,Base64 encoding scheme,store encoded data securely';
+  'online file to Base64 encoder,convert file to Base64,file to Base64 encoder tool,Base64 encoding,Base64 decoding,Base64 secure,Base64 transmission,Base64 storage,free file to Base64 encoder,no download required,supports all file formats,easy to use,customizable settings,Base64 encoding scheme,store encoded data securely,image to Base64,text to Base64,pdf to Base64';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease',
+    'Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64',
   navigationUrl,
   pageTitle,
   metaTags: [

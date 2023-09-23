@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 const navigationUrl = '/tools/cron-expression';
 const pageTitle = 'Online Cron Expression Generator: Create Cron Expressions';
 const pageDescription =
-  'Generate cron expressions for your tasks with ease with our free online cron expression generator tool. No download required, no sign-up required.';
+  'Generate cron expressions for your tasks with ease with our free online cron expression generator tool. Graphically generate cron expressions online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 const keywords =

@@ -11,10 +11,10 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
 const keywords =
-  'free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images';
+  'free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images,picture compressor,pic compressor,photo size reducer,reduce resolution of image';
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Image Compressor: Reduce Image File Size Without Losing Quality',
+    'Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images',
   navigationUrl,
   pageTitle,
   metaTags: [

@@ -14,7 +14,7 @@ const keywords =
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online Base64 to File Decoder: Convert Base64 to Any File Format with Ease',
+    'Free Online Base64 to File Decoder: Convert Base64 to Image, Text, PDF and File',
   navigationUrl,
   pageTitle,
   metaTags: [

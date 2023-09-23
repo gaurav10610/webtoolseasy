@@ -6,7 +6,7 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/word-counter';
 const pageTitle = 'Free Online Word, Character, and Sentence Count Tool';
 const pageDescription =
-  'Our free online word, character, and sentence count tool is quick, easy, and accurate. Simply copy and paste your text into the text box and see the number of words, characters, and sentences in your text.';
+  'Our free online word, character, and sentence count tool is quick, and easy, and lets you count the number of words, characters, and sentences in your text.';
 const imageUrl = `${environment.screenshotsBaseUrl}/word-counter.png`;
 
 const keywords =

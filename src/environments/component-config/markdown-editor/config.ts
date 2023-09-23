@@ -6,11 +6,11 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/markdown-editor';
 const pageTitle = 'Free Online Markdown Editor: Preview Markdown in Real Time';
 const pageDescription =
-  'Write and preview Markdown in real time with our free online Markdown editor. No download required, no sign-up required.';
+  'Write and preview Markdown in real time with our free online Markdown editor. Md Editor Online. Md Markup Editor. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/markdown-editor.png`;
 
 const keywords =
-  'online Markdown editor,write Markdown,preview Markdown,real-time preview,export Markdown to HTML,export Markdown to PDF,export Markdown to Microsoft Word,free Markdown editor,no download required,supports Markdown syntax,Markdown syntax highlighting,share Markdown documents';
+  'online Markdown editor,write Markdown,preview Markdown,real-time preview,export Markdown to HTML,export Markdown to PDF,export Markdown to Microsoft Word,free Markdown editor,no download required,supports Markdown syntax,Markdown syntax highlighting,share Markdown documents,md editors,md markup editor,md editor online';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:

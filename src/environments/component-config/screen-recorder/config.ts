@@ -6,11 +6,11 @@ import { AppDisplayNames } from 'src/environments/tools-directory-config';
 const navigationUrl = '/tools/screen-recorder';
 const pageTitle = 'Free Screen Recorder - Record Screen with Audio and Webcam';
 const pageDescription =
-  'Record your screen with audio and webcam for free with our online screen recorder. No download required, no watermark, no sign-up required.';
+  'Record your screen with audio and webcam for free with our online screen recorder. Record screen with no watermark and no time limit. No sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
 
 const keywords =
-  'online screen recorder,free screen recorder,screen recorder with audio,screen recorder with webcam,screen recorder for tutorials,screen recorder for demos,screen recorder for video lectures,screen recorder for webinars,screen recorder for gameplay,screen recorder for Windows,screen recorder for Mac,screen recorder for Chromebook,screen recorder for Linux';
+  'online screen recorder,free screen recorder,screen recorder with audio,screen recorder with webcam,screen recorder for tutorials,screen recorder for demos,screen recorder for video lectures,screen recorder for webinars,screen recorder for gameplay,screen recorder for Windows,screen recorder for Mac,screen recorder for Chromebook,screen recorder for Linux, no watermark, no time limit screen recording';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:

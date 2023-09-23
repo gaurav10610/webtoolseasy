@@ -13,7 +13,7 @@ const keywords =
   'free image cropper,online image cropper,crop images online,crop JPEG images,crop PNG images,crop GIF images,crop BMP images,image cropping,image composition,image aspect ratio,social media image cropping,website image cropping,remove unwanted parts of an image,resize an image,create a square image';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Image Cropper: Crop Images Online for Free',
+  mainHeading: 'Free Online Image Cropper: Crop JPG, PNG, WEBP, BMP Images',
   navigationUrl,
   pageTitle,
   metaTags: [
