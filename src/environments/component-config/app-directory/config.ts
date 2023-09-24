@@ -38,6 +38,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: [],
+  relatedTools: [],
   icons: [
     {
       iconName: 'qr-code',

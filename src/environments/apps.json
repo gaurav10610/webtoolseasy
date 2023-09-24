@@ -39,16 +39,16 @@
     "displayText": "Video to Audio Converter",
     "iconName": "video-convert-icon",
     "navigateUrl": "/tools/video-converter",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "video-convert.svg"
   },
-  "screen-recorder": {
+  "screenrecorder": {
     "applicationId": "screenrecorder",
     "displayText": "Free Screen Recorder",
     "iconName": "screen-icon",
     "navigateUrl": "/tools/screen-recorder",
     "iconRelativeUrl": "screen.svg"
   },
-  "imagecompress": {
+  "imagecompressor": {
     "applicationId": "imagecompressor",
     "displayText": "Free Image Compressor",
     "iconName": "image-icon",
@@ -62,7 +62,7 @@
     "navigateUrl": "/tools/crop-image",
     "iconRelativeUrl": "image-icon.svg"
   },
-  "jwt": {
+  "jwtdecoder": {
     "applicationId": "jwtdecoder",
     "displayText": "JWT Decoder",
     "iconName": "jwt-icon",
@@ -95,7 +95,7 @@
     "displayText": "Online HTML Formatter",
     "iconName": "html-icon",
     "navigateUrl": "/tools/html-formatter",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "html.svg"
   },
   "cssformatter": {
     "applicationId": "cssformatter",
@@ -125,21 +125,21 @@
     "navigateUrl": "/tools/cron-expression",
     "iconRelativeUrl": "cron.svg"
   },
-  "uuidv4": {
+  "uuidv4generator": {
     "applicationId": "uuidv4generator",
     "displayText": "UUID V4 Generator",
     "iconName": "uuid-icon",
     "navigateUrl": "/tools/uuid-v4-generator",
     "iconRelativeUrl": "uuid-icon.svg"
   },
-  "uuidv1": {
+  "uuidv1generator": {
     "applicationId": "uuidv1generator",
     "displayText": "UUID V1 Generator",
     "iconName": "uuid-icon",
     "navigateUrl": "/tools/uuid-v1-generator",
     "iconRelativeUrl": "uuid-icon.svg"
   },
-  "guid": {
+  "guidgenerator": {
     "applicationId": "guidgenerator",
     "displayText": "GUID Generator",
     "iconName": "uuid-icon",

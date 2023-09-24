@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/guid-generator';
 const pageTitle = 'GUID Generator: Online Tool to Generate GUIDs | Bulk GUIDs';
@@ -11,6 +14,12 @@ const imageUrl = `${environment.screenshotsBaseUrl}/guid-generator.png`;
 
 const keywords =
   'GUID generator, GUID generator online, GUID generator free, GUID, globally unique identifier, UUID, universally unique identifier, generate GUID, generate GUID online, generate GUID free, single GUID, bulk GUID, bulk GUID generator';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.JWT_DECODER,
+  ApplicationIds.UUID_VERSION1_GENERATOR,
+  ApplicationIds.UUID_VERSION4_GENERATOR,
+];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
@@ -44,36 +53,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jwt',
-      displayText: AppDisplayNames.JWT_DECODER,
-      iconName: 'jwt-icon',
-      navigateUrl: '/tools/jwt',
-    },
-    {
-      applicationId: 'uuidv1',
-      displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid-v1-generator',
-    },
-    {
-      applicationId: 'uuidv4',
-      displayText: AppDisplayNames.UUID_VERSION4_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid-v4-generator',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AppDisplayConfig, ApplicationConfig } from 'src/app/@types/config';
+import { AppNavigationConfig, ApplicationConfig } from 'src/app/@types/config';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { applicationConfig } from 'src/environments/tools-directory-config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -14,7 +14,7 @@ export class AppDirectoryComponent {
   /**
    * application config for composing UI
    */
-  appsConfig: AppDisplayConfig[] = Array.from(applicationConfig.values());
+  appsConfig: AppNavigationConfig[] = Array.from(applicationConfig.values());
 
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = [];

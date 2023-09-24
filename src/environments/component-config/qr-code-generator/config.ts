@@ -43,6 +43,7 @@ export const componentConfig: ApplicationConfig = {
   ],
   tags: keywords.split(',').map(word => word.trim()),
   icons: [],
+  relatedTools: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [

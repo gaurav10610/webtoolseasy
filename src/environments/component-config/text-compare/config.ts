@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/text-compare';
 const pageTitle =
@@ -10,6 +13,8 @@ const pageDescription = `Our text compare tool is a quick and easy way to compar
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 const keywords =
   'text compare tool, text comparison tool, text diff tool, compare text online, compare text files, compare text documents, plagiarism checker, compare documents for similarity, compare two texts, text similarity checker, compare text online free, text compare online, compare text ignore whitespace';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.WORD_COUNTER];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Text Compare - Text to Text Comparison',
@@ -42,20 +47,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'word-icon',
-      iconRelativeUrl: 'word.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'wordcounter',
-      displayText: AppDisplayNames.WORD_COUNTER,
-      iconName: 'word-icon',
-      navigateUrl: '/tools/word-counter',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

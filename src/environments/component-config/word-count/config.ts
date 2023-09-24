@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/word-counter';
 const pageTitle = 'Free Online Word, Character, and Sentence Count Tool';
@@ -11,6 +14,8 @@ const imageUrl = `${environment.screenshotsBaseUrl}/word-counter.png`;
 
 const keywords =
   'word count tool, character count tool, sentence count tool, free word count tool, free character count tool, free sentence count tool, online word count tool, online character count tool, online sentence count tool, word counter, character counter, sentence counter, word count, character count, sentence count';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.TEXT_COMPARE];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'Free Online Word, Character, and Sentence Count Tool',
@@ -43,20 +48,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'comparison-icon',
-      iconRelativeUrl: 'comparison.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'textcompare',
-      displayText: AppDisplayNames.TEXT_COMPARE,
-      iconName: 'comparison-icon',
-      navigateUrl: '/tools/text-compare',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

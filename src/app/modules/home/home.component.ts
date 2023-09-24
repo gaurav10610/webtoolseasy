@@ -1,5 +1,10 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+} from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
@@ -13,7 +18,7 @@ import { componentConfig } from 'src/environments/component-config/home/config';
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   constructor(
     private titleService: Title,
     private metaService: Meta,
@@ -23,11 +28,15 @@ export class HomeComponent {
     private metaConfigService: MetaConfigService,
     private iconConfigService: IconConfigService,
     public platformMetaDataService: PlatformMetadataService
-  ) {
-    this.iconConfigService.registerCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
+  ) {}
+
+  ngOnInit(): void {
+    componentConfig.icons.forEach(iconConfig =>
+      this.iconConfigService.registerCustomIcon(
+        iconConfig,
+        this.matIconRegistry,
+        this.domSanitizer
+      )
     );
     this.metaConfigService.updatePageMetaData(
       componentConfig,

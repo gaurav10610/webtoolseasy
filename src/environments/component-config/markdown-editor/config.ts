@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/markdown-editor';
 const pageTitle = 'Free Online Markdown Editor: Preview Markdown in Real Time';
@@ -11,6 +14,11 @@ const imageUrl = `${environment.screenshotsBaseUrl}/markdown-editor.png`;
 
 const keywords =
   'online Markdown editor,write Markdown,preview Markdown,real-time preview,export Markdown to HTML,export Markdown to PDF,export Markdown to Microsoft Word,free Markdown editor,no download required,supports Markdown syntax,Markdown syntax highlighting,share Markdown documents,md editors,md markup editor,md editor online';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.TEXT_COMPARE,
+  ApplicationIds.JWT_DECODER,
+];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
@@ -44,30 +52,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'comparison-icon',
-      iconRelativeUrl: 'comparison.svg',
-    },
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'textcompare',
-      displayText: AppDisplayNames.TEXT_COMPARE,
-      iconName: 'comparison-icon',
-      navigateUrl: '/tools/text-compare',
-    },
-    {
-      applicationId: 'jwt',
-      displayText: AppDisplayNames.JWT_DECODER,
-      iconName: 'jwt-icon',
-      navigateUrl: '/tools/jwt',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

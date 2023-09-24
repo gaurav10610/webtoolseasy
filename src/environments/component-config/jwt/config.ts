@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/jwt';
 const pageTitle = 'JWT Decoder: Online Tool to Decode JSON Web Tokens';
@@ -10,6 +13,13 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/jwt-decoder.png`;
 const keywords =
   'JWT decoder, JWT decoder online, JWT decoder free, JWT decoder tool, decode JWT, decode JWT online, decode JWT free, JWT debugger, JSON Web Token decoder, JSON Web Token decoder online, JSON Web Token decoder free, decode JWT header, validate JWT, validate JSON Web Token';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.MARKDOWN_EDITOR,
+  ApplicationIds.UUID_VERSION1_GENERATOR,
+  ApplicationIds.UUID_VERSION4_GENERATOR,
+  ApplicationIds.GUID_GENERATOR,
+];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: 'JWT Decoder - Decode and Validate JSON Web Token Online',
@@ -42,42 +52,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
-    {
-      iconName: 'markdown-icon',
-      iconRelativeUrl: 'markdown.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'markdowneditor',
-      displayText: AppDisplayNames.MARKDOWN_EDITOR,
-      iconName: 'markdown-icon',
-      navigateUrl: '/tools/markdown-editor',
-    },
-    {
-      applicationId: 'uuidv1',
-      displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid-v1-generator',
-    },
-    {
-      applicationId: 'uuidv4',
-      displayText: AppDisplayNames.UUID_VERSION4_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid-v4-generator',
-    },
-    {
-      applicationId: 'guid',
-      displayText: AppDisplayNames.GUID_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/guid-generator',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
