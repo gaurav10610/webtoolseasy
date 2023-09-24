@@ -4,35 +4,35 @@
     "displayText": "QR Code Generator",
     "iconName": "qr-code",
     "navigateUrl": "/tools/qr-code-generator",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "qr-code.svg"
   },
   "wordcounter": {
     "applicationId": "wordcounter",
     "displayText": "Word Counter",
     "iconName": "word-icon",
     "navigateUrl": "/tools/word-counter",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "word.svg"
   },
   "textcompare": {
     "applicationId": "textcompare",
     "displayText": "Online Text Compare",
     "iconName": "comparison-icon",
     "navigateUrl": "/tools/text-compare",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "comparison.svg"
   },
   "markdowneditor": {
     "applicationId": "markdowneditor",
     "displayText": "Markdown Editor",
     "iconName": "markdown-icon",
     "navigateUrl": "/tools/markdown-editor",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "markdown.svg"
   },
   "passwordgenerator": {
     "applicationId": "passwordgenerator",
     "displayText": "Random Password Generator",
     "iconName": "password-icon",
     "navigateUrl": "/tools/password-generator",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "password.svg"
   },
   "videoconverter": {
     "applicationId": "videoconverter",
@@ -46,49 +46,49 @@
     "displayText": "Free Screen Recorder",
     "iconName": "screen-icon",
     "navigateUrl": "/tools/screen-recorder",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "screen.svg"
   },
   "imagecompress": {
     "applicationId": "imagecompressor",
     "displayText": "Free Image Compressor",
     "iconName": "image-icon",
     "navigateUrl": "/tools/image-compress",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "image-icon.svg"
   },
   "imagecropper": {
     "applicationId": "imagecropper",
     "displayText": "Free Image Cropper",
     "iconName": "image-icon",
     "navigateUrl": "/tools/crop-image",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "image-icon.svg"
   },
   "jwt": {
     "applicationId": "jwtdecoder",
     "displayText": "JWT Decoder",
     "iconName": "jwt-icon",
     "navigateUrl": "/tools/jwt",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "jwt-icon.svg"
   },
   "jsformatter": {
     "applicationId": "jsformatter",
     "displayText": "Online Javascript Formatter",
     "iconName": "js-icon",
     "navigateUrl": "/tools/js-formatter",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "js-icon.svg"
   },
   "jsonformatter": {
     "applicationId": "jsonformatter",
     "displayText": "Online JSON Formatter",
     "iconName": "json-icon",
     "navigateUrl": "/tools/json-formatter",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "json-icon.svg"
   },
   "jsonviewer": {
     "applicationId": "jsonviewer",
     "displayText": "Online JSON Viewer",
     "iconName": "json-icon",
     "navigateUrl": "/tools/json-viewer",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "json-icon.svg"
   },
   "htmlformatter": {
     "applicationId": "htmlformatter",
@@ -102,48 +102,48 @@
     "displayText": "Online CSS Formatter",
     "iconName": "css-icon",
     "navigateUrl": "/tools/css-formatter",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "css.svg"
   },
   "base64encoder": {
     "applicationId": "base64encoder",
     "displayText": "Base64 Encoder",
     "iconName": "file-encode-icon",
     "navigateUrl": "/tools/base64-encode",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "file-encode.svg"
   },
   "base64decoder": {
     "applicationId": "base64decoder",
     "displayText": "Base64 Decoder",
     "iconName": "file-decode-icon",
     "navigateUrl": "/tools/base64-decode",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "file-decode.svg"
   },
   "crongenerator": {
     "applicationId": "crongenerator",
     "displayText": "Cron Expression Generator",
     "iconName": "cron-icon",
     "navigateUrl": "/tools/cron-expression",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "cron.svg"
   },
   "uuidv4": {
     "applicationId": "uuidv4generator",
     "displayText": "UUID V4 Generator",
     "iconName": "uuid-icon",
     "navigateUrl": "/tools/uuid-v4-generator",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "uuid-icon.svg"
   },
   "uuidv1": {
     "applicationId": "uuidv1generator",
     "displayText": "UUID V1 Generator",
     "iconName": "uuid-icon",
     "navigateUrl": "/tools/uuid-v1-generator",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "uuid-icon.svg"
   },
   "guid": {
     "applicationId": "guidgenerator",
     "displayText": "GUID Generator",
     "iconName": "uuid-icon",
     "navigateUrl": "/tools/guid-generator",
-    "iconRelativeUrl": ""
+    "iconRelativeUrl": "uuid-icon.svg"
   }
 }
