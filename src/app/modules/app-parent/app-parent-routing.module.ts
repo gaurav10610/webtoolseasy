@@ -163,6 +163,13 @@ const routes: Routes = [
             m => m.QrCodeGeneratorModule
           ),
       },
+      {
+        path: 'xml-to-json',
+        loadChildren: () =>
+          import('../xml-to-json/xml-to-json.module').then(
+            m => m.XmlToJsonModule
+          ),
+      },
     ],
   },
 ];
