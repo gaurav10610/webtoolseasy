@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
@@ -14,7 +14,7 @@ import { DescriptionBlock } from 'src/app/@types/description';
   templateUrl: './html-formatter.component.html',
   styleUrls: ['./html-formatter.component.scss'],
 })
-export class HtmlFormatterComponent {
+export class HtmlFormatterComponent implements OnInit {
   rawCode: string =
     '<html><head><title>Online HTML Formatter</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
 
@@ -35,7 +35,9 @@ export class HtmlFormatterComponent {
   constructor(
     private clipboard: Clipboard,
     public platformMetaDataService: PlatformMetadataService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.formattedCode = html_beautify(this.rawCode);
   }
 

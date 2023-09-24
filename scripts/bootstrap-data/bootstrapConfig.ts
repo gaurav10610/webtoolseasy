@@ -1,17 +1,22 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/cron-expression';
 const pageTitle = '';
 const pageDescription = '';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
-const keywords = 'cron expression,cron expression generator';
+const keywords = '';
+
+const relatedTools: ApplicationIds[] = [];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: '',
-  subHeading: '',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -41,6 +46,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
   icons: [],
 };
 

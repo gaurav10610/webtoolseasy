@@ -1,4 +1,11 @@
 {
+  "xmltojson": {
+    "applicationId": "xmltojson",
+    "displayText": "XML to JSON Converter",
+    "iconName": "xml-icon",
+    "navigateUrl": "/tools/xml-to-json",
+    "iconRelativeUrl": "xml.svg"
+  },
   "qrcodegenerator": {
     "applicationId": "qrcodegenerator",
     "displayText": "QR Code Generator",
