@@ -4,7 +4,7 @@ var xmlFormat = require('xml-formatter');
 
 /**
  * add the new app's url in 'src/sitemap.xml'
- * @param {*} newAppName 
+ * @param {*} newAppName
  */
 function addUrlInSitemap(newAppName) {
   var siteMapData = fs.readFileSync('./src/sitemap.xml', {
@@ -13,7 +13,7 @@ function addUrlInSitemap(newAppName) {
 
   const parser = new XMLParser({
     ignoreAttributes: false,
-    ignoreDeclaration: false
+    ignoreDeclaration: false,
   });
 
   let jObj = parser.parse(siteMapData);
@@ -26,7 +26,7 @@ function addUrlInSitemap(newAppName) {
 
   const builder = new XMLBuilder({
     ignoreAttributes: false,
-    ignoreDeclaration: false
+    ignoreDeclaration: false,
   });
   const xmlContent = xmlFormat(builder.build(jObj));
 
@@ -40,11 +40,16 @@ function addUrlInSitemap(newAppName) {
  * create app's component config in 'src/environments/component-config/new-app'
  */
 function createNewAppComponentConfig() {
-  console.log('creating app config for new app: ' + process.env.APP_NAME);
   var configPath =
     './src/environments/component-config/' + process.env.APP_NAME;
 
-  fs.mkdirSync(configPath);
+  /**
+   * check if the directory exists
+   */
+  if (!fs.existsSync(configPath)) {
+    fs.mkdirSync(configPath);
+  }
+
   fs.copyFileSync(
     './scripts/bootstrap-data/bootstrapConfig.ts',
     configPath + '/config.ts'
@@ -53,25 +58,32 @@ function createNewAppComponentConfig() {
 
 /**
  * register new app in 'src/environments/apps.json'
- * @param {*} newAppName 
+ * @param {*} newAppName
  */
 function registerNewApp(newAppName) {
-  const appsConfigJson = JSON.parse(fs.readFileSync('./src/environments/apps.json', {
-    encoding: 'utf8'
-  }));
-  
-  const applicationId = newAppName.replaceAll('-','')
+  const formattingSpace = '  '
+  const appsConfigJson = JSON.parse(
+    fs.readFileSync('./src/environments/apps.json', {
+      encoding: 'utf8',
+    })
+  );
+
+  const applicationId = newAppName.replaceAll('-', '');
   appsConfigJson[applicationId] = {
     applicationId,
     displayText: newAppName,
     iconName: `${newAppName}-icon`,
     navigateUrl: `/tools/${newAppName}`,
-    iconRelativeUrl: ''
-  }
+    iconRelativeUrl: '',
+  };
 
-  fs.writeFileSync('./src/environments/apps.json', JSON.stringify(appsConfigJson), {
-    encoding: 'utf8'
-  });
+  fs.writeFileSync(
+    './src/environments/apps.json',
+    JSON.stringify(appsConfigJson, null, formattingSpace),
+    {
+      encoding: 'utf8',
+    }
+  );
 }
 
 createNewAppComponentConfig();
@@ -79,3 +91,5 @@ createNewAppComponentConfig();
 addUrlInSitemap(process.env.APP_NAME);
 
 registerNewApp(process.env.APP_NAME);
+
+console.log(`new application has been created: ${process.env.APP_NAME}`);
