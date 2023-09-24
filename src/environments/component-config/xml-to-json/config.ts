@@ -6,7 +6,7 @@ import {
   applicationConfig,
 } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/cron-expression';
+const navigationUrl = '/tools/xml-to-json';
 const pageTitle = 'Free Online XML to JSON Converter: Convert XML to JSON';
 const pageDescription =
   'Convert XML to JSON with ease with our free online XML to JSON converter. No download required, no sign-up required.';
