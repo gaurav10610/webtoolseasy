@@ -8,7 +8,7 @@ describe('XmlToJsonComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [XmlToJsonComponent]
+      declarations: [XmlToJsonComponent],
     });
     fixture = TestBed.createComponent(XmlToJsonComponent);
     component = fixture.componentInstance;

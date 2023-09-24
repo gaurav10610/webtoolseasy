@@ -22,7 +22,8 @@
       <app-related-tools
         class="full-width"
         *ngIf="
-          appContextService.applicationConfig?.relatedTools
+          appContextService.applicationConfig?.relatedTools &&
+          (appContextService.applicationConfig?.relatedTools)!.length > 0
         "></app-related-tools>
 
       <!-- description -->

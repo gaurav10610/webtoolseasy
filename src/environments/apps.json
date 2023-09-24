@@ -1,4 +1,11 @@
 {
+  "xmltojson": {
+    "applicationId": "xmltojson",
+    "displayText": "XML to JSON Converter",
+    "iconName": "xml-icon",
+    "navigateUrl": "/tools/xml-to-json",
+    "iconRelativeUrl": "xml.svg"
+  },
   "qrcodegenerator": {
     "applicationId": "qrcodegenerator",
     "displayText": "QR Code Generator",
@@ -145,12 +152,5 @@
     "iconName": "uuid-icon",
     "navigateUrl": "/tools/guid-generator",
     "iconRelativeUrl": "uuid-icon.svg"
-  },
-  "xmltojson": {
-    "applicationId": "xmltojson",
-    "displayText": "xml-to-json",
-    "iconName": "xml-to-json-icon",
-    "navigateUrl": "/tools/xml-to-json",
-    "iconRelativeUrl": ""
   }
 }
