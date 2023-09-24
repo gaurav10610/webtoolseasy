@@ -24,6 +24,30 @@ export enum AppDisplayNames {
   QR_CODE_GENERATOR = 'QR Code Generator',
 }
 
+export enum ApplicationIds {
+  VIDEO_CONVERTER = 'videoconverter',
+  SCREEN_RECORDER = 'screenrecorder',
+  TEXT_COMPARE = 'textcompare',
+  JWT_DECODER = 'jwtdecoder',
+  IMAGE_COMPRESSOR = 'imagecompressor',
+  JS_FORMATTER = 'jsformatter',
+  JSON_FORMATTER = 'jsonformatter',
+  HTML_FORMATTER = 'htmlformatter',
+  CSS_FORMATTER = 'cssformatter',
+  JSON_VIEWER = 'jsonviewer',
+  PASSWORD_GENERATOR = 'passwordgenerator',
+  BASE64_ENCODE = 'base64encoder',
+  BASE64_DECODE = 'base64decoder',
+  CRON_GENERATOR = 'crongenerator',
+  IMAGE_CROPPER = 'imagecropper',
+  UUID_VERSION1_GENERATOR = 'uuidv1generator',
+  UUID_VERSION4_GENERATOR = 'uuidv4generator',
+  GUID_GENERATOR = 'guidgenerator',
+  MARKDOWN_EDITOR = 'markdowneditor',
+  WORD_COUNTER = 'wordcounter',
+  QR_CODE_GENERATOR = 'qrcodegenerator',
+}
+
 export const appDisplayConfig: AppDisplayConfig[] = [
   {
     applicationId: 'qrcodegenerator',

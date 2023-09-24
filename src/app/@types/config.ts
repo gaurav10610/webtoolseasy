@@ -7,6 +7,7 @@ export interface BaseAppConfig {
 export interface AppDisplayConfig extends BaseAppConfig {
   applicationId: string;
   iconName: string;
+  iconRelativeUrl?: string;
 }
 
 export interface ApplicationConfig {
