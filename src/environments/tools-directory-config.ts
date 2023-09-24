@@ -1,4 +1,5 @@
 import { AppDisplayConfig } from 'src/app/@types/config';
+import * as appConfigJson from './apps.json';
 
 export enum AppDisplayNames {
   VIDEO_CONVERTER = 'Video to Audio Converter',
@@ -48,131 +49,9 @@ export enum ApplicationIds {
   QR_CODE_GENERATOR = 'qrcodegenerator',
 }
 
-export const appDisplayConfig: AppDisplayConfig[] = [
-  {
-    applicationId: 'qrcodegenerator',
-    displayText: AppDisplayNames.QR_CODE_GENERATOR,
-    iconName: 'qr-code',
-    navigateUrl: '/tools/qr-code-generator',
-  },
-  {
-    applicationId: 'wordcounter',
-    displayText: AppDisplayNames.WORD_COUNTER,
-    iconName: 'word-icon',
-    navigateUrl: '/tools/word-counter',
-  },
-  {
-    applicationId: 'textcompare',
-    displayText: AppDisplayNames.TEXT_COMPARE,
-    iconName: 'comparison-icon',
-    navigateUrl: '/tools/text-compare',
-  },
-  {
-    applicationId: 'markdowneditor',
-    displayText: AppDisplayNames.MARKDOWN_EDITOR,
-    iconName: 'markdown-icon',
-    navigateUrl: '/tools/markdown-editor',
-  },
-  {
-    applicationId: 'passwordgenerator',
-    displayText: AppDisplayNames.PASSWORD_GENERATOR,
-    iconName: 'password-icon',
-    navigateUrl: '/tools/password-generator',
-  },
-  {
-    applicationId: 'videoconverter',
-    displayText: AppDisplayNames.VIDEO_CONVERTER,
-    iconName: 'video-convert-icon',
-    navigateUrl: '/tools/video-converter',
-  },
-  {
-    applicationId: 'screen-recorder',
-    displayText: AppDisplayNames.SCREEN_RECORDER,
-    iconName: 'screen-icon',
-    navigateUrl: '/tools/screen-recorder',
-  },
-  {
-    applicationId: 'imagecompress',
-    displayText: AppDisplayNames.IMAGE_COMPRESSOR,
-    iconName: 'image-icon',
-    navigateUrl: '/tools/image-compress',
-  },
-  {
-    applicationId: 'imagecropper',
-    displayText: AppDisplayNames.IMAGE_CROPPER,
-    iconName: 'image-icon',
-    navigateUrl: '/tools/crop-image',
-  },
-  {
-    applicationId: 'jwt',
-    displayText: AppDisplayNames.JWT_DECODER,
-    iconName: 'jwt-icon',
-    navigateUrl: '/tools/jwt',
-  },
-  {
-    applicationId: 'jsformatter',
-    displayText: AppDisplayNames.JS_FORMATTER,
-    iconName: 'js-icon',
-    navigateUrl: '/tools/js-formatter',
-  },
-  {
-    applicationId: 'jsonformatter',
-    displayText: AppDisplayNames.JSON_FORMATTER,
-    iconName: 'json-icon',
-    navigateUrl: '/tools/json-formatter',
-  },
-  {
-    applicationId: 'jsonviewer',
-    displayText: AppDisplayNames.JSON_VIEWER,
-    iconName: 'json-icon',
-    navigateUrl: '/tools/json-viewer',
-  },
-  {
-    applicationId: 'htmlformatter',
-    displayText: AppDisplayNames.HTML_FORMATTER,
-    iconName: 'html-icon',
-    navigateUrl: '/tools/html-formatter',
-  },
-  {
-    applicationId: 'cssformatter',
-    displayText: AppDisplayNames.CSS_FORMATTER,
-    iconName: 'css-icon',
-    navigateUrl: '/tools/css-formatter',
-  },
-  {
-    applicationId: 'base64encoder',
-    displayText: AppDisplayNames.BASE64_ENCODE,
-    iconName: 'file-encode-icon',
-    navigateUrl: '/tools/base64-encode',
-  },
-  {
-    applicationId: 'base64decoder',
-    displayText: AppDisplayNames.BASE64_DECODE,
-    iconName: 'file-decode-icon',
-    navigateUrl: '/tools/base64-decode',
-  },
-  {
-    applicationId: 'crongenerator',
-    displayText: AppDisplayNames.CRON_GENERATOR,
-    iconName: 'cron-icon',
-    navigateUrl: '/tools/cron-expression',
-  },
-  {
-    applicationId: 'uuidv4',
-    displayText: AppDisplayNames.UUID_VERSION4_GENERATOR,
-    iconName: 'uuid-icon',
-    navigateUrl: '/tools/uuid-v4-generator',
-  },
-  {
-    applicationId: 'uuidv1',
-    displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
-    iconName: 'uuid-icon',
-    navigateUrl: '/tools/uuid-v1-generator',
-  },
-  {
-    applicationId: 'guid',
-    displayText: AppDisplayNames.GUID_GENERATOR,
-    iconName: 'uuid-icon',
-    navigateUrl: '/tools/guid-generator',
-  },
-];
+const appsConfigMap: Map<string, AppDisplayConfig> = new Map(
+  Object.entries(appConfigJson)
+);
+appsConfigMap.delete('default');
+
+export const applicationConfig: Map<string, AppDisplayConfig> = appsConfigMap;
