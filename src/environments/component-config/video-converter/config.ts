@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/video-converter';
 const pageTitle = 'Free Video to Audio Converter: Extract Audio from Videos';
@@ -11,6 +14,9 @@ const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
 
 const keywords =
   'online video to audio converter,extract audio from videos,convert video to audio,convert video to MP3,reduce video file size,free video to audio converter,no download required,supports multiple video formats,high-quality MP3 files,easy to use,choose video format,check audio quality,choose audio format for needs,create podcasts,create audiobooks,listen to audio from videos,mp4 to mp3,mp4 to wav,audio extractor';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.SCREEN_RECORDER];
+
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online Video to Audio Converter: Extract Audio from Videos Easily',
@@ -60,19 +66,8 @@ export const componentConfig: ApplicationConfig = {
       iconName: 'play-icon',
       iconRelativeUrl: 'play-icon.svg',
     },
-    {
-      iconName: 'screen-icon',
-      iconRelativeUrl: 'screen.svg',
-    },
   ],
-  relatedTools: [
-    {
-      applicationId: 'screen-recorder',
-      displayText: AppDisplayNames.SCREEN_RECORDER,
-      iconName: 'screen-icon',
-      navigateUrl: '/tools/screen-recorder',
-    },
-  ],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

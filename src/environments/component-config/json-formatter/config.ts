@@ -1,7 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-formatter';
 const pageTitle =
@@ -12,6 +15,13 @@ const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;
 
 const keywords =
   'online JSON beautifier and formatter,beautify JSON data,format JSON data,JSON beautifier and formatter tool,JSON data formatter,JSON data style,improve JSON data readability,make JSON data more consistent,follow JSON data style guidelines,free JSON beautifier and formatter,no download required,supports all JSON features,easy to use,customizable settings,JSON data style guide,JSON data formatting errors';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.JSON_VIEWER,
+  ApplicationIds.HTML_FORMATTER,
+  ApplicationIds.JS_FORMATTER,
+  ApplicationIds.CSS_FORMATTER,
+];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
@@ -45,50 +55,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsonviewer',
-      displayText: AppDisplayNames.JSON_VIEWER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-viewer',
-    },
-    {
-      applicationId: 'jsformatter',
-      displayText: AppDisplayNames.JS_FORMATTER,
-      iconName: 'js-icon',
-      navigateUrl: '/tools/js-formatter',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: AppDisplayNames.CSS_FORMATTER,
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

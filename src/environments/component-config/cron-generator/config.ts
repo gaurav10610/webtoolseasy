@@ -43,6 +43,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
+  relatedTools: [],
   icons: [],
 };
 
