@@ -1,22 +1,26 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
 const pageTitle =
-  'Strong Password Generator: Create Secure Passwords for All Your Accounts';
+  'Password Generator: Create Strong, Random & Secure Passwords';
 const pageDescription =
   'Generate strong, unique passwords for all your online accounts with our free password generator tool. No sign-up required. Generate single password or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 const keywords =
-  'password generator,strong password generator,create secure passwords,unique passwords,different passwords for all accounts,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account';
+  'password generator,strong password generator,create secure passwords,unique passwords,different passwords for all accounts,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.JWT_DECODER];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Strong Password Generator: Create Secure Passwords for All Your Accounts',
-  subHeading: 'Generate Strong, Random & Secure Passwords',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -46,20 +50,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jwt',
-      displayText: AppDisplayNames.JWT_DECODER,
-      iconName: 'jwt-icon',
-      navigateUrl: '/tools/jwt',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

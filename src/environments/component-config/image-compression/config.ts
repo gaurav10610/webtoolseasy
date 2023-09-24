@@ -1,21 +1,26 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/image-compress';
 const pageTitle =
-  'Free Image Compressor: Reduce Image File Size Without Losing Quality';
+  'Free Image Compressor: Reduce the Size of Your Photos Online';
 const pageDescription =
   'Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
 const keywords =
-  'free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images';
+  'free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images,picture compressor,pic compressor,photo size reducer,reduce resolution of image';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.IMAGE_CROPPER];
+
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Image Compressor: Reduce Image File Size Without Losing Quality',
-  subHeading: 'Compress JPEG, PNG, WEBP & BMP Images For Free',
+    'Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -45,36 +50,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  relatedTools: [
-    {
-      applicationId: 'imagecropper',
-      displayText: AppDisplayNames.IMAGE_CROPPER,
-      iconName: 'image-icon',
-      navigateUrl: '/tools/crop-image',
-    },
-  ],
-  icons: [
-    {
-      iconName: 'image-file-icon',
-      iconRelativeUrl: 'image-file.svg',
-    },
-    {
-      iconName: 'download-icon',
-      iconRelativeUrl: 'download.svg',
-    },
-    {
-      iconName: 'settings-icon',
-      iconRelativeUrl: 'settings.svg',
-    },
-    {
-      iconName: 'play-icon',
-      iconRelativeUrl: 'play-icon.svg',
-    },
-    {
-      iconName: 'image-icon',
-      iconRelativeUrl: 'image-icon.svg',
-    },
-  ],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
+  icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [

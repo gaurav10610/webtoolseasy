@@ -44,7 +44,9 @@
     "ngx-json-viewer": "3.2.1",
     "ngx-monaco-editor-v2": "16.0.1",
     "ngx-sharebuttons": "13.0.0",
+    "qrcode": "1.5.3",
     "rxjs": "7.8.1",
+    "fast-xml-parser": "4.3.0",
     "uuid": "9.0.0",
     "video-stream-merger": "4.0.1",
     "zone.js": "0.13.1"
@@ -64,6 +66,7 @@
     "@types/jasmine": "3.10.0",
     "@types/js-beautify": "1.13.3",
     "@types/node": "12.11.1",
+    "@types/qrcode": "1.5.2",
     "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.4.0",
@@ -81,6 +84,7 @@
     "prettier-eslint": "15.0.1",
     "tslib": "2.6.2",
     "typescript": "5.1.6",
-    "webpack-bundle-analyzer": "4.9.1"
+    "webpack-bundle-analyzer": "4.9.1",
+    "xml-formatter": "3.5.0"
   }
 }

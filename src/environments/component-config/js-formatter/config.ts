@@ -1,11 +1,13 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/js-formatter';
-const pageTitle =
-  'Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease';
+const pageTitle = 'JS Beautifier and Formatter: Beautify and Format JavaScript';
 const pageDescription =
   'Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
@@ -13,10 +15,16 @@ const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 const keywords =
   'online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,easy to use,customizable settings,JavaScript code style guide,JavaScript code formatting errors';
 
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.CSS_FORMATTER,
+  ApplicationIds.HTML_FORMATTER,
+  ApplicationIds.JSON_FORMATTER,
+  ApplicationIds.JSON_VIEWER,
+];
+
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease',
-  subHeading: 'Online Javascript Beautifier',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -46,46 +54,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsonformatter',
-      displayText: AppDisplayNames.JSON_FORMATTER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
-      applicationId: 'jsonviewer',
-      displayText: AppDisplayNames.JSON_VIEWER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-viewer',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: AppDisplayNames.CSS_FORMATTER,
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

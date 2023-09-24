@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
-import { ApplicationConfig } from 'src/app/@types/config';
+import { ApplicationConfig, IconConfig } from 'src/app/@types/config';
 import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './app-parent.component.html',
   styleUrls: ['./app-parent.component.scss'],
 })
-export class AppParentComponent {
+export class AppParentComponent implements OnInit {
   constructor(
     private iconConfigService: IconConfigService,
     private matIconRegistry: MatIconRegistry,
@@ -24,11 +24,15 @@ export class AppParentComponent {
     private titleService: Title,
     private metaService: Meta,
     @Inject(DOCUMENT) private document: any
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      ICON_CONFIG,
-      this.matIconRegistry,
-      this.domSanitizer
+  ) {}
+
+  ngOnInit(): void {
+    ICON_CONFIG.forEach(iconConfig =>
+      this.iconConfigService.registerCustomIcon(
+        iconConfig,
+        this.matIconRegistry,
+        this.domSanitizer
+      )
     );
   }
 
@@ -41,16 +45,37 @@ export class AppParentComponent {
       const applicationConfig: ApplicationConfig = <ApplicationConfig>(
         event.applicationConfig
       );
+      //console.log(applicationConfig);
       this.appContextService.applicationConfig = applicationConfig;
       this.appContextService.appUrl = `${environment.hostname}${applicationConfig.navigationUrl}`;
 
       /**
+       * load related tools icons
+       */
+      applicationConfig.relatedTools
+        .map(tool => {
+          return {
+            iconName: tool.iconName,
+            iconRelativeUrl: tool.iconRelativeUrl,
+          };
+        })
+        .forEach((iconConfig: IconConfig) =>
+          this.iconConfigService.registerCustomIcon(
+            iconConfig,
+            this.matIconRegistry,
+            this.domSanitizer
+          )
+        );
+
+      /**
        * loading custom icons
        */
-      this.iconConfigService.loadCustomIcons(
-        applicationConfig.icons,
-        this.matIconRegistry,
-        this.domSanitizer
+      applicationConfig.icons.forEach(iconConfig =>
+        this.iconConfigService.registerCustomIcon(
+          iconConfig,
+          this.matIconRegistry,
+          this.domSanitizer
+        )
       );
 
       /**

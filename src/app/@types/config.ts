@@ -4,20 +4,20 @@ export interface BaseAppConfig {
   displayText: string;
   navigateUrl: string;
 }
-export interface AppDisplayConfig extends BaseAppConfig {
+export interface AppNavigationConfig extends BaseAppConfig {
   applicationId: string;
   iconName: string;
+  iconRelativeUrl: string;
 }
 
 export interface ApplicationConfig {
   mainHeading?: string;
-  subHeading?: string;
   navigationUrl: string;
   metaTags: MetaDefinition[];
   pageTitle: string;
   tags: string[];
   icons: IconConfig[];
-  relatedTools?: AppDisplayConfig[];
+  relatedTools: AppNavigationConfig[];
 }
 
 export interface IconConfig {

@@ -1,22 +1,25 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/base64-encode';
-const pageTitle =
-  'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease';
+const pageTitle = 'File to Base64 Encoder: Convert Any File to Base64';
 const pageDescription =
-  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. No download required, no sign-up required.';
+  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. Image, Text, PDF or File to Base64.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 const keywords =
-  'online file to Base64 encoder,convert file to Base64,file to Base64 encoder tool,Base64 encoding,Base64 decoding,Base64 secure,Base64 transmission,Base64 storage,free file to Base64 encoder,no download required,supports all file formats,easy to use,customizable settings,Base64 encoding scheme,store encoded data securely';
+  'online file to Base64 encoder,convert file to Base64,file to Base64 encoder tool,Base64 encoding,Base64 decoding,Base64 secure,Base64 transmission,Base64 storage,free file to Base64 encoder,no download required,supports all file formats,easy to use,customizable settings,Base64 encoding scheme,store encoded data securely,image to Base64,text to Base64,pdf to Base64';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.BASE64_DECODE];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online File to Base64 Encoder: Convert Any File to Base64 with Ease',
-  subHeading: 'Encode Image/Text/PDF/File to Base64',
+    'Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -46,14 +49,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  relatedTools: [
-    {
-      applicationId: 'base64decoder',
-      displayText: AppDisplayNames.BASE64_DECODE,
-      iconName: 'file-decode-icon',
-      navigateUrl: '/tools/base64-decode',
-    },
-  ],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
   icons: [
     {
       iconName: 'file-decode-icon',

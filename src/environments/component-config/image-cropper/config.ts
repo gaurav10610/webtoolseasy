@@ -1,10 +1,13 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/crop-image';
-const pageTitle = 'Free Image Cropper: Crop Images Online for Free';
+const pageTitle = 'Free Online Image Cropper: Crop Your Photos Online for Free';
 const pageDescription =
   'Crop your images online for free with our easy-to-use image cropper. No download required, no sign-up required. Crop JPG, PNG, WEBP, BMP For Free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-cropper.png`;
@@ -12,9 +15,10 @@ const imageUrl = `${environment.screenshotsBaseUrl}/image-cropper.png`;
 const keywords =
   'free image cropper,online image cropper,crop images online,crop JPEG images,crop PNG images,crop GIF images,crop BMP images,image cropping,image composition,image aspect ratio,social media image cropping,website image cropping,remove unwanted parts of an image,resize an image,create a square image';
 
+const relatedTools: ApplicationIds[] = [ApplicationIds.IMAGE_COMPRESSOR];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Image Cropper: Crop Images Online for Free',
-  subHeading: 'Crop Image Online',
+  mainHeading: 'Free Online Image Cropper: Crop JPG, PNG, WEBP, BMP Images',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -44,20 +48,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'image-icon',
-      iconRelativeUrl: 'image-icon.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'imagecompress',
-      displayText: AppDisplayNames.IMAGE_COMPRESSOR,
-      iconName: 'image-icon',
-      navigateUrl: '/tools/image-compress',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

@@ -1,21 +1,30 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/uuid-v4-generator';
-const pageTitle = 'Generate Single or Bulk UUID v4 Online for Free';
+const pageTitle =
+  'Online UUID Version4 (v4) Generator | Bulk UUID v4 Generator';
 const pageDescription =
-  'Our free online UUID v4 generator tool is a quick and easy way to generate universally unique identifiers (UUIDs), either individually or in bulk. Simply enter the number of UUIDs you need and click the "Generate" button to generate a list of unique UUID v4s.';
+  'Our free online UUID v4 generator tool is a quick and easy way to generate universally unique identifiers (UUIDs), either individually or in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/uuid-v4-generator.png`;
 
 const keywords =
   'UUID v4 generator, UUID generator online, UUID generator free, UUID v4, UUID, universally unique identifier, GUID, globally unique identifier, generate UUID, generate UUID online, generate UUID free';
 
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.JWT_DECODER,
+  ApplicationIds.UUID_VERSION1_GENERATOR,
+  ApplicationIds.GUID_GENERATOR,
+];
+
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     'UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free',
-  subHeading: 'Generate UUID Version 4 (v4) Individually or in Bulk',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -45,36 +54,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jwt',
-      displayText: AppDisplayNames.JWT_DECODER,
-      iconName: 'jwt-icon',
-      navigateUrl: '/tools/jwt',
-    },
-    {
-      applicationId: 'uuidv1',
-      displayText: AppDisplayNames.UUID_VERSION1_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid-v1-generator',
-    },
-    {
-      applicationId: 'guid',
-      displayText: AppDisplayNames.GUID_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/guid-generator',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [

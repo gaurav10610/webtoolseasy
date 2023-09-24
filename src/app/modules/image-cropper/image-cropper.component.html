@@ -49,23 +49,20 @@
   >
 
   <div
-    class="flex-display flex-column-flow full-width flex-gap-medium"
+    class="flex-display flex-align-center full-width flex-gap-large auto-scroll"
     *ngIf="fileList.length > 0">
     <div
-      class="flex-display flex-row-flow flex-align-center full-width flex-gap-large auto-scroll">
+      class="flex-display flex-column-flow flex-center border-grey shadow-grey thumbnail-container pointer-cursor"
+      *ngFor="let imageFile of fileList"
+      (click)="selectCurrentFile(imageFile.id)">
+      <img
+        mat-card-image
+        src="{{ imageFile?.dataURI }}"
+        alt="selected image for crop" />
       <div
-        class="flex-display flex-column-flow flex-center border-grey shadow-grey thumbnail-container pointer-cursor"
-        *ngFor="let imageFile of fileList"
-        (click)="selectCurrentFile(imageFile.id)">
-        <img
-          mat-card-image
-          src="{{ imageFile?.dataURI }}"
-          alt="selected image for crop" />
-        <div
-          class="full-width flex-display flex-row-flow flex-center"
-          style="overflow: hidden">
-          <span>{{ imageFile?.name }}</span>
-        </div>
+        class="full-width flex-display flex-row-flow flex-center"
+        style="overflow: hidden">
+        <span>{{ imageFile?.name }}</span>
       </div>
     </div>
   </div>

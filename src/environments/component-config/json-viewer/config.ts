@@ -1,11 +1,13 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-viewer';
-const pageTitle =
-  'Free Online JSON Viewer: View Your JSON Data in a Tree Structure';
+const pageTitle = 'Free Online JSON Viewer: View Your JSON in a Tree Structure';
 const pageDescription =
   'View your JSON data in a tree structure with our free online JSON viewer tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
@@ -13,10 +15,15 @@ const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
 const keywords =
   'online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,no download required,supports all JSON features,easy to use,customizable settings,JSON beautifier,JSON formatter,expand and collapse,search JSON data';
 
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.JSON_FORMATTER,
+  ApplicationIds.JS_FORMATTER,
+  ApplicationIds.HTML_FORMATTER,
+  ApplicationIds.CSS_FORMATTER,
+];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading:
-    'Free Online JSON Viewer: View Your JSON Data in a Tree Structure',
-  subHeading: 'JSON Visualizer / Tree Viewer',
+  mainHeading: 'Free Online JSON Viewer: View Your JSON in a Tree Structure',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -46,50 +53,8 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: keywords.split(',').map(word => word.trim()),
-  icons: [
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsonformatter',
-      displayText: AppDisplayNames.JSON_FORMATTER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'jsformatter',
-      displayText: AppDisplayNames.JS_FORMATTER,
-      iconName: 'js-icon',
-      navigateUrl: '/tools/js-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: AppDisplayNames.CSS_FORMATTER,
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-  ],
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
