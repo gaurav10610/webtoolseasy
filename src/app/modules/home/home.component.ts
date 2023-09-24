@@ -24,7 +24,7 @@ export class HomeComponent {
     private iconConfigService: IconConfigService,
     public platformMetaDataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
+    this.iconConfigService.registerCustomIcons(
       componentConfig.icons,
       this.matIconRegistry,
       this.domSanitizer

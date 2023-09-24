@@ -25,7 +25,7 @@ export class AppParentComponent {
     private metaService: Meta,
     @Inject(DOCUMENT) private document: any
   ) {
-    this.iconConfigService.loadCustomIcons(
+    this.iconConfigService.registerCustomIcons(
       ICON_CONFIG,
       this.matIconRegistry,
       this.domSanitizer
@@ -47,7 +47,7 @@ export class AppParentComponent {
       /**
        * loading custom icons
        */
-      this.iconConfigService.loadCustomIcons(
+      this.iconConfigService.registerCustomIcons(
         applicationConfig.icons,
         this.matIconRegistry,
         this.domSanitizer

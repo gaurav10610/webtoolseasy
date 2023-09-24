@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class IconConfigService {
-  loadCustomIcons(
+  registerCustomIcons(
     icons: IconConfig[],
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer
@@ -17,11 +17,11 @@ export class IconConfigService {
      * load only those icons which are not already registered
      */
     icons.forEach(iconConfig => {
-      this.loadCustomIcon(iconConfig, matIconRegistry, domSanitizer);
+      this.registerCustomIcon(iconConfig, matIconRegistry, domSanitizer);
     });
   }
 
-  async loadCustomIcon(
+  async registerCustomIcon(
     iconConfig: IconConfig,
     matIconRegistry: MatIconRegistry,
     domSanitizer: DomSanitizer
