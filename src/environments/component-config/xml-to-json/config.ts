@@ -6,11 +6,11 @@ import {
   applicationConfig,
 } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/cron-expression';
+const navigationUrl = '/tools/xml-to-json';
 const pageTitle = 'Free Online XML to JSON Converter: Convert XML to JSON';
 const pageDescription =
   'Convert XML to JSON with ease with our free online XML to JSON converter. No download required, no sign-up required.';
-const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
+const imageUrl = `${environment.screenshotsBaseUrl}/xml-to-json.png`;
 
 const keywords =
   'online XML to JSON converter,XML to JSON converter,XML to JSON,XML to JSON conversion,XML to JSON tool,free XML to JSON converter,no download required,supports all XML versions,easy to use,customizable settings,XML and JSON,XML to JSON best practices,JSON validator';
