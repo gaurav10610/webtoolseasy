@@ -170,6 +170,13 @@ const routes: Routes = [
             m => m.XmlToJsonModule
           ),
       },
+      {
+        path: 'compound-interest-calculator',
+        loadChildren: () =>
+          import(
+            '../compound-interest-calculator/compound-interest-calculator.module'
+          ).then(m => m.CompoundInterestCalculatorModule),
+      },
     ],
   },
 ];
