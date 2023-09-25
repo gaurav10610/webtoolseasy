@@ -29,6 +29,10 @@ const serverCache: Map<string, any> = new Map();
 export function app(serverCache: Map<string, any>): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/webtoolseasy/browser');
+  const monacoDistFolder = join(
+    process.cwd(),
+    'dist/webtoolseasy/browser/assets/monaco'
+  );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index';
@@ -44,13 +48,26 @@ export function app(serverCache: Map<string, any>): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
+  /**
+   * added this only to get rid of the error for this specific file
+   */
+  server.get(
+    '**/simpleWorker.nls.js.map',
+    express.static(monacoDistFolder, {
+      maxAge: '1y',
+      fallthrough: false,
+      setHeaders: function (res) {
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+      },
+    })
+  );
+
   server.get(
     '*.*',
     express.static(distFolder, {
       maxAge: '1y',
+      fallthrough: false,
       setHeaders: function (res) {
         res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
         res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
@@ -66,6 +83,8 @@ export function app(serverCache: Map<string, any>): express.Express {
       if (cachedHtml) {
         res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
         res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+
+        // console.log(`[WebToolsEasy] Serving from server cache`);
 
         // Cache exists. Send it.
         res.send(cachedHtml);
@@ -85,6 +104,7 @@ export function app(serverCache: Map<string, any>): express.Express {
         },
         (err: Error, html: string) => {
           // Cache the rendered `html` for this request url to use for subsequent requests
+          // console.log(`[WebToolsEasy] Serving from server`);
           serverCache.set(req.url, html);
           res.send(html);
         }
