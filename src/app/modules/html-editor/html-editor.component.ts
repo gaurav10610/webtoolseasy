@@ -25,8 +25,10 @@ export class HtmlEditorComponent implements OnInit {
   </head>
   <body>
   
-      <h1>This is an Online HTML Editor</h1>
-      <p>WebToolsEasy is awesome. Explore more such free tools.</p>
+    <h1>This is an Online HTML Editor</h1>
+    <p style="color:red">
+      WebToolsEasy is awesome. Explore more such free tools.
+    </p>
   
   </body>
   </html>
