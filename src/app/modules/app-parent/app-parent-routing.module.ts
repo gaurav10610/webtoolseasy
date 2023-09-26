@@ -191,6 +191,11 @@ const routes: Routes = [
             m => m.HtmlEditorModule
           ),
       },
+      {
+        path: 'javascript-editor',
+        loadChildren: () =>
+          import('../js-editor/js-editor.module').then(m => m.JsEditorModule),
+      },
     ],
   },
 ];

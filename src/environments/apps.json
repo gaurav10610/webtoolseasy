@@ -1,8 +1,15 @@
 {
+  "jseditor": {
+    "applicationId": "jseditor",
+    "displayText": "Online Javascript Editor",
+    "iconName": "js-icon",
+    "navigateUrl": "/tools/javascript-editor",
+    "iconRelativeUrl": "js-icon.svg"
+  },
   "htmleditor": {
     "applicationId": "htmleditor",
     "displayText": "Online HTML Editor",
-    "iconName": "html-editor-icon",
+    "iconName": "html-icon",
     "navigateUrl": "/tools/html-editor",
     "iconRelativeUrl": "html.svg"
   },
