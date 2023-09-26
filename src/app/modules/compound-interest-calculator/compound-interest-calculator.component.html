@@ -1,1 +1,66 @@
-<p>compound-interest-calculator works!</p>
+<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+  <div class="flex-display flex-center flex-gap-large interest-fields">
+    <mat-form-field appearance="outline">
+      <mat-label>Amount</mat-label>
+      <input
+        matInput
+        placeholder="Enter inital investment amount"
+        [formControl]="initialAmount"
+        required="" />
+      <mat-hint>Hint: Principal Amount</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Interest Rate (%)</mat-label>
+      <input
+        matInput
+        placeholder="Enter yearly rate"
+        [formControl]="interestRate" />
+      <mat-hint>Hint: Yearly Interest (%)</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Tenure</mat-label>
+      <input
+        matInput
+        placeholder="Enter investment period"
+        [formControl]="investmentTime" />
+      <mat-hint>Hint: Time in Months</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Interest</mat-label>
+      <mat-select disableRipple [formControl]="compoundFrequency">
+        <mat-option value="yearly">Yearly</mat-option>
+        <mat-option value="quaterly">Quaterly</mat-option>
+        <mat-option value="monthly">Monthly</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="flex-display flex-column-flow flex-gap-medium">
+    <span *ngFor="let error of errors" style="color: red">
+      *error: {{ error }}
+    </span>
+  </div>
+  <div
+    class="flex-display flex-gap-large flex-center"
+    style="flex-wrap: wrap"
+    *ngIf="compoundInterestResult">
+    <div class="flex-display flex-gap-medium">
+      <span style="font-size: large" class="bold-text">Amount:</span>
+      <span style="font-size: large; color: red">{{
+        compoundInterestResult.amount
+      }}</span>
+    </div>
+    <div class="flex-display flex-gap-medium">
+      <span style="font-size: large" class="bold-text">Principal:</span>
+      <span style="font-size: large; color: red">{{
+        compoundInterestResult.principal
+      }}</span>
+    </div>
+    <div class="flex-display flex-gap-medium">
+      <span style="font-size: large" class="bold-text">Interest</span>
+      <span style="font-size: large; color: red">{{
+        compoundInterestResult.interest
+      }}</span>
+    </div>
+  </div>
+</div>
