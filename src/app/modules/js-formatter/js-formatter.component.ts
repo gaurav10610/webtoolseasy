@@ -25,7 +25,7 @@ export class JsFormatterComponent {
   editorOptions = {
     theme: 'vs-dark',
     language: 'javascript',
-    fontSize: 17,
+    fontSize: 15,
   };
 
   applicationConfig: ApplicationConfig = componentConfig;

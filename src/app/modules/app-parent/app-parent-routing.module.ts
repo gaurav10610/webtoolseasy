@@ -184,6 +184,18 @@ const routes: Routes = [
             m => m.CaseConverterModule
           ),
       },
+      {
+        path: 'html-editor',
+        loadChildren: () =>
+          import('../html-editor/html-editor.module').then(
+            m => m.HtmlEditorModule
+          ),
+      },
+      {
+        path: 'javascript-editor',
+        loadChildren: () =>
+          import('../js-editor/js-editor.module').then(m => m.JsEditorModule),
+      },
     ],
   },
 ];
