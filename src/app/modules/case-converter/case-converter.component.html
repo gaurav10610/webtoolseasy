@@ -1,0 +1,26 @@
+<div
+  class="flex-display flex-column-flow flex-align-center full-width flex-gap-large">
+  <span style="align-self: flex-start; font-size: large"
+    >Text (Paste Text Here)</span
+  >
+  <form class="full-width full-height">
+    <mat-form-field appearance="outline" class="full-width full-height">
+      <textarea
+        matInput
+        placeholder="Enter text here to convert..."
+        style="height: 200px"
+        [formControl]="textInput"></textarea>
+    </mat-form-field>
+  </form>
+  <div class="flex-display flex-center flex-gap-medium" style="flex-wrap: wrap">
+    <button mat-stroked-button color="primary" (click)="toUpperCase()">
+      To Uppercase
+    </button>
+    <button mat-stroked-button color="primary" (click)="toLowerCase()">
+      To Lowercase
+    </button>
+    <button mat-stroked-button color="primary" (click)="clearText()">
+      Clear
+    </button>
+  </div>
+</div>
