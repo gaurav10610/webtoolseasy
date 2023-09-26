@@ -177,6 +177,13 @@ const routes: Routes = [
             '../compound-interest-calculator/compound-interest-calculator.module'
           ).then(m => m.CompoundInterestCalculatorModule),
       },
+      {
+        path: 'case-converter',
+        loadChildren: () =>
+          import('../case-converter/case-converter.module').then(
+            m => m.CaseConverterModule
+          ),
+      },
     ],
   },
 ];
