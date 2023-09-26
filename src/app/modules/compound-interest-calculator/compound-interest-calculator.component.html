@@ -6,7 +6,7 @@
         matInput
         placeholder="Enter inital investment amount"
         [formControl]="initialAmount"
-        required="" />
+        required />
       <mat-hint>Hint: Principal Amount</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline">
@@ -14,24 +14,27 @@
       <input
         matInput
         placeholder="Enter yearly rate"
-        [formControl]="interestRate" />
+        [formControl]="interestRate"
+        required />
       <mat-hint>Hint: Yearly Interest (%)</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Tenure</mat-label>
+      <mat-label>Tenure (In Months)</mat-label>
       <input
         matInput
         placeholder="Enter investment period"
-        [formControl]="investmentTime" />
+        [formControl]="investmentTime"
+        required />
       <mat-hint>Hint: Time in Months</mat-hint>
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
-      <mat-label>Interest</mat-label>
+      <mat-label>Compound On</mat-label>
       <mat-select disableRipple [formControl]="compoundFrequency">
         <mat-option value="yearly">Yearly</mat-option>
         <mat-option value="quaterly">Quaterly</mat-option>
         <mat-option value="monthly">Monthly</mat-option>
       </mat-select>
+      <mat-hint>Hint: Interest Compound Frequency</mat-hint>
     </mat-form-field>
   </div>
 
@@ -57,7 +60,7 @@
       }}</span>
     </div>
     <div class="flex-display flex-gap-medium">
-      <span style="font-size: large" class="bold-text">Interest</span>
+      <span style="font-size: large" class="bold-text">Interest:</span>
       <span style="font-size: large; color: red">{{
         compoundInterestResult.interest
       }}</span>
