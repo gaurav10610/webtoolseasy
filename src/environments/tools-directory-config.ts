@@ -23,6 +23,10 @@ export enum ApplicationIds {
   MARKDOWN_EDITOR = 'markdowneditor',
   WORD_COUNTER = 'wordcounter',
   QR_CODE_GENERATOR = 'qrcodegenerator',
+  HTML_EDITOR = 'htmleditor',
+  JS_EDITOR = 'jseditor',
+  XML_TO_JSON = 'xmltojson',
+  COMPOUND_INTEREST_CALCULATOR = 'compoundinterestcalculator',
 }
 
 const appsConfigMap: Map<string, AppNavigationConfig> = new Map(

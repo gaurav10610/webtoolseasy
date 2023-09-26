@@ -1,0 +1,23 @@
+.div-label {
+  font-size: large;
+}
+
+.text-area-div {
+  width: 49%;
+  height: 600px;
+}
+
+.text-area-container {
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 735px) {
+  .text-area-div {
+    height: 300px;
+    width: 100%;
+  }
+  .text-area-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

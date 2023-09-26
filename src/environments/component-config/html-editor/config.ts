@@ -16,7 +16,7 @@ const imageUrl = `${environment.screenshotsBaseUrl}/html-editor.png`;
 const keywords =
   'online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,no download required,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor';
 
-const relatedTools: ApplicationIds[] = [];
+const relatedTools: ApplicationIds[] = [ApplicationIds.JS_EDITOR];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
