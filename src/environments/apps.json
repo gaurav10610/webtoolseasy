@@ -1,4 +1,11 @@
 {
+  "compoundinterestcalculator": {
+    "applicationId": "compoundinterestcalculator",
+    "displayText": "Compound Interest Calculator",
+    "iconName": "interest-icon",
+    "navigateUrl": "/tools/compound-interest-calculator",
+    "iconRelativeUrl": "interest.svg"
+  },
   "xmltojson": {
     "applicationId": "xmltojson",
     "displayText": "XML to JSON Converter",
