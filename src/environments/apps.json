@@ -20,6 +20,13 @@
     "navigateUrl": "/tools/qr-code-generator",
     "iconRelativeUrl": "qr-code.svg"
   },
+  "caseconverter": {
+    "applicationId": "caseconverter",
+    "displayText": "Case Converter",
+    "iconName": "case-converter-icon",
+    "navigateUrl": "/tools/case-converter",
+    "iconRelativeUrl": "case-convert.svg"
+  },
   "wordcounter": {
     "applicationId": "wordcounter",
     "displayText": "Word Counter",
