@@ -14,7 +14,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/html-editor.png`;
 
 const keywords =
-  'online HTML editor,write HTML code,edit HTML code,run HTML code,free HTML editor,no download required,supports all HTML elements and attributes,syntax highlighting,code completion,error checking,real-time preview,code sharing,tips for using an online HTML editor,test your code before publishing';
+  'online HTML editor,write HTML code,edit HTML code,run HTML code,free HTML editor,no download required,supports all HTML elements and attributes,syntax highlighting,code completion,error checking,real-time preview,code sharing,tips for using an online HTML editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor';
 
 const relatedTools: ApplicationIds[] = [];
 

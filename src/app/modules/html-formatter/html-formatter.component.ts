@@ -26,7 +26,7 @@ export class HtmlFormatterComponent implements OnInit {
   editorOptions = {
     theme: 'vs-dark',
     language: 'html',
-    fontSize: 17,
+    fontSize: 15,
   };
 
   applicationConfig: ApplicationConfig = componentConfig;

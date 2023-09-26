@@ -25,7 +25,7 @@ export class CssFormatterComponent {
   editorOptions = {
     theme: 'vs-dark',
     language: 'css',
-    fontSize: 17,
+    fontSize: 15,
   };
 
   applicationConfig: ApplicationConfig = componentConfig;

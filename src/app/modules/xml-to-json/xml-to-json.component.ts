@@ -46,13 +46,13 @@ export class XmlToJsonComponent implements OnInit {
   xmlEditorOptions = {
     theme: 'vs-dark',
     language: 'xml',
-    fontSize: 17,
+    fontSize: 15,
   };
 
   jsonEditorOptions = {
     theme: 'vs-dark',
     language: 'json',
-    fontSize: 17,
+    fontSize: 15,
   };
 
   xmlParser = new XMLParser();

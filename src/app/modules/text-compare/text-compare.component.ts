@@ -31,7 +31,7 @@ export class TextCompareComponent {
 
   editorOptions = {
     originalEditable: true,
-    fontSize: 17,
+    fontSize: 15,
   };
 
   originalModel: DiffEditorModel = {

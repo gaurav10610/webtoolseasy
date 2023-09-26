@@ -24,7 +24,7 @@ export class JsonFormatterComponent {
   editorOptions = {
     theme: 'vs-dark',
     language: 'json',
-    fontSize: 17,
+    fontSize: 15,
   };
 
   applicationConfig: ApplicationConfig = componentConfig;
