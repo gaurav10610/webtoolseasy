@@ -3,6 +3,7 @@ import { MetaDefinition } from '@angular/platform-browser';
 export interface BaseAppConfig {
   displayText: string;
   navigateUrl: string;
+  category: string;
 }
 export interface AppNavigationConfig extends BaseAppConfig {
   applicationId: string;
@@ -23,4 +24,13 @@ export interface ApplicationConfig {
 export interface IconConfig {
   iconName: string;
   iconRelativeUrl: string;
+}
+
+export enum AppCategory {
+  TEXT = 'Text',
+  MISCELLANEOUS = 'Miscellaneous',
+  PROGRAMMING = 'Programming',
+  ONLINE_EDITORS = 'Online Editors',
+  MEDIA = 'Media',
+  FINANCE = 'Finance',
 }
