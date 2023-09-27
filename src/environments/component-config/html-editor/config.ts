@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-editor';
-const pageTitle =
-  'Free Online HTML and CSS Editor: Write, Edit, and Run HTML and CSS Code Directly from Your Browser';
+const pageTitle = 'Online HTML and CSS Editor: Edit & Run HTML, CSS in Browser';
 const pageDescription =
   'Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. No download required, no sign-up required. Create responsive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-editor.png`;

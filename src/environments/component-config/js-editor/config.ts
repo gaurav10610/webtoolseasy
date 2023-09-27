@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/javascript-editor';
-const pageTitle =
-  'Free Online JavaScript Editor: Write, Edit, and Run JavaScript Code Directly from Your Browser';
+const pageTitle = 'Online JavaScript Editor: Edit, and Run JS in Browser';
 const pageDescription =
   'Write, edit, and run JavaScript code directly from your browser with our free online JavaScript editor. No download required, no sign-up required. Create interactive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-editor.png`;
