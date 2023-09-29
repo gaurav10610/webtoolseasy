@@ -41,7 +41,7 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
   * **GitHub ReadME**
   * **Bitbucket ReadME**
   
-  [WebToolsEasy](https://webtoolseasy.com/tools) - Free web tools to make work super easy`;
+  [WebToolsEasy](https://webtoolseasy.com) - Free web tools to make work super easy`;
 
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;

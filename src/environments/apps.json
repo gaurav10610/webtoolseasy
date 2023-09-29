@@ -3,7 +3,7 @@
     "applicationId": "jseditor",
     "displayText": "Online JavaScript Editor",
     "iconName": "js-icon",
-    "navigateUrl": "/tools/javascript-editor",
+    "navigateUrl": "tools/javascript-editor",
     "iconRelativeUrl": "js-icon.svg",
     "category": "Online Editors"
   },
@@ -11,7 +11,7 @@
     "applicationId": "htmleditor",
     "displayText": "Online HTML Editor",
     "iconName": "html-icon",
-    "navigateUrl": "/tools/html-editor",
+    "navigateUrl": "tools/html-editor",
     "iconRelativeUrl": "html.svg",
     "category": "Online Editors"
   },
@@ -19,7 +19,7 @@
     "applicationId": "compoundinterestcalculator",
     "displayText": "Compound Interest Calculator",
     "iconName": "interest-icon",
-    "navigateUrl": "/tools/compound-interest-calculator",
+    "navigateUrl": "tools/compound-interest-calculator",
     "iconRelativeUrl": "interest.svg",
     "category": "Finance"
   },
@@ -27,7 +27,7 @@
     "applicationId": "xmltojson",
     "displayText": "XML to JSON Converter",
     "iconName": "xml-icon",
-    "navigateUrl": "/tools/xml-to-json",
+    "navigateUrl": "tools/xml-to-json",
     "iconRelativeUrl": "xml.svg",
     "category": "Programming"
   },
@@ -35,7 +35,7 @@
     "applicationId": "qrcodegenerator",
     "displayText": "QR Code Generator",
     "iconName": "qr-code",
-    "navigateUrl": "/tools/qr-code-generator",
+    "navigateUrl": "tools/qr-code-generator",
     "iconRelativeUrl": "qr-code.svg",
     "category": "Miscellaneous"
   },
@@ -43,7 +43,7 @@
     "applicationId": "caseconverter",
     "displayText": "Case Converter",
     "iconName": "case-converter-icon",
-    "navigateUrl": "/tools/case-converter",
+    "navigateUrl": "tools/case-converter",
     "iconRelativeUrl": "case-convert.svg",
     "category": "Text"
   },
@@ -51,7 +51,7 @@
     "applicationId": "wordcounter",
     "displayText": "Word Counter",
     "iconName": "word-icon",
-    "navigateUrl": "/tools/word-counter",
+    "navigateUrl": "tools/word-counter",
     "iconRelativeUrl": "word.svg",
     "category": "Text"
   },
@@ -59,7 +59,7 @@
     "applicationId": "textcompare",
     "displayText": "Online Text Compare",
     "iconName": "comparison-icon",
-    "navigateUrl": "/tools/text-compare",
+    "navigateUrl": "tools/text-compare",
     "iconRelativeUrl": "comparison.svg",
     "category": "Text"
   },
@@ -67,7 +67,7 @@
     "applicationId": "markdowneditor",
     "displayText": "Markdown Editor",
     "iconName": "markdown-icon",
-    "navigateUrl": "/tools/markdown-editor",
+    "navigateUrl": "tools/markdown-editor",
     "iconRelativeUrl": "markdown.svg",
     "category": "Online Editors"
   },
@@ -75,7 +75,7 @@
     "applicationId": "passwordgenerator",
     "displayText": "Random Password Generator",
     "iconName": "password-icon",
-    "navigateUrl": "/tools/password-generator",
+    "navigateUrl": "tools/password-generator",
     "iconRelativeUrl": "password.svg",
     "category": "Miscellaneous"
   },
@@ -83,7 +83,7 @@
     "applicationId": "videoconverter",
     "displayText": "Video to Audio Converter",
     "iconName": "video-convert-icon",
-    "navigateUrl": "/tools/video-converter",
+    "navigateUrl": "tools/video-converter",
     "iconRelativeUrl": "video-convert.svg",
     "category": "Media"
   },
@@ -91,7 +91,7 @@
     "applicationId": "screenrecorder",
     "displayText": "Free Screen Recorder",
     "iconName": "screen-icon",
-    "navigateUrl": "/tools/screen-recorder",
+    "navigateUrl": "tools/screen-recorder",
     "iconRelativeUrl": "screen.svg",
     "category": "Media"
   },
@@ -99,7 +99,7 @@
     "applicationId": "imagecompressor",
     "displayText": "Free Image Compressor",
     "iconName": "image-icon",
-    "navigateUrl": "/tools/image-compress",
+    "navigateUrl": "tools/image-compress",
     "iconRelativeUrl": "image-icon.svg",
     "category": "Media"
   },
@@ -107,7 +107,7 @@
     "applicationId": "imagecropper",
     "displayText": "Free Image Cropper",
     "iconName": "image-icon",
-    "navigateUrl": "/tools/crop-image",
+    "navigateUrl": "tools/crop-image",
     "iconRelativeUrl": "image-icon.svg",
     "category": "Media"
   },
@@ -115,7 +115,7 @@
     "applicationId": "jwtdecoder",
     "displayText": "JWT Decoder",
     "iconName": "jwt-icon",
-    "navigateUrl": "/tools/jwt",
+    "navigateUrl": "tools/jwt",
     "iconRelativeUrl": "jwt-icon.svg",
     "category": "Programming"
   },
@@ -123,7 +123,7 @@
     "applicationId": "jsformatter",
     "displayText": "Online Javascript Formatter",
     "iconName": "js-icon",
-    "navigateUrl": "/tools/js-formatter",
+    "navigateUrl": "tools/js-formatter",
     "iconRelativeUrl": "js-icon.svg",
     "category": "Programming"
   },
@@ -131,7 +131,7 @@
     "applicationId": "jsonformatter",
     "displayText": "Online JSON Formatter",
     "iconName": "json-icon",
-    "navigateUrl": "/tools/json-formatter",
+    "navigateUrl": "tools/json-formatter",
     "iconRelativeUrl": "json-icon.svg",
     "category": "Programming"
   },
@@ -139,7 +139,7 @@
     "applicationId": "jsonviewer",
     "displayText": "Online JSON Viewer",
     "iconName": "json-icon",
-    "navigateUrl": "/tools/json-viewer",
+    "navigateUrl": "tools/json-viewer",
     "iconRelativeUrl": "json-icon.svg",
     "category": "Programming"
   },
@@ -147,7 +147,7 @@
     "applicationId": "htmlformatter",
     "displayText": "Online HTML Formatter",
     "iconName": "html-icon",
-    "navigateUrl": "/tools/html-formatter",
+    "navigateUrl": "tools/html-formatter",
     "iconRelativeUrl": "html.svg",
     "category": "Programming"
   },
@@ -155,7 +155,7 @@
     "applicationId": "cssformatter",
     "displayText": "Online CSS Formatter",
     "iconName": "css-icon",
-    "navigateUrl": "/tools/css-formatter",
+    "navigateUrl": "tools/css-formatter",
     "iconRelativeUrl": "css.svg",
     "category": "Programming"
   },
@@ -163,7 +163,7 @@
     "applicationId": "base64encoder",
     "displayText": "Base64 Encoder",
     "iconName": "file-encode-icon",
-    "navigateUrl": "/tools/base64-encode",
+    "navigateUrl": "tools/base64-encode",
     "iconRelativeUrl": "file-encode.svg",
     "category": "Programming"
   },
@@ -171,7 +171,7 @@
     "applicationId": "base64decoder",
     "displayText": "Base64 Decoder",
     "iconName": "file-decode-icon",
-    "navigateUrl": "/tools/base64-decode",
+    "navigateUrl": "tools/base64-decode",
     "iconRelativeUrl": "file-decode.svg",
     "category": "Programming"
   },
@@ -179,7 +179,7 @@
     "applicationId": "crongenerator",
     "displayText": "Cron Expression Generator",
     "iconName": "cron-icon",
-    "navigateUrl": "/tools/cron-expression",
+    "navigateUrl": "tools/cron-expression",
     "iconRelativeUrl": "cron.svg",
     "category": "Programming"
   },
@@ -187,7 +187,7 @@
     "applicationId": "uuidv4generator",
     "displayText": "UUID V4 Generator",
     "iconName": "uuid-icon",
-    "navigateUrl": "/tools/uuid-v4-generator",
+    "navigateUrl": "tools/uuid-v4-generator",
     "iconRelativeUrl": "uuid-icon.svg",
     "category": "Programming"
   },
@@ -195,7 +195,7 @@
     "applicationId": "uuidv1generator",
     "displayText": "UUID V1 Generator",
     "iconName": "uuid-icon",
-    "navigateUrl": "/tools/uuid-v1-generator",
+    "navigateUrl": "tools/uuid-v1-generator",
     "iconRelativeUrl": "uuid-icon.svg",
     "category": "Programming"
   },
@@ -203,7 +203,7 @@
     "applicationId": "guidgenerator",
     "displayText": "GUID Generator",
     "iconName": "uuid-icon",
-    "navigateUrl": "/tools/guid-generator",
+    "navigateUrl": "tools/guid-generator",
     "iconRelativeUrl": "uuid-icon.svg",
     "category": "Programming"
   }
