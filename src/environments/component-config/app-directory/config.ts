@@ -1,9 +1,10 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { environment } from 'src/environments/environment';
 
-const navigationUrl = '/tools';
-const pageTitle = 'Free Online Web Tools: Discover Useful Tools';
-const pageDescription = `Looking for the best free online web tools to help you with your work, studies, or personal projects? Look no further! WebToolsEasy features multiple free web tools that can help you boost your productivity and get things done more efficiently. Browse our categories and find the perfect tool for your needs, whether you're looking for a way to edit photos, create videos, manage your projects, or learn new skills.`;
+const navigationUrl = '';
+const pageTitle =
+  'Free Online Web Tools for Programming, Text, Media, and More';
+const pageDescription = `WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, record screen, or generate a qr code.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/tools-directory.png`;
 
 export const componentConfig: ApplicationConfig = {

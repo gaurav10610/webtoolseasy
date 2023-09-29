@@ -5,12 +5,6 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./modules/home/home.module').then(m => m.HomeModule),
-    pathMatch: 'full',
-  },
-  {
-    path: 'tools',
-    loadChildren: () =>
       import('./modules/app-parent/app-parent.module').then(
         m => m.AppParentModule
       ),

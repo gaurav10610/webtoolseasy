@@ -6,6 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: AppParentComponent,
+    pathMatch: 'prefix',
     children: [
       {
         path: '',
@@ -16,183 +17,183 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'uuid',
+        path: 'tools/uuid',
         redirectTo: 'uuid-v4-generator',
       },
       {
-        path: 'jwt',
+        path: 'tools/jwt',
         loadChildren: () => import('../jwt/jwt.module').then(m => m.JwtModule),
       },
       {
-        path: 'json-formatter',
+        path: 'tools/json-formatter',
         loadChildren: () =>
           import('../json-formatter/json-formatter.module').then(
             m => m.JsonFormatterModule
           ),
       },
       {
-        path: 'image-compress',
+        path: 'tools/image-compress',
         loadChildren: () =>
           import('../image-compression/image-compression.module').then(
             m => m.ImageCompressionModule
           ),
       },
       {
-        path: 'js-formatter',
+        path: 'tools/js-formatter',
         loadChildren: () =>
           import('../js-formatter/js-formatter.module').then(
             m => m.JsFormatterModule
           ),
       },
       {
-        path: 'css-formatter',
+        path: 'tools/css-formatter',
         loadChildren: () =>
           import('../css-formatter/css-formatter.module').then(
             m => m.CssFormatterModule
           ),
       },
       {
-        path: 'html-formatter',
+        path: 'tools/html-formatter',
         loadChildren: () =>
           import('../html-formatter/html-formatter.module').then(
             m => m.HtmlFormatterModule
           ),
       },
       {
-        path: 'screen-recorder',
+        path: 'tools/screen-recorder',
         loadChildren: () =>
           import('../screen-recorder/screen-recorder.module').then(
             m => m.ScreenRecorderModule
           ),
       },
       {
-        path: 'text-compare',
+        path: 'tools/text-compare',
         loadChildren: () =>
           import('../text-compare/text-compare.module').then(
             m => m.TextCompareModule
           ),
       },
       {
-        path: 'video-converter',
+        path: 'tools/video-converter',
         loadChildren: () =>
           import('../video-converter/video-converter.module').then(
             m => m.VideoConverterModule
           ),
       },
       {
-        path: 'json-viewer',
+        path: 'tools/json-viewer',
         loadChildren: () =>
           import('../json-viewer/json-viewer.module').then(
             m => m.JsonViewerModule
           ),
       },
       {
-        path: 'password-generator',
+        path: 'tools/password-generator',
         loadChildren: () =>
           import('../password-generator/password-generator.module').then(
             m => m.PasswordGeneratorModule
           ),
       },
       {
-        path: 'base64-encode',
+        path: 'tools/base64-encode',
         loadChildren: () =>
           import('../base64-encode/base64-encode.module').then(
             m => m.Base64EncodeModule
           ),
       },
       {
-        path: 'base64-decode',
+        path: 'tools/base64-decode',
         loadChildren: () =>
           import('../base64-decode/base64-decode.module').then(
             m => m.Base64DecodeModule
           ),
       },
       {
-        path: 'cron-expression',
+        path: 'tools/cron-expression',
         loadChildren: () =>
           import('../cron-generator/cron-generator.module').then(
             m => m.CronGeneratorModule
           ),
       },
       {
-        path: 'crop-image',
+        path: 'tools/crop-image',
         loadChildren: () =>
           import('../image-cropper/image-cropper.module').then(
             m => m.ImageCropperModule
           ),
       },
       {
-        path: 'uuid-v1-generator',
+        path: 'tools/uuid-v1-generator',
         loadChildren: () =>
           import(
             '../uuid-version1-generator/uuid-version1-generator.module'
           ).then(m => m.UuidVersion1GeneratorModule),
       },
       {
-        path: 'uuid-v4-generator',
+        path: 'tools/uuid-v4-generator',
         loadChildren: () =>
           import(
             '../uuid-version4-generator/uuid-version4-generator.module'
           ).then(m => m.UuidVersion4GeneratorModule),
       },
       {
-        path: 'guid-generator',
+        path: 'tools/guid-generator',
         loadChildren: () =>
           import('../guid-generator/guid-generator.module').then(
             m => m.GuidGeneratorModule
           ),
       },
       {
-        path: 'markdown-editor',
+        path: 'tools/markdown-editor',
         loadChildren: () =>
           import('../markdown-editor/markdown-editor.module').then(
             m => m.MarkdownEditorModule
           ),
       },
       {
-        path: 'word-counter',
+        path: 'tools/word-counter',
         loadChildren: () =>
           import('../word-count/word-count.module').then(
             m => m.WordCountModule
           ),
       },
       {
-        path: 'qr-code-generator',
+        path: 'tools/qr-code-generator',
         loadChildren: () =>
           import('../qr-code-generator/qr-code-generator.module').then(
             m => m.QrCodeGeneratorModule
           ),
       },
       {
-        path: 'xml-to-json',
+        path: 'tools/xml-to-json',
         loadChildren: () =>
           import('../xml-to-json/xml-to-json.module').then(
             m => m.XmlToJsonModule
           ),
       },
       {
-        path: 'compound-interest-calculator',
+        path: 'tools/compound-interest-calculator',
         loadChildren: () =>
           import(
             '../compound-interest-calculator/compound-interest-calculator.module'
           ).then(m => m.CompoundInterestCalculatorModule),
       },
       {
-        path: 'case-converter',
+        path: 'tools/case-converter',
         loadChildren: () =>
           import('../case-converter/case-converter.module').then(
             m => m.CaseConverterModule
           ),
       },
       {
-        path: 'html-editor',
+        path: 'tools/html-editor',
         loadChildren: () =>
           import('../html-editor/html-editor.module').then(
             m => m.HtmlEditorModule
           ),
       },
       {
-        path: 'javascript-editor',
+        path: 'tools/javascript-editor',
         loadChildren: () =>
           import('../js-editor/js-editor.module').then(m => m.JsEditorModule),
       },
