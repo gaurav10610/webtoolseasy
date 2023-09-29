@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { AppNavigationConfig, ApplicationConfig } from 'src/app/@types/config';
+import { Component } from '@angular/core';
+import {
+  AppCatalogue,
+  AppNavigationConfig,
+  ApplicationConfig,
+} from 'src/app/@types/config';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { applicationConfig } from 'src/environments/tools-directory-config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -13,11 +17,11 @@ import { IconConfigService } from 'src/app/service/icon-config/icon-config.servi
   templateUrl: './app-directory.component.html',
   styleUrls: ['./app-directory.component.scss'],
 })
-export class AppDirectoryComponent implements OnInit {
+export class AppDirectoryComponent {
   /**
    * application config for composing UI
    */
-  appsConfig: AppNavigationConfig[] = Array.from(applicationConfig.values());
+  appsCatalogue: AppCatalogue[] = [];
 
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = [];
@@ -27,23 +31,33 @@ export class AppDirectoryComponent implements OnInit {
     private iconConfigService: IconConfigService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
-  ) {}
-
-  ngOnInit(): void {
-    this.appsConfig
-      .map(appConfig => {
-        return {
-          iconName: appConfig.iconName,
-          iconRelativeUrl: appConfig.iconRelativeUrl,
-        };
-      })
-      .forEach(iconConfig =>
-        this.iconConfigService.registerCustomIcon(
-          iconConfig,
-          this.matIconRegistry,
-          this.domSanitizer
-        )
+  ) {
+    const appsCategoryMap: Map<string, AppNavigationConfig[]> = new Map();
+    applicationConfig.forEach(value => {
+      /**
+       * load app icons
+       */
+      this.iconConfigService.registerCustomIcon(
+        {
+          iconName: value.iconName,
+          iconRelativeUrl: value.iconRelativeUrl,
+        },
+        this.matIconRegistry,
+        this.domSanitizer
       );
+
+      const category = value.category;
+      if (!appsCategoryMap.has(category)) {
+        appsCategoryMap.set(category, []);
+      }
+      appsCategoryMap.get(category)!.push(value);
+    });
+    appsCategoryMap.forEach((value, key) => {
+      this.appsCatalogue.push({
+        category: key,
+        apps: value,
+      });
+    });
   }
 
   onAppClick(event: any) {

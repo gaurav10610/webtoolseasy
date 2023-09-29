@@ -34,3 +34,8 @@ export enum AppCategory {
   MEDIA = 'Media',
   FINANCE = 'Finance',
 }
+
+export interface AppCatalogue {
+  category: string;
+  apps: AppNavigationConfig[];
+}

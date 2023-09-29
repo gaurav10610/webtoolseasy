@@ -1,7 +1,7 @@
 {
   "jseditor": {
     "applicationId": "jseditor",
-    "displayText": "Online Javascript Editor",
+    "displayText": "Online JavaScript Editor",
     "iconName": "js-icon",
     "navigateUrl": "/tools/javascript-editor",
     "iconRelativeUrl": "js-icon.svg",

@@ -1,20 +1,29 @@
 <!-- applications container -->
-<div class="apps-container flex-center flex-display">
+<div class="flex-display flex-center flex-column-flow flex-gap-xlarge">
   <div
-    class="application shadow-grey flex-display flex-column-flow flex-center flex-align-center app-card pointer-cursor flex-gap-medium"
-    *ngFor="let application of appsConfig"
-    [replaceUrl]="true"
-    routerLink="{{ application.navigateUrl }}">
-    <mat-icon
-      *ngIf="platformMetaDataService.isPlatformBrowser"
-      svgIcon="{{ application.iconName }}"
-      class="app-icon"></mat-icon>
-    <a
-      [replaceUrl]="true"
-      routerLink="{{ application.navigateUrl }}"
-      (click)="onAppClick($event)"
-      style="text-align: center"
-      >{{ application.displayText }}</a
-    >
+    class="flex-display flex-column-flow flex-gap-medium"
+    *ngFor="let appList of appsCatalogue">
+    <span style="font-size: large; align-self: center">{{
+      appList.category
+    }}</span>
+    <div class="apps-container flex-display">
+      <div
+        class="application shadow-grey flex-display flex-column-flow flex-center flex-align-center pointer-cursor flex-gap-medium"
+        *ngFor="let application of appList.apps"
+        [replaceUrl]="true"
+        routerLink="{{ application.navigateUrl }}">
+        <mat-icon
+          *ngIf="platformMetaDataService.isPlatformBrowser"
+          svgIcon="{{ application.iconName }}"
+          class="app-icon"></mat-icon>
+        <a
+          [replaceUrl]="true"
+          routerLink="{{ application.navigateUrl }}"
+          (click)="onAppClick($event)"
+          style="text-align: center"
+          >{{ application.displayText }}</a
+        >
+      </div>
+    </div>
   </div>
 </div>
