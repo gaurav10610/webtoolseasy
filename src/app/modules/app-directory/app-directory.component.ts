@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AppCatalogue,
   AppNavigationConfig,
@@ -17,7 +17,7 @@ import { IconConfigService } from 'src/app/service/icon-config/icon-config.servi
   templateUrl: './app-directory.component.html',
   styleUrls: ['./app-directory.component.scss'],
 })
-export class AppDirectoryComponent {
+export class AppDirectoryComponent implements OnInit {
   /**
    * application config for composing UI
    */
@@ -31,7 +31,9 @@ export class AppDirectoryComponent {
     private iconConfigService: IconConfigService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     const appsCategoryMap: Map<string, AppNavigationConfig[]> = new Map();
     applicationConfig.forEach(value => {
       /**
