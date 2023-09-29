@@ -81,33 +81,33 @@ export class MarkdownEditorComponent implements AfterViewInit, OnDestroy {
     if (this.platformMetaDataService.isPlatformBrowser) {
       this.importStyle(
         'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css'
-      );
-
-      importScript(
-        'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js'
       ).then(() => {
-        this.mdEditor = new EasyMDE({
-          element: this.editor.nativeElement,
-          spellChecker: false,
-          toolbar: [
-            {
-              name: 'toggle-preview',
-              action: EasyMDE.togglePreview,
-              text: 'Preview',
-              title: 'Preview Button',
+        importScript(
+          'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js'
+        ).then(() => {
+          this.mdEditor = new EasyMDE({
+            element: this.editor.nativeElement,
+            spellChecker: false,
+            toolbar: [
+              {
+                name: 'toggle-preview',
+                action: EasyMDE.togglePreview,
+                text: 'Preview',
+                title: 'Preview Button',
+              },
+              ...this.toolbar,
+            ],
+            renderingConfig: {
+              sanitizerFunction: (renderedHTML: string) => {
+                return this.domSanitizer.sanitize(
+                  SecurityContext.HTML,
+                  renderedHTML
+                );
+              },
             },
-            ...this.toolbar,
-          ],
-          renderingConfig: {
-            sanitizerFunction: (renderedHTML: string) => {
-              return this.domSanitizer.sanitize(
-                SecurityContext.HTML,
-                renderedHTML
-              );
-            },
-          },
+          });
+          this.mdEditor.value(this.initialValue);
         });
-        this.mdEditor.value(this.initialValue);
       });
     }
   }
