@@ -6,7 +6,6 @@ const routes: Routes = [
   {
     path: '',
     component: AppParentComponent,
-    pathMatch: 'prefix',
     children: [
       {
         path: '',
