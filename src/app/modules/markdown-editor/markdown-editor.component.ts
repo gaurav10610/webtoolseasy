@@ -2,19 +2,16 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  Inject,
   ViewChild,
   SecurityContext,
   Renderer2,
 } from '@angular/core';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
-import { DOCUMENT } from '@angular/common';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/markdown-editor/config';
-import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/service/file/file.service';
@@ -63,8 +60,6 @@ export class MarkdownEditorComponent implements AfterViewInit {
   ];
 
   constructor(
-    public platformMetaDataService: PlatformMetadataService,
-    @Inject(DOCUMENT) private document: any,
     private clipboard: Clipboard,
     private domSanitizer: DomSanitizer,
     private fileService: FileService,
