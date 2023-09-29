@@ -9,6 +9,7 @@
 
   <cron-editor
     #cronEditor
+    *ngIf="platformMetaDataService.isPlatformBrowser"
     [formControl]="cronForm"
     [options]="cronOptions"
     class="border-grey cron-editor"></cron-editor>
