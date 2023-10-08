@@ -3,16 +3,16 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/qr-code-generator';
-const pageTitle = 'Free QR Code Generator: Generate QR Code | QR Code Builder';
+const pageTitle = 'Free QR Code Generator: Create QR Codes for Free';
 const pageDescription =
   'Generate custom QR codes for free with our easy-to-use online QR code generator tool. QR code builder. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 const keywords =
-  'online qr code generator,qr code generator,qr code,create qr code,qr code types,free qr code generator,no download required,easy to use,customizable settings,qr code tips,qr code best practices,generate qr,qr code builder,quick response code';
+  'online qr code generator,qr code generator,qr code,create qr code,qr code types,free qr code generator,generate qr,qr code builder,quick response code';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Online QR Code Generator: Generate QR Codes in Seconds',
+  mainHeading: 'Free QR Code Generator: Create QR Codes for Free',
   navigationUrl,
   pageTitle,
   metaTags: [

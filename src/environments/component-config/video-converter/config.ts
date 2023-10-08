@@ -7,7 +7,8 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/video-converter';
-const pageTitle = 'Free Video to Audio Converter: Extract Audio from Videos';
+const pageTitle =
+  'Free Video to Audio Converter: Convert Any Video to Audio in Any Format';
 const pageDescription =
   'Convert your videos to audio files for free with our online video to audio converter tool. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
 const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;
@@ -19,7 +20,7 @@ const relatedTools: ApplicationIds[] = [ApplicationIds.SCREEN_RECORDER];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online Video to Audio Converter: Extract Audio from Videos Easily',
+    'Free Video to Audio Converter: Convert Any Video to Audio in Any Format',
   navigationUrl,
   pageTitle,
   metaTags: [

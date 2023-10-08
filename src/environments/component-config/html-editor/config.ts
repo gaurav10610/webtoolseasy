@@ -7,19 +7,19 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-editor';
-const pageTitle = 'Online HTML and CSS Editor: Edit & Run HTML, CSS in Browser';
+const pageTitle = 'Online HTML and CSS Editor with Real-Time Preview';
 const pageDescription =
   'Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. No download required, no sign-up required. Create responsive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-editor.png`;
 
 const keywords =
-  'online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,no download required,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor';
+  'online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor';
 
 const relatedTools: ApplicationIds[] = [ApplicationIds.JS_EDITOR];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online HTML and CSS Editor: Write, Edit, and Run HTML and CSS Code Directly from Your Browser',
+    'Online HTML and CSS Editor with Real-Time Preview: See Your Changes Instantly',
   navigationUrl,
   pageTitle,
   metaTags: [

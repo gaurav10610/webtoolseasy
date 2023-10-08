@@ -8,19 +8,19 @@ import {
 
 const navigationUrl = '/tools/password-generator';
 const pageTitle =
-  'Password Generator: Create Strong, Random & Secure Passwords';
+  'Free Online Password Generator: Generate Strong Passwords for All Your Accounts';
 const pageDescription =
   'Generate strong, unique passwords for all your online accounts with our free password generator tool. No sign-up required. Generate single password or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 const keywords =
-  'password generator,strong password generator,create secure passwords,unique passwords,different passwords for all accounts,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
+  'password generator,strong password generator,create secure passwords,unique passwords,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
 
 const relatedTools: ApplicationIds[] = [ApplicationIds.JWT_DECODER];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Strong Password Generator: Create Secure Passwords for All Your Accounts',
+    'Free Online Password Generator: Create Strong, Secure & Random Passwords',
   navigationUrl,
   pageTitle,
   metaTags: [

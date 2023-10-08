@@ -13,12 +13,13 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/case-converter.png`;
 
 const keywords =
-  'case converter,convert text to any case,free case converter,no download required,supports all case types,easy to use,customizable settings,uppercase,lowercase,sentence case,title case,case types,case rules,format text,correct errors in case,learn about case';
+  'case converter,convert text to any case,free case converter,easy to use,uppercase,lowercase,sentence case,title case,case types,format text,learn about case';
 
 const relatedTools: ApplicationIds[] = [];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Online Case Converter: Convert Text to Any Case with Ease',
+  mainHeading:
+    'Online Case Converter: Convert Text to Lowercase or Uppercase Easily',
   navigationUrl,
   pageTitle,
   metaTags: [

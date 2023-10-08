@@ -13,7 +13,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 const keywords =
-  'online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,easy to use,customizable settings,JavaScript code style guide,JavaScript code formatting errors';
+  'online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.CSS_FORMATTER,

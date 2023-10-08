@@ -7,19 +7,20 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/javascript-editor';
-const pageTitle = 'Online JavaScript Editor: Edit, and Run JS in Browser';
+const pageTitle =
+  'Online JavaScript Editor: Write and Edit JavaScript Code in Your Browser';
 const pageDescription =
   'Write, edit, and run JavaScript code directly from your browser with our free online JavaScript editor. No download required, no sign-up required. Create interactive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-editor.png`;
 
 const keywords =
-  'online JavaScript editor,write JavaScript code,edit JavaScript code,run JavaScript code,free JavaScript editor,no download required,supports all JavaScript elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online JavaScript editor,test your code before publishing,online js editor,js online editor,javascript ide online,js ide online,java script online editor,javascript compile online';
+  'online JavaScript editor,write JavaScript code,edit JavaScript code,run JavaScript code,free JavaScript editor,supports all JavaScript elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online JavaScript editor,test your code before publishing,online js editor,js online editor,javascript ide online,js ide online,java script online editor,javascript compile online';
 
 const relatedTools: ApplicationIds[] = [ApplicationIds.HTML_EDITOR];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online JavaScript Editor: Write, Edit, and Run JavaScript Code Directly from Your Browser',
+    'Online JavaScript Editor: Write and Edit JavaScript Code in Your Browser',
   navigationUrl,
   pageTitle,
   metaTags: [

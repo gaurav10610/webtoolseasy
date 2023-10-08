@@ -3,13 +3,13 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/cron-expression';
-const pageTitle = 'Online Cron Expression Generator: Create Cron Expressions';
+const pageTitle = 'Online Cron Expression Generator | Create Cron Expressions';
 const pageDescription =
   'Generate cron expressions for your tasks with ease with our free online cron expression generator tool. Graphically generate cron expressions online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 const keywords =
-  'online cron expression generator,generate cron expression,cron expression generator tool,cron expression,crontab,cron job,schedule task,Unix-like operating system,free cron expression generator,no download required,supports all cron expression fields,easy to use,customizable settings';
+  'online cron expression generator,generate cron expression,cron expression generator tool,cron expression,cron job,schedule task,free cron expression generator,supports all cron expression fields';
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:

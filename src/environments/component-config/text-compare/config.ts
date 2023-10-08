@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle =
-  'Online Text Compare Tool - Compare Two Texts for Differences';
+const pageTitle = 'Online Text Compare Tool: Compare Two Texts Side-by-Side';
 const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarity and differences. It's perfect for students, writers, bloggers.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 const keywords =
@@ -17,7 +16,8 @@ const keywords =
 const relatedTools: ApplicationIds[] = [ApplicationIds.WORD_COUNTER];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Text Compare - Text to Text Comparison',
+  mainHeading:
+    'Free Online Text Compare Tool: Find Differences Between Two Texts Easily',
   navigationUrl,
   pageTitle,
   metaTags: [

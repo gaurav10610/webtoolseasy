@@ -2,14 +2,12 @@
 <div class="flex-display flex-center flex-column-flow flex-gap-xlarge">
   <div
     class="flex-display flex-column-flow flex-gap-medium"
-    *ngFor="let appList of appsCatalogue">
-    <span style="font-size: large; align-self: center">{{
-      appList.category
-    }}</span>
+    *ngFor="let category of appCategories">
+    <span style="font-size: large; align-self: center">{{ category }}</span>
     <div class="apps-container flex-display">
       <div
         class="application shadow-grey flex-display flex-column-flow flex-center flex-align-center pointer-cursor flex-gap-medium"
-        *ngFor="let application of appList.apps"
+        *ngFor="let application of applications.get(category)"
         [replaceUrl]="true"
         routerLink="{{ application.navigateUrl }}">
         <mat-icon

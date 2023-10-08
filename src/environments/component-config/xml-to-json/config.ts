@@ -7,7 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/xml-to-json';
-const pageTitle = 'Free Online XML to JSON Converter: Convert XML to JSON';
+const pageTitle = 'Online XML to JSON Converter: Convert XML to JSON';
 const pageDescription =
   'Convert XML to JSON with ease with our free online XML to JSON converter. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/xml-to-json.png`;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  AppCatalogue,
+  AppCategory,
   AppNavigationConfig,
   ApplicationConfig,
 } from 'src/app/@types/config';
@@ -21,10 +21,19 @@ export class AppDirectoryComponent implements OnInit {
   /**
    * application config for composing UI
    */
-  appsCatalogue: AppCatalogue[] = [];
+  applications!: Map<AppCategory, AppNavigationConfig[]>;
 
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = [];
+
+  appCategories: AppCategory[] = [
+    AppCategory.MEDIA,
+    AppCategory.MISCELLANEOUS,
+    AppCategory.ONLINE_EDITORS,
+    AppCategory.PROGRAMMING,
+    AppCategory.TEXT,
+    AppCategory.FINANCE,
+  ];
 
   constructor(
     public platformMetaDataService: PlatformMetadataService,
@@ -34,7 +43,7 @@ export class AppDirectoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const appsCategoryMap: Map<string, AppNavigationConfig[]> = new Map();
+    this.applications = new Map();
     applicationConfig.forEach(value => {
       /**
        * load app icons
@@ -48,17 +57,11 @@ export class AppDirectoryComponent implements OnInit {
         this.domSanitizer
       );
 
-      const category = value.category;
-      if (!appsCategoryMap.has(category)) {
-        appsCategoryMap.set(category, []);
+      const category: AppCategory = <AppCategory>value.category;
+      if (!this.applications.has(category)) {
+        this.applications.set(category, []);
       }
-      appsCategoryMap.get(category)!.push(value);
-    });
-    appsCategoryMap.forEach((value, key) => {
-      this.appsCatalogue.push({
-        category: key,
-        apps: value,
-      });
+      this.applications.get(category)!.push(value);
     });
   }
 

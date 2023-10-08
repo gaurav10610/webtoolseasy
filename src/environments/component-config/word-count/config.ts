@@ -7,7 +7,8 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/word-counter';
-const pageTitle = 'Free Online Word, Character, and Sentence Count Tool';
+const pageTitle =
+  'Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text';
 const pageDescription =
   'Our free online word, character, and sentence count tool is quick, and easy, and lets you count the number of words, characters, and sentences in your text.';
 const imageUrl = `${environment.screenshotsBaseUrl}/word-counter.png`;
@@ -18,7 +19,8 @@ const keywords =
 const relatedTools: ApplicationIds[] = [ApplicationIds.TEXT_COMPARE];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Online Word, Character, and Sentence Count Tool',
+  mainHeading:
+    'Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text',
   navigationUrl,
   pageTitle,
   metaTags: [

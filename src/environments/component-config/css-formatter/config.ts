@@ -13,7 +13,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/css-format.png`;
 
 const keywords =
-  'online CSS beautifier and formatter,beautify CSS code,format CSS code,CSS beautifier and formatter tool,CSS code formatter,CSS code style,improve CSS code readability,make CSS code more consistent,follow CSS code style guidelines,free CSS beautifier and formatter,no download required,supports all CSS features,easy to use,customizable settings,CSS code style guide,CSS code formatting errors';
+  'online CSS beautifier and formatter,beautify CSS code,format CSS code,CSS beautifier and formatter tool,CSS code formatter,CSS code style,improve CSS code readability,make CSS code more consistent,follow CSS code style guidelines,free CSS beautifier and formatter,CSS code formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.JSON_FORMATTER,

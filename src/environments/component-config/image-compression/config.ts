@@ -8,7 +8,7 @@ import {
 
 const navigationUrl = '/tools/image-compress';
 const pageTitle =
-  'Free Image Compressor: Reduce the Size of Your Photos Online';
+  'Free Image Compressor: Reduce Image File Size Without Losing Quality';
 const pageDescription =
   'Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;

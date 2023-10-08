@@ -7,7 +7,8 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle = 'Free Screen Recorder - Record Screen with Audio and Webcam';
+const pageTitle =
+  'Free Screen Recorder: Record Your Screen Without Watermark or Time Limit';
 const pageDescription =
   'Record your screen with audio and webcam for free with our online screen recorder. Record screen with no watermark and no time limit. No sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
@@ -19,7 +20,7 @@ const relatedTools: ApplicationIds[] = [ApplicationIds.VIDEO_CONVERTER];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online Screen Recorder - Record Your Screen with Audio, Webcam and No Watermark',
+    'Free Online Screen Recorder - Record Your Screen with Audio, Webcam',
   navigationUrl,
   pageTitle,
   metaTags: [

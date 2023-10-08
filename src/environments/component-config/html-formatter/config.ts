@@ -14,7 +14,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;
 
 const keywords =
-  'online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,no download required,supports all HTML features,easy to use,customizable settings,HTML code style guide,HTML code formatting errors';
+  'online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,HTML code formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.JS_FORMATTER,
