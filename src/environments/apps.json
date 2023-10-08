@@ -115,7 +115,7 @@
     "applicationId": "jwtdecoder",
     "displayText": "JWT Decoder",
     "iconName": "jwt-icon",
-    "navigateUrl": "tools/jwt",
+    "navigateUrl": "tools/jwt-decoder",
     "iconRelativeUrl": "jwt-icon.svg",
     "category": "Programming"
   },

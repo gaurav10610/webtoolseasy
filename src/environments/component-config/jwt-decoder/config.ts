@@ -6,7 +6,7 @@ import {
   applicationConfig,
 } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/jwt';
+const navigationUrl = '/tools/jwt-decoder';
 const pageTitle = 'JWT Decoder: Online Tool to Decode JSON Web Tokens';
 const pageDescription =
   'Our free online JWT decoder tool is a quick and easy way to decode JSON Web Tokens (JWTs). Decode JWT header and body. Validate JWT Token Online.';

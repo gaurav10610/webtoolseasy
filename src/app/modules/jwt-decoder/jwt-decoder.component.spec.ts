@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { JwtComponent } from './jwt.component';
+import { JwtDecoderComponent } from './jwt-decoder.component';
 
-describe('JwtComponent', () => {
-  let component: JwtComponent;
-  let fixture: ComponentFixture<JwtComponent>;
+describe('JwtDecoderComponent', () => {
+  let component: JwtDecoderComponent;
+  let fixture: ComponentFixture<JwtDecoderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [JwtComponent],
+      declarations: [JwtDecoderComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(JwtComponent);
+    fixture = TestBed.createComponent(JwtDecoderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

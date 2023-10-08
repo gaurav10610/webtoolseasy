@@ -20,8 +20,9 @@ const routes: Routes = [
         redirectTo: 'uuid-v4-generator',
       },
       {
-        path: 'tools/jwt',
-        loadChildren: () => import('../jwt/jwt.module').then(m => m.JwtModule),
+        path: 'tools/jwt-decoder',
+        loadChildren: () =>
+          import('../jwt-decoder/jwt-decoder.module').then(m => m.JwtDecoderModule),
       },
       {
         path: 'tools/json-formatter',

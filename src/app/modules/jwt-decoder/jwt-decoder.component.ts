@@ -10,18 +10,18 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
   descriptionData,
-} from 'src/environments/component-config/jwt/config';
+} from 'src/environments/component-config/jwt-decoder/config';
 import { decodeJwt, decodeProtectedHeader } from 'jose';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
-  selector: 'app-jwt',
-  templateUrl: './jwt.component.html',
-  styleUrls: ['./jwt.component.scss'],
+  selector: 'app-jwt-decoder',
+  templateUrl: './jwt-decoder.component.html',
+  styleUrls: ['./jwt-decoder.component.scss'],
 })
-export class JwtComponent implements AfterViewInit {
+export class JwtDecoderComponent implements AfterViewInit {
   isTokenValid: boolean = true;
   tabSpaceValue: string = '  ';
 
@@ -91,7 +91,7 @@ export class JwtComponent implements AfterViewInit {
       this.updateTokenHeaders(tokenHeadersValue);
     } catch (error) {
       LogUtils.error(
-        `error occured while decoding token: ${this.encodedToken}`
+        `error occurred while decoding token: ${this.encodedToken}`
       );
       LogUtils.error(error);
       this.isTokenValid = false;
@@ -110,8 +110,8 @@ export class JwtComponent implements AfterViewInit {
     this.decodedToken = decodedToken;
   }
 
-  updateTokenHeaders(tokeanHeaders: any) {
-    this.decodedHeaders = tokeanHeaders;
+  updateTokenHeaders(tokenHeaders: any) {
+    this.decodedHeaders = tokenHeaders;
   }
 
   copyDecodedToken() {
