@@ -20,5 +20,8 @@
     "editor.formatOnSave": false
   },
   "editor.formatOnSave": true,
-  "html.format.contentUnformatted": ""
+  "html.format.contentUnformatted": "",
+  "cSpell.words": [
+    "Extention"
+  ]
 }

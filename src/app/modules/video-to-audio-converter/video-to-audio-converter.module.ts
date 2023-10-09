@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VideoConverterRoutingModule } from './video-converter-routing.module';
+import { VideoToAudioConverterRoutingModule } from './video-to-audio-converter-routing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { VideoConverterComponent } from './video-converter.component';
+import { VideoToAudioConverterComponent } from './video-to-audio-converter.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -14,10 +14,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PopupFormModule } from '../popup-form/popup-form.module';
 
 @NgModule({
-  declarations: [VideoConverterComponent],
+  declarations: [VideoToAudioConverterComponent],
   imports: [
     CommonModule,
-    VideoConverterRoutingModule,
+    VideoToAudioConverterRoutingModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
@@ -30,4 +30,4 @@ import { PopupFormModule } from '../popup-form/popup-form.module';
     PopupFormModule,
   ],
 })
-export class VideoConverterModule {}
+export class VideoToAudioConverterModule {}

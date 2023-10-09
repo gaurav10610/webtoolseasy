@@ -10,7 +10,7 @@ import { VideoStreamMerger } from 'video-stream-merger';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
+import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/constants';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';

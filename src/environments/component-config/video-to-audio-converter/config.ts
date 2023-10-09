@@ -6,7 +6,7 @@ import {
   applicationConfig,
 } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/video-converter';
+const navigationUrl = '/tools/video-to-audio-converter';
 const pageTitle =
   'Free Video to Audio Converter: Convert Any Video to Audio in Any Format';
 const pageDescription =

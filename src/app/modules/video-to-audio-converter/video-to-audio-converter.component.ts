@@ -18,7 +18,7 @@ import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
   descriptionData,
-} from 'src/environments/component-config/video-converter/config';
+} from 'src/environments/component-config/video-to-audio-converter/config';
 import {
   ConvertEvent,
   ConvertEventType,
@@ -40,17 +40,19 @@ import {
   ELIGIBLE_TARGET_FORMATS,
   FFMPEG_FORMATS,
 } from 'src/environments/ffmpeg-config';
-import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
+import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/constants';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-video-converter',
-  templateUrl: './video-converter.component.html',
-  styleUrls: ['./video-converter.component.scss'],
+  templateUrl: './video-to-audio-converter.component.html',
+  styleUrls: ['./video-to-audio-converter.component.scss'],
 })
-export class VideoConverterComponent implements AfterViewInit, OnDestroy {
+export class VideoToAudioConverterComponent
+  implements AfterViewInit, OnDestroy
+{
   fileStore: Map<string, VideoFileData> = new Map();
   fileDisplayList: VideoFileData[] = [];
 
@@ -101,7 +103,7 @@ export class VideoConverterComponent implements AfterViewInit, OnDestroy {
 
     this.subscriptions.push(
       this.ffmpegService.progressEvent.subscribe(
-        this.handleConverionProgress.bind(this)
+        this.handleConversionProgress.bind(this)
       )
     );
 
@@ -164,7 +166,7 @@ export class VideoConverterComponent implements AfterViewInit, OnDestroy {
    * handle file conversion progress
    * @param eventData
    */
-  async handleConverionProgress(eventData: ConvertProgressEvent) {
+  async handleConversionProgress(eventData: ConvertProgressEvent) {
     this.zoneRef.run(() => {
       LogUtils.info(
         `[conversion progress] ( progress: ${eventData.progress}, file id: ${eventData.fileId})`

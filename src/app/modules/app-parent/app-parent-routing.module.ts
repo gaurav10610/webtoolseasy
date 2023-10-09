@@ -22,7 +22,9 @@ const routes: Routes = [
       {
         path: 'tools/jwt-decoder',
         loadChildren: () =>
-          import('../jwt-decoder/jwt-decoder.module').then(m => m.JwtDecoderModule),
+          import('../jwt-decoder/jwt-decoder.module').then(
+            m => m.JwtDecoderModule
+          ),
       },
       {
         path: 'tools/json-formatter',
@@ -74,11 +76,11 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'tools/video-converter',
+        path: 'tools/video-to-audio-converter',
         loadChildren: () =>
-          import('../video-converter/video-converter.module').then(
-            m => m.VideoConverterModule
-          ),
+          import(
+            '../video-to-audio-converter/video-to-audio-converter.module'
+          ).then(m => m.VideoToAudioConverterModule),
       },
       {
         path: 'tools/json-viewer',

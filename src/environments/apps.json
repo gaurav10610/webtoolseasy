@@ -83,7 +83,7 @@
     "applicationId": "videoconverter",
     "displayText": "Video to Audio Converter",
     "iconName": "video-convert-icon",
-    "navigateUrl": "tools/video-converter",
+    "navigateUrl": "tools/video-to-audio-converter",
     "iconRelativeUrl": "video-convert.svg",
     "category": "Media"
   },
