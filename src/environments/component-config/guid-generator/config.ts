@@ -7,7 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/guid-generator';
-const pageTitle = 'Online GUID Generator: Generate Single or Bulk GUIDs';
+const pageTitle = 'Online GUID Generator: Generate Single or Bulk GUID';
 const pageDescription =
   'Our free online GUID generator tool is a quick and easy way to generate globally unique identifiers (GUIDs), either individually or in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/guid-generator.png`;

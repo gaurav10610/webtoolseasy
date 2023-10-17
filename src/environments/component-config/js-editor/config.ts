@@ -7,10 +7,9 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/javascript-editor';
-const pageTitle =
-  'Online JavaScript Editor: Write and Edit JavaScript Code in Your Browser';
+const pageTitle = 'Online JavaScript Editor: Write and Edit JavaScript Code';
 const pageDescription =
-  'Write, edit, and run JavaScript code directly from your browser with our free online JavaScript editor. No download required, no sign-up required. Create interactive web pages with ease.';
+  'Write, edit, and run JavaScript code directly from your browser with our free online JavaScript editor. Create interactive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-editor.png`;
 
 const keywords =

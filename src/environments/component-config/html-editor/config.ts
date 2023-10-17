@@ -9,7 +9,7 @@ import {
 const navigationUrl = '/tools/html-editor';
 const pageTitle = 'Online HTML and CSS Editor with Real-Time Preview';
 const pageDescription =
-  'Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. No download required, no sign-up required. Create responsive web pages with ease.';
+  'Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. Create responsive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-editor.png`;
 
 const keywords =
@@ -18,8 +18,7 @@ const keywords =
 const relatedTools: ApplicationIds[] = [ApplicationIds.JS_EDITOR];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading:
-    'Online HTML and CSS Editor with Real-Time Preview: See Your Changes Instantly',
+  mainHeading: 'Online HTML and CSS Editor with Real-Time Preview',
   navigationUrl,
   pageTitle,
   metaTags: [

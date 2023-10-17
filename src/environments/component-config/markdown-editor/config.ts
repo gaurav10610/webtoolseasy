@@ -9,7 +9,7 @@ import {
 const navigationUrl = '/tools/markdown-editor';
 const pageTitle = 'Free Online Markdown Editor: Preview Markdown in Real Time';
 const pageDescription =
-  'Write and preview Markdown in real time with our free online Markdown editor. Md Editor Online. Md Markup Editor. No download required, no sign-up required.';
+  'Write, edit and preview Markdown in real time with our free online Markdown editor. Create, edit and preview ReadME and Md Online.';
 const imageUrl = `${environment.screenshotsBaseUrl}/markdown-editor.png`;
 
 const keywords =
@@ -22,7 +22,7 @@ const relatedTools: ApplicationIds[] = [
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online Markdown Editor: Write and Preview Markdown in Real Time',
+    'Free Online Markdown Editor: Write, Edit and Preview Markdown in Real Time',
   navigationUrl,
   pageTitle,
   metaTags: [

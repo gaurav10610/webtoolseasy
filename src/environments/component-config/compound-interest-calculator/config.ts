@@ -7,9 +7,9 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/compound-interest-calculator';
-const pageTitle = 'Compound Interest Calculator: Free Online Calculator';
+const pageTitle = 'Compound Interest Calculator: Calculate Compound Interest';
 const pageDescription =
-  'Calculate your future earnings with ease using our free online compound interest calculator. Simply enter your investment amount, interest rate, and investment term, and our calculator will show you how much your investment will grow over time.';
+  'Calculate compound interest with our compound interest calculator. Simply enter your amount, interest rate, and investment term, to calculate compound interest.';
 const imageUrl = `${environment.screenshotsBaseUrl}/compound-interest-calculator.png`;
 
 const keywords =

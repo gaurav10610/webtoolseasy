@@ -9,7 +9,7 @@ import {
 const navigationUrl = '/tools/case-converter';
 const pageTitle = 'Online Case Converter: Convert Text to Uppercase, Lowercase';
 const pageDescription =
-  'Convert text to any case with ease using our free online case converter tool. No download required, no sign-up required. Convert text to uppercase, lowercase, sentence case, title case, and more.';
+  'Convert text to any case with ease using our free online case converter tool. Convert text to uppercase, lowercase, sentence case, title case, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/case-converter.png`;
 
 const keywords =
@@ -18,8 +18,7 @@ const keywords =
 const relatedTools: ApplicationIds[] = [];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading:
-    'Online Case Converter: Convert Text to Lowercase or Uppercase Easily',
+  mainHeading: 'Online Case Converter: Convert Text to Lowercase or Uppercase',
   navigationUrl,
   pageTitle,
   metaTags: [

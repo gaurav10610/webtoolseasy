@@ -7,8 +7,8 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle = 'Online Text Compare Tool: Compare Two Texts Side-by-Side';
-const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarity and differences. It's perfect for students, writers, bloggers.`;
+const pageTitle = 'Online Text Compare Tool: Compare Two Texts Side by Side';
+const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarities and differences. It's perfect for students, writers, bloggers.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 const keywords =
   'text compare tool, text comparison tool, text diff tool, compare text online, compare text files, compare text documents, plagiarism checker, compare documents for similarity, compare two texts, text similarity checker, compare text online free, text compare online, compare text ignore whitespace';

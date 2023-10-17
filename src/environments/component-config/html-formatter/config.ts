@@ -25,7 +25,7 @@ const relatedTools: ApplicationIds[] = [
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online HTML Beautifier: Make Your HTML Code More Readable and Maintainable',
+    'Free Online HTML Beautifier and Formatter: Beautify and Format HTML Code',
   navigationUrl,
   pageTitle,
   metaTags: [

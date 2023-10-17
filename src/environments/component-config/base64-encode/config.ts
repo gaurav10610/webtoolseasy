@@ -9,7 +9,7 @@ import {
 const navigationUrl = '/tools/base64-encode';
 const pageTitle = 'File to Base64 Encoder: Convert Any File to Base64';
 const pageDescription =
-  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. Image, Text, PDF or File to Base64.';
+  'Convert any file to Base64 with ease with our free online file to the Base64 encoder tool. Image, Text, PDF or File to Base64.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 const keywords =

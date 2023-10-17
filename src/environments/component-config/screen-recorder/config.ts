@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle =
-  'Free Screen Recorder: Record Your Screen Without Watermark or Time Limit';
+const pageTitle = 'Free Screen Recorder: Record Your Screen with Audio, Webcam';
 const pageDescription =
   'Record your screen with audio and webcam for free with our online screen recorder. Record screen with no watermark and no time limit. No sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
@@ -74,6 +73,7 @@ export const descriptionData: DescriptionBlock[] = [
       'No download required. Record your screen directly from your web browser.',
       'Record screen, audio, and webcam. Capture everything on your screen, as well as your audio and webcam.',
       'Easy to use. Simply click the "Start Recording" button and start recording.',
+      'Record Your Screen Without Watermark or Time Limit',
       `Save your recordings to your computer. Once you're finished recording, you can save your recording to your computer.`,
     ],
   },

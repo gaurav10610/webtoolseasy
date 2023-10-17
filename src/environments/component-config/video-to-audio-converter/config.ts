@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/video-to-audio-converter';
-const pageTitle =
-  'Free Video to Audio Converter: Convert Any Video to Audio in Any Format';
+const pageTitle = 'Free Video to Audio Converter: Convert Any Video to Audio';
 const pageDescription =
   'Convert your videos to audio files for free with our online video to audio converter tool. Supports wide range of video formats i.e MP4, MKV, WEBM, AVI, OGM.';
 const imageUrl = `${environment.screenshotsBaseUrl}/video-converter.png`;

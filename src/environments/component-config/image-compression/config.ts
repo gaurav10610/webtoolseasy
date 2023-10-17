@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/image-compress';
-const pageTitle =
-  'Free Image Compressor: Reduce Image File Size Without Losing Quality';
+const pageTitle = 'Free Image Compressor: Reduce Image File Size';
 const pageDescription =
   'Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;

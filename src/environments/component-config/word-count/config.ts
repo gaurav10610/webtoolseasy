@@ -8,7 +8,7 @@ import {
 
 const navigationUrl = '/tools/word-counter';
 const pageTitle =
-  'Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text';
+  'Free Word Count Tool: Count Words, Characters, and Sentences';
 const pageDescription =
   'Our free online word, character, and sentence count tool is quick, and easy, and lets you count the number of words, characters, and sentences in your text.';
 const imageUrl = `${environment.screenshotsBaseUrl}/word-counter.png`;

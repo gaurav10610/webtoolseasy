@@ -2,15 +2,14 @@ import { ApplicationConfig } from 'src/app/@types/config';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '';
-const pageTitle =
-  'Free Online Web Tools for Programming, Text, Media, and More';
-const pageDescription = `WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, record screen, or generate a qr code.`;
+const pageTitle = 'Online Web Tools: Browse Free Tools to Boost Productivity';
+const pageDescription = `WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, or record a screen.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/tools-directory.png`;
 
 export const componentConfig: ApplicationConfig = {
   navigationUrl,
   mainHeading:
-    'Free Online Web Tools: Discover Easy Tools to Make Work Super Easy',
+    'Free Online Web Tools: Discover Free Tools to Make Work Super Easy',
   pageTitle,
   metaTags: [
     {

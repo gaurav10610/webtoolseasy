@@ -25,7 +25,7 @@ const relatedTools: ApplicationIds[] = [
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data with Ease',
+    'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data',
   navigationUrl,
   pageTitle,
   metaTags: [

@@ -7,10 +7,9 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
-const pageTitle =
-  'Free Online Password Generator: Generate Strong Passwords for All Your Accounts';
+const pageTitle = 'Free Password Generator: Generate Strong & Secure Passwords';
 const pageDescription =
-  'Generate strong, unique passwords for all your online accounts with our free password generator tool. No sign-up required. Generate single password or generate passwords in bulk.';
+  'Generate strong, random, unique and secure passwords with our free password generator tool. Generate single passwords or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 const keywords =
@@ -69,6 +68,7 @@ export const descriptionData: DescriptionBlock[] = [
       'No download required. Generate passwords directly from your web browser.',
       'Creates strong, unique passwords. Our password generator uses advanced algorithms to create passwords that are difficult to guess.',
       'Easy to use. Simply click the "Generate Password" button and your password will be generated.',
+      'Generate single password or generate passwords in bulk.',
       'Save your passwords in a password manager. We recommend saving your passwords in a password manager to keep them safe and secure.',
     ],
   },

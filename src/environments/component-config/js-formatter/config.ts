@@ -7,7 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/js-formatter';
-const pageTitle = 'JS Beautifier and Formatter: Beautify and Format JavaScript';
+const pageTitle = 'JavaScript Beautifier and Formatter: Beautify and Format JS';
 const pageDescription =
   'Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
