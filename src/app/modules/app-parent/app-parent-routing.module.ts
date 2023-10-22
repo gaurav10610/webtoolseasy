@@ -41,7 +41,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'tools/js-formatter',
+        path: 'tools/javascript-formatter',
         loadChildren: () =>
           import('../js-formatter/js-formatter.module').then(
             m => m.JsFormatterModule

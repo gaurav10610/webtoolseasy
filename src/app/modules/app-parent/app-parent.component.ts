@@ -45,6 +45,17 @@ export class AppParentComponent implements OnInit {
       const applicationConfig: ApplicationConfig = <ApplicationConfig>(
         event.applicationConfig
       );
+
+      /**
+       * adding page meta info
+       */
+      this.metaConfigService.updatePageMetaData(
+        applicationConfig,
+        this.titleService,
+        this.metaService,
+        this.document
+      );
+
       //console.log(applicationConfig);
       this.appContextService.applicationConfig = applicationConfig;
       this.appContextService.appUrl = `${environment.hostname}${applicationConfig.navigationUrl}`;
@@ -76,16 +87,6 @@ export class AppParentComponent implements OnInit {
           this.matIconRegistry,
           this.domSanitizer
         )
-      );
-
-      /**
-       * adding page meta info
-       */
-      this.metaConfigService.updatePageMetaData(
-        applicationConfig,
-        this.titleService,
-        this.metaService,
-        this.document
       );
     }
 

@@ -95,9 +95,7 @@ export class ScreenRecorderComponent implements OnDestroy {
         this.isMobile = breakpointObserver.isMatched(
           `(max-width: ${MOBILE_VIEW_WIDTH_THRESHOLD})`
         );
-        this.checkCompatibility();
       });
-    this.checkCompatibility();
   }
 
   checkCompatibility() {
@@ -128,6 +126,15 @@ export class ScreenRecorderComponent implements OnDestroy {
    */
   startRecording() {
     this.zoneRef.run(async () => {
+      this.checkCompatibility();
+
+      /**
+       * show recording not supported in case of mobile browser
+       */
+      if (!this.isSupported) {
+        return;
+      }
+
       this.isRecording = true;
       this.resetContextVariables();
 
@@ -148,7 +155,7 @@ export class ScreenRecorderComponent implements OnDestroy {
          */
         this.configureStreamStopListener(this.screenStream);
       } catch (error) {
-        LogUtils.error(`error occured while capturing screen stream`);
+        LogUtils.error(`error occurred while capturing screen stream`);
         LogUtils.error(error);
         this.stopRecording();
       }
@@ -160,7 +167,7 @@ export class ScreenRecorderComponent implements OnDestroy {
         }
       } catch (error) {
         LogUtils.error(
-          `error occured while capturing camera or mic media stream`
+          `error occurred while capturing camera or mic media stream`
         );
         LogUtils.error(error);
         this.stopRecording();
@@ -319,7 +326,7 @@ export class ScreenRecorderComponent implements OnDestroy {
   }
 
   /**
-   * resume media stream recoring
+   * resume media stream recording
    */
   resumeRecording() {
     this.mediaStreamRecorder?.resume();
@@ -367,7 +374,7 @@ export class ScreenRecorderComponent implements OnDestroy {
         this.zoneRef.run(() => (this.isProcessingStream = false));
         clear();
       } catch (error) {
-        LogUtils.info(`error occured while preparing video file for download`);
+        LogUtils.info(`error occurred while preparing video file for download`);
         LogUtils.error(error);
         this.zoneRef.run(() => (this.isProcessingStream = false));
       }

@@ -123,7 +123,7 @@
     "applicationId": "jsformatter",
     "displayText": "Online Javascript Formatter",
     "iconName": "js-icon",
-    "navigateUrl": "tools/js-formatter",
+    "navigateUrl": "tools/javascript-formatter",
     "iconRelativeUrl": "js-icon.svg",
     "category": "Programming"
   },
