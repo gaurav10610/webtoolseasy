@@ -11,7 +11,7 @@
         *ngIf="platformMetaDataService.isPlatformBrowser"
         svgIcon="{{ appConfig.iconName }}"
         style="margin: 10px"></mat-icon
-      ><a [replaceUrl]="true" routerLink="{{ appConfig.navigateUrl }}">{{
+      ><a routerLink="{{ appConfig.navigateUrl }}">{{
         appConfig.displayText
       }}</a>
     </div>

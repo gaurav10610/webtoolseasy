@@ -8,14 +8,12 @@
       <div
         class="application shadow-grey flex-display flex-column-flow flex-center flex-align-center pointer-cursor flex-gap-medium"
         *ngFor="let application of applications.get(category)"
-        [replaceUrl]="true"
         routerLink="{{ application.navigateUrl }}">
         <mat-icon
           *ngIf="platformMetaDataService.isPlatformBrowser"
           svgIcon="{{ application.iconName }}"
           class="app-icon"></mat-icon>
         <a
-          [replaceUrl]="true"
           routerLink="{{ application.navigateUrl }}"
           (click)="onAppClick($event)"
           style="text-align: center"
