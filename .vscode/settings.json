@@ -22,6 +22,7 @@
   "editor.formatOnSave": true,
   "html.format.contentUnformatted": "",
   "cSpell.words": [
+    "datastructures",
     "Extention",
     "keyval",
     "ondataavailable",
