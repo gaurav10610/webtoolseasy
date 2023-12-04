@@ -93,5 +93,10 @@ export class AppParentComponent implements OnInit {
     if (event.descriptionData) {
       this.appContextService.descriptionData = event.descriptionData;
     }
+
+    /**
+     * after routing to the new url, scrolling back to top of the page
+     */
+    document.getElementById('appRendererDiv')!.scrollTop = 0;
   }
 }

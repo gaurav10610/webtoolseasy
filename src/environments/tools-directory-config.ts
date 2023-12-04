@@ -32,6 +32,8 @@ export enum ApplicationIds {
 const appsConfigMap: Map<string, AppNavigationConfig> = new Map(
   Object.entries(appConfigJson)
 );
+
 appsConfigMap.delete('default');
+
 export const applicationConfig: Map<string, AppNavigationConfig> =
   appsConfigMap;

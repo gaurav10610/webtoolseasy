@@ -1,4 +1,5 @@
 import { MetaDefinition } from '@angular/platform-browser';
+import { ApplicationIds } from 'src/environments/tools-directory-config';
 
 export interface BaseAppConfig {
   displayText: string;
@@ -38,4 +39,9 @@ export enum AppCategory {
 export interface AppCatalogue {
   category: string;
   apps: AppNavigationConfig[];
+}
+
+export interface AppContext {
+  id: ApplicationIds;
+  data: any;
 }

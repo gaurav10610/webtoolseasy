@@ -74,6 +74,7 @@ export const descriptionData: DescriptionBlock[] = [
       'Supports all HTML and CSS elements and attributes. Our editor supports all HTML and CSS elements and attributes, so you can create any type of responsive web page you want.',
       'Syntax highlighting and code completion. Our editor provides syntax highlighting and code completion to help you write and edit HTML and CSS code more efficiently.',
       'Error checking and live previews. Our editor checks your code for errors and warnings to help you avoid problems, and it provides live previews of your web page so you can see how your changes look as you make them.,',
+      'Stores user state in browser cache meaning your HTML and CSS code will not be lost even if you refresh/reload and reopen the HTML editor browser window',
     ],
   },
   {
