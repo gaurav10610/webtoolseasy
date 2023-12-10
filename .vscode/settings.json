@@ -27,5 +27,10 @@
     "keyval",
     "ondataavailable",
     "webtoolseasy"
-  ]
+  ],
+  "[html][typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  }
 }
