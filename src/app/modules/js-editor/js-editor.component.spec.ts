@@ -8,7 +8,7 @@ describe('JsEditorComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [JsEditorComponent]
+      declarations: [JsEditorComponent],
     });
     fixture = TestBed.createComponent(JsEditorComponent);
     component = fixture.componentInstance;
