@@ -296,12 +296,8 @@ export class ScreenRecorderComponent implements OnDestroy {
   async getScreenStream(): Promise<MediaStream> {
     const screenCaptureOptions = {
       video: true,
-      audio: false,
+      audio: this.includeScreenAudio,
     };
-
-    if (this.includeScreenAudio) {
-      screenCaptureOptions.audio = true;
-    }
     return navigator.mediaDevices.getDisplayMedia(screenCaptureOptions);
   }
 
@@ -394,6 +390,9 @@ export class ScreenRecorderComponent implements OnDestroy {
         break;
       case 'camera-video':
         this.includeCameraVideo = event.checked;
+        break;
+      case 'speaker-audio':
+        this.includeScreenAudio = event.checked;
         break;
     }
   }
