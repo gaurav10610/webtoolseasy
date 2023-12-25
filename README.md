@@ -1,27 +1,59 @@
-# WebToolsEasy
+<p align="center">
+  <a href="#">
+    <img alt="webtoolseasy icon" width="128px" height="128px" src="https://webtoolseasy.com/favicon.png"></img>
+  </a>
+</p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.5.
+# **WebToolsEasy**
 
-## Development server
+Webtoolseasy is a suite of free web tools to make work super easy. Currently, it offers following free web tools -
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Online Editors
 
-## Code scaffolding
+* Online JavaScript Editor
+* Online HTML Editor
+* Markdown Editor
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Finance
 
-## Build
+* Compound Interest Calculator
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Programming
 
-## Running unit tests
+* XML to JSON Converter
+* JWT Decoder
+* Online Javascript Formatter
+* Online JSON Formatter
+* Online JSON Viewer
+* Online HTML Formatter
+* Online CSS Formatter
+* Base64 Encoder
+* Base64 Decoder
+* Cron Expression Generator
+* UUID V4 Generator
+* UUID V1 Generator
+* GUID Generator
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Text
 
-## Running end-to-end tests
+* Case Converter
+* Word Counter
+* Online Text Compare
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Media
 
-## Further help
+* Video to Audio Converter
+* Free Screen Recorder
+* Free Image Compressor
+* Free Image Cropper
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Miscellaneous
+
+* QR Code Generator
+* Random Password Generator
+
+If like it, please follow us -
+
+* [LinkedIn](https://www.linkedin.com/company/webtoolseasy/)
+* [Facebook](https://www.facebook.com/people/Webtoolseasy/100088911459047/)
+* [Twitter](https://twitter.com/webtoolseasy)
