@@ -1,6 +1,6 @@
 <p align="center">
   <a href="#">
-    <img alt="webtoolseasy icon" width="100px" height="100px" src="https://webtoolseasy.com/favicon.png"></img>
+    <img alt="webtoolseasy icon" width="128px" height="128px" src="https://webtoolseasy.com/favicon.png"></img>
   </a>
 </p>
 
