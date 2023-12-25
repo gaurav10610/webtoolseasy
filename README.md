@@ -1,4 +1,8 @@
-![](image/README/1703497487170.png)
+<p align="center">
+  <a href="#">
+    <img alt="webtoolseasy icon" width="100px" height="100px" src="https://webtoolseasy.com/favicon.png"></img>
+  </a>
+</p>
 
 # **WebToolsEasy**
 
