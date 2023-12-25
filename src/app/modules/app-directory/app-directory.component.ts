@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AppNavigationConfig, ApplicationConfig } from 'src/app/@types/config';
+import {
+  AppCategory,
+  AppNavigationConfig,
+  ApplicationConfig,
+} from 'src/app/@types/config';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
 import { applicationConfig } from 'src/environments/tools-directory-config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -17,10 +21,19 @@ export class AppDirectoryComponent implements OnInit {
   /**
    * application config for composing UI
    */
-  appsConfig: AppNavigationConfig[] = Array.from(applicationConfig.values());
+  applications!: Map<AppCategory, AppNavigationConfig[]>;
 
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = [];
+
+  appCategories: AppCategory[] = [
+    AppCategory.MEDIA,
+    AppCategory.MISCELLANEOUS,
+    AppCategory.ONLINE_EDITORS,
+    AppCategory.PROGRAMMING,
+    AppCategory.TEXT,
+    AppCategory.FINANCE,
+  ];
 
   constructor(
     public platformMetaDataService: PlatformMetadataService,
@@ -30,20 +43,26 @@ export class AppDirectoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.appsConfig
-      .map(appConfig => {
-        return {
-          iconName: appConfig.iconName,
-          iconRelativeUrl: appConfig.iconRelativeUrl,
-        };
-      })
-      .forEach(iconConfig =>
-        this.iconConfigService.registerCustomIcon(
-          iconConfig,
-          this.matIconRegistry,
-          this.domSanitizer
-        )
+    this.applications = new Map();
+    applicationConfig.forEach(value => {
+      /**
+       * load app icons
+       */
+      this.iconConfigService.registerCustomIcon(
+        {
+          iconName: value.iconName,
+          iconRelativeUrl: value.iconRelativeUrl,
+        },
+        this.matIconRegistry,
+        this.domSanitizer
       );
+
+      const category: AppCategory = <AppCategory>value.category;
+      if (!this.applications.has(category)) {
+        this.applications.set(category, []);
+      }
+      this.applications.get(category)!.push(value);
+    });
   }
 
   onAppClick(event: any) {

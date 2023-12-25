@@ -8,7 +8,7 @@ describe('ImageCropperComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageCropperComponent]
+      declarations: [ImageCropperComponent],
     });
     fixture = TestBed.createComponent(ImageCropperComponent);
     component = fixture.componentInstance;

@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/uuid-v4-generator';
-const pageTitle =
-  'Online UUID Version4 (v4) Generator | Bulk UUID v4 Generator';
+const pageTitle = 'UUID v4 Generator: Generate Single or Bulk UUID v4';
 const pageDescription =
   'Our free online UUID v4 generator tool is a quick and easy way to generate universally unique identifiers (UUIDs), either individually or in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/uuid-v4-generator.png`;
@@ -46,7 +45,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

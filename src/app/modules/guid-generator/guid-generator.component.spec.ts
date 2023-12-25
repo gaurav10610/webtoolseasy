@@ -8,7 +8,7 @@ describe('GuidGeneratorComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GuidGeneratorComponent]
+      declarations: [GuidGeneratorComponent],
     });
     fixture = TestBed.createComponent(GuidGeneratorComponent);
     component = fixture.componentInstance;

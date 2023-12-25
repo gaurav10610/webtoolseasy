@@ -3,16 +3,16 @@ import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
 
 const navigationUrl = '/tools/qr-code-generator';
-const pageTitle = 'Free QR Code Generator: Generate QR Code | QR Code Builder';
+const pageTitle = 'Free QR Code Generator: Generate QR Codes with Free Text';
 const pageDescription =
-  'Generate custom QR codes for free with our easy-to-use online QR code generator tool. QR code builder. No download required, no sign-up required.';
+  'Generate custom QR codes for free with our easy to use online QR code generator tool. QR code builder. Generate QR code with free text.';
 const imageUrl = `${environment.screenshotsBaseUrl}/cron-expression.png`;
 
 const keywords =
-  'online qr code generator,qr code generator,qr code,create qr code,qr code types,free qr code generator,no download required,easy to use,customizable settings,qr code tips,qr code best practices,generate qr,qr code builder,quick response code';
+  'online qr code generator,qr code generator,qr code,create qr code,qr code types,free qr code generator,generate qr,qr code builder,quick response code';
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Online QR Code Generator: Generate QR Codes in Seconds',
+  mainHeading: 'Free QR Code Generator: Generate QR Codes with Free Text',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,7 +34,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
@@ -69,6 +68,7 @@ export const descriptionData: DescriptionBlock[] = [
       'Supports all QR code types. Our generator supports all QR code types, including standard QR codes, URL QR codes, vCard QR codes, and more.',
       'Easy to use. Simply enter the information you want to encode in the QR text-box and the qr code will be generated automatically.',
       'Multiple download option, you may either save qr as SVG or download qr in PNG, JPEG, WEBP as an image',
+      'Generate QR code with free text.',
     ],
   },
   {

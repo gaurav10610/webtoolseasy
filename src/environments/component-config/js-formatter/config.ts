@@ -6,14 +6,14 @@ import {
   applicationConfig,
 } from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/js-formatter';
-const pageTitle = 'JS Beautifier and Formatter: Beautify and Format JavaScript';
+const navigationUrl = '/tools/javascript-formatter';
+const pageTitle = 'JavaScript Beautifier and Formatter: Beautify and Format JS';
 const pageDescription =
   'Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
 const keywords =
-  'online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,easy to use,customizable settings,JavaScript code style guide,JavaScript code formatting errors';
+  'online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.CSS_FORMATTER,
@@ -46,7 +46,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

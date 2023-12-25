@@ -7,20 +7,19 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
-const pageTitle =
-  'Password Generator: Create Strong, Random & Secure Passwords';
+const pageTitle = 'Free Password Generator: Generate Strong & Secure Passwords';
 const pageDescription =
-  'Generate strong, unique passwords for all your online accounts with our free password generator tool. No sign-up required. Generate single password or generate passwords in bulk.';
+  'Generate strong, random, unique and secure passwords with our free password generator tool. Generate single passwords or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
 const keywords =
-  'password generator,strong password generator,create secure passwords,unique passwords,different passwords for all accounts,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
+  'password generator,strong password generator,create secure passwords,unique passwords,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
 
 const relatedTools: ApplicationIds[] = [ApplicationIds.JWT_DECODER];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Strong Password Generator: Create Secure Passwords for All Your Accounts',
+    'Free Online Password Generator: Create Strong, Secure & Random Passwords',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -42,7 +41,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
@@ -70,6 +68,7 @@ export const descriptionData: DescriptionBlock[] = [
       'No download required. Generate passwords directly from your web browser.',
       'Creates strong, unique passwords. Our password generator uses advanced algorithms to create passwords that are difficult to guess.',
       'Easy to use. Simply click the "Generate Password" button and your password will be generated.',
+      'Generate single password or generate passwords in bulk.',
       'Save your passwords in a password manager. We recommend saving your passwords in a password manager to keep them safe and secure.',
     ],
   },

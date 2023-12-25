@@ -13,7 +13,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
 
 const keywords =
-  'online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,no download required,supports all JSON features,easy to use,customizable settings,JSON beautifier,JSON formatter,expand and collapse,search JSON data';
+  'online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,JSON beautifier,expand and collapse,search JSON data';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.JSON_FORMATTER,
@@ -45,7 +45,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

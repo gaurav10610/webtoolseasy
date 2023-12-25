@@ -22,7 +22,7 @@
           >
         </div>
 
-        <span class="description-font"> {{ line }}</span>
+        <p class="description-font">{{ line }}</p>
       </div>
     </div>
 
@@ -31,11 +31,11 @@
       *ngIf="descriptionRecord.blockData"
       class="flex-display flex-column-flow flex-gap-large"
       style="overflow-wrap: anywhere">
-      <span
+      <p
         *ngFor="let block of descriptionRecord.blockData"
         class="description-font">
         {{ block }}
-      </span>
+      </p>
     </div>
 
     <!-- div for links -->

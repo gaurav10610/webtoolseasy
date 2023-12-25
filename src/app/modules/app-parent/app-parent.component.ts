@@ -45,6 +45,17 @@ export class AppParentComponent implements OnInit {
       const applicationConfig: ApplicationConfig = <ApplicationConfig>(
         event.applicationConfig
       );
+
+      /**
+       * adding page meta info
+       */
+      this.metaConfigService.updatePageMetaData(
+        applicationConfig,
+        this.titleService,
+        this.metaService,
+        this.document
+      );
+
       //console.log(applicationConfig);
       this.appContextService.applicationConfig = applicationConfig;
       this.appContextService.appUrl = `${environment.hostname}${applicationConfig.navigationUrl}`;
@@ -77,20 +88,15 @@ export class AppParentComponent implements OnInit {
           this.domSanitizer
         )
       );
-
-      /**
-       * adding page meta info
-       */
-      this.metaConfigService.updatePageMetaData(
-        applicationConfig,
-        this.titleService,
-        this.metaService,
-        this.document
-      );
     }
 
     if (event.descriptionData) {
       this.appContextService.descriptionData = event.descriptionData;
     }
+
+    /**
+     * after routing to the new url, scrolling back to top of the page
+     */
+    document.getElementById('appRendererDiv')!.scrollTop = 0;
   }
 }

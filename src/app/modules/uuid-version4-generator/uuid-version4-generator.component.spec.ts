@@ -8,7 +8,7 @@ describe('UuidVersion4GeneratorComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UuidVersion4GeneratorComponent]
+      declarations: [UuidVersion4GeneratorComponent],
     });
     fixture = TestBed.createComponent(UuidVersion4GeneratorComponent);
     component = fixture.componentInstance;

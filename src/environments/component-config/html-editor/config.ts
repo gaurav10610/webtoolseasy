@@ -7,20 +7,18 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/html-editor';
-const pageTitle =
-  'Free Online HTML and CSS Editor: Write, Edit, and Run HTML and CSS Code Directly from Your Browser';
+const pageTitle = 'Online HTML and CSS Editor with Real-Time Preview';
 const pageDescription =
-  'Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. No download required, no sign-up required. Create responsive web pages with ease.';
+  'Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. Create responsive web pages with ease.';
 const imageUrl = `${environment.screenshotsBaseUrl}/html-editor.png`;
 
 const keywords =
-  'online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,no download required,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor';
+  'online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor';
 
 const relatedTools: ApplicationIds[] = [ApplicationIds.JS_EDITOR];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading:
-    'Free Online HTML and CSS Editor: Write, Edit, and Run HTML and CSS Code Directly from Your Browser',
+  mainHeading: 'Online HTML and CSS Editor with Real-Time Preview',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -42,7 +40,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
@@ -77,6 +74,7 @@ export const descriptionData: DescriptionBlock[] = [
       'Supports all HTML and CSS elements and attributes. Our editor supports all HTML and CSS elements and attributes, so you can create any type of responsive web page you want.',
       'Syntax highlighting and code completion. Our editor provides syntax highlighting and code completion to help you write and edit HTML and CSS code more efficiently.',
       'Error checking and live previews. Our editor checks your code for errors and warnings to help you avoid problems, and it provides live previews of your web page so you can see how your changes look as you make them.,',
+      'Stores user state in browser cache meaning your HTML and CSS code will not be lost even if you refresh/reload and reopen the HTML editor browser window',
     ],
   },
   {

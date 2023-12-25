@@ -9,16 +9,16 @@ import {
 const navigationUrl = '/tools/case-converter';
 const pageTitle = 'Online Case Converter: Convert Text to Uppercase, Lowercase';
 const pageDescription =
-  'Convert text to any case with ease using our free online case converter tool. No download required, no sign-up required. Convert text to uppercase, lowercase, sentence case, title case, and more.';
+  'Convert text to any case with ease using our free online case converter tool. Convert text to uppercase, lowercase, sentence case, title case, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/case-converter.png`;
 
 const keywords =
-  'case converter,convert text to any case,free case converter,no download required,supports all case types,easy to use,customizable settings,uppercase,lowercase,sentence case,title case,case types,case rules,format text,correct errors in case,learn about case';
+  'case converter,convert text to any case,free case converter,easy to use,uppercase,lowercase,sentence case,title case,case types,format text,learn about case';
 
 const relatedTools: ApplicationIds[] = [];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Free Online Case Converter: Convert Text to Any Case with Ease',
+  mainHeading: 'Online Case Converter: Convert Text to Lowercase or Uppercase',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -40,7 +40,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

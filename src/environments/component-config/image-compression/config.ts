@@ -7,8 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/image-compress';
-const pageTitle =
-  'Free Image Compressor: Reduce the Size of Your Photos Online';
+const pageTitle = 'Free Image Compressor: Reduce Image File Size';
 const pageDescription =
   'Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
@@ -42,7 +41,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

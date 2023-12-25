@@ -14,7 +14,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;
 
 const keywords =
-  'online JSON beautifier and formatter,beautify JSON data,format JSON data,JSON beautifier and formatter tool,JSON data formatter,JSON data style,improve JSON data readability,make JSON data more consistent,follow JSON data style guidelines,free JSON beautifier and formatter,no download required,supports all JSON features,easy to use,customizable settings,JSON data style guide,JSON data formatting errors';
+  'online JSON beautifier and formatter,beautify JSON data,format JSON data,JSON beautifier and formatter tool,JSON data formatter,JSON data style,improve JSON data readability,make JSON data more consistent,follow JSON data style guidelines,free JSON beautifier and formatter,JSON data formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.JSON_VIEWER,
@@ -25,7 +25,7 @@ const relatedTools: ApplicationIds[] = [
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data with Ease',
+    'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -47,7 +47,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

@@ -14,7 +14,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/html-format.png`;
 
 const keywords =
-  'online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,no download required,supports all HTML features,easy to use,customizable settings,HTML code style guide,HTML code formatting errors';
+  'online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,HTML code formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.JS_FORMATTER,
@@ -25,7 +25,7 @@ const relatedTools: ApplicationIds[] = [
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online HTML Beautifier: Make Your HTML Code More Readable and Maintainable',
+    'Free Online HTML Beautifier and Formatter: Beautify and Format HTML Code',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -47,7 +47,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

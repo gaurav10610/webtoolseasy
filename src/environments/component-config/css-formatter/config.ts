@@ -13,7 +13,7 @@ const pageDescription =
 const imageUrl = `${environment.screenshotsBaseUrl}/css-format.png`;
 
 const keywords =
-  'online CSS beautifier and formatter,beautify CSS code,format CSS code,CSS beautifier and formatter tool,CSS code formatter,CSS code style,improve CSS code readability,make CSS code more consistent,follow CSS code style guidelines,free CSS beautifier and formatter,no download required,supports all CSS features,easy to use,customizable settings,CSS code style guide,CSS code formatting errors';
+  'online CSS beautifier and formatter,beautify CSS code,format CSS code,CSS beautifier and formatter tool,CSS code formatter,CSS code style,improve CSS code readability,make CSS code more consistent,follow CSS code style guidelines,free CSS beautifier and formatter,CSS code formatting errors';
 
 const relatedTools: ApplicationIds[] = [
   ApplicationIds.JSON_FORMATTER,
@@ -24,7 +24,7 @@ const relatedTools: ApplicationIds[] = [
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Free Online CSS Beautifier and Formatter: Beautify and Format Your CSS Code with Ease',
+    'Free Online CSS Beautifier and Formatter: Beautify and Format Your CSS Code',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -46,7 +46,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

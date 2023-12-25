@@ -1,15 +1,15 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { environment } from 'src/environments/environment';
 
-const navigationUrl = '/tools';
-const pageTitle = 'Free Online Web Tools Directory: Discover Useful Tools';
-const pageDescription = `Looking for the best free online web tools to help you with your work, studies, or personal projects? Look no further! WebToolsEasy features multiple free web tools that can help you boost your productivity and get things done more efficiently. Browse our categories and find the perfect tool for your needs, whether you're looking for a way to edit photos, create videos, manage your projects, or learn new skills.`;
+const navigationUrl = '';
+const pageTitle = 'Online Web Tools: Browse Free Tools to Boost Productivity';
+const pageDescription = `WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, or record a screen.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/tools-directory.png`;
 
 export const componentConfig: ApplicationConfig = {
   navigationUrl,
   mainHeading:
-    'Free Online Web Tools Directory: Discover Useful Tools to Boost Your Productivity',
+    'Free Online Web Tools: Discover Free Tools to Make Work Super Easy',
   pageTitle,
   metaTags: [
     {
@@ -30,7 +30,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

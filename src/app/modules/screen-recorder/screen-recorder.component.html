@@ -12,7 +12,14 @@
   >
 
   <section class="flex-display recoder-options" *ngIf="isSupported">
-    <mat-checkbox (change)="recorderOptionChange($event, 'mic-audio')"
+    <mat-checkbox
+      (change)="recorderOptionChange($event, 'speaker-audio')"
+      [disabled]="includeMicAudio"
+      >include speaker audio</mat-checkbox
+    >
+    <mat-checkbox
+      (change)="recorderOptionChange($event, 'mic-audio')"
+      [disabled]="includeScreenAudio"
       >include mic audio</mat-checkbox
     >
     <mat-checkbox (change)="recorderOptionChange($event, 'camera-video')"

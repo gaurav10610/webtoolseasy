@@ -36,7 +36,9 @@ export class JsEditorComponent implements OnInit {
       let a = 5;
       let b = 6;
       let c = a + b;
-      document.getElementById("js-demo").innerHTML = "The value of c is: " + c;
+      document
+      .getElementById("js-demo")
+      .innerHTML = "The value of c is: " + c;
     </script>
 
   </body>

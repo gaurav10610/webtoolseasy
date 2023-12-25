@@ -9,7 +9,7 @@ import {
 const navigationUrl = '/tools/base64-encode';
 const pageTitle = 'File to Base64 Encoder: Convert Any File to Base64';
 const pageDescription =
-  'Convert any file to Base64 with ease with our free online file to Base64 encoder tool. Image, Text, PDF or File to Base64.';
+  'Convert any file to Base64 with ease with our free online file to the Base64 encoder tool. Image, Text, PDF or File to Base64.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-encode.png`;
 
 const keywords =
@@ -41,7 +41,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

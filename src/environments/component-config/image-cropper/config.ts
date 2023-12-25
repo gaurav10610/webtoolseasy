@@ -7,7 +7,7 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/crop-image';
-const pageTitle = 'Free Online Image Cropper: Crop Your Photos Online for Free';
+const pageTitle = 'Free Image Cropper: Crop Your Photos Online For Free';
 const pageDescription =
   'Crop your images online for free with our easy-to-use image cropper. No download required, no sign-up required. Crop JPG, PNG, WEBP, BMP For Free.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-cropper.png`;
@@ -40,7 +40,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

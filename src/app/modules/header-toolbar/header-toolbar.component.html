@@ -1,9 +1,5 @@
 <mat-toolbar color="primary">
-  <button
-    mat-icon-button
-    aria-label="app icon button"
-    [replaceUrl]="true"
-    routerLink="">
+  <button mat-icon-button aria-label="app icon button" routerLink="">
     <mat-icon
       *ngIf="platformMetaDataService.isPlatformBrowser"
       svgIcon="app-icon"
@@ -11,15 +7,9 @@
   </button>
   <div
     class="flex-display flex-row-flow flex-align-center flex-full-height app-name">
-    <span class="header-font pointer-cursor" routerLink="" [replaceUrl]="true"
-      >WebToolsEasy</span
-    >
+    <span class="header-font pointer-cursor" routerLink="">WebToolsEasy</span>
   </div>
-  <button
-    mat-icon-button
-    aria-label="home icon button"
-    [replaceUrl]="true"
-    routerLink="/tools">
+  <button mat-icon-button aria-label="home icon button" routerLink="">
     <mat-icon
       *ngIf="platformMetaDataService.isPlatformBrowser"
       svgIcon="home-icon"

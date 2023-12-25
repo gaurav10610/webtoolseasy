@@ -3,21 +3,21 @@ import { ServerModule } from '@angular/platform-server';
 
 import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
-import { environment } from 'src/environments/environment';
-import {
-  NgxGoogleAnalyticsModule,
-  NgxGoogleAnalyticsRouterModule,
-} from 'ngx-google-analytics';
+// import { environment } from 'src/environments/environment';
+// import {
+//   NgxGoogleAnalyticsModule,
+//   NgxGoogleAnalyticsRouterModule,
+// } from 'ngx-google-analytics';
 
-const analyticsModules = environment.production
-  ? [
-      NgxGoogleAnalyticsModule.forRoot(environment.gaCode),
-      NgxGoogleAnalyticsRouterModule,
-    ]
-  : [];
+// const analyticsModules = [];
+
+// if (environment.production) {
+//   analyticsModules.push(NgxGoogleAnalyticsModule.forRoot(environment.gaCode));
+//   analyticsModules.push(NgxGoogleAnalyticsRouterModule);
+// }
 
 @NgModule({
-  imports: [AppModule, ServerModule, ...analyticsModules],
+  imports: [AppModule, ServerModule],
   bootstrap: [AppComponent],
 })
 export class AppServerModule {}

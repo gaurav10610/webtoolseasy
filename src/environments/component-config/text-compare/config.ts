@@ -7,9 +7,8 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle =
-  'Online Text Compare Tool - Compare Two Texts for Differences';
-const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarity and differences. It's perfect for students, writers, bloggers.`;
+const pageTitle = 'Online Text Compare Tool: Compare Two Texts Side by Side';
+const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarities and differences. It's perfect for students, writers, bloggers.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
 const keywords =
   'text compare tool, text comparison tool, text diff tool, compare text online, compare text files, compare text documents, plagiarism checker, compare documents for similarity, compare two texts, text similarity checker, compare text online free, text compare online, compare text ignore whitespace';
@@ -17,7 +16,8 @@ const keywords =
 const relatedTools: ApplicationIds[] = [ApplicationIds.WORD_COUNTER];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Text Compare - Text to Text Comparison',
+  mainHeading:
+    'Free Online Text Compare Tool: Find Differences Between Two Texts Easily',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -39,7 +39,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },

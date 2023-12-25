@@ -8,8 +8,8 @@
   </div>
 
   <cron-editor
-    *ngIf="platformMetaDataService.isPlatformBrowser"
     #cronEditor
+    *ngIf="platformMetaDataService.isPlatformBrowser"
     [formControl]="cronForm"
     [options]="cronOptions"
     class="border-grey cron-editor"></cron-editor>
