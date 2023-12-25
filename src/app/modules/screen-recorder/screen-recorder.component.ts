@@ -234,7 +234,7 @@ export class ScreenRecorderComponent implements OnDestroy {
       y: 0,
       width: streamMerger.width,
       height: streamMerger.height,
-      mute: true,
+      mute: !this.includeScreenAudio,
       index: 0,
     };
 
@@ -246,7 +246,7 @@ export class ScreenRecorderComponent implements OnDestroy {
       y: streamMerger.height - this.cameraVideoOptions.height,
       width: this.cameraVideoOptions.width,
       height: this.cameraVideoOptions.height,
-      mute: false,
+      mute: !this.includeMicAudio,
       index: 1,
     };
 
