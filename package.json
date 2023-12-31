@@ -15,7 +15,8 @@
     "serve:ssr": "PORT=9898 nodemon dist/webtoolseasy/server/main.js",
     "build:ssr": "ng build && ng run webtoolseasy:server",
     "prerender": "ng run webtoolseasy:prerender",
-    "create:app": "ng g module --routing=true $name && ng g component --skip-import $name && APP_NAME=$name node scripts/createApp.js"
+    "create:app": "ng g module --routing=true $name && ng g component --skip-import $name && APP_NAME=$name node scripts/createApp.js",
+    "init:ffmpeg": "node scripts/copy-ffmpeg-worker.js"
   },
   "private": true,
   "dependencies": {
@@ -30,6 +31,8 @@
     "@angular/platform-browser-dynamic": "16.2.1",
     "@angular/platform-server": "16.2.1",
     "@angular/router": "16.2.1",
+    "@ffmpeg/ffmpeg": "0.12.10",
+    "@ffmpeg/util": "0.12.1",
     "@nguniversal/express-engine": "16.2.0",
     "easymde": "2.18.0",
     "express": "4.15.2",
