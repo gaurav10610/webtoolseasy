@@ -14,10 +14,10 @@ import {
 } from 'src/environments/component-config/image-compression/config';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
-import { importScript } from 'src/app/service/ffmpeg/lib/util';
 import { environment } from 'src/environments/environment';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { FileService } from 'src/app/service/file/file.service';
+import { importScript } from '@ffmpeg/util';
 
 declare var imageCompression: any;
 declare var window: any;
