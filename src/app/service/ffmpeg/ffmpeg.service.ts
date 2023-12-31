@@ -14,13 +14,9 @@ import {
   FFMPEG_FORMATS,
 } from 'src/environments/ffmpeg-config';
 import { LogUtils } from 'src/app/service/util/logger';
-import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg';
-import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util';
-import {
-  LogEvent,
-  ProgressEvent,
-} from 'src/app/service/ffmpeg/lib/ffmpeg/types';
 import { environment } from 'src/environments/environment';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { toBlobURL, fetchFile } from '@ffmpeg/util';
 
 @Injectable({
   providedIn: 'root',
@@ -84,6 +80,7 @@ export class FfmpegService {
         `${environment.ffmpegBaseUrl}/ffmpeg-core.worker.js`,
         'text/javascript'
       ),
+      classWorkerURL: `${environment.hostname}/assets/@ffmpeg/worker.js`,
     });
   }
 
@@ -100,7 +97,7 @@ export class FfmpegService {
    * handle conversion logs
    * @param logParams
    */
-  async handleLogs(logParams: LogEvent) {
+  async handleLogs(logParams: any) {
     this.convertLogEvent.emit({
       ...logParams,
     });
@@ -140,7 +137,7 @@ export class FfmpegService {
    * handles file progress
    * @param progressParams
    */
-  async handleFFMpegProgress(progressParams: ProgressEvent) {
+  async handleFFMpegProgress(progressParams: any) {
     const progress: number = Number((progressParams.progress * 100).toFixed(2));
     this.progressEvent.emit({
       fileId: this.currentFile!.id,

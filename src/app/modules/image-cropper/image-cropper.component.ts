@@ -2,7 +2,6 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { BaseFileData, FileDataType } from 'src/app/@types/file';
-import { importScript } from 'src/app/service/ffmpeg/lib/util';
 import { FileService } from 'src/app/service/file/file.service';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
@@ -16,6 +15,7 @@ import {
 } from 'ngx-image-cropper';
 import { environment } from 'src/environments/environment';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { importScript } from '@ffmpeg/util';
 
 @Component({
   selector: 'app-image-cropper',
