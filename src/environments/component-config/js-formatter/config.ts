@@ -1,17 +1,30 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
-const navigationUrl = '/tools/js-formatter';
-const pageTitle = 'Best Online Javascript Formatter | Javascript Beautifier';
+const navigationUrl = '/tools/javascript-formatter';
+const pageTitle = 'JavaScript Beautifier and Formatter: Beautify and Format JS';
 const pageDescription =
-  'Our Best Online Javascript Formatter/Beautifier tool lets you beautify/format your JavaScript code for free';
+  'Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/js-format.png`;
 
+const keywords =
+  'online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.CSS_FORMATTER,
+  ApplicationIds.HTML_FORMATTER,
+  ApplicationIds.JSON_FORMATTER,
+  ApplicationIds.JSON_VIEWER,
+];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Javascript Formatter',
-  subHeading: 'Online Javascript Beautifier',
+  mainHeading:
+    'Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -33,135 +46,62 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'js formatter',
-    'js beautifier',
-    'string format javascript',
-    'javascript prettify',
-    'javascript formatter',
-    'javascript beautifier',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsonformatter',
-      displayText: AppDisplayNames.JSON_FORMATTER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
-      applicationId: 'jsonviewer',
-      displayText: AppDisplayNames.JSON_VIEWER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-viewer',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: AppDisplayNames.CSS_FORMATTER,
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use Javascript Formatter / Beautifier?',
-    listData: [
-      `Paste unformatted / minified Javascript in unformatted Javascript block and code it be formatted / beautified automatically.`,
-    ],
-  },
-  {
-    heading: 'Why choose our Online JavaScript Formatter / Beautifier Tool?',
-    listData: [
-      `Improves readability: Clean and organized code is easier to read and understand, making it easier for you or your team to work with.`,
-      `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
-      `Supports collaboration: Clean, organized code makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: `What is Javascript?`,
+    heading: 'What is a JavaScript Beautifier and Formatter?',
     blockData: [
-      `JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions. While it is most well-known as the scripting language for Web pages, many non-browser environments also use it, such as Node.js, Apache CouchDB and Adobe Acrobat. JavaScript is a prototype-based, multi-paradigm, single-threaded, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.`,
-      `JavaScript's dynamic capabilities include runtime object construction, variable parameter lists, function variables, dynamic script creation (via eval), object introspection (via for...in and Object utilities), and source-code recovery (JavaScript functions store their source text and can be retrieved through toString()).`,
+      'A JavaScript beautifier and formatter is a tool that takes your JavaScript code and formats it in a consistent and readable style. This can make your code easier to read, understand, and maintain.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'Why Use a JavaScript Beautifier and Formatter?',
     listData: [
-      `Supports online editing of your Javascript code using our inbuilt monaco code edior.`,
-      `Easy to use: Our user-friendly interface makes it simple for anyone to format their JavaScript code with just pasting Javascript here.`,
-      `Real-time formatting: Our tool formats your Javascript in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your code into our platform and get a clean, organized, and optimized result.`,
-      `Formatted / Beautified Javascript can be saved or copied easily.`,
+      'To improve the readability of your code. Well-formatted code is easier to read and understand, which can help you to write better code and to debug your code more easily.',
+      'To make your code more consistent. A JavaScript beautifier and formatter can help you to format your code in a consistent style, which can make your code more readable and maintainable.',
+      'To follow code style guidelines. Many companies have code style guidelines that they require their developers to follow. A JavaScript beautifier and formatter can help you to format your code in accordance with these guidelines.',
     ],
   },
   {
-    heading: 'References',
-    links: [
-      {
-        displayText: 'Read more about Javascript at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/JavaScript',
-      },
-      {
-        displayText: 'Learn Javascript at w3schools.com',
-        url: 'https://www.w3schools.com/js/DEFAULT.asp',
-      },
-      {
-        displayText: 'Read about Javascript at Mozilla Developer Docs',
-        url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
-      },
+    heading: 'Features of Our Online JavaScript Beautifier and Formatter Tool',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Beautify and format your JavaScript code directly from your web browser.',
+      'Supports all JavaScript features. Our beautifier and formatter supports all the features of the JavaScript language, including ES6 and ES7.',
+      'Easy to use. Simply paste your JavaScript code into the editor and click the "Beautify and Format" button.',
+      'Customizable settings. You can customize the settings of our beautifier and formatter to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online JavaScript Beautifier and Formatter Tool',
+    listData: [
+      'Go to our website and paste your JavaScript code into the editor.',
+      'Click the "Beautify and Format" button.',
+      'View your beautified and formatted JavaScript code in the sidebar.',
+      'Copy and paste your beautified and formatted JavaScript code into your project.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a JavaScript Beautifier and Formatter',
+    listData: [
+      'Use a consistent code style. Choose a code style and use it consistently throughout your project. This will make your code more readable and maintainable.',
+      'Format your code before you commit it to a repository. This will help to ensure that your code is readable and maintainable for other developers.',
+      'Use a JavaScript beautifier and formatter to check for formatting errors. A JavaScript beautifier and formatter can help you to identify and fix formatting errors in your code.',
+    ],
+  },
+  {
+    blockData: [
+      'Our free online JavaScript beautifier and formatter tool is a great way to beautify and format your JavaScript code with ease. It is easy to use and supports all the features of the JavaScript language. With our beautifier and formatter, you can improve the readability, consistency, and maintainability of your JavaScript code.',
     ],
   },
 ];

@@ -1,0 +1,126 @@
+<div class="flex-display flex-column-flow flex-align-center flex-gap-xlarge">
+  <!-- file imput -->
+  <input
+    #inputFiles
+    type="file"
+    style="display: none"
+    multiple
+    (change)="selectFiles($event)"
+    [accept]="validImageFormats" />
+
+  <!-- file drop area -->
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center border-grey full-width flex-gap-medium file-drop-area"
+    (drop)="dropHandler($event)"
+    (dragover)="dragOverHandler($event)"
+    *ngIf="fileList.length === 0">
+    <mat-icon style="transform: scale(2)">collections</mat-icon>
+    <span class="header-font" style="font-size: large"
+      >Drag & drop files here</span
+    >
+    <span class="header-font" style="font-size: large">or</span>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openFileDialog()"
+      matTooltip="select images to compress">
+      <mat-icon>file_upload</mat-icon>Browse For Files
+    </button>
+  </div>
+
+  <div
+    class="flex-display flex-row-flow full-width"
+    style="justify-content: end"
+    *ngIf="fileList.length > 0">
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openFileDialog()"
+      matTooltip="select images to compress">
+      <mat-icon>file_upload</mat-icon>Upload More Images
+    </button>
+  </div>
+
+  <span
+    style="font-size: large; align-self: flex-start"
+    *ngIf="fileList.length > 0"
+    >Uploaded Images</span
+  >
+
+  <div
+    class="flex-display flex-align-center full-width flex-gap-large auto-scroll"
+    *ngIf="fileList.length > 0">
+    <div
+      class="flex-display flex-column-flow flex-center border-grey shadow-grey thumbnail-container pointer-cursor"
+      *ngFor="let imageFile of fileList"
+      (click)="selectCurrentFile(imageFile.id)">
+      <img
+        mat-card-image
+        src="{{ imageFile?.dataURI }}"
+        alt="selected image for crop" />
+      <div
+        class="full-width flex-display flex-row-flow flex-center"
+        style="overflow: hidden">
+        <span>{{ imageFile?.name }}</span>
+      </div>
+    </div>
+  </div>
+
+  <span style="font-size: large; align-self: flex-start" *ngIf="currentFile"
+    >Crop & Preview</span
+  >
+
+  <div
+    *ngIf="currentFile && platformMetaDataService.isPlatformBrowser"
+    class="flex-display flex-row-flow flex-align-center full-width cropper-container">
+    <div
+      #imageCropperContainer
+      class="flex-display flex-column-flow flex-center cropped-box border-grey">
+      <image-cropper
+        #imageCropper
+        [imageFile]="currentFile.file"
+        [maintainAspectRatio]="false"
+        [format]="outputFormat"
+        (imageCropped)="imageCropped($event)"
+        (loadImageFailed)="loadImageFailed()"
+        (cropperReady)="cropperReady()"
+        style="max-height: 100%; max-width: 100%"></image-cropper>
+    </div>
+
+    <div
+      #croppedImageContainer
+      class="flex-display flex-column-flow flex-center flex-align-center cropped-box border-grey">
+      <img #croppedImageTag src="{{ croppedImage }}" alt="cropped image" />
+    </div>
+  </div>
+
+  <div
+    class="flex-display flex-align-center flex-gap-medium"
+    style="justify-content: end; margin-top: 20px; align-self: flex-end"
+    *ngIf="currentFile">
+    <mat-form-field
+      appearance="outline"
+      color="primary"
+      style="margin-bottom: -1.25em">
+      <mat-label>Output Format</mat-label>
+      <mat-select
+        disableRipple
+        value="png"
+        (valueChange)="onOutputFormatChange($event)">
+        <mat-option value="png">PNG</mat-option>
+        <mat-option value="jpeg">JPG</mat-option>
+        <mat-option value="webp">WEBP</mat-option>
+        <mat-option value="bmp">BMP</mat-option>
+        <mat-option value="ico">ICO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="downloadCroppedImage()"
+      matTooltip="select images to compress">
+      <mat-icon>file_download</mat-icon>Download Image
+    </button>
+  </div>
+</div>

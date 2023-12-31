@@ -1,0 +1,38 @@
+.div-label {
+  font-size: large;
+}
+
+.text-area-div {
+  width: 48%;
+  font-size: larger;
+  min-height: 20em;
+}
+
+.div-border {
+  border-radius: 4px;
+}
+
+.text-area-container {
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 735px) {
+  .encoded-div {
+    padding: 10px;
+  }
+}
+
+// to remove border from editable span or div
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+@media screen and (max-width: 735px) {
+  .text-area-div {
+    width: 100%;
+    min-height: 10em;
+  }
+  .text-area-container {
+    flex-direction: column;
+  }
+}

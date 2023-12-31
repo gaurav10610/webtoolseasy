@@ -15,6 +15,22 @@
     },
     "editor.formatOnSave": false
   },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
   "editor.formatOnSave": true,
-  "html.format.contentUnformatted": ""
+  "html.format.contentUnformatted": "",
+  "cSpell.words": [
+    "datastructures",
+    "Extention",
+    "keyval",
+    "ondataavailable",
+    "webtoolseasy"
+  ],
+  "[html][typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  }
 }

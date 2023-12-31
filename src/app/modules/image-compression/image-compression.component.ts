@@ -1,163 +1,62 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
-  Inject,
   NgZone,
-  OnDestroy,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import {
-  ImageFileData,
-  FileDataType,
-  ImageCompressSettings,
-} from 'src/app/@types/file';
+import { ImageFileData, FileDataType } from 'src/app/@types/file';
 import { LogUtils } from 'src/app/service/util/logger';
-import { default as imageCompression } from 'browser-image-compression';
-import { Subject, takeUntil } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CompressSettingsComponent } from 'src/app/modules/image-compression/compress-settings/compress-settings.component';
-import { v4 } from 'uuid';
-import { DOCUMENT } from '@angular/common';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/image-compression/config';
-import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
+import { importScript } from 'src/app/service/ffmpeg/lib/util';
+import { environment } from 'src/environments/environment';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { FileService } from 'src/app/service/file/file.service';
+
+declare var imageCompression: any;
+declare var window: any;
 
 @Component({
   selector: 'app-image-compression',
   templateUrl: './image-compression.component.html',
   styleUrls: ['./image-compression.component.scss'],
 })
-export class ImageCompressionComponent implements OnDestroy {
-  isMobile!: boolean;
+export class ImageCompressionComponent implements AfterViewInit {
   fileList: ImageFileData[] = [];
 
   @ViewChild('inputFiles', { static: false })
   inputFiles!: ElementRef;
 
-  destroyed = new Subject<void>();
-  isDownloadAllActive: boolean = false;
-  activeDialog: MatDialogRef<any> | undefined;
-
-  /**
-   * valid image formats
-   */
   validImageFormats: string = '.jpg,.jpeg,.png,.webp,.bmp';
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
+  currentFile: ImageFileData | undefined = undefined;
+
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
     private renderer: Renderer2,
     private zoneRef: NgZone,
-    private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
+    public platformMetaDataService: PlatformMetadataService,
+    private fileService: FileService
+  ) {}
 
-    this.breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.Web])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(result => {
-        this.isMobile = breakpointObserver.isMatched('(max-width: 735px)');
-        LogUtils.info(`mobile view: ${this.isMobile}`);
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroyed.next();
-    this.destroyed.complete();
+  ngAfterViewInit(): void {
+    if (this.platformMetaDataService.isPlatformBrowser) {
+      importScript(environment.imageCompressionLibUrl);
+    }
   }
 
   async openFileDialog() {
     this.renderer
       .selectRootElement(this.inputFiles.nativeElement, true)
       .click();
-  }
-
-  /**
-   * open settings dialog
-   * @param file
-   */
-  async openSettingsDialog(file: ImageFileData) {
-    this.closeDialog();
-    this.activeDialog = this.dialog.open(CompressSettingsComponent, {
-      data: file,
-    });
-
-    /**
-     * subscribe dialog close event
-     */
-    this.activeDialog
-      .afterClosed()
-      .subscribe(this.handleSettingsChange.bind(this));
-  }
-
-  async closeDialog(data = {}) {
-    if (this.activeDialog) {
-      this.activeDialog.close(data);
-    }
-  }
-
-  /**
-   * handle compression rate change event
-   * @param data
-   */
-  async handleSettingsChange(data: any = {}) {
-    LogUtils.info(`settings dialog closed with data: ${JSON.stringify(data)}`);
-
-    /**
-     * process only if some settings has been changed
-     */
-    if (Object.keys(data).length > 0) {
-      const compressSettings: ImageCompressSettings = <ImageCompressSettings>(
-        data
-      );
-      this.zoneRef.run(() => {
-        const ImageFileData: ImageFileData = this.fileList.find(
-          ImageFileData => ImageFileData.id === compressSettings.fileId
-        )!;
-
-        if (
-          ImageFileData.compressionRate !== compressSettings.compressionRate
-        ) {
-          ImageFileData.isCompressed = false;
-        }
-
-        ImageFileData.compressionRate = compressSettings.compressionRate;
-        ImageFileData.maxFileSize = compressSettings.maxFileSize;
-        ImageFileData.compressOptions = {
-          ...ImageFileData.compressOptions,
-          maxSizeMB: compressSettings.maxFileSize / 1024 / 1024,
-        };
-      });
-    }
   }
 
   /**
@@ -193,8 +92,8 @@ export class ImageCompressionComponent implements OnDestroy {
 
   async addFileToCompress(file: File) {
     this.zoneRef.run(() => {
-      this.fileList.push({
-        id: v4(),
+      const imageFileData: ImageFileData = {
+        id: crypto.randomUUID(),
         file: file,
         type: FileDataType.IMAGE,
         inProgress: false,
@@ -208,21 +107,36 @@ export class ImageCompressionComponent implements OnDestroy {
         },
         compressionRate: 10,
         maxFileSize: 0.9 * file.size,
-      });
+      };
+
+      this.fileList.push(imageFileData);
+      this.fileService.readFileAsURL(
+        imageFileData.id,
+        file,
+        this.readImageDataURI.bind(this)
+      );
     });
+  }
+
+  readImageDataURI(id: string, imageDataURI: any) {
+    const fileData = this.fileList.find(fileData => fileData.id === id);
+    fileData!.dataURI = imageDataURI;
   }
 
   async selectFiles(event: any) {
     for (const file of event.target.files) {
       await this.addFileToCompress(file);
     }
+    // set first file as current file
+    this.currentFile = this.fileList[0];
   }
 
   async startCompressAll() {
-    this.fileList.forEach(ImageFileData => this.compressImage(ImageFileData));
+    this.fileList.forEach(imageFileData => this.compressImage(imageFileData));
   }
 
-  async compressImage(imageFileData: ImageFileData) {
+  async compressImage(fileData?: ImageFileData) {
+    const imageFileData = fileData ? fileData : this.currentFile!;
     this.zoneRef.run(async () => {
       imageFileData.inProgress = true;
       imageFileData.compressProgress = 0;
@@ -232,14 +146,18 @@ export class ImageCompressionComponent implements OnDestroy {
           imageFileData.file,
           {
             ...imageFileData.compressOptions,
-            onProgress: progress => {
+            onProgress: (progress: number) => {
               imageFileData.compressProgress = progress;
             },
           }
         );
         imageFileData.isCompressed = true;
         imageFileData.inProgress = false;
-        this.isDownloadAllActive = true;
+
+        const urlCreator = window.URL || window.webkitURL;
+        imageFileData.compressedImageData = urlCreator.createObjectURL(
+          imageFileData.compressedData
+        );
       } catch (error) {
         LogUtils.error(
           `error while compressing image with name: ${imageFileData.file.name}`
@@ -251,7 +169,8 @@ export class ImageCompressionComponent implements OnDestroy {
     });
   }
 
-  async downloadImage(imageFileData: ImageFileData): Promise<void> {
+  async downloadImage(fileData?: ImageFileData): Promise<void> {
+    const imageFileData = fileData ? fileData : this.currentFile!;
     const fileName: string =
       imageFileData.name.substring(
         0,
@@ -273,6 +192,13 @@ export class ImageCompressionComponent implements OnDestroy {
     );
     this.renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
+  }
+
+  onCompressionRateChange(event: any) {
+    this.currentFile!.compressionRate = event.target.value;
+    const compressionRatio: number = 100 - event.target.value;
+    this.currentFile!.maxFileSize =
+      (compressionRatio / 100) * this.currentFile!.file.size;
   }
 
   /**
@@ -300,5 +226,8 @@ export class ImageCompressionComponent implements OnDestroy {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  showInfo(ImageFileData: ImageFileData) {}
+  selectCurrentFile(id: string) {
+    const fileData = this.fileList.find(fileData => fileData.id === id);
+    this.currentFile = fileData;
+  }
 }

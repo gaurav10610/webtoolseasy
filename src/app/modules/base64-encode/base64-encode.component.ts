@@ -1,21 +1,11 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Inject,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import {
   descriptionData,
   componentConfig,
 } from 'src/environments/component-config/base64-encode/config';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-base64-encode',
@@ -31,35 +21,13 @@ export class Base64EncodeComponent {
   // base64 data
   base64Data: string | undefined;
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
     private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private clipboard: Clipboard,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-  }
+    private clipboard: Clipboard
+  ) {}
 
   async openFileDialog() {
     this.renderer

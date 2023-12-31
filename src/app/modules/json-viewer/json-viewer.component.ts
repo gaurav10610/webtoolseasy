@@ -7,15 +7,12 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { descriptionData } from 'src/environments/component-config/json-viewer/config';
 import { componentConfig } from 'src/environments/component-config/json-viewer/config';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-json-viewer',
@@ -35,35 +32,14 @@ export class JsonViewerComponent implements AfterViewInit {
   tabSpaceValue: string = '   ';
   formattedJSON = JSON.parse(this.rawJson);
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
     private renderer: Renderer2,
-    private titleService: Title,
-    private metaService: Meta,
     @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private clipboard: Clipboard,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
-  }
+    private clipboard: Clipboard
+  ) {}
 
   ngAfterViewInit(): void {
     this.updateRawJson(this.rawJson);

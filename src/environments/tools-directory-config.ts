@@ -1,105 +1,39 @@
-import { AppDisplayConfig } from 'src/app/@types/config';
+import { AppNavigationConfig } from 'src/app/@types/config';
+import * as appConfigJson from './apps.json';
 
-export enum AppDisplayNames {
-  VIDEO_CONVERTER = 'Video Converter',
-  SCREEN_RECORDER = 'Screen Recorder',
-  TEXT_COMPARE = 'Text File Difference',
-  UUID_GENERATOR = 'UUID Generator',
-  JWT_DECODER = 'JWT Decoder',
-  IMAGE_COMPRESSOR = 'Image Compressor',
-  JS_FORMATTER = 'Javascript Formatter',
-  JSON_FORMATTER = 'JSON Formatter',
-  HTML_FORMATTER = 'HTML Formatter',
-  CSS_FORMATTER = 'CSS Formatter',
-  JSON_VIEWER = 'JSON Viewer',
-  PASSWORD_GENERATOR = 'Password Generator',
-  BASE64_ENCODE = 'Base64 Encode',
-  BASE64_DECODE = 'Base64 Decode',
+export enum ApplicationIds {
+  VIDEO_CONVERTER = 'videoconverter',
+  SCREEN_RECORDER = 'screenrecorder',
+  TEXT_COMPARE = 'textcompare',
+  JWT_DECODER = 'jwtdecoder',
+  IMAGE_COMPRESSOR = 'imagecompressor',
+  JS_FORMATTER = 'jsformatter',
+  JSON_FORMATTER = 'jsonformatter',
+  HTML_FORMATTER = 'htmlformatter',
+  CSS_FORMATTER = 'cssformatter',
+  JSON_VIEWER = 'jsonviewer',
+  PASSWORD_GENERATOR = 'passwordgenerator',
+  BASE64_ENCODE = 'base64encoder',
+  BASE64_DECODE = 'base64decoder',
+  CRON_GENERATOR = 'crongenerator',
+  IMAGE_CROPPER = 'imagecropper',
+  UUID_VERSION1_GENERATOR = 'uuidv1generator',
+  UUID_VERSION4_GENERATOR = 'uuidv4generator',
+  GUID_GENERATOR = 'guidgenerator',
+  MARKDOWN_EDITOR = 'markdowneditor',
+  WORD_COUNTER = 'wordcounter',
+  QR_CODE_GENERATOR = 'qrcodegenerator',
+  HTML_EDITOR = 'htmleditor',
+  JS_EDITOR = 'jseditor',
+  XML_TO_JSON = 'xmltojson',
+  COMPOUND_INTEREST_CALCULATOR = 'compoundinterestcalculator',
 }
 
-export const appDisplayConfig: AppDisplayConfig[] = [
-  {
-    applicationId: 'passwordgenerator',
-    displayText: AppDisplayNames.PASSWORD_GENERATOR,
-    iconName: 'password-icon',
-    navigateUrl: '/tools/password-generator',
-  },
-  {
-    applicationId: 'videoconverter',
-    displayText: AppDisplayNames.VIDEO_CONVERTER,
-    iconName: 'video-convert-icon',
-    navigateUrl: '/tools/video-converter',
-  },
-  {
-    applicationId: 'screen-recorder',
-    displayText: AppDisplayNames.SCREEN_RECORDER,
-    iconName: 'screen-icon',
-    navigateUrl: '/tools/screen-recorder',
-  },
-  {
-    applicationId: 'textcompare',
-    displayText: AppDisplayNames.TEXT_COMPARE,
-    iconName: 'comparison-icon',
-    navigateUrl: '/tools/text-compare',
-  },
-  {
-    applicationId: 'uuid',
-    displayText: AppDisplayNames.UUID_GENERATOR,
-    iconName: 'uuid-icon',
-    navigateUrl: '/tools/uuid',
-  },
-  {
-    applicationId: 'jwt',
-    displayText: AppDisplayNames.JWT_DECODER,
-    iconName: 'jwt-icon',
-    navigateUrl: '/tools/jwt',
-  },
-  {
-    applicationId: 'imagecompress',
-    displayText: AppDisplayNames.IMAGE_COMPRESSOR,
-    iconName: 'image-compress-icon',
-    navigateUrl: '/tools/image-compress',
-  },
-  {
-    applicationId: 'jsformatter',
-    displayText: AppDisplayNames.JS_FORMATTER,
-    iconName: 'js-icon',
-    navigateUrl: '/tools/js-formatter',
-  },
-  {
-    applicationId: 'jsonformatter',
-    displayText: AppDisplayNames.JSON_FORMATTER,
-    iconName: 'json-icon',
-    navigateUrl: '/tools/json-formatter',
-  },
-  {
-    applicationId: 'jsonviewer',
-    displayText: AppDisplayNames.JSON_VIEWER,
-    iconName: 'json-icon',
-    navigateUrl: '/tools/json-viewer',
-  },
-  {
-    applicationId: 'htmlformatter',
-    displayText: AppDisplayNames.HTML_FORMATTER,
-    iconName: 'html-icon',
-    navigateUrl: '/tools/html-formatter',
-  },
-  {
-    applicationId: 'cssformatter',
-    displayText: AppDisplayNames.CSS_FORMATTER,
-    iconName: 'css-icon',
-    navigateUrl: '/tools/css-formatter',
-  },
-  {
-    applicationId: 'base64encoder',
-    displayText: AppDisplayNames.BASE64_ENCODE,
-    iconName: 'file-encode-icon',
-    navigateUrl: '/tools/base64-encode',
-  },
-  {
-    applicationId: 'base64decoder',
-    displayText: AppDisplayNames.BASE64_DECODE,
-    iconName: 'file-decode-icon',
-    navigateUrl: '/tools/base64-decode',
-  },
-];
+const appsConfigMap: Map<string, AppNavigationConfig> = new Map(
+  Object.entries(appConfigJson)
+);
+
+appsConfigMap.delete('default');
+
+export const applicationConfig: Map<string, AppNavigationConfig> =
+  appsConfigMap;

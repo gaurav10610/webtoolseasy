@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-header-toolbar',
@@ -6,7 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./header-toolbar.component.scss'],
 })
 export class HeaderToolbarComponent {
-  navigateSocialLink(url: string) {
-    window.open(url, '_blank');
-  }
+  constructor(public platformMetaDataService: PlatformMetadataService) {}
 }

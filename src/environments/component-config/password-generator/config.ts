@@ -1,18 +1,25 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/password-generator';
-const pageTitle =
-  'Best Online Random Password Generator - Generate Strong, Random & Secure Passwords';
+const pageTitle = 'Free Password Generator: Generate Strong & Secure Passwords';
 const pageDescription =
-  'Quickly and easily generate single or bulk strong, random and secure passwords using our best free online passwod generator tool';
+  'Generate strong, random, unique and secure passwords with our free password generator tool. Generate single passwords or generate passwords in bulk.';
 const imageUrl = `${environment.screenshotsBaseUrl}/password-generator.png`;
 
+const keywords =
+  'password generator,strong password generator,create secure passwords,unique passwords,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.JWT_DECODER];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Random Password Generator',
-  subHeading: 'Generate Strong, Random & Secure Passwords',
+  mainHeading:
+    'Free Online Password Generator: Create Strong, Secure & Random Passwords',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,103 +41,59 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'password generator',
-    'random password generator',
-    'strong password generator',
-    'bulk password generator',
-    'secure password generator',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jwt',
-      displayText: AppDisplayNames.JWT_DECODER,
-      iconName: 'jwt-icon',
-      navigateUrl: '/tools/jwt',
-    },
-    {
-      applicationId: 'uuid',
-      displayText: AppDisplayNames.UUID_GENERATOR,
-      iconName: 'uuid-icon',
-      navigateUrl: '/tools/uuid',
-    },
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'What makes a password strong?',
+    heading: 'Why Use a Password Generator?',
     listData: [
-      `Length: The longer the password, the harder it is to crack. Ideally, your password should be at least 12 characters long.`,
-      `Complexity: A strong password should contain a mix of upper and lowercase letters, numbers, and special characters such as punctuation marks.`,
-      `Unpredictability: Your password should not be easy to guess based on information that could be publicly available about you, such as your name, birthdate, or hometown.`,
-      `Randomness: A truly strong password should be randomly generated, rather than a word or phrase that is easy to guess.`,
-      `Unique: You should use a different password for each of your accounts to avoid the risk of one password being compromised and then used to access your other accounts.`,
+      'To create strong passwords. A strong password is at least 12 characters long and contains a mix of upper and lowercase letters, numbers, and symbols. It should not be a word that can be found in a dictionary or a personal detail such as your name or birthday.',
+      'To use different passwords for all your accounts. If you use the same password for multiple accounts and one of those accounts is hacked, your other accounts are also at risk. Using a password generator can help you create and manage unique passwords for all your accounts.',
+      'To make it easier to remember your passwords. A password generator can create strong, random passwords that are difficult to guess but easy for you to remember.',
     ],
   },
   {
-    heading: 'What makes a password weak?',
+    heading: 'Features of Our Strong Password Generator',
     listData: [
-      `Short length: Passwords that are too short, typically less than eight characters, are easier to guess or crack.`,
-      `Lack of complexity: Simple passwords that consist of only lowercase letters or only numbers, such as "password123," are easier to guess or crack than passwords that include a mix of uppercase and lowercase letters, numbers, and symbols.`,
-      `Dictionary words: Passwords that are common words or phrases found in a dictionary are vulnerable to dictionary attacks, where attackers use automated tools to try every word in the dictionary.`,
-      `Personal information: Passwords that contain personal information such as names, birthdates, or addresses are easy to guess or find through social engineering techniques.`,
-      `Sequential or repetitive characters: Passwords that consist of sequential or repetitive characters, such as "12345678" or "aaaaaaa," are easy to guess or crack.`,
-      `Overused passwords: Passwords that have been used repeatedly across multiple accounts are vulnerable to credential stuffing attacks, where attackers use stolen username and password combinations from one site to attempt to gain access to other sites.`,
-      `Lack of updates: Passwords that have not been updated for a long time may be compromised in a data breach, and the compromised password may be used to gain unauthorized access to the account.`,
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Generate passwords directly from your web browser.',
+      'Creates strong, unique passwords. Our password generator uses advanced algorithms to create passwords that are difficult to guess.',
+      'Easy to use. Simply click the "Generate Password" button and your password will be generated.',
+      'Generate single password or generate passwords in bulk.',
+      'Save your passwords in a password manager. We recommend saving your passwords in a password manager to keep them safe and secure.',
     ],
   },
   {
-    heading: 'Key Features',
+    heading: 'How to Use Our Strong Password Generator',
     listData: [
-      `Generate unlimited strong and random passwords for free.`,
-      `Complexity: Our password generator tool is capable of generating passwords that include a combination of uppercase and lowercase letters, numbers, and symbols. This combination makes the password much harder to guess or crack.`,
-      `Customization: Our password generator tool allow users to customize the password generated, such as selecting which characters to include or exclude, or adding custom patterns or phrases.`,
-      `Generate passwords in bulk using bulk password generator tool and export generated passwords in a text file.`,
-      `User-friendly: Our password generator tool is easy to use and accessible to all types of users, regardless of their technical expertise.`,
-      `Compatibility: Our password generator tool work on all types of devices and across all types of web browsers.`,
-      `Security: We don't store any password. All the passwords are generated in host browser only.`,
+      'Go to our website and click the "Generate Password" button.',
+      'Choose the desired length of your password.',
+      'Select the types of characters you want to include in your password.',
+      'Click the "Generate Password" button again to generate a new password.',
+      'Save your password in a password manager.',
+    ],
+  },
+  {
+    heading: 'Tips for Creating Strong Passwords',
+    listData: [
+      'Use at least 12 characters. The longer your password, the more difficult it is to crack.',
+      'Use a mix of upper and lowercase letters, numbers, and symbols. This makes your password more difficult to guess.',
+      'Avoid using words that can be found in a dictionary or personal details such as your name or birthday. These passwords are easy to guess.',
+      'Use a different password for each of your online accounts. This way, if one of your accounts is hacked, your other accounts are still safe.',
+    ],
+  },
+  {
+    blockData: [
+      'Our strong password generator is a great way to create strong, unique passwords for all your online accounts. It is easy to use and free to use. With our password generator, you can keep your accounts safe and secure from hackers.',
     ],
   },
   {

@@ -1,13 +1,15 @@
-import { Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppDisplayConfig } from 'src/app/@types/config';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
-import { DOCUMENT } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import {
+  AppCategory,
+  AppNavigationConfig,
+  ApplicationConfig,
+} from 'src/app/@types/config';
 import { componentConfig } from 'src/environments/component-config/app-directory/config';
+import { applicationConfig } from 'src/environments/tools-directory-config';
+import { DescriptionBlock } from 'src/app/@types/description';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { MatIconRegistry } from '@angular/material/icon';
-import { appDisplayConfig } from 'src/environments/tools-directory-config';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { DomSanitizer } from '@angular/platform-browser';
 import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
 
 @Component({
@@ -15,45 +17,52 @@ import { IconConfigService } from 'src/app/service/icon-config/icon-config.servi
   templateUrl: './app-directory.component.html',
   styleUrls: ['./app-directory.component.scss'],
 })
-export class AppDirectoryComponent {
+export class AppDirectoryComponent implements OnInit {
   /**
    * application config for composing UI
    */
-  appsConfig: AppDisplayConfig[] = appDisplayConfig;
+  applications!: Map<AppCategory, AppNavigationConfig[]>;
+
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = [];
+
+  appCategories: AppCategory[] = [
+    AppCategory.MEDIA,
+    AppCategory.MISCELLANEOUS,
+    AppCategory.ONLINE_EDITORS,
+    AppCategory.PROGRAMMING,
+    AppCategory.TEXT,
+    AppCategory.FINANCE,
+  ];
 
   constructor(
-    private router: Router,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
+    public platformMetaDataService: PlatformMetadataService,
+    private iconConfigService: IconConfigService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-  }
+    private domSanitizer: DomSanitizer
+  ) {}
 
-  navigateByAppId(applicationId: string) {
-    const appConfig: AppDisplayConfig = this.appsConfig.find(
-      applicationConfig => applicationConfig.applicationId === applicationId
-    )!;
-    if (appConfig.navigateUrl !== '') {
-      this.router.navigateByUrl(appConfig.navigateUrl);
-    }
+  ngOnInit(): void {
+    this.applications = new Map();
+    applicationConfig.forEach(value => {
+      /**
+       * load app icons
+       */
+      this.iconConfigService.registerCustomIcon(
+        {
+          iconName: value.iconName,
+          iconRelativeUrl: value.iconRelativeUrl,
+        },
+        this.matIconRegistry,
+        this.domSanitizer
+      );
+
+      const category: AppCategory = <AppCategory>value.category;
+      if (!this.applications.has(category)) {
+        this.applications.set(category, []);
+      }
+      this.applications.get(category)!.push(value);
+    });
   }
 
   onAppClick(event: any) {

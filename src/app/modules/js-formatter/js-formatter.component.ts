@@ -1,17 +1,13 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/js-formatter/config';
-import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { js_beautify } from 'js-beautify';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-js-formatter',
@@ -29,37 +25,16 @@ export class JsFormatterComponent {
   editorOptions = {
     theme: 'vs-dark',
     language: 'javascript',
-    fontSize: 17,
+    fontSize: 15,
   };
+
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
     private clipboard: Clipboard,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
     this.formattedCode = js_beautify(this.rawCode);
   }
 

@@ -1,8 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, NgZone, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, NgZone, OnDestroy, Renderer2 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import { LogUtils } from 'src/app/service/util/logger';
 import {
   componentConfig,
@@ -12,12 +9,11 @@ import { clear, get, set } from 'idb-keyval';
 import { VideoStreamMerger } from 'video-stream-merger';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { environment } from 'src/environments/environment';
-import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/contants';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
+import { MOBILE_VIEW_WIDTH_THRESHOLD } from 'src/app/service/util/constants';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-screen-recorder',
@@ -80,38 +76,15 @@ export class ScreenRecorderComponent implements OnDestroy {
 
   destroyed = new Subject<void>();
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private renderer: Renderer2,
     private zoneRef: NgZone,
     private breakpointObserver: BreakpointObserver,
-    private appContextService: AppContextService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
-    private platformMetaDataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
-
     /**
      * screen resize handler
      */
@@ -122,9 +95,7 @@ export class ScreenRecorderComponent implements OnDestroy {
         this.isMobile = breakpointObserver.isMatched(
           `(max-width: ${MOBILE_VIEW_WIDTH_THRESHOLD})`
         );
-        this.checkCompatibility();
       });
-    this.checkCompatibility();
   }
 
   checkCompatibility() {
@@ -155,6 +126,15 @@ export class ScreenRecorderComponent implements OnDestroy {
    */
   startRecording() {
     this.zoneRef.run(async () => {
+      this.checkCompatibility();
+
+      /**
+       * show recording not supported in case of mobile browser
+       */
+      if (!this.isSupported) {
+        return;
+      }
+
       this.isRecording = true;
       this.resetContextVariables();
 
@@ -175,7 +155,7 @@ export class ScreenRecorderComponent implements OnDestroy {
          */
         this.configureStreamStopListener(this.screenStream);
       } catch (error) {
-        LogUtils.error(`error occured while capturing screen stream`);
+        LogUtils.error(`error occurred while capturing screen stream`);
         LogUtils.error(error);
         this.stopRecording();
       }
@@ -187,7 +167,7 @@ export class ScreenRecorderComponent implements OnDestroy {
         }
       } catch (error) {
         LogUtils.error(
-          `error occured while capturing camera or mic media stream`
+          `error occurred while capturing camera or mic media stream`
         );
         LogUtils.error(error);
         this.stopRecording();
@@ -254,7 +234,7 @@ export class ScreenRecorderComponent implements OnDestroy {
       y: 0,
       width: streamMerger.width,
       height: streamMerger.height,
-      mute: true,
+      mute: !this.includeScreenAudio,
       index: 0,
     };
 
@@ -266,7 +246,7 @@ export class ScreenRecorderComponent implements OnDestroy {
       y: streamMerger.height - this.cameraVideoOptions.height,
       width: this.cameraVideoOptions.width,
       height: this.cameraVideoOptions.height,
-      mute: false,
+      mute: !this.includeMicAudio,
       index: 1,
     };
 
@@ -316,12 +296,8 @@ export class ScreenRecorderComponent implements OnDestroy {
   async getScreenStream(): Promise<MediaStream> {
     const screenCaptureOptions = {
       video: true,
-      audio: false,
+      audio: this.includeScreenAudio,
     };
-
-    if (this.includeScreenAudio) {
-      screenCaptureOptions.audio = true;
-    }
     return navigator.mediaDevices.getDisplayMedia(screenCaptureOptions);
   }
 
@@ -346,7 +322,7 @@ export class ScreenRecorderComponent implements OnDestroy {
   }
 
   /**
-   * resume media stream recoring
+   * resume media stream recording
    */
   resumeRecording() {
     this.mediaStreamRecorder?.resume();
@@ -394,7 +370,7 @@ export class ScreenRecorderComponent implements OnDestroy {
         this.zoneRef.run(() => (this.isProcessingStream = false));
         clear();
       } catch (error) {
-        LogUtils.info(`error occured while preparing video file for download`);
+        LogUtils.info(`error occurred while preparing video file for download`);
         LogUtils.error(error);
         this.zoneRef.run(() => (this.isProcessingStream = false));
       }
@@ -414,6 +390,9 @@ export class ScreenRecorderComponent implements OnDestroy {
         break;
       case 'camera-video':
         this.includeCameraVideo = event.checked;
+        break;
+      case 'speaker-audio':
+        this.includeScreenAudio = event.checked;
         break;
     }
   }

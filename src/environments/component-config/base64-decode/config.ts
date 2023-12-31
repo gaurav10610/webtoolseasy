@@ -1,17 +1,25 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/base64-decode';
-const pageTitle = 'Base64 to File | Base64 Decode | Base64 Converter | Base64';
+const pageTitle = 'Base64 to File Decoder: Convert Base64 to Any File Format';
 const pageDescription =
-  'Our Best Online Base64 tool lets you decode a base64 data uri to file.';
+  'Convert Base64 to any file format with ease with our free online Base64 to file decoder tool. Decode Base64 to Image, Text, PDF and File.';
 const imageUrl = `${environment.screenshotsBaseUrl}/base64-decode.png`;
 
+const keywords =
+  'online Base64 to file decoder,decode Base64 to file,Base64 to file decoder tool,Base64 decoding,Base64 encoding,Base64 secure,Base64 transmission,Base64 storage,free Base64 to file decoder,no download required,supports all Base64 encoding schemes,supports all file formats,easy to use,Base64 decoding scheme,store decoded files securely, Base64 to image, Base64 to text, Base64 to pdf';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.BASE64_ENCODE];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Base64 to File Decode',
-  subHeading: 'Decode Base64 to File',
+  mainHeading:
+    'Free Online Base64 to File Decoder: Convert Base64 to Image, Text, PDF and File',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -33,118 +41,62 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  relatedTools: [
-    {
-      applicationId: 'base64encoder',
-      displayText: AppDisplayNames.BASE64_ENCODE,
-      iconName: 'file-encode-icon',
-      navigateUrl: '/tools/base64-encode',
-    },
-  ],
-  tags: [
-    'base64 decode',
-    'base64 decode online',
-    'base64 to file decoder',
-    'online base64 decode',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'file-encode-icon',
-      iconRelativeUrl: 'file-encode.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
+  tags: keywords.split(',').map(word => word.trim()),
+  icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Decode Base64 to File?',
-    listData: [
-      `Paste Base64 Data URI in the text box in order to decode it to a file`,
-      `After pasting the Base64 Data URI, use decode base64 button to decode the data into a file`,
-      `After Base64 data is decoded the download link for the file will appear automatically`,
-    ],
-  },
-  {
-    heading: 'Example Input Format',
+    heading: 'What is Base64 Decoding?',
     blockData: [
-      `Base64 Data URI => data:text/csv;base64,IklEIiwiQ3VzdG9tZXIgSUQiLCJMU`,
+      'Base64 decoding is the process of converting a Base64 encoded string back to binary data. Base64 encoding is a way to convert binary data into a string of ASCII characters. This is useful for storing and transmitting binary data in text-based formats, such as email or XML.',
     ],
   },
   {
-    heading: 'Why choose our Online Base64 to File Decoder?',
+    heading: 'Why Use a Base64 to File Decoder?',
     listData: [
-      `Intuitive UX: Easy to use interface to decode Base64 to File`,
-      `Saves time: Fast and secure Base64 to File conversion`,
-      `Cross-platform: Cross-platform Base64 to File decoding tool`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
+      'To decode Base64 encoded files. Base64 encoded files are often used to store and transmit binary files in text-based formats. A Base64 to file decoder can be used to decode these files back to their original binary form.',
+      'To debug Base64 encoded files. If you are having trouble with a Base64 encoded file, a Base64 to file decoder can be used to debug the file. This can help you to identify and fix any problems with the file.',
+      'To learn more about Base64 encoding. Base64 encoding is a powerful data format, but it can be difficult to learn. A Base64 to file decoder can be used to learn more about Base64 encoding by displaying the decoded data in its original binary form.',
     ],
   },
   {
-    heading: 'What is Base64?',
+    heading: 'Features of Our Online Base64 to File Decoder Tool',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Decode your Base64 data directly from your web browser.',
+      'Supports all Base64 encoding schemes. Our decoder supports all Base64 encoding schemes, including standard Base64, URL-safe Base64, and MIME Base64.',
+      'Supports all file formats. Our decoder can decode Base64 encoded data into any file format, including text files, image files, video files, and audio files.',
+      'Easy to use. Simply paste your Base64 encoded data into the editor and select the output file format. Then, click the "Decode" button.',
+      'Customizable settings. You can customize the settings of our decoder to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online Base64 to File Decoder Tool',
+    listData: [
+      'Paste your Base64 encoded data into the editor.',
+      'Click the "Decode" button.',
+      'Download your decoded file by clicking the "Download" button.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a Base64 to File Decoder',
+    listData: [
+      'Choose a secure Base64 to file decoder. Make sure to choose a Base64 to file decoder that is secure and that will not leak your data.',
+      'Use a consistent decoding scheme. Choose a Base64 decoding scheme and use it consistently throughout your project. This will make it easier to decode your data later.',
+      'Store your decoded files securely. Once you have decoded your files, make sure to store them securely. Decoded files are still vulnerable to attack, so it is important to store them securely.',
+    ],
+  },
+  {
     blockData: [
-      `Base64 is a binary-to-text encoding scheme that allows binary data to be represented as a sequence of printable ASCII characters. It is commonly used to encode binary data, such as images, audio, video, and other types of files, so that it can be transmitted over text-based protocols, like email or HTTP, which may not reliably support binary data.`,
-      `The name "Base64" comes from the fact that it uses a set of 64 different printable characters, which consist of uppercase and lowercase letters (A-Z, a-z), numbers (0-9), and two additional special characters, usually '+' and '/'. The padding character '=' is used to ensure that the encoded output is a multiple of 4 characters, as the encoding is done in groups of 3 bytes.`,
-      `The encoding process involves breaking the binary data into 6-bit chunks and converting them into their corresponding ASCII characters according to the Base64 encoding table. Each group of 3 bytes (24 bits) is then represented by 4 Base64 characters. Decoding Base64 is the reverse process, where the ASCII characters are converted back to their original binary representation.`,
-      `Base64 encoding is widely used in various applications, such as: Email attachments, Data transmission, Data storage, Web development`,
-      `It's important to note that Base64 is not a secure encryption method, as it is easily reversible. Its main purpose is to facilitate the transport and storage of binary data in environments that only support text-based formats.`,
-    ],
-  },
-  {
-    heading: 'Key features',
-    listData: [
-      `Fast and secure Base64 to File conversion`,
-      `Free tool to convert Base64 to File`,
-      `Base64 decoding for all file types`,
-      `Base64 to File conversion with high data integrity`,
-      `Cross-platform Base64 to File decoding tool`,
-    ],
-  },
-  {
-    heading: 'References',
-    links: [
-      {
-        displayText: 'Read more about Base64 at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/Base64',
-      },
-      {
-        displayText: 'RFC 4648 - Base64 Encoding',
-        url: 'https://datatracker.ietf.org/doc/html/rfc4648#section-4',
-      },
-      {
-        displayText: 'Base64 Docs - Mozilla',
-        url: 'https://developer.mozilla.org/en-US/docs/Glossary/Base64',
-      },
+      'Our free online Base64 to file decoder tool is a great way to convert Base64 to any file format with ease. It is easy to use and supports all Base64 encoding schemes and file formats. With our decoder, you can easily decode Base64 encoded files, debug Base64 encoded files, and learn more about Base64 encoding.',
     ],
   },
 ];

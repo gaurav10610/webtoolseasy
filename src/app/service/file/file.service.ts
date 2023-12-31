@@ -4,8 +4,6 @@ import { Injectable, Renderer2 } from '@angular/core';
   providedIn: 'root',
 })
 export class FileService {
-  constructor() {}
-
   /**
    * read file contents as text
    * @param file
@@ -15,6 +13,17 @@ export class FileService {
     const fileReader: FileReader = new FileReader();
     fileReader.onload = () => callback(fileReader.result);
     fileReader.readAsText(file);
+  }
+
+  /**
+   * read file contents as text
+   * @param file
+   * @param callback
+   */
+  async readFileAsURL(id: string, file: File, callback: any): Promise<void> {
+    const fileReader: FileReader = new FileReader();
+    fileReader.onload = () => callback(id, fileReader.result);
+    fileReader.readAsDataURL(file);
   }
 
   /**
@@ -36,5 +45,26 @@ export class FileService {
     );
     renderer.setProperty(downloadAnchor, 'download', fileName);
     downloadAnchor.click();
+  }
+
+  getFormattedFileName(fileName: string): string {
+    return fileName.replace(/ /g, '_');
+  }
+
+  getFileExtension(formattedName: string): string {
+    return formattedName.split('.').pop()!;
+  }
+
+  getPlainFileName(fileName: string): string {
+    return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
+  }
+
+  /**
+   * data uri to base64
+   * @param dataURI
+   * @returns
+   */
+  dataUriToBase64(dataURI: string) {
+    return dataURI.split(',')[1];
   }
 }

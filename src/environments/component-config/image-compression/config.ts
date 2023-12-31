@@ -1,16 +1,25 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/image-compress';
-const pageTitle = 'Best Online Image Compressor | Image File Size Reducer';
+const pageTitle = 'Free Image Compressor: Reduce Image File Size';
 const pageDescription =
-  'Our Best Online Image Compression tool lets you compress your images to reduce file storage size for free. Supports a wide range of image file formats i.e JPEG, PNG, WEBBP and BMP.';
+  'Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.';
 const imageUrl = `${environment.screenshotsBaseUrl}/image-compressor.png`;
 
+const keywords =
+  'free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images,picture compressor,pic compressor,photo size reducer,reduce resolution of image';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.IMAGE_CROPPER];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Image Compressor',
-  subHeading: 'Compress JPEG, PNG, WEBP & BMP Images for free',
+  mainHeading:
+    'Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -32,130 +41,55 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'image compressor',
-    'image size reducer',
-    'jpg size reducer',
-    'png size reducer',
-    'compress jpeg',
-    'compress png',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'image-file-icon',
-      iconRelativeUrl: 'image-file.svg',
-    },
-    {
-      iconName: 'download-icon',
-      iconRelativeUrl: 'download.svg',
-    },
-    {
-      iconName: 'settings-icon',
-      iconRelativeUrl: 'settings.svg',
-    },
-    {
-      iconName: 'play-icon',
-      iconRelativeUrl: 'play-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
+  icons: [],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to Compress Images using Image Compressor Tool?',
+    heading: 'Why Use an Image Compressor?',
     listData: [
-      `Drag & drop or select image files (JPEG, PNG, WEBP, BMP only) to compress.`,
-      `All image files will be listed.`,
-      `For compressing images either use compress button corresponding to the image file or use compress all button.`,
-      `By default images will be compressed by 20% of their original size. To compress further, use settings button to customize compression level .`,
-      `Use download button corresponding to an image file to download compressed image.`,
-      `Use download zip button to download all compressed images at once.`,
+      `To improve website performance. Smaller image files load faster, which can improve your website's loading speed and SEO.`,
+      'To save storage space. Compressed images take up less space on your computer or server.',
+      'To share images online. Many social media platforms and other websites have image size restrictions, so compressing your images can help you share them without any problems.',
     ],
   },
   {
-    heading: 'What is Image Compression?',
-    blockData: [
-      `Image compression is the process of reducing the file size of a digital image without significantly impacting its quality. The goal of image compression is to make images smaller in size, so they can be stored, transmitted, and processed more efficiently. This can be especially important for website owners, as large image files can slow down the website's loading time, affecting the user experience.`,
-      `There are two main types of image compression: lossless and lossy. Lossless compression reduces the file size of an image without losing any image data, while lossy compression reduces the file size by discarding some image data. Lossy compression is generally used for images that contain a lot of redundant information, such as photographs, where some loss in quality is acceptable to achieve a smaller file size.`,
-      `JPEG and PNG are two of the most common image formats used for image compression. JPEG uses lossy compression and is suitable for photographs, while PNG uses lossless compression and is best for images with sharp lines and flat areas of color, such as graphics and illustrations.`,
-      `Overall, image compression is an important technique for optimizing images and making them faster to load and easier to handle.`,
-    ],
-  },
-  {
-    heading: 'Why would you want to Compress Images?',
-    blockData: [
-      `The objective of image compression is to reduce irrelevance and redundancy of the image data to be able to store or transmit data in an efficient form. It is concerned with minimizing the number of bits required to represent an image. Image compression may be lossy or lossless.`,
-    ],
-  },
-  {
-    heading: 'Key features',
+    heading: 'Features of Our Free Online Image Compressor',
     listData: [
-      `Unlimited images can be compressed. Online Image Compressor is completely free. No registration required. No credit card required.`,
-      `Supports customizing compression level to control the compressed image size.`,
-      `Easy to use: Our user-friendly interface makes it simple for anyone to compress their images with just a few clicks.`,
-      `High-quality compression: Our tool uses advanced compression algorithms to reduce image file size while preserving image quality.`,
-      `Batch processing: Compress multiple images at once, saving you time and effort.`,
-      `Supports wide range of image formats: Our tool works with JPEG, PNG, WEBP and BMP image formats, providing versatile compression options.`,
-      `Secure: Image compression will be performed in host browser only. We don't store any of the images.`,
-      `No need to download any software. Simply upload your images to our platform and get your compressed images in no time.`,
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Compress your images directly from your web browser.',
+      'Supports multiple image formats. Compress JPEG, PNG, WEBP & BMP images.',
+      'Reduces image file size without losing quality. Our image compressor uses advanced algorithms to reduce file size without sacrificing quality.',
+      'Easy to use. Simply upload your images and click the "Compress" button.',
     ],
   },
   {
-    heading: 'Disclaimer',
+    heading: 'How to Use Our Free Online Image Compressor',
+    listData: [
+      'Go to our website and click the "Upload Images" button.',
+      'Select the images you want to compress.',
+      'Click the "Compress" button.',
+      'Download your compressed images.',
+    ],
+  },
+  {
+    heading: 'Tips for Using an Image Compressor',
+    listData: [
+      'Choose the right compression level. The higher the compression level, the smaller the file size will be, but the image quality may also decrease. Experiment with different compression levels to find the best balance between file size and quality.',
+      'Resize your images before compressing them. This can help to further reduce the file size without sacrificing quality.',
+    ],
+  },
+  {
     blockData: [
-      'Only JPEG, PNG, WEBP and BMP images can be compressed as of now.',
-    ],
-  },
-  {
-    heading: 'References',
-    links: [
-      {
-        displayText: 'Read more about Image Compression at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/Image_compression',
-      },
-      {
-        displayText: 'Disadvantages and Advantages of Image Compression',
-        url: 'https://www.techwalla.com/articles/disadvantages-and-advantages-of-image-compression',
-      },
-      {
-        displayText: 'Read more about JPEG format at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/JPEG#:~:text=JPEG%20(%2F%CB%88d%CA%92e%C9%AAp,storage%20size%20and%20image%20quality.',
-      },
-      {
-        displayText: 'Read more about PNG format at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/PNG',
-      },
+      'Our free online image compressor is a great way to reduce image file size without losing quality. It is easy to use and supports multiple image formats. With our image compressor, you can improve website performance, save storage space, and share images online without any problems.',
     ],
   },
 ];

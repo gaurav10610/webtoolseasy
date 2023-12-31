@@ -1,95 +1,74 @@
-<div class="full-height flex-display flex-column-flow no-y-scroll">
-  <!-- profile header -->
-  <app-header-toolbar></app-header-toolbar>
+<div
+  class="flex-display flex-column-flow flex-align-center full-width flex-gap-large">
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
+    <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
+      svgIcon="screen-icon"></mat-icon>
+  </div>
 
-  <div class="full-width y-scroll">
-    <!-- app container -->
-    <div
-      class="flex-display flex-column-flow flex-align-center base-app-container flex-gap-large">
-      <!--web tool headings-->
-      <app-tool-heading></app-tool-heading>
+  <span *ngIf="!isSupported" class="error"
+    >screen capturing is not supported by host browser</span
+  >
 
-      <!-- share buttons -->
-      <app-share-buttons class="full-width"></app-share-buttons>
+  <section class="flex-display recoder-options" *ngIf="isSupported">
+    <mat-checkbox
+      (change)="recorderOptionChange($event, 'speaker-audio')"
+      [disabled]="includeMicAudio"
+      >include speaker audio</mat-checkbox
+    >
+    <mat-checkbox
+      (change)="recorderOptionChange($event, 'mic-audio')"
+      [disabled]="includeScreenAudio"
+      >include mic audio</mat-checkbox
+    >
+    <mat-checkbox (change)="recorderOptionChange($event, 'camera-video')"
+      >include camera video</mat-checkbox
+    >
+  </section>
 
-      <div
-        class="flex-display flex-column-flow flex-align-center full-width flex-gap-large">
-        <div
-          class="flex-display flex-column-flow flex-center flex-align-center full-width icon-div">
-          <mat-icon svgIcon="screen-icon"></mat-icon>
-        </div>
+  <div class="flex-display flex-row-flow flex-gap-medium">
+    <button
+      mat-stroked-button
+      aria-label="start recording button"
+      *ngIf="!isRecording && !isProcessingStream && isSupported"
+      color="primary"
+      (click)="startRecording()">
+      <mat-icon>play_arrow</mat-icon> Start Recording
+    </button>
+    <button
+      mat-stroked-button
+      aria-label="pause recording button"
+      *ngIf="isRecording && !isRecPaused"
+      color="warn"
+      (click)="pauseRecording()">
+      <mat-icon>pause</mat-icon> Pause Recording
+    </button>
+    <button
+      mat-stroked-button
+      aria-label="resume recording button"
+      *ngIf="isRecording && isRecPaused"
+      color="accent"
+      (click)="resumeRecording()">
+      <mat-icon>play_arrow</mat-icon> Resume Recording
+    </button>
+    <button
+      mat-raised-button
+      aria-label="stop recording button"
+      *ngIf="isRecording && !isProcessingStream && isSupported"
+      color="warn"
+      (click)="stopRecording()">
+      <mat-icon>stop</mat-icon> Stop Recording
+    </button>
+  </div>
 
-        <span *ngIf="!isSupported" class="error"
-          >screen capturing is not supported by host browser</span
-        >
-
-        <section class="flex-display recoder-options" *ngIf="isSupported">
-          <mat-checkbox (change)="recorderOptionChange($event, 'mic-audio')"
-            >include mic audio</mat-checkbox
-          >
-          <mat-checkbox (change)="recorderOptionChange($event, 'camera-video')"
-            >include camera video</mat-checkbox
-          >
-        </section>
-
-        <div class="flex-display flex-row-flow flex-gap-medium">
-          <button
-            mat-stroked-button
-            aria-label="start recording button"
-            *ngIf="!isRecording && !isProcessingStream && isSupported"
-            color="primary"
-            (click)="startRecording()">
-            <mat-icon>play_arrow</mat-icon> Start Recording
-          </button>
-          <button
-            mat-stroked-button
-            aria-label="pause recording button"
-            *ngIf="isRecording && !isRecPaused"
-            color="warn"
-            (click)="pauseRecording()">
-            <mat-icon>pause</mat-icon> Pause Recording
-          </button>
-          <button
-            mat-stroked-button
-            aria-label="resume recording button"
-            *ngIf="isRecording && isRecPaused"
-            color="accent"
-            (click)="resumeRecording()">
-            <mat-icon>play_arrow</mat-icon> Resume Recording
-          </button>
-          <button
-            mat-raised-button
-            aria-label="stop recording button"
-            *ngIf="isRecording && !isProcessingStream && isSupported"
-            color="warn"
-            (click)="stopRecording()">
-            <mat-icon>stop</mat-icon> Stop Recording
-          </button>
-        </div>
-
-        <div
-          class="flex-display flex-row-flow flex-align-center"
-          *ngIf="isProcessingStream">
-          <mat-spinner
-            color="primary"
-            style="margin-right: 10px"
-            diameter="30"></mat-spinner>
-          <span class="bold-text">preparing video file to download</span>
-        </div>
-      </div>
-
-      <!-- related tools -->
-      <app-related-tools class="full-width"></app-related-tools>
-
-      <!-- description -->
-      <app-description class="full-width"></app-description>
-
-      <!-- tags div -->
-      <app-tags></app-tags>
-
-      <!-- follow buttons -->
-      <app-follow-buttons></app-follow-buttons>
-    </div>
-    <app-footer></app-footer>
+  <div
+    class="flex-display flex-row-flow flex-align-center"
+    *ngIf="isProcessingStream">
+    <mat-spinner
+      color="primary"
+      style="margin-right: 10px"
+      diameter="30"></mat-spinner>
+    <span class="bold-text">preparing video file to download</span>
   </div>
 </div>

@@ -3,6 +3,7 @@
   <div
     class="flex-display flex-row-flow icon-div flex-align-center flex-gap-small">
     <mat-icon
+      *ngIf="platformMetaDataService.isPlatformBrowser"
       svgIcon="app-icon"
       class="app-icon"
       style="margin-left: 16px"></mat-icon>

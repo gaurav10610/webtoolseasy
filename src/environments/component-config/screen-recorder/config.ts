@@ -1,17 +1,25 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/screen-recorder';
-const pageTitle = 'Free Screen Recorder With No Watermark | No Time Limit';
+const pageTitle = 'Free Screen Recorder: Record Your Screen with Audio, Webcam';
 const pageDescription =
-  'Easy HD Screen recording via our Best Free Online Screen Recorder with or without audio, video from mic and webcam. No watermark and time limit for screen recording.';
+  'Record your screen with audio and webcam for free with our online screen recorder. Record screen with no watermark and no time limit. No sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/screen-recorder.png`;
 
+const keywords =
+  'online screen recorder,free screen recorder,screen recorder with audio,screen recorder with webcam,screen recorder for tutorials,screen recorder for demos,screen recorder for video lectures,screen recorder for webinars,screen recorder for gameplay,screen recorder for Windows,screen recorder for Mac,screen recorder for Chromebook,screen recorder for Linux, no watermark, no time limit screen recording';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.VIDEO_CONVERTER];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online Screen Recorder',
-  subHeading: 'HD Screen Recording With Mic & Camera',
+  mainHeading:
+    'Free Online Screen Recorder - Record Your Screen with Audio, Webcam',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -33,98 +41,65 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
-    { property: 'twitter:card', content: 'summary_large_image' },
-    { property: 'twitter:site', content: '@webtoolseasy' },
-    { property: 'twitter:title', content: pageTitle },
-    { property: 'twitter:description', content: pageDescription },
-    { property: 'twitter:image', content: imageUrl },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'screen recorder',
-    'screen capture',
-    'screen record on mac',
-    'screen recorder windows 10',
-    'windows screen recorder',
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
   icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
     {
       iconName: 'screen-icon',
       iconRelativeUrl: 'screen.svg',
     },
-    {
-      iconName: 'video-convert-icon',
-      iconRelativeUrl: 'video-convert.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
   ],
-  relatedTools: [
-    {
-      applicationId: 'videoconverter',
-      displayText: AppDisplayNames.VIDEO_CONVERTER,
-      iconName: 'video-convert-icon',
-      navigateUrl: '/tools/video-converter',
-    },
-  ],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use Screen Recorder?',
+    heading: 'Why Use a Screen Recorder?',
     listData: [
-      `To include mic audio & camera video in the recorded video, use provided checkboxes.`,
-      `Start screen recording using start recording button.`,
-      `When asked for mic & camera permission then provide the same.`,
-      `Camera video if included will appear at bottom right corner in the recorded video in 150X150 px box.`,
-      `Screen recording can be stopped via native stop recording button or use stop recording button on the screen (button will appear once recording starts).`,
-      `Once recording is stopped then recorded video will be downloaded automatically.`,
+      'To create tutorials and demos. Screen recorders are a great way to create tutorials and demos of how to use software or complete a task.',
+      'To record video lectures and webinars. Screen recorders can be used to record video lectures and webinars for students or clients to watch later.',
+      'To record gameplay. Screen recorders are also popular for recording gameplay footage to share with friends or online communities.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'Features of Our Online Screen Recorder',
     listData: [
-      `Screen recording is 100% free. No registration required. No credit card required.`,
-      `Unlimited screen recording in HD format i.e no time limit for recording.`,
-      `Record screen with webcam video & microphone audio.`,
-      `Pause and resume screen recording.`,
-      `HD screen recording with no watermark.`,
-      `Easy to use: No software installation is needed to record screen.`,
-      `Cross platform: Tool is completely web-based and can be accessed wherever you are, from any computer. It is compatible with all major browsers and OSes, including Windows, macOS, and Linux.`,
-      `Secure: Screen recording is 100% secure as whole processing is being done at client side only (in host browser) and we don't store any video.`,
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Record your screen directly from your web browser.',
+      'Record screen, audio, and webcam. Capture everything on your screen, as well as your audio and webcam.',
+      'Easy to use. Simply click the "Start Recording" button and start recording.',
+      'Record Your Screen Without Watermark or Time Limit',
+      `Save your recordings to your computer. Once you're finished recording, you can save your recording to your computer.`,
     ],
   },
   {
-    heading: 'Disclaimer',
+    heading: 'How to Use Our Online Screen Recorder',
+    listData: [
+      'Go to our website and click the "Start Recording" button.',
+      'Select the area of the screen you want to record.',
+      'Choose whether you want to record audio and/or webcam.',
+      'Click the "Start Recording" button to begin recording.',
+      `Click the "Stop Recording" button when you're finished recording.`,
+      'Save your recording to your computer.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a Screen Recorder',
+    listData: [
+      'Choose the right recording mode. There are different recording modes available, such as full screen, custom region, and window. Choose the recording mode that best suits your needs.',
+      `Use a high-quality microphone. If you're recording audio, make sure to use a high-quality microphone to ensure good sound quality.`,
+      `Edit your recordings. Once you're finished recording, you can edit your recordings to remove any unwanted footage or add annotations.`,
+      `Share your recordings online. Once you're happy with your recordings, you can share them online with others on social media or video sharing platforms.`,
+    ],
+  },
+  {
     blockData: [
-      'Recorded video will be in WEBM format. To convert in some other format like MP4 you can use our video converter tool to convert the recorded video.',
+      'Our free online screen recorder is a great way to record your screen with audio and webcam. It is easy to use, no download required, and no sign-up required. With our screen recorder, you can create tutorials and demos, record video lectures and webinars, record gameplay, and more.',
     ],
   },
 ];

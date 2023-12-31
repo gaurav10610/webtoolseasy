@@ -1,24 +1,19 @@
-import { DOCUMENT } from '@angular/common';
 import {
   Component,
   ElementRef,
-  Inject,
   NgZone,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/text-compare/config';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
 import { FileService } from 'src/app/service/file/file.service';
 import { DiffEditorComponent, DiffEditorModel } from 'ngx-monaco-editor-v2';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-text-compare',
@@ -36,7 +31,7 @@ export class TextCompareComponent {
 
   editorOptions = {
     originalEditable: true,
-    fontSize: 17,
+    fontSize: 15,
   };
 
   originalModel: DiffEditorModel = {
@@ -49,36 +44,15 @@ export class TextCompareComponent {
     language: 'text/plain',
   };
 
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
+
   constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: Document,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private renderer: Renderer2,
-    private appContextService: AppContextService,
     private fileService: FileService,
     private zoneRef: NgZone,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
-    public platformMetadataService: PlatformMetadataService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.descrptionData = descriptionData;
-  }
+    public platformMetaDataService: PlatformMetadataService
+  ) {}
 
   async selectFiles(event: any) {
     const file: File = event.target.files[0];

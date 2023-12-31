@@ -1,18 +1,31 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-formatter';
 const pageTitle =
-  'Best Online JSON Formatter | JSON Beautifier | JSON Validator';
+  'JSON Beautifier and Formatter: Beautify and Format Your JSON';
 const pageDescription =
-  'Our Best Online JSON Formatter/Beautifier/Validator tool lets you format/beautify/validate your JSON for free.';
+  'Beautify and format your JSON data with ease with our free online JSON beautifier and formatter tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-format.png`;
 
+const keywords =
+  'online JSON beautifier and formatter,beautify JSON data,format JSON data,JSON beautifier and formatter tool,JSON data formatter,JSON data style,improve JSON data readability,make JSON data more consistent,follow JSON data style guidelines,free JSON beautifier and formatter,JSON data formatting errors';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.JSON_VIEWER,
+  ApplicationIds.HTML_FORMATTER,
+  ApplicationIds.JS_FORMATTER,
+  ApplicationIds.CSS_FORMATTER,
+];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'JSON Formatter',
-  subHeading: 'Online JSON Beautifier',
+  mainHeading:
+    'Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,141 +47,62 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'json formatter',
-    'json validator',
-    'json beautifier',
-    'best json formatter',
-    'best json validator',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsonviewer',
-      displayText: AppDisplayNames.JSON_VIEWER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-viewer',
-    },
-    {
-      applicationId: 'jsformatter',
-      displayText: AppDisplayNames.JS_FORMATTER,
-      iconName: 'js-icon',
-      navigateUrl: '/tools/js-formatter',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: AppDisplayNames.CSS_FORMATTER,
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use JSON Formatter / Beautifier / Validator?',
-    listData: [
-      `Paste unformatted / minified json in unformatted JSON block and JSON will be formatted / beautified / validated automatically.`,
-    ],
-  },
-  {
-    heading: 'Why choose our Online JSON Formatter Tool?',
-    listData: [
-      `Improves readability: Clean and organized JSON is easier to read and understand, making it easier for you or your team to work with.`,
-      `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
-      `Supports collaboration: Clean, organized JSON makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: 'What is JSON or JavaScript Object Notation?',
+    heading: 'What is a JSON Beautifier and Formatter?',
     blockData: [
-      `JSON or JavaScript Object Notation is a language-independent open data format that uses human-readable text to express data objects consisting of attribute-value pairs.`,
-      `Although originally derived from the JavaScript scripting language, JSON data can be generated and parsed with a wide variety of programming languages including JavaScript, PHP, Python, Ruby, and Java.`,
+      'A JSON beautifier and formatter is a tool that takes your JSON data and formats it in a consistent and readable style. This can make your data easier to read, understand, and maintain.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'Why Use a JSON Beautifier and Formatter?',
     listData: [
-      `Supports online editing of your JSON code using our inbuilt monaco code edior.`,
-      `Easy to use: Our user-friendly interface makes it simple for anyone to format their JSON with just pasting it here.`,
-      `Real-time formatting: Our tool formats your JSON in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your JSON into our platform and get a clean, organized, and optimized result.`,
-      `Auto validation: Once a JSON is pasted then tool will auto validate the JSON before formatting it.`,
-      `Formatted JSON can be saved or copied easily.`,
+      'To improve the readability of your data. Well-formatted data is easier to read and understand, which can help you to write better code and to debug your code more easily.',
+      'To make your data more consistent. A JSON beautifier and formatter can help you to format your data in a consistent style, which can make your data more readable and maintainable.',
+      'To follow data style guidelines. Many companies have data style guidelines that they require their developers to follow. A JSON beautifier and formatter can help you to format your data in accordance with these guidelines.',
     ],
   },
   {
-    heading: 'References',
-    links: [
-      {
-        displayText:
-          'Read more about JSON or JavaScript Object Notation at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/JSON',
-      },
-      {
-        displayText:
-          'RFC 8259 - The JavaScript Object Notation (JSON) Data Interchange Format',
-        url: 'https://datatracker.ietf.org/doc/html/rfc8259',
-      },
-      {
-        displayText: 'json.org',
-        url: 'https://www.json.org/json-en.html',
-      },
+    heading: 'Features of Our Online JSON Beautifier and Formatter Tool',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. Beautify and format your JSON data directly from your web browser.',
+      'Supports all JSON features. Our beautifier and formatter supports all the features of the JSON language, including JSON5 and JSON Schema.',
+      'Easy to use. Simply paste your JSON data into the editor and click the "Beautify and Format" button.',
+      'Customizable settings. You can customize the settings of our beautifier and formatter to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online JSON Beautifier and Formatter Tool',
+    listData: [
+      'Go to our website and paste your JSON data into the editor.',
+      'Click the "Beautify and Format" button.',
+      'View your beautified and formatted JSON data in the sidebar.',
+      'Copy and paste your beautified and formatted JSON data into your project.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a JSON Beautifier and Formatter',
+    listData: [
+      'Use a consistent data style. Choose a data style and use it consistently throughout your project. This will make your data more readable and maintainable.',
+      'Format your data before you commit it to a repository. This will help to ensure that your data is readable and maintainable for other developers.',
+      'Use a JSON beautifier and formatter to check for formatting errors. A JSON beautifier and formatter can help you to identify and fix formatting errors in your data.',
+    ],
+  },
+  {
+    blockData: [
+      'Our free online JSON beautifier and formatter tool is a great way to beautify and format your JSON data with ease. It is easy to use and supports all the features of the JSON language. With our beautifier and formatter, you can improve the readability, consistency, and maintainability of your JSON data.',
     ],
   },
 ];

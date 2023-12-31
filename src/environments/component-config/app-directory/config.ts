@@ -1,15 +1,15 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { environment } from 'src/environments/environment';
 
-const navigationUrl = '/tools';
-const pageTitle = 'Free Online Web Tools - webtoolseasy.com';
-const pageDescription =
-  'Discover a comprehensive directory of free web tools online. Find the perfect tool for your needs and streamline your online experience.';
+const navigationUrl = '';
+const pageTitle = 'Online Web Tools: Browse Free Tools to Boost Productivity';
+const pageDescription = `WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, or record a screen.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/tools-directory.png`;
 
 export const componentConfig: ApplicationConfig = {
   navigationUrl,
-  mainHeading: 'Web Tools Directory',
+  mainHeading:
+    'Free Online Web Tools: Discover Free Tools to Make Work Super Easy',
   pageTitle,
   metaTags: [
     {
@@ -29,10 +29,7 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:url', content: `${environment.hostname}${navigationUrl}` },
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
-    { property: 'og:image:width', content: '1640' },
-    { property: 'og:image:height', content: '856' },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
@@ -40,82 +37,6 @@ export const componentConfig: ApplicationConfig = {
     { property: 'twitter:image', content: imageUrl },
   ],
   tags: [],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'uuid-icon',
-      iconRelativeUrl: 'uuid-icon.svg',
-    },
-    {
-      iconName: 'jwt-icon',
-      iconRelativeUrl: 'jwt-icon.svg',
-    },
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'image-compress-icon',
-      iconRelativeUrl: 'image-compress-icon.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'screen-icon',
-      iconRelativeUrl: 'screen.svg',
-    },
-    {
-      iconName: 'comparison-icon',
-      iconRelativeUrl: 'comparison.svg',
-    },
-    {
-      iconName: 'video-convert-icon',
-      iconRelativeUrl: 'video-convert.svg',
-    },
-    {
-      iconName: 'password-icon',
-      iconRelativeUrl: 'password.svg',
-    },
-    {
-      iconName: 'file-encode-icon',
-      iconRelativeUrl: 'file-encode.svg',
-    },
-    {
-      iconName: 'file-decode-icon',
-      iconRelativeUrl: 'file-decode.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
+  relatedTools: [],
+  icons: [],
 };

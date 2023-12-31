@@ -6,8 +6,6 @@ import { ApplicationConfig } from 'src/app/@types/config';
   providedIn: 'root',
 })
 export class MetaConfigService {
-  constructor() {}
-
   /**
    * set following page metadata
    *

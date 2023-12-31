@@ -35,6 +35,10 @@ body {
   overflow-y: scroll;
 }
 
+.auto-scroll {
+  overflow: auto;
+}
+
 .x-scroll {
   overflow-x: scroll;
 }
@@ -83,25 +87,8 @@ body {
   flex-wrap: wrap;
 }
 
-.spacer {
-  flex: 1 1 auto;
-}
-
-.no-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scroll {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
 .no-y-scroll {
   overflow-y: hidden;
-}
-
-.no-x-scroll {
-  overflow-x: hidden;
 }
 
 .pointer-cursor {

@@ -1,22 +1,22 @@
-import { Options } from 'browser-image-compression';
-
 export interface BaseFileData {
   id: string;
   file: File;
-  inProgress: boolean;
+  inProgress?: boolean;
   type: FileDataType;
   name: string;
   error?: string;
   fileFormat?: number; // file format identifier
+  dataURI?: any;
 }
 
 export interface ImageFileData extends BaseFileData {
   isCompressed: boolean;
   compressProgress: number;
   compressedData?: Blob;
-  compressOptions: Options;
+  compressOptions: any;
   compressionRate: number;
   maxFileSize: number;
+  compressedImageData?: any;
 }
 
 export interface VideoFileData extends BaseFileData {

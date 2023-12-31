@@ -1,24 +1,20 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { Title, Meta, DomSanitizer } from '@angular/platform-browser';
+import { Component, OnInit } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/html-formatter/config';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import { html_beautify } from 'js-beautify';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-html-formatter',
   templateUrl: './html-formatter.component.html',
   styleUrls: ['./html-formatter.component.scss'],
 })
-export class HtmlFormatterComponent {
+export class HtmlFormatterComponent implements OnInit {
   rawCode: string =
     '<html><head><title>Online HTML Formatter</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>';
 
@@ -30,37 +26,18 @@ export class HtmlFormatterComponent {
   editorOptions = {
     theme: 'vs-dark',
     language: 'html',
-    fontSize: 17,
+    fontSize: 15,
   };
+
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
     private clipboard: Clipboard,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
-    public platformMetadataService: PlatformMetadataService
-  ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
+    public platformMetaDataService: PlatformMetadataService
+  ) {}
+
+  ngOnInit(): void {
     this.formattedCode = html_beautify(this.rawCode);
   }
 

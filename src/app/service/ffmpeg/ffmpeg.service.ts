@@ -17,7 +17,6 @@ import { LogUtils } from 'src/app/service/util/logger';
 import { FFmpeg } from 'src/app/service/ffmpeg/lib/ffmpeg';
 import { fetchFile, toBlobURL } from 'src/app/service/ffmpeg/lib/util';
 import {
-  FSNode,
   LogEvent,
   ProgressEvent,
 } from 'src/app/service/ffmpeg/lib/ffmpeg/types';
@@ -30,7 +29,7 @@ export class FfmpegService {
   private ffmpeg!: FFmpeg;
 
   /**
-   * queue data strcuture to hold the submitted files
+   * queue data structure to hold the submitted files
    */
   private fileQueue!: QueueStorage<VideoFileData>;
   private isConverting = false;
@@ -63,7 +62,7 @@ export class FfmpegService {
   }
 
   /**
-   * initialise/load ffmpeg wasm binary
+   * initialize/load ffmpeg wasm binary
    *
    */
   async initializeFFMpeg() {

@@ -1,0 +1,51 @@
+<div
+  class="flex-display flex-column-flow flex-align-center uuid-app border-grey flex-gap-large full-width">
+  <!-- version 1 app container -->
+
+  <div class="flex-display flex-align-center uid-div flex-gap-medium">
+    <span class="uuid-class" style="color: #ff4081">{{ currentUUID }}</span>
+    <button mat-stroked-button (click)="copyGeneratedId()" color="primary">
+      <mat-icon>content_copy</mat-icon> Copy
+    </button>
+  </div>
+
+  <button mat-stroked-button color="primary" (click)="generateUUID()">
+    <mat-icon>repeat</mat-icon>
+    Generate Again
+  </button>
+
+  <div class="flex-display flex-column-flow flex-align-center flex-gap-medium">
+    <span style="font-size: large" class="bold-text"
+      >Bulk Version 1 UUID Generator</span
+    >
+    <mat-form-field appearance="outline">
+      <mat-label>Enter UUIDs Count</mat-label>
+      <input
+        #bulkUUIDInput
+        type="number"
+        matInput
+        placeholder="Max 1000"
+        value="5"
+        min="0"
+        max="1000" />
+      <button
+        mat-raised-button
+        matTextSuffix=""
+        aria-label="Clear"
+        (click)="generateBulkUUID()">
+        Generate
+      </button>
+    </mat-form-field>
+    <span *ngIf="bulkUUIDError" style="color: red"
+      >*Max allowed value is 1000</span
+    >
+    <a href="#" (click)="downloadUUIDs($event)">Download to a file</a>
+  </div>
+
+  <div
+    class="flex-display flex-column-flow flex-center flex-align-center bulk-uuids border-grey y-scroll"
+    style="max-height: 200px"
+    *ngIf="bulkUUIDs.length > 0">
+    <span *ngFor="let uuid of bulkUUIDs"> {{ uuid }} </span>
+  </div>
+</div>

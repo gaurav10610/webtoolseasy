@@ -1,59 +1,58 @@
-<div class="flex-display flex-column-flow flex-gap-medium">
-  <mat-card
-    *ngFor="let descriptionRecord of descriptionData"
-    class="description-block">
-    <mat-card-header class="description-heading">
-      <mat-card-title
-        ><h3 id="header">
-          {{ descriptionRecord.heading }}
-        </h3></mat-card-title
-      >
-    </mat-card-header>
+<div class="flex-display flex-column-flow flex-gap-xlarge">
+  <div
+    class="flex-display flex-column-flow"
+    *ngFor="let descriptionRecord of appContextService.descriptionData">
+    <h2
+      style="font-size: medium; font-weight: 700"
+      *ngIf="descriptionRecord.heading">
+      {{ descriptionRecord.heading }}
+    </h2>
 
-    <!-- desciption block content -->
-    <mat-card-content style="margin-top: 10px">
-      <!-- div for numbered list -->
+    <!-- div for list data -->
+    <div
+      *ngIf="descriptionRecord.listData"
+      class="flex-display flex-column-flow">
       <div
-        *ngIf="descriptionRecord.listData"
-        class="flex-display flex-column-flow">
-        <div
-          *ngFor="let line of descriptionRecord.listData"
-          class="flex-display description-font">
-          <div>
-            <mat-icon aria-hidden="false" aria-label="right pointer icon"
-              >chevron_right</mat-icon
-            >
-          </div>
-          <span> {{ line }}</span>
+        *ngFor="let line of descriptionRecord.listData"
+        class="flex-display flex-row-flow flex-gap-small"
+        style="overflow-wrap: anywhere">
+        <div>
+          <mat-icon aria-hidden="false" aria-label="right pointer icon"
+            >chevron_right</mat-icon
+          >
         </div>
-      </div>
 
-      <!-- div for paragraphs -->
-      <div
-        *ngIf="descriptionRecord.blockData"
-        class="flex-display flex-column-flow">
-        <span
-          *ngFor="let block of descriptionRecord.blockData"
-          class="description-font">
-          {{ block }}
-        </span>
+        <p class="description-font">{{ line }}</p>
       </div>
+    </div>
 
-      <!-- div for paragraphs -->
+    <!-- div for block data -->
+    <div
+      *ngIf="descriptionRecord.blockData"
+      class="flex-display flex-column-flow flex-gap-large"
+      style="overflow-wrap: anywhere">
+      <p
+        *ngFor="let block of descriptionRecord.blockData"
+        class="description-font">
+        {{ block }}
+      </p>
+    </div>
+
+    <!-- div for links -->
+    <div *ngIf="descriptionRecord.links" class="flex-display flex-column-flow">
       <div
-        *ngIf="descriptionRecord.links"
-        class="flex-display flex-column-flow">
-        <div *ngFor="let link of descriptionRecord.links" class="flex-display">
-          <div>
-            <mat-icon aria-hidden="false" aria-label="right pointer icon"
-              >chevron_right</mat-icon
-            >
-          </div>
-          <a href="{{ link.url }}">
-            {{ link.displayText }}
-          </a>
+        *ngFor="let link of descriptionRecord.links"
+        class="flex-display flex-row-flow flex-gap-small">
+        <div>
+          <mat-icon aria-hidden="false" aria-label="right pointer icon"
+            >chevron_right</mat-icon
+          >
         </div>
+
+        <a href="{{ link.url }}">
+          {{ link.displayText }}
+        </a>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </div>

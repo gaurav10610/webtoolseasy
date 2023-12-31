@@ -1,16 +1,23 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/text-compare';
-const pageTitle = 'Best Online Text Difference | Side By Side Text Compare';
-const pageDescription =
-  'Our Best Online Text File Difference tool lets you compare text side by side to find the difference between two text files.';
+const pageTitle = 'Online Text Compare Tool: Compare Two Texts Side by Side';
+const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarities and differences. It's perfect for students, writers, bloggers.`;
 const imageUrl = `${environment.screenshotsBaseUrl}/text-diff.png`;
+const keywords =
+  'text compare tool, text comparison tool, text diff tool, compare text online, compare text files, compare text documents, plagiarism checker, compare documents for similarity, compare two texts, text similarity checker, compare text online free, text compare online, compare text ignore whitespace';
+
+const relatedTools: ApplicationIds[] = [ApplicationIds.WORD_COUNTER];
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Text File Difference',
-  subHeading: 'Compare Text Files Online',
+  mainHeading:
+    'Free Online Text Compare Tool: Find Differences Between Two Texts Easily',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -32,80 +39,77 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'diff checker',
-    'text to compare',
-    'text compare online',
-    'file diff',
-    'text difference checker',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to compare text',
-    listData: [
-      `Paste original text in text 1 area or upload a file 1 to compare.`,
-      `Paste target text in text 2 area or upload a file 2 to compare.`,
-      `Difference between both the texts will be evaluated automatically and will be reflected in difference area.`,
-      `Default text comparion type is charcter by charcter, which can be changed via comparison type dropdown to any of the available comparison type like word by word or line by line.`,
-      `To ignore case while comparing, use the corresponding checkbox.`,
-      `To ignore leading & trailing whitespace while comparing, use the corresponding checkbox.`,
-      `For swapping text 1 & text 2 with each other use the switch texts button.`,
-      `After making any of the above change difference between both the texts will be evaluated automatically.`,
+    blockData: [
+      `Looking for a quick and easy way to compare two texts for similarity and differences? Try our free online text compare tool! It's simple to use and completely free.`,
+      'To use the tool, simply copy and paste your texts into the text boxes and click the "Compare" button. The tool will instantly calculate the similarity percentage between the two texts and show you the differences. You can also view a side-by-side comparison of the two texts to see how they differ.',
+      `Our text compare tool is perfect for students, writers, bloggers, and anyone else who needs to check the originality of their work. It's also great for checking for plagiarism and ensuring that your work is unique.`,
     ],
   },
   {
-    heading: 'What is the need of a text file comparison / difference tool?',
+    heading:
+      'Here are some of the benefits of using our free online text compare tool:',
     listData: [
-      `An online text file comparison / difference tool is an essential tool for writers, students, researchers, and anyone who needs to compare texts quickly and easily. With this tool, you can compare different versions of a text, identify similarities and differences between texts, and highlight changes between texts.`,
-      `This tool uses advanced algorithms to accurately compare texts, making it easy for you to identify differences, changes, and similarities. Whether you're working on an academic project, a research paper, or a business report, an online text comparison tool can help you get the job done faster and more accurately.`,
+      `It's quick and easy to use.`,
+      `It's completely free.`,
+      `It's accurate and reliable.`,
+      `It calculates the similarity percentage between two texts.`,
+      `It shows you the differences between two texts.`,
+      `It provides a side-by-side comparison of two texts.`,
+      `It's perfect for students, writers, bloggers, and anyone else who needs to check the originality of their work.`,
+      `It's great for checking for plagiarism and ensuring that your work is unique.`,
     ],
   },
   {
-    heading: 'Key features',
+    heading:
+      'Here are some examples of how you can use our free online text compare tool:',
     listData: [
-      `Text file comparsion/difference tool is 100% free.`,
-      `Supports online editing of text contents using inbuilt monaco editor.`,
-      `View text file difference side by side.`,
-      `Text file comparison/difference is 100% secure as whole processing is being done at client side only (in host browser).`,
-      `Unlimited text file comparison.`,
-      `Track down plagiarism.`,
-      `Compare text files character by character, word by word or line by line`,
-      `Optionally, you can ignore whitepsace.`,
+      'Students can use the tool to check the originality of their essays and assignments.',
+      'Writers can use the tool to check for plagiarism in their articles and blog posts.',
+      'Bloggers can use the tool to compare their blog posts to other blog posts to see if they are similar.',
+      'Anyone can use the tool to compare any two texts to see if they are similar.',
+    ],
+  },
+  {
+    heading: 'How to use our free online text compare tool:',
+    listData: [
+      'Copy and paste your texts into the text boxes.',
+      'The tool will instantly show you the differences.',
+      'You can also view a side-by-side comparison of the two texts to see how they differ.',
+    ],
+  },
+  {
+    heading: 'Tips for using our free online text compare tool:',
+    listData: [
+      'Make sure to copy and paste all of your text into the text boxes, including any spaces, line breaks, and punctuation.',
+      'If you need to compare a large amount of text, you can break it down into smaller sections and compare them one at a time.',
+      'You can also use the tool to compare two text files. Simply upload the files to the tool and click the "Compare" button.',
+    ],
+  },
+  {
+    heading: 'Benefits of using our free online text compare tool:',
+    listData: [
+      'Our tool is quick and easy to use.',
+      'Our tool is completely free.',
+      'Our tool is accurate and reliable.',
+      'Our tool is versatile and can be used for a variety of tasks, such as checking the originality of work, checking for plagiarism, and comparing two texts for similarity.',
+    ],
+  },
+  {
+    blockData: [
+      'No matter what your needs are, our free online text compare tool is a valuable resource. Try it today and see how easy it is to use!',
     ],
   },
 ];

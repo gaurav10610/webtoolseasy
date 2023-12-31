@@ -1,16 +1,12 @@
-import { Component, Inject } from '@angular/core';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { DOCUMENT } from '@angular/common';
 import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/json-formatter/config';
-import { MatIconRegistry } from '@angular/material/icon';
-import { AppContextService } from 'src/app/service/app-context/app-context.service';
-import { IconConfigService } from 'src/app/service/icon-config/icon-config.service';
-import { MetaConfigService } from 'src/app/service/meta-config/meta-config.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ApplicationConfig } from 'src/app/@types/config';
+import { DescriptionBlock } from 'src/app/@types/description';
 
 @Component({
   selector: 'app-json-formatter',
@@ -28,37 +24,16 @@ export class JsonFormatterComponent {
   editorOptions = {
     theme: 'vs-dark',
     language: 'json',
-    fontSize: 17,
+    fontSize: 15,
   };
+
+  applicationConfig: ApplicationConfig = componentConfig;
+  descriptionData: DescriptionBlock[] = descriptionData;
 
   constructor(
     private clipboard: Clipboard,
-    private titleService: Title,
-    private metaService: Meta,
-    @Inject(DOCUMENT) private document: any,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private appContextService: AppContextService,
-    private metaConfigService: MetaConfigService,
-    private iconConfigService: IconConfigService,
-    public platformMetadataService: PlatformMetadataService
+    public platformMetaDataService: PlatformMetadataService
   ) {
-    this.iconConfigService.loadCustomIcons(
-      componentConfig.icons,
-      this.matIconRegistry,
-      this.domSanitizer
-    );
-    this.metaConfigService.updatePageMetaData(
-      componentConfig,
-      this.titleService,
-      this.metaService,
-      this.document
-    );
-    this.appContextService.tags = componentConfig.tags;
-    this.appContextService.mainHeading = componentConfig.mainHeading!;
-    this.appContextService.subHeading = componentConfig.subHeading;
-    this.appContextService.relatedTools = componentConfig.relatedTools;
-    this.appContextService.descrptionData = descriptionData;
     this.formattedCode = JSON.stringify(
       JSON.parse(this.rawCode),
       null,
@@ -66,9 +41,9 @@ export class JsonFormatterComponent {
     );
   }
 
-  onRawCodeChange() {
+  onRawCodeChange(updatedModel: string) {
     this.formattedCode = JSON.stringify(
-      JSON.parse(this.rawCode),
+      JSON.parse(updatedModel),
       null,
       this.tabSpaceValue
     );

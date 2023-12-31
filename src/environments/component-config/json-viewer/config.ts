@@ -1,18 +1,29 @@
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { environment } from 'src/environments/environment';
-import { AppDisplayNames } from 'src/environments/tools-directory-config';
+import {
+  ApplicationIds,
+  applicationConfig,
+} from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/json-viewer';
-const pageTitle =
-  'Best Online JSON Viewer | JSON Beautifier | JSON Tree Viewer';
+const pageTitle = 'Free Online JSON Viewer: View Your JSON in a Tree Structure';
 const pageDescription =
-  'Online JSON Viewer, JSON Beautifier, Formatter and Validator to beautify and tree view of JSON data - It works as JSON Pretty Print to prettify JSON data.';
+  'View your JSON data in a tree structure with our free online JSON viewer tool. No download required, no sign-up required.';
 const imageUrl = `${environment.screenshotsBaseUrl}/json-viewer.png`;
 
+const keywords =
+  'online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,JSON beautifier,expand and collapse,search JSON data';
+
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.JSON_FORMATTER,
+  ApplicationIds.JS_FORMATTER,
+  ApplicationIds.HTML_FORMATTER,
+  ApplicationIds.CSS_FORMATTER,
+];
+
 export const componentConfig: ApplicationConfig = {
-  mainHeading: 'Online JSON Viewer',
-  subHeading: 'JSON Visualizer / Tree Viewer',
+  mainHeading: 'Free Online JSON Viewer: View Your JSON in a Tree Structure',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -34,143 +45,62 @@ export const componentConfig: ApplicationConfig = {
     { property: 'og:image', content: imageUrl },
     { property: 'og:image:secure_url', content: imageUrl },
     { property: 'og:description', content: pageDescription },
-    { property: 'og:site_name', content: 'WebToolsEasy' },
     { property: 'twitter:card', content: 'summary_large_image' },
     { property: 'twitter:site', content: '@webtoolseasy' },
     { property: 'twitter:title', content: pageTitle },
     { property: 'twitter:description', content: pageDescription },
     { property: 'twitter:image', content: imageUrl },
   ],
-  tags: [
-    'json viewer',
-    'json formatter',
-    'json beautifier',
-    'json prettify',
-    'json validator',
-  ],
-  icons: [
-    {
-      iconName: 'app-icon',
-      iconRelativeUrl: 'app-icon.svg',
-    },
-    {
-      iconName: 'json-icon',
-      iconRelativeUrl: 'json-icon.svg',
-    },
-    {
-      iconName: 'html-icon',
-      iconRelativeUrl: 'html.svg',
-    },
-    {
-      iconName: 'css-icon',
-      iconRelativeUrl: 'css.svg',
-    },
-    {
-      iconName: 'js-icon',
-      iconRelativeUrl: 'js-icon.svg',
-    },
-    {
-      iconName: 'share-fb',
-      iconRelativeUrl: 'share-fb.svg',
-    },
-    {
-      iconName: 'share-linkedin',
-      iconRelativeUrl: 'share-linkedin.svg',
-    },
-    {
-      iconName: 'share-twitter',
-      iconRelativeUrl: 'share-twitter.svg',
-    },
-    {
-      iconName: 'share-copy',
-      iconRelativeUrl: 'share-copy.svg',
-    },
-    {
-      iconName: 'home-icon',
-      iconRelativeUrl: 'home.svg',
-    },
-  ],
-  relatedTools: [
-    {
-      applicationId: 'jsonformatter',
-      displayText: AppDisplayNames.JSON_FORMATTER,
-      iconName: 'json-icon',
-      navigateUrl: '/tools/json-formatter',
-    },
-    {
-      applicationId: 'htmlformatter',
-      displayText: AppDisplayNames.HTML_FORMATTER,
-      iconName: 'html-icon',
-      navigateUrl: '/tools/html-formatter',
-    },
-    {
-      applicationId: 'jsformatter',
-      displayText: AppDisplayNames.JS_FORMATTER,
-      iconName: 'js-icon',
-      navigateUrl: '/tools/js-formatter',
-    },
-    {
-      applicationId: 'cssformatter',
-      displayText: AppDisplayNames.CSS_FORMATTER,
-      iconName: 'css-icon',
-      navigateUrl: '/tools/css-formatter',
-    },
-  ],
+  tags: keywords.split(',').map(word => word.trim()),
+  icons: [],
+  relatedTools: relatedTools.map(tool => applicationConfig.get(tool)!),
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: 'How to use JSON Viewer / Beautifier / Validator?',
-    listData: [
-      `Paste unformatted / minified JSON in JSON block and JSON will be validated and JSON Tree view will be rendered automatically.`,
-    ],
-  },
-  {
-    heading:
-      'Why choose our Online JavaScript Viewer / Beautifier / Validator Tool?',
-    listData: [
-      `Improves readability: Clean and organized code is easier to read and understand, making it easier for you or your team to work with.`,
-      `Saves time: Automated formatting and optimization saves you time and effort compared to manual formatting.`,
-      `Supports collaboration: Clean, organized code makes it easier for multiple people to work on the same project, improving collaboration and reducing the risk of errors.`,
-      `Security: Your data is 100% secure on our platform as whole processing is being done in host browser only.`,
-    ],
-  },
-  {
-    heading: 'What is JSON or JavaScript Object Notation?',
+    heading: 'What is a JSON Viewer?',
     blockData: [
-      `JSON or JavaScript Object Notation is a language-independent open data format that uses human-readable text to express data objects consisting of attribute-value pairs.`,
-      `Although originally derived from the JavaScript scripting language, JSON data can be generated and parsed with a wide variety of programming languages including JavaScript, PHP, Python, Ruby, and Java.`,
+      'A JSON viewer is a tool that allows you to view JSON data in a human-readable format. JSON viewers typically display JSON data in a tree structure, which makes it easier to read and understand.',
     ],
   },
   {
-    heading: 'Key features',
+    heading: 'Why Use a JSON Viewer?',
     listData: [
-      `Supports online editing of your JSON code using our inbuilt monaco code edior.`,
-      `JSON tree view visualizer.`,
-      `Easy to use: Our user-friendly interface makes it simple for anyone to see JSON Tree View for a JSON with just pasting it here.`,
-      `Real-time formatting: Our tool renders JSON Tree View for your JSON in real-time, so you can see the changes as you make them.`,
-      `No need to download any software. Simply paste your JSON into our platform and get a clean and organized JSON Tree view.`,
-      `Auto validation: Once a JSON is pasted then tool will auto validate the JSON before formatting it.`,
-      `Formatted JSON can be saved or copied easily.`,
+      'To make JSON data more readable. JSON data is often stored in a single line of text, which can make it difficult to read and understand. A JSON viewer can display JSON data in a tree structure, which makes it much easier to read and understand.',
+      'To debug JSON data. If you are having trouble with your JSON data, a JSON viewer can help you to identify the problem. JSON viewers typically display error messages and warnings, which can help you to fix the problem.',
+      'To learn more about JSON. JSON is a powerful data format, but it can be difficult to learn. A JSON viewer can help you to learn more about JSON by displaying the data in a visual format.',
     ],
   },
   {
-    heading: 'References',
-    links: [
-      {
-        displayText:
-          'Read more about JSON or JavaScript Object Notation at Wikipedia',
-        url: 'https://en.wikipedia.org/wiki/JSON',
-      },
-      {
-        displayText:
-          'RFC 8259 - The JavaScript Object Notation (JSON) Data Interchange Format',
-        url: 'https://datatracker.ietf.org/doc/html/rfc8259',
-      },
-      {
-        displayText: 'json.org',
-        url: 'https://www.json.org/json-en.html',
-      },
+    heading: 'Features of Our Online JSON Viewer Tool',
+    listData: [
+      'Free to use. No need to pay or sign up for an account.',
+      'No download required. View your JSON data directly from your web browser.',
+      'Supports all JSON features. Our JSON viewer supports all the features of the JSON language, including JSON5 and JSON Schema.',
+      'Easy to use. Simply paste your JSON data into the editor and click the "View JSON" button.',
+      'Customizable settings. You can customize the settings of our JSON viewer to match your personal preferences.',
+    ],
+  },
+  {
+    heading: 'How to Use Our Online JSON Viewer Tool',
+    listData: [
+      'Go to our website and paste your JSON data into the editor.',
+      'Click the "View JSON" button.',
+      'View your JSON data in a tree structure in the sidebar.',
+      'Expand and collapse the nodes of the tree structure to view the data in more detail.',
+    ],
+  },
+  {
+    heading: 'Tips for Using a JSON Viewer',
+    listData: [
+      'Use a JSON beautifier and formatter to format your JSON data before you view it in a JSON viewer. This will make it easier to read and understand your JSON data.',
+      'Use the expand and collapse features of the tree structure to view your JSON data in more detail.',
+      'Use the search feature of the JSON viewer to search for specific values in your JSON data.',
+    ],
+  },
+  {
+    blockData: [
+      'Our free online JSON viewer tool is a great way to view your JSON data in a tree structure. It is easy to use and supports all the features of the JSON language. With our JSON viewer, you can easily read and understand your JSON data, debug problems, and learn more about the JSON language.',
     ],
   },
 ];
