@@ -49,11 +49,12 @@
     >error: token is invalid</span
   >
 
-  <button
-    mat-stroked-button
-    (click)="copyDecodedToken()"
-    color="primary"
-    style="align-self: flex-end">
-    <mat-icon>content_copy</mat-icon>Copy Decoded Token
-  </button>
+  <div class="flex-display copy-buttons flex-gap-medium">
+    <button mat-stroked-button (click)="copyShareableLink()" color="primary">
+      <mat-icon>link</mat-icon>Copy Shareable Link
+    </button>
+    <button mat-stroked-button (click)="copyDecodedToken()" color="primary">
+      <mat-icon>content_copy</mat-icon>Copy Decoded Token
+    </button>
+  </div>
 </div>

@@ -15,6 +15,8 @@ import { decodeJwt, decodeProtectedHeader } from 'jose';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-jwt-decoder',
@@ -54,14 +56,25 @@ export class JwtDecoderComponent implements AfterViewInit {
 
   constructor(
     private clipboard: Clipboard,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    this.decodedToken = decodeJwt(this.encodedToken);
+    if (route.snapshot.queryParams['token']) {
+      this.encodedToken = route.snapshot.queryParams['token'];
+    }
 
-    /**
-     * decoded JWT token headers
-     */
-    this.decodedHeaders = decodeProtectedHeader(this.encodedToken);
+    try {
+      this.decodedToken = decodeJwt(this.encodedToken);
+
+      /**
+       * decoded JWT token headers
+       */
+      this.decodedHeaders = decodeProtectedHeader(this.encodedToken);
+    } catch (error) {
+      LogUtils.error('invalid token provided in query param');
+      this.isTokenValid = false;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -117,6 +130,12 @@ export class JwtDecoderComponent implements AfterViewInit {
   copyDecodedToken() {
     this.clipboard.copy(
       JSON.stringify(this.text2AreaContent.json, null, this.tabSpaceValue)
+    );
+  }
+
+  copyShareableLink() {
+    this.clipboard.copy(
+      `${environment.hostname}${this.router.url}?token=${this.encodedToken}`
     );
   }
 

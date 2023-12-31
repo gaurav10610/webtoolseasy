@@ -20,6 +20,9 @@
   .encoded-div {
     padding: 10px;
   }
+  .copy-buttons {
+    align-self: flex-end;
+  }
 }
 
 // to remove border from editable span or div
@@ -33,6 +36,9 @@
     min-height: 10em;
   }
   .text-area-container {
+    flex-direction: column;
+  }
+  .copy-buttons {
     flex-direction: column;
   }
 }
