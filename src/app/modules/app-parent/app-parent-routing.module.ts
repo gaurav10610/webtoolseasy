@@ -199,6 +199,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('../js-editor/js-editor.module').then(m => m.JsEditorModule),
       },
+      {
+        path: 'tools/javascript-compiler',
+        loadChildren: () =>
+          import('../js-compiler/js-compiler.module').then(
+            m => m.JsCompilerModule
+          ),
+      },
     ],
   },
 ];
