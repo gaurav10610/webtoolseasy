@@ -23,7 +23,9 @@
       <span style="font-size: small">Headers ( Algorithm & Token Type)</span>
 
       <!-- JWT header div -->
-      <div class="div-border full-width border-grey">
+      <div
+        class="div-border full-width border-grey"
+        *ngIf="platformMetaDataService.isPlatformBrowser">
         <ngx-json-viewer
           #text3AreaContent
           [json]="decodedHeaders"
@@ -33,7 +35,8 @@
       <span style="font-size: small">Token Data</span>
 
       <div
-        class="div-border flex-full-height full-width border-grey auto-scroll">
+        class="div-border flex-full-height full-width border-grey auto-scroll"
+        *ngIf="platformMetaDataService.isPlatformBrowser">
         <ngx-json-viewer
           #text2AreaContent
           [json]="decodedToken"

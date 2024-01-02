@@ -17,6 +17,7 @@ import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-jwt-decoder',
@@ -58,7 +59,8 @@ export class JwtDecoderComponent implements AfterViewInit {
     private clipboard: Clipboard,
     private renderer: Renderer2,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public platformMetaDataService: PlatformMetadataService
   ) {
     if (route.snapshot.queryParams['token']) {
       this.encodedToken = route.snapshot.queryParams['token'];

@@ -13,6 +13,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { NgxJsonViewerComponent } from 'ngx-json-viewer';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-json-viewer',
@@ -38,7 +39,8 @@ export class JsonViewerComponent implements AfterViewInit {
   constructor(
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: any,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    public platformMetaDataService: PlatformMetadataService
   ) {}
 
   ngAfterViewInit(): void {
