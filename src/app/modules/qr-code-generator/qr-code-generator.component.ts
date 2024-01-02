@@ -16,6 +16,8 @@ import { FileService } from 'src/app/service/file/file.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Observable, Observer } from 'rxjs';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-qr-code-generator',
@@ -35,8 +37,14 @@ export class QrCodeGeneratorComponent implements AfterViewInit {
     private fileService: FileService,
     private renderer: Renderer2,
     private clipboard: Clipboard,
-    private platformMetaDataService: PlatformMetadataService
-  ) {}
+    private platformMetaDataService: PlatformMetadataService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    if (route.snapshot.queryParams['text']) {
+      this.qrText = decodeURIComponent(route.snapshot.queryParams['text']);
+    }
+  }
 
   ngAfterViewInit(): void {
     if (this.platformMetaDataService.isPlatformBrowser) {
@@ -47,7 +55,6 @@ export class QrCodeGeneratorComponent implements AfterViewInit {
   onTextChange(event: any) {
     this.qrText = event.target.value;
     if (this.qrText.trim() !== '') {
-      console.log(this.qrText);
       toCanvas(this.qrCanvas.nativeElement, this.qrText);
     }
   }
@@ -90,5 +97,13 @@ export class QrCodeGeneratorComponent implements AfterViewInit {
       observer.next(blob);
       observer.complete();
     });
+  }
+
+  copyShareableLink() {
+    this.clipboard.copy(
+      `${environment.hostname}${this.router.url}?text=${encodeURIComponent(
+        this.qrText
+      )}`
+    );
   }
 }

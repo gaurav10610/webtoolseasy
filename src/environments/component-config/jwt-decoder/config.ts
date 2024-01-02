@@ -66,8 +66,7 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading:
-      'Here are some of the benefits of using our free online JWT decoder tool:',
+    heading: 'Features of our free online JWT decoder tool:',
     listData: [
       `It's quick and easy to use.`,
       `It's completely free.`,
@@ -75,6 +74,7 @@ export const descriptionData: DescriptionBlock[] = [
       'It decodes JWTs into header, payload, and signature.',
       `It's perfect for developers, testers, and anyone else who needs to decode JWTs.`,
       `It's great for learning more about JWTs and how they work.`,
+      `Provides an easy way to either copy the decoded JWT token data or copy the shareable link for the JWT.`,
     ],
   },
   {

@@ -21,6 +21,14 @@
     <button
       mat-stroked-button
       matTextSuffix=""
+      aria-label="copy Shareable link button"
+      (click)="copyShareableLink()"
+      color="accent">
+      Copy Shareable Link
+    </button>
+    <button
+      mat-stroked-button
+      matTextSuffix=""
       aria-label="copy as string button"
       (click)="copySVG()"
       color="accent">
