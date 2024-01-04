@@ -206,5 +206,13 @@
     "navigateUrl": "tools/guid-generator",
     "iconRelativeUrl": "uuid-icon.svg",
     "category": "Programming"
+  },
+  "jscompiler": {
+    "applicationId": "jscompiler",
+    "displayText": "Online Javascript Compiler",
+    "iconName": "js-icon",
+    "navigateUrl": "/tools/javascript-compiler",
+    "iconRelativeUrl": "js-icon.svg",
+    "category": "Online Editors"
   }
 }

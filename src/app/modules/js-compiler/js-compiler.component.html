@@ -1,0 +1,42 @@
+<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+  <div
+    class="flex-display flex-row-flow flex-align-center full-width text-area-container">
+    <!-- Text 1 div -->
+    <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+      <span class="div-label">JavaScript Code</span>
+
+      <div class="flex-full-height full-width">
+        <!-- unformatted code editor -->
+        <ngx-monaco-editor
+          *ngIf="platformMetaDataService.isPlatformBrowser"
+          style="height: 100%"
+          [options]="editorOptions"
+          (ngModelChange)="onRawCodeChange($event)"
+          [(ngModel)]="rawCode"></ngx-monaco-editor>
+      </div>
+    </div>
+
+    <!-- Text 2 div -->
+    <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
+      <span class="div-label">Console Output</span>
+      <iframe
+        [srcdoc]="iframeSourceCode"
+        class="auto-scroll flex-full-height border-grey"></iframe>
+    </div>
+  </div>
+
+  <div class="flex-display copy-buttons flex-gap-medium">
+    <button mat-raised-button color="primary" (click)="runCode()">
+      <mat-icon>play_arrow</mat-icon>Run
+    </button>
+    <button mat-stroked-button color="primary" (click)="formatCode()">
+      <mat-icon>code</mat-icon>Format Code
+    </button>
+    <button mat-stroked-button color="primary" (click)="copyShareableLink()">
+      <mat-icon>link</mat-icon>Copy Code (Shareable Link)
+    </button>
+    <button mat-stroked-button color="primary" (click)="copyCode()">
+      <mat-icon>content_copy</mat-icon>Copy Code
+    </button>
+  </div>
+</div>
