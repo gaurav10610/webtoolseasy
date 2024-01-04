@@ -16,6 +16,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/service/file/file.service';
 import * as EasyMDE from 'easymde';
+import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 
 @Component({
   selector: 'app-markdown-editor',
@@ -63,32 +64,35 @@ export class MarkdownEditorComponent implements AfterViewInit {
     private clipboard: Clipboard,
     private domSanitizer: DomSanitizer,
     private fileService: FileService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private platformService: PlatformMetadataService
   ) {}
 
   ngAfterViewInit(): void {
-    this.mdEditor = new EasyMDE({
-      element: this.editor.nativeElement,
-      spellChecker: false,
-      toolbar: [
-        {
-          name: 'toggle-preview',
-          action: EasyMDE.togglePreview,
-          text: 'Preview',
-          title: 'Preview Button',
+    if (this.platformService.isPlatformBrowser) {
+      this.mdEditor = new EasyMDE({
+        element: this.editor.nativeElement,
+        spellChecker: false,
+        toolbar: [
+          {
+            name: 'toggle-preview',
+            action: EasyMDE.togglePreview,
+            text: 'Preview',
+            title: 'Preview Button',
+          },
+          ...this.toolbar,
+        ],
+        renderingConfig: {
+          sanitizerFunction: (renderedHTML: string) => {
+            return this.domSanitizer.sanitize(
+              SecurityContext.HTML,
+              renderedHTML
+            )!;
+          },
         },
-        ...this.toolbar,
-      ],
-      renderingConfig: {
-        sanitizerFunction: (renderedHTML: string) => {
-          return this.domSanitizer.sanitize(
-            SecurityContext.HTML,
-            renderedHTML
-          )!;
-        },
-      },
-    });
-    this.mdEditor.value(this.initialValue);
+      });
+      this.mdEditor.value(this.initialValue);
+    }
   }
 
   copyMarkdownData() {

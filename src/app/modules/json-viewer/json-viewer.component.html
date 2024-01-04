@@ -28,7 +28,9 @@
     <!-- Text 2 div -->
     <div class="flex-display flex-column-flow text-area-div flex-gap-medium">
       <span class="div-label">Formatted JSON</span>
-      <div class="text-content-div y-scroll full-height full-width border-grey">
+      <div
+        class="text-content-div y-scroll full-height full-width border-grey"
+        *ngIf="platformMetaDataService.isPlatformBrowser">
         <ngx-json-viewer
           #text2AreaContent
           [json]="formattedJSON"

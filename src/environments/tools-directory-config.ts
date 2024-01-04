@@ -27,6 +27,7 @@ export enum ApplicationIds {
   JS_EDITOR = 'jseditor',
   XML_TO_JSON = 'xmltojson',
   COMPOUND_INTEREST_CALCULATOR = 'compoundinterestcalculator',
+  JS_COMPILER = 'jscompiler',
 }
 
 const appsConfigMap: Map<string, AppNavigationConfig> = new Map(
