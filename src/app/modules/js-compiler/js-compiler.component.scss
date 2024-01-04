@@ -11,6 +11,11 @@
   justify-content: space-between;
 }
 
+.copy-buttons {
+  align-self: flex-start;
+  flex-wrap: wrap;
+}
+
 @media screen and (max-width: 735px) {
   .text-area-div {
     height: 300px;

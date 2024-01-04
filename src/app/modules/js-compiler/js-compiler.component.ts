@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
@@ -7,42 +7,166 @@ import {
   componentConfig,
   descriptionData,
 } from 'src/environments/component-config/js-compiler/config';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ActivatedRoute, Router } from '@angular/router';
+import { js_beautify } from 'js-beautify';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-js-compiler',
   templateUrl: './js-compiler.component.html',
   styleUrls: ['./js-compiler.component.scss'],
 })
-export class JsCompilerComponent {
+export class JsCompilerComponent implements OnInit {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  rawCode: string = `
+  htmlTemplate: string = `
   <!DOCTYPE html>
   <html>
+
   <head>
       <title>Page Title</title>
   </head>
+
   <body>
-  
-    <h1>This is an Online HTML Editor</h1>
-    <p style="color:red">
-      WebToolsEasy is awesome. Explore more such free tools.
-    </p>
+      <script>
+          window.console.log = function(arg, ...optionalParams) {
+              let par = document.createElement("p");
+              if (optionalParams) {
+                  let newText = '';
+                  if (Array.isArray(optionalParams)) {
+                      for (let i = 0; i < optionalParams.length; i++) {
+                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
+                      }
+                  } else {
+                      newText = JSON.stringify(optionalParams)
+                  }
 
-    <p id="js-demo"></p>
+                  arg = arg + " " + newText;
+              }
+              let text = document.createTextNode(arg);
+              par.appendChild(text);
+              document.body.appendChild(par);
+          };
 
-    <script>
-      let a = 5;
-      let b = 6;
-      let c = a + b;
-      document
-      .getElementById("js-demo")
-      .innerHTML = "The value of c is: " + c;
-    </script>
+          window.console.debug = function(arg, ...optionalParams) {
+              let par = document.createElement("p");
+              if (optionalParams) {
+                  let newText = '';
+                  if (Array.isArray(optionalParams)) {
+                      for (let i = 0; i < optionalParams.length; i++) {
+                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
+                      }
+                  } else {
+                      newText = JSON.stringify(optionalParams)
+                  }
 
+                  arg = arg + " " + newText;
+              }
+              let text = document.createTextNode(arg);
+              par.appendChild(text);
+              document.body.appendChild(par);
+          };
+
+          window.console.error = function(arg, ...optionalParams) {
+              let par = document.createElement("p");
+              if (optionalParams) {
+                  let newText = '';
+                  if (Array.isArray(optionalParams)) {
+                      for (let i = 0; i < optionalParams.length; i++) {
+                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
+                      }
+                  } else {
+                      newText = JSON.stringify(optionalParams)
+                  }
+
+                  arg = arg + " " + newText;
+              }
+              let text = document.createTextNode(arg);
+              par.appendChild(text);
+              document.body.appendChild(par);
+          };
+
+          window.console.info = function(arg, ...optionalParams) {
+              let par = document.createElement("p");
+              if (optionalParams) {
+                  let newText = '';
+                  if (Array.isArray(optionalParams)) {
+                      for (let i = 0; i < optionalParams.length; i++) {
+                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
+                      }
+                  } else {
+                      newText = JSON.stringify(optionalParams)
+                  }
+
+                  arg = arg + " " + newText;
+              }
+              let text = document.createTextNode(arg);
+              par.appendChild(text);
+              document.body.appendChild(par);
+          };
+
+          window.console.trace = function(arg, ...optionalParams) {
+              let par = document.createElement("p");
+              if (optionalParams) {
+                  let newText = '';
+                  if (Array.isArray(optionalParams)) {
+                      for (let i = 0; i < optionalParams.length; i++) {
+                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
+                      }
+                  } else {
+                      newText = JSON.stringify(optionalParams)
+                  }
+
+                  arg = arg + " " + newText;
+              }
+              let text = document.createTextNode(arg);
+              par.appendChild(text);
+              document.body.appendChild(par);
+          };
+
+          window.console.warn = function(arg, ...optionalParams) {
+              let par = document.createElement("p");
+              if (optionalParams) {
+                  let newText = '';
+                  if (Array.isArray(optionalParams)) {
+                      for (let i = 0; i < optionalParams.length; i++) {
+                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
+                      }
+                  } else {
+                      newText = JSON.stringify(optionalParams)
+                  }
+
+                  arg = arg + " " + newText;
+              }
+              let text = document.createTextNode(arg);
+              par.appendChild(text);
+              document.body.appendChild(par);
+          };
+
+          try {
+              {code}
+          } catch (error) {
+              console.log(error);
+              console.log(error.stack);
+          }
+      </script>
   </body>
+
   </html>
+  `;
+
+  rawCode: string = `
+  /**
+   * This is an Online Javascript Compiler offered by WebToolsEasy
+   */
+  
+  const obj = {
+      appName: 'WebToolsEasy'
+  }
+  
+  console.log("Welcome to WebToolsEasy!", obj);
   `;
 
   /**
@@ -50,7 +174,7 @@ export class JsCompilerComponent {
    */
   editorOptions = {
     theme: 'vs-dark',
-    language: 'html',
+    language: 'javascript',
     fontSize: 15,
   };
 
@@ -58,17 +182,49 @@ export class JsCompilerComponent {
 
   constructor(
     public platformMetaDataService: PlatformMetadataService,
-    private domSanitizer: DomSanitizer
-  ) {}
+    private domSanitizer: DomSanitizer,
+    private clipboard: Clipboard,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    if (route.snapshot.queryParams['code']) {
+      this.rawCode = decodeURIComponent(route.snapshot.queryParams['code']);
+    }
+  }
 
   ngOnInit(): void {
     this.iframeSourceCode = this.domSanitizer.bypassSecurityTrustHtml(
-      this.rawCode
+      this.getUpdatedHtmlTemplate(this.rawCode)
     );
   }
 
   onRawCodeChange(updatedModel: string) {
-    this.iframeSourceCode =
-      this.domSanitizer.bypassSecurityTrustHtml(updatedModel);
+    this.rawCode = updatedModel;
+  }
+
+  getUpdatedHtmlTemplate(rawJSCode: string) {
+    return this.htmlTemplate.replace('{code}', rawJSCode);
+  }
+
+  runCode() {
+    this.iframeSourceCode = this.domSanitizer.bypassSecurityTrustHtml(
+      this.getUpdatedHtmlTemplate(this.rawCode)
+    );
+  }
+
+  formatCode() {
+    this.rawCode = js_beautify(this.rawCode);
+  }
+
+  copyShareableLink() {
+    this.clipboard.copy(
+      `${environment.hostname}${this.router.url}?code=${encodeURIComponent(
+        this.rawCode
+      )}`
+    );
+  }
+
+  copyCode() {
+    this.clipboard.copy(this.rawCode);
   }
 }

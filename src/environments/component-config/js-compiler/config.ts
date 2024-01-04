@@ -7,19 +7,19 @@ import {
 } from 'src/environments/tools-directory-config';
 
 const navigationUrl = '/tools/javascript-compiler';
-const pageTitle = 'Online Javascript Compiler: Compile Javascript in Browser';
+const pageTitle = 'Online JavaScript Compiler: Compile JS Code in Browser';
 const pageDescription =
   'Compile and execute JavaScript code directly in your browser with our lightning-fast, feature-rich online compiler. Perfect for beginners, students, and professionals alike.';
 const imageUrl = `${environment.screenshotsBaseUrl}/javascript-compiler.png`;
 
 const keywords =
-  'online javascript compiler, javascript compiler, javascript online, run javascript online, code javascript online, free javascript compiler';
+  'online javascript compiler, javascript compiler, javascript online, run javascript online, code javascript online, free javascript compiler, compile js online, online js compiler, run javascript in browser, run js in browser';
 
 const relatedTools: ApplicationIds[] = [];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    'Online Javascript Compiler: Compile & Run Javascript in Browser',
+    'Online JavaScript Compiler: Compile & Run JavaScript in Browser',
   navigationUrl,
   pageTitle,
   metaTags: [
@@ -60,7 +60,7 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: 'Key Features of Online Javascript Compiler',
+    heading: 'Key Features of Online JavaScript Compiler',
     listData: [
       `Instant Compilation: Experience lightning-fast code execution thanks to our cutting-edge compiler technology.`,
       `Browser-Based: Access the compiler anytime, anywhere, from any device with an internet connection.`,
@@ -68,6 +68,7 @@ export const descriptionData: DescriptionBlock[] = [
       `Code Sharing: Easily share your code creations with others via unique URLs.`,
       `Beginner-Friendly: Ideal for learning JavaScript with a user-friendly interface and clear syntax highlighting.`,
       `Perfect for Professionals: Streamline your development workflow by quickly testing code snippets and ideas.`,
+      `Security: Your javascript code is 100% secured as it won't leave the browser and javascript code will be compiled, run in browser only.`,
     ],
   },
   {

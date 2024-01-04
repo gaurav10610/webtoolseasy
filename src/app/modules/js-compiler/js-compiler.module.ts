@@ -5,6 +5,9 @@ import { JsCompilerRoutingModule } from './js-compiler-routing.module';
 import { JsCompilerComponent } from './js-compiler.component';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [JsCompilerComponent],
@@ -13,6 +16,9 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
     JsCompilerRoutingModule,
     FormsModule,
     MonacoEditorModule.forRoot(),
+    MatIconModule,
+    MatButtonModule,
+    ClipboardModule,
   ],
 })
 export class JsCompilerModule {}
