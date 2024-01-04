@@ -8,7 +8,7 @@ describe('JsCompilerComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [JsCompilerComponent]
+      declarations: [JsCompilerComponent],
     });
     fixture = TestBed.createComponent(JsCompilerComponent);
     component = fixture.componentInstance;
