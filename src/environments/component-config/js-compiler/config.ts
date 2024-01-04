@@ -15,7 +15,10 @@ const imageUrl = `${environment.screenshotsBaseUrl}/javascript-compiler.png`;
 const keywords =
   'online javascript compiler, javascript compiler, javascript online, run javascript online, code javascript online, free javascript compiler, compile js online, online js compiler, run javascript in browser, run js in browser';
 
-const relatedTools: ApplicationIds[] = [];
+const relatedTools: ApplicationIds[] = [
+  ApplicationIds.HTML_EDITOR,
+  ApplicationIds.MARKDOWN_EDITOR,
+];
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
