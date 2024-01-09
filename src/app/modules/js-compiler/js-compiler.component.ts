@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ApplicationConfig } from 'src/app/@types/config';
+import { AppContext, ApplicationConfig } from 'src/app/@types/config';
 import { DescriptionBlock } from 'src/app/@types/description';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
 import {
@@ -11,6 +11,8 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute, Router } from '@angular/router';
 import { js_beautify } from 'js-beautify';
 import { environment } from 'src/environments/environment';
+import { AppCacheService } from 'src/app/service/app-cache/app-cache.service';
+import { ApplicationIds } from 'src/environments/tools-directory-config';
 
 @Component({
   selector: 'app-js-compiler',
@@ -185,8 +187,17 @@ export class JsCompilerComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private clipboard: Clipboard,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private appCacheService: AppCacheService
   ) {
+    const appContext: AppContext | null = this.appCacheService.getAppContext(
+      ApplicationIds.JS_COMPILER
+    );
+
+    if (appContext && appContext.data) {
+      this.rawCode = appContext.data;
+    }
+
     if (route.snapshot.queryParams['code']) {
       this.rawCode = decodeURIComponent(route.snapshot.queryParams['code']);
     }
@@ -200,6 +211,14 @@ export class JsCompilerComponent implements OnInit {
 
   onRawCodeChange(updatedModel: string) {
     this.rawCode = updatedModel;
+
+    /**
+     * store updated code in browser cache
+     */
+    this.appCacheService.setAppContext({
+      id: ApplicationIds.JS_COMPILER,
+      data: updatedModel,
+    });
   }
 
   getUpdatedHtmlTemplate(rawJSCode: string) {

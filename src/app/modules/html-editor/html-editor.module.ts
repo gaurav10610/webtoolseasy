@@ -5,6 +5,9 @@ import { HtmlEditorRoutingModule } from './html-editor-routing.module';
 import { HtmlEditorComponent } from './html-editor.component';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [HtmlEditorComponent],
@@ -12,6 +15,9 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
     CommonModule,
     HtmlEditorRoutingModule,
     FormsModule,
+    MatIconModule,
+    MatButtonModule,
+    ClipboardModule,
     MonacoEditorModule.forRoot(),
   ],
 })
