@@ -36,7 +36,7 @@
     "@nguniversal/express-engine": "16.2.0",
     "easymde": "2.18.0",
     "express": "4.15.2",
-    "fast-xml-parser": "4.3.2",
+    "fast-xml-parser": "4.3.3",
     "generate-password-browser": "1.1.0",
     "guid-typescript": "1.0.9",
     "idb-keyval": "6.2.1",

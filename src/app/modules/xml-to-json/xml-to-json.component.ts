@@ -7,7 +7,7 @@ import {
   descriptionData,
 } from 'src/environments/component-config/xml-to-json/config';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { X2jOptionsOptional, XMLParser } from 'fast-xml-parser';
+import { X2jOptions, XMLParser } from 'fast-xml-parser';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
@@ -57,7 +57,7 @@ export class XmlToJsonComponent implements OnInit {
 
   xmlParser = new XMLParser();
 
-  parserOptions: X2jOptionsOptional = {
+  parserOptions: X2jOptions = {
     ignoreAttributes: true,
     ignoreDeclaration: true,
   };
