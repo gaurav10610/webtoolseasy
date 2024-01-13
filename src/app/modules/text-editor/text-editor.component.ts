@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  NgZone,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppCacheService } from 'src/app/service/app-cache/app-cache.service';
 import { PlatformMetadataService } from 'src/app/service/platform-metadata/platform-metadata.service';
@@ -12,6 +18,8 @@ import {
 } from 'src/environments/component-config/text-editor/config';
 import { environment } from 'src/environments/environment';
 import { ApplicationState } from 'src/app/@types/component';
+import { FileService } from 'src/app/service/file/file.service';
+import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-text-editor',
@@ -33,11 +41,20 @@ export class TextEditorComponent implements ApplicationState {
     fontSize: 15,
   };
 
+  @ViewChild('inputPlainText', { static: false })
+  inputPlainText!: ElementRef;
+
+  @ViewChild('inputRichText', { static: false })
+  inputRichText!: ElementRef;
+
   constructor(
     public platformMetaDataService: PlatformMetadataService,
     private appCacheService: AppCacheService,
     private clipboard: Clipboard,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fileService: FileService,
+    private renderer: Renderer2,
+    private zoneRef: NgZone
   ) {
     this.restoreState();
 
@@ -109,5 +126,67 @@ export class TextEditorComponent implements ApplicationState {
 
   copyText() {
     this.clipboard.copy(this.rawCode);
+  }
+
+  async downloadFile(type: string) {
+    let blob;
+    let fileName;
+    switch (type) {
+      case 'text':
+        blob = new Blob([this.rawCode], { type: 'plain/text' });
+        fileName = 'mytext-webtoolseasy.txt';
+        break;
+
+      case 'json':
+        const str = JSON.stringify({
+          text: this.rawCode,
+          editorOptions: this.editorOptions,
+        });
+        const bytes = new TextEncoder().encode(str);
+        blob = new Blob([bytes], {
+          type: 'application/json;charset=utf-8',
+        });
+        fileName = 'mytext-webtoolseasy.json';
+        break;
+    }
+    this.fileService.downloadFile(fileName!, blob!, this.renderer);
+  }
+
+  openFileDialog(type: string) {
+    switch (type) {
+      case 'text':
+        this.renderer
+          .selectRootElement(this.inputPlainText.nativeElement, true)
+          .click();
+        break;
+
+      case 'json':
+        this.renderer
+          .selectRootElement(this.inputRichText.nativeElement, true)
+          .click();
+        break;
+    }
+  }
+
+  uploadFile(event: any, type: string) {
+    const file: File = event.target.files[0];
+    switch (type) {
+      case 'text':
+        this.fileService.readFileAsText(file, this.onRawCodeChange.bind(this));
+        break;
+
+      case 'json':
+        this.fileService.readFileAsText(file, this.loadRichText.bind(this));
+        break;
+    }
+  }
+
+  loadRichText(data: string) {
+    const { text, editorOptions } = JSON.parse(data);
+    this.zoneRef.run(() => {
+      this.rawCode = text;
+      this.editorOptions = { ...editorOptions };
+    });
+    this.saveState();
   }
 }

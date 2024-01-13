@@ -28,6 +28,40 @@
   <div
     class="flex-display flex-gap-small full-width flex-align-center"
     style="flex-wrap: wrap">
+    <input
+      #inputRichText
+      type="file"
+      style="display: none"
+      (change)="uploadFile($event, 'json')"
+      accept=".json" />
+
+    <input
+      #inputPlainText
+      type="file"
+      style="display: none"
+      (change)="uploadFile($event, 'text')"
+      accept=".txt" />
+
+    <button
+      mat-raised-button
+      color="primary"
+      aria-label="Button for upload plain text"
+      (click)="openFileDialog('text')">
+      <mat-icon>upload</mat-icon>Upload Plain Text (.txt)
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      aria-label="Button for upload rich text"
+      (click)="openFileDialog('json')">
+      <mat-icon>upload</mat-icon>Upload Rich Text (.json)
+    </button>
+  </div>
+
+  <div
+    class="flex-display flex-gap-small full-width flex-align-center"
+    style="flex-wrap: wrap">
     <button mat-stroked-button color="primary" (click)="copyShareableLink()">
       <mat-icon>link</mat-icon>Copy Text (Shareable Link)
     </button>
@@ -43,14 +77,16 @@
     <button
       mat-stroked-button
       color="primary"
-      aria-label="Button for download as rich text">
+      aria-label="Button for download as plain text"
+      (click)="downloadFile('text')">
       <mat-icon>download</mat-icon>Download Plain Text (.txt)
     </button>
 
     <button
       mat-stroked-button
       color="primary"
-      aria-label="Button for download as rich text">
+      aria-label="Button for download as rich text"
+      (click)="downloadFile('json')">
       <mat-icon>download</mat-icon>Download Rich Text (.json)
     </button>
   </div>
