@@ -29,7 +29,7 @@ export class TextEditorComponent implements ApplicationState {
   applicationConfig: ApplicationConfig = componentConfig;
   descriptionData: DescriptionBlock[] = descriptionData;
 
-  rawCode: string = 'this is online text editor';
+  rawCode: string = 'This is a free online text editor offered by WebToolEasy';
 
   /**
    * monaco editor options
