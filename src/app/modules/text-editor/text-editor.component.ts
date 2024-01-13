@@ -19,7 +19,6 @@ import {
 import { environment } from 'src/environments/environment';
 import { ApplicationState } from 'src/app/@types/component';
 import { FileService } from 'src/app/service/file/file.service';
-import { LogUtils } from 'src/app/service/util/logger';
 
 @Component({
   selector: 'app-text-editor',
