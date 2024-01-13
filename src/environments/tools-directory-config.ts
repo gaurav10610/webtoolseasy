@@ -29,6 +29,7 @@ export enum ApplicationIds {
   COMPOUND_INTEREST_CALCULATOR = 'compoundinterestcalculator',
   JS_COMPILER = 'jscompiler',
   TEXT_EDITOR = 'texteditor',
+  CASE_CONVERETR = 'caseconverter',
 }
 
 const appsConfigMap: Map<string, AppNavigationConfig> = new Map(
