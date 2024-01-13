@@ -75,6 +75,7 @@ export const descriptionData: DescriptionBlock[] = [
       'Supports all JavaScript elements and attributes. Our editor supports all JavaScript elements and attributes, so you can create any type of interactive web page you want.',
       'Syntax highlighting and code completion. Our editor provides syntax highlighting and code completion to help you write and edit JavaScript code more efficiently.',
       'Error checking and live previews. Our editor checks your code for errors and warnings to help you avoid problems, and it provides live previews of your web page so you can see how your changes look as you make them.',
+      `Share and Collaborate: Share your code with ease using the generated URL, enabling seamless collaboration and knowledge sharing.`,
     ],
   },
   {

@@ -9,6 +9,10 @@ import {
   descriptionData,
 } from 'src/environments/component-config/html-editor/config';
 import { ApplicationIds } from 'src/environments/tools-directory-config';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ActivatedRoute, Router } from '@angular/router';
+import { html_beautify } from 'js-beautify';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-html-editor',
@@ -22,17 +26,20 @@ export class HtmlEditorComponent implements OnInit {
   rawCode: string = `
   <!DOCTYPE html>
   <html>
+  
   <head>
       <title>Page Title</title>
   </head>
+  
   <body>
   
-    <h1>This is an Online HTML Editor</h1>
-    <p style="color:red">
-      WebToolsEasy is awesome. Explore more such free tools.
-    </p>
+      <h1>This is an Online HTML Editor</h1>
+      <p style="color:red">
+          WebToolsEasy is Shikha. Explore more such free tools.
+      </p>
   
   </body>
+  
   </html>
   `;
 
@@ -50,25 +57,34 @@ export class HtmlEditorComponent implements OnInit {
   constructor(
     public platformMetaDataService: PlatformMetadataService,
     private domSanitizer: DomSanitizer,
-    private appCacheService: AppCacheService
-  ) {}
-
-  ngOnInit(): void {
+    private appCacheService: AppCacheService,
+    private clipboard: Clipboard,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     const appContext: AppContext | null = this.appCacheService.getAppContext(
       ApplicationIds.HTML_EDITOR
     );
+
     if (appContext && appContext.data) {
       this.rawCode = appContext.data;
     }
 
+    if (this.route.snapshot.queryParams['code']) {
+      this.rawCode = decodeURIComponent(
+        this.route.snapshot.queryParams['code']
+      );
+    }
+  }
+
+  ngOnInit(): void {
     this.iframeSourceCode = this.domSanitizer.bypassSecurityTrustHtml(
       this.rawCode
     );
   }
 
   onRawCodeChange(updatedModel: string) {
-    this.iframeSourceCode =
-      this.domSanitizer.bypassSecurityTrustHtml(updatedModel);
+    this.rawCode = updatedModel;
 
     /**
      * store updated code in browser cache
@@ -77,5 +93,27 @@ export class HtmlEditorComponent implements OnInit {
       id: ApplicationIds.HTML_EDITOR,
       data: updatedModel,
     });
+  }
+
+  runCode() {
+    this.iframeSourceCode = this.domSanitizer.bypassSecurityTrustHtml(
+      this.rawCode
+    );
+  }
+
+  formatCode() {
+    this.rawCode = html_beautify(this.rawCode);
+  }
+
+  copyShareableLink() {
+    this.clipboard.copy(
+      `${environment.hostname}${this.router.url}?code=${encodeURIComponent(
+        this.rawCode
+      )}`
+    );
+  }
+
+  copyCode() {
+    this.clipboard.copy(this.rawCode);
   }
 }

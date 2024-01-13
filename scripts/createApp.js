@@ -61,7 +61,7 @@ function createNewAppComponentConfig() {
  * @param {*} newAppName
  */
 function registerNewApp(newAppName) {
-  const formattingSpace = '  '
+  const formattingSpace = '  ';
   const appsConfigJson = JSON.parse(
     fs.readFileSync('./src/environments/apps.json', {
       encoding: 'utf8',

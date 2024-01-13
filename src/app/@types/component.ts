@@ -1,0 +1,11 @@
+export interface ApplicationState {
+  /**
+   * save application state
+   */
+  saveState(): Promise<void>;
+
+  /**
+   * restore application state
+   */
+  restoreState(): void;
+}

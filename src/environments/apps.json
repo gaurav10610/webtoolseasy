@@ -214,5 +214,13 @@
     "navigateUrl": "/tools/javascript-compiler",
     "iconRelativeUrl": "js-icon.svg",
     "category": "Online Editors"
+  },
+  "texteditor": {
+    "applicationId": "texteditor",
+    "displayText": "Online Text Editor",
+    "iconName": "text-editor-icon",
+    "navigateUrl": "/tools/text-editor",
+    "iconRelativeUrl": "text-icon.svg",
+    "category": "Online Editors"
   }
 }

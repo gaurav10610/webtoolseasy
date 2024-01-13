@@ -1,0 +1,9 @@
+.text-area-div {
+  height: 600px;
+}
+
+@media screen and (max-width: 735px) {
+  .text-area-div {
+    height: 300px;
+  }
+}

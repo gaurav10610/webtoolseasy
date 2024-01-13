@@ -24,4 +24,21 @@
         class="auto-scroll flex-full-height border-grey"></iframe>
     </div>
   </div>
+
+  <div
+    class="flex-display flex-gap-medium"
+    style="align-self: flex-start; flex-wrap: wrap">
+    <button mat-raised-button color="primary" (click)="runCode()">
+      <mat-icon>play_arrow</mat-icon>Run
+    </button>
+    <button mat-stroked-button color="primary" (click)="formatCode()">
+      <mat-icon>code</mat-icon>Format Code
+    </button>
+    <button mat-stroked-button color="primary" (click)="copyShareableLink()">
+      <mat-icon>link</mat-icon>Copy Code (Shareable Link)
+    </button>
+    <button mat-stroked-button color="primary" (click)="copyCode()">
+      <mat-icon>content_copy</mat-icon>Copy Code
+    </button>
+  </div>
 </div>

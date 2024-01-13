@@ -75,6 +75,7 @@ export const descriptionData: DescriptionBlock[] = [
       'Syntax highlighting and code completion. Our editor provides syntax highlighting and code completion to help you write and edit HTML and CSS code more efficiently.',
       'Error checking and live previews. Our editor checks your code for errors and warnings to help you avoid problems, and it provides live previews of your web page so you can see how your changes look as you make them.,',
       'Stores user state in browser cache meaning your HTML and CSS code will not be lost even if you refresh/reload and reopen the HTML editor browser window',
+      `Share and Collaborate: Share your code with ease using the generated URL, enabling seamless collaboration and knowledge sharing.`,
     ],
   },
   {
