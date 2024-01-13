@@ -1,0 +1,107 @@
+<div class="flex-display flex-column-flow flex-align-center flex-gap-large">
+  <!-- editor options -->
+  <div
+    class="flex-display flex-gap-small full-width flex-align-center"
+    style="flex-wrap: wrap">
+    <mat-button-toggle-group
+      name="editorTheme"
+      aria-label="Editor Theme"
+      (change)="handleConfigChange($event, 'theme')"
+      [value]="editorOptions.theme">
+      <mat-button-toggle value="vs-light">Light Theme</mat-button-toggle>
+      <mat-button-toggle value="vs-dark">Dark Theme</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-form-field appearance="outline" [subscriptSizing]="'dynamic'">
+      <mat-label>Font Size</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="Max 50"
+        [value]="editorOptions.fontSize"
+        min="5"
+        max="50"
+        (input)="handleConfigChange($event, 'fontSize')" />
+    </mat-form-field>
+  </div>
+
+  <div
+    class="flex-display flex-gap-small full-width flex-align-center"
+    style="flex-wrap: wrap">
+    <input
+      #inputRichText
+      type="file"
+      style="display: none"
+      (change)="uploadFile($event, 'json')"
+      accept=".json" />
+
+    <input
+      #inputPlainText
+      type="file"
+      style="display: none"
+      (change)="uploadFile($event, 'text')"
+      accept=".txt" />
+
+    <button
+      mat-raised-button
+      color="primary"
+      aria-label="Button for upload plain text"
+      (click)="openFileDialog('text')">
+      <mat-icon>upload</mat-icon>Upload Plain Text (.txt)
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      aria-label="Button for upload rich text"
+      (click)="openFileDialog('json')">
+      <mat-icon>upload</mat-icon>Upload Rich Text (.json)
+    </button>
+  </div>
+
+  <div
+    class="flex-display flex-gap-small full-width flex-align-center"
+    style="flex-wrap: wrap">
+    <button mat-stroked-button color="primary" (click)="copyShareableLink()">
+      <mat-icon>link</mat-icon>Copy Text (Shareable Link)
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      aria-label="Button for download as text"
+      (click)="copyText()">
+      <mat-icon>content_copy</mat-icon>Copy Text
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      aria-label="Button for download as plain text"
+      (click)="downloadFile('text')">
+      <mat-icon>download</mat-icon>Download Plain Text (.txt)
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      aria-label="Button for download as rich text"
+      (click)="downloadFile('json')">
+      <mat-icon>download</mat-icon>Download Rich Text (.json)
+    </button>
+  </div>
+
+  <!-- Text div -->
+  <div
+    class="flex-display flex-column-flow text-area-div flex-gap-medium full-width border-grey">
+    <div class="flex-full-height full-width">
+      <!-- unformatted code editor -->
+      <ngx-monaco-editor
+        *ngIf="platformMetaDataService.isPlatformBrowser"
+        style="height: 100%"
+        [options]="editorOptions"
+        (ngModelChange)="onRawCodeChange($event)"
+        [(ngModel)]="rawCode"></ngx-monaco-editor>
+    </div>
+  </div>
+</div>

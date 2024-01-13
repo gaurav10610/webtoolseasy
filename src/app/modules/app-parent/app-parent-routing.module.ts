@@ -206,6 +206,13 @@ const routes: Routes = [
             m => m.JsCompilerModule
           ),
       },
+      {
+        path: 'tools/text-editor',
+        loadChildren: () =>
+          import('../text-editor/text-editor.module').then(
+            m => m.TextEditorModule
+          ),
+      },
     ],
   },
 ];
