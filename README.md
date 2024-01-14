@@ -14,6 +14,7 @@ Webtoolseasy is a suite of free web tools to make work super easy. Currently, it
 * Online HTML Editor
 * Markdown Editor
 * Online JavaScript Compiler
+* Online Text Editor
 
 ## Finance
 
