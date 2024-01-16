@@ -97,6 +97,6 @@ export class AppParentComponent implements OnInit {
     /**
      * after routing to the new url, scrolling back to top of the page
      */
-    document.getElementById('appRendererDiv')!.scrollTop = 0;
+    this.document.getElementById('appRendererDiv')!.scrollTop = 0;
   }
 }
