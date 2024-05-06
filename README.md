@@ -10,7 +10,7 @@ Webtoolseasy is a suite of free web tools to make work super easy. Currently, it
 
 ## Online Editors
 
-* Online JavaScript Editor
+* [Online JavaScript Editor](https://webtoolseasy.com/tools/javascript-editor)
 * Online HTML Editor
 * Markdown Editor
 * Online JavaScript Compiler
