@@ -56,7 +56,7 @@ Try at - [https://webtoolseasy.com/](https://webtoolseasy.com/)
 * [QR Code Generator](https://webtoolseasy.com/tools/qr-code-generator)
 * [Random Password Generator](https://webtoolseasy.com/tools/password-generator)
 
-If like it, please follow us -
+If you like it, please follow WebToolsEasy -
 
 * [LinkedIn](https://www.linkedin.com/company/webtoolseasy/)
 * [Facebook](https://www.facebook.com/people/Webtoolseasy/100088911459047/)
