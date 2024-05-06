@@ -6,22 +6,8 @@ import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
-/**
- *
- * fixing document is undefined error
- */
-// const domino = require('domino');
-// const fs = require('fs');
-// const path = require('path');
-// const distFolder = join(process.cwd(), 'dist/webtoolseasy/browser');
-// const template = fs
-//   .readFileSync(path.join(distFolder, 'index.html'))
-//   .toString();
-// const win = domino.createWindow(template.toString());
-// // @ts-ignore
-// global['document'] = win.document;
-
 import { AppServerModule } from './src/main.server';
+import { addResponseHeaders } from 'ssr-server-helper';
 
 const serverCache: Map<string, any> = new Map();
 
@@ -56,10 +42,7 @@ export function app(serverCache: Map<string, any>): express.Express {
     express.static(monacoDistFolder, {
       maxAge: '1y',
       fallthrough: false,
-      setHeaders: function (res) {
-        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-      },
+      setHeaders: addResponseHeaders,
     })
   );
 
@@ -68,10 +51,7 @@ export function app(serverCache: Map<string, any>): express.Express {
     express.static(distFolder, {
       maxAge: '1y',
       fallthrough: false,
-      setHeaders: function (res) {
-        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-      },
+      setHeaders: addResponseHeaders,
     })
   );
 
@@ -81,8 +61,7 @@ export function app(serverCache: Map<string, any>): express.Express {
     (req, res, next) => {
       const cachedHtml = serverCache.get(req.url);
       if (cachedHtml) {
-        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        addResponseHeaders(res);
 
         // console.log(`[WebToolsEasy] Serving from server cache`);
 
@@ -94,8 +73,7 @@ export function app(serverCache: Map<string, any>): express.Express {
       }
     },
     (req, res) => {
-      res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-      res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+      addResponseHeaders(res);
       res.render(
         indexHtml,
         {
