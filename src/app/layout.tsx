@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { robotoFont } from "@/design";
+import { theme } from "@/theme";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +17,35 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={robotoFont.variable}>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <div className="main-container no-vr-scroll">
+              {/* <ResponsiveAppBar>
+                <FlexList
+                  items={topAppBarItems}
+                  isDirectionRow={true}
+                ></FlexList>
+              </ResponsiveAppBar>
+              <MenuItems
+                menuItems={categoryData}
+                sx={{
+                  marginTop: "10px",
+                }}
+              /> */}
+              <div
+                className="base-container full-width flex-full-height"
+                style={{
+                  overflowY: "auto",
+                }}
+              >
+                {children}
+              </div>
+              {/* <ResponsiveAppBar position="relative" /> */}
+            </div>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }
