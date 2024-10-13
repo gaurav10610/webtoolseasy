@@ -1,5 +1,5 @@
-import { MetaDefinition } from '@angular/platform-browser';
-import { ApplicationIds } from 'src/environments/tools-directory-config';
+import { ApplicationIds } from "@/data/tools-directory-config";
+import { Metadata } from "next";
 
 export interface BaseAppConfig {
   displayText: string;
@@ -15,7 +15,7 @@ export interface AppNavigationConfig extends BaseAppConfig {
 export interface ApplicationConfig {
   mainHeading?: string;
   navigationUrl: string;
-  metaTags: MetaDefinition[];
+  metaTags: Metadata[];
   pageTitle: string;
   tags: string[];
   icons: IconConfig[];
@@ -28,12 +28,12 @@ export interface IconConfig {
 }
 
 export enum AppCategory {
-  TEXT = 'Text',
-  MISCELLANEOUS = 'Miscellaneous',
-  PROGRAMMING = 'Programming',
-  ONLINE_EDITORS = 'Online Editors',
-  MEDIA = 'Media',
-  FINANCE = 'Finance',
+  TEXT = "Text",
+  MISCELLANEOUS = "Miscellaneous",
+  PROGRAMMING = "Programming",
+  ONLINE_EDITORS = "Online Editors",
+  MEDIA = "Media",
+  FINANCE = "Finance",
 }
 
 export interface AppCatalogue {
@@ -43,5 +43,6 @@ export interface AppCatalogue {
 
 export interface AppContext {
   id: ApplicationIds;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
 }

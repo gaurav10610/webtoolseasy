@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export enum PopupFormType {
-  VIDEO_CONVERT_SETTINGS = 'video-convert-sttings',
+  VIDEO_CONVERT_SETTINGS = "video-convert-sttings",
 }
 
 export enum PopupFormElementType {
-  DROPDOWN = 'dropdown',
-  BUTTON = 'button',
+  DROPDOWN = "dropdown",
+  BUTTON = "button",
 }
 
 export interface PopupFormElement {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface BaseFileData {
   id: string;
   file: File;
@@ -42,6 +43,6 @@ export interface ImageCompressSettings {
 }
 
 export enum FileDataType {
-  IMAGE = 'image',
-  VIDEO = 'video',
+  IMAGE = "image",
+  VIDEO = "video",
 }
