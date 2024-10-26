@@ -9,7 +9,8 @@ import { ResponsiveAppBar } from "@/components/lib/appBar";
 import { getRandomId } from "@/util/commonUtils";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import Image from "next/image";
+import ApplicationIcon from "@/data/icons/app-icon.svg";
+import { CustomSvgIcon } from "@/components/lib/icons";
 
 export const metadata: Metadata = {
   title: "Online Web Tools: Browse Free Tools to Boost Productivity",
@@ -24,12 +25,13 @@ export default function RootLayout({
 }>) {
   const topAppBarItems = [
     <Link href="/" key={getRandomId()}>
-      <Image
-        src="/images/icons/app-icon.svg"
-        alt="Home Icon"
-        width={30}
-        height={30}
-      />
+      <CustomSvgIcon
+        sx={{
+          fontSize: "1.8rem",
+        }}
+      >
+        <ApplicationIcon />
+      </CustomSvgIcon>
     </Link>,
     <Link href="/" passHref key={getRandomId()}>
       <Typography variant="h6" color="inherit">

@@ -6,7 +6,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { isEmpty, map } from "lodash";
+import isEmpty from "lodash-es/isEmpty";
+import map from "lodash-es/map";
 import { ReactNode } from "react";
 
 export function BasicTable({
