@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import ApplicationIcon from "@/data/icons/app-icon.svg";
 import { CustomSvgIcon } from "@/components/lib/icons";
+import HomeIcon from "@/data/icons/home.svg";
 
 export const metadata: Metadata = {
   title: "Online Web Tools: Browse Free Tools to Boost Productivity",
@@ -25,11 +26,7 @@ export default function RootLayout({
 }>) {
   const topAppBarItems = [
     <Link href="/" key={getRandomId()}>
-      <CustomSvgIcon
-        sx={{
-          fontSize: "1.8rem",
-        }}
-      >
+      <CustomSvgIcon size="large">
         <ApplicationIcon />
       </CustomSvgIcon>
     </Link>,
@@ -38,6 +35,19 @@ export default function RootLayout({
         WebToolsEasy
       </Typography>
     </Link>,
+    <div
+      key={getRandomId()}
+      className="row-display full-width"
+      style={{
+        justifyContent: "flex-end",
+      }}
+    >
+      <Link href="/" passHref>
+        <CustomSvgIcon size="large">
+          <HomeIcon />
+        </CustomSvgIcon>
+      </Link>
+    </div>,
   ];
 
   return (
@@ -50,6 +60,7 @@ export default function RootLayout({
                 <FlexList
                   items={topAppBarItems}
                   isDirectionRow={true}
+                  isFullWidth={true}
                 ></FlexList>
               </ResponsiveAppBar>
               <div
