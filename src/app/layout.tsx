@@ -31,7 +31,12 @@ export default function RootLayout({
       </CustomSvgIcon>
     </Link>,
     <Link href="/" passHref key={getRandomId()}>
-      <Typography variant="h6" color="inherit">
+      <Typography
+        color="inherit"
+        sx={{
+          fontSize: "1.3rem",
+        }}
+      >
         WebToolsEasy
       </Typography>
     </Link>,

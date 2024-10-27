@@ -14,7 +14,8 @@ export async function AppHomeCard({
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
   return (
     <PaperWithChildren
-      variant="outlined"
+      variant="elevation"
+      elevation={3}
       sx={{
         padding: "15px",
         ...sx,
