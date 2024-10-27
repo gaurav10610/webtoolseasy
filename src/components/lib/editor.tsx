@@ -1,6 +1,6 @@
 "use client";
 
-import MonacoEditor from "react-monaco-editor";
+import MonacoEditor, { monaco } from "react-monaco-editor";
 
 export function CodeEditor({
   language,
@@ -9,6 +9,7 @@ export function CodeEditor({
   onChange,
   editorOptions = {},
   sx = {},
+  handleEditorDidMount,
 }: Readonly<{
   language: string;
   theme?: string;
@@ -16,6 +17,9 @@ export function CodeEditor({
   onChange?: (value: string) => void;
   editorOptions?: Record<string, unknown>;
   sx?: Record<string, unknown>;
+  handleEditorDidMount?: (
+    editor: monaco.editor.IStandaloneCodeEditor | null
+  ) => void;
 }>) {
   const defaultEditorOptions = {
     selectOnLineNumbers: true,
@@ -24,6 +28,7 @@ export function CodeEditor({
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
   };
+
   return (
     <div className="full-width" style={sx}>
       <MonacoEditor
@@ -37,6 +42,7 @@ export function CodeEditor({
           ...editorOptions,
         }}
         {...(onChange && { onChange })}
+        {...(handleEditorDidMount && { editorDidMount: handleEditorDidMount })}
       />
     </div>
   );

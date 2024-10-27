@@ -7,7 +7,9 @@ export function ButtonWithHandler({
   color = "primary",
   buttonText,
   onClick,
-  sx,
+  sx = {},
+  startIcon,
+  endIcon,
 }: Readonly<{
   size?: "small" | "medium" | "large";
   variant?: "text" | "outlined" | "contained";
@@ -22,14 +24,18 @@ export function ButtonWithHandler({
   buttonText: string;
   onClick?: () => void;
   sx?: Record<string, unknown>;
+  startIcon?: JSX.Element;
+  endIcon?: JSX.Element;
 }>): JSX.Element {
   return (
     <Button
       size={size}
       variant={variant}
       color={color}
-      onClick={onClick}
+      {...(onClick && { onClick })}
       sx={sx}
+      {...(startIcon && { startIcon })}
+      {...(endIcon && { endIcon })}
     >
       {buttonText}
     </Button>

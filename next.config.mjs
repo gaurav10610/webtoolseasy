@@ -12,6 +12,7 @@ const nextConfig = {
       config.plugins.push(
         new MonacoWebpackPlugin({
           languages: ["javascript", "typescript", "json", "html", "css"],
+          filename: "static/[name].worker.js",
         })
       );
     }
