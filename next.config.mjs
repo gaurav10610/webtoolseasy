@@ -8,6 +8,9 @@ const nextConfig = {
 
     return config;
   },
+  experimental: {
+    optimizePackageImports: ["lodash-es"],
+  },
 };
 
 export default nextConfig;

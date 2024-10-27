@@ -3,14 +3,12 @@ import { FlexList } from "@/components/lib/flexComponents";
 import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
 import { AppListConfig, AppNavigationConfig } from "@/@types/config";
-import map from "lodash-es/map";
 import { AppHomeCard } from "@/components/appCards";
-import values from "lodash-es/values";
-import { groupBy } from "lodash-es";
 import { Typography } from "@mui/material";
 import { isMobileDevice } from "@/lib/server-responsive";
+import { groupBy, map, values } from "lodash-es";
 
-async function SectionAppList({
+function SectionAppList({
   category,
   configs,
   isMobileView,
@@ -55,8 +53,8 @@ async function SectionAppList({
   });
 }
 
-export default async function Home() {
-  const isMobileView = await isMobileDevice();
+export default function Home() {
+  const isMobileView = isMobileDevice();
   const appListConfig = appConfigJson as AppListConfig;
   const categoryWiseAppList = groupBy(values(appListConfig), "category");
 
