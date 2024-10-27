@@ -1,10 +1,14 @@
+import dynamic from "next/dynamic";
+
 export default function WebToolPage({
   params,
 }: Readonly<{ params: { [key: string]: string } }>) {
-  console.log(params.pageUrl);
-  return (
-    <div className="column-display base-flex-gap full-width">
-      <h1>Web Tool Page</h1>
-    </div>
+  const ToolComponent = dynamic(
+    () => import(`@/components/tools/${params.pageUrl}.tsx`),
+    {
+      loading: () => <p>Loading...</p>,
+      ssr: false,
+    }
   );
+  return <ToolComponent />;
 }
