@@ -1,3 +1,4 @@
+import { CircularLoader } from "@/components/lib/loaders";
 import dynamic from "next/dynamic";
 
 export default function WebToolPage({
@@ -6,7 +7,7 @@ export default function WebToolPage({
   const ToolComponent = dynamic(
     () => import(`@/components/tools/${params.pageUrl}.tsx`),
     {
-      loading: () => <p>Loading...</p>,
+      loading: () => CircularLoader({ color: "secondary" }),
       ssr: false,
     }
   );

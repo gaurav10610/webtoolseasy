@@ -17,10 +17,12 @@
     "@mui/material-nextjs": "^6.1.3",
     "lodash-es": "^4.17.21",
     "mobile-detect": "^1.4.5",
+    "monaco-editor-webpack-plugin": "^7.1.0",
     "nanoid": "^5.0.7",
     "next": "14.2.15",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-monaco-editor": "^0.56.2"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
