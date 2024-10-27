@@ -1,5 +1,3 @@
-import { Metadata } from "next";
-
 export enum ApplicationIds {
   VIDEO_CONVERTER = "videoconverter",
   SCREEN_RECORDER = "screenrecorder",
@@ -49,7 +47,7 @@ export interface AppListConfig {
 export interface ApplicationConfig {
   mainHeading?: string;
   navigationUrl: string;
-  metaTags: Metadata[];
+  metaTags: Record<string, string>[];
   pageTitle: string;
   tags: string[];
   icons: IconConfig[];
