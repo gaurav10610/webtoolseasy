@@ -2,15 +2,7 @@
 
 import MonacoEditor, { monaco } from "react-monaco-editor";
 
-export function CodeEditor({
-  language,
-  theme = "vs-dark",
-  value,
-  onChange,
-  editorOptions = {},
-  sx = {},
-  handleEditorDidMount,
-}: Readonly<{
+export interface CodeEditorProps {
   language: string;
   theme?: string;
   value: string;
@@ -20,7 +12,17 @@ export function CodeEditor({
   handleEditorDidMount?: (
     editor: monaco.editor.IStandaloneCodeEditor | null
   ) => void;
-}>) {
+}
+
+export const CodeEditor: React.FC<CodeEditorProps> = ({
+  language,
+  theme = "vs-dark",
+  value,
+  onChange,
+  editorOptions = {},
+  sx = {},
+  handleEditorDidMount,
+}) => {
   const defaultEditorOptions = {
     selectOnLineNumbers: true,
     fontSize: 16,
@@ -46,4 +48,4 @@ export function CodeEditor({
       />
     </div>
   );
-}
+};

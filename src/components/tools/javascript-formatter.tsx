@@ -24,20 +24,12 @@ export default function JavaScriptFormatter() {
   });
   const [themeOption, setThemeOption] = useState("vs-dark");
 
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-
   const onRawCodeChange = (value: string) => {
     setRawCode(value);
   };
 
   const formatJs = () => {
     setFormattedCode(js_beautify(rawCode));
-  };
-
-  const handleEditorDidMount = (
-    editor: monaco.editor.IStandaloneCodeEditor | null
-  ) => {
-    editorRef.current = editor;
   };
 
   return (
@@ -112,7 +104,6 @@ export default function JavaScriptFormatter() {
             sx={{ height: "30rem" }}
             editorOptions={editorOptions}
             theme={themeOption}
-            handleEditorDidMount={handleEditorDidMount}
           />
         </div>
       </div>
