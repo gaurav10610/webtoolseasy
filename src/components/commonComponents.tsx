@@ -23,7 +23,22 @@ export function AppHeading({
   );
 }
 
-export function ToolDescriptionBlock({
+export function ToolDescription({
+  descriptionData,
+}: Readonly<{ descriptionData: DescriptionBlock[] }>) {
+  return (
+    <div className="column-display full-width base-flex-gap">
+      {map(descriptionData, (descriptionBlock) => (
+        <ToolDescriptionBlock
+          key={getRandomId()}
+          descriptionBlock={descriptionBlock}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ToolDescriptionBlock({
   descriptionBlock,
 }: Readonly<{
   descriptionBlock: DescriptionBlock;

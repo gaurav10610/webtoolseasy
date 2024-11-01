@@ -1,12 +1,9 @@
 import { ApplicationConfig } from "@/@types/config";
 import { DescriptionBlock } from "@/@types/description";
-import {
-  AppHeading,
-  ToolDescriptionBlock,
-} from "@/components/commonComponents";
+import BaseToolsPage from "@/components/baseToolPage";
+import { AppHeading, ToolDescription } from "@/components/commonComponents";
 import { FlexList } from "@/components/lib/flexComponents";
 import { getRandomId } from "@/util/commonUtils";
-import { map } from "lodash-es";
 
 export default async function WebToolLayout({
   children,
@@ -23,15 +20,11 @@ export default async function WebToolLayout({
     flexGap: "20px",
     items: [
       <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />,
-      <div key={getRandomId()} className="full-width">
-        {children}
-      </div>,
-      ...map(toolDescriptionData, (descriptionBlock) => (
-        <ToolDescriptionBlock
-          key={getRandomId()}
-          descriptionBlock={descriptionBlock}
-        />
-      )),
+      <BaseToolsPage key={getRandomId()}>{children}</BaseToolsPage>,
+      <ToolDescription
+        key={getRandomId()}
+        descriptionData={toolDescriptionData}
+      />,
     ],
   });
 }

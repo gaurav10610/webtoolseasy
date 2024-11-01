@@ -20,7 +20,7 @@ export default function JavaScriptFormatter() {
   const [rawCode, setRawCode] = useState(initialValue);
   const [formattedCode, setFormattedCode] = useState(js_beautify(initialValue));
   const [editorOptions, setEditorOptions] = useState({
-    fontSize: 16,
+    fontSize: 14,
   });
   const [themeOption, setThemeOption] = useState("vs-dark");
 
@@ -42,10 +42,10 @@ export default function JavaScriptFormatter() {
 
   return (
     <div className="column-display base-flex-gap full-width flex-vr-center">
+      {/* Buttons group */}
       <div
-        className="row-display inner-flex-gap"
+        className="row-display inner-flex-gap full-width"
         style={{
-          width: "80%",
           flexDirection: isMobileView ? "column" : "row",
         }}
       >
@@ -70,9 +70,8 @@ export default function JavaScriptFormatter() {
         />
       </div>
       <div
-        className="row-display base-flex-gap flex-hz-center"
+        className="row-display base-flex-gap flex-hz-center full-width flex-vr-center"
         style={{
-          width: "80%",
           flexDirection: isMobileView ? "column" : "row",
           justifyContent: "space-between",
         }}
@@ -81,12 +80,12 @@ export default function JavaScriptFormatter() {
         <div
           className="column-display base-flex-gap"
           style={{
-            width: isMobileView ? "100%" : "48%",
+            width: isMobileView ? "80%" : "49%",
           }}
         >
-          <Typography variant="body2" fontSize={"inherit"}>
+          {/* <Typography variant="body2" fontSize={"inherit"}>
             Javascript Code
-          </Typography>
+          </Typography> */}
           <CodeEditor
             language="javascript"
             value={initialValue}
@@ -101,12 +100,12 @@ export default function JavaScriptFormatter() {
         <div
           className="column-display base-flex-gap"
           style={{
-            width: isMobileView ? "100%" : "48%",
+            width: isMobileView ? "80%" : "49%",
           }}
         >
-          <Typography variant="body2" fontSize={"inherit"}>
+          {/* <Typography variant="body2" fontSize={"inherit"}>
             Formatted Javascript
-          </Typography>
+          </Typography> */}
           <CodeEditor
             language="javascript"
             value={formattedCode}
