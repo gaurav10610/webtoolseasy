@@ -11,7 +11,7 @@ export function TwoCodeEditors({
   secondEditorHeading,
   secondEditorProps,
 }: Readonly<{
-  buttons?: React.ReactNode[];
+  buttons?: React.ReactNode;
   firstEditorHeading?: string;
   firstEditorProps: CodeEditorProps;
   secondEditorHeading?: string;

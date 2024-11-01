@@ -1,15 +1,50 @@
 "use client";
 
-import { Button, Typography } from "@mui/material";
-import { CodeEditor } from "../lib/editor";
 import { isMobileDevice } from "@/lib/client-response";
-import { useRef, useState } from "react";
-import { monaco } from "react-monaco-editor";
+import { useState } from "react";
 import { js_beautify } from "js-beautify";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
+import { TwoCodeEditors } from "../codeEditors";
+
+function ControlButtons({
+  isMobileView,
+  formatJs,
+}: Readonly<{
+  isMobileView: boolean;
+  formatJs: () => void;
+}>) {
+  return (
+    <div
+      className="row-display inner-flex-gap full-width"
+      style={{
+        flexDirection: isMobileView ? "column" : "row",
+      }}
+    >
+      <ButtonWithHandler
+        buttonText="Format Code"
+        variant="contained"
+        onClick={formatJs}
+        size="small"
+        startIcon={<FormatAlignCenterIcon />}
+      />
+      <ButtonWithHandler
+        buttonText="Copy Code"
+        variant="outlined"
+        size="small"
+        startIcon={<ContentCopyIcon />}
+      />
+      <ButtonWithHandler
+        buttonText="Copy Shareable Link"
+        variant="outlined"
+        size="small"
+        startIcon={<LinkIcon />}
+      />
+    </div>
+  );
+}
 
 export default function JavaScriptFormatter() {
   const isMobileView = isMobileDevice();
@@ -33,80 +68,31 @@ export default function JavaScriptFormatter() {
   };
 
   return (
-    <div className="column-display base-flex-gap full-width flex-vr-center">
-      {/* Buttons group */}
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          onClick={formatJs}
-          size="small"
-          startIcon={<FormatAlignCenterIcon />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Code"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-        />
-      </div>
-      <div
-        className="row-display base-flex-gap flex-hz-center full-width flex-vr-center"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-          justifyContent: "space-between",
-        }}
-      >
-        {/* Unformatted Javascript Block */}
-        <div
-          className="column-display base-flex-gap"
-          style={{
-            width: isMobileView ? "80%" : "49%",
-          }}
-        >
-          <Typography variant="body2" fontSize={"inherit"}>
-            Javascript Code
-          </Typography>
-          <CodeEditor
-            language="javascript"
-            value={initialValue}
-            onChange={onRawCodeChange}
-            sx={{ height: "30rem" }}
-            editorOptions={editorOptions}
-            theme={themeOption}
-          />
-        </div>
-
-        {/* Formatted Javascript Block */}
-        <div
-          className="column-display base-flex-gap"
-          style={{
-            width: isMobileView ? "80%" : "49%",
-          }}
-        >
-          <Typography variant="body2" fontSize={"inherit"}>
-            Formatted Javascript
-          </Typography>
-          <CodeEditor
-            language="javascript"
-            value={formattedCode}
-            sx={{ height: "30rem" }}
-            editorOptions={editorOptions}
-            theme={themeOption}
-          />
-        </div>
-      </div>
-    </div>
+    <TwoCodeEditors
+      buttons={
+        <ControlButtons isMobileView={isMobileView} formatJs={formatJs} />
+      }
+      firstEditorHeading="Javascript Code"
+      firstEditorProps={{
+        language: "javascript",
+        value: initialValue,
+        onChange: onRawCodeChange,
+        editorOptions,
+        theme: themeOption,
+        sx: {
+          height: "30rem",
+        },
+      }}
+      secondEditorHeading="Formatted Code"
+      secondEditorProps={{
+        language: "javascript",
+        value: formattedCode,
+        editorOptions,
+        theme: themeOption,
+        sx: {
+          height: "30rem",
+        },
+      }}
+    />
   );
 }
