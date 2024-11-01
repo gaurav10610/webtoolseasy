@@ -83,9 +83,9 @@ export default function JavaScriptFormatter() {
             width: isMobileView ? "80%" : "49%",
           }}
         >
-          {/* <Typography variant="body2" fontSize={"inherit"}>
+          <Typography variant="body2" fontSize={"inherit"}>
             Javascript Code
-          </Typography> */}
+          </Typography>
           <CodeEditor
             language="javascript"
             value={initialValue}
@@ -103,9 +103,9 @@ export default function JavaScriptFormatter() {
             width: isMobileView ? "80%" : "49%",
           }}
         >
-          {/* <Typography variant="body2" fontSize={"inherit"}>
+          <Typography variant="body2" fontSize={"inherit"}>
             Formatted Javascript
-          </Typography> */}
+          </Typography>
           <CodeEditor
             language="javascript"
             value={formattedCode}
