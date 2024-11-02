@@ -26,6 +26,7 @@ function SectionAppList({
         variant="h2"
         sx={{
           fontSize: "1.5rem",
+          fontWeight: "bold",
         }}
         color="textSecondary"
       >
@@ -34,6 +35,7 @@ function SectionAppList({
       FlexList({
         isFullWidth: true,
         isDirectionRow: true,
+        classList: ["flex-hz-center"],
         items: map(configs, (config) => {
           return (
             <AppHomeCard
@@ -72,7 +74,7 @@ export default function Home() {
       FlexList({
         isFullWidth: true,
         isDirectionRow: true,
-        flexGap: "20px",
+        flexGap: "40px",
         items: [
           ...map(categoryWiseAppList, (configs, category) => {
             return SectionAppList({ category, configs, isMobileView });

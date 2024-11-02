@@ -1,4 +1,4 @@
-import { ApplicationConfig } from "@/types/config";
+import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
@@ -11,16 +11,10 @@ const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/js-format.png`;
 const keywords =
   "online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors";
 
-// const relatedTools: ApplicationIds[] = [
-//   ApplicationIds.CSS_FORMATTER,
-//   ApplicationIds.HTML_FORMATTER,
-//   ApplicationIds.JSON_FORMATTER,
-//   ApplicationIds.JSON_VIEWER,
-// ];
-
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  keywords,
   openGraph: {
     title: pageTitle,
     type: "website",
@@ -54,8 +48,12 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
-  // relatedTools: relatedTools.map((tool) => applicationConfig.get(tool)!),
-  relatedTools: [],
+  relatedTools: [
+    ApplicationIds.CSS_FORMATTER,
+    ApplicationIds.HTML_FORMATTER,
+    ApplicationIds.JSON_FORMATTER,
+    ApplicationIds.JSON_VIEWER,
+  ],
 };
 
 export const descriptionData: DescriptionBlock[] = [

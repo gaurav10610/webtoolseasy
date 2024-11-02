@@ -50,7 +50,7 @@ export interface ApplicationConfig {
   pageTitle: string;
   tags: string[];
   icons: IconConfig[];
-  relatedTools: AppNavigationConfig[];
+  relatedTools: ApplicationIds[];
 }
 
 export interface IconConfig {
