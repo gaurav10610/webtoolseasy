@@ -49,21 +49,27 @@ function ControlButtons({
 export default function JavaScriptFormatter() {
   const isMobileView = isMobileDevice();
 
-  const initialValue =
-    "if(value==='webtoolseasy'){formatjs();}else{console.log('this is awesome');}";
+  const initialValue = `
+  /**
+   * 
+   * Paste your javascript code here
+   * 
+   * */
+  if (value === 'webtoolseasy'
+  ) {
+    formatjs();
+} else {console.log('this is awesome');}
+  `;
 
   const [rawCode, setRawCode] = useState(initialValue);
   const [formattedCode, setFormattedCode] = useState(js_beautify(initialValue));
-  const [editorOptions, setEditorOptions] = useState({
-    fontSize: 14,
-  });
-  const [themeOption, setThemeOption] = useState("vs-dark");
 
   const onRawCodeChange = (value: string) => {
     setRawCode(value);
   };
 
   const formatJs = () => {
+    console.log("formatting js");
     setFormattedCode(js_beautify(rawCode));
   };
 
@@ -77,8 +83,6 @@ export default function JavaScriptFormatter() {
         language: "javascript",
         value: initialValue,
         onChange: onRawCodeChange,
-        editorOptions,
-        theme: themeOption,
         sx: {
           height: "30rem",
         },
@@ -87,12 +91,11 @@ export default function JavaScriptFormatter() {
       secondEditorProps={{
         language: "javascript",
         value: formattedCode,
-        editorOptions,
-        theme: themeOption,
         sx: {
           height: "30rem",
         },
       }}
+      showEditorOptions={true}
     />
   );
 }
