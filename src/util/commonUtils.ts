@@ -31,7 +31,7 @@ export function decodeText(text: string): string {
   return decodeURIComponent(text);
 }
 
-export async function compressStringAndCopyToClipboard(dataToCompress: string) {
+export async function compressStringToBase64(dataToCompress: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(dataToCompress);
 
@@ -44,12 +44,7 @@ export async function compressStringAndCopyToClipboard(dataToCompress: string) {
   const compressedData = await new Response(cs.readable).arrayBuffer();
 
   // Convert to base64 for clipboard-friendly format
-  const base64String = Buffer.from(compressedData).toString("base64");
-
-  // Copy to clipboard
-  copyToClipboard(base64String);
-
-  return base64String;
+  return Buffer.from(compressedData).toString("base64");
 }
 
 export async function decompressStringFromBase64(base64String: string) {

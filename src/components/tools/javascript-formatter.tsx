@@ -8,13 +8,20 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { TwoCodeEditors } from "../codeEditors";
-import { copyToClipboard, decodeText, encodeText } from "@/util/commonUtils";
-import { useSearchParams, usePathname } from "next/navigation";
+import {
+  compressStringToBase64,
+  copyToClipboard,
+  decodeText,
+  encodeText,
+} from "@/util/commonUtils";
+import { usePathname } from "next/navigation";
 import { SnackBarWithPosition } from "../lib/snackBar";
+import { ToolComponentProps } from "@/types/component";
 
 export default function JavaScriptFormatter({
   hostname,
-}: Readonly<{ hostname: string }>) {
+  queryParams,
+}: Readonly<ToolComponentProps>) {
   const isMobileView = isMobileDevice();
 
   const initialValue = `
@@ -29,7 +36,7 @@ export default function JavaScriptFormatter({
 } else {console.log('this is awesome');}
   `;
 
-  const codeQueryParam = useSearchParams().get("content");
+  const codeQueryParam = queryParams.content;
   const currentPath = usePathname();
 
   const [rawCode, setRawCode] = useState(
@@ -62,9 +69,13 @@ export default function JavaScriptFormatter({
   };
 
   const handleLinkCopy = () => {
-    copyToClipboard(`${hostname}${currentPath}?content=${encodeText(rawCode)}`);
-    setSnackBarMessage("Link Copied to Clipboard!");
-    setIsSnackBarOpen(true);
+    compressStringToBase64(rawCode).then((compressedData) => {
+      copyToClipboard(
+        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
+      );
+      setSnackBarMessage("Link Copied to Clipboard!");
+      setIsSnackBarOpen(true);
+    });
   };
 
   function ControlButtons() {

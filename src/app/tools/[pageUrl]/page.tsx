@@ -1,10 +1,15 @@
 import { ToolComponentProps } from "@/types/component";
 import { CircularLoader } from "@/components/lib/loaders";
 import dynamic from "next/dynamic";
+import { decompressStringFromBase64 } from "@/util/commonUtils";
 
-export default function WebToolPage({
+export default async function WebToolPage({
   params,
-}: Readonly<{ params: { [key: string]: string } }>) {
+  searchParams,
+}: Readonly<{
+  params: { [key: string]: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}>) {
   const ToolComponent = dynamic(
     () => import(`@/components/tools/${params.pageUrl}.tsx`),
     {
@@ -12,5 +17,18 @@ export default function WebToolPage({
       ssr: false,
     }
   ) as React.FC<ToolComponentProps>;
-  return <ToolComponent hostname={process.env.HOSTNAME} />;
+
+  const contentQueryParam = searchParams.content as string | undefined;
+
+  const queryParams: { [key: string]: string } = {};
+
+  if (contentQueryParam) {
+    queryParams["content"] = await decompressStringFromBase64(
+      contentQueryParam
+    );
+  }
+
+  return (
+    <ToolComponent hostname={process.env.HOSTNAME} queryParams={queryParams} />
+  );
 }

@@ -12,4 +12,5 @@ export interface ApplicationState {
 
 export interface ToolComponentProps {
   hostname?: string;
+  queryParams: { [key: string]: string };
 }
