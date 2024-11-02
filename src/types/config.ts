@@ -47,7 +47,6 @@ export interface AppListConfig {
 export interface ApplicationConfig {
   mainHeading?: string;
   navigationUrl: string;
-  metaTags: Record<string, string>[];
   pageTitle: string;
   tags: string[];
   icons: IconConfig[];

@@ -1,11 +1,12 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
 
 const navigationUrl = "/tools/javascript-formatter";
 const pageTitle = "JavaScript Beautifier and Formatter: Beautify and Format JS";
 const pageDescription =
   "Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.";
-const imageUrl = `${process.env.HOSTNAME}/js-format.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/js-format.png`;
 
 const keywords =
   "online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors";
@@ -17,36 +18,40 @@ const keywords =
 //   ApplicationIds.JSON_VIEWER,
 // ];
 
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: pageTitle,
+    type: "website",
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
+    images: [
+      {
+        url: imageUrl,
+        secureUrl: imageUrl,
+        alt: pageTitle,
+      },
+    ],
+    description: pageDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    title: pageTitle,
+    description: pageDescription,
+    images: [imageUrl],
+  },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
+};
+
 export const componentConfig: ApplicationConfig = {
   mainHeading:
     "Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease",
   navigationUrl,
   pageTitle,
-  metaTags: [
-    {
-      name: "description",
-      content: pageDescription,
-    },
-    {
-      name: "author",
-      content: "Gaurav Kumar Yadav",
-    },
-    { name: "robots", content: "index, follow" },
-    {
-      property: "og:title",
-      content: pageTitle,
-    },
-    { property: "og:type", content: "website" },
-    { property: "og:url", content: `${process.env.HOSTNAME}${navigationUrl}` },
-    { property: "og:image", content: imageUrl },
-    { property: "og:image:secure_url", content: imageUrl },
-    { property: "og:description", content: pageDescription },
-    { property: "twitter:card", content: "summary_large_image" },
-    { property: "twitter:site", content: "@webtoolseasy" },
-    { property: "twitter:title", content: pageTitle },
-    { property: "twitter:description", content: pageDescription },
-    { property: "twitter:image", content: imageUrl },
-  ],
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   // relatedTools: relatedTools.map((tool) => applicationConfig.get(tool)!),
