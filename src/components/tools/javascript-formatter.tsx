@@ -64,7 +64,7 @@ export default function JavaScriptFormatter({
 
   const handleFormattedCodeCopy = () => {
     copyToClipboard(formattedCode);
-    setSnackBarMessage("Formatted Code Copied to Clipboard!");
+    setSnackBarMessage("Copied Formatted Code to Clipboard!");
     setIsSnackBarOpen(true);
   };
 
@@ -73,7 +73,7 @@ export default function JavaScriptFormatter({
       copyToClipboard(
         `${hostname}${currentPath}?content=${encodeText(compressedData)}`
       );
-      setSnackBarMessage("Link Copied to Clipboard!");
+      setSnackBarMessage("Copied Link to Clipboard!");
       setIsSnackBarOpen(true);
     });
   };
