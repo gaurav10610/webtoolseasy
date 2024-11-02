@@ -1,4 +1,4 @@
-import { DescriptionBlock } from "@/@types/description";
+import { DescriptionBlock } from "@/types/description";
 import { getRandomId } from "@/util/commonUtils";
 import Typography from "@mui/material/Typography";
 import { isEmpty, isNil, map } from "lodash-es";

@@ -9,3 +9,7 @@ export interface ApplicationState {
    */
   restoreState(): void;
 }
+
+export interface ToolComponentProps {
+  hostname?: string;
+}

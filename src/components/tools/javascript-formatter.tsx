@@ -1,52 +1,20 @@
 "use client";
 
 import { isMobileDevice } from "@/lib/client-response";
-import { useState } from "react";
+import React, { useState } from "react";
 import { js_beautify } from "js-beautify";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { TwoCodeEditors } from "../codeEditors";
+import { copyToClipboard, decodeText, encodeText } from "@/util/commonUtils";
+import { useSearchParams, usePathname } from "next/navigation";
+import { SnackBarWithPosition } from "../lib/snackBar";
 
-function ControlButtons({
-  isMobileView,
-  formatJs,
-}: Readonly<{
-  isMobileView: boolean;
-  formatJs: () => void;
-}>) {
-  return (
-    <div
-      className="row-display inner-flex-gap full-width"
-      style={{
-        flexDirection: isMobileView ? "column" : "row",
-      }}
-    >
-      <ButtonWithHandler
-        buttonText="Format Code"
-        variant="contained"
-        onClick={formatJs}
-        size="small"
-        startIcon={<FormatAlignCenterIcon />}
-      />
-      <ButtonWithHandler
-        buttonText="Copy Code"
-        variant="outlined"
-        size="small"
-        startIcon={<ContentCopyIcon />}
-      />
-      <ButtonWithHandler
-        buttonText="Copy Shareable Link"
-        variant="outlined"
-        size="small"
-        startIcon={<LinkIcon />}
-      />
-    </div>
-  );
-}
-
-export default function JavaScriptFormatter() {
+export default function JavaScriptFormatter({
+  hostname,
+}: Readonly<{ hostname: string }>) {
   const isMobileView = isMobileDevice();
 
   const initialValue = `
@@ -57,45 +25,112 @@ export default function JavaScriptFormatter() {
    * */
   if (value === 'webtoolseasy'
   ) {
-    formatjs();
+    formatJS();
 } else {console.log('this is awesome');}
   `;
 
-  const [rawCode, setRawCode] = useState(initialValue);
-  const [formattedCode, setFormattedCode] = useState(js_beautify(initialValue));
+  const codeQueryParam = useSearchParams().get("content");
+  const currentPath = usePathname();
+
+  const [rawCode, setRawCode] = useState(
+    codeQueryParam ? decodeText(codeQueryParam) : initialValue
+  );
+
+  const [formattedCode, setFormattedCode] = useState(
+    js_beautify(codeQueryParam ? decodeText(codeQueryParam) : initialValue)
+  );
 
   const onRawCodeChange = (value: string) => {
     setRawCode(value);
   };
 
   const formatJs = () => {
-    console.log("formatting js");
     setFormattedCode(js_beautify(rawCode));
   };
 
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+
+  const handleSnackBarClose = () => {
+    setIsSnackBarOpen(false);
+  };
+
+  const handleFormattedCodeCopy = () => {
+    copyToClipboard(formattedCode);
+    setSnackBarMessage("Formatted Code Copied to Clipboard!");
+    setIsSnackBarOpen(true);
+  };
+
+  const handleLinkCopy = () => {
+    copyToClipboard(`${hostname}${currentPath}?content=${encodeText(rawCode)}`);
+    setSnackBarMessage("Link Copied to Clipboard!");
+    setIsSnackBarOpen(true);
+  };
+
+  function ControlButtons() {
+    return (
+      <div
+        className="row-display inner-flex-gap full-width"
+        style={{
+          flexDirection: isMobileView ? "column" : "row",
+        }}
+      >
+        <ButtonWithHandler
+          buttonText="Format Code"
+          variant="contained"
+          onClick={formatJs}
+          size="small"
+          startIcon={<FormatAlignCenterIcon />}
+        />
+        <ButtonWithHandler
+          buttonText="Copy Formatted Code"
+          variant="outlined"
+          size="small"
+          startIcon={<ContentCopyIcon />}
+          onClick={handleFormattedCodeCopy}
+        />
+        <ButtonWithHandler
+          buttonText="Copy Shareable Link"
+          variant="outlined"
+          size="small"
+          startIcon={<LinkIcon />}
+          onClick={handleLinkCopy}
+        />
+      </div>
+    );
+  }
+
   return (
-    <TwoCodeEditors
-      buttons={
-        <ControlButtons isMobileView={isMobileView} formatJs={formatJs} />
-      }
-      firstEditorHeading="Javascript Code"
-      firstEditorProps={{
-        language: "javascript",
-        value: initialValue,
-        onChange: onRawCodeChange,
-        sx: {
-          height: "30rem",
-        },
-      }}
-      secondEditorHeading="Formatted Code"
-      secondEditorProps={{
-        language: "javascript",
-        value: formattedCode,
-        sx: {
-          height: "30rem",
-        },
-      }}
-      showEditorOptions={true}
-    />
+    <>
+      <SnackBarWithPosition
+        message={snackBarMessage}
+        open={isSnackBarOpen}
+        autoHideDuration={2000}
+        handleClose={handleSnackBarClose}
+      />
+      <TwoCodeEditors
+        buttons={<ControlButtons />}
+        firstEditorHeading="Javascript Code"
+        firstEditorProps={{
+          language: "javascript",
+          value: rawCode,
+          onChange: onRawCodeChange,
+          sx: {
+            height: "30rem",
+          },
+        }}
+        secondEditorHeading="Formatted Code"
+        secondEditorProps={{
+          language: "javascript",
+          value: formattedCode,
+          sx: {
+            height: "30rem",
+          },
+          editorOptions: {
+            readOnly: true,
+          },
+        }}
+      />
+    </>
   );
 }

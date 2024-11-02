@@ -1,4 +1,4 @@
-import { AppNavigationConfig } from "@/@types/config";
+import { AppNavigationConfig } from "@/types/config";
 import { PaperWithChildren } from "./lib/papers";
 import { CustomSvgIcon } from "./lib/icons";
 import React from "react";

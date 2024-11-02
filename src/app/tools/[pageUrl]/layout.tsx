@@ -1,5 +1,5 @@
-import { ApplicationConfig } from "@/@types/config";
-import { DescriptionBlock } from "@/@types/description";
+import { ApplicationConfig } from "@/types/config";
+import { DescriptionBlock } from "@/types/description";
 import BaseToolsPage from "@/components/baseToolPage";
 import { AppHeading, ToolDescription } from "@/components/commonComponents";
 import { FlexList } from "@/components/lib/flexComponents";

@@ -2,7 +2,7 @@ import { AppHeading } from "@/components/commonComponents";
 import { FlexList } from "@/components/lib/flexComponents";
 import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
-import { AppListConfig, AppNavigationConfig } from "@/@types/config";
+import { AppListConfig, AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
 import { isMobileDevice } from "@/lib/server-responsive";

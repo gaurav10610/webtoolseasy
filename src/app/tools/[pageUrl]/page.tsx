@@ -1,3 +1,4 @@
+import { ToolComponentProps } from "@/types/component";
 import { CircularLoader } from "@/components/lib/loaders";
 import dynamic from "next/dynamic";
 
@@ -10,6 +11,6 @@ export default function WebToolPage({
       loading: () => CircularLoader({ color: "secondary" }),
       ssr: false,
     }
-  );
-  return <ToolComponent />;
+  ) as React.FC<ToolComponentProps>;
+  return <ToolComponent hostname={process.env.HOSTNAME} />;
 }

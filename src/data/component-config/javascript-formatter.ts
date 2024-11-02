@@ -1,5 +1,5 @@
-import { ApplicationConfig } from "@/@types/config";
-import { DescriptionBlock } from "@/@types/description";
+import { ApplicationConfig } from "@/types/config";
+import { DescriptionBlock } from "@/types/description";
 
 const navigationUrl = "/tools/javascript-formatter";
 const pageTitle = "JavaScript Beautifier and Formatter: Beautify and Format JS";

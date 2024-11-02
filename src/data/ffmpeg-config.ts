@@ -1,4 +1,4 @@
-import { FFmpegFormat } from "@/@types/ffmpeg";
+import { FFmpegFormat } from "@/types/ffmpeg";
 
 export const FFMPEG_FORMATS: Map<number, FFmpegFormat> = new Map([
   [

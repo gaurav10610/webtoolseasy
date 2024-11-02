@@ -11,6 +11,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useState } from "react";
+import { editor } from "monaco-editor";
 
 export function TwoCodeEditors({
   buttons,
@@ -29,9 +30,10 @@ export function TwoCodeEditors({
 }>) {
   const isMobileView = isMobileDevice();
 
-  const [editorOptions, setEditorOptions] = useState({
-    fontSize: 14,
-  });
+  const [editorOptions, setEditorOptions] =
+    useState<editor.IStandaloneEditorConstructionOptions>({
+      fontSize: 14,
+    });
 
   const [themeOption, setThemeOption] = useState("vs-dark");
 
@@ -129,7 +131,10 @@ export function TwoCodeEditors({
             value={firstEditorProps.value}
             onChange={firstEditorProps.onChange}
             sx={firstEditorProps.sx}
-            editorOptions={editorOptions}
+            editorOptions={{
+              ...editorOptions,
+              ...(firstEditorProps.editorOptions || {}),
+            }}
             theme={themeOption}
             handleEditorDidMount={firstEditorProps.handleEditorDidMount}
           />
@@ -152,7 +157,10 @@ export function TwoCodeEditors({
             value={secondEditorProps.value}
             onChange={secondEditorProps.onChange}
             sx={secondEditorProps.sx}
-            editorOptions={editorOptions}
+            editorOptions={{
+              ...editorOptions,
+              ...(secondEditorProps.editorOptions || {}),
+            }}
             theme={themeOption}
             handleEditorDidMount={secondEditorProps.handleEditorDidMount}
           />

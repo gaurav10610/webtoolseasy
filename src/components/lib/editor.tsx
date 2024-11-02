@@ -1,13 +1,14 @@
 "use client";
 
 import MonacoEditor, { monaco } from "react-monaco-editor";
+import { editor } from "monaco-editor";
 
 export interface CodeEditorProps {
   language: string;
   theme?: string;
   value: string;
   onChange?: (value: string) => void;
-  editorOptions?: Record<string, unknown>;
+  editorOptions?: editor.IStandaloneEditorConstructionOptions;
   sx?: Record<string, unknown>;
   handleEditorDidMount?: (
     editor: monaco.editor.IStandaloneCodeEditor | null
@@ -23,7 +24,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   sx = {},
   handleEditorDidMount,
 }) => {
-  const defaultEditorOptions = {
+  const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,
     fontSize: 16,
     automaticLayout: true,
