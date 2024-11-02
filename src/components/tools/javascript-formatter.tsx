@@ -127,7 +127,7 @@ export default function JavaScriptFormatter({
           value: rawCode,
           onChange: onRawCodeChange,
           sx: {
-            height: "30rem",
+            height: isMobileView ? "20rem" : "30rem",
           },
         }}
         secondEditorHeading="Formatted Code"
@@ -135,7 +135,7 @@ export default function JavaScriptFormatter({
           language: "javascript",
           value: formattedCode,
           sx: {
-            height: "30rem",
+            height: isMobileView ? "20rem" : "30rem",
           },
           editorOptions: {
             readOnly: true,

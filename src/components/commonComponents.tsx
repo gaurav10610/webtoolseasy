@@ -3,6 +3,9 @@ import { getRandomId } from "@/util/commonUtils";
 import Typography from "@mui/material/Typography";
 import { isEmpty, isNil, map } from "lodash-es";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { AppNavigationConfig } from "@/types/config";
+import { FlexList } from "./lib/flexComponents";
+import { RelatedToolCard } from "./appCards";
 
 export function AppHeading({
   heading,
@@ -20,6 +23,38 @@ export function AppHeading({
     >
       {heading}
     </Typography>
+  );
+}
+
+export function RelatedTools({
+  relatedToolsConfigs,
+  isMobileView,
+}: Readonly<{
+  relatedToolsConfigs: AppNavigationConfig[];
+  isMobileView: boolean;
+}>) {
+  return (
+    <FlexList
+      isFullWidth={true}
+      items={[
+        <Typography
+          key={getRandomId()}
+          variant="h2"
+          fontSize={"inherit"}
+          color="textPrimary"
+        >
+          Related Tools
+        </Typography>,
+        <FlexList
+          key={getRandomId()}
+          isFullWidth={true}
+          isDirectionRow={!isMobileView}
+          items={map(relatedToolsConfigs, (relatedToolConfig) => (
+            <RelatedToolCard key={getRandomId()} config={relatedToolConfig} />
+          ))}
+        />,
+      ]}
+    />
   );
 }
 
