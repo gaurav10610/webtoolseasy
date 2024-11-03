@@ -1,4 +1,4 @@
-import { AppHeading } from "@/components/commonComponents";
+import { AppFollowButtons, AppHeading } from "@/components/commonComponents";
 import { FlexList } from "@/components/lib/flexComponents";
 import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
@@ -84,6 +84,7 @@ export default function Home() {
           flexWrap: "wrap",
         },
       }),
+      AppFollowButtons(),
     ],
   });
 }
