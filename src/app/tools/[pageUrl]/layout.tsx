@@ -7,7 +7,9 @@ import {
 import { DescriptionBlock } from "@/types/description";
 import BaseToolsPage from "@/components/baseToolPage";
 import {
+  AppFollowButtons,
   AppHeading,
+  PageTags,
   RelatedTools,
   ToolDescription,
 } from "@/components/commonComponents";
@@ -51,6 +53,8 @@ export default async function WebToolLayout({
         key={getRandomId()}
         descriptionData={toolDescriptionData}
       />,
+      <PageTags key={getRandomId()} tags={toolConfigData.tags} />,
+      <AppFollowButtons key={getRandomId()} />,
     ],
   });
 }

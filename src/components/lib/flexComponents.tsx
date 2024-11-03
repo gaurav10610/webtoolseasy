@@ -2,7 +2,7 @@ import { getRandomId } from "@/util/commonUtils";
 import { ReactNode, Fragment } from "react";
 
 interface FlexListProps {
-  items: ReactNode[];
+  items: ReactNode[] | JSX.Element[];
   flexGap?: string;
   isDirectionRow?: boolean;
   isFullWidth?: boolean;

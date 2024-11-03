@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "Online Web Tools: Browse Free Tools to Boost Productivity",
   description:
     "WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, or record a screen.",
+  icons: "/favicon.png",
 };
 
 export default function RootLayout({
