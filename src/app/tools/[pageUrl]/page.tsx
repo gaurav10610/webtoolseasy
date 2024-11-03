@@ -2,19 +2,8 @@ import { ToolComponentProps } from "@/types/component";
 import { CircularLoader } from "@/components/lib/loaders";
 import dynamic from "next/dynamic";
 import { decompressStringFromBase64 } from "@/util/commonUtils";
-import { Metadata } from "next";
 import { keysIn } from "lodash-es";
-
-export async function generateMetadata({
-  params,
-}: Readonly<{
-  params: { [key: string]: string };
-}>): Promise<Metadata> {
-  const { metadata } = await import(
-    `@/data/component-config/${params.pageUrl}`
-  );
-  return metadata;
-}
+import { SocialShareButtons } from "@/components/commonComponents";
 
 export default async function WebToolPage({
   params,
@@ -38,6 +27,14 @@ export default async function WebToolPage({
   }
 
   return (
-    <ToolComponent hostname={process.env.HOSTNAME} queryParams={queryParams} />
+    <div className="column-display base-flex-gap full-width">
+      <SocialShareButtons
+        pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
+      />
+      <ToolComponent
+        hostname={process.env.HOSTNAME}
+        queryParams={queryParams}
+      />
+    </div>
   );
 }

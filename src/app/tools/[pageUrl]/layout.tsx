@@ -18,6 +18,23 @@ import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
 import { keys } from "lodash-es";
 import { isMobileDevice } from "@/lib/server-responsive";
+import { Metadata } from "next";
+
+/**
+ * generates meta tags for the page
+ * @param params - page url params
+ * @returns metadata for the page
+ */
+export async function generateMetadata({
+  params,
+}: Readonly<{
+  params: { [key: string]: string };
+}>): Promise<Metadata> {
+  const { metadata } = await import(
+    `@/data/component-config/${params.pageUrl}`
+  );
+  return metadata;
+}
 
 export default async function WebToolLayout({
   children,

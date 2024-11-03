@@ -6,11 +6,11 @@ export async function BaseToolsAds() {
   return (
     <div
       style={{
-        backgroundColor: "lightgrey",
+        // backgroundColor: "lightgrey",
         width: isMobile ? "100%" : "15%",
       }}
     >
-      This is the div for google ads
+      {/* This is the div for google ads */}
     </div>
   );
 }
