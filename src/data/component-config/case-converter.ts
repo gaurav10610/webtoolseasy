@@ -42,7 +42,8 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: "Online Case Converter: Convert Text to Lowercase or Uppercase",
+  mainHeading:
+    "Online Case Converter: Convert Text to Lowercase, Uppercase, Sentence Case & Title Case",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
