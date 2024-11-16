@@ -16,7 +16,7 @@ import {
 import { FlexList } from "@/components/lib/flexComponents";
 import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
-import { keys } from "lodash-es";
+import { isEmpty, isNil, keys } from "lodash-es";
 import { isMobileDevice } from "@/lib/server-responsive";
 import { Metadata } from "next";
 
@@ -63,11 +63,13 @@ export default async function WebToolLayout({
     items: [
       <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />,
       <BaseToolsPage key={getRandomId()}>{children}</BaseToolsPage>,
-      <RelatedTools
-        key={getRandomId()}
-        relatedToolsConfigs={relatedToolsConfigs}
-        isMobileView={isMobileView}
-      />,
+      !isNil(relatedToolsConfigs) && !isEmpty(relatedToolsConfigs) ? (
+        <RelatedTools
+          key={getRandomId()}
+          relatedToolsConfigs={relatedToolsConfigs}
+          isMobileView={isMobileView}
+        />
+      ) : null,
       <ToolDescription
         key={getRandomId()}
         descriptionData={toolDescriptionData}
