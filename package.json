@@ -16,6 +16,7 @@
     "@mui/material": "^6.1.6",
     "@mui/material-nextjs": "^6.1.6",
     "@types/js-beautify": "^1.14.3",
+    "fast-xml-parser": "^4.5.0",
     "js-beautify": "^1.15.1",
     "lodash-es": "^4.17.21",
     "mobile-detect": "^1.4.5",
