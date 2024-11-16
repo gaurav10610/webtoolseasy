@@ -56,8 +56,10 @@ export default async function WebToolLayout({
   const isMobileView = isMobileDevice();
 
   return FlexList({
-    isFullWidth: true,
     flexGap: "20px",
+    sx: {
+      width: isMobileView ? "100%" : "70%",
+    },
     items: [
       <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />,
       <BaseToolsPage key={getRandomId()}>{children}</BaseToolsPage>,
