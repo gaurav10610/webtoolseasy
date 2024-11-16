@@ -3,7 +3,6 @@
 import { TextField, Typography } from "@mui/material";
 import { ButtonWithHandler } from "../lib/buttons";
 import { useState } from "react";
-import { isEmpty } from "lodash-es";
 import { isMobileDevice } from "@/lib/client-response";
 
 export default function CaseConverter() {
@@ -17,25 +16,14 @@ export default function CaseConverter() {
   };
 
   const convertToUppercase = () => {
-    console.log("convertToUppercase");
-    console.log("text", text);
-    if (isEmpty(text)) {
-      return;
-    }
     setText(text.toUpperCase());
   };
 
   const convertToLowercase = () => {
-    if (isEmpty(text)) {
-      return;
-    }
     setText(text.toLowerCase());
   };
 
   const convertToSentenceCase = () => {
-    if (isEmpty(text)) {
-      return;
-    }
     setText(
       text
         .split(". ")
