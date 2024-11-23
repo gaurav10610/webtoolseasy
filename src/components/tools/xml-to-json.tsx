@@ -19,7 +19,7 @@ import { Code } from "@mui/icons-material";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { Checkbox, Typography } from "@mui/material";
 
-export default function JavaScriptFormatter({
+export default function XmlToJsonConverter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {

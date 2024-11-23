@@ -25,6 +25,7 @@
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
+    "react-json-view-lite": "^2.0.1",
     "react-monaco-editor": "^0.56.2"
   },
   "devDependencies": {

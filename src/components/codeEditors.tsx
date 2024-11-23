@@ -3,12 +3,12 @@
 import { isMobileDevice } from "@/lib/client-response";
 import { CodeEditor, CodeEditorProps } from "./lib/editor";
 import {
-  Typography,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { editor } from "monaco-editor";
@@ -115,57 +115,64 @@ export function TwoCodeEditors({
         }}
       >
         {/* First Editor Block */}
-        <div
-          className="column-display base-flex-gap"
-          style={{
-            width: isMobileView ? "80%" : "49%",
-          }}
-        >
-          {firstEditorHeading && (
-            <Typography variant="body2" fontSize={"inherit"}>
-              {firstEditorHeading}
-            </Typography>
-          )}
-          <CodeEditor
-            language={firstEditorProps.language}
-            value={firstEditorProps.value}
-            onChange={firstEditorProps.onChange}
-            sx={firstEditorProps.sx}
-            editorOptions={{
-              ...editorOptions,
-              ...(firstEditorProps.editorOptions || {}),
-            }}
-            theme={themeOption}
-            handleEditorDidMount={firstEditorProps.handleEditorDidMount}
-          />
-        </div>
+        <SingleCodeEditorWithHeader
+          isMobileView={isMobileView}
+          codeEditorProps={firstEditorProps}
+          editorHeading={firstEditorHeading}
+          themeOption={themeOption}
+          editorOptions={editorOptions}
+        />
 
         {/* Second Editor Block */}
-        <div
-          className="column-display base-flex-gap"
-          style={{
-            width: isMobileView ? "80%" : "49%",
-          }}
-        >
-          {secondEditorHeading && (
-            <Typography variant="body2" fontSize={"inherit"}>
-              {secondEditorHeading}
-            </Typography>
-          )}
-          <CodeEditor
-            language={secondEditorProps.language}
-            value={secondEditorProps.value}
-            onChange={secondEditorProps.onChange}
-            sx={secondEditorProps.sx}
-            editorOptions={{
-              ...editorOptions,
-              ...(secondEditorProps.editorOptions || {}),
-            }}
-            theme={themeOption}
-            handleEditorDidMount={secondEditorProps.handleEditorDidMount}
-          />
-        </div>
+        <SingleCodeEditorWithHeader
+          isMobileView={isMobileView}
+          codeEditorProps={secondEditorProps}
+          editorHeading={secondEditorHeading}
+          themeOption={themeOption}
+          editorOptions={editorOptions}
+        />
       </div>
+    </div>
+  );
+}
+
+export function SingleCodeEditorWithHeader({
+  isMobileView,
+  editorHeading,
+  codeEditorProps,
+  themeOption,
+  editorOptions = {},
+}: Readonly<{
+  isMobileView: boolean;
+  editorHeading?: string;
+  codeEditorProps: CodeEditorProps;
+  themeOption: string;
+  editorOptions?: editor.IStandaloneEditorConstructionOptions;
+}>) {
+  return (
+    <div
+      className="column-display base-flex-gap"
+      style={{
+        width: isMobileView ? "80%" : "49%",
+      }}
+    >
+      {editorHeading && (
+        <Typography variant="body2" fontSize={"inherit"}>
+          {editorHeading}
+        </Typography>
+      )}
+      <CodeEditor
+        language={codeEditorProps.language}
+        value={codeEditorProps.value}
+        onChange={codeEditorProps.onChange}
+        sx={codeEditorProps.sx}
+        editorOptions={{
+          ...editorOptions,
+          ...(codeEditorProps.editorOptions || {}),
+        }}
+        theme={themeOption}
+        handleEditorDidMount={codeEditorProps.handleEditorDidMount}
+      />
     </div>
   );
 }
