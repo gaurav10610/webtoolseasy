@@ -142,18 +142,21 @@ export function SingleCodeEditorWithHeader({
   codeEditorProps,
   themeOption,
   editorOptions = {},
+  sx = {},
 }: Readonly<{
   isMobileView: boolean;
   editorHeading?: string;
   codeEditorProps: CodeEditorProps;
   themeOption: string;
   editorOptions?: editor.IStandaloneEditorConstructionOptions;
+  sx?: Record<string, unknown>;
 }>) {
   return (
     <div
       className="column-display base-flex-gap"
       style={{
         width: isMobileView ? "80%" : "49%",
+        ...sx,
       }}
     >
       {editorHeading && (
