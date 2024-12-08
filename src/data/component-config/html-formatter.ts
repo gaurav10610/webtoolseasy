@@ -13,6 +13,9 @@ const keywords =
   "online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,HTML code formatting errors";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,

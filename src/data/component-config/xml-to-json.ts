@@ -12,6 +12,9 @@ const keywords =
   "online XML to JSON converter,XML to JSON converter,XML to JSON,XML to JSON conversion,XML to JSON tool,free XML to JSON converter,no download required,supports all XML versions,easy to use,customizable settings,XML and JSON,XML to JSON best practices,JSON validator";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,

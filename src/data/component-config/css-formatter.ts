@@ -12,6 +12,9 @@ const keywords =
   "online CSS beautifier and formatter,beautify CSS code,format CSS code,CSS beautifier and formatter tool,CSS code formatter,CSS code style,improve CSS code readability,make CSS code more consistent,follow CSS code style guidelines,free CSS beautifier and formatter,CSS code formatting errors";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,

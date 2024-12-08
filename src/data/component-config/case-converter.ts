@@ -12,6 +12,9 @@ const keywords =
   "case converter,convert text to any case,free case converter,easy to use,uppercase,lowercase,sentence case,title case,case types,format text,learn about case";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,

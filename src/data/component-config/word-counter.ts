@@ -13,6 +13,9 @@ const keywords =
   "word count tool, character count tool, sentence count tool, free word count tool, free character count tool, free sentence count tool, online word count tool, online character count tool, online sentence count tool, word counter, character counter, sentence counter, word count, character count, sentence count";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,
