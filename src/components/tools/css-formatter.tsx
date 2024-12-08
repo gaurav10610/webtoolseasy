@@ -119,6 +119,9 @@ export default function CssFormatter({
           sx: {
             height: isMobileView ? "20rem" : "30rem",
           },
+          editorOptions: {
+            wordWrap: "on",
+          },
         }}
         secondEditorHeading="Formatted Code"
         secondEditorProps={{

@@ -121,6 +121,9 @@ export default function JsonViewer({
             sx: {
               height: isMobileView ? "20rem" : "30rem",
             },
+            editorOptions: {
+              wordWrap: "on",
+            },
           }}
         />
         <div

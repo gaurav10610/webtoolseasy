@@ -207,7 +207,37 @@ function ToolDescriptionBlock({
         isEmpty(descriptionBlock.blockData) && (
           <DescriptionDataListData listData={descriptionBlock.listData} />
         )}
+      {!isNil(descriptionBlock.links) && (
+        <DescriptionLinks links={descriptionBlock.links} />
+      )}
     </div>
+  );
+}
+
+function DescriptionLinks({
+  links,
+}: Readonly<{
+  links: { url: string; displayText: string }[];
+}>) {
+  return (
+    <FlexList
+      key={getRandomId()}
+      items={map(links, (link) => (
+        <div className="row-display inner-flex-gap">
+          <KeyboardArrowRightIcon />
+          <Typography
+            key={getRandomId()}
+            href={link.url}
+            component={"a"}
+            color="primary"
+            target="_blank"
+            sx={{ textDecoration: "underline" }}
+          >
+            {link.displayText}
+          </Typography>
+        </div>
+      ))}
+    />
   );
 }
 

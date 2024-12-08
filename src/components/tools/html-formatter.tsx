@@ -119,6 +119,9 @@ export default function HtmlFormatter({
           sx: {
             height: isMobileView ? "20rem" : "30rem",
           },
+          editorOptions: {
+            wordWrap: "on",
+          },
         }}
         secondEditorHeading="Formatted Code"
         secondEditorProps={{
