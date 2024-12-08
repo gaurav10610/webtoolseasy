@@ -12,6 +12,7 @@ import Link from "next/link";
 import ApplicationIcon from "@/data/icons/app-icon.svg";
 import { CustomSvgIcon } from "@/components/lib/icons";
 import HomeIcon from "@/data/icons/home.svg";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const pageTitle = "Online Web Tools: Browse Free Tools to Boost Productivity";
 const pageDescription =
@@ -90,6 +91,9 @@ export default function RootLayout({
       <body className={robotoFont.variable}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
+            {process.env.NODE_ENV === "production" && (
+              <GoogleAnalytics gaId={process.env.GA_CODE!} />
+            )}
             <div className="main-container no-vr-scroll">
               <ResponsiveAppBar>
                 <FlexList
