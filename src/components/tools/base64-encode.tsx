@@ -35,18 +35,13 @@ export default function Base64Encode() {
     input.click();
   };
 
-  const copyBase64Data = () => {
-    copyToClipboard(base64Data.split(",").pop() || "");
-    setIsSnackBarOpen(true);
-  };
-
   const copyBase64DataURI = () => {
     copyToClipboard(base64Data);
     setIsSnackBarOpen(true);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-2">
+    <div className="flex flex-col items-center justify-center w-full gap-3">
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -70,18 +65,25 @@ export default function Base64Encode() {
         />
       </div>
 
-      <div className="flex flex-col w-full justify-end gap-2 md:flex-row md:gap-4">
+      <div className="flex flex-col w-full justify-end gap-2">
         <ButtonWithHandler
           buttonText="Copy Base64 Data"
-          onClick={copyBase64Data}
-          size="small"
-        />
-        <ButtonWithHandler
-          buttonText="Copy Base64 Data URI"
           onClick={copyBase64DataURI}
           size="small"
-          variant="outlined"
+          variant="contained"
         />
+      </div>
+
+      <div className="flex flex-col w-full gap-1">
+        <Typography
+          color="textSecondary"
+          variant="caption"
+          sx={{ overflowWrap: "anywhere" }}
+        >
+          Base64 data example:
+          iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACzElEQVR4nGNgGAWjYBSMwFgYwB
+          ...
+        </Typography>
       </div>
 
       <div className="flex flex-col w-full">
