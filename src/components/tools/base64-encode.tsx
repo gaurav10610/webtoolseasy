@@ -87,7 +87,7 @@ export default function Base64Encode() {
       </div>
 
       <div className="flex flex-col w-full">
-        <Typography variant="h3" sx={{ fontSize: "inherit" }}>
+        <Typography variant="h3" sx={{ fontSize: "inherit" }} color="primary">
           Base64 Encoded Data
         </Typography>
         <div className="w-full border-solid border-2 border-lightgrey rounded-sm p-4">

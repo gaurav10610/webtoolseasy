@@ -143,6 +143,7 @@ export function SingleCodeEditorWithHeader({
   themeOption,
   editorOptions = {},
   sx = {},
+  className = "",
 }: Readonly<{
   isMobileView: boolean;
   editorHeading?: string;
@@ -150,10 +151,11 @@ export function SingleCodeEditorWithHeader({
   themeOption: string;
   editorOptions?: editor.IStandaloneEditorConstructionOptions;
   sx?: Record<string, unknown>;
+  className?: string;
 }>) {
   return (
     <div
-      className="column-display base-flex-gap"
+      className={`column-display base-flex-gap ${className}`}
       style={{
         width: isMobileView ? "80%" : "49%",
         ...sx,
