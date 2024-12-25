@@ -4,14 +4,13 @@ import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRound
 import { useState } from "react";
 import { Typography } from "@mui/material";
 import { ButtonWithHandler } from "../lib/buttons";
-import { isEmpty } from "lodash-es";
 import { copyToClipboard } from "@/util/commonUtils";
 import { SnackBarWithPosition } from "../lib/snackBar";
 
 export default function Base64Encode() {
   const [base64Data, setBase64Data] = useState<string>("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("Base64 Data Copied!");
+  const snackBarMessage = "Base64 Data Copied!";
 
   const handleSnackBarClose = () => {
     setIsSnackBarOpen(false);
@@ -37,6 +36,11 @@ export default function Base64Encode() {
   };
 
   const copyBase64Data = () => {
+    copyToClipboard(base64Data.split(",").pop() || "");
+    setIsSnackBarOpen(true);
+  };
+
+  const copyBase64DataURI = () => {
     copyToClipboard(base64Data);
     setIsSnackBarOpen(true);
   };
@@ -66,11 +70,17 @@ export default function Base64Encode() {
         />
       </div>
 
-      <div className="flex flex-row w-full justify-end">
+      <div className="flex flex-row w-full justify-end gap-1">
         <ButtonWithHandler
           buttonText="Copy Base64 Data"
           onClick={copyBase64Data}
           size="small"
+        />
+        <ButtonWithHandler
+          buttonText="Copy Base64 Data URI"
+          onClick={copyBase64DataURI}
+          size="small"
+          variant="outlined"
         />
       </div>
 
