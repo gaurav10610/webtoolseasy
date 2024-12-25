@@ -70,7 +70,7 @@ export default function Base64Encode() {
         />
       </div>
 
-      <div className="flex flex-row w-full justify-end gap-1">
+      <div className="flex flex-col w-full justify-end gap-2 md:flex-row md:gap-4">
         <ButtonWithHandler
           buttonText="Copy Base64 Data"
           onClick={copyBase64Data}
