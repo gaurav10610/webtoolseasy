@@ -16,7 +16,7 @@ export default function IFrameWithLabel({
       </Typography>
       <iframe
         srcDoc={iFrameSourceDoc}
-        className="w-full h-full border-2 border-gray-300"
+        className="w-full h-full scroll-auto border-2 border-gray-300"
       />
     </div>
   );
