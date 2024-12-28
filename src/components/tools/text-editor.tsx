@@ -42,11 +42,7 @@ export default function TextEditor({
   );
 
   const onRawCodeChange = (value: string) => {
-    try {
-      setRawCode(value);
-    } catch (e) {
-      console.error(`invalid json`, e);
-    }
+    setRawCode(value);
   };
 
   const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorProps>({
@@ -68,7 +64,7 @@ export default function TextEditor({
     setIsSnackBarOpen(false);
   };
 
-  const handleFormattedCodeCopy = () => {
+  const handleTextCopy = () => {
     copyToClipboard(rawCode);
     setSnackBarMessage("Copied Formatted Code to Clipboard!");
     setIsSnackBarOpen(true);
@@ -102,7 +98,7 @@ export default function TextEditor({
           variant="outlined"
           size="small"
           startIcon={<ContentCopyIcon />}
-          onClick={handleFormattedCodeCopy}
+          onClick={handleTextCopy}
         />
         <ButtonWithHandler
           buttonText="Copy Shareable Link"
@@ -132,6 +128,7 @@ export default function TextEditor({
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const CodeEditorOptions = () => {
     return (
       <div className="flex flex-row w-full">
