@@ -46,7 +46,7 @@ export default function TextEditor({
   };
 
   const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorProps>({
-    language: "text",
+    language: "text/plain",
     value: rawCode,
     onChange: onRawCodeChange,
     sx: {

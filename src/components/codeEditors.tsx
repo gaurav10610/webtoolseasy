@@ -1,11 +1,11 @@
-"use client";
-
 import { isMobileDevice } from "@/lib/client-response";
 import {
   CodeEditor,
   CodeEditorProps,
   CodeEditorPropsV2,
   CodeEditorV2,
+  DiffEditor,
+  DiffEditorProps,
 } from "./lib/editor";
 import {
   Select,
@@ -219,6 +219,49 @@ export function SingleCodeEditorWithHeaderV2({
         theme={themeOption}
         handleEditorDidMount={codeEditorProps.handleEditorDidMount}
       />
+    </div>
+  );
+}
+
+export function DiffEditorsWithHeader({
+  firstTextHeading,
+  secondTextHeading,
+  classes = "",
+  diffEditorProps,
+  editorOptions = {},
+  themeOption,
+}: Readonly<{
+  firstTextHeading: string;
+  secondTextHeading: string;
+  classes?: string;
+  diffEditorProps: DiffEditorProps;
+  editorOptions?: editor.IStandaloneDiffEditorConstructionOptions;
+  themeOption: string;
+}>) {
+  return (
+    <div className={`flex flex-col gap-2 h-full ${classes}`}>
+      <div className="w-full flex flex-row justify-around">
+        <Typography variant="body2" fontSize={"inherit"} color="primary">
+          {firstTextHeading}
+        </Typography>
+        <Typography variant="body2" fontSize={"inherit"} color="primary">
+          {secondTextHeading}
+        </Typography>
+      </div>
+      <div className="w-full h-full border-2 border-gray-300">
+        <DiffEditor
+          language={diffEditorProps.language}
+          value={diffEditorProps.value}
+          onChange={diffEditorProps.onChange}
+          classes={diffEditorProps.classes}
+          original={diffEditorProps.original}
+          theme={themeOption}
+          editorOptions={{
+            ...editorOptions,
+            ...(diffEditorProps.editorOptions || {}),
+          }}
+        />
+      </div>
     </div>
   );
 }
