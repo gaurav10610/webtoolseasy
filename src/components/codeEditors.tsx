@@ -1,7 +1,12 @@
 "use client";
 
 import { isMobileDevice } from "@/lib/client-response";
-import { CodeEditor, CodeEditorProps } from "./lib/editor";
+import {
+  CodeEditor,
+  CodeEditorProps,
+  CodeEditorPropsV2,
+  CodeEditorV2,
+} from "./lib/editor";
 import {
   Select,
   MenuItem,
@@ -171,6 +176,42 @@ export function SingleCodeEditorWithHeader({
         value={codeEditorProps.value}
         onChange={codeEditorProps.onChange}
         sx={codeEditorProps.sx}
+        editorOptions={{
+          ...editorOptions,
+          ...(codeEditorProps.editorOptions || {}),
+        }}
+        theme={themeOption}
+        handleEditorDidMount={codeEditorProps.handleEditorDidMount}
+      />
+    </div>
+  );
+}
+
+export function SingleCodeEditorWithHeaderV2({
+  editorHeading,
+  codeEditorProps,
+  themeOption,
+  editorOptions = {},
+  classes = "",
+}: Readonly<{
+  editorHeading?: string;
+  codeEditorProps: CodeEditorPropsV2;
+  themeOption: string;
+  editorOptions?: editor.IStandaloneEditorConstructionOptions;
+  classes?: string;
+}>) {
+  return (
+    <div className={`flex flex-col gap-2 w-full h-full ${classes}`}>
+      {editorHeading && (
+        <Typography variant="body2" fontSize={"inherit"} color="primary">
+          {editorHeading}
+        </Typography>
+      )}
+      <CodeEditorV2
+        language={codeEditorProps.language}
+        value={codeEditorProps.value}
+        onChange={codeEditorProps.onChange}
+        classes={codeEditorProps.classes}
         editorOptions={{
           ...editorOptions,
           ...(codeEditorProps.editorOptions || {}),
