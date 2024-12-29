@@ -27,6 +27,7 @@
     "nanoid": "^5.0.7",
     "next": "14.2.15",
     "react": "^18",
+    "react-cron-generator": "^2.0.15",
     "react-dom": "^18",
     "react-json-view-lite": "^2.0.1",
     "react-monaco-editor": "^0.56.2",
