@@ -132,11 +132,11 @@ export default function JsonViewer({
             width: isMobileView ? "80%" : "49%",
           }}
         >
-          <Typography variant="body2" fontSize={"inherit"}>
+          <Typography variant="body2" fontSize={"inherit"} color="primary">
             Json Viewer
           </Typography>
           <div
-            className="column-display base-flex-gap full-width full-height"
+            className="column-display base-flex-gap full-width full-height border-2 border-2 border-gray-300"
             style={{
               height: isMobileView ? "20rem" : "30rem",
             }}

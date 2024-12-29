@@ -167,7 +167,7 @@ export function SingleCodeEditorWithHeader({
       }}
     >
       {editorHeading && (
-        <Typography variant="body2" fontSize={"inherit"}>
+        <Typography variant="body2" fontSize={"inherit"} color="primary">
           {editorHeading}
         </Typography>
       )}
