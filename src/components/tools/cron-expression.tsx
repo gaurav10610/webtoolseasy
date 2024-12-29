@@ -47,7 +47,7 @@ export default function CronExpression() {
           setState({ value: e });
         }}
         value={state.value}
-        showResultText={false}
+        showResultText={true}
         showResultCron={false}
       />
     </div>
