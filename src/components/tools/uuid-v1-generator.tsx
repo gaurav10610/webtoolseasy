@@ -34,7 +34,7 @@ export default function UUIDV1Generator() {
       type: "plain/text",
     });
     element.href = URL.createObjectURL(file);
-    element.download = "bulk-uuids-webtoolseasy.txt";
+    element.download = "bulk-uuids-v1-webtoolseasy.txt";
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
     document.body.removeChild(element); // Remove the element after download

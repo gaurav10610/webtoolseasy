@@ -2,7 +2,6 @@
 
 import { TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { v4 as generateUUID } from "uuid";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { SnackBarWithPosition } from "../lib/snackBar";
@@ -10,31 +9,35 @@ import { copyToClipboard } from "@/util/commonUtils";
 import DownloadIcon from "@mui/icons-material/Download";
 import LoopIcon from "@mui/icons-material/Loop";
 import { isEmpty, map } from "lodash-es";
+import { Guid } from "guid-ts";
 
-export default function UUIDV4Generator() {
-  const [uuid, setUuid] = useState<string>(generateUUID());
-  const [bulkUuids, setBulkUuids] = useState<string[]>([]);
-  const [bulkUuidsCount, setBulkUuidsCount] = useState<number>(5);
+export default function GuidGenerator() {
+  const generateGUID = () => {
+    return Guid.newGuid().toString();
+  };
+  const [guid, setGuid] = useState<string>(generateGUID());
+  const [bulkGuids, setBulkGuids] = useState<string[]>([]);
+  const [bulkGuidsCount, setBulkGuidsCount] = useState<number>(5);
 
   const onCopyHandler = () => {
-    copyToClipboard(uuid);
+    copyToClipboard(guid);
     setIsSnackBarOpen(true);
   };
 
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const snackBarMessage = "UUID copied to clipboard";
+  const snackBarMessage = "GUID copied to clipboard";
 
   const handleSnackBarClose = () => {
     setIsSnackBarOpen(false);
   };
 
-  const downloadUUIDs = () => {
+  const downloadGUIDs = () => {
     const element = document.createElement("a");
-    const file = new Blob([bulkUuids.join("\n")], {
+    const file = new Blob([bulkGuids.join("\n")], {
       type: "plain/text",
     });
     element.href = URL.createObjectURL(file);
-    element.download = "bulk-uuids-v4-webtoolseasy.txt";
+    element.download = "bulk-guids-webtoolseasy.txt";
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
     document.body.removeChild(element); // Remove the element after download
@@ -50,10 +53,10 @@ export default function UUIDV4Generator() {
       />
       <div className="flex flex-col gap-2 w-full md:flex-row md:justify-center md:items-center">
         <Typography color="secondary" className="text-center" variant="h5">
-          {uuid}
+          {guid}
         </Typography>
         <ButtonWithHandler
-          buttonText="Copy UUID"
+          buttonText="Copy GUID"
           startIcon={<ContentCopyIcon />}
           size="small"
           onClick={onCopyHandler}
@@ -61,8 +64,8 @@ export default function UUIDV4Generator() {
       </div>
 
       <ButtonWithHandler
-        buttonText="Generate New UUID"
-        onClick={() => setUuid(generateUUID())}
+        buttonText="Generate New GUID"
+        onClick={() => setGuid(generateGUID())}
         size="small"
         variant="outlined"
         startIcon={<LoopIcon />}
@@ -70,32 +73,32 @@ export default function UUIDV4Generator() {
       />
       <div className="flex flex-col gap-3 mt-4 w-full md:w-fit">
         <Typography variant="h5" color="textSecondary" className="text-center">
-          Bulk Version 4 UUID Generator
+          Bulk GUID Generator
         </Typography>
         <div className="flex flex-col gap-2 md:flex-row md:gap-4 md:items-center">
           <TextField
-            label="Enter UUIDs count"
+            label="Enter GUIDs count"
             variant="outlined"
             required={true}
-            value={bulkUuidsCount}
-            onChange={(event) => setBulkUuidsCount(Number(event.target.value))}
+            value={bulkGuidsCount}
+            onChange={(event) => setBulkGuidsCount(Number(event.target.value))}
             size="small"
           />
           <ButtonWithHandler
-            buttonText="Generate Bulk UUIDs"
+            buttonText="Generate Bulk GUIDs"
             onClick={() => {
-              const uuids = Array.from({ length: bulkUuidsCount }, () =>
-                generateUUID()
+              const uuids = Array.from({ length: bulkGuidsCount }, () =>
+                generateGUID()
               );
-              setBulkUuids(uuids);
+              setBulkGuids(uuids);
             }}
             startIcon={<LoopIcon />}
           />
         </div>
 
-        {!isEmpty(bulkUuids) && (
+        {!isEmpty(bulkGuids) && (
           <div className="flex flex-col gap-2 w-full items-center overflow-y-auto max-h-[20rem] md:border-2 md:rounded-md md:p-4">
-            {map(bulkUuids, (uuid, index) => {
+            {map(bulkGuids, (uuid, index) => {
               return (
                 <Typography variant="caption" color="textSecondary">
                   {index + 1}. {uuid}
@@ -108,7 +111,7 @@ export default function UUIDV4Generator() {
         <ButtonWithHandler
           buttonText="Download bulk uuids to file"
           variant="outlined"
-          onClick={downloadUUIDs}
+          onClick={downloadGUIDs}
           startIcon={<DownloadIcon />}
         />
       </div>
