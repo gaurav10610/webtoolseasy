@@ -49,7 +49,7 @@ export default function UUIDV4Generator() {
         handleClose={handleSnackBarClose}
       />
       <div className="flex flex-col gap-2 w-full md:flex-row md:justify-center md:items-center">
-        <Typography variant="h4" color="secondary" className="text-center">
+        <Typography color="secondary" className="text-center" variant="h5">
           {uuid}
         </Typography>
         <ButtonWithHandler
