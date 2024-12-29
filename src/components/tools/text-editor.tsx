@@ -82,7 +82,7 @@ export default function TextEditor({
 
   const handleDownloadTextFile = () => {
     const element = document.createElement("a");
-    const file = new Blob([rawCode], { type: "text/plain" });
+    const file = new Blob([rawCode], { type: "plain/text" });
     element.href = URL.createObjectURL(file);
     element.download = "text-editor.txt";
     document.body.appendChild(element); // Required for this to work in FireFox
