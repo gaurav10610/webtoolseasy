@@ -10,6 +10,7 @@ export function ButtonWithHandler({
   sx = {},
   startIcon,
   endIcon,
+  classes = "",
 }: Readonly<{
   size?: "small" | "medium" | "large";
   variant?: "text" | "outlined" | "contained";
@@ -26,6 +27,7 @@ export function ButtonWithHandler({
   sx?: Record<string, unknown>;
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
+  classes?: string;
 }>): JSX.Element {
   return (
     <Button
@@ -36,6 +38,7 @@ export function ButtonWithHandler({
       sx={sx}
       {...(startIcon && { startIcon })}
       {...(endIcon && { endIcon })}
+      className={classes}
     >
       {buttonText}
     </Button>
