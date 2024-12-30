@@ -216,7 +216,7 @@ export default function CropImage() {
               ...c,
             });
           }}
-          className="w-full max-h-fit border-solid border-2 border-gray-300 p-4 rounded-md"
+          className="w-full max-h-fit border-solid border-2 border-gray-300"
         >
           <img
             id="image-cropper-preview"
