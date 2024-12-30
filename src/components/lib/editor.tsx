@@ -125,6 +125,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
       useInlineViewWhenSpaceIsLimited: false,
+      originalEditable: true,
     };
 
   return (
