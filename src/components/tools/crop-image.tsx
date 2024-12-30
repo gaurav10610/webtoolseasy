@@ -63,21 +63,37 @@ export default function CropImage() {
     image.src = URL.createObjectURL(selectedFile);
 
     image.onload = () => {
-      canvas.width = crop.width;
-      canvas.height = crop.height;
+      const previewImage = document.getElementById(
+        "image-cropper-preview"
+      ) as HTMLImageElement;
+      if (!previewImage) {
+        console.error("Preview image not found");
+        return;
+      }
+
+      const scaleX = image.naturalWidth / previewImage.width;
+      const scaleY = image.naturalHeight / previewImage.height;
+
+      const cropX = crop.x * scaleX;
+      const cropY = crop.y * scaleY;
+      const cropWidth = crop.width * scaleX;
+      const cropHeight = crop.height * scaleY;
+
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
       const ctx = canvas.getContext("2d");
 
       if (ctx) {
         ctx.drawImage(
           image,
-          crop.x,
-          crop.y,
-          crop.width,
-          crop.height, // Source rectangle
+          cropX,
+          cropY,
+          cropWidth,
+          cropHeight, // Source rectangle
           0,
           0,
-          crop.width,
-          crop.height // Destination rectangle
+          cropWidth,
+          cropHeight // Destination rectangle
         );
 
         canvas.toBlob(callback);
@@ -203,6 +219,7 @@ export default function CropImage() {
           className="w-full max-h-fit border-solid border-2 border-gray-300 p-4 rounded-md"
         >
           <img
+            id="image-cropper-preview"
             src={URL.createObjectURL(selectedFile)}
             alt={selectedFile.name}
             className="h-full w-full object-cover"
