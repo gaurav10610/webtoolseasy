@@ -95,10 +95,10 @@ export default function UUIDV1Generator() {
 
         {!isEmpty(bulkUuids) && (
           <div className="flex flex-col gap-2 w-full items-center overflow-y-auto max-h-[20rem] md:border-2 md:rounded-md md:p-4">
-            {map(bulkUuids, (uuid, index) => {
+            {map(bulkUuids, (uuid) => {
               return (
                 <Typography variant="caption" color="textSecondary">
-                  {index + 1}. {uuid}
+                  {uuid}
                 </Typography>
               );
             })}

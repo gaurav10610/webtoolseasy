@@ -19,6 +19,7 @@
     "@types/js-beautify": "^1.14.3",
     "@uiw/react-md-editor": "^4.0.5",
     "fast-xml-parser": "^4.5.0",
+    "generate-password-ts": "^1.6.5",
     "guid-ts": "^1.1.2",
     "jose": "^5.9.6",
     "js-beautify": "^1.15.1",
