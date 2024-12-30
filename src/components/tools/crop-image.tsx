@@ -16,6 +16,7 @@ import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { ButtonWithHandler } from "../lib/buttons";
 import DownloadIcon from "@mui/icons-material/Download";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CropImage() {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -35,7 +36,7 @@ export default function CropImage() {
       return;
     }
     const files = event.target.files;
-    setFileList([...Array.from(files)]);
+    setFileList([...fileList, ...Array.from(files)]);
     if (isNil(selectedFile)) {
       setSelectedFile(files[0]);
     }
@@ -57,7 +58,6 @@ export default function CropImage() {
     imageFormat: string;
     callback: (blob: Blob | null) => void;
   }>) => {
-    console.log("Cropping image", { crop });
     const canvas = document.createElement("canvas");
     const image = new Image();
     image.src = URL.createObjectURL(selectedFile);
@@ -156,11 +156,12 @@ export default function CropImage() {
       <div className="flex flex-row w-full gap-2 justify-end">
         <div className="w-[8rem]">
           <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel>Output Format</InputLabel>
+            <InputLabel size="small">Output Format</InputLabel>
             <Select
               value={imageFormat}
               label="Output Format"
               onChange={handleImageFormatChange}
+              size="small"
             >
               {formatOptions}
             </Select>
@@ -178,9 +179,14 @@ export default function CropImage() {
               callback: downloadCallback,
             });
           }}
+          size="small"
         />
       </div>
     );
+  };
+
+  const selectImageHandler = (file: File) => {
+    setSelectedFile(file);
   };
 
   return (
@@ -195,11 +201,26 @@ export default function CropImage() {
       />
       {isEmpty(fileList) && <NoFilesState openFileDialog={openFileDialog} />}
       {!isEmpty(fileList) && (
+        <div className="w-full flex flex-row justify-end">
+          <ButtonWithHandler
+            buttonText="Add More Images"
+            onClick={openFileDialog}
+            size="small"
+            startIcon={<AddIcon />}
+          />
+        </div>
+      )}
+      {!isEmpty(fileList) && (
         <Typography variant="h5" color="primary">
           Selected Images
         </Typography>
       )}
-      {!isEmpty(fileList) && <ImagesPreview fileList={fileList} />}
+      {!isEmpty(fileList) && (
+        <ImagesPreview
+          fileList={fileList}
+          selectImageHandler={selectImageHandler}
+        />
+      )}
       {!isNil(selectedFile) && (
         <Typography variant="h5" color="primary">
           Crop & Preview
