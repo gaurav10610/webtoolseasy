@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { isEmpty, isNil, map, toUpper } from "lodash-es";
+import { find, isEmpty, isNil, map, toUpper } from "lodash-es";
 import { useState } from "react";
 import { ImagesPreview, NoFilesState } from "../fileComponents";
 import {
@@ -17,10 +17,11 @@ import "react-image-crop/dist/ReactCrop.css";
 import { ButtonWithHandler } from "../lib/buttons";
 import DownloadIcon from "@mui/icons-material/Download";
 import AddIcon from "@mui/icons-material/Add";
+import { BaseImageData } from "@/types/file";
 
 export default function CropImage() {
-  const [fileList, setFileList] = useState<File[]>([]);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileList, setFileList] = useState<BaseImageData[]>([]);
+  const [selectedFile, setSelectedFile] = useState<BaseImageData | null>(null);
   const [crop, setCrop] = useState<Crop>({
     unit: "px", // Can be 'px' or '%'
     x: 25,
@@ -36,9 +37,13 @@ export default function CropImage() {
       return;
     }
     const files = event.target.files;
-    setFileList([...fileList, ...Array.from(files)]);
+    const newFiles = map(Array.from(files), (file) => ({
+      id: crypto.randomUUID(),
+      originalFile: file,
+    }));
+    setFileList([...fileList, ...newFiles]);
     if (isNil(selectedFile)) {
-      setSelectedFile(files[0]);
+      setSelectedFile(newFiles[0]);
     }
   };
 
@@ -54,13 +59,13 @@ export default function CropImage() {
     callback,
   }: Readonly<{
     crop: Crop;
-    selectedFile: File;
+    selectedFile: BaseImageData;
     imageFormat: string;
     callback: (blob: Blob | null) => void;
   }>) => {
     const canvas = document.createElement("canvas");
     const image = new Image();
-    image.src = URL.createObjectURL(selectedFile);
+    image.src = URL.createObjectURL(selectedFile.originalFile);
 
     image.onload = () => {
       const previewImage = document.getElementById(
@@ -132,7 +137,7 @@ export default function CropImage() {
     callback,
   }: Readonly<{
     crop: Crop;
-    selectedFile: File;
+    selectedFile: BaseImageData;
     imageFormat: string;
     callback: (blob: Blob | null) => void;
   }>) => {
@@ -171,7 +176,7 @@ export default function CropImage() {
           onClick={() => {
             downloadImage({
               crop,
-              selectedFile: selectedFile as File,
+              selectedFile: selectedFile!,
               imageFormat,
               callback: downloadCallback,
             });
@@ -182,8 +187,8 @@ export default function CropImage() {
     );
   };
 
-  const selectImageHandler = (file: File) => {
-    setSelectedFile(file);
+  const selectImageHandler = (id: string) => {
+    setSelectedFile(find(fileList, { id }) || null);
   };
 
   return (
@@ -238,8 +243,8 @@ export default function CropImage() {
         >
           <img
             id="image-cropper-preview"
-            src={URL.createObjectURL(selectedFile)}
-            alt={selectedFile.name}
+            src={URL.createObjectURL(selectedFile.originalFile)}
+            alt={selectedFile.originalFile.name}
             className="h-full w-full object-cover"
           />
         </ReactCrop>

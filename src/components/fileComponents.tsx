@@ -2,6 +2,7 @@ import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRound
 import { Typography } from "@mui/material";
 import { ButtonWithHandler } from "./lib/buttons";
 import Image from "next/image";
+import { BaseImageData } from "@/types/file";
 
 export const NoFilesState = ({
   openFileDialog,
@@ -26,20 +27,20 @@ export const ImagesPreview = ({
   fileList,
   selectImageHandler,
 }: {
-  fileList: File[];
-  selectImageHandler: (file: File) => void;
+  fileList: BaseImageData[];
+  selectImageHandler: (id: string) => void;
 }) => {
   return (
     <div className="flex flex-row gap-4 overflow-y-auto w-full h-36 md:h-50">
-      {fileList.map((file, index) => (
+      {fileList.map((baseFileData, index) => (
         <Image
           key={index}
-          src={URL.createObjectURL(file)}
-          alt={file.name}
+          src={URL.createObjectURL(baseFileData.originalFile)}
+          alt={baseFileData.originalFile.name}
           className="h-full object-cover rounded-md border-2 border-gray-300"
           width={128}
           height={128}
-          onClick={() => selectImageHandler(file)}
+          onClick={() => selectImageHandler(baseFileData.id)}
         />
       ))}
     </div>
