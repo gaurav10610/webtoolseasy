@@ -67,7 +67,6 @@ export default function CropImage() {
         "image-cropper-preview"
       ) as HTMLImageElement;
       if (!previewImage) {
-        console.error("Preview image not found");
         return;
       }
 
@@ -115,7 +114,6 @@ export default function CropImage() {
 
   const downloadCallback = (blob: Blob | null) => {
     if (!blob) {
-      console.error("Failed to crop image");
       return;
     }
 
@@ -139,7 +137,6 @@ export default function CropImage() {
     callback: (blob: Blob | null) => void;
   }>) => {
     if (!selectedFile) {
-      console.error("No file selected");
       return;
     }
 

@@ -14,7 +14,7 @@ export const NoFilesState = ({
       <Typography variant="body2">or</Typography>
       <ButtonWithHandler
         onClick={openFileDialog}
-        buttonText="Browse File"
+        buttonText="Browse Files"
         size="small"
         variant="outlined"
       />
