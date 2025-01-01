@@ -6,12 +6,14 @@ export function PaperWithChildren({
   variant = "elevation",
   square = true,
   sx = {},
+  classes = "",
 }: Readonly<{
   children: React.ReactNode;
   elevation?: number;
   variant?: "elevation" | "outlined";
   square?: boolean;
   sx?: Record<string, unknown>;
+  classes?: string;
 }>) {
   return (
     <Paper
@@ -21,6 +23,7 @@ export function PaperWithChildren({
       sx={{
         ...sx,
       }}
+      className={classes}
     >
       {children}
     </Paper>
