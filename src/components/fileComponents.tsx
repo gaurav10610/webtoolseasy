@@ -2,7 +2,7 @@ import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRound
 import { Typography } from "@mui/material";
 import { ButtonWithHandler } from "./lib/buttons";
 import Image from "next/image";
-import { BaseImageData } from "@/types/file";
+import { BaseFileData } from "@/types/file";
 
 export const NoFilesState = ({
   openFileDialog,
@@ -27,7 +27,7 @@ export const ImagesPreview = ({
   fileList,
   selectImageHandler,
 }: {
-  fileList: BaseImageData[];
+  fileList: BaseFileData[];
   selectImageHandler: (id: string) => void;
 }) => {
   return (

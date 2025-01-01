@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { ButtonWithHandler } from "../lib/buttons";
 import AddIcon from "@mui/icons-material/Add";
-import { BaseImageData } from "@/types/file";
+import { BaseFileData } from "@/types/file";
 import imageCompression from "browser-image-compression";
 import { formatBytes } from "@/util/commonUtils";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -27,7 +27,7 @@ interface CompressOptions {
   useWebWorker: boolean;
 }
 
-interface ImageFileData extends BaseImageData {
+interface ImageFileData extends BaseFileData {
   compressedFile?: Blob;
   compressProgress: number;
   isCompressed: boolean;

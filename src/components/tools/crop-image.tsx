@@ -17,11 +17,11 @@ import "react-image-crop/dist/ReactCrop.css";
 import { ButtonWithHandler } from "../lib/buttons";
 import DownloadIcon from "@mui/icons-material/Download";
 import AddIcon from "@mui/icons-material/Add";
-import { BaseImageData } from "@/types/file";
+import { BaseFileData } from "@/types/file";
 
 export default function CropImage() {
-  const [fileList, setFileList] = useState<BaseImageData[]>([]);
-  const [selectedFile, setSelectedFile] = useState<BaseImageData | null>(null);
+  const [fileList, setFileList] = useState<BaseFileData[]>([]);
+  const [selectedFile, setSelectedFile] = useState<BaseFileData | null>(null);
   const [crop, setCrop] = useState<Crop>({
     unit: "px", // Can be 'px' or '%'
     x: 25,
@@ -59,7 +59,7 @@ export default function CropImage() {
     callback,
   }: Readonly<{
     crop: Crop;
-    selectedFile: BaseImageData;
+    selectedFile: BaseFileData;
     imageFormat: string;
     callback: (blob: Blob | null) => void;
   }>) => {
@@ -137,7 +137,7 @@ export default function CropImage() {
     callback,
   }: Readonly<{
     crop: Crop;
-    selectedFile: BaseImageData;
+    selectedFile: BaseFileData;
     imageFormat: string;
     callback: (blob: Blob | null) => void;
   }>) => {
