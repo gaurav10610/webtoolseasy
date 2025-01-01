@@ -1,16 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { find, isEmpty, isNil, map } from "lodash-es";
+import { find, isEmpty, isNil, map, toUpper } from "lodash-es";
 import { useState } from "react";
 import { ImagesPreview, NoFilesState } from "../fileComponents";
-import { Slider, Typography } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Slider,
+  Typography,
+} from "@mui/material";
 import { ButtonWithHandler } from "../lib/buttons";
 import AddIcon from "@mui/icons-material/Add";
 import { BaseImageData } from "@/types/file";
 import imageCompression from "browser-image-compression";
 import { formatBytes } from "@/util/commonUtils";
 import SettingsIcon from "@mui/icons-material/Settings";
+import DownloadIcon from "@mui/icons-material/Download";
 
 interface CompressOptions {
   signal: AbortSignal;
@@ -71,11 +80,22 @@ export default function ImageCompress() {
       "compression-rate-slider"
     ) as HTMLSpanElement;
 
+    const compressionRate = Number(compresstionRateSlider.innerText);
+    const compressionRatio: number = 100 - compressionRate;
+    const maxFileSize =
+      (compressionRatio / 100) * selectedFile!.originalFile.size;
+    const maxSizeMB = maxFileSize / 1024 / 1024;
+
     const imageFileData: ImageFileData = {
       ...selectedFile!,
+      compressOptions: {
+        ...selectedFile!.compressOptions,
+        maxSizeMB,
+      },
       inProgress: true,
       compressProgress: 0,
-      compressionRate: Number(compresstionRateSlider.innerText),
+      compressionRate,
+      maxFileSize,
     };
 
     setSelectedFile({
@@ -154,7 +174,7 @@ export default function ImageCompress() {
         </div>
         <div>
           <ButtonWithHandler
-            buttonText="Apply Settings"
+            buttonText="Apply Options & Compress"
             onClick={compressImage}
             size="small"
             startIcon={<SettingsIcon />}
@@ -171,13 +191,94 @@ export default function ImageCompress() {
     compressedFile: Blob;
   }>) => {
     return (
-      <div className="w-full max-h-fit gap-3 border-solid border-2 border-gray-300">
-        <img
-          id="image-cropper-preview"
-          src={URL.createObjectURL(compressedFile)}
-          alt="Compressed image preview"
-          className="h-full w-full object-cover"
+      <>
+        <Typography variant="h5" color="primary">
+          Compress & Preview
+        </Typography>
+        <DownloadImageButtons />
+        <div className="w-full max-h-fit gap-3 border-solid border-2 border-gray-300">
+          <img
+            id="image-cropper-preview"
+            src={URL.createObjectURL(compressedFile)}
+            alt="Compressed image preview"
+            className="h-full w-full object-cover"
+          />
+        </div>
+      </>
+    );
+  };
+
+  const formatList = ["png", "jpeg", "webp", "bmp", "ico"];
+  const [imageFormat, setImageFormat] = useState<string>(formatList[0]);
+
+  const handleImageFormatChange = (event: SelectChangeEvent<string>) => {
+    setImageFormat(event.target.value);
+  };
+
+  const formatOptions = map(formatList, (item) => {
+    return (
+      <MenuItem key={item} value={item}>
+        {toUpper(item)}
+      </MenuItem>
+    );
+  });
+
+  const downloadImage = (blob: Blob) => {
+    if (!blob) {
+      return;
+    }
+
+    const element = document.createElement("a");
+    element.href = URL.createObjectURL(blob);
+    element.download = `cropped-image.${imageFormat}`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
+  const DownloadImageButtons = () => {
+    return (
+      <div className="flex flex-row w-full gap-2 justify-end">
+        <div className="w-[8rem]">
+          <FormControl variant="outlined" size="small" fullWidth>
+            <InputLabel size="small">Output Format</InputLabel>
+            <Select
+              value={imageFormat}
+              label="Output Format"
+              onChange={handleImageFormatChange}
+              size="small"
+            >
+              {formatOptions}
+            </Select>
+          </FormControl>
+        </div>
+
+        <ButtonWithHandler
+          buttonText="Download Image"
+          startIcon={<DownloadIcon />}
+          onClick={() => {
+            downloadImage(selectedFile!.compressedFile!);
+          }}
+          size="small"
         />
+      </div>
+    );
+  };
+
+  const ProgressLoader = () => {
+    return (
+      <div className="flex flex-col w-full items-center gap-3">
+        <div className="w-full flex flex-row justify-center items-center gap-3">
+          <Typography variant="body1" color="secondary">
+            Compressing...
+          </Typography>
+          <div className="w-full flex flex-row justify-center items-center">
+            <progress
+              value={selectedFile!.compressProgress}
+              max="100"
+            ></progress>
+          </div>
+        </div>
       </div>
     );
   };
@@ -220,9 +321,14 @@ export default function ImageCompress() {
       {!isNil(selectedFile) && (
         <CompressionSettings selectedFile={selectedFile} />
       )}
-      {!isNil(selectedFile) && !isNil(selectedFile.compressedFile) && (
-        <CompressedImagePreview compressedFile={selectedFile.compressedFile} />
-      )}
+      {!isNil(selectedFile) && selectedFile.inProgress && <ProgressLoader />}
+      {!isNil(selectedFile) &&
+        !isNil(selectedFile.compressedFile) &&
+        !selectedFile.inProgress && (
+          <CompressedImagePreview
+            compressedFile={selectedFile.compressedFile}
+          />
+        )}
     </div>
   );
 }
