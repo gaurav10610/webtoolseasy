@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { fetchFile, toBlobURL } from "@ffmpeg/util";
-import { BaseFileData } from "@/types/file";
+import { toBlobURL } from "@ffmpeg/util";
+import { VideoFileData } from "@/types/file";
 import {
   ELIGIBLE_TARGET_FORMATS,
   FFMPEG_FORMATS,
@@ -17,24 +17,9 @@ import { PaperWithChildren } from "../lib/papers";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import { LinearProgress, SelectChangeEvent, Typography } from "@mui/material";
 import { formatBytes, getRandomId } from "@/util/commonUtils";
-import { SelectItem, SelectWithLabel } from "../lib/select";
+import { SelectWithLabel } from "../lib/select";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-
-interface ConvertedFileData {
-  data?: Blob;
-  formatName: string;
-  formatId: number;
-  isConverted: boolean;
-}
-
-interface VideoFileData extends BaseFileData {
-  error?: unknown;
-  convertedData: Record<number, ConvertedFileData>;
-  formatId: number;
-  formatName: string;
-  //   eligbleFormats: SelectItem[];
-  selectedTargetFormatId: number;
-}
+import { buildFFMpegCommand } from "@/service/ffmpegService";
 
 function _getFileFormatId(fileExtension: string): number {
   return (
@@ -54,6 +39,34 @@ function _getEligibleFormatIds(fileName: string): number[] | undefined {
   const fileFormatId = _getFileFormatId(fileExtension!);
   const fileFormat = FFMPEG_FORMATS.get(fileFormatId) as FFmpegFormat;
   return ELIGIBLE_TARGET_FORMATS.get(fileFormat.targetFormat);
+}
+
+function _getOutputFileName({
+  file,
+  targetFormatid,
+}: Readonly<{ file: File; targetFormatid: number }>): string {
+  const fileName = file.name;
+  return `output-${fileName.substring(0, fileName.lastIndexOf("."))}.${
+    FFMPEG_FORMATS.get(targetFormatid)!.targetFormat
+  }`;
+}
+
+async function _transcodeVideo({
+  videoFileData,
+}: Readonly<{
+  videoFileData: VideoFileData;
+}>) {
+  const fileName = videoFileData.originalFile.name;
+  const outputFileName = _getOutputFileName({
+    file: videoFileData.originalFile,
+    targetFormatid: videoFileData.selectedTargetFormatId,
+  });
+
+  const ffmpegCommand: string[] = buildFFMpegCommand({
+    fileFormat: videoFileData.formatId,
+    targetFormat: videoFileData.selectedTargetFormatId,
+    args: [fileName, outputFileName],
+  });
 }
 
 export default function VideoToAudioConverter() {
@@ -108,6 +121,7 @@ export default function VideoToAudioConverter() {
             formatId: defaultTargetFormatId,
             isConverted: false,
             formatName: FFMPEG_FORMATS.get(defaultTargetFormatId)!.displayName,
+            conversionProgress: 0,
           },
         },
         formatName: FFMPEG_FORMATS.get(formatId)!.displayName,
