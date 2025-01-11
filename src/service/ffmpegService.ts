@@ -1,7 +1,7 @@
 import { FFMPEG_COMMANDS } from "@/data/config/ffmpeg-config";
 import { ConversionState, VideoFileData } from "@/types/file";
 import { updateFileState } from "@/util/videoConverterUtils";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { FFmpeg, FileData } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 
 export const createFFmpegInstance = async () => {
@@ -30,15 +30,15 @@ export const executeFFmpegCommand = async ({
 
 export const writeFFmpegFile = async ({
   ffmpeg,
-  file,
+  fileData,
   fileName,
 }: Readonly<{
   ffmpeg: FFmpeg;
-  file: File;
+  fileData: FileData;
   fileName: string;
 }>) => {
   // Load the file into ffmpeg
-  return ffmpeg.writeFile(fileName, await fetchFile(file));
+  return ffmpeg.writeFile(fileName, fileData);
 };
 
 export const getFFmpegFile = async ({
@@ -134,12 +134,14 @@ export async function transcodeVideo({
     setFileList,
   });
 
+  const fileDataFromDisk = await fetchFile(videoFileData.originalFile);
+
   /**
    * Write the file to ffmpeg
    */
   await writeFFmpegFile({
     ffmpeg,
-    file: videoFileData.originalFile,
+    fileData: fileDataFromDisk,
     fileName: formattedFileName,
   });
 
