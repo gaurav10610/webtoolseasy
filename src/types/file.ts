@@ -25,6 +25,7 @@ export interface ConvertedFileData {
 
 export interface VideoFileData extends BaseFileData {
   convertedData: Record<number, ConvertedFileData>;
+  fomattedFileName: string;
   formatId: number;
   formatName: string;
   selectedTargetFormatId: number;

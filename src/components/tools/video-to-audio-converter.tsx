@@ -18,7 +18,12 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { formatBytes, getFileExtension, getRandomId } from "@/util/commonUtils";
+import {
+  formatBytes,
+  getFileExtension,
+  getFormattedFileName,
+  getRandomId,
+} from "@/util/commonUtils";
 import { SelectWithLabel } from "../lib/select";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
@@ -74,6 +79,7 @@ export default function VideoToAudioConverter() {
       const videoFileData: VideoFileData = {
         id: crypto.randomUUID(),
         originalFile: file,
+        fomattedFileName: getFormattedFileName(file.name),
         convertedData: {
           [defaultTargetFormatId]: {
             formatId: defaultTargetFormatId,
@@ -108,11 +114,13 @@ export default function VideoToAudioConverter() {
               selectedTargetFormatId: Number(selectedFormatId),
               convertedData: {
                 ...fileData.convertedData,
-                [selectedFormatId]: {
-                  formatId: selectedFormatId,
+                [Number(selectedFormatId)]: {
+                  formatId: Number(selectedFormatId),
                   isConverted: false,
                   formatName: FFMPEG_FORMATS.get(Number(selectedFormatId))!
                     .displayName,
+                  conversionState: ConversionState.NOT_CONVERTED,
+                  conversionProgress: 0,
                 },
               },
             };
@@ -209,6 +217,12 @@ export default function VideoToAudioConverter() {
               size={30}
               variant="determinate"
             />
+          )}
+          {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
+            .conversionState === ConversionState.FAILED && (
+            <Typography variant="body2" color="error">
+              Conversion Failed
+            </Typography>
           )}
         </div>
       </PaperWithChildren>

@@ -24,12 +24,14 @@ export const createFFmpegInstance = async () => {
 export const writeFFmpegFile = async ({
   ffmpeg,
   file,
+  fileName,
 }: Readonly<{
   ffmpeg: FFmpeg;
   file: File;
+  fileName: string;
 }>) => {
   // Load the file into ffmpeg
-  return ffmpeg.writeFile(file.name, await fetchFile(file));
+  return ffmpeg.writeFile(fileName, await fetchFile(file));
 };
 
 export const executeFFmpegCommand = async ({
@@ -98,16 +100,16 @@ export async function transcodeVideo({
     setFileList,
   });
 
-  const fileName = videoFileData.originalFile.name;
+  const formattedFileName = videoFileData.fomattedFileName;
   const outputFileName = getOutputFileName({
-    file: videoFileData.originalFile,
+    fileName: formattedFileName,
     targetFormatid: videoFileData.selectedTargetFormatId,
   });
 
   const ffmpegCommand: string[] = buildFFMpegCommand({
     fileFormat: videoFileData.formatId,
     targetFormat: videoFileData.selectedTargetFormatId,
-    args: [fileName, outputFileName],
+    args: [formattedFileName, outputFileName],
   });
 
   const ffmpeg = await createFFmpegInstance();
@@ -126,6 +128,7 @@ export async function transcodeVideo({
   await writeFFmpegFile({
     ffmpeg,
     file: videoFileData.originalFile,
+    fileName: formattedFileName,
   });
 
   videoFileData.convertedData[targetFormatId]!.conversionState =
@@ -139,12 +142,25 @@ export async function transcodeVideo({
   console.log(`executing ffmpeg command: ${ffmpegCommand.join(" ")}`);
 
   ffmpeg.on("progress", ({ progress }) => {
-    console.log(`progress: ${progress}`);
+    const translatedProgress: number = Number((progress * 100).toFixed(2));
+    console.log(`progress: ${translatedProgress}`);
     // videoFileData.convertedData[targetFormatId].conversionProgress = progress;
     // updateFileState({
     //   updatedVideoFileData: videoFileData,
     //   setFileList,
     // });
+  });
+
+  ffmpeg.on("log", ({ message, type }) => {
+    console.log(`${type}: ${message}`);
+    if (type === "stderr") {
+      videoFileData.convertedData[targetFormatId]!.conversionState =
+        ConversionState.FAILED;
+      updateFileState({
+        updatedVideoFileData: videoFileData,
+        setFileList,
+      });
+    }
   });
 
   /**

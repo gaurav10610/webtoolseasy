@@ -94,3 +94,14 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
 export function getFileExtension(fileName: string): string {
   return fileName.split(".").pop()!;
 }
+
+/**
+ * Formats the file name by removing the spaces and special characters and
+ * replacing with underscore
+ *
+ * @param fileName
+ * @returns
+ */
+export function getFormattedFileName(fileName: string): string {
+  return fileName.replace(/[^a-zA-Z0-9.]/g, "_");
+}

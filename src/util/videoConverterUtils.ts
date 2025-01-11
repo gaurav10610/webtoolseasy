@@ -25,11 +25,10 @@ export const updateFileState = ({
 };
 
 export function getOutputFileName({
-  file,
+  fileName,
   targetFormatid,
-}: Readonly<{ file: File; targetFormatid: number }>): string {
-  const fileName = file.name;
-  return `output-${fileName.substring(0, fileName.lastIndexOf("."))}.${
+}: Readonly<{ fileName: string; targetFormatid: number }>): string {
+  return `output_${fileName.substring(0, fileName.lastIndexOf("."))}.${
     FFMPEG_FORMATS.get(targetFormatid)!.targetFormat
   }`;
 }
