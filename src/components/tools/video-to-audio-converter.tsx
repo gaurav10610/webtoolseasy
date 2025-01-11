@@ -29,6 +29,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   getEligibleFormatIds,
   getFileFormatId,
+  getOutputFileName,
 } from "@/util/videoConverterUtils";
 import { transcodeVideo } from "@/service/ffmpegService";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -72,11 +73,17 @@ export default function VideoToAudioConverter() {
       const formatId = getFileFormatId(fileExtension);
 
       const defaultTargetFormatId = getEligibleFormatIds(file.name)![0];
+      const formattedFileName = getFormattedFileName(file.name);
+      const outputFileName = getOutputFileName({
+        fileName: formattedFileName,
+        targetFormatid: defaultTargetFormatId,
+      });
 
       const videoFileData: VideoFileData = {
         id: crypto.randomUUID(),
         originalFile: file,
-        fomattedFileName: getFormattedFileName(file.name),
+        formattedFileName,
+        outputFileName,
         convertedData: {
           [defaultTargetFormatId]: {
             formatId: defaultTargetFormatId,
@@ -144,10 +151,7 @@ export default function VideoToAudioConverter() {
     });
   };
 
-  const downloadConvertedFile = async (
-    fileId: string,
-    targetFormatId: number
-  ) => {
+  const downloadConvertedFile = async (fileId: string) => {
     const videoFileData = find(fileList, (file) => file.id === fileId);
     console.log(`download: `, {
       videoFileData,
@@ -238,10 +242,7 @@ export default function VideoToAudioConverter() {
               size="medium"
               variant="outlined"
               onClick={() => {
-                downloadConvertedFile(
-                  videoFileData.id,
-                  videoFileData.selectedTargetFormatId
-                );
+                downloadConvertedFile(videoFileData.id);
               }}
               startIcon={<DownloadIcon />}
               color="success"

@@ -1,6 +1,6 @@
 import { FFMPEG_COMMANDS } from "@/data/config/ffmpeg-config";
 import { ConversionState, VideoFileData } from "@/types/file";
-import { getOutputFileName, updateFileState } from "@/util/videoConverterUtils";
+import { updateFileState } from "@/util/videoConverterUtils";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 
@@ -106,11 +106,8 @@ export async function transcodeVideo({
     setFileList,
   });
 
-  const formattedFileName = videoFileData.fomattedFileName;
-  const outputFileName = getOutputFileName({
-    fileName: formattedFileName,
-    targetFormatid: videoFileData.selectedTargetFormatId,
-  });
+  const formattedFileName = videoFileData.formattedFileName;
+  const outputFileName = videoFileData.outputFileName;
 
   const ffmpegCommand: string[] = buildFFMpegCommand({
     fileFormat: videoFileData.formatId,
