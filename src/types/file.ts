@@ -4,14 +4,14 @@ export interface BaseFileData {
 }
 
 export enum ConversionState {
-  NOT_CONVERTED = "NOT_CONVERTED",
-  INITIALISING_FFMPEG = "INITIALISING_FFMPEG",
-  FILE_LOADING = "FILE_LOADING",
-  IN_PROGRESS = "IN_PROGRESS",
-  FILE_READING = "FILE_READING",
-  FAILED = "FAILED",
-  CONVERT_ERROR = "CONVERT_ERROR",
-  CONVERTED = "CONVERTED",
+  NOT_CONVERTED = "Not Converted",
+  INITIALISING_FFMPEG = "Initialising Coverter...",
+  FILE_LOADING = "Loading File...",
+  IN_PROGRESS = "Conversion In Progress...",
+  FILE_READING = "Preparing File...",
+  FAILED = "Conversion Failed",
+  CONVERT_ERROR = "Conversion Error",
+  CONVERTED = "Converted Successfully",
 }
 
 export interface ConvertedFileData {

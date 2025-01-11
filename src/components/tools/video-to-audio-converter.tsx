@@ -28,6 +28,7 @@ import {
 import { transcodeVideo } from "@/service/ffmpegService";
 import DownloadIcon from "@mui/icons-material/Download";
 import { SnackBarWithPosition } from "../lib/snackBar";
+import { CircularProgressWithLabel } from "../lib/progress";
 
 export default function VideoToAudioConverter() {
   const [fileList, setFileList] = useState<VideoFileData[]>([]);
@@ -190,6 +191,37 @@ export default function VideoToAudioConverter() {
             <Typography variant="body2" color="secondary">
               {formatBytes(videoFileData.originalFile.size)}
             </Typography>
+            {includes(
+              [
+                ConversionState.INITIALISING_FFMPEG,
+                ConversionState.FILE_LOADING,
+                ConversionState.IN_PROGRESS,
+                ConversionState.FAILED,
+                ConversionState.FILE_READING,
+              ],
+              videoFileData.convertedData[videoFileData.selectedTargetFormatId]
+                .conversionState
+            ) && (
+              <div
+                className="flex flex-row gap-2 items-center"
+                key={getRandomId()}
+              >
+                <Typography variant="caption" color="textPrimary">
+                  State:{" "}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="secondary"
+                  fontStyle={"italic"}
+                >
+                  {
+                    videoFileData.convertedData[
+                      videoFileData.selectedTargetFormatId
+                    ].conversionState
+                  }
+                </Typography>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-row gap-2 items-center">
@@ -220,21 +252,14 @@ export default function VideoToAudioConverter() {
           ) && <CircularProgress size={30} />}
           {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
             .conversionState === ConversionState.IN_PROGRESS && (
-            <CircularProgress
+            <CircularProgressWithLabel
               value={
                 videoFileData.convertedData[
                   videoFileData.selectedTargetFormatId
                 ].conversionProgress
               }
-              size={30}
-              variant="determinate"
+              color="success"
             />
-          )}
-          {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
-            .conversionState === ConversionState.FAILED && (
-            <Typography variant="body2" color="error">
-              Conversion Failed
-            </Typography>
           )}
           {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
             .data && (

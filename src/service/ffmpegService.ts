@@ -1,8 +1,9 @@
 import { FFMPEG_COMMANDS } from "@/data/config/ffmpeg-config";
+import { CoreFileStreamer } from "@/lib/CoreFileStreamer";
 import { ConversionState, VideoFileData } from "@/types/file";
 import { updateFileState } from "@/util/videoConverterUtils";
 import { FFmpeg, FileData } from "@ffmpeg/ffmpeg";
-import { fetchFile, toBlobURL } from "@ffmpeg/util";
+import { toBlobURL } from "@ffmpeg/util";
 
 export const createFFmpegInstance = async () => {
   const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd";
@@ -134,14 +135,33 @@ export async function transcodeVideo({
     setFileList,
   });
 
-  const fileDataFromDisk = await fetchFile(videoFileData.originalFile);
+  const fileStreamer = new CoreFileStreamer(videoFileData.originalFile);
+  const fileDataFromDisk: Uint8Array<ArrayBufferLike>[] = [];
+
+  while (!fileStreamer.isEndOfFile()) {
+    const arrayBufferChunk = await fileStreamer.readBlockAsArrayBuffer();
+    fileDataFromDisk.push(new Uint8Array(arrayBufferChunk));
+  }
+
+  // Aggregate array buffer chunks into a single Uint8Array
+  const totalSize = fileDataFromDisk.reduce(
+    (acc, chunk) => acc + chunk.byteLength,
+    0
+  );
+  const aggregatedArrayBuffer = new Uint8Array(totalSize);
+
+  let offset = 0;
+  for (const chunk of fileDataFromDisk) {
+    aggregatedArrayBuffer.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
 
   /**
    * Write the file to ffmpeg
    */
   await writeFFmpegFile({
     ffmpeg,
-    fileData: fileDataFromDisk,
+    fileData: aggregatedArrayBuffer,
     fileName: formattedFileName,
   });
 
@@ -159,7 +179,15 @@ export async function transcodeVideo({
 
   ffmpeg.on("progress", ({ progress }) => {
     const translatedProgress: number = Number((progress * 100).toFixed(2));
+    console.log(`progress: ${translatedProgress}`);
     if (translatedProgress === 100) {
+      videoFileData.convertedData[targetFormatId]!.conversionState =
+        ConversionState.FILE_READING;
+      updateFileState({
+        updatedVideoFileData: videoFileData,
+        setFileList,
+      });
+
       getFFmpegFile({
         ffmpeg,
         fileName: outputFileName,
@@ -182,6 +210,13 @@ export async function transcodeVideo({
           updatedVideoFileData: videoFileData,
           setFileList,
         });
+      });
+    } else {
+      videoFileData.convertedData[targetFormatId]!.conversionProgress =
+        translatedProgress;
+      updateFileState({
+        updatedVideoFileData: videoFileData,
+        setFileList,
       });
     }
   });
