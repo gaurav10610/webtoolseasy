@@ -16,6 +16,7 @@ export enum ConversionState {
 
 export interface ConvertedFileData {
   data?: Uint8Array;
+  outputFileName: string;
   formatName: string;
   formatId: number;
   conversionState: ConversionState;
@@ -27,7 +28,6 @@ export interface ConvertedFileData {
 export interface VideoFileData extends BaseFileData {
   convertedData: Record<number, ConvertedFileData>;
   formattedFileName: string;
-  outputFileName: string;
   formatId: number;
   formatName: string;
   selectedTargetFormatId: number;

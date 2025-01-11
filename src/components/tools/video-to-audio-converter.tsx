@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { toBlobURL } from "@ffmpeg/util";
+import { useState } from "react";
 import { ConversionState, VideoFileData } from "@/types/file";
 import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
 import { cloneDeep, find, includes, isEmpty, isNil, map } from "lodash-es";
@@ -12,12 +10,7 @@ import { ButtonWithHandler } from "../lib/buttons";
 import AddIcon from "@mui/icons-material/Add";
 import { PaperWithChildren } from "../lib/papers";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import {
-  CircularProgress,
-  LinearProgress,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, SelectChangeEvent, Typography } from "@mui/material";
 import {
   formatBytes,
   getFileExtension,
@@ -29,39 +22,20 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   getEligibleFormatIds,
   getFileFormatId,
+  getMimeType,
   getOutputFileName,
 } from "@/util/videoConverterUtils";
 import { transcodeVideo } from "@/service/ffmpegService";
 import DownloadIcon from "@mui/icons-material/Download";
+import { SnackBarWithPosition } from "../lib/snackBar";
 
 export default function VideoToAudioConverter() {
-  const [isFFmpegLoaded, setIsFFmpegLoaded] = useState(false);
-  const ffmpegRef = useRef(new FFmpeg());
   const [fileList, setFileList] = useState<VideoFileData[]>([]);
-
-  const onComponentLoad = async () => {
-    const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd";
-    const ffmpeg = ffmpegRef.current;
-    ffmpeg.on("log", ({ message }) => {
-      console.log(message);
-    });
-
-    // toBlobURL is used to bypass CORS issue, urls with the same
-    // domain can be used directly.
-    await ffmpeg.load({
-      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
-      wasmURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.wasm`,
-        "application/wasm"
-      ),
-    });
-
-    setIsFFmpegLoaded(true);
-  };
-
-  useEffect(() => {
-    onComponentLoad();
-  }, []);
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [snackBarColor, setSnackBarColor] = useState<
+    "success" | "info" | "warning" | "error"
+  >("success");
 
   const onFilesSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
@@ -83,7 +57,6 @@ export default function VideoToAudioConverter() {
         id: crypto.randomUUID(),
         originalFile: file,
         formattedFileName,
-        outputFileName,
         convertedData: {
           [defaultTargetFormatId]: {
             formatId: defaultTargetFormatId,
@@ -91,6 +64,7 @@ export default function VideoToAudioConverter() {
             formatName: FFMPEG_FORMATS.get(defaultTargetFormatId)!.displayName,
             conversionProgress: 0,
             conversionState: ConversionState.NOT_CONVERTED,
+            outputFileName,
           },
         },
         formatName: FFMPEG_FORMATS.get(formatId)!.displayName,
@@ -125,6 +99,10 @@ export default function VideoToAudioConverter() {
                     .displayName,
                   conversionState: ConversionState.NOT_CONVERTED,
                   conversionProgress: 0,
+                  outputFileName: getOutputFileName({
+                    fileName: fileData.formattedFileName,
+                    targetFormatid: Number(selectedFormatId),
+                  }),
                 },
               },
             };
@@ -145,17 +123,40 @@ export default function VideoToAudioConverter() {
       return;
     }
 
+    /**
+     * Clone the video file data to avoid state mutation
+     */
     transcodeVideo({
       videoFileData: cloneDeep(videoFileData!),
       setFileList,
+      setIsSnackBarOpen,
+      setSnackBarMessage,
+      setSnackBarColor,
     });
   };
 
   const downloadConvertedFile = async (fileId: string) => {
     const videoFileData = find(fileList, (file) => file.id === fileId);
-    console.log(`download: `, {
-      videoFileData,
-    });
+    const element = document.createElement("a");
+    const file = new Blob(
+      [
+        videoFileData!.convertedData[videoFileData!.selectedTargetFormatId]!
+          .data!,
+      ],
+      {
+        type: getMimeType(videoFileData!.selectedTargetFormatId),
+      }
+    );
+    element.href = URL.createObjectURL(file);
+
+    element.download =
+      videoFileData!.convertedData[
+        videoFileData!.selectedTargetFormatId
+      ].outputFileName;
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   const VideoFile = ({
@@ -267,28 +268,19 @@ export default function VideoToAudioConverter() {
     );
   };
 
-  const ConverterStatus = () => {
-    return (
-      <div className="flex flex-col w-full gap-3">
-        <div className="flex flex-row gap-2 items-center w-full justify-end">
-          <Typography variant="h6" color="primary">
-            Converter Status:{" "}
-          </Typography>
-
-          <Typography
-            variant="h6"
-            color={isFFmpegLoaded ? "success" : "secondary"}
-          >
-            {isFFmpegLoaded ? "Ready" : "Loading..."}
-          </Typography>
-        </div>
-        {!isFFmpegLoaded && <LinearProgress className="w-full" />}
-      </div>
-    );
+  const handleSnackBarClose = () => {
+    setIsSnackBarOpen(false);
   };
 
   return (
     <div className="flex flex-col w-full gap-3">
+      <SnackBarWithPosition
+        message={snackBarMessage}
+        open={isSnackBarOpen}
+        autoHideDuration={2000}
+        handleClose={handleSnackBarClose}
+        color={snackBarColor}
+      />
       <input
         id="file"
         type="file"
@@ -297,7 +289,6 @@ export default function VideoToAudioConverter() {
         multiple
         accept=".mp4,.webm,.ogv,.mkv,.ogm,.avi"
       />
-      <ConverterStatus />
       {isEmpty(fileList) && <NoFilesState openFileDialog={openFileDialog} />}
       {!isEmpty(fileList) && (
         <div className="w-full flex flex-row justify-end mb-3">

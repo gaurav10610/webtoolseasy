@@ -92,9 +92,17 @@ export const buildFFMpegCommand = ({
 export async function transcodeVideo({
   videoFileData,
   setFileList,
+  setIsSnackBarOpen,
+  setSnackBarMessage,
+  setSnackBarColor,
 }: Readonly<{
   videoFileData: VideoFileData;
   setFileList: React.Dispatch<React.SetStateAction<VideoFileData[]>>;
+  setIsSnackBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSnackBarMessage: React.Dispatch<React.SetStateAction<string>>;
+  setSnackBarColor: React.Dispatch<
+    React.SetStateAction<"success" | "info" | "warning" | "error">
+  >;
 }>) {
   const targetFormatId = videoFileData.selectedTargetFormatId;
 
@@ -107,7 +115,8 @@ export async function transcodeVideo({
   });
 
   const formattedFileName = videoFileData.formattedFileName;
-  const outputFileName = videoFileData.outputFileName;
+  const outputFileName =
+    videoFileData.convertedData[targetFormatId]!.outputFileName;
 
   const ffmpegCommand: string[] = buildFFMpegCommand({
     fileFormat: videoFileData.formatId,
@@ -142,12 +151,12 @@ export async function transcodeVideo({
     setFileList,
   });
 
-  console.log(`executing ffmpeg command: ${ffmpegCommand.join(" ")}`);
+  console.log(`executing ffmpeg command: `, {
+    ffmpegCommand,
+  });
 
   ffmpeg.on("progress", ({ progress }) => {
     const translatedProgress: number = Number((progress * 100).toFixed(2));
-    console.log(`progress: ${translatedProgress}`);
-
     if (translatedProgress === 100) {
       getFFmpegFile({
         ffmpeg,
@@ -163,6 +172,10 @@ export async function transcodeVideo({
 
         await deleteFFmpegFile({ ffmpeg, fileName: formattedFileName });
 
+        setSnackBarMessage(`${videoFileData.originalFile.name} converted!`);
+        setSnackBarColor("success");
+        setIsSnackBarOpen(true);
+
         updateFileState({
           updatedVideoFileData: videoFileData,
           setFileList,
@@ -171,9 +184,9 @@ export async function transcodeVideo({
     }
   });
 
-  ffmpeg.on("log", ({ message, type }) => {
-    console.log(`${type}: ${message}`);
-  });
+  // ffmpeg.on("log", ({ message, type }) => {
+  //   console.log(`${type}: ${message}`);
+  // });
 
   /**
    * Execute the ffmpeg command

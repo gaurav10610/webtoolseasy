@@ -48,3 +48,12 @@ export function getEligibleFormatIds(fileName: string): number[] | undefined {
   const fileFormat = FFMPEG_FORMATS.get(fileFormatId) as FFmpegFormat;
   return ELIGIBLE_TARGET_FORMATS.get(fileFormat.targetFormat);
 }
+
+export function getMimeType(targetFormat: number) {
+  const targetFormatName: string =
+    FFMPEG_FORMATS.get(targetFormat)!.targetFormat;
+  if (targetFormatName === "mp4" || targetFormatName === "webm") {
+    return `video/${targetFormatName}`;
+  }
+  return `audio/${targetFormatName}`;
+}
