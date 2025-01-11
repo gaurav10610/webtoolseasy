@@ -10,7 +10,7 @@ export enum ConvertEventType {
 }
 
 export interface FFMpegBaseFileEvent {
-  fileId: string;
+  id: string;
 }
 
 export interface ConvertEvent extends FFMpegBaseFileEvent {

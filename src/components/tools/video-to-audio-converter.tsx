@@ -3,71 +3,29 @@
 import { useEffect, useRef, useState } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { toBlobURL } from "@ffmpeg/util";
-import { VideoFileData } from "@/types/file";
-import {
-  ELIGIBLE_TARGET_FORMATS,
-  FFMPEG_FORMATS,
-} from "@/data/config/ffmpeg-config";
-import { find, isEmpty, isNil, map } from "lodash-es";
+import { ConversionState, VideoFileData } from "@/types/file";
+import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
+import { cloneDeep, find, includes, isEmpty, isNil, map } from "lodash-es";
 import { FFmpegFormat } from "@/types/ffmpeg";
 import { NoFilesState } from "../fileComponents";
 import { ButtonWithHandler } from "../lib/buttons";
 import AddIcon from "@mui/icons-material/Add";
 import { PaperWithChildren } from "../lib/papers";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import { LinearProgress, SelectChangeEvent, Typography } from "@mui/material";
-import { formatBytes, getRandomId } from "@/util/commonUtils";
+import {
+  CircularProgress,
+  LinearProgress,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
+import { formatBytes, getFileExtension, getRandomId } from "@/util/commonUtils";
 import { SelectWithLabel } from "../lib/select";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { buildFFMpegCommand } from "@/service/ffmpegService";
-
-function _getFileFormatId(fileExtension: string): number {
-  return (
-    find(
-      Array.from(FFMPEG_FORMATS.entries()),
-      ([, format]) => format.targetFormat === fileExtension
-    )?.[0] ?? 6
-  );
-}
-
-function _getFileExtension(fileName: string): string {
-  return fileName.split(".").pop()!;
-}
-
-function _getEligibleFormatIds(fileName: string): number[] | undefined {
-  const fileExtension = _getFileExtension(fileName);
-  const fileFormatId = _getFileFormatId(fileExtension!);
-  const fileFormat = FFMPEG_FORMATS.get(fileFormatId) as FFmpegFormat;
-  return ELIGIBLE_TARGET_FORMATS.get(fileFormat.targetFormat);
-}
-
-function _getOutputFileName({
-  file,
-  targetFormatid,
-}: Readonly<{ file: File; targetFormatid: number }>): string {
-  const fileName = file.name;
-  return `output-${fileName.substring(0, fileName.lastIndexOf("."))}.${
-    FFMPEG_FORMATS.get(targetFormatid)!.targetFormat
-  }`;
-}
-
-async function _transcodeVideo({
-  videoFileData,
-}: Readonly<{
-  videoFileData: VideoFileData;
-}>) {
-  const fileName = videoFileData.originalFile.name;
-  const outputFileName = _getOutputFileName({
-    file: videoFileData.originalFile,
-    targetFormatid: videoFileData.selectedTargetFormatId,
-  });
-
-  const ffmpegCommand: string[] = buildFFMpegCommand({
-    fileFormat: videoFileData.formatId,
-    targetFormat: videoFileData.selectedTargetFormatId,
-    args: [fileName, outputFileName],
-  });
-}
+import {
+  getEligibleFormatIds,
+  getFileFormatId,
+} from "@/util/videoConverterUtils";
+import { transcodeVideo } from "@/service/ffmpegService";
 
 export default function VideoToAudioConverter() {
   const [isFFmpegLoaded, setIsFFmpegLoaded] = useState(false);
@@ -108,10 +66,10 @@ export default function VideoToAudioConverter() {
     }
     const files = event.target.files;
     const newFiles: VideoFileData[] = map(Array.from(files), (file) => {
-      const fileExtension = _getFileExtension(file.name);
-      const formatId = _getFileFormatId(fileExtension);
+      const fileExtension = getFileExtension(file.name);
+      const formatId = getFileFormatId(fileExtension);
 
-      const defaultTargetFormatId = _getEligibleFormatIds(file.name)![0];
+      const defaultTargetFormatId = getEligibleFormatIds(file.name)![0];
 
       const videoFileData: VideoFileData = {
         id: crypto.randomUUID(),
@@ -122,6 +80,7 @@ export default function VideoToAudioConverter() {
             isConverted: false,
             formatName: FFMPEG_FORMATS.get(defaultTargetFormatId)!.displayName,
             conversionProgress: 0,
+            conversionState: ConversionState.NOT_CONVERTED,
           },
         },
         formatName: FFMPEG_FORMATS.get(formatId)!.displayName,
@@ -168,9 +127,15 @@ export default function VideoToAudioConverter() {
     });
   };
 
-  const onVideoConvert = async (fileId: string) => {
-    console.log("Started converting file: ", {
-      fileData: find(fileList, (file) => file.id === fileId),
+  const onVideoConvert = (fileId: string) => {
+    const videoFileData = find(fileList, (file) => file.id === fileId);
+    if (isEmpty(videoFileData)) {
+      return;
+    }
+
+    transcodeVideo({
+      videoFileData: cloneDeep(videoFileData!),
+      setFileList,
     });
   };
 
@@ -179,7 +144,7 @@ export default function VideoToAudioConverter() {
   }: Readonly<{
     videoFileData: VideoFileData;
   }>) => {
-    const eligibleFormats = _getEligibleFormatIds(
+    const eligibleFormats = getEligibleFormatIds(
       videoFileData.originalFile.name
     )!;
     const selectOptions = map(eligibleFormats, (formatId) => {
@@ -217,14 +182,34 @@ export default function VideoToAudioConverter() {
             }}
             classes="w-[10rem]"
           />
-          <ButtonWithHandler
-            buttonText="Convert"
-            size="medium"
-            onClick={() => {
-              onVideoConvert(videoFileData.id);
-            }}
-            endIcon={<PlayArrowIcon />}
-          />
+          {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
+            .conversionState === ConversionState.NOT_CONVERTED && (
+            <ButtonWithHandler
+              buttonText="Convert"
+              size="medium"
+              onClick={() => {
+                onVideoConvert(videoFileData.id);
+              }}
+              endIcon={<PlayArrowIcon />}
+            />
+          )}
+          {includes(
+            [ConversionState.INITIALISING_FFMPEG, ConversionState.FILE_LOADING],
+            videoFileData.convertedData[videoFileData.selectedTargetFormatId]
+              .conversionState
+          ) && <CircularProgress size={30} />}
+          {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
+            .conversionState === ConversionState.IN_PROGRESS && (
+            <CircularProgress
+              value={
+                videoFileData.convertedData[
+                  videoFileData.selectedTargetFormatId
+                ].conversionProgress
+              }
+              size={30}
+              variant="determinate"
+            />
+          )}
         </div>
       </PaperWithChildren>
     );
