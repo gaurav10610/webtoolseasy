@@ -11,10 +11,11 @@ export enum ConversionState {
   FILE_READING = "FILE_READING",
   FAILED = "FAILED",
   CONVERT_ERROR = "CONVERT_ERROR",
+  CONVERTED = "CONVERTED",
 }
 
 export interface ConvertedFileData {
-  data?: Blob;
+  data?: Uint8Array;
   formatName: string;
   formatId: number;
   conversionState: ConversionState;

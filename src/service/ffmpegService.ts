@@ -5,7 +5,7 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 
 export const createFFmpegInstance = async () => {
-  const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/umd";
+  const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd";
   const ffmpeg = new FFmpeg();
 
   // toBlobURL is used to bypass CORS issue, urls with the same
@@ -13,12 +13,19 @@ export const createFFmpegInstance = async () => {
   await ffmpeg.load({
     coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
     wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, "application/wasm"),
-    workerURL: await toBlobURL(
-      `${baseURL}/ffmpeg-core.worker.js`,
-      "text/javascript"
-    ),
   });
   return ffmpeg;
+};
+
+export const executeFFmpegCommand = async ({
+  ffmpeg,
+  command,
+}: Readonly<{
+  ffmpeg: FFmpeg;
+  command: string[];
+}>) => {
+  // Run the command
+  return ffmpeg.exec(command);
 };
 
 export const writeFFmpegFile = async ({
@@ -34,17 +41,6 @@ export const writeFFmpegFile = async ({
   return ffmpeg.writeFile(fileName, await fetchFile(file));
 };
 
-export const executeFFmpegCommand = async ({
-  ffmpeg,
-  command,
-}: Readonly<{
-  ffmpeg: FFmpeg;
-  command: string[];
-}>) => {
-  // Run the command
-  return ffmpeg.exec(command);
-};
-
 export const getFFmpegFile = async ({
   ffmpeg,
   fileName,
@@ -53,6 +49,16 @@ export const getFFmpegFile = async ({
   fileName: string;
 }>) => {
   return ffmpeg.readFile(fileName);
+};
+
+export const deleteFFmpegFile = async ({
+  ffmpeg,
+  fileName,
+}: Readonly<{
+  ffmpeg: FFmpeg;
+  fileName: string;
+}>) => {
+  return ffmpeg.deleteFile(fileName);
 };
 
 export const buildFFMpegCommand = ({
@@ -144,23 +150,32 @@ export async function transcodeVideo({
   ffmpeg.on("progress", ({ progress }) => {
     const translatedProgress: number = Number((progress * 100).toFixed(2));
     console.log(`progress: ${translatedProgress}`);
-    // videoFileData.convertedData[targetFormatId].conversionProgress = progress;
-    // updateFileState({
-    //   updatedVideoFileData: videoFileData,
-    //   setFileList,
-    // });
+
+    if (translatedProgress === 100) {
+      getFFmpegFile({
+        ffmpeg,
+        fileName: outputFileName,
+      }).then(async (fileData) => {
+        videoFileData.convertedData[targetFormatId]!.conversionState =
+          ConversionState.CONVERTED;
+        videoFileData.convertedData[targetFormatId]!.isConverted = true;
+        videoFileData.convertedData[targetFormatId]!.conversionProgress = 100;
+        videoFileData.convertedData[targetFormatId]!.data = <Uint8Array>(
+          fileData
+        );
+
+        await deleteFFmpegFile({ ffmpeg, fileName: formattedFileName });
+
+        updateFileState({
+          updatedVideoFileData: videoFileData,
+          setFileList,
+        });
+      });
+    }
   });
 
   ffmpeg.on("log", ({ message, type }) => {
     console.log(`${type}: ${message}`);
-    if (type === "stderr") {
-      videoFileData.convertedData[targetFormatId]!.conversionState =
-        ConversionState.FAILED;
-      updateFileState({
-        updatedVideoFileData: videoFileData,
-        setFileList,
-      });
-    }
   });
 
   /**

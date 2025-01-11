@@ -31,6 +31,7 @@ import {
   getFileFormatId,
 } from "@/util/videoConverterUtils";
 import { transcodeVideo } from "@/service/ffmpegService";
+import DownloadIcon from "@mui/icons-material/Download";
 
 export default function VideoToAudioConverter() {
   const [isFFmpegLoaded, setIsFFmpegLoaded] = useState(false);
@@ -38,7 +39,7 @@ export default function VideoToAudioConverter() {
   const [fileList, setFileList] = useState<VideoFileData[]>([]);
 
   const onComponentLoad = async () => {
-    const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/umd";
+    const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd";
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on("log", ({ message }) => {
       console.log(message);
@@ -51,10 +52,6 @@ export default function VideoToAudioConverter() {
       wasmURL: await toBlobURL(
         `${baseURL}/ffmpeg-core.wasm`,
         "application/wasm"
-      ),
-      workerURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.worker.js`,
-        "text/javascript"
       ),
     });
 
@@ -147,6 +144,16 @@ export default function VideoToAudioConverter() {
     });
   };
 
+  const downloadConvertedFile = async (
+    fileId: string,
+    targetFormatId: number
+  ) => {
+    const videoFileData = find(fileList, (file) => file.id === fileId);
+    console.log(`download: `, {
+      videoFileData,
+    });
+  };
+
   const VideoFile = ({
     videoFileData,
   }: Readonly<{
@@ -223,6 +230,22 @@ export default function VideoToAudioConverter() {
             <Typography variant="body2" color="error">
               Conversion Failed
             </Typography>
+          )}
+          {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
+            .data && (
+            <ButtonWithHandler
+              buttonText="Download"
+              size="medium"
+              variant="outlined"
+              onClick={() => {
+                downloadConvertedFile(
+                  videoFileData.id,
+                  videoFileData.selectedTargetFormatId
+                );
+              }}
+              startIcon={<DownloadIcon />}
+              color="success"
+            />
           )}
         </div>
       </PaperWithChildren>
