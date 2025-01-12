@@ -24,6 +24,7 @@
     "fast-xml-parser": "^4.5.0",
     "generate-password-ts": "^1.6.5",
     "guid-ts": "^1.1.2",
+    "idb-keyval": "^6.2.1",
     "jose": "^5.9.6",
     "js-beautify": "^1.15.1",
     "lodash-es": "^4.17.21",
@@ -39,7 +40,8 @@
     "react-json-view-lite": "^2.0.1",
     "react-monaco-editor": "^0.56.2",
     "rehype-sanitize": "^6.0.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "video-stream-merger": "^4.0.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
