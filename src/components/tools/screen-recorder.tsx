@@ -3,11 +3,11 @@
 import { ButtonWithHandler } from "../lib/buttons";
 import { CustomSvgIcon } from "../lib/icons";
 import MonitorIcon from "@/data/icons/monitor.svg";
-import ScreenIcon from "@/data/icons/screen.svg";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { CheckBoxWithLabel } from "../lib/checkboxes";
 import PauseIcon from "@mui/icons-material/Pause";
+import { CircularProgress, Typography } from "@mui/material";
 
 enum RecordingState {
   NOT_RECORDING,
@@ -30,6 +30,17 @@ export default function ScreenRecorder() {
 
   const stopRecording = () => {
     setRecordingState(RecordingState.PREPARING_RECORDING);
+  };
+
+  const PreparingRecording = () => {
+    return (
+      <div className="flex flex-row gap-3 items-center">
+        <CircularProgress color="primary" size={40} />
+        <Typography variant="body1" color="secondary">
+          Preparing recording...
+        </Typography>
+      </div>
+    );
   };
 
   return (
@@ -72,6 +83,9 @@ export default function ScreenRecorder() {
           startIcon={<PauseIcon />}
           color="error"
         />
+      )}
+      {recordingState === RecordingState.PREPARING_RECORDING && (
+        <PreparingRecording />
       )}
     </div>
   );
