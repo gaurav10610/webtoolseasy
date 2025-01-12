@@ -4,7 +4,7 @@ import {
 } from "@/data/config/ffmpeg-config";
 import { FFmpegFormat } from "@/types/ffmpeg";
 import { VideoFileData } from "@/types/file";
-import { find, map, merge } from "lodash-es";
+import { find, isEmpty, map, merge } from "lodash-es";
 import { getFileExtension } from "./commonUtils";
 
 export const updateFileState = ({
@@ -42,11 +42,23 @@ export function getFileFormatId(fileExtension: string): number {
   );
 }
 
-export function getEligibleFormatIds(fileName: string): number[] | undefined {
+export function getEligibleFormatIds(
+  fileName: string,
+  formatTypeFilter?: "Audio" | "Video"
+): number[] | undefined {
   const fileExtension = getFileExtension(fileName);
   const fileFormatId = getFileFormatId(fileExtension!);
   const fileFormat = FFMPEG_FORMATS.get(fileFormatId) as FFmpegFormat;
-  return ELIGIBLE_TARGET_FORMATS.get(fileFormat.targetFormat);
+  const eligibleFormats = ELIGIBLE_TARGET_FORMATS.get(fileFormat.targetFormat);
+
+  if (isEmpty(formatTypeFilter)) {
+    return eligibleFormats;
+  }
+
+  return eligibleFormats?.filter((formatId) => {
+    const format = FFMPEG_FORMATS.get(formatId) as FFmpegFormat;
+    return format.displayName.includes(formatTypeFilter!);
+  });
 }
 
 export function getMimeType(targetFormat: number) {

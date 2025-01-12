@@ -47,7 +47,10 @@ export default function VideoToAudioConverter() {
       const fileExtension = getFileExtension(file.name);
       const formatId = getFileFormatId(fileExtension);
 
-      const defaultTargetFormatId = getEligibleFormatIds(file.name)![0];
+      const defaultTargetFormatId = getEligibleFormatIds(
+        file.name,
+        "Audio"
+      )![0];
       const formattedFileName = getFormattedFileName(file.name);
       const outputFileName = getOutputFileName({
         fileName: formattedFileName,
@@ -166,7 +169,8 @@ export default function VideoToAudioConverter() {
     videoFileData: VideoFileData;
   }>) => {
     const eligibleFormats = getEligibleFormatIds(
-      videoFileData.originalFile.name
+      videoFileData.originalFile.name,
+      "Audio"
     )!;
     const selectOptions = map(eligibleFormats, (formatId) => {
       const format = FFMPEG_FORMATS.get(formatId) as FFmpegFormat;
@@ -287,7 +291,7 @@ export default function VideoToAudioConverter() {
     return (
       <div className="flex flex-col w-full gap-3">
         {map(fileList, (videoFileData) => (
-          <VideoFile key={getRandomId()} videoFileData={videoFileData} />
+          <VideoFile key={videoFileData.id} videoFileData={videoFileData} />
         ))}
       </div>
     );

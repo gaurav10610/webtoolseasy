@@ -90,6 +90,11 @@ export const buildFFMpegCommand = ({
   return command.split(" ");
 };
 
+export const validateFileSize = (file: File) => {
+  const fileSizeInGB = file.size / (1024 * 1024 * 1024);
+  return fileSizeInGB <= 1;
+};
+
 export async function transcodeVideo({
   videoFileData,
   setFileList,
@@ -105,6 +110,17 @@ export async function transcodeVideo({
     React.SetStateAction<"success" | "info" | "warning" | "error">
   >;
 }>) {
+  const fileSizeValid = validateFileSize(videoFileData.originalFile);
+
+  if (!fileSizeValid) {
+    setSnackBarMessage(
+      `File size should be less than 1GB. File: ${videoFileData.originalFile.name}`
+    );
+    setSnackBarColor("error");
+    setIsSnackBarOpen(true);
+    return;
+  }
+
   const targetFormatId = videoFileData.selectedTargetFormatId;
 
   videoFileData.convertedData[targetFormatId]!.conversionState =
