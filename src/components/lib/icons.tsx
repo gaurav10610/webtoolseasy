@@ -4,10 +4,12 @@ export function CustomSvgIcon({
   children,
   size = "small",
   sx = {},
+  className = "",
 }: Readonly<{
   children: React.ReactNode;
   size?: "inherit" | "large" | "medium" | "small";
   sx?: Record<string, unknown>;
+  className?: string;
 }>) {
   return (
     <SvgIcon
@@ -15,6 +17,7 @@ export function CustomSvgIcon({
       sx={{
         ...sx,
       }}
+      className={className}
     >
       {children}
     </SvgIcon>
