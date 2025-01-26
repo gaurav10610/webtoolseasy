@@ -34,13 +34,6 @@ export async function getCameraAndMicrophoneStream({
   });
 }
 
-export function configureMediaStreamRecorder(
-  mediaStream: MediaStream,
-  mediaRecorderOptions: MediaRecorderOptions
-) {
-  return new MediaRecorder(mediaStream, mediaRecorderOptions);
-}
-
 export function mergeMediaStreams({
   screenStream,
   webcamStream,
@@ -54,17 +47,19 @@ export function mergeMediaStreams({
   includeMicrophoneAudio: boolean;
   cameraVideoOptions: Record<string, number>;
 }>): MediaStream | null {
-  const screenStreamSettings: MediaTrackSettings = screenStream
-    ?.getVideoTracks()[0]
+  const screenStreamSettings: MediaTrackSettings = screenStream!
+    .getVideoTracks()[0]
     .getSettings()!;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mergerOptions: any = {
     width: screenStreamSettings.width!,
     height: screenStreamSettings.height!,
   };
 
-  let streamMerger: VideoStreamMerger = new VideoStreamMerger(mergerOptions);
+  const streamMerger: VideoStreamMerger = new VideoStreamMerger(mergerOptions);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mergeScreenStreamOptions: any = {
     x: 0,
     y: 0,
@@ -77,6 +72,7 @@ export function mergeMediaStreams({
   // Add the screen capture. Position it to fill the whole stream (the default)
   streamMerger.addStream(screenStream!, mergeScreenStreamOptions);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mergeWebcamStreamOptions: any = {
     x: streamMerger.width - cameraVideoOptions.width,
     y: streamMerger.height - cameraVideoOptions.height,
