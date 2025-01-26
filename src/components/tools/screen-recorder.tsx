@@ -36,8 +36,8 @@ const PreparingRecording = () => {
 
 export default function ScreenRecorder() {
   const cameraVideoOptions: Record<string, number> = {
-    width: 150,
-    height: 150,
+    width: 300,
+    height: 300,
   };
 
   const mediaRecoderOptionsConfig: Record<string, MediaRecorderOptions> = {
@@ -131,12 +131,12 @@ export default function ScreenRecorder() {
       }
     }
     if (screenStream) {
-      configureStreamStopListener(screenStream);
+      configureStreamStopListener(screenStream, true);
     }
 
     let mergedMediaStream: MediaStream | null;
     if (webcamStream) {
-      configureStreamStopListener(webcamStream);
+      configureStreamStopListener(webcamStream, false);
 
       mergedMediaStream = mergeMediaStreams({
         screenStream,
@@ -159,7 +159,7 @@ export default function ScreenRecorder() {
     mediaRecorderContextRef.current["mediaRecorder"] = mediaRecorder;
 
     if (screenStream && webcamStream && !mergedMediaStream) {
-      stopRecording();
+      stopRecording(false);
     }
 
     if (mergedMediaStream) {
@@ -178,7 +178,7 @@ export default function ScreenRecorder() {
     setRecordingState(RecordingState.RECORDING);
   };
 
-  const stopRecording = () => {
+  const stopRecording = (triggerProcessRecording: boolean) => {
     console.log("stop recording triggered..");
     const { screenStream, webcamStream, mergedMediaStream } =
       streamContextRef.current;
@@ -188,7 +188,7 @@ export default function ScreenRecorder() {
     webcamStream?.getTracks().forEach((track) => track.stop());
     mergedMediaStream?.getTracks().forEach((track) => track.stop());
 
-    if (recordingState === RecordingState.RECORDING) {
+    if (triggerProcessRecording) {
       setRecordingState(RecordingState.PROCESSING_RECORDING);
       processRecordingVideo();
     }
@@ -238,7 +238,10 @@ export default function ScreenRecorder() {
     }, RECORDING_START_DELAY_MS);
   };
 
-  const configureStreamStopListener = (mediaStream: MediaStream) => {
+  const configureStreamStopListener = (
+    mediaStream: MediaStream,
+    triggerStopRecording: boolean
+  ) => {
     mediaStream.getTracks().forEach((track) => {
       track.addEventListener("ended", () => {
         console.log(`media stream track has ended`);
@@ -246,11 +249,8 @@ export default function ScreenRecorder() {
           recordingState,
         });
 
-        /**
-         * If recording is in progress, stop recording
-         */
-        if (recordingState === RecordingState.RECORDING) {
-          stopRecording();
+        if (triggerStopRecording) {
+          stopRecording(triggerStopRecording);
         }
       });
     });
@@ -298,7 +298,7 @@ export default function ScreenRecorder() {
       )}
       {recordingState === RecordingState.RECORDING && (
         <ButtonWithHandler
-          onClick={stopRecording}
+          onClick={() => stopRecording(true)}
           buttonText="Stop Recording"
           startIcon={<PauseIcon />}
           color="error"
