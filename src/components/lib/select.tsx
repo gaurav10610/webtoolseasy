@@ -18,7 +18,7 @@ interface SelectProps {
   value: string;
   onChange: (event: SelectChangeEvent<string>) => void;
   selectLabel: string;
-  classes?: string;
+  className?: string;
 }
 
 export function SelectWithLabel({
@@ -26,10 +26,10 @@ export function SelectWithLabel({
   value,
   onChange,
   selectLabel,
-  classes = "",
+  className = "",
 }: SelectProps) {
   return (
-    <div className={`${classes}`}>
+    <div className={className}>
       <FormControl variant="outlined" size="small" fullWidth>
         <InputLabel size="small">Output Format</InputLabel>
         <Select

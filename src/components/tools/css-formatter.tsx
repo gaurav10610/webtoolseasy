@@ -1,6 +1,5 @@
 "use client";
 
-import { isMobileDevice } from "@/lib/client-response";
 import React, { useState } from "react";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -22,8 +21,6 @@ export default function CssFormatter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
 
   const codeQueryParam = queryParams.content;
@@ -70,12 +67,7 @@ export default function CssFormatter({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Format Code"
           variant="contained"
@@ -116,9 +108,7 @@ export default function CssFormatter({
           language: "css",
           value: rawCode,
           onChange: onRawCodeChange,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             wordWrap: "on",
           },
@@ -127,9 +117,7 @@ export default function CssFormatter({
         secondEditorProps={{
           language: "css",
           value: formattedCode,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             readOnly: true,
           },

@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 
 export function CircularLoader({
   color = "primary",
-  sx = {},
+  className = "",
 }: Readonly<{
   color?:
     | "primary"
@@ -13,16 +13,10 @@ export function CircularLoader({
     | "success"
     | "warning"
     | "inherit";
-  sx?: Record<string, unknown>;
+  className?: string;
 }>) {
   return (
-    <div
-      className="column-display full-width flex-vr-center"
-      style={{
-        padding: "20px",
-        ...sx,
-      }}
-    >
+    <div className={`flex flex-col w-full items-center p-5 ${className}`}>
       <CircularProgress color={color} />
       <Typography color={color} fontSize={"inherit"}>
         Loading...

@@ -3,7 +3,6 @@ import { robotoFont } from "@/design";
 import { theme } from "@/theme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { FlexList } from "@/components/lib/flexComponents";
 import { ResponsiveAppBar } from "@/components/lib/appBar";
 import { getRandomId } from "@/util/commonUtils";
 import Typography from "@mui/material/Typography";
@@ -18,37 +17,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const topAppBarItems = [
-    <Link href="/" key={getRandomId()}>
-      <CustomSvgIcon size="large">
-        <ApplicationIcon />
-      </CustomSvgIcon>
-    </Link>,
-    <Link href="/" passHref key={getRandomId()}>
-      <Typography
-        color="inherit"
-        sx={{
-          fontSize: "1.3rem",
-        }}
-      >
-        WebToolsEasy
-      </Typography>
-    </Link>,
-    <div
-      key={getRandomId()}
-      className="row-display full-width"
-      style={{
-        justifyContent: "flex-end",
-      }}
-    >
-      <Link href="/" passHref>
-        <CustomSvgIcon size="large">
-          <HomeIcon />
-        </CustomSvgIcon>
-      </Link>
-    </div>,
-  ];
-
   return (
     <html lang="en">
       <body className={robotoFont.variable}>
@@ -57,23 +25,34 @@ export default function RootLayout({
             {process.env.NODE_ENV === "production" && (
               <GoogleAnalytics gaId={process.env.GA_CODE!} />
             )}
-            <div className="main-container no-vr-scroll">
+            <div className="w-full flex flex-col overflow-y-hidden">
               <ResponsiveAppBar>
-                <FlexList
-                  items={topAppBarItems}
-                  isDirectionRow={true}
-                  isFullWidth={true}
-                ></FlexList>
+                <div className="flex flex-row gap-2 w-full">
+                  <Link href="/" key={getRandomId()}>
+                    <CustomSvgIcon size="large">
+                      <ApplicationIcon />
+                    </CustomSvgIcon>
+                  </Link>
+                  <Link href="/" passHref key={getRandomId()}>
+                    <Typography color="inherit" className="text-xl">
+                      WebToolsEasy
+                    </Typography>
+                  </Link>
+                  <div
+                    key={getRandomId()}
+                    className="flex flex-row w-full justify-end"
+                  >
+                    <Link href="/" passHref>
+                      <CustomSvgIcon size="large">
+                        <HomeIcon />
+                      </CustomSvgIcon>
+                    </Link>
+                  </div>
+                </div>
               </ResponsiveAppBar>
-              <div
-                className="base-container full-width flex-full-height"
-                style={{
-                  overflowY: "auto",
-                }}
-              >
+              <div className="flex flex-col items-center gap-3 p-2 flex-grow overflow-y-auto">
                 {children}
               </div>
-              {/* <ResponsiveAppBar position="relative" /> */}
             </div>
           </ThemeProvider>
         </AppRouterCacheProvider>

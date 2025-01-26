@@ -1,6 +1,5 @@
 "use client";
 
-import { isMobileDevice } from "@/lib/client-response";
 import React, { useState } from "react";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -22,8 +21,6 @@ export default function HtmlFormatter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `<html><head><title>Online HTML Formatter</title></head><body><p>webtoolseasy is awesome!</p></p></body></html>`;
 
   const codeQueryParam = queryParams.content;
@@ -70,12 +67,7 @@ export default function HtmlFormatter({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Format Code"
           variant="contained"
@@ -116,9 +108,7 @@ export default function HtmlFormatter({
           language: "html",
           value: rawCode,
           onChange: onRawCodeChange,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             wordWrap: "on",
           },
@@ -127,9 +117,7 @@ export default function HtmlFormatter({
         secondEditorProps={{
           language: "html",
           value: formattedCode,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             readOnly: true,
           },

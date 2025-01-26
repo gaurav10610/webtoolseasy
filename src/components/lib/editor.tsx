@@ -13,6 +13,7 @@ export interface CodeEditorProps {
   handleEditorDidMount?: (
     editor: monaco.editor.IStandaloneCodeEditor | null
   ) => void;
+  className?: string;
 }
 
 export interface DiffEditorProps {
@@ -22,7 +23,7 @@ export interface DiffEditorProps {
   value: string;
   editorOptions?: editor.IStandaloneDiffEditorConstructionOptions;
   onChange?: (newValue: string, event: unknown) => void;
-  classes?: string;
+  className?: string;
 }
 
 export interface CodeEditorPropsV2 {
@@ -31,10 +32,10 @@ export interface CodeEditorPropsV2 {
   value: string;
   onChange?: (value: string) => void;
   editorOptions?: editor.IStandaloneEditorConstructionOptions;
-  classes?: string;
   handleEditorDidMount?: (
     editor: monaco.editor.IStandaloneCodeEditor | null
   ) => void;
+  className?: string;
 }
 
 export const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -45,6 +46,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   editorOptions = {},
   sx = {},
   handleEditorDidMount,
+  className = "",
 }) => {
   const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,
@@ -55,7 +57,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <div className="full-width" style={sx}>
+    <div className={className} style={sx}>
       <MonacoEditor
         width="100%"
         height="100%"
@@ -79,8 +81,8 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   value,
   onChange,
   editorOptions = {},
-  classes = "",
   handleEditorDidMount,
+  className = "",
 }) => {
   const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,
@@ -91,7 +93,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   };
 
   return (
-    <div className={`w-full h-full ${classes}`}>
+    <div className={className}>
       <MonacoEditor
         width="100%"
         height="100%"
@@ -112,11 +114,11 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
 export const DiffEditor: React.FC<DiffEditorProps> = ({
   value,
   original,
-  classes = "",
   editorOptions = {},
   language,
   onChange,
   theme = "vs-dark",
+  className = "",
 }) => {
   const defaultEditorOptions: editor.IStandaloneDiffEditorConstructionOptions =
     {
@@ -129,7 +131,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
     };
 
   return (
-    <div className={`w-full h-full ${classes}`}>
+    <div className={className}>
       <MonacoDiffEditor
         width="100%"
         height="100%"

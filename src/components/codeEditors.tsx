@@ -1,4 +1,3 @@
-import { isMobileDevice } from "@/lib/client-response";
 import {
   CodeEditor,
   CodeEditorProps,
@@ -33,8 +32,6 @@ export function TwoCodeEditors({
   secondEditorProps: CodeEditorProps;
   showEditorOptions?: boolean;
 }>) {
-  const isMobileView = isMobileDevice();
-
   const [editorOptions, setEditorOptions] =
     useState<editor.IStandaloneEditorConstructionOptions>({
       fontSize: 14,
@@ -54,15 +51,10 @@ export function TwoCodeEditors({
   };
 
   return (
-    <div className="column-display base-flex-gap full-width flex-vr-center">
+    <div className="flex flex-col gap-2 items-center w-full">
       {/* Editor Options */}
       {showEditorOptions && (
-        <div
-          className="row-display inner-flex-gap full-width"
-          style={{
-            flexDirection: isMobileView ? "column" : "row",
-          }}
-        >
+        <div className="flex flex-col md:flex-row gap-2 w-full">
           {/* Dropdown for editorOptions.fontSize */}
           <FormControl variant="outlined" style={{ minWidth: 120 }}>
             <InputLabel>Font Size</InputLabel>
@@ -103,25 +95,11 @@ export function TwoCodeEditors({
 
       {/* Buttons group */}
       {buttons && (
-        <div
-          className="row-display inner-flex-gap full-width"
-          style={{
-            flexDirection: isMobileView ? "column" : "row",
-          }}
-        >
-          {buttons}
-        </div>
+        <div className="flex flex-col md:flex-row gap-2 w-full">{buttons}</div>
       )}
-      <div
-        className="row-display base-flex-gap flex-hz-center full-width flex-vr-center"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-          justifyContent: "space-between",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 justify-between w-full items-center">
         {/* First Editor Block */}
         <SingleCodeEditorWithHeader
-          isMobileView={isMobileView}
           codeEditorProps={firstEditorProps}
           editorHeading={firstEditorHeading}
           themeOption={themeOption}
@@ -130,7 +108,6 @@ export function TwoCodeEditors({
 
         {/* Second Editor Block */}
         <SingleCodeEditorWithHeader
-          isMobileView={isMobileView}
           codeEditorProps={secondEditorProps}
           editorHeading={secondEditorHeading}
           themeOption={themeOption}
@@ -142,30 +119,20 @@ export function TwoCodeEditors({
 }
 
 export function SingleCodeEditorWithHeader({
-  isMobileView,
   editorHeading,
   codeEditorProps,
   themeOption,
   editorOptions = {},
-  sx = {},
   className = "",
 }: Readonly<{
-  isMobileView: boolean;
   editorHeading?: string;
   codeEditorProps: CodeEditorProps;
   themeOption: string;
   editorOptions?: editor.IStandaloneEditorConstructionOptions;
-  sx?: Record<string, unknown>;
   className?: string;
 }>) {
   return (
-    <div
-      className={`column-display base-flex-gap ${className}`}
-      style={{
-        width: isMobileView ? "80%" : "49%",
-        ...sx,
-      }}
-    >
+    <div className={`flex flex-col gap-2 w-[80%] md:w-[49%] ${className}`}>
       {editorHeading && (
         <Typography variant="body2" fontSize={"inherit"} color="primary">
           {editorHeading}
@@ -182,6 +149,7 @@ export function SingleCodeEditorWithHeader({
         }}
         theme={themeOption}
         handleEditorDidMount={codeEditorProps.handleEditorDidMount}
+        className={codeEditorProps.className}
       />
     </div>
   );
@@ -192,16 +160,16 @@ export function SingleCodeEditorWithHeaderV2({
   codeEditorProps,
   themeOption,
   editorOptions = {},
-  classes = "",
+  className = "",
 }: Readonly<{
   editorHeading?: string;
   codeEditorProps: CodeEditorPropsV2;
   themeOption: string;
   editorOptions?: editor.IStandaloneEditorConstructionOptions;
-  classes?: string;
+  className?: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 w-full h-full ${classes}`}>
+    <div className={`flex flex-col gap-2 w-full h-full ${className}`}>
       {editorHeading && (
         <Typography variant="body2" fontSize={"inherit"} color="primary">
           {editorHeading}
@@ -211,7 +179,7 @@ export function SingleCodeEditorWithHeaderV2({
         language={codeEditorProps.language}
         value={codeEditorProps.value}
         onChange={codeEditorProps.onChange}
-        classes={codeEditorProps.classes}
+        className={codeEditorProps.className}
         editorOptions={{
           ...editorOptions,
           ...(codeEditorProps.editorOptions || {}),
@@ -226,20 +194,20 @@ export function SingleCodeEditorWithHeaderV2({
 export function DiffEditorsWithHeader({
   firstTextHeading,
   secondTextHeading,
-  classes = "",
+  className = "",
   diffEditorProps,
   editorOptions = {},
   themeOption,
 }: Readonly<{
   firstTextHeading: string;
   secondTextHeading: string;
-  classes?: string;
+  className?: string;
   diffEditorProps: DiffEditorProps;
   editorOptions?: editor.IStandaloneDiffEditorConstructionOptions;
   themeOption: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 h-full ${classes}`}>
+    <div className={`flex flex-col gap-2 h-full ${className}`}>
       <div className="w-full flex flex-row justify-around">
         <Typography variant="body2" fontSize={"inherit"} color="primary">
           {firstTextHeading}
@@ -253,7 +221,7 @@ export function DiffEditorsWithHeader({
           language={diffEditorProps.language}
           value={diffEditorProps.value}
           onChange={diffEditorProps.onChange}
-          classes={diffEditorProps.classes}
+          className={diffEditorProps.className}
           original={diffEditorProps.original}
           theme={themeOption}
           editorOptions={{

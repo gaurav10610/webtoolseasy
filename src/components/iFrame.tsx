@@ -3,14 +3,16 @@ import { Typography } from "@mui/material";
 export default function IFrameWithLabel({
   iFrameSourceDoc,
   heading = "Preview HTML",
-  classes = "",
+  className = "",
 }: Readonly<{
   iFrameSourceDoc: string;
   heading?: string;
-  classes?: string;
+  className?: string;
 }>) {
   return (
-    <div className={`flex flex-col justify-end w-full h-full gap-2 ${classes}`}>
+    <div
+      className={`flex flex-col justify-end w-full h-full gap-2 ${className}`}
+    >
       <Typography variant="body2" fontSize={"inherit"} color="primary">
         {heading}
       </Typography>

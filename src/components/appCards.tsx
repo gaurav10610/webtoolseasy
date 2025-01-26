@@ -6,31 +6,19 @@ import { Link } from "@mui/material";
 
 export async function AppHomeCard({
   config,
-  sx = {},
+  className = "",
 }: Readonly<{
   config: AppNavigationConfig;
-  sx?: Record<string, unknown>;
+  className?: string;
 }>) {
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
   return (
-    <PaperWithChildren
-      variant="elevation"
-      elevation={3}
-      sx={{
-        padding: "15px",
-        ...sx,
-      }}
-    >
-      <div className="column-display inner-flex-gap full-width flex-vr-center">
+    <PaperWithChildren variant="elevation" elevation={3} className={className}>
+      <div className="flex flex-col gap-2 w-full items-center">
         <CustomSvgIcon size="large">
           {React.createElement(svgIcon.default)}
         </CustomSvgIcon>
-        <Link
-          href={config.navigateUrl}
-          style={{
-            textAlign: "center",
-          }}
-        >
+        <Link href={config.navigateUrl} className="text-center">
           {config.displayText}
         </Link>
       </div>
@@ -40,22 +28,15 @@ export async function AppHomeCard({
 
 export async function RelatedToolCard({
   config,
-  sx = {},
+  className = "",
 }: Readonly<{
   config: AppNavigationConfig;
-  sx?: Record<string, unknown>;
+  className?: string;
 }>) {
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
   return (
-    <PaperWithChildren
-      variant="elevation"
-      elevation={3}
-      sx={{
-        padding: "15px",
-        ...sx,
-      }}
-    >
-      <div className="row-display inner-flex-gap full-width flex-hz-center flex-vr-center">
+    <PaperWithChildren variant="elevation" elevation={3} className={className}>
+      <div className="flex flex-row gap-2 w-full justify-center items-center">
         <CustomSvgIcon size="medium">
           {React.createElement(svgIcon.default)}
         </CustomSvgIcon>

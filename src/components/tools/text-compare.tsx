@@ -20,7 +20,7 @@ export default function TextCompare() {
         secondTextHeading="Modified"
         themeOption="light"
         diffEditorProps={diffEditorProps}
-        classes="w-[80%] md:w-full"
+        className="w-[80%] md:w-full"
       />
     </div>
   );

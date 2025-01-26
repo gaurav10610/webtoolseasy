@@ -1,11 +1,9 @@
 import { AppFollowButtons, AppHeading } from "@/components/commonComponents";
-import { FlexList } from "@/components/lib/flexComponents";
 import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
 import { AppListConfig, AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
-import { isMobileDevice } from "@/lib/server-responsive";
 import { groupBy, map, values } from "lodash-es";
 import { Metadata } from "next";
 
@@ -51,80 +49,54 @@ export const metadata: Metadata = {
 function SectionAppList({
   category,
   configs,
-  isMobileView,
 }: Readonly<{
   category: string;
   configs: AppNavigationConfig[];
-  isMobileView: boolean;
 }>) {
-  return FlexList({
-    isFullWidth: true,
-    alignCenter: true,
-    items: [
+  return (
+    <div className="flex flex-col gap-2 items-center w-full">
       <Typography
         key={getRandomId()}
         variant="h2"
-        sx={{
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-        }}
+        className="text-2xl font-bold"
         color="textSecondary"
       >
         {category}
-      </Typography>,
-      FlexList({
-        isFullWidth: true,
-        isDirectionRow: true,
-        classList: ["flex-hz-center"],
-        items: map(configs, (config) => {
+      </Typography>
+      <div className="flex flex-row flex-wrap gap-2 w-full justify-center">
+        {map(configs, (config) => {
           return (
             <AppHomeCard
               key={getRandomId()}
               config={config}
-              sx={{
-                width: isMobileView ? "100%" : "20%",
-              }}
+              className="w-full md:w-[25%]"
             />
           );
-        }),
-        sx: {
-          flexWrap: "wrap",
-        },
-      }),
-    ],
-  });
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default function Home() {
-  const isMobileView = isMobileDevice();
   const appListConfig = appConfigJson as AppListConfig;
   const categoryWiseAppList = groupBy(values(appListConfig), "category");
 
   // Remove undefined category
   delete categoryWiseAppList["undefined"];
 
-  return FlexList({
-    isFullWidth: true,
-    alignCenter: true,
-    items: [
+  return (
+    <div className="flex flex-col gap-2 items-center w-full">
       <AppHeading
         key={getRandomId()}
         heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy"
-      />,
-      FlexList({
-        isFullWidth: true,
-        isDirectionRow: true,
-        flexGap: "40px",
-        items: [
-          ...map(categoryWiseAppList, (configs, category) => {
-            return SectionAppList({ category, configs, isMobileView });
-          }),
-        ],
-        sx: {
-          flexWrap: "wrap",
-        },
-      }),
-      AppFollowButtons(),
-    ],
-  });
+      />
+      <div className="flex flex-row gap-10 w-full">
+        {map(categoryWiseAppList, (configs, category) => {
+          return SectionAppList({ category, configs });
+        })}
+      </div>
+      <AppFollowButtons />
+    </div>
+  );
 }

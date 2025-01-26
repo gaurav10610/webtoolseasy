@@ -1,6 +1,5 @@
 "use client";
 
-import { isMobileDevice } from "@/lib/client-response";
 import { ToolComponentProps } from "@/types/component";
 import { SingleCodeEditorWithHeader } from "../codeEditors";
 import { Typography } from "@mui/material";
@@ -23,8 +22,6 @@ export default function JsonViewer({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
 
   const codeQueryParam = queryParams.content;
@@ -68,12 +65,7 @@ export default function JsonViewer({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Copy Formatted Code"
           variant="outlined"
@@ -93,7 +85,7 @@ export default function JsonViewer({
   }
 
   return (
-    <div className="column-display base-flex-gap full-width flex-vr-center">
+    <div className="flex flex-col gap-2 w-full items-center">
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -101,15 +93,9 @@ export default function JsonViewer({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      <div
-        className="row-display base-flex-gap flex-hz-center full-width flex-vr-center"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center">
         <SingleCodeEditorWithHeader
           editorHeading="Json Code"
-          isMobileView={isMobileView}
           themeOption="vs-dark"
           editorOptions={{
             fontSize: 14,
@@ -118,35 +104,23 @@ export default function JsonViewer({
             language: "json",
             value: rawCode,
             onChange: onRawCodeChange,
-            sx: {
-              height: isMobileView ? "20rem" : "30rem",
-            },
+            className: "h-[20rem] md:h-[30rem]",
             editorOptions: {
               wordWrap: "on",
             },
           }}
         />
-        <div
-          className="column-display base-flex-gap"
-          style={{
-            width: isMobileView ? "80%" : "49%",
-          }}
-        >
+        <div className="flex flex-col gap-2 w-[80%] md:w-[49%]">
           <Typography variant="body2" fontSize={"inherit"} color="primary">
             Json Viewer
           </Typography>
-          <div
-            className="column-display base-flex-gap full-width full-height border-2 border-2 border-gray-300"
-            style={{
-              height: isMobileView ? "20rem" : "30rem",
-            }}
-          >
+          <div className="flex flex-col gap-2 w-full h-[20rem] md:h-[30rem] border-2 border-gray-300">
             <JsonView
               data={JSON.parse(rawCode)}
               shouldExpandNode={allExpanded}
               style={{
                 ...defaultStyles,
-                container: "full-width full-height vr-scroll",
+                container: "w-full h-full overflow-y-scroll",
               }}
             />
           </div>

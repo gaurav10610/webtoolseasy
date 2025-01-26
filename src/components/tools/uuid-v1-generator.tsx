@@ -66,7 +66,7 @@ export default function UUIDV1Generator() {
         size="small"
         variant="outlined"
         startIcon={<LoopIcon />}
-        classes="w-full md:w-fit"
+        className="w-full md:w-fit"
       />
       <div className="flex flex-col gap-3 mt-4 w-full md:w-fit">
         <Typography variant="h5" color="textSecondary" className="text-center">

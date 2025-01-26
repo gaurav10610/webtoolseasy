@@ -3,13 +3,10 @@
 import { TextField, Typography } from "@mui/material";
 import { ButtonWithHandler } from "../lib/buttons";
 import { useState } from "react";
-import { isMobileDevice } from "@/lib/client-response";
 
 export default function CaseConverter() {
   const initialValue = "WebToolsEasy is Awesome. Explore Free Web Tools.";
   const [text, setText] = useState(initialValue);
-
-  const isMobileView = isMobileDevice();
 
   const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -50,17 +47,12 @@ export default function CaseConverter() {
   };
 
   return (
-    <div className="column-display base-flex-gap">
+    <div className="flex flex-col gap-2">
       <Typography variant="body1" color="primary">
         Text (Paste Your Text Here)
       </Typography>
       <TextField multiline rows={5} onChange={onTextChange} value={text} />
-      <div
-        className="row-display flex-hz-center w-full inner-flex-gap"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 justify-center w-full">
         <ButtonWithHandler
           buttonText="Convert to Uppercase"
           variant="outlined"
