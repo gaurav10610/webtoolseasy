@@ -58,18 +58,18 @@ function SectionAppList({
       <Typography
         key={getRandomId()}
         variant="h2"
-        className="text-2xl font-bold"
+        className="!text-xl md:!text-2xl"
         color="textSecondary"
       >
         {category}
       </Typography>
-      <div className="flex flex-row flex-wrap gap-2 w-full justify-center">
+      <div className="flex flex-row flex-wrap gap-2 w-full">
         {map(configs, (config) => {
           return (
             <AppHomeCard
               key={getRandomId()}
               config={config}
-              className="w-full md:w-[25%]"
+              className="w-full md:w-[24%] pt-2 pb-2"
             />
           );
         })}
@@ -87,13 +87,16 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-2 items-center w-full">
-      <AppHeading
-        key={getRandomId()}
-        heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy"
-      />
-      <div className="flex flex-row gap-10 w-full">
+      <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
+      <div className="flex flex-col gap-10 w-full mt-5">
         {map(categoryWiseAppList, (configs, category) => {
-          return SectionAppList({ category, configs });
+          return (
+            <SectionAppList
+              key={getRandomId()}
+              category={category}
+              configs={configs}
+            />
+          );
         })}
       </div>
       <AppFollowButtons />

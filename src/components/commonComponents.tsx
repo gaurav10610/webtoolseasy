@@ -20,7 +20,7 @@ export function AppHeading({
     <Typography
       key={getRandomId()}
       variant="h1"
-      className="text-3xl text-center"
+      className="text-center !text-2xl md:!text-4xl"
     >
       {heading}
     </Typography>

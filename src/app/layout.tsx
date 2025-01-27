@@ -27,27 +27,27 @@ export default function RootLayout({
             )}
             <div className="w-full flex flex-col overflow-y-hidden">
               <ResponsiveAppBar>
-                <div className="flex flex-row gap-2 w-full">
+                <div className="flex flex-row gap-2 w-full items-center">
                   <Link href="/" key={getRandomId()}>
                     <CustomSvgIcon size="large">
                       <ApplicationIcon />
                     </CustomSvgIcon>
                   </Link>
-                  <Link href="/" passHref key={getRandomId()}>
+                  <Link
+                    href="/"
+                    passHref
+                    key={getRandomId()}
+                    className="flex-grow"
+                  >
                     <Typography color="inherit" className="text-xl">
                       WebToolsEasy
                     </Typography>
                   </Link>
-                  <div
-                    key={getRandomId()}
-                    className="flex flex-row w-full justify-end"
-                  >
-                    <Link href="/" passHref>
-                      <CustomSvgIcon size="large">
-                        <HomeIcon />
-                      </CustomSvgIcon>
-                    </Link>
-                  </div>
+                  <Link href="/" passHref>
+                    <CustomSvgIcon size="large">
+                      <HomeIcon />
+                    </CustomSvgIcon>
+                  </Link>
                 </div>
               </ResponsiveAppBar>
               <div className="flex flex-col items-center gap-3 p-2 flex-grow overflow-y-auto">
