@@ -168,8 +168,8 @@ export default function XmlToJsonConverter({
           },
         }}
       />
-      <div className="flex flex-col md:flex-row gap-2 justify-center w-full">
-        <div className="flex flex-row gap-2 items-center justify-center">
+      <div className="flex flex-row gap-2 justify-center w-full">
+        <div className="flex flex-row gap-2 items-center">
           <Checkbox
             defaultChecked
             onChange={(e) => {
@@ -179,7 +179,7 @@ export default function XmlToJsonConverter({
           />
           <Typography variant="body2">Ignore Attributes</Typography>
         </div>
-        <div className="flex flex-row gap-2 items-start justify-center">
+        <div className="flex flex-row gap-2 items-center">
           <Checkbox
             defaultChecked
             onChange={(e) => {

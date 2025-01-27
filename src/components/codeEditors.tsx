@@ -104,6 +104,7 @@ export function TwoCodeEditors({
           editorHeading={firstEditorHeading}
           themeOption={themeOption}
           editorOptions={editorOptions}
+          className="w-[80%] md:w-full"
         />
 
         {/* Second Editor Block */}
@@ -112,6 +113,7 @@ export function TwoCodeEditors({
           editorHeading={secondEditorHeading}
           themeOption={themeOption}
           editorOptions={editorOptions}
+          className="w-[80%] md:w-full"
         />
       </div>
     </div>

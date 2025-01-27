@@ -152,7 +152,7 @@ export default function JwtDecoder({
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row gap-2 items-center justify-center w-full h-[30rem]">
+      <div className="flex flex-col md:flex-row gap-2 items-center w-full h-[60rem] md:h-[30rem]">
         <SingleCodeEditorWithHeader
           editorHeading="JWT Token"
           themeOption="vs-dark"
@@ -170,9 +170,9 @@ export default function JwtDecoder({
               wordWrap: "on",
             },
           }}
-          className="h-[30rem] w-[80%] md:w-[49%]"
+          className="h-[50%] md:h-full w-[80%] md:w-full"
         />
-        <div className="flex flex-col h-[30rem] w-[80%] md:w-[49%]">
+        <div className="flex flex-col gap-2 items-center h-full w-full">
           <SingleCodeEditorWithHeader
             key={getRandomId()}
             editorHeading="Headers ( Algorithm & Token Type)"
@@ -189,7 +189,7 @@ export default function JwtDecoder({
                 readOnly: true,
               },
             }}
-            className="h-[50%] w-full"
+            className="h-[50%] md:h-full w-[80%] md:w-full"
           />
           <SingleCodeEditorWithHeader
             key={getRandomId()}
@@ -207,7 +207,7 @@ export default function JwtDecoder({
                 readOnly: true,
               },
             }}
-            className="h-[50%] w-full"
+            className="h-[50%] w-[80%] md:w-full"
           />
         </div>
       </div>
