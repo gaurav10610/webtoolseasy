@@ -43,8 +43,8 @@ export default function CronExpression() {
         />
       </div>
       <Cron
-        onChange={(e) => {
-          setState({ value: e });
+        onChange={(value) => {
+          setState({ value });
         }}
         value={state.value}
         showResultText={true}

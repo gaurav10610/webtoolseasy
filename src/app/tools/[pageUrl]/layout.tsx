@@ -36,13 +36,14 @@ export async function generateMetadata(
 }
 
 export default async function WebToolLayout(
-  props: Readonly<{ children: React.ReactNode; params: { [key: string]: string } }>
+  props: Readonly<{
+    children: React.ReactNode;
+    params: Promise<{ [key: string]: string }>;
+  }>
 ) {
   const params = await props.params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const { descriptionData, componentConfig } = await import(
     `@/data/component-config/${params.pageUrl}`
