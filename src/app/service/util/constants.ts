@@ -1,1 +1,0 @@
-export const MOBILE_VIEW_WIDTH_THRESHOLD = '735px';

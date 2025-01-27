@@ -1,63 +1,36 @@
-<p align="center">
-  <a href="#">
-    <img alt="webtoolseasy icon" width="128px" height="128px" src="https://webtoolseasy.com/favicon.png"></img>
-  </a>
-</p>
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-# **WebToolsEasy**
+## Getting Started
 
-Webtoolseasy is a suite of free web tools to make work super easy.
+First, run the development server:
 
-Try at - [https://webtoolseasy.com/](https://webtoolseasy.com/)
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## Online Editors
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-* [Online JavaScript Editor](https://webtoolseasy.com/tools/javascript-editor)
-* [Online HTML Editor](https://webtoolseasy.com/tools/html-editor)
-* [Markdown Editor](https://webtoolseasy.com/tools/markdown-editor)
-* [Online JavaScript Compiler](https://webtoolseasy.com/tools/javascript-compiler)
-* [Online Text Editor](https://webtoolseasy.com/tools/text-editor)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Finance
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-* [Compound Interest Calculator](https://webtoolseasy.com/tools/compound-interest-calculator)
+## Learn More
 
-## Programming
+To learn more about Next.js, take a look at the following resources:
 
-* [XML to JSON Converter](https://webtoolseasy.com/tools/xml-to-json)
-* [JWT Decoder](https://webtoolseasy.com/tools/jwt-decoder)
-* [Online Javascript Formatter](https://webtoolseasy.com/tools/javascript-formatter)
-* [Online JSON Formatter](https://webtoolseasy.com/tools/json-formatter)
-* [Online JSON Viewer](https://webtoolseasy.com/tools/json-viewer)
-* [Online HTML Formatter](https://webtoolseasy.com/tools/html-formatter)
-* [Online CSS Formatter](https://webtoolseasy.com/tools/css-formatter)
-* [Base64 Encoder](https://webtoolseasy.com/tools/base64-encode)
-* [Base64 Decoder](https://webtoolseasy.com/tools/base64-decode)
-* [Cron Expression Generator](https://webtoolseasy.com/tools/cron-expression)
-* [UUID V4 Generator](https://webtoolseasy.com/tools/uuid-v4-generator)
-* [UUID V1 Generator](https://webtoolseasy.com/tools/uuid-v1-generator)
-* [GUID Generator](https://webtoolseasy.com/tools/guid-generator)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Text
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-* [Case Converter](https://webtoolseasy.com/tools/case-converter)
-* [Word Counter](https://webtoolseasy.com/tools/word-counter)
-* [Online Text Compare](https://webtoolseasy.com/tools/text-compare)
+## Deploy on Vercel
 
-## Media
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-* [Video to Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter)
-* [Free Screen Recorder](https://webtoolseasy.com/tools/screen-recorder)
-* [Free Image Compressor](https://webtoolseasy.com/tools/image-compress)
-* [Free Image Cropper](https://webtoolseasy.com/tools/crop-image)
-
-## Miscellaneous
-
-* [QR Code Generator](https://webtoolseasy.com/tools/qr-code-generator)
-* [Random Password Generator](https://webtoolseasy.com/tools/password-generator)
-
-If like it, please follow us -
-
-* [LinkedIn](https://www.linkedin.com/company/webtoolseasy/)
-* [Facebook](https://www.facebook.com/people/Webtoolseasy/100088911459047/)
-* [Twitter](https://twitter.com/webtoolseasy)
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
