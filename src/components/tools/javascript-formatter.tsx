@@ -1,6 +1,5 @@
 "use client";
 
-import { isMobileDevice } from "@/lib/client-response";
 import React, { useState } from "react";
 import { js_beautify } from "js-beautify";
 import { ButtonWithHandler } from "../lib/buttons";
@@ -22,8 +21,6 @@ export default function JavaScriptFormatter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `
   /**
    * 
@@ -80,12 +77,7 @@ export default function JavaScriptFormatter({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Format Code"
           variant="contained"
@@ -126,9 +118,7 @@ export default function JavaScriptFormatter({
           language: "javascript",
           value: rawCode,
           onChange: onRawCodeChange,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             wordWrap: "on",
           },
@@ -137,9 +127,7 @@ export default function JavaScriptFormatter({
         secondEditorProps={{
           language: "javascript",
           value: formattedCode,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             readOnly: true,
           },

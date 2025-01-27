@@ -5,7 +5,6 @@ import { SingleCodeEditorWithHeader } from "../codeEditors";
 import { CodeEditorProps } from "../lib/editor";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { usePathname } from "next/navigation";
-import { isMobileDevice } from "@/lib/client-response";
 import { ToolComponentProps } from "@/types/component";
 import {
   compressStringToBase64,
@@ -29,8 +28,6 @@ export default function TextEditor({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue =
     "This is an online text editor offered by WebToolsEasy. Write your text here....";
 
@@ -49,9 +46,7 @@ export default function TextEditor({
     language: "text/plain",
     value: rawCode,
     onChange: onRawCodeChange,
-    sx: {
-      height: isMobileView ? "20rem" : "30rem",
-    },
+    className: "h-[20rem] md:h-[30rem] w-full",
     editorOptions: {
       wordWrap: "on",
     },
@@ -168,14 +163,9 @@ export default function TextEditor({
       <ControlButtons />
       {/* <CodeEditorOptions /> */}
       <SingleCodeEditorWithHeader
-        isMobileView={isMobileView}
         codeEditorProps={codeEditorProps}
         themeOption="vs-dark"
-        className="w-full"
-        sx={{
-          height: isMobileView ? "20rem" : "30rem",
-          width: isMobileView ? "80%" : "100%",
-        }}
+        className="h-[20rem] md:h-[30rem] w-[80%] md:w-[100%]"
       />
     </div>
   );

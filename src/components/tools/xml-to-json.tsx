@@ -1,6 +1,5 @@
 "use client";
 
-import { isMobileDevice } from "@/lib/client-response";
 import React, { useState } from "react";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -23,8 +22,6 @@ export default function XmlToJsonConverter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `
   <?xml version="1.0"?>
   <customers>
@@ -118,12 +115,7 @@ export default function XmlToJsonConverter({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Convert Xml Code"
           variant="contained"
@@ -164,29 +156,20 @@ export default function XmlToJsonConverter({
           language: "xml",
           value: rawCode,
           onChange: onRawCodeChange,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
         }}
         secondEditorHeading="Json Code"
         secondEditorProps={{
           language: "json",
           value: convertedJson,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             readOnly: true,
           },
         }}
       />
-      <div
-        className="row-display flex-hz-center w-full base-flex-gap"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
-        <div className="row-display flex-hz-center inner-flex-gap flex-vr-center">
+      <div className="flex flex-row gap-2 justify-center w-full">
+        <div className="flex flex-row gap-2 items-center">
           <Checkbox
             defaultChecked
             onChange={(e) => {
@@ -196,7 +179,7 @@ export default function XmlToJsonConverter({
           />
           <Typography variant="body2">Ignore Attributes</Typography>
         </div>
-        <div className="row-display flex-hz-center inner-flex-gap flex-vr-center">
+        <div className="flex flex-row gap-2 items-center">
           <Checkbox
             defaultChecked
             onChange={(e) => {

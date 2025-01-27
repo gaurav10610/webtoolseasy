@@ -1,4 +1,4 @@
-import { ApplicationConfig, ApplicationIds } from "@/types/config";
+import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 

@@ -72,6 +72,7 @@ export default function JavascriptEditor({
     editorOptions: {
       wordWrap: "on",
     },
+    className: "w-full h-full",
   });
 
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);

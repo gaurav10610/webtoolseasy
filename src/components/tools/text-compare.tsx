@@ -11,17 +11,17 @@ export default function TextCompare() {
     original: originalText,
     value: modifiedText,
     language: "text/plain",
+    className:
+      "h-[20rem] md:h-[30rem] w-[80%] md:w-full border-2 border-gray-300",
   };
 
   return (
-    <div className="h-[20rem] w-full flex flex-row justify-center md:h-[30rem]">
-      <DiffEditorsWithHeader
-        firstTextHeading="Original"
-        secondTextHeading="Modified"
-        themeOption="light"
-        diffEditorProps={diffEditorProps}
-        classes="w-[80%] md:w-full"
-      />
-    </div>
+    <DiffEditorsWithHeader
+      firstTextHeading="Original"
+      secondTextHeading="Modified"
+      themeOption="light"
+      diffEditorProps={diffEditorProps}
+      className="w-full items-center"
+    />
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { isMobileDevice } from "@/lib/client-response";
 import React, { useState } from "react";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -21,8 +20,6 @@ export default function JsonFormatter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
 
   const codeQueryParam = queryParams.content;
@@ -73,12 +70,7 @@ export default function JsonFormatter({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Format Code"
           variant="contained"
@@ -119,9 +111,7 @@ export default function JsonFormatter({
           language: "json",
           value: rawCode,
           onChange: onRawCodeChange,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             wordWrap: "on",
           },
@@ -130,9 +120,7 @@ export default function JsonFormatter({
         secondEditorProps={{
           language: "json",
           value: formattedCode,
-          sx: {
-            height: isMobileView ? "20rem" : "30rem",
-          },
+          className: "h-[20rem] md:h-[30rem]",
           editorOptions: {
             readOnly: true,
           },

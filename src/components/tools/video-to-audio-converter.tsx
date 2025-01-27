@@ -183,7 +183,7 @@ export default function VideoToAudioConverter() {
 
     return (
       <PaperWithChildren
-        classes="flex flex-col gap-3 w-full p-3 md:gap-1 md:items-start md:flex-row"
+        className="flex flex-col gap-3 w-full p-3 md:gap-1 md:items-start md:flex-row"
         variant="elevation"
       >
         <div className="flex flex-row gap-2 w-full md:items-center">
@@ -236,7 +236,7 @@ export default function VideoToAudioConverter() {
             onChange={(event: SelectChangeEvent<string>) => {
               onTargetFormatChange(event.target.value, videoFileData.id);
             }}
-            classes="w-[10rem]"
+            className="w-[10rem]"
           />
           {videoFileData.convertedData[videoFileData.selectedTargetFormatId]
             .conversionState === ConversionState.NOT_CONVERTED && (

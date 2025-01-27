@@ -7,10 +7,9 @@ export function ButtonWithHandler({
   color = "primary",
   buttonText,
   onClick,
-  sx = {},
   startIcon,
   endIcon,
-  classes = "",
+  className = "",
 }: Readonly<{
   size?: "small" | "medium" | "large";
   variant?: "text" | "outlined" | "contained";
@@ -24,10 +23,9 @@ export function ButtonWithHandler({
     | "warning";
   buttonText: string;
   onClick?: () => void;
-  sx?: Record<string, unknown>;
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
-  classes?: string;
+  className?: string;
 }>): JSX.Element {
   return (
     <Button
@@ -35,10 +33,9 @@ export function ButtonWithHandler({
       variant={variant}
       color={color}
       {...(onClick && { onClick })}
-      sx={sx}
       {...(startIcon && { startIcon })}
       {...(endIcon && { endIcon })}
-      className={classes}
+      className={className}
     >
       {buttonText}
     </Button>
@@ -51,7 +48,7 @@ export function ButtonWithLink({
   color = "primary",
   buttonText,
   href,
-  sx,
+  className = "",
 }: Readonly<{
   size?: "small" | "medium" | "large";
   variant?: "text" | "outlined" | "contained";
@@ -65,16 +62,11 @@ export function ButtonWithLink({
     | "warning";
   buttonText: string;
   href: string;
-  sx?: Record<string, unknown>;
+  className?: string;
 }>): JSX.Element {
   return (
-    <Link
-      href={href}
-      sx={{
-        width: "100%",
-      }}
-    >
-      <Button size={size} variant={variant} color={color} sx={sx}>
+    <Link href={href} className={className}>
+      <Button size={size} variant={variant} color={color} className="w-full">
         {buttonText}
       </Button>
     </Link>

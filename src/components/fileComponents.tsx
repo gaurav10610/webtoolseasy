@@ -24,20 +24,26 @@ export const NoFilesState = ({
 };
 
 export const ImagesPreview = ({
+  selectedFile,
   fileList,
   selectImageHandler,
 }: {
+  selectedFile: BaseFileData | null;
   fileList: BaseFileData[];
   selectImageHandler: (id: string) => void;
 }) => {
   return (
     <div className="flex flex-row gap-4 overflow-y-auto w-full h-36 md:h-50">
-      {fileList.map((baseFileData, index) => (
+      {fileList.map((baseFileData) => (
         <Image
-          key={index}
+          key={baseFileData.id}
           src={URL.createObjectURL(baseFileData.originalFile)}
           alt={baseFileData.originalFile.name}
-          className="h-full object-cover rounded-md border-2 border-gray-300"
+          className={`h-full object-cover rounded-md border-2 ${
+            selectedFile?.id === baseFileData.id
+              ? "border-green-400"
+              : "border-gray-300"
+          }`}
           width={128}
           height={128}
           onClick={() => selectImageHandler(baseFileData.id)}

@@ -5,13 +5,13 @@ export function CheckBoxWithLabel({
   label,
   value,
   onChange,
-  classes = "",
   color = "textSecondary",
+  className = "",
 }: Readonly<{
   label: string;
   value: boolean;
   onChange: Dispatch<SetStateAction<boolean>>;
-  classes?: string;
+  className?: string;
   color?:
     | "textPrimary"
     | "textSecondary"
@@ -24,7 +24,7 @@ export function CheckBoxWithLabel({
     | "textDisabled";
 }>) {
   return (
-    <div className={`flex flex-row items-center ${classes}`}>
+    <div className={`flex flex-row items-center ${className}`}>
       <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />
       <Typography variant="body2" color={color}>
         {label}

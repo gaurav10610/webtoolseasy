@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import { isEmpty, isNil, map } from "lodash-es";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { AppNavigationConfig } from "@/types/config";
-import { FlexList } from "./lib/flexComponents";
 import { RelatedToolCard } from "./appCards";
 import { Tag } from "./lib/tags";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -21,10 +20,7 @@ export function AppHeading({
     <Typography
       key={getRandomId()}
       variant="h1"
-      sx={{
-        fontSize: "2rem",
-        textAlign: "center",
-      }}
+      className="text-center !text-2xl md:!text-4xl"
     >
       {heading}
     </Typography>
@@ -37,137 +33,99 @@ export function SocialShareButtons({
   pageUrl: string;
 }>) {
   return (
-    <FlexList
-      isFullWidth={true}
-      isDirectionRow={true}
-      alignCenter={true}
-      sx={{ justifyContent: "flex-end" }}
-      items={[
-        <Typography
-          key={getRandomId()}
-          color="textSecondary"
-          fontSize={"inherit"}
-        >
-          Share this tool -
-        </Typography>,
-        <Link
-          key={getRandomId()}
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-            pageUrl
-          )}`}
-          target="_blank"
-          passHref
-        >
-          <FacebookIcon fontSize="large" color="primary" />
-        </Link>,
-        <Link
-          key={getRandomId()}
-          href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(
-            pageUrl
-          )}`}
-          target="_blank"
-          passHref
-        >
-          <LinkedInIcon fontSize="large" color="primary" />
-        </Link>,
-        <Link
-          key={getRandomId()}
-          href={`https://twitter.com/share?url=${encodeURIComponent(pageUrl)}`}
-          target="_blank"
-          passHref
-        >
-          <XIcon fontSize="large" color="inherit" />
-        </Link>,
-      ]}
-    />
+    <div className="flex flex-row gap-2 items-center justify-end">
+      <Typography
+        key={getRandomId()}
+        color="textSecondary"
+        fontSize={"inherit"}
+      >
+        Share this tool -
+      </Typography>
+      <Link
+        key={getRandomId()}
+        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          pageUrl
+        )}`}
+        target="_blank"
+        passHref
+      >
+        <FacebookIcon fontSize="large" color="primary" />
+      </Link>
+      <Link
+        key={getRandomId()}
+        href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(
+          pageUrl
+        )}`}
+        target="_blank"
+        passHref
+      >
+        <LinkedInIcon fontSize="large" color="primary" />
+      </Link>
+      <Link
+        key={getRandomId()}
+        href={`https://twitter.com/share?url=${encodeURIComponent(pageUrl)}`}
+        target="_blank"
+        passHref
+      >
+        <XIcon fontSize="large" color="inherit" />
+      </Link>
+    </div>
   );
 }
 
 export function RelatedTools({
   relatedToolsConfigs,
-  isMobileView,
 }: Readonly<{
   relatedToolsConfigs: AppNavigationConfig[];
-  isMobileView: boolean;
 }>) {
   return (
-    <FlexList
-      isFullWidth={true}
-      items={[
-        <Typography
-          key={getRandomId()}
-          variant="h2"
-          fontSize={"inherit"}
-          color="textPrimary"
-        >
-          Related Tools
-        </Typography>,
-        <FlexList
-          key={getRandomId()}
-          isFullWidth={true}
-          isDirectionRow={!isMobileView}
-          items={map(relatedToolsConfigs, (relatedToolConfig) => (
-            <RelatedToolCard key={getRandomId()} config={relatedToolConfig} />
-          ))}
-        />,
-      ]}
-    />
+    <div className="flex flex-col gap-2 w-full">
+      <Typography key={getRandomId()} variant="h2" fontSize={"inherit"}>
+        Related Tools
+      </Typography>
+      <div className="flex flex-col md:flex-row gap-2 w-full">
+        {map(relatedToolsConfigs, (relatedToolConfig) => (
+          <RelatedToolCard key={getRandomId()} config={relatedToolConfig} />
+        ))}
+      </div>
+    </div>
   );
 }
 
 export function AppFollowButtons() {
   return (
-    <FlexList
-      key={getRandomId()}
-      flexCenter={true}
-      alignCenter={true}
-      items={[
-        <Typography key={getRandomId()} variant="h3" fontSize={"inherit"}>
-          Follow us on
-        </Typography>,
-        <FlexList
-          key={getRandomId()}
-          isDirectionRow={true}
-          items={[
-            <Link
-              key={getRandomId()}
-              href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
-              target="_blank"
-            >
-              <FacebookIcon fontSize="large" color="primary" />
-            </Link>,
-            <Link
-              key={getRandomId()}
-              href="https://www.linkedin.com/company/webtoolseasy/"
-              target="_blank"
-            >
-              <LinkedInIcon fontSize="large" color="primary" />
-            </Link>,
-            <Link
-              key={getRandomId()}
-              href="https://twitter.com/webtoolseasy"
-              target="_blank"
-            >
-              <XIcon fontSize="large" color="inherit" />
-            </Link>,
-          ]}
-        />,
-      ]}
-    />
+    <div className="flex flex-col gap-2 items-center justify-center">
+      <Typography key={getRandomId()} variant="h3" fontSize={"inherit"}>
+        Follow us on
+      </Typography>
+      <div className="flex flex-row gap-2">
+        <Link
+          href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
+          target="_blank"
+        >
+          <FacebookIcon fontSize="large" color="primary" />
+        </Link>
+        <Link
+          href="https://www.linkedin.com/company/webtoolseasy/"
+          target="_blank"
+        >
+          <LinkedInIcon fontSize="large" color="primary" />
+        </Link>
+        <Link href="https://twitter.com/webtoolseasy" target="_blank">
+          <XIcon fontSize="large" color="inherit" />
+        </Link>
+      </div>
+    </div>
   );
 }
 
 export function PageTags({ tags }: Readonly<{ tags: string[] }>) {
   return (
-    <FlexList
-      key={getRandomId()}
-      flexCenter={true}
-      isDirectionRow={true}
-      items={map(tags, (tag) => (
+    <div className="flex flex-row gap-2 justify-center flex-wrap">
+      {map(tags, (tag) => (
         <Tag label={tag} key={getRandomId()} color={"secondary"} />
       ))}
-      sx={{ flexWrap: "wrap" }}
-    />
+    </div>
   );
 }
 
@@ -175,7 +133,7 @@ export function ToolDescription({
   descriptionData,
 }: Readonly<{ descriptionData: DescriptionBlock[] }>) {
   return (
-    <div className="column-display full-width base-flex-gap">
+    <div className="flex flex-col w-full gap-2">
       {map(descriptionData, (descriptionBlock) => (
         <ToolDescriptionBlock
           key={getRandomId()}
@@ -192,10 +150,7 @@ function ToolDescriptionBlock({
   descriptionBlock: DescriptionBlock;
 }>) {
   return (
-    <div
-      key={getRandomId()}
-      className="column-display inner-flex-gap full-width"
-    >
+    <div key={getRandomId()} className="flex flex-col w-full gap-2">
       <Typography variant="h3" fontSize={"inherit"} color="secondary">
         {descriptionBlock.heading}
       </Typography>
@@ -220,10 +175,9 @@ function DescriptionLinks({
   links: { url: string; displayText: string }[];
 }>) {
   return (
-    <FlexList
-      key={getRandomId()}
-      items={map(links, (link) => (
-        <div className="row-display inner-flex-gap">
+    <div className="flex flex-col gap-2">
+      {map(links, (link) => (
+        <div className="flex flex-row gap-2">
           <KeyboardArrowRightIcon />
           <Typography
             key={getRandomId()}
@@ -231,13 +185,13 @@ function DescriptionLinks({
             component={"a"}
             color="primary"
             target="_blank"
-            sx={{ textDecoration: "underline" }}
+            className="underline"
           >
             {link.displayText}
           </Typography>
         </div>
       ))}
-    />
+    </div>
   );
 }
 
@@ -247,10 +201,7 @@ function DescriptionDataBlockData({
   blockData: string[];
 }>) {
   return (
-    <div
-      key={getRandomId()}
-      className="column-display inner-flex-gap full-width"
-    >
+    <div key={getRandomId()} className="flex flex-col gap-2 w-full">
       {map(blockData, (data) => (
         <Typography key={getRandomId()} variant="body1">
           {data}
@@ -266,15 +217,9 @@ function DescriptionDataListData({
   listData: string[];
 }>) {
   return (
-    <div
-      key={getRandomId()}
-      className="column-display inner-flex-gap full-width"
-    >
+    <div key={getRandomId()} className="flex flex-col gap-2 w-full">
       {map(listData, (data) => (
-        <div
-          key={getRandomId()}
-          className="row-display inner-flex-gap full-width"
-        >
+        <div key={getRandomId()} className="flex flex-row gap-2 w-full">
           <KeyboardArrowRightIcon />
           <Typography key={getRandomId()} variant="body1">
             {data}

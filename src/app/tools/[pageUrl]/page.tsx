@@ -27,7 +27,7 @@ export default async function WebToolPage({
   }
 
   return (
-    <div className="column-display base-flex-gap full-width">
+    <div className="flex flex-col gap-2 w-full">
       <SocialShareButtons
         pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
       />

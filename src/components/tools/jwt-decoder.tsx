@@ -11,12 +11,10 @@ import {
   encodeText,
   getRandomId,
 } from "@/util/commonUtils";
-import { isMobileDevice } from "@/lib/client-response";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { SingleCodeEditorWithHeader } from "../codeEditors";
-import { FlexList } from "../lib/flexComponents";
 import { isNil } from "lodash-es";
 import { decodeJwt, decodeProtectedHeader } from "jose";
 import { Typography } from "@mui/material";
@@ -26,8 +24,6 @@ export default function JwtDecoder({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const isMobileView = isMobileDevice();
-
   const initialValue = `eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM`;
 
   const codeQueryParam = queryParams.content;
@@ -110,12 +106,7 @@ export default function JwtDecoder({
 
   function ControlButtons() {
     return (
-      <div
-        className="row-display inner-flex-gap full-width"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
           buttonText="Copy JWT Token"
           variant="outlined"
@@ -142,7 +133,7 @@ export default function JwtDecoder({
   }
 
   return (
-    <div className="column-display base-flex-gap full-width flex-vr-center">
+    <div className="flex flex-col gap-2 w-full items-center">
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -153,7 +144,7 @@ export default function JwtDecoder({
       <ControlButtons />
 
       {tokenError && (
-        <div className="row-display inner-flex-gap">
+        <div className="flex flex-row gap-2">
           <ErrorIcon color="error" />
           <Typography variant="h6" color="error">
             Token is invalid!
@@ -161,16 +152,9 @@ export default function JwtDecoder({
         </div>
       )}
 
-      <div
-        className="row-display base-flex-gap flex-hz-center full-width flex-vr-center"
-        style={{
-          flexDirection: isMobileView ? "column" : "row",
-          height: "30rem",
-        }}
-      >
+      <div className="flex flex-col md:flex-row gap-2 items-center w-full h-[60rem] md:h-[30rem]">
         <SingleCodeEditorWithHeader
           editorHeading="JWT Token"
-          isMobileView={isMobileView}
           themeOption="vs-dark"
           editorOptions={{
             fontSize: 14,
@@ -186,68 +170,46 @@ export default function JwtDecoder({
               wordWrap: "on",
             },
           }}
-          sx={{
-            height: "30rem",
-            width: isMobileView ? "80%" : "49%",
-          }}
+          className="h-[50%] md:h-full w-[80%] md:w-full"
         />
-
-        <FlexList
-          sx={{
-            height: "30rem",
-            width: isMobileView ? "80%" : "49%",
-          }}
-          items={[
-            <SingleCodeEditorWithHeader
-              key={getRandomId()}
-              editorHeading="Headers ( Algorithm & Token Type)"
-              isMobileView={isMobileView}
-              themeOption="vs-dark"
-              editorOptions={{
-                fontSize: 14,
-              }}
-              codeEditorProps={{
-                language: "json",
-                value: decodedJwtTokenHeaders,
-                onChange: onRawCodeChange,
-                sx: {
-                  height: "100%",
-                },
-                editorOptions: {
-                  readOnly: true,
-                },
-              }}
-              sx={{
-                width: "100%",
-                height: "50%",
-              }}
-            />,
-            <SingleCodeEditorWithHeader
-              key={getRandomId()}
-              editorHeading="Token Data"
-              isMobileView={isMobileView}
-              themeOption="vs-dark"
-              editorOptions={{
-                fontSize: 14,
-              }}
-              codeEditorProps={{
-                language: "json",
-                value: decodedJwtToken,
-                onChange: onRawCodeChange,
-                sx: {
-                  height: "100%",
-                },
-                editorOptions: {
-                  readOnly: true,
-                },
-              }}
-              sx={{
-                width: "100%",
-                height: "50%",
-              }}
-            />,
-          ]}
-        />
+        <div className="flex flex-col gap-2 items-center h-full w-full">
+          <SingleCodeEditorWithHeader
+            key={getRandomId()}
+            editorHeading="Headers ( Algorithm & Token Type)"
+            themeOption="vs-dark"
+            editorOptions={{
+              fontSize: 14,
+            }}
+            codeEditorProps={{
+              language: "json",
+              value: decodedJwtTokenHeaders,
+              onChange: onRawCodeChange,
+              className: "h-full",
+              editorOptions: {
+                readOnly: true,
+              },
+            }}
+            className="h-[50%] md:h-full w-[80%] md:w-full"
+          />
+          <SingleCodeEditorWithHeader
+            key={getRandomId()}
+            editorHeading="Token Data"
+            themeOption="vs-dark"
+            editorOptions={{
+              fontSize: 14,
+            }}
+            codeEditorProps={{
+              language: "json",
+              value: decodedJwtToken,
+              onChange: onRawCodeChange,
+              className: "h-full",
+              editorOptions: {
+                readOnly: true,
+              },
+            }}
+            className="h-[50%] w-[80%] md:w-full"
+          />
+        </div>
       </div>
     </div>
   );

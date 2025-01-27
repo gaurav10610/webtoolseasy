@@ -7,21 +7,16 @@ export function ResponsiveAppBar({
   children,
   color = "primary",
   position = "sticky",
-  sx = {},
+  className = "",
 }: Readonly<{
   children?: ReactNode;
   color?: PropTypes.Color;
   position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
   sx?: Record<string, unknown>;
+  className?: string;
 }>) {
   return (
-    <AppBar
-      position={position}
-      color={color}
-      sx={{
-        ...sx,
-      }}
-    >
+    <AppBar position={position} color={color} className={className}>
       <Toolbar variant="dense">{children}</Toolbar>
     </AppBar>
   );
