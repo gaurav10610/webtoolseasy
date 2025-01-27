@@ -152,7 +152,7 @@ export async function transcodeVideo({
   });
 
   const fileStreamer = new CoreFileStreamer(videoFileData.originalFile);
-  const fileDataFromDisk: Uint8Array<ArrayBufferLike>[] = [];
+  const fileDataFromDisk: Array<Uint8Array> = [];
 
   while (!fileStreamer.isEndOfFile()) {
     const arrayBufferChunk = await fileStreamer.readBlockAsArrayBuffer();
