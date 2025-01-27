@@ -237,10 +237,6 @@ export async function transcodeVideo({
     }
   });
 
-  // ffmpeg.on("log", ({ message, type }) => {
-  //   console.log(`${type}: ${message}`);
-  // });
-
   /**
    * Execute the ffmpeg command
    */

@@ -1,24 +1,16 @@
-import { ToolComponentProps } from "@/types/component";
-import { CircularLoader } from "@/components/lib/loaders";
-import dynamic from "next/dynamic";
 import { decompressStringFromBase64 } from "@/util/commonUtils";
 import { keysIn } from "lodash-es";
 import { SocialShareButtons } from "@/components/commonComponents";
+import ToolComponentWrapper from "@/components/toolComponentWrapper";
 
-export default async function WebToolPage({
-  params,
-  searchParams = {},
-}: Readonly<{
-  params: { [key: string]: string };
-  searchParams: { [key: string]: string };
-}>) {
-  const ToolComponent = dynamic(
-    () => import(`@/components/tools/${params.pageUrl}.tsx`),
-    {
-      loading: () => CircularLoader({ color: "secondary" }),
-      ssr: false,
-    }
-  ) as React.FC<ToolComponentProps>;
+export default async function WebToolPage(
+  props: Readonly<{
+    params: Promise<{ [key: string]: string }>;
+    searchParams: Promise<{ [key: string]: string }>;
+  }>
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
 
   const queryParams: { [key: string]: string } = {};
 
@@ -31,8 +23,8 @@ export default async function WebToolPage({
       <SocialShareButtons
         pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
       />
-      <ToolComponent
-        hostname={process.env.HOSTNAME}
+      <ToolComponentWrapper
+        pageUrl={params.pageUrl}
         queryParams={queryParams}
       />
     </div>
