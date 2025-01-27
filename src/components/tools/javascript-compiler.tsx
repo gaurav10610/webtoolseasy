@@ -198,6 +198,7 @@ export default function JavascriptCompiler({
     editorOptions: {
       wordWrap: "on",
     },
+    className: "w-full h-full",
   });
 
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);

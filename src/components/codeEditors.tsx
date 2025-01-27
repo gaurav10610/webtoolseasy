@@ -132,7 +132,7 @@ export function SingleCodeEditorWithHeader({
   className?: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 w-[80%] md:w-[49%] ${className}`}>
+    <div className={`flex flex-col gap-2 ${className}`}>
       {editorHeading && (
         <Typography variant="body2" fontSize={"inherit"} color="primary">
           {editorHeading}

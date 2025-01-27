@@ -46,7 +46,7 @@ export default function TextEditor({
     language: "text/plain",
     value: rawCode,
     onChange: onRawCodeChange,
-    className: "h-[20rem] md:h-[30rem]",
+    className: "h-[20rem] md:h-[30rem] w-full",
     editorOptions: {
       wordWrap: "on",
     },
