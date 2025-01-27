@@ -11,6 +11,7 @@ import ApplicationIcon from "@/data/icons/app-icon.svg";
 import { CustomSvgIcon } from "@/components/lib/icons";
 import HomeIcon from "@/data/icons/home.svg";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { BaseToolsAds } from "@/components/baseAds";
 
 export default function RootLayout({
   children,
@@ -50,8 +51,10 @@ export default function RootLayout({
                   </Link>
                 </div>
               </ResponsiveAppBar>
-              <div className="flex flex-col items-center gap-3 p-2 flex-grow overflow-y-auto">
-                {children}
+              <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
+                <BaseToolsAds />
+                <div className="w-full md:w-[70%]">{children}</div>
+                <BaseToolsAds />
               </div>
             </div>
           </ThemeProvider>
