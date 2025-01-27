@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ButtonWithHandler } from "../lib/buttons";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { copyToClipboard } from "@/util/commonUtils";
+import { copyToClipboard, getRandomId } from "@/util/commonUtils";
 import DownloadIcon from "@mui/icons-material/Download";
 import LoopIcon from "@mui/icons-material/Loop";
 import { isEmpty, map } from "lodash-es";
@@ -100,7 +100,11 @@ export default function GuidGenerator() {
           <div className="flex flex-col gap-2 w-full items-center overflow-y-auto max-h-[20rem] md:border-2 md:rounded-md md:p-4">
             {map(bulkGuids, (guid) => {
               return (
-                <Typography variant="caption" color="textSecondary">
+                <Typography
+                  key={getRandomId()}
+                  variant="caption"
+                  color="textSecondary"
+                >
                   {guid}
                 </Typography>
               );

@@ -1,6 +1,8 @@
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 
+import type { JSX } from "react";
+
 export function ButtonWithHandler({
   size = "medium",
   variant = "contained",
