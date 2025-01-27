@@ -36,7 +36,7 @@ export async function RelatedToolCard({
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
   return (
     <PaperWithChildren variant="elevation" elevation={3} className={className}>
-      <div className="flex flex-row gap-2 w-full justify-center items-center">
+      <div className="flex flex-row gap-2 w-full justify-center items-center p-3">
         <CustomSvgIcon size="medium">
           {React.createElement(svgIcon.default)}
         </CustomSvgIcon>

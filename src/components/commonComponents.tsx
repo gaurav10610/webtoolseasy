@@ -80,12 +80,7 @@ export function RelatedTools({
 }>) {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <Typography
-        key={getRandomId()}
-        variant="h2"
-        fontSize={"inherit"}
-        color="textPrimary"
-      >
+      <Typography key={getRandomId()} variant="h2" fontSize={"inherit"}>
         Related Tools
       </Typography>
       <div className="flex flex-col md:flex-row gap-2 w-full">

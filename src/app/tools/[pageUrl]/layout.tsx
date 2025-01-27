@@ -52,7 +52,7 @@ export default async function WebToolLayout({
     .map((toolId) => appListConfig[toolId]);
 
   return (
-    <div className="flex flex-col gap-5 w-full md:w-[70%]">
+    <div className="flex flex-col gap-5 w-full">
       <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />
       <BaseToolsPage key={getRandomId()}>{children}</BaseToolsPage>
       {!isNil(relatedToolsConfigs) && !isEmpty(relatedToolsConfigs) && (
