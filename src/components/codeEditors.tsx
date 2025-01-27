@@ -209,7 +209,7 @@ export function DiffEditorsWithHeader({
   themeOption: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 h-full ${className}`}>
+    <div className={`flex flex-col gap-2 ${className}`}>
       <div className="w-full flex flex-row justify-around">
         <Typography variant="body2" fontSize={"inherit"} color="primary">
           {firstTextHeading}
@@ -218,20 +218,18 @@ export function DiffEditorsWithHeader({
           {secondTextHeading}
         </Typography>
       </div>
-      <div className="w-full h-full border-2 border-gray-300">
-        <DiffEditor
-          language={diffEditorProps.language}
-          value={diffEditorProps.value}
-          onChange={diffEditorProps.onChange}
-          className={diffEditorProps.className}
-          original={diffEditorProps.original}
-          theme={themeOption}
-          editorOptions={{
-            ...editorOptions,
-            ...(diffEditorProps.editorOptions || {}),
-          }}
-        />
-      </div>
+      <DiffEditor
+        language={diffEditorProps.language}
+        value={diffEditorProps.value}
+        onChange={diffEditorProps.onChange}
+        className={diffEditorProps.className}
+        original={diffEditorProps.original}
+        theme={themeOption}
+        editorOptions={{
+          ...editorOptions,
+          ...(diffEditorProps.editorOptions || {}),
+        }}
+      />
     </div>
   );
 }

@@ -213,18 +213,19 @@ export default function CropImage() {
         </div>
       )}
       {!isEmpty(fileList) && (
-        <Typography variant="h5" color="primary">
+        <Typography variant="h5" color="textSecondary">
           Selected Images
         </Typography>
       )}
       {!isEmpty(fileList) && (
         <ImagesPreview
+          selectedFile={selectedFile}
           fileList={fileList}
           selectImageHandler={selectImageHandler}
         />
       )}
       {!isNil(selectedFile) && (
-        <Typography variant="h5" color="primary">
+        <Typography variant="h5" color="textSecondary">
           Crop & Preview
         </Typography>
       )}

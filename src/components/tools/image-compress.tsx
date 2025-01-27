@@ -137,7 +137,7 @@ export default function ImageCompress() {
   }>) => {
     return (
       <div className="flex flex-col gap-3 w-full items-center p-2 border-solid border-2 border-gray-300 mdp-4 rounded-sm">
-        <Typography variant="h5" color="primary">
+        <Typography variant="h5" color="textSecondary">
           Compression Options
         </Typography>
         <div className="flex flex-col gap-3 w-full items-center">
@@ -305,12 +305,13 @@ export default function ImageCompress() {
         </div>
       )}
       {!isEmpty(fileList) && (
-        <Typography variant="h5" color="primary">
+        <Typography variant="h5" color="textSecondary">
           Selected Images
         </Typography>
       )}
       {!isEmpty(fileList) && (
         <ImagesPreview
+          selectedFile={selectedFile}
           fileList={map(fileList, ({ id, originalFile }) => ({
             id,
             originalFile,

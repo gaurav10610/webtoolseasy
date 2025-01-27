@@ -93,7 +93,7 @@ export default function JsonViewer({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center">
+      <div className="flex flex-col md:flex-row gap-2 h-full w-full items-center">
         <SingleCodeEditorWithHeader
           editorHeading="Json Code"
           themeOption="vs-dark"
@@ -103,18 +103,19 @@ export default function JsonViewer({
           codeEditorProps={{
             language: "json",
             value: rawCode,
+            className: "h-full w-full",
             onChange: onRawCodeChange,
-            className: "h-[20rem] md:h-[30rem]",
             editorOptions: {
               wordWrap: "on",
             },
           }}
+          className="h-[20rem] md:h-[30rem] w-[80%] md:w-full"
         />
-        <div className="flex flex-col gap-2 w-[80%] md:w-[49%]">
+        <div className="flex flex-col gap-2 w-[80%] md:w-full md:h-[30rem] mt-7 md:mt-0">
           <Typography variant="body2" fontSize={"inherit"} color="primary">
             Json Viewer
           </Typography>
-          <div className="flex flex-col gap-2 w-full h-[20rem] md:h-[30rem] border-2 border-gray-300">
+          <div className="flex flex-col gap-2 w-full h-full border-2 border-gray-300">
             <JsonView
               data={JSON.parse(rawCode)}
               shouldExpandNode={allExpanded}
