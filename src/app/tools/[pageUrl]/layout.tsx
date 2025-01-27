@@ -23,21 +23,27 @@ import { Metadata } from "next";
  * @param params - page url params
  * @returns metadata for the page
  */
-export async function generateMetadata({
-  params,
-}: Readonly<{
-  params: { [key: string]: string };
-}>): Promise<Metadata> {
+export async function generateMetadata(
+  props: Readonly<{
+    params: { [key: string]: string };
+  }>
+): Promise<Metadata> {
+  const params = await props.params;
   const { metadata } = await import(
     `@/data/component-config/${params.pageUrl}`
   );
   return metadata;
 }
 
-export default async function WebToolLayout({
-  children,
-  params,
-}: Readonly<{ children: React.ReactNode; params: { [key: string]: string } }>) {
+export default async function WebToolLayout(
+  props: Readonly<{ children: React.ReactNode; params: { [key: string]: string } }>
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const { descriptionData, componentConfig } = await import(
     `@/data/component-config/${params.pageUrl}`
   );

@@ -5,13 +5,14 @@ import { decompressStringFromBase64 } from "@/util/commonUtils";
 import { keysIn } from "lodash-es";
 import { SocialShareButtons } from "@/components/commonComponents";
 
-export default async function WebToolPage({
-  params,
-  searchParams = {},
-}: Readonly<{
-  params: { [key: string]: string };
-  searchParams: { [key: string]: string };
-}>) {
+export default async function WebToolPage(
+  props: Readonly<{
+    params: { [key: string]: string };
+    searchParams: { [key: string]: string };
+  }>
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const ToolComponent = dynamic(
     () => import(`@/components/tools/${params.pageUrl}.tsx`),
     {
