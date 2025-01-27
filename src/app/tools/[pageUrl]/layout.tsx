@@ -25,7 +25,7 @@ import { Metadata } from "next";
  */
 export async function generateMetadata(
   props: Readonly<{
-    params: { [key: string]: string };
+    params: Promise<{ [key: string]: string }>;
   }>
 ): Promise<Metadata> {
   const params = await props.params;
