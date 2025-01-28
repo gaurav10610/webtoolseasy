@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     site: "@webtoolseasy",
     title: pageTitle,
     description: pageDescription,
-    images: [`${process.env.SCREENSHOTS_BASE_URL}/tools-directory.png`],
+    images: [`${process.env.SCREENSHOTS_BASE_URL}/home.png`],
   },
   keywords:
     "web tools, online tools, web development, web design, HTML tools, CSS tools, JavaScript tools, SEO tools, image compression, code formatter, JSON formatter, URL encoder, URL decoder, base64 encoder, base64 decoder, text editor, color picker, regex tester, lorem ipsum generator, password generator, hash generator, QR code generator, web utilities",
