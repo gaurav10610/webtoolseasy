@@ -2,6 +2,15 @@ import { decompressStringFromBase64 } from "@/util/commonUtils";
 import { keysIn } from "lodash-es";
 import { SocialShareButtons } from "@/components/commonComponents";
 import ToolComponentWrapper from "@/components/toolComponentWrapper";
+import fs from "fs";
+
+export async function generateStaticParams() {
+  const baseToolsPath = `${process.cwd()}/src/components/tools`;
+  const files = fs.readdirSync(baseToolsPath);
+  return files
+    .map((file) => file.replace(".tsx", ""))
+    .map((pageUrl) => ({ pageUrl }));
+}
 
 export default async function WebToolPage(
   props: Readonly<{

@@ -34,7 +34,7 @@
     "next": "15.1.6",
     "qrcode": "^1.5.4",
     "react": "19.0.0",
-    "react-cron-generator": "^2.0.15",
+    "react-cron-generator": "^2.0.17",
     "react-dom": "19.0.0",
     "react-image-crop": "^11.0.7",
     "react-json-view-lite": "^2.3.0",
