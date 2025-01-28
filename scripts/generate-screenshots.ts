@@ -2,12 +2,15 @@ import { forEach } from "lodash-es";
 import fs from "fs";
 import puppeteer from "puppeteer";
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const takeScreenshot = async (url: string, fileName: string) => {
   console.log(`Taking screenshot of ${url}...`);
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   page.setViewport({ width: 1640, height: 856 });
   await page.goto(url);
+  await delay(3000);
   const screenshot = await page.screenshot({ fullPage: true });
 
   const baseFolderPath = `${process.cwd()}/public/screenshots`;
@@ -32,11 +35,6 @@ const getAllUrls = () => {
 
   forEach(dataFolders, (folder) => {
     const folderPath = `${baseFolderPath}/${folder}`;
-
-    urls.push({
-      url: `${hostname}/${folder}`,
-      fileName: folder,
-    });
 
     const files = fs.readdirSync(folderPath);
 
