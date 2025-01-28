@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     url: `${process.env.HOSTNAME}`,
     images: [
       {
-        url: `${process.env.SCREENSHOTS_BASE_URL}/tools-directory.png`,
-        secureUrl: `${process.env.SCREENSHOTS_BASE_URL}/tools-directory.png`,
+        url: `${process.env.SCREENSHOTS_BASE_URL}/home.png`,
+        secureUrl: `${process.env.SCREENSHOTS_BASE_URL}/home.png`,
         alt: pageTitle,
       },
     ],
