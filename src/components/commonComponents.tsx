@@ -157,7 +157,7 @@ function DescriptionDataBlockData({
   return (
     <div key={getRandomId()} className="flex flex-col gap-2 w-full">
       {map(blockData, (data) => (
-        <Typography key={getRandomId()} variant="body1">
+        <Typography key={getRandomId()} variant="body1" color="textSecondary">
           {data}
         </Typography>
       ))}
@@ -175,7 +175,7 @@ function DescriptionDataListData({
       {map(listData, (data) => (
         <div key={getRandomId()} className="flex flex-row gap-2 w-full">
           <KeyboardArrowRightIcon />
-          <Typography key={getRandomId()} variant="body1">
+          <Typography key={getRandomId()} variant="body1" color="textSecondary">
             {data}
           </Typography>
         </div>

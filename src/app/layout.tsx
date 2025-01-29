@@ -59,8 +59,8 @@ export default function RootLayout({
                   className="hidden w-[20%] md:flex"
                   appConfigJson={appConfigJson as AppListConfig}
                 />
-                <div className="w-full md:w-[60%]">{children}</div>
-                <BaseToolsAds />
+                <div className="w-full md:w-[70%]">{children}</div>
+                <BaseToolsAds className="w-full md:w-[20%]" />
               </div>
             </div>
           </ThemeProvider>

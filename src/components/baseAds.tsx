@@ -1,3 +1,5 @@
-export async function BaseToolsAds() {
-  return <div className="w-full max-h-20 md:w-[20%]"></div>;
+export async function BaseToolsAds({
+  className = "",
+}: Readonly<{ className?: string }>) {
+  return <div className={`max-h-20 ${className}`}></div>;
 }
