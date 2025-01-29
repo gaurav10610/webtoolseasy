@@ -112,7 +112,11 @@ export default function JsonViewer({
           className="h-[20rem] md:h-[30rem] w-[80%] md:w-full"
         />
         <div className="flex flex-col gap-2 w-[80%] md:w-full md:h-[30rem] mt-7 md:mt-0">
-          <Typography variant="body2" fontSize={"inherit"} color="primary">
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            className="!text-xl !font-semibold"
+          >
             Json Viewer
           </Typography>
           <div className="flex flex-col gap-2 w-full h-full border-2 border-gray-300">

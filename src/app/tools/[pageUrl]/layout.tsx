@@ -17,6 +17,7 @@ import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
 import { isEmpty, isNil, keys } from "lodash-es";
 import { Metadata } from "next";
+import { SocialShareButtons } from "@/components/socialShareButtons";
 
 /**
  * generates meta tags for the page
@@ -61,6 +62,11 @@ export default async function WebToolLayout(
   return (
     <div className="flex flex-col gap-5 w-full">
       <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />
+      <SocialShareButtons
+        key={getRandomId()}
+        pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
+        heading={toolConfigData.pageTitle}
+      />
       <BaseToolsPage key={getRandomId()}>{children}</BaseToolsPage>
       {!isNil(relatedToolsConfigs) && !isEmpty(relatedToolsConfigs) && (
         <RelatedTools

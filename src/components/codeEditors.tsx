@@ -136,7 +136,11 @@ export function SingleCodeEditorWithHeader({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {editorHeading && (
-        <Typography variant="body2" fontSize={"inherit"} color="primary">
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          className="!text-xl !font-semibold"
+        >
           {editorHeading}
         </Typography>
       )}
@@ -173,7 +177,11 @@ export function SingleCodeEditorWithHeaderV2({
   return (
     <div className={`flex flex-col gap-2 w-full h-full ${className}`}>
       {editorHeading && (
-        <Typography variant="body2" fontSize={"inherit"} color="primary">
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          className="!text-xl !font-semibold"
+        >
           {editorHeading}
         </Typography>
       )}
@@ -211,10 +219,18 @@ export function DiffEditorsWithHeader({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <div className="w-full flex flex-row justify-around">
-        <Typography variant="body2" fontSize={"inherit"} color="primary">
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          className="!text-xl !font-semibold"
+        >
           {firstTextHeading}
         </Typography>
-        <Typography variant="body2" fontSize={"inherit"} color="primary">
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          className="!text-xl !font-semibold"
+        >
           {secondTextHeading}
         </Typography>
       </div>
