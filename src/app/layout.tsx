@@ -56,7 +56,7 @@ export default function RootLayout({
               </ResponsiveAppBar>
               <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
                 <SidePanel
-                  className="hidden w-[20%] md:block"
+                  className="hidden w-[20%] md:flex"
                   appConfigJson={appConfigJson as AppListConfig}
                 />
                 <div className="w-full md:w-[60%]">{children}</div>

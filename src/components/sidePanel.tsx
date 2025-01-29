@@ -27,24 +27,6 @@ const SectionLinks = ({
   );
 };
 
-const SectionWiseAppLinks = ({
-  categoryWiseAppList,
-}: {
-  categoryWiseAppList: Record<string, unknown[]>;
-}) => {
-  return (
-    <div className="flex flex-col gap-4 w-full">
-      {map(keysIn(categoryWiseAppList), (category) => (
-        <SectionLinks
-          key={getRandomId()}
-          category={category}
-          appList={categoryWiseAppList[category] as AppNavigationConfig[]}
-        />
-      ))}
-    </div>
-  );
-};
-
 export default function SidePanel({
   className = "",
   appConfigJson,
@@ -55,8 +37,14 @@ export default function SidePanel({
   delete categoryWiseAppList["undefined"];
 
   return (
-    <div className={`flex flex-col gap-3 p-3 w-full ${className}`}>
-      <SectionWiseAppLinks categoryWiseAppList={categoryWiseAppList} />
+    <div className={`flex flex-col gap-4 p-3 ${className}`}>
+      {map(keysIn(categoryWiseAppList), (category) => (
+        <SectionLinks
+          key={getRandomId()}
+          category={category}
+          appList={categoryWiseAppList[category] as AppNavigationConfig[]}
+        />
+      ))}
     </div>
   );
 }
