@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     name: "Gaurav Kumar Yadav",
   },
   robots: "index, follow",
+  metadataBase: new URL(process.env.HOSTNAME!),
   openGraph: {
     title: pageTitle,
     type: "website",
@@ -55,22 +56,22 @@ function SectionAppList({
   configs: AppNavigationConfig[];
 }>) {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-2 w-full">
       <Typography
         key={getRandomId()}
         variant="h2"
-        className="!text-xl md:!text-2xl"
+        className="!text-xl md:!text-2xl !font-medium"
         color="textSecondary"
       >
         {category}
       </Typography>
-      <div className="flex flex-row flex-wrap gap-2 w-full">
+      <div className="flex flex-row flex-wrap gap-4 w-full">
         {map(configs, (config) => {
           return (
             <AppHomeCard
               key={getRandomId()}
               config={config}
-              className="w-full md:w-[24%] pt-2 pb-2"
+              className="w-full md:w-[23%] pl-2 pr-2 pt-3 pb-3"
             />
           );
         })}

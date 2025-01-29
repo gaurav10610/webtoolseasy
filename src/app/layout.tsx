@@ -40,7 +40,7 @@ export default function RootLayout({
                     key={getRandomId()}
                     className="flex-grow"
                   >
-                    <Typography color="inherit" className="text-xl">
+                    <Typography className="!text-xl !font-medium">
                       WebToolsEasy
                     </Typography>
                   </Link>

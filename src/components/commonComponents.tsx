@@ -57,16 +57,16 @@ export function AppFollowButtons() {
           href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
           target="_blank"
         >
-          <FacebookIcon fontSize="large" color="primary" />
+          <FacebookIcon fontSize="medium" color="primary" />
         </Link>
         <Link
           href="https://www.linkedin.com/company/webtoolseasy/"
           target="_blank"
         >
-          <LinkedInIcon fontSize="large" color="primary" />
+          <LinkedInIcon fontSize="medium" color="primary" />
         </Link>
         <Link href="https://twitter.com/webtoolseasy" target="_blank">
-          <XIcon fontSize="large" color="inherit" />
+          <XIcon fontSize="medium" color="inherit" />
         </Link>
       </div>
     </div>
