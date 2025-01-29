@@ -1,6 +1,5 @@
 import { decompressStringFromBase64 } from "@/util/commonUtils";
 import { keysIn } from "lodash-es";
-import { SocialShareButtons } from "@/components/commonComponents";
 import ToolComponentWrapper from "@/components/toolComponentWrapper";
 import fs from "fs";
 
@@ -29,9 +28,6 @@ export default async function WebToolPage(
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <SocialShareButtons
-        pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
-      />
       <ToolComponentWrapper
         pageUrl={params.pageUrl}
         queryParams={queryParams}

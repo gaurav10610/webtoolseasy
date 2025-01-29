@@ -6,6 +6,7 @@ import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
 import { groupBy, map, values } from "lodash-es";
 import { Metadata } from "next";
+import { SocialShareButtons } from "@/components/socialShareButtons";
 
 const pageTitle = "Online Web Tools: Browse Free Tools to Boost Productivity";
 const pageDescription =
@@ -88,6 +89,10 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
       <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
+      <SocialShareButtons
+        pageUrl={`${process.env.HOSTNAME}`}
+        heading={pageTitle}
+      />
       <div className="flex flex-col gap-10 w-full mt-5">
         {map(categoryWiseAppList, (configs, category) => {
           return (

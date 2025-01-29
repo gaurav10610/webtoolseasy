@@ -27,52 +27,6 @@ export function AppHeading({
   );
 }
 
-export function SocialShareButtons({
-  pageUrl,
-}: Readonly<{
-  pageUrl: string;
-}>) {
-  return (
-    <div className="flex flex-row gap-2 items-center justify-end">
-      <Typography
-        key={getRandomId()}
-        color="textSecondary"
-        fontSize={"inherit"}
-      >
-        Share this tool -
-      </Typography>
-      <Link
-        key={getRandomId()}
-        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          pageUrl
-        )}`}
-        target="_blank"
-        passHref
-      >
-        <FacebookIcon fontSize="large" color="primary" />
-      </Link>
-      <Link
-        key={getRandomId()}
-        href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(
-          pageUrl
-        )}`}
-        target="_blank"
-        passHref
-      >
-        <LinkedInIcon fontSize="large" color="primary" />
-      </Link>
-      <Link
-        key={getRandomId()}
-        href={`https://twitter.com/share?url=${encodeURIComponent(pageUrl)}`}
-        target="_blank"
-        passHref
-      >
-        <XIcon fontSize="large" color="inherit" />
-      </Link>
-    </div>
-  );
-}
-
 export function RelatedTools({
   relatedToolsConfigs,
 }: Readonly<{
