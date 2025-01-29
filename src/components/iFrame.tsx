@@ -13,7 +13,11 @@ export default function IFrameWithLabel({
     <div
       className={`flex flex-col justify-end w-full h-full gap-2 ${className}`}
     >
-      <Typography variant="body2" fontSize={"inherit"} color="primary">
+      <Typography
+        variant="body1"
+        color="textSecondary"
+        className="!text-xl !font-semibold"
+      >
         {heading}
       </Typography>
       <iframe
