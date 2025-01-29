@@ -4,6 +4,11 @@ import { Typography } from "@mui/material";
 import { groupBy, keysIn, map, values } from "lodash-es";
 import Link from "next/link";
 
+/**
+ * This component is used to display the links of the apps in the side panel
+ * @param param0
+ * @returns
+ */
 const SectionLinks = ({
   category,
   appList,
