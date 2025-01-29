@@ -6,6 +6,7 @@ import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
 import { groupBy, map, values } from "lodash-es";
 import { Metadata } from "next";
+import { SocialShareButtons } from "@/components/socialShareButtons";
 
 const pageTitle = "Online Web Tools: Browse Free Tools to Boost Productivity";
 const pageDescription =
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
     name: "Gaurav Kumar Yadav",
   },
   robots: "index, follow",
+  metadataBase: new URL(process.env.HOSTNAME!),
   openGraph: {
     title: pageTitle,
     type: "website",
@@ -54,22 +56,22 @@ function SectionAppList({
   configs: AppNavigationConfig[];
 }>) {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-2 w-full">
       <Typography
         key={getRandomId()}
         variant="h2"
-        className="!text-xl md:!text-2xl"
+        className="!text-xl md:!text-2xl !font-medium"
         color="textSecondary"
       >
         {category}
       </Typography>
-      <div className="flex flex-row flex-wrap gap-2 w-full">
+      <div className="flex flex-row flex-wrap gap-4 w-full">
         {map(configs, (config) => {
           return (
             <AppHomeCard
               key={getRandomId()}
               config={config}
-              className="w-full md:w-[24%] pt-2 pb-2"
+              className="w-full md:w-[23%] pl-2 pr-2 pt-3 pb-3"
             />
           );
         })}
@@ -88,6 +90,10 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
       <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
+      <SocialShareButtons
+        pageUrl={`${process.env.HOSTNAME}`}
+        heading={pageTitle}
+      />
       <div className="flex flex-col gap-10 w-full mt-5">
         {map(categoryWiseAppList, (configs, category) => {
           return (
