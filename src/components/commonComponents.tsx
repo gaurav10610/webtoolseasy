@@ -20,7 +20,7 @@ export function AppHeading({
     <Typography
       key={getRandomId()}
       variant="h1"
-      className="text-center !text-2xl md:!text-4xl"
+      className="text-center !text-2xl md:!text-4xl !font-normal"
     >
       {heading}
     </Typography>
@@ -49,7 +49,11 @@ export function RelatedTools({
 export function AppFollowButtons() {
   return (
     <div className="flex flex-col gap-2 items-center justify-center">
-      <Typography key={getRandomId()} variant="h3" fontSize={"inherit"}>
+      <Typography
+        key={getRandomId()}
+        className="!text-lg"
+        color="textSecondary"
+      >
         Follow us on
       </Typography>
       <div className="flex flex-row gap-2">

@@ -39,7 +39,11 @@ export const SocialShareButtons = ({
         autoHideDuration={2000}
         handleClose={handleSnackBarClose}
       />
-      <Typography key={getRandomId()} variant="body2" color="textSecondary">
+      <Typography
+        key={getRandomId()}
+        color="textSecondary"
+        className="!text-lg"
+      >
         Share:
       </Typography>
       <FacebookShareButton

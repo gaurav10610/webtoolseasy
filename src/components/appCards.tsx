@@ -19,7 +19,7 @@ export async function AppHomeCard({
           <CustomSvgIcon size="large">
             {React.createElement(svgIcon.default)}
           </CustomSvgIcon>
-          <Typography color="info" fontWeight={500} className="!text-center">
+          <Typography fontWeight={500} className="!text-center">
             {config.displayText}
           </Typography>
         </div>
