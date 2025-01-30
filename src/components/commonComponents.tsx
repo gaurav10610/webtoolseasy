@@ -81,7 +81,7 @@ export function PageTags({ tags }: Readonly<{ tags: string[] }>) {
   return (
     <div className="flex flex-row gap-2 justify-center flex-wrap">
       {map(tags, (tag) => (
-        <Tag label={tag} key={getRandomId()} color={"secondary"} />
+        <Tag label={tag} key={getRandomId()} color={"primary"} />
       ))}
     </div>
   );
@@ -91,7 +91,7 @@ export function ToolDescription({
   descriptionData,
 }: Readonly<{ descriptionData: DescriptionBlock[] }>) {
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className="flex flex-col w-full gap-4">
       {map(descriptionData, (descriptionBlock) => (
         <ToolDescriptionBlock
           key={getRandomId()}
@@ -109,7 +109,7 @@ function ToolDescriptionBlock({
 }>) {
   return (
     <div key={getRandomId()} className="flex flex-col w-full gap-2">
-      <Typography variant="h3" fontSize={"inherit"} color="secondary">
+      <Typography variant="h3" fontSize={"inherit"} color="info">
         {descriptionBlock.heading}
       </Typography>
       {!isNil(descriptionBlock.blockData) &&
