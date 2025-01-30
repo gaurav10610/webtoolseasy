@@ -189,7 +189,7 @@ export default function JwtDecoder({
                 readOnly: true,
               },
             }}
-            className="h-[50%] md:h-full w-[80%] md:w-full"
+            className="h-[50%] w-[80%] md:w-full"
           />
           <SingleCodeEditorWithHeader
             key={getRandomId()}

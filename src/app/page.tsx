@@ -7,6 +7,7 @@ import { Typography } from "@mui/material";
 import { groupBy, map, values } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
+import { BaseToolsAds } from "@/components/baseAds";
 
 const pageTitle = "Online Web Tools: Browse Free Tools to Boost Productivity";
 const pageDescription =
@@ -88,24 +89,28 @@ export default function Home() {
   delete categoryWiseAppList["undefined"];
 
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
-      <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
-      <SocialShareButtons
-        pageUrl={`${process.env.HOSTNAME}`}
-        heading={pageTitle}
-      />
-      <div className="flex flex-col gap-10 w-full mt-5">
-        {map(categoryWiseAppList, (configs, category) => {
-          return (
-            <SectionAppList
-              key={getRandomId()}
-              category={category}
-              configs={configs}
-            />
-          );
-        })}
+    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
+      <BaseToolsAds className="w-full md:w-[20%]" />
+      <div className="flex flex-col gap-2 items-center w-full">
+        <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
+        <SocialShareButtons
+          pageUrl={`${process.env.HOSTNAME}`}
+          heading={pageTitle}
+        />
+        <div className="flex flex-col gap-10 w-full mt-5">
+          {map(categoryWiseAppList, (configs, category) => {
+            return (
+              <SectionAppList
+                key={getRandomId()}
+                category={category}
+                configs={configs}
+              />
+            );
+          })}
+        </div>
+        <AppFollowButtons />
       </div>
-      <AppFollowButtons />
+      <BaseToolsAds className="w-full md:w-[20%]" />
     </div>
   );
 }

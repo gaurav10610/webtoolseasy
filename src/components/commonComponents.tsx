@@ -131,7 +131,7 @@ function DescriptionLinks({
   return (
     <div className="flex flex-col gap-2">
       {map(links, (link) => (
-        <div className="flex flex-row gap-2">
+        <div key={getRandomId()} className="flex flex-row gap-2">
           <KeyboardArrowRightIcon />
           <Typography
             key={getRandomId()}

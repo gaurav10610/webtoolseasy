@@ -106,7 +106,7 @@ export default function JsonFormatter({
       />
       <TwoCodeEditors
         buttons={<ControlButtons />}
-        firstEditorHeading="Json Code"
+        firstEditorHeading="JSON Code"
         firstEditorProps={{
           language: "json",
           value: rawCode,
