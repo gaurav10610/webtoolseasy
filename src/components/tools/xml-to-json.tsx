@@ -151,14 +151,14 @@ export default function XmlToJsonConverter({
       />
       <TwoCodeEditors
         buttons={<ControlButtons />}
-        firstEditorHeading="Xml Code"
+        firstEditorHeading="XML Code"
         firstEditorProps={{
           language: "xml",
           value: rawCode,
           onChange: onRawCodeChange,
           className: "h-[20rem] md:h-[30rem]",
         }}
-        secondEditorHeading="Json Code"
+        secondEditorHeading="JSON Code"
         secondEditorProps={{
           language: "json",
           value: convertedJson,

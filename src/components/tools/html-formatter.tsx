@@ -103,7 +103,7 @@ export default function HtmlFormatter({
       />
       <TwoCodeEditors
         buttons={<ControlButtons />}
-        firstEditorHeading="Html Code"
+        firstEditorHeading="HTML Code"
         firstEditorProps={{
           language: "html",
           value: rawCode,

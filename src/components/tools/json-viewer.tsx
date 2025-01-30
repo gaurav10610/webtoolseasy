@@ -95,7 +95,7 @@ export default function JsonViewer({
       <ControlButtons />
       <div className="flex flex-col md:flex-row gap-2 h-full w-full items-center">
         <SingleCodeEditorWithHeader
-          editorHeading="Json Code"
+          editorHeading="JSON Code"
           themeOption="vs-dark"
           editorOptions={{
             fontSize: 14,

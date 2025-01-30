@@ -1,8 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { CircularLoader } from "./lib/loaders";
 import { ToolComponentProps } from "@/types/component";
+import { SkeletonWithProps } from "./lib/skeletons";
 
 const ToolComponentWrapper = ({
   pageUrl,
@@ -14,7 +14,7 @@ const ToolComponentWrapper = ({
   const ToolComponent = dynamic(
     () => import(`@/components/tools/${pageUrl}.tsx`),
     {
-      loading: () => <CircularLoader color="secondary" />,
+      loading: () => <SkeletonWithProps />,
       ssr: false,
     }
   ) as React.FC<ToolComponentProps>;

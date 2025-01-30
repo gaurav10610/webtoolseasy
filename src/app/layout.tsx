@@ -11,10 +11,6 @@ import ApplicationIcon from "@/data/icons/app-icon.svg";
 import { CustomSvgIcon } from "@/components/lib/icons";
 import HomeIcon from "@/data/icons/home.svg";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { BaseToolsAds } from "@/components/baseAds";
-import SidePanel from "@/components/sidePanel";
-import * as appConfigJson from "@/data/apps.json";
-import { AppListConfig } from "@/types/config";
 
 export default function RootLayout({
   children,
@@ -54,14 +50,7 @@ export default function RootLayout({
                   </Link>
                 </div>
               </ResponsiveAppBar>
-              <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
-                <SidePanel
-                  className="hidden w-[20%] md:flex"
-                  appConfigJson={appConfigJson as AppListConfig}
-                />
-                <div className="w-full md:w-[60%]">{children}</div>
-                <BaseToolsAds />
-              </div>
+              <div className="p-2 w-full h-full">{children}</div>
             </div>
           </ThemeProvider>
         </AppRouterCacheProvider>

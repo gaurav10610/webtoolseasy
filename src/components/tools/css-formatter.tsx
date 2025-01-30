@@ -103,7 +103,7 @@ export default function CssFormatter({
       />
       <TwoCodeEditors
         buttons={<ControlButtons />}
-        firstEditorHeading="Css Code"
+        firstEditorHeading="CSS Code"
         firstEditorProps={{
           language: "css",
           value: rawCode,

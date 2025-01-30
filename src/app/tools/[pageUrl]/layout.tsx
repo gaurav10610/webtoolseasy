@@ -5,7 +5,6 @@ import {
   AppNavigationConfig,
 } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
-import BaseToolsPage from "@/components/baseToolPage";
 import {
   AppFollowButtons,
   AppHeading,
@@ -18,6 +17,8 @@ import * as appConfigJson from "@/data/apps.json";
 import { isEmpty, isNil, keys } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
+import SidePanel from "@/components/sidePanel";
+import { BaseToolsAds } from "@/components/baseAds";
 
 /**
  * generates meta tags for the page
@@ -60,26 +61,33 @@ export default async function WebToolLayout(
     .map((toolId) => appListConfig[toolId]);
 
   return (
-    <div className="flex flex-col gap-5 w-full">
-      <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />
-      <SocialShareButtons
-        key={getRandomId()}
-        pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
-        heading={toolConfigData.pageTitle}
+    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
+      <SidePanel
+        className="hidden w-[20%] md:flex"
+        appConfigJson={appConfigJson as AppListConfig}
       />
-      <BaseToolsPage key={getRandomId()}>{children}</BaseToolsPage>
-      {!isNil(relatedToolsConfigs) && !isEmpty(relatedToolsConfigs) && (
-        <RelatedTools
+      <div className="flex flex-col gap-5 w-full">
+        <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />
+        <SocialShareButtons
           key={getRandomId()}
-          relatedToolsConfigs={relatedToolsConfigs}
+          pageUrl={`${process.env.HOSTNAME}/tools/${params.pageUrl}`}
+          heading={toolConfigData.pageTitle}
         />
-      )}
-      <ToolDescription
-        key={getRandomId()}
-        descriptionData={toolDescriptionData}
-      />
-      <PageTags key={getRandomId()} tags={toolConfigData.tags} />
-      <AppFollowButtons key={getRandomId()} />
+        <div className="flex flex-col gap-2 w-full">{children}</div>
+        {!isNil(relatedToolsConfigs) && !isEmpty(relatedToolsConfigs) && (
+          <RelatedTools
+            key={getRandomId()}
+            relatedToolsConfigs={relatedToolsConfigs}
+          />
+        )}
+        <ToolDescription
+          key={getRandomId()}
+          descriptionData={toolDescriptionData}
+        />
+        <PageTags key={getRandomId()} tags={toolConfigData.tags} />
+        <AppFollowButtons key={getRandomId()} />
+      </div>
+      <BaseToolsAds className="w-full md:w-[20%]" />
     </div>
   );
 }

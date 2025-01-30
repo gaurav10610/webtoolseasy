@@ -20,7 +20,7 @@ export function AppHeading({
     <Typography
       key={getRandomId()}
       variant="h1"
-      className="text-center !text-2xl md:!text-4xl"
+      className="text-center !text-2xl md:!text-4xl !font-normal"
     >
       {heading}
     </Typography>
@@ -49,7 +49,11 @@ export function RelatedTools({
 export function AppFollowButtons() {
   return (
     <div className="flex flex-col gap-2 items-center justify-center">
-      <Typography key={getRandomId()} variant="h3" fontSize={"inherit"}>
+      <Typography
+        key={getRandomId()}
+        className="!text-lg"
+        color="textSecondary"
+      >
         Follow us on
       </Typography>
       <div className="flex flex-row gap-2">
@@ -77,7 +81,7 @@ export function PageTags({ tags }: Readonly<{ tags: string[] }>) {
   return (
     <div className="flex flex-row gap-2 justify-center flex-wrap">
       {map(tags, (tag) => (
-        <Tag label={tag} key={getRandomId()} color={"secondary"} />
+        <Tag label={tag} key={getRandomId()} color={"primary"} />
       ))}
     </div>
   );
@@ -87,7 +91,7 @@ export function ToolDescription({
   descriptionData,
 }: Readonly<{ descriptionData: DescriptionBlock[] }>) {
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className="flex flex-col w-full gap-4">
       {map(descriptionData, (descriptionBlock) => (
         <ToolDescriptionBlock
           key={getRandomId()}
@@ -105,7 +109,7 @@ function ToolDescriptionBlock({
 }>) {
   return (
     <div key={getRandomId()} className="flex flex-col w-full gap-2">
-      <Typography variant="h3" fontSize={"inherit"} color="secondary">
+      <Typography variant="h3" fontSize={"inherit"} color="info">
         {descriptionBlock.heading}
       </Typography>
       {!isNil(descriptionBlock.blockData) &&
@@ -131,7 +135,7 @@ function DescriptionLinks({
   return (
     <div className="flex flex-col gap-2">
       {map(links, (link) => (
-        <div className="flex flex-row gap-2">
+        <div key={getRandomId()} className="flex flex-row gap-2">
           <KeyboardArrowRightIcon />
           <Typography
             key={getRandomId()}
@@ -157,7 +161,7 @@ function DescriptionDataBlockData({
   return (
     <div key={getRandomId()} className="flex flex-col gap-2 w-full">
       {map(blockData, (data) => (
-        <Typography key={getRandomId()} variant="body1">
+        <Typography key={getRandomId()} variant="body1" color="textSecondary">
           {data}
         </Typography>
       ))}
@@ -175,7 +179,7 @@ function DescriptionDataListData({
       {map(listData, (data) => (
         <div key={getRandomId()} className="flex flex-row gap-2 w-full">
           <KeyboardArrowRightIcon />
-          <Typography key={getRandomId()} variant="body1">
+          <Typography key={getRandomId()} variant="body1" color="textSecondary">
             {data}
           </Typography>
         </div>
