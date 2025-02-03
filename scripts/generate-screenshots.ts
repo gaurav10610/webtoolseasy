@@ -11,7 +11,7 @@ const takeScreenshot = async (url: string, fileName: string) => {
   page.setViewport({ width: 1640, height: 856 });
   await page.goto(url);
   await delay(3000);
-  const screenshot = await page.screenshot({ fullPage: true });
+  const screenshot = await page.screenshot();
 
   const baseFolderPath = `${process.cwd()}/public/screenshots`;
 
