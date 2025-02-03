@@ -65,6 +65,7 @@ export default async function WebToolLayout(
       <SidePanel
         className="hidden w-[20%] md:flex"
         appConfigJson={appConfigJson as AppListConfig}
+        pageUrl={params.pageUrl}
       />
       <div className="flex flex-col gap-5 w-full">
         <AppHeading key={getRandomId()} heading={toolConfigData.mainHeading!} />
