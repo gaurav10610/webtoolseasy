@@ -12,17 +12,27 @@ import Link from "next/link";
 const SectionLinks = ({
   category,
   appList,
+  pageUrl,
 }: {
   category: string;
   appList: AppNavigationConfig[];
+  pageUrl: string;
 }) => {
+  const selectedPageUrl = `tools/${pageUrl}`;
   return (
     <div className="flex flex-col gap-2 w-full">
       <Typography variant="body1">{category}</Typography>
       <div className="flex flex-col gap-2 pl-3 border-l-2">
         {map(appList, (app) => (
           <Link href={`../${app.navigateUrl}`} key={getRandomId()} replace>
-            <Typography color="textSecondary" variant="body2">
+            <Typography
+              color={
+                selectedPageUrl === app.navigateUrl
+                  ? "primary"
+                  : "textSecondary"
+              }
+              variant="body2"
+            >
               {app.displayText}
             </Typography>
           </Link>
@@ -35,7 +45,12 @@ const SectionLinks = ({
 export default function SidePanel({
   className = "",
   appConfigJson,
-}: Readonly<{ className?: string; appConfigJson: AppListConfig }>) {
+  pageUrl,
+}: Readonly<{
+  className?: string;
+  appConfigJson: AppListConfig;
+  pageUrl: string;
+}>) {
   const categoryWiseAppList = groupBy(values(appConfigJson), "category");
 
   // Remove undefined category
@@ -48,6 +63,7 @@ export default function SidePanel({
           key={getRandomId()}
           category={category}
           appList={categoryWiseAppList[category] as AppNavigationConfig[]}
+          pageUrl={pageUrl}
         />
       ))}
     </div>
