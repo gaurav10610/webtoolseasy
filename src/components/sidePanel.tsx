@@ -24,7 +24,7 @@ const SectionLinks = ({
       <Typography variant="body1">{category}</Typography>
       <div className="flex flex-col gap-2 pl-3 border-l-2">
         {map(appList, (app) => (
-          <Link href={`../${app.navigateUrl}`} key={getRandomId()} replace>
+          <Link href={`../${app.navigateUrl}`} key={getRandomId()}>
             <Typography
               color={
                 selectedPageUrl === app.navigateUrl
