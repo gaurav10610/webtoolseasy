@@ -7,9 +7,11 @@ import { SkeletonWithProps } from "./lib/skeletons";
 const ToolComponentWrapper = ({
   pageUrl,
   queryParams,
+  hostname,
 }: Readonly<{
   pageUrl: string;
   queryParams: { [key: string]: string };
+  hostname: string;
 }>) => {
   const ToolComponent = dynamic(
     () => import(`@/components/tools/${pageUrl}.tsx`),
@@ -19,9 +21,7 @@ const ToolComponentWrapper = ({
     }
   ) as React.FC<ToolComponentProps>;
 
-  return (
-    <ToolComponent hostname={process.env.HOSTNAME} queryParams={queryParams} />
-  );
+  return <ToolComponent hostname={hostname} queryParams={queryParams} />;
 };
 
 export default ToolComponentWrapper;
