@@ -31,6 +31,7 @@ export default async function WebToolPage(
       <ToolComponentWrapper
         pageUrl={params.pageUrl}
         queryParams={queryParams}
+        hostname={process.env.HOSTNAME!}
       />
     </div>
   );
