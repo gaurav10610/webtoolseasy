@@ -30,9 +30,7 @@ export async function generateMetadata(
   }>
 ): Promise<Metadata> {
   const params = await props.params;
-  const { metadata } = await import(
-    `@/data/component-config/${params.pageUrl}`
-  );
+  const { metadata } = await import(`@/data/tools/${params.pageUrl}`);
   return metadata;
 }
 
@@ -47,7 +45,7 @@ export default async function WebToolLayout(
   const { children } = props;
 
   const { descriptionData, componentConfig } = await import(
-    `@/data/component-config/${params.pageUrl}`
+    `@/data/tools/${params.pageUrl}`
   );
   const toolDescriptionData = descriptionData as DescriptionBlock[];
   const toolConfigData = componentConfig as ApplicationConfig;

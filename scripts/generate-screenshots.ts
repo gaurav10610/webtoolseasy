@@ -22,7 +22,7 @@ const generateScreenshots = async () => {
 
   const baseFolderPath = `${process.cwd()}/public/screenshots`;
 
-  const dataFolders = ["component-config", "blog"];
+  const dataFolders = ["tools", "blog"];
   const screenshotsUrls: { url: string; fileName: string; folder?: string }[] =
     [
       ...[
@@ -54,7 +54,7 @@ const generateScreenshots = async () => {
     const { url, fileName, folder } = screenshotsUrls[i];
     const { screenshot } = await takeScreenshot(
       url,
-      folder === "component-config" ? 3000 : 0
+      folder === "tools" ? 3000 : 0
     );
 
     if (isNil(folder)) {
