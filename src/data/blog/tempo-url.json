@@ -1,0 +1,20 @@
+{
+  "pageMetadata": {
+    "title": "This is tempo title",
+    "description": "page description"
+  },
+  "html": "<body id=\"yoopta-clipboard\" data-editor-id=\"dd530b96-3481-4b98-8927-1dbe4fba19cf\"><dl data-theme=\"success\" data-meta-align=\"left\" data-meta-depth=\"0\" style=\"margin-left: 0px; text-align: left; padding: .5rem .5rem .5rem 1rem; margin-top: .5rem; border-radius: .375rem; color: #12b77f; border-left: 4px solid #12b77f; background-color: #d1fae5\">scwecwevrwvrv</dl><h2 data-meta-align=\"left\" data-meta-depth=\"0\" style=\"margin-left: 0px; text-align: left\">This is H2 heading</h2><div style=\"margin-left: 0px; display: flex; width: 100%; justify-content: center;\">\n        <img data-meta-align=\"center\" data-meta-depth=\"0\" src=\"/media/1739260444513.png\" alt=\"noukrinotify\" width=\"650\" height=\"217\" objectFit=\"contain\"/>\n        </div></body>",
+  "heading": "This is H1 heading",
+  "pageUrl": "/blog/tempo-url",
+  "updatedAt": "2025-02-11T07:49:57.339Z",
+  "updatedBy": {
+    "name": "Gaurav Kumar Yadav",
+    "gender": "M"
+  },
+  "tags": [
+    "tag1",
+    "tag2",
+    "tag3"
+  ],
+  "isDisabled": "YES"
+}

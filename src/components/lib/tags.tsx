@@ -8,7 +8,14 @@ export function Tag({
 }: Readonly<{
   label: string;
   variant?: "filled" | "outlined";
-  color?: "default" | "primary" | "secondary";
+  color?:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
   sx?: Record<string, unknown>;
 }>) {
   return BasicChip({ label, variant, color, sx });

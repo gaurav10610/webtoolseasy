@@ -105,3 +105,16 @@ export function getFileExtension(fileName: string): string {
 export function getFormattedFileName(fileName: string): string {
   return fileName.replace(/[^a-zA-Z0-9.]/g, "_");
 }
+
+export const formatUpdatedAt = (date: Date): string => {
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" });
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12;
+  const time = `${formattedHours}:${minutes} ${ampm}`;
+
+  return `${day} ${month} ${year} | ${time}`;
+};
