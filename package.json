@@ -46,7 +46,8 @@
     "rehype-sanitize": "^6.0.0",
     "request": "^2.88.2",
     "uuid": "^11.0.3",
-    "video-stream-merger": "^4.0.1"
+    "video-stream-merger": "^4.0.1",
+    "xml-formatter": "^3.6.4"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
