@@ -6,10 +6,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { AppNavigationConfig } from "@/types/config";
 import { RelatedToolCard } from "./appCards";
 import { Tag } from "./lib/tags";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import XIcon from "@mui/icons-material/X";
-import Link from "next/link";
 
 export function AppHeading({
   heading,
@@ -41,37 +37,6 @@ export function RelatedTools({
         {map(relatedToolsConfigs, (relatedToolConfig) => (
           <RelatedToolCard key={getRandomId()} config={relatedToolConfig} />
         ))}
-      </div>
-    </div>
-  );
-}
-
-export function AppFollowButtons() {
-  return (
-    <div className="flex flex-col gap-2 items-center justify-center">
-      <Typography
-        key={getRandomId()}
-        className="!text-lg"
-        color="textSecondary"
-      >
-        Follow us on
-      </Typography>
-      <div className="flex flex-row gap-2">
-        <Link
-          href="https://www.facebook.com/people/Webtoolseasy/100088911459047/"
-          target="_blank"
-        >
-          <FacebookIcon fontSize="medium" color="primary" />
-        </Link>
-        <Link
-          href="https://www.linkedin.com/company/webtoolseasy/"
-          target="_blank"
-        >
-          <LinkedInIcon fontSize="medium" color="primary" />
-        </Link>
-        <Link href="https://twitter.com/webtoolseasy" target="_blank">
-          <XIcon fontSize="medium" color="inherit" />
-        </Link>
       </div>
     </div>
   );

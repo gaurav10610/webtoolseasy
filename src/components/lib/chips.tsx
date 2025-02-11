@@ -39,7 +39,14 @@ export function BasicChip({
 }: Readonly<{
   label: string;
   variant?: "filled" | "outlined";
-  color?: "default" | "primary" | "secondary";
+  color?:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
   sx?: Record<string, unknown>;
   size?: "small" | "medium";
 }>) {
@@ -68,7 +75,14 @@ export function ChipWithLink({
   label: string;
   variant?: "filled" | "outlined";
   href: string;
-  color?: "default" | "primary" | "secondary";
+  color?:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
   sx?: Record<string, unknown>;
   size?: "small" | "medium";
   onChipClick?: (label: string) => void;
