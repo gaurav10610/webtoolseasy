@@ -89,7 +89,7 @@ export default function Home() {
   delete categoryWiseAppList["undefined"];
 
   return (
-    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
+    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
       <BaseToolsAds className="w-full md:w-[20%]" />
       <div className="flex flex-col gap-4 items-center w-full">
         <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />

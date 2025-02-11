@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "pageUrl": "/blog/decoding-jwt-comprehensive-guide",
+    "heading": "Decoding JSON Web Tokens (JWTs): A Comprehensive Guide",
+    "updatedAt": "2025-02-11T08:25:36.574Z",
+    "updatedBy": {
+      "name": "Gaurav Kumar Yadav",
+      "gender": "M"
+    }
+  }
+]
