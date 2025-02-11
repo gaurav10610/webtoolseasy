@@ -3,14 +3,9 @@ import { robotoFont } from "@/design";
 import { theme } from "@/theme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { ResponsiveAppBar } from "@/components/lib/appBar";
-import { getRandomId } from "@/util/commonUtils";
-import Typography from "@mui/material/Typography";
-import Link from "next/link";
-import ApplicationIcon from "@/data/icons/app-icon.svg";
-import { CustomSvgIcon } from "@/components/lib/icons";
-import HomeIcon from "@/data/icons/home.svg";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import HeaderAppBar from "@/components/headerAppBar";
+import { CommonSiteData } from "@/components/commonSiteData";
 
 export default function RootLayout({
   children,
@@ -25,32 +20,12 @@ export default function RootLayout({
             {process.env.NODE_ENV === "production" && (
               <GoogleAnalytics gaId={process.env.GA_CODE!} />
             )}
-            <div className="w-full flex flex-col overflow-y-hidden">
-              <ResponsiveAppBar>
-                <div className="flex flex-row gap-2 w-full items-center">
-                  <Link href="/" key={getRandomId()}>
-                    <CustomSvgIcon size="large">
-                      <ApplicationIcon />
-                    </CustomSvgIcon>
-                  </Link>
-                  <Link
-                    href="/"
-                    passHref
-                    key={getRandomId()}
-                    className="flex-grow"
-                  >
-                    <Typography className="!text-xl !font-medium">
-                      WebToolsEasy
-                    </Typography>
-                  </Link>
-                  <Link href="/" passHref>
-                    <CustomSvgIcon size="large">
-                      <HomeIcon />
-                    </CustomSvgIcon>
-                  </Link>
-                </div>
-              </ResponsiveAppBar>
-              <div className="p-2 w-full h-full">{children}</div>
+            <HeaderAppBar className="mb-4" />
+            <div className="p-2 w-full h-full relative mb-4">{children}</div>
+            <div className="flex flex-row w-full gap-2 mb-4 p-2">
+              <span className="hidden md:block w-[20%]"></span>
+              <CommonSiteData className="w-full" />
+              <span className="hidden md:block w-[20%]"></span>
             </div>
           </ThemeProvider>
         </AppRouterCacheProvider>

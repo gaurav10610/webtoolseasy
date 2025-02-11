@@ -1,0 +1,36 @@
+.blog-div h1 {
+  @apply text-center text-2xl md:text-4xl font-normal;
+}
+
+.blog-div h2 {
+  @apply text-center text-xl md:text-2xl font-normal;
+}
+
+.blog-div h3 {
+  @apply text-center text-lg md:text-xl font-normal;
+}
+
+.blog-div h4 {
+  @apply text-center text-base md:text-lg font-normal;
+}
+
+.blog-div table {
+  @apply w-full border-collapse;
+}
+
+.blog-div th,
+.blog-div td {
+  @apply border border-gray-300;
+}
+
+.blog-div tr {
+  @apply border-b border-gray-300;
+}
+
+.blog-div ul {
+  @apply list-disc list-inside;
+}
+
+.blog-div ol {
+  @apply list-disc list-inside;
+}
