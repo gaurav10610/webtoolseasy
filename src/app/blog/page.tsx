@@ -1,5 +1,5 @@
 import { join, map } from "lodash-es";
-import blogList from "@/data/overviewList.json";
+import blogList from "@/data/blogList.json";
 import BlogList from "@/components/blogList";
 
 const pageTitle = "NaukriNotify - Blog";

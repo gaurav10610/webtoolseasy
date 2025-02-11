@@ -49,7 +49,7 @@ export async function updateJsonFile({
 
   const { pageUrl } = data;
 
-  const blogListPath = `${process.cwd()}/src/data/overviewList.json`;
+  const blogListPath = `${process.cwd()}/src/data/blogList.json`;
   const blogListData = readFileSync(blogListPath, "utf8");
   const blogListJson = JSON.parse(blogListData) as BlogEntityOverview[];
 

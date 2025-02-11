@@ -37,6 +37,14 @@ function SocialFollowButtons() {
   );
 }
 
+function CopyRight() {
+  return (
+    <Typography variant="caption" color="textSecondary">
+      © 2024-2025. All rights reserved.{" "}
+    </Typography>
+  );
+}
+
 export async function CommonSiteData({
   className = "",
 }: {
@@ -45,6 +53,7 @@ export async function CommonSiteData({
   return (
     <div className={`flex flex-col items-center gap-3 ${className}`}>
       <SocialFollowButtons />
+      <CopyRight />
     </div>
   );
 }
