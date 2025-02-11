@@ -6,7 +6,7 @@ const navigationUrl = "/tools/cron-expression";
 const pageTitle = "Online Cron Expression Generator: Create Cron Expressions";
 const pageDescription =
   "Generate cron expressions for your tasks with ease with our free online cron expression generator tool. Graphically generate cron expressions online.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/cron-expression.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
   "online cron expression generator,generate cron expression,cron expression generator tool,cron expression,cron job,schedule task,free cron expression generator,supports all cron expression fields";

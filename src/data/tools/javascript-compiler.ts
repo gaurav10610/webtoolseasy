@@ -6,7 +6,7 @@ const navigationUrl = "/tools/javascript-compiler";
 const pageTitle = "Online JavaScript Compiler: Compile JS Code in Browser";
 const pageDescription =
   "Compile and execute JavaScript code directly in your browser with our lightning-fast, feature-rich online compiler. Perfect for beginners, students, and professionals alike.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/javascript-compiler.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/javascript-compiler.png`;
 
 const keywords =
   "online javascript compiler, javascript compiler, javascript online, run javascript online, code javascript online, free javascript compiler, compile js online, online js compiler, run javascript in browser, run js in browser";

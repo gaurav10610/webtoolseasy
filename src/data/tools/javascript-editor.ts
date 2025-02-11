@@ -6,7 +6,7 @@ const navigationUrl = "/tools/javascript-editor";
 const pageTitle = "Online JavaScript Editor: Write and Edit JavaScript Code";
 const pageDescription =
   "Write, edit, and run JavaScript code directly from your browser with our free online JavaScript editor. Create interactive web pages with ease.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/js-editor.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-editor.png`;
 
 const keywords =
   "online JavaScript editor,write JavaScript code,edit JavaScript code,run JavaScript code,free JavaScript editor,supports all JavaScript elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online JavaScript editor,test your code before publishing,online js editor,js online editor,javascript ide online,js ide online,java script online editor,javascript compile online";

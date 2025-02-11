@@ -6,7 +6,7 @@ const navigationUrl = "/tools/password-generator";
 const pageTitle = "Free Password Generator: Generate Strong & Secure Passwords";
 const pageDescription =
   "Generate strong, random, unique and secure passwords with our free password generator tool. Generate single passwords or generate passwords in bulk.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/password-generator.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/password-generator.png`;
 
 const keywords =
   "password generator,strong password generator,create secure passwords,unique passwords,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator";

@@ -6,7 +6,7 @@ const navigationUrl = "/tools/css-formatter";
 const pageTitle = "CSS Beautifier and Formatter: Beautify and Format CSS Code";
 const pageDescription =
   "Beautify and format your CSS code with ease with our free online CSS beautifier and formatter tool. No download required, no sign-up required.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/css-format.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/css-format.png`;
 
 const keywords =
   "online CSS beautifier and formatter,beautify CSS code,format CSS code,CSS beautifier and formatter tool,CSS code formatter,CSS code style,improve CSS code readability,make CSS code more consistent,follow CSS code style guidelines,free CSS beautifier and formatter,CSS code formatting errors";

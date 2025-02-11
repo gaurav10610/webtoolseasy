@@ -6,7 +6,7 @@ const navigationUrl = "/tools/guid-generator";
 const pageTitle = "Online GUID Generator: Generate Single or Bulk GUID";
 const pageDescription =
   "Our free online GUID generator tool is a quick and easy way to generate globally unique identifiers (GUIDs), either individually or in bulk.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/guid-generator.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/guid-generator.png`;
 
 const keywords =
   "GUID generator, GUID generator online, GUID generator free, GUID, globally unique identifier, UUID, universally unique identifier, generate GUID, generate GUID online, generate GUID free, single GUID, bulk GUID, bulk GUID generator";

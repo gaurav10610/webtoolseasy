@@ -6,7 +6,7 @@ const navigationUrl = "/tools/html-editor";
 const pageTitle = "Online HTML and CSS Editor with Real-Time Preview";
 const pageDescription =
   "Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. Create responsive web pages with ease.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/html-editor.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-editor.png`;
 
 const keywords =
   "online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor";

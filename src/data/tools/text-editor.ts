@@ -6,7 +6,7 @@ const navigationUrl = "/tools/text-editor";
 const pageTitle = "Online Text Editor: Write, Edit Plain Text on Notepad";
 const pageDescription =
   "Unleash your inner novelist, blogger, or student with our distraction-free online text editor. Write with laser focus, format with ease, and access your work from anywhere.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/text-editor.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-editor.png`;
 
 const keywords =
   "online text editor, online notepad, writing tool, distraction-free writing, cloud-based storage, real-time collaboration, export options, focus mode, writing tips, creative writing, student writing, professional writing";

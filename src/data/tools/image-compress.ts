@@ -6,7 +6,7 @@ const navigationUrl = "/tools/image-compress";
 const pageTitle = "Free Image Compressor: Reduce Image File Size";
 const pageDescription =
   "Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/image-compressor.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-compressor.png`;
 
 const keywords =
   "free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images,picture compressor,pic compressor,photo size reducer,reduce resolution of image";

@@ -6,7 +6,7 @@ const navigationUrl = "/tools/markdown-editor";
 const pageTitle = "Free Online Markdown Editor: Preview Markdown in Real Time";
 const pageDescription =
   "Write, edit and preview Markdown in real time with our free online Markdown editor. Create, edit and preview ReadME and Md Online.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/markdown-editor.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-editor.png`;
 
 const keywords =
   "online Markdown editor,write Markdown,preview Markdown,real-time preview,export Markdown to HTML,export Markdown to PDF,export Markdown to Microsoft Word,free Markdown editor,no download required,supports Markdown syntax,Markdown syntax highlighting,share Markdown documents,md editors,md markup editor,md editor online";

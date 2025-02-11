@@ -6,7 +6,7 @@ const navigationUrl = "/tools/uuid-v4-generator";
 const pageTitle = "UUID v4 Generator: Generate Single or Bulk UUID v4";
 const pageDescription =
   "Our free online UUID v4 generator tool is a quick and easy way to generate universally unique identifiers (UUIDs), either individually or in bulk.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/uuid-v4-generator.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
   "UUID v4 generator, UUID generator online, UUID generator free, UUID v4, UUID, universally unique identifier, GUID, globally unique identifier, generate UUID, generate UUID online, generate UUID free";

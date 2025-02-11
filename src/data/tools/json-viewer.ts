@@ -6,7 +6,7 @@ const navigationUrl = "/tools/json-viewer";
 const pageTitle = "Free Online JSON Viewer: View Your JSON in a Tree Structure";
 const pageDescription =
   "View your JSON data in a tree structure with our free online JSON viewer tool. No download required, no sign-up required.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/json-viewer.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-viewer.png`;
 
 const keywords =
   "online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,JSON beautifier,expand and collapse,search JSON data";

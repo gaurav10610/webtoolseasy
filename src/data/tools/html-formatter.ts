@@ -7,7 +7,7 @@ const pageTitle =
   "HTML Beautifier and Formatter: Beautify and Format HTML Code";
 const pageDescription =
   "Beautify your HTML code with ease with our free online HTML beautifier tool. No download required, no sign-up required.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/html-format.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
 
 const keywords =
   "online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,HTML code formatting errors";

@@ -7,7 +7,7 @@ const pageTitle =
   "Free Word Count Tool: Count Words, Characters, and Sentences";
 const pageDescription =
   "Our free online word, character, and sentence count tool is quick, and easy, and lets you count the number of words, characters, and sentences in your text.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/word-counter.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/word-counter.png`;
 
 const keywords =
   "word count tool, character count tool, sentence count tool, free word count tool, free character count tool, free sentence count tool, online word count tool, online character count tool, online sentence count tool, word counter, character counter, sentence counter, word count, character count, sentence count";

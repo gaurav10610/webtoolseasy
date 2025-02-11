@@ -6,7 +6,7 @@ const navigationUrl = "/tools/screen-recorder";
 const pageTitle = "Free Screen Recorder: Record Your Screen with Audio, Webcam";
 const pageDescription =
   "Record your screen with audio and webcam for free with our online screen recorder. Record screen with no watermark and no time limit. No sign-up required.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/screen-recorder.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/screen-recorder.png`;
 
 const keywords =
   "online screen recorder,free screen recorder,screen recorder with audio,screen recorder with webcam,screen recorder for tutorials,screen recorder for demos,screen recorder for video lectures,screen recorder for webinars,screen recorder for gameplay,screen recorder for Windows,screen recorder for Mac,screen recorder for Chromebook,screen recorder for Linux, no watermark, no time limit screen recording";

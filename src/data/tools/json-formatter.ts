@@ -7,7 +7,7 @@ const pageTitle =
   "JSON Beautifier and Formatter: Beautify and Format Your JSON";
 const pageDescription =
   "Beautify and format your JSON data with ease with our free online JSON beautifier and formatter tool. No download required, no sign-up required.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/json-format.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-format.png`;
 
 const keywords =
   "online JSON beautifier and formatter,beautify JSON data,format JSON data,JSON beautifier and formatter tool,JSON data formatter,JSON data style,improve JSON data readability,make JSON data more consistent,follow JSON data style guidelines,free JSON beautifier and formatter,JSON data formatting errors";

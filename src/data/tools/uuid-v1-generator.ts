@@ -6,7 +6,7 @@ const navigationUrl = "/tools/uuid-v1-generator";
 const pageTitle = "UUID v1 Generator: Generate Single or Bulk UUID v1";
 const pageDescription =
   "Our free online UUID v1 generator tool is a quick and easy way to generate UUIDs based on MAC address and time, either individually or in bulk.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/uuid-v1-generator.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v1-generator.png`;
 
 const keywords =
   "UUID v1 generator, UUID generator online, UUID generator free, UUID v1, UUID, universally unique identifier, GUID, globally unique identifier, generate UUID, generate UUID online, generate UUID free, MAC address, time, timestamp";

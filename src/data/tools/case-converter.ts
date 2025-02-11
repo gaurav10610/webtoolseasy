@@ -6,7 +6,7 @@ const navigationUrl = "/tools/case-converter";
 const pageTitle = "Online Case Converter: Convert Text to Uppercase, Lowercase";
 const pageDescription =
   "Convert text to any case with ease using our free online case converter tool. Convert text to uppercase, lowercase, sentence case, title case, and more.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/case-converter.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/case-converter.png`;
 
 const keywords =
   "case converter,convert text to any case,free case converter,easy to use,uppercase,lowercase,sentence case,title case,case types,format text,learn about case";

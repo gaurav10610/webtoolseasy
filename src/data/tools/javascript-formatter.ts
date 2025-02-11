@@ -6,7 +6,7 @@ const navigationUrl = "/tools/javascript-formatter";
 const pageTitle = "JavaScript Beautifier and Formatter: Beautify and Format JS";
 const pageDescription =
   "Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/js-format.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-format.png`;
 
 const keywords =
   "online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors";

@@ -6,7 +6,7 @@ const navigationUrl = "/tools/qr-code-generator";
 const pageTitle = "Free QR Code Generator: Generate QR Codes with Free Text";
 const pageDescription =
   "Generate custom QR codes for free with our easy to use online QR code generator tool. QR code builder. Generate QR code with free text.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/cron-expression.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
   "online qr code generator,qr code generator,qr code,create qr code,qr code types,free qr code generator,generate qr,qr code builder,quick response code";

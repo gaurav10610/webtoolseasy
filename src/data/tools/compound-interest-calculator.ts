@@ -6,7 +6,7 @@ const navigationUrl = "/tools/compound-interest-calculator";
 const pageTitle = "Compound Interest Calculator: Calculate Compound Interest";
 const pageDescription =
   "Calculate compound interest with our compound interest calculator. Simply enter your amount, interest rate, and investment term, to calculate compound interest.";
-const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/compound-interest-calculator.png`;
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/compound-interest-calculator.png`;
 
 const keywords =
   "compound interest calculator,calculate compound interest,compound interest,future earnings calculator,investment calculator,financial calculator,free compound interest calculator,no download required,easy to use,customizable settings,compounding frequency,reinvest earnings,financial goals,financial planning";
