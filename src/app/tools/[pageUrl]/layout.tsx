@@ -6,7 +6,6 @@ import {
 } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import {
-  AppFollowButtons,
   AppHeading,
   PageTags,
   RelatedTools,
@@ -86,7 +85,6 @@ export default async function WebToolLayout(
           descriptionData={toolDescriptionData}
         />
         <PageTags key={getRandomId()} tags={toolConfigData.tags} />
-        <AppFollowButtons key={getRandomId()} />
       </div>
       <BaseToolsAds className="w-full md:w-[20%]" />
     </div>

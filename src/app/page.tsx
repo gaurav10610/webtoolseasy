@@ -1,4 +1,4 @@
-import { AppFollowButtons, AppHeading } from "@/components/commonComponents";
+import { AppHeading } from "@/components/commonComponents";
 import { getRandomId } from "@/util/commonUtils";
 import * as appConfigJson from "@/data/apps.json";
 import { AppListConfig, AppNavigationConfig } from "@/types/config";
@@ -108,7 +108,6 @@ export default function Home() {
             );
           })}
         </div>
-        <AppFollowButtons />
       </div>
       <BaseToolsAds className="w-full md:w-[20%]" />
     </div>
