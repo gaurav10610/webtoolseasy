@@ -45,24 +45,21 @@ const AdminControls = () => {
   );
 };
 
-/**
- * @TODO - Change social share heading afterwards in this component
- * and in naukrinotify as well
- *
- * @param param0
- * @returns
- */
 export default async function BlogList({
   blogList,
 }: Readonly<{ blogList: BlogEntityOverview[] }>) {
   return (
-    <div className="w-full flex flex-col gap-3">
+    <div className="w-full flex flex-col gap-3 items-center">
       {process.env.NODE_ENV !== "production" && <AdminControls />}
-      <H1Heading heading={"This is blog page!!"} />
+      <H1Heading heading="WEBTOOLSEASY BLOG" />
+      <Typography variant="body1" color="textSecondary">
+        Discover the latest online web tools and technologies on the
+        WebToolsEasy blog
+      </Typography>
       <SocialShareButtons
         key={getRandomId()}
         pageUrl={`${process.env.HOSTNAME}/blog`}
-        heading={"This is heading"}
+        heading={"WEBTOOLSEASY BLOG"}
       />
       {map(blogList, (blogEntityOverview) => (
         <BlogOverviewListItem

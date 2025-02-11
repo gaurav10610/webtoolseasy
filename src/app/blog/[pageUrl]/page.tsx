@@ -26,7 +26,7 @@ export async function generateMetadata(
     },
     title: jsonData.pageMetadata.title,
     description: jsonData.pageMetadata.description,
-    icons: "/app-icon1.svg",
+    icons: "/favicon.png",
     authors: {
       name: "Gaurav Kumar Yadav",
     },
@@ -38,11 +38,11 @@ export async function generateMetadata(
       url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
       images: [`/screenshots/blog/${pageUrl}.png`],
       description: jsonData.pageMetadata.description,
-      siteName: "NaukriNotify",
+      siteName: "WebToolsEasy",
     },
     twitter: {
       card: "summary_large_image",
-      site: "@naukrinotify",
+      site: "@webtoolseasy",
       title: jsonData.pageMetadata.title,
       description: jsonData.pageMetadata.title,
       images: [`/screenshots/blog/${pageUrl}.png`],
