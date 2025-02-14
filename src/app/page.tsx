@@ -162,7 +162,7 @@ export default function Home() {
           aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: String(random(4, 5, true)),
-            ratingCount: String(random(100, 1000)),
+            ratingCount: random(100, 1000),
           },
           offers: {
             "@type": "Offer",
