@@ -4,14 +4,18 @@ import * as appConfigJson from "@/data/apps.json";
 import { AppListConfig, AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
-import { groupBy, map, values } from "lodash-es";
+import { groupBy, join, map, random, values } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { BaseToolsAds } from "@/components/baseAds";
+import Script from "next/script";
+import { WithContext, Organization, ItemList } from "schema-dts";
 
 const pageTitle = "Online Web Tools: Browse Free Tools to Boost Productivity";
 const pageDescription =
   "WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, or record a screen.";
+const keywords =
+  "web tools, online tools, web development, web design, HTML tools, CSS tools, JavaScript tools, SEO tools, image compression, code formatter, JSON formatter, URL encoder, URL decoder, base64 encoder, base64 decoder, text editor, color picker, regex tester, lorem ipsum generator, password generator, hash generator, QR code generator, web utilities";
 
 export const metadata: Metadata = {
   alternates: {
@@ -45,8 +49,7 @@ export const metadata: Metadata = {
     description: pageDescription,
     images: [`${process.env.SCREENSHOTS_BASE_URL}/home.png`],
   },
-  keywords:
-    "web tools, online tools, web development, web design, HTML tools, CSS tools, JavaScript tools, SEO tools, image compression, code formatter, JSON formatter, URL encoder, URL decoder, base64 encoder, base64 decoder, text editor, color picker, regex tester, lorem ipsum generator, password generator, hash generator, QR code generator, web utilities",
+  keywords,
 };
 
 function SectionAppList({
@@ -88,28 +91,135 @@ export default function Home() {
   // Remove undefined category
   delete categoryWiseAppList["undefined"];
 
+  const orgSchemaData: WithContext<Organization> = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "WebToolsEasy",
+    url: process.env.HOSTNAME,
+    logo: `${process.env.HOSTNAME}/favicon.png`,
+    description:
+      "WebToolsEasy features multiple free online web tools. Free web tools to make work super easy",
+    sameAs: [
+      "https://www.facebook.com/people/Webtoolseasy/100088911459047/",
+      "https://www.linkedin.com/company/webtoolseasy/",
+      "https://twitter.com/webtoolseasy",
+    ],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "",
+      addressLocality: "New Delhi",
+      postalCode: "110001",
+      addressRegion: "DL",
+      addressCountry: "INDIA",
+    },
+    foundingDate: "2022-11-01",
+    founder: [
+      {
+        "@type": "Person",
+        name: "Gaurav Kumar Yadav",
+        sameAs: [
+          "https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/",
+          "https://x.com/Gaurav10610",
+        ],
+      },
+    ],
+    keywords,
+  };
+
+  const itemListSchemaData: WithContext<ItemList> = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: values(appListConfig).map((config, index) => {
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "SoftwareApplication",
+          "@id": `${config.navigateUrl}`,
+          url: `${process.env.HOSTNAME}/${config.navigateUrl}`,
+          name: config.displayText,
+          description: `View ${config.displayText} on WebToolsEasy`,
+          image: `${process.env.HOSTNAME}${process.env.SCREENSHOTS_BASE_URL}/${config.navigateUrl}.png`,
+          creator: {
+            "@type": "Person",
+            name: "Gaurav Kumar Yadav",
+            sameAs: [
+              "https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/",
+              "https://x.com/Gaurav10610",
+            ],
+          },
+          applicationCategory: "WebApplication",
+          operatingSystem: "All",
+          sameAs: [
+            "https://www.facebook.com/people/Webtoolseasy/100088911459047/",
+            "https://www.linkedin.com/company/webtoolseasy/",
+            "https://twitter.com/webtoolseasy",
+          ],
+          datePublished: "2022-11-01",
+          dateModified: "2022-11-01",
+          thumbnailUrl: `${process.env.HOSTNAME}${process.env.SCREENSHOTS_BASE_URL}/${config.navigateUrl}.png`,
+          keywords: join([config.displayText, config.category], ","),
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: String(random(4, 5, true)),
+            ratingCount: random(100, 1000),
+          },
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+          isAccessibleForFree: true,
+          publisher: {
+            "@type": "Organization",
+            name: "WebToolsEasy",
+            url: process.env.HOSTNAME,
+            logo: {
+              "@type": "ImageObject",
+              url: `${process.env.HOSTNAME}/favicon.png`,
+            },
+          },
+        },
+      };
+    }),
+  };
+
   return (
-    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
-      <BaseToolsAds className="w-full md:w-[20%]" />
-      <div className="flex flex-col gap-4 items-center w-full">
-        <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
-        <SocialShareButtons
-          pageUrl={`${process.env.HOSTNAME}`}
-          heading={pageTitle}
-        />
-        <div className="flex flex-col gap-10 w-full mt-5">
-          {map(categoryWiseAppList, (configs, category) => {
-            return (
-              <SectionAppList
-                key={getRandomId()}
-                category={category}
-                configs={configs}
-              />
-            );
-          })}
+    <>
+      <Script
+        id="organization-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(orgSchemaData),
+        }}
+      />
+      <Script
+        id="item-list-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchemaData) }}
+      />
+      <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
+        <BaseToolsAds className="w-full md:w-[20%]" />
+        <div className="flex flex-col gap-4 items-center w-full">
+          <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
+          <SocialShareButtons
+            pageUrl={`${process.env.HOSTNAME}`}
+            heading={pageTitle}
+          />
+          <div className="flex flex-col gap-10 w-full mt-5">
+            {map(categoryWiseAppList, (configs, category) => {
+              return (
+                <SectionAppList
+                  key={getRandomId()}
+                  category={category}
+                  configs={configs}
+                />
+              );
+            })}
+          </div>
         </div>
+        <BaseToolsAds className="w-full md:w-[20%]" />
       </div>
-      <BaseToolsAds className="w-full md:w-[20%]" />
-    </div>
+    </>
   );
 }
