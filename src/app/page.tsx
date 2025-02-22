@@ -4,7 +4,7 @@ import * as appConfigJson from "@/data/apps.json";
 import { AppListConfig, AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
-import { groupBy, join, map, random, values } from "lodash-es";
+import { groupBy, join, map, values } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { BaseToolsAds } from "@/components/baseAds";
@@ -160,11 +160,6 @@ export default function Home() {
           dateModified: "2022-11-01",
           thumbnailUrl: `${process.env.HOSTNAME}${process.env.SCREENSHOTS_BASE_URL}/${config.navigateUrl}.png`,
           keywords: join([config.displayText, config.category], ","),
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: String(random(4, 5, true)),
-            ratingCount: random(100, 1000),
-          },
           offers: {
             "@type": "Offer",
             price: "0",
