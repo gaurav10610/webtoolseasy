@@ -133,6 +133,7 @@ export default function Home() {
       return {
         "@type": "ListItem",
         position: index + 1,
+        name: config.displayText,
         item: {
           "@type": "SoftwareApplication",
           "@id": `${config.navigateUrl}`,
