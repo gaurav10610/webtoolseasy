@@ -154,9 +154,8 @@ export default function QrCodeGenerator({
       />
       <Typography
         variant="body1"
-        fontSize={"inherit"}
-        color="primary"
-        className="w-full"
+        color="textSecondary"
+        className="!text-xl !font-semibold !w-full"
       >
         QR Code Free Text
       </Typography>

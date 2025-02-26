@@ -108,7 +108,7 @@ function DescriptionLinks({
             component={"a"}
             color="primary"
             target="_blank"
-            className="underline"
+            className="no-underline hover:underline"
           >
             {link.displayText}
           </Typography>
