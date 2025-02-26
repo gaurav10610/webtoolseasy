@@ -48,7 +48,11 @@ export default function CaseConverter() {
 
   return (
     <div className="flex flex-col gap-2">
-      <Typography variant="body1" color="primary">
+      <Typography
+        variant="body1"
+        color="textSecondary"
+        className="!text-xl !font-semibold !w-full"
+      >
         Text (Paste Your Text Here)
       </Typography>
       <TextField multiline rows={5} onChange={onTextChange} value={text} />

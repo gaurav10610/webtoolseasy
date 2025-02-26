@@ -283,7 +283,7 @@ export default function PasswordGenerator() {
         )}
 
         <ButtonWithHandler
-          buttonText="Download bulk uuids to file"
+          buttonText="Download bulk passwords to file"
           variant="outlined"
           onClick={downloadPasswords}
           startIcon={<DownloadIcon />}
