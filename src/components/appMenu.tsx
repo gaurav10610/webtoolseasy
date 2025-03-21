@@ -25,11 +25,7 @@ export default function AppMenu({ className = "" }: { className?: string }) {
           className="!no-underline"
           title={`Go to ${menuItem.label} Page`}
         >
-          <Typography
-            variant="body1"
-            className="text-white !font-semibold !"
-            color="textPrimary"
-          >
+          <Typography variant="body1" color="textPrimary">
             {menuItem.label}
           </Typography>
         </Link>

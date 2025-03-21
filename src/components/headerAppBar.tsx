@@ -24,7 +24,7 @@ export default function HeaderAppBar({
                   WebToolsEasy
                 </Typography>
                 <Typography variant="caption" className="!italic">
-                  (Free Online Web Tools to Make Work Your Super Easy)
+                  (Online Web Tools – Editors, Finance, Programming & More)
                 </Typography>
               </div>
             </div>
