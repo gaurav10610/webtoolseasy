@@ -108,8 +108,7 @@ export default function Home() {
     name: "WebToolsEasy",
     url: process.env.HOSTNAME,
     logo: `${process.env.HOSTNAME}/favicon.png`,
-    description:
-      "WebToolsEasy features multiple free online web tools. Free web tools to make work super easy",
+    description: pageDescription,
     sameAs: [
       "https://www.facebook.com/people/Webtoolseasy/100088911459047/",
       "https://www.linkedin.com/company/webtoolseasy/",
