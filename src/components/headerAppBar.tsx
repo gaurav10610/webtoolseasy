@@ -18,9 +18,7 @@ export default function HeaderAppBar({
             <CustomSvgIcon size="large">
               <ApplicationIcon />
             </CustomSvgIcon>
-            <Typography className="!text-xl !font-medium">
-              WebToolsEasy
-            </Typography>
+            <Typography className="!text-xl">WebToolsEasy</Typography>
           </div>
         </Link>
         <AppMenu />
