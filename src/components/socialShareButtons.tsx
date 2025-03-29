@@ -12,9 +12,10 @@ import {
 } from "next-share";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import { getRandomId } from "@/util/commonUtils";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { SnackBarWithPosition } from "./lib/snackBar";
 import { useState } from "react";
+import ShareIcon from "@mui/icons-material/Share";
 
 export const SocialShareButtons = ({
   pageUrl,
@@ -39,13 +40,7 @@ export const SocialShareButtons = ({
         autoHideDuration={2000}
         handleClose={handleSnackBarClose}
       />
-      <Typography
-        key={getRandomId()}
-        color="textSecondary"
-        className="!text-lg"
-      >
-        Share:
-      </Typography>
+      <ShareIcon fontSize="medium" />
       <FacebookShareButton
         key={getRandomId()}
         url={pageUrl}

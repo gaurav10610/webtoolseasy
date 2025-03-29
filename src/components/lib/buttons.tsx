@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 
 import type { JSX } from "react";
+import React from "react";
 
 export function ButtonWithHandler({
   size = "medium",
@@ -63,7 +64,7 @@ export function ButtonWithLink({
     | "error"
     | "info"
     | "warning";
-  buttonText: string;
+  buttonText: string | React.ReactNode;
   href: string;
   className?: string;
   title?: string;
