@@ -51,6 +51,7 @@ export function ButtonWithLink({
   buttonText,
   href,
   className = "",
+  title = "",
 }: Readonly<{
   size?: "small" | "medium" | "large";
   variant?: "text" | "outlined" | "contained";
@@ -65,9 +66,10 @@ export function ButtonWithLink({
   buttonText: string;
   href: string;
   className?: string;
+  title?: string;
 }>): JSX.Element {
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} title={title}>
       <Button size={size} variant={variant} color={color} className="w-full">
         {buttonText}
       </Button>
