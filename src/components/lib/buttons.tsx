@@ -71,7 +71,12 @@ export function ButtonWithLink({
 }>): JSX.Element {
   return (
     <Link href={href} className={className} title={title}>
-      <Button size={size} variant={variant} color={color} className="w-full">
+      <Button
+        size={size}
+        variant={variant}
+        color={color}
+        className={`w-full ${className}`}
+      >
         {buttonText}
       </Button>
     </Link>
