@@ -16,11 +16,11 @@ export const menuItems = [
 
 export default function AppMenu({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-row gap-1 justify-start ${className}`}>
+    <div className={`flex flex-row gap-2 justify-start ${className}`}>
       {map(menuItems, (menuItem) => (
         <ButtonWithLink
           buttonText={
-            <Typography color="textPrimary" variant="body2">
+            <Typography color="primary" variant="body2">
               {menuItem.label}
             </Typography>
           }
@@ -28,8 +28,9 @@ export default function AppMenu({ className = "" }: { className?: string }) {
           key={getRandomId()}
           title={`Go to ${menuItem.label} Page`}
           size="small"
-          variant="text"
+          variant="outlined"
           color="primary"
+          className="!capitalize"
         />
       ))}
     </div>
