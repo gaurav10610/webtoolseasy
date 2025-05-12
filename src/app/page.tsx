@@ -12,11 +12,11 @@ import Script from "next/script";
 import { WithContext, Organization, ItemList } from "schema-dts";
 
 const pageTitle =
-  "Free Online Web Tools | Editors, Finance, Programming & More";
+  "Free Online Web Tools for Productivity, Development & Utilities";
 const pageDescription =
-  "Explore free online web tools for editors, finance, programming, text, media, and more. Boost productivity with our easy-to-use tools!";
+  "Discover a comprehensive suite of free online web tools for productivity, development, and various utilities. Enhance your workflow with our easy-to-use solutions for everyday tasks and professional projects!";
 const keywords =
-  "best free online web tools, free online tools for developers, online productivity tools free, free text and media tools online, free online coding and programming tools, best online editors for text and code, free web utilities for daily tasks, free online code editor for developers, best online finance tools for budgeting, text manipulation tools online free, media converter and editor online, miscellaneous web tools for productivity";
+  "free online web tools, online productivity tools, web development tools, free web utilities, online tools for developers, productivity software, developer resources, daily task utilities, easy-to-use web apps, comprehensive tool suite, online converters, online calculators, text tools, coding utilities";
 
 export const metadata: Metadata = {
   alternates: {
@@ -207,7 +207,7 @@ export default function Home() {
       <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
         <BaseToolsAds className="w-full md:w-[20%]" />
         <div className="flex flex-col gap-4 items-center w-full">
-          <AppHeading heading="Free Online Web Tools – Editors, Finance, Programming & More" />
+          <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
           <SocialShareButtons
             pageUrl={`${process.env.HOSTNAME}`}
             heading={pageTitle}
