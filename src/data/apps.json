@@ -222,5 +222,13 @@
     "navigateUrl": "tools/text-editor",
     "iconRelativeUrl": "text-icon.svg",
     "category": "Online Editors"
+  },
+  "imagetotext": {
+    "applicationId": "imagetotext",
+    "displayText": "Image to Text Converter",
+    "iconName": "image-icon",
+    "navigateUrl": "tools/image-to-text",
+    "iconRelativeUrl": "image-icon.svg",
+    "category": "Media"
   }
 }
