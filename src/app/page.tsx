@@ -4,12 +4,10 @@ import * as appConfigJson from "@/data/apps.json";
 import { AppListConfig, AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import { Typography } from "@mui/material";
-import { groupBy, join, map, values } from "lodash-es";
+import { groupBy, map, values } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { BaseToolsAds } from "@/components/baseAds";
-import Script from "next/script";
-import { WithContext, Organization, ItemList } from "schema-dts";
 
 const pageTitle =
   "Free Online Web Tools for Productivity, Development & Utilities";
@@ -102,130 +100,28 @@ export default function Home() {
   // Remove undefined category
   delete categoryWiseAppList["undefined"];
 
-  const orgSchemaData: WithContext<Organization> = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "WebToolsEasy",
-    url: process.env.HOSTNAME,
-    logo: `${process.env.HOSTNAME}/favicon.png`,
-    description: pageDescription,
-    sameAs: [
-      "https://www.facebook.com/people/Webtoolseasy/100088911459047/",
-      "https://www.linkedin.com/company/webtoolseasy/",
-      "https://twitter.com/webtoolseasy",
-    ],
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "",
-      addressLocality: "New Delhi",
-      postalCode: "110001",
-      addressRegion: "DL",
-      addressCountry: "INDIA",
-    },
-    foundingDate: "2022-11-01",
-    founder: [
-      {
-        "@type": "Person",
-        name: "Gaurav Kumar Yadav",
-        sameAs: [
-          "https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/",
-          "https://x.com/Gaurav10610",
-        ],
-      },
-    ],
-    keywords,
-  };
-
-  const itemListSchemaData: WithContext<ItemList> = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: values(appListConfig).map((config, index) => {
-      return {
-        "@type": "ListItem",
-        position: index + 1,
-        name: config.displayText,
-        item: {
-          "@type": "SoftwareApplication",
-          "@id": `${config.navigateUrl}`,
-          url: `${process.env.HOSTNAME}/${config.navigateUrl}`,
-          name: config.displayText,
-          description: `View ${config.displayText} on WebToolsEasy`,
-          image: `${process.env.HOSTNAME}${process.env.SCREENSHOTS_BASE_URL}/${config.navigateUrl}.png`,
-          creator: {
-            "@type": "Person",
-            name: "Gaurav Kumar Yadav",
-            sameAs: [
-              "https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/",
-              "https://x.com/Gaurav10610",
-            ],
-          },
-          applicationCategory: "WebApplication",
-          operatingSystem: "All",
-          sameAs: [
-            "https://www.facebook.com/people/Webtoolseasy/100088911459047/",
-            "https://www.linkedin.com/company/webtoolseasy/",
-            "https://twitter.com/webtoolseasy",
-          ],
-          datePublished: "2022-11-01",
-          dateModified: "2022-11-01",
-          thumbnailUrl: `${process.env.HOSTNAME}${process.env.SCREENSHOTS_BASE_URL}/${config.navigateUrl}.png`,
-          keywords: join([config.displayText, config.category], ","),
-          offers: {
-            "@type": "Offer",
-            price: "0",
-            priceCurrency: "USD",
-          },
-          isAccessibleForFree: true,
-          publisher: {
-            "@type": "Organization",
-            name: "WebToolsEasy",
-            url: process.env.HOSTNAME,
-            logo: {
-              "@type": "ImageObject",
-              url: `${process.env.HOSTNAME}/favicon.png`,
-            },
-          },
-        },
-      };
-    }),
-  };
-
   return (
-    <>
-      <Script
-        id="organization-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(orgSchemaData),
-        }}
-      />
-      <Script
-        id="item-list-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchemaData) }}
-      />
-      <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
-        <BaseToolsAds className="w-full md:w-[20%]" />
-        <div className="flex flex-col gap-4 items-center w-full">
-          <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
-          <SocialShareButtons
-            pageUrl={`${process.env.HOSTNAME}`}
-            heading={pageTitle}
-          />
-          <div className="flex flex-col gap-10 w-full mt-5">
-            {map(categoryWiseAppList, (configs, category) => {
-              return (
-                <SectionAppList
-                  key={getRandomId()}
-                  category={category}
-                  configs={configs}
-                />
-              );
-            })}
-          </div>
+    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
+      <BaseToolsAds className="w-full md:w-[20%]" />
+      <div className="flex flex-col gap-4 items-center w-full">
+        <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
+        <SocialShareButtons
+          pageUrl={`${process.env.HOSTNAME}`}
+          heading={pageTitle}
+        />
+        <div className="flex flex-col gap-10 w-full mt-5">
+          {map(categoryWiseAppList, (configs, category) => {
+            return (
+              <SectionAppList
+                key={getRandomId()}
+                category={category}
+                configs={configs}
+              />
+            );
+          })}
         </div>
-        <BaseToolsAds className="w-full md:w-[20%]" />
       </div>
-    </>
+      <BaseToolsAds className="w-full md:w-[20%]" />
+    </div>
   );
 }

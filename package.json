@@ -9,7 +9,9 @@
     "lint": "next lint",
     "generate:screenshots": "tsx scripts/generate-screenshots.ts",
     "index:urls": "tsx scripts/index-urls.ts",
-    "index:urls:all": "INDEX_ALL_URLS=true tsx scripts/index-urls.ts"
+    "index:urls:all": "INDEX_ALL_URLS=true tsx scripts/index-urls.ts",
+    "update:sitemap": "tsx scripts/update-sitemap.ts",
+    "bot": "npm run update:sitemap && tsx scripts/screenshot-generator-bot.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -67,6 +69,7 @@
     "rehype-sanitize": "^6.0.0",
     "request": "^2.88.2",
     "schema-dts": "^1.1.2",
+    "tesseract.js": "^6.0.1",
     "uuid": "^11.0.3",
     "video-stream-merger": "^4.0.1",
     "xml-formatter": "^3.6.4"

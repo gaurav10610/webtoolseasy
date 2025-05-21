@@ -7,12 +7,8 @@ import { BlogEntity } from "@/types/domain-entities";
 import { join, map } from "lodash-es";
 import fs from "fs";
 import { SocialShareButtons } from "@/components/socialShareButtons";
-import { getRandomId } from "@/util/commonUtils";
-import { Tag } from "@/components/lib/tags";
 import { H1Heading } from "@/components/baseComponents/headings";
 import { PageMetadata } from "@/components/baseComponents/pageMetadata";
-import { BlogPosting, WithContext } from "schema-dts";
-import Script from "next/script";
 
 export async function generateMetadata(
   props: Readonly<{
@@ -82,16 +78,6 @@ export async function generateStaticParams() {
   return staticParams;
 }
 
-const PageTags = ({ tags }: { tags: string[] }) => {
-  return (
-    <div className="flex flex-row gap-2 justify-center flex-wrap">
-      {map(tags, (tag) => (
-        <Tag label={tag} key={getRandomId()} color="info" />
-      ))}
-    </div>
-  );
-};
-
 export default async function BlogPage(
   props: Readonly<{
     params: Promise<{ [key: string]: string }>;
@@ -113,73 +99,21 @@ export default async function BlogPage(
 
   const parsedContent = parse(jsonData.html, options);
 
-  const blogPostingSchemaData: WithContext<BlogPosting> = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: jsonData.heading,
-    datePublished: jsonData.updatedAt,
-    dateModified: jsonData.updatedAt,
-    description: jsonData.pageMetadata.description,
-    author: {
-      "@type": "Person",
-      name: jsonData.updatedBy.name,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "WebToolsEasy",
-      url: process.env.HOSTNAME,
-      logo: {
-        "@type": "ImageObject",
-        url: `${process.env.HOSTNAME}/favicon.png`,
-      },
-    },
-    url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
-    mainEntityOfPage: `${process.env.HOSTNAME}/blog/${pageUrl}`,
-    sameAs: [
-      "https://www.facebook.com/people/Webtoolseasy/100088911459047/",
-      "https://www.linkedin.com/company/webtoolseasy/",
-      "https://twitter.com/webtoolseasy",
-    ],
-    image: `${process.env.HOSTNAME}${process.env.SCREENSHOTS_BASE_URL}/blog/${pageUrl}.png`,
-    keywords: join(jsonData.tags, ", "),
-    inLanguage: "en",
-    copyrightHolder: {
-      "@type": "Organization",
-      name: "WebToolsEasy",
-      url: process.env.HOSTNAME,
-      logo: {
-        "@type": "ImageObject",
-        url: `${process.env.HOSTNAME}/favicon.png`,
-      },
-    },
-    // articleBody: jsonData.textContent,
-  };
-
   return (
-    <>
-      <Script
-        id="blog-post"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(blogPostingSchemaData),
-        }}
+    <div className="w-full flex flex-col gap-3 blog-div">
+      {process.env.NODE_ENV !== "production" && (
+        <AdminControls pageUrl={jsonData.pageUrl} />
+      )}
+      <H1Heading heading={jsonData.heading} />
+      <SocialShareButtons
+        pageUrl={`${process.env.HOSTNAME}${jsonData.pageUrl}`}
+        heading={jsonData.heading}
       />
-      <div className="w-full flex flex-col gap-3 blog-div">
-        {process.env.NODE_ENV !== "production" && (
-          <AdminControls pageUrl={jsonData.pageUrl} />
-        )}
-        <H1Heading heading={jsonData.heading} />
-        <SocialShareButtons
-          pageUrl={`${process.env.HOSTNAME}${jsonData.pageUrl}`}
-          heading={jsonData.heading}
-        />
-        <PageMetadata
-          updatedBy={jsonData.updatedBy}
-          updatedAt={jsonData.updatedAt}
-        />
-        {parsedContent}
-        <PageTags tags={jsonData.tags} />
-      </div>
-    </>
+      <PageMetadata
+        updatedBy={jsonData.updatedBy}
+        updatedAt={jsonData.updatedAt}
+      />
+      {parsedContent}
+    </div>
   );
 }

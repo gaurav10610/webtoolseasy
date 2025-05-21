@@ -1,18 +1,11 @@
-import { forEach, isNil } from "lodash-es";
-import fs from "fs";
-import puppeteer from "puppeteer";
+import { isNil } from "lodash-es";
+import fs, { readdirSync } from "fs";
+import puppeteer, { Page } from "puppeteer";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const takeScreenshot = async (url: string, delayInMs: number = 0) => {
+const takeScreenshot = async (url: string, page: Page) => {
   console.log(`Taking screenshot of ${url}...`);
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  page.setViewport({ width: 1640, height: 856 });
-  await page.goto(url);
-  await delay(delayInMs);
+  await page.goto(url, { waitUntil: "networkidle2" });
   const screenshot = await page.screenshot();
-  await browser.close();
   console.log(`Screenshot of ${url} taken successfully!!`);
   return { screenshot };
 };
@@ -22,52 +15,61 @@ const generateScreenshots = async () => {
 
   const baseFolderPath = `${process.cwd()}/public/screenshots`;
 
-  const dataFolders = ["tools", "blog"];
-  const screenshotsUrls: { url: string; fileName: string; folder?: string }[] =
-    [
-      ...[
-        { url: "http://localhost:3000", fileName: "home" },
-        { url: "http://localhost:3000/blog", fileName: "blog" },
-      ],
-    ];
+  const commonUrls = [
+    { url: "http://localhost:3000", fileName: "home" },
+    { url: "http://localhost:3000/blog", fileName: "blog" },
+  ];
 
-  const dataFolderPath = `${process.cwd()}/src/data`;
+  const screenshotsUrls: {
+    url: string;
+    fileName: string | undefined;
+    folder?: string | undefined;
+  }[] = ["tools", "blog"]
+    .map((folder) => `${process.cwd()}/src/data/${folder}`)
+    .map((folderPath) => {
+      return readdirSync(folderPath).map(
+        (file) => `${folderPath.split("/").pop()}/${file}`
+      );
+    })
+    .flat()
+    .map((fileName) => fileName.replace(".ts", ""))
+    .map((fileName) => fileName.replace(".json", ""))
+    .map((fileName) => ({
+      url: `http://localhost:3000/${fileName}`,
+      fileName: fileName.split("/").pop(),
+      folder: fileName.split("/")[0],
+    }));
 
-  forEach(dataFolders, (folder) => {
-    const folderPath = `${dataFolderPath}/${folder}`;
-    const files = fs.readdirSync(folderPath);
+  screenshotsUrls.unshift(...commonUrls);
 
-    files
-      .map((file) => file.replace(".json", ""))
-      .map((file) => file.replace(".ts", ""))
-      .forEach((file) => {
-        const url = `http://localhost:3000/${folder}/${file}`;
-        screenshotsUrls.push({
-          url,
-          fileName: file,
-          folder,
-        });
-      });
-  });
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  page.setViewport({ width: 1640, height: 856 });
 
-  for (let i = 0; i < screenshotsUrls.length; i++) {
-    const { url, fileName, folder } = screenshotsUrls[i];
-    const { screenshot } = await takeScreenshot(
-      url,
-      folder === "tools" ? 3000 : 0
-    );
+  try {
+    for (let i = 0; i < screenshotsUrls.length; i++) {
+      const { url, fileName, folder } = screenshotsUrls[i];
+      const { screenshot } = await takeScreenshot(url, page);
 
-    if (isNil(folder)) {
-      fs.writeFileSync(`${baseFolderPath}/${fileName}.png`, screenshot);
-    } else {
+      if (isNil(folder)) {
+        fs.writeFileSync(`${baseFolderPath}/${fileName}.png`, screenshot);
+        continue;
+      }
+
       if (!fs.existsSync(`${baseFolderPath}/${folder}`)) {
         fs.mkdirSync(`${baseFolderPath}/${folder}`);
       }
+
       fs.writeFileSync(
         `${baseFolderPath}/${folder}/${fileName}.png`,
         screenshot
       );
     }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await page.close();
+    await browser.close();
   }
 
   console.log("Screenshots generated successfully!!");
