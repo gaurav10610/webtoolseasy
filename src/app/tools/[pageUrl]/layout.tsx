@@ -7,7 +7,6 @@ import {
 import { DescriptionBlock } from "@/types/description";
 import {
   AppHeading,
-  PageTags,
   RelatedTools,
   ToolDescription,
 } from "@/components/commonComponents";
@@ -83,7 +82,6 @@ export default async function WebToolLayout(
           key={getRandomId()}
           descriptionData={toolDescriptionData}
         />
-        <PageTags key={getRandomId()} tags={toolConfigData.tags} />
       </div>
       <BaseToolsAds className="w-full md:w-[20%]" />
     </div>
