@@ -16,21 +16,21 @@ function SocialFollowButtons() {
           target="_blank"
           title="Webtoolseasy Facebook Page"
         >
-          <FacebookIcon color="primary" fontSize="large" />
+          <FacebookIcon color="action" fontSize="large" />
         </Link>
         <Link
           href="https://www.linkedin.com/company/webtoolseasy/"
           target="_blank"
           title="Webtoolseasy LinkedIn Page"
         >
-          <LinkedInIcon color="primary" fontSize="large" />
+          <LinkedInIcon color="action" fontSize="large" />
         </Link>
         <Link
           href="https://twitter.com/webtoolseasy"
           target="_blank"
           title="Webtoolseasy X Page"
         >
-          <XIcon fontSize="medium" />
+          <XIcon color="action" fontSize="medium" />
         </Link>
       </div>
     </div>
