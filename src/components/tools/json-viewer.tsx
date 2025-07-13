@@ -146,7 +146,7 @@ export default function JsonViewer({
             color="textSecondary"
             className="!text-xl !font-semibold"
           >
-            Json Viewer
+            JSON Viewer
           </Typography>
           <JsonView
             data={JSON.parse(rawCode)}
