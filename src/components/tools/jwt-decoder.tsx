@@ -9,16 +9,17 @@ import {
   copyToClipboard,
   decodeText,
   encodeText,
-  getRandomId,
 } from "@/util/commonUtils";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SingleCodeEditorWithHeader } from "../codeEditors";
 import { isNil } from "lodash-es";
 import { decodeJwt, decodeProtectedHeader } from "jose";
 import { Typography } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 export default function JwtDecoder({
   hostname,
@@ -104,6 +105,8 @@ export default function JwtDecoder({
     });
   };
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   function ControlButtons() {
     return (
       <div className="flex flex-col md:flex-row gap-2 w-full">
@@ -128,12 +131,36 @@ export default function JwtDecoder({
           startIcon={<LinkIcon />}
           onClick={handleLinkCopy}
         />
+        {!isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Enter Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<OpenInFullIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+        {isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Close Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<CloseFullscreenIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2 w-full items-center">
+    <div
+      className={`flex flex-col gap-3 w-full ${
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      }`}
+    >
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -152,62 +179,56 @@ export default function JwtDecoder({
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row gap-2 items-center w-full h-[60rem] md:h-[30rem]">
-        <SingleCodeEditorWithHeader
-          editorHeading="JWT Token"
-          themeOption="vs-dark"
-          editorOptions={{
-            fontSize: 14,
-          }}
+      <div
+        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
+          isFullScreen ? "md:h-full" : ""
+        }`}
+      >
+        <SingleCodeEditorWithHeaderV2
           codeEditorProps={{
             language: "text",
             value: rawCode,
             onChange: onRawCodeChange,
-            sx: {
-              height: "100%",
-            },
             editorOptions: {
               wordWrap: "on",
             },
+            className: "w-full h-full",
           }}
-          className="h-[50%] md:h-full w-[80%] md:w-full"
+          themeOption="vs-dark"
+          editorHeading="JWT Token"
+          className="w-[80%] md:w-[49%]"
         />
-        <div className="flex flex-col gap-2 items-center h-full w-full">
-          <SingleCodeEditorWithHeader
-            key={getRandomId()}
-            editorHeading="Headers ( Algorithm & Token Type)"
-            themeOption="vs-dark"
-            editorOptions={{
-              fontSize: 14,
-            }}
+        <div className="flex flex-col gap-2 items-center w-[80%] md:w-[49%] h-full">
+          <SingleCodeEditorWithHeaderV2
             codeEditorProps={{
               language: "json",
               value: decodedJwtTokenHeaders,
               onChange: onRawCodeChange,
-              className: "h-full",
               editorOptions: {
+                wordWrap: "on",
                 readOnly: true,
               },
+              className: "w-full h-full",
             }}
-            className="h-[50%] w-[80%] md:w-full"
-          />
-          <SingleCodeEditorWithHeader
-            key={getRandomId()}
-            editorHeading="Token Data"
             themeOption="vs-dark"
-            editorOptions={{
-              fontSize: 14,
-            }}
+            editorHeading="Headers ( Algorithm & Token Type)"
+            className="w-full h-full"
+          />
+
+          <SingleCodeEditorWithHeaderV2
             codeEditorProps={{
               language: "json",
               value: decodedJwtToken,
               onChange: onRawCodeChange,
-              className: "h-full",
               editorOptions: {
+                wordWrap: "on",
                 readOnly: true,
               },
+              className: "w-full h-full",
             }}
-            className="h-[50%] w-[80%] md:w-full"
+            themeOption="vs-dark"
+            editorHeading="Token Data"
+            className="w-full h-full"
           />
         </div>
       </div>
