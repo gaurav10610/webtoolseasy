@@ -63,7 +63,7 @@ export default function HtmlEditor({
     editorOptions: {
       wordWrap: "on",
     },
-    className: "!w-full !h-full",
+    className: "w-full h-full",
   });
 
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -190,7 +190,7 @@ export default function HtmlEditor({
   return (
     <div
       className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white" : ""
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
       }`}
     >
       <SnackBarWithPosition
@@ -201,28 +201,22 @@ export default function HtmlEditor({
       />
       <ControlButtons />
       <div
-        className={`flex flex-col gap-2 w-full items-center md:flex-row ${
+        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
           isFullScreen ? "md:h-full" : ""
         }`}
       >
-        <div
-          className={`w-[80%] h-[20rem] md:w-[49%] md:h-[30rem] ${
-            isFullScreen ? "md:h-full" : ""
-          }`}
-        >
-          <SingleCodeEditorWithHeaderV2
-            codeEditorProps={codeEditorProps}
-            themeOption="vs-dark"
-            editorHeading="HTML Code"
-          />
-        </div>
-        <div
-          className={`w-[80%] h-[20rem] md:w-[49%] md:h-[30rem] ${
-            isFullScreen ? "md:h-full" : ""
-          }`}
-        >
-          <IFrameWithLabel iFrameSourceDoc={rawCode} heading="HTML Preview" />
-        </div>
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={codeEditorProps}
+          themeOption="vs-dark"
+          editorHeading="HTML Code"
+          className="w-[80%] md:w-[49%]"
+        />
+
+        <IFrameWithLabel
+          iFrameSourceDoc={rawCode}
+          heading="HTML Preview"
+          className="w-[80%] md:w-[49%]"
+        />
       </div>
     </div>
   );
