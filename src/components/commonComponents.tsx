@@ -5,7 +5,6 @@ import { isEmpty, isNil, map } from "lodash-es";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { AppNavigationConfig } from "@/types/config";
 import { RelatedToolCard } from "./appCards";
-import { Tag } from "./lib/tags";
 
 export function AppHeading({
   heading,
@@ -38,16 +37,6 @@ export function RelatedTools({
           <RelatedToolCard key={getRandomId()} config={relatedToolConfig} />
         ))}
       </div>
-    </div>
-  );
-}
-
-export function PageTags({ tags }: Readonly<{ tags: string[] }>) {
-  return (
-    <div className="flex flex-row gap-2 justify-center flex-wrap">
-      {map(tags, (tag) => (
-        <Tag label={tag} key={getRandomId()} color={"primary"} />
-      ))}
     </div>
   );
 }
@@ -108,7 +97,7 @@ function DescriptionLinks({
             component={"a"}
             color="primary"
             target="_blank"
-            className="underline"
+            className="no-underline hover:underline"
           >
             {link.displayText}
           </Typography>

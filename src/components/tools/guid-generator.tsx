@@ -113,7 +113,7 @@ export default function GuidGenerator() {
         )}
 
         <ButtonWithHandler
-          buttonText="Download bulk uuids to file"
+          buttonText="Download bulk guids to file"
           variant="outlined"
           onClick={downloadGUIDs}
           startIcon={<DownloadIcon />}

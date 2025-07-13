@@ -9,9 +9,12 @@ import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { BaseToolsAds } from "@/components/baseAds";
 
-const pageTitle = "Online Web Tools: Browse Free Tools to Boost Productivity";
+const pageTitle =
+  "Free Online Web Tools for Productivity, Development & Utilities";
 const pageDescription =
-  "WebToolsEasy features multiple free online web tools. Find the perfect tool for your needs, whether you're looking for a way to edit photos, or record a screen.";
+  "Discover a comprehensive suite of free online web tools for productivity, development, and various utilities. Enhance your workflow with our easy-to-use solutions for everyday tasks and professional projects!";
+const keywords =
+  "free online web tools, online productivity tools, web development tools, free web utilities, online tools for developers, productivity software, developer resources, daily task utilities, easy-to-use web apps, comprehensive tool suite, online converters, online calculators, text tools, coding utilities";
 
 export const metadata: Metadata = {
   alternates: {
@@ -45,8 +48,7 @@ export const metadata: Metadata = {
     description: pageDescription,
     images: [`${process.env.SCREENSHOTS_BASE_URL}/home.png`],
   },
-  keywords:
-    "web tools, online tools, web development, web design, HTML tools, CSS tools, JavaScript tools, SEO tools, image compression, code formatter, JSON formatter, URL encoder, URL decoder, base64 encoder, base64 decoder, text editor, color picker, regex tester, lorem ipsum generator, password generator, hash generator, QR code generator, web utilities",
+  keywords,
 };
 
 function SectionAppList({
@@ -56,6 +58,8 @@ function SectionAppList({
   category: string;
   configs: AppNavigationConfig[];
 }>) {
+  const emptyColumns = 4 - (configs.length % 4);
+
   return (
     <div className="flex flex-col gap-2 w-full">
       <Typography
@@ -66,13 +70,21 @@ function SectionAppList({
       >
         {category}
       </Typography>
-      <div className="flex flex-row flex-wrap gap-4 w-full">
+      <div className="flex flex-row flex-wrap w-full md:justify-between">
         {map(configs, (config) => {
           return (
             <AppHomeCard
               key={getRandomId()}
               config={config}
-              className="w-full md:w-[23%] pl-2 pr-2 pt-3 pb-3"
+              className="w-full md:w-[24.3%] pl-2 pr-2 pt-3 pb-3 mb-3"
+            />
+          );
+        })}
+        {map(new Array(emptyColumns), () => {
+          return (
+            <div
+              key={getRandomId()}
+              className="w-full hidden md:block md:w-[24.3%] pl-2 pr-2 pt-3 pb-3 mb-3"
             />
           );
         })}
@@ -92,7 +104,7 @@ export default function Home() {
     <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
       <BaseToolsAds className="w-full md:w-[20%]" />
       <div className="flex flex-col gap-4 items-center w-full">
-        <AppHeading heading="Free Online Web Tools: Discover Free Tools to Make Work Super Easy" />
+        <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
         <SocialShareButtons
           pageUrl={`${process.env.HOSTNAME}`}
           heading={pageTitle}

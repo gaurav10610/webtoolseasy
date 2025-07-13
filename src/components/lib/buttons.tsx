@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 
 import type { JSX } from "react";
+import React from "react";
 
 export function ButtonWithHandler({
   size = "medium",
@@ -51,6 +52,7 @@ export function ButtonWithLink({
   buttonText,
   href,
   className = "",
+  title = "",
 }: Readonly<{
   size?: "small" | "medium" | "large";
   variant?: "text" | "outlined" | "contained";
@@ -62,13 +64,19 @@ export function ButtonWithLink({
     | "error"
     | "info"
     | "warning";
-  buttonText: string;
+  buttonText: string | React.ReactNode;
   href: string;
   className?: string;
+  title?: string;
 }>): JSX.Element {
   return (
-    <Link href={href} className={className}>
-      <Button size={size} variant={variant} color={color} className="w-full">
+    <Link href={href} className={className} title={title}>
+      <Button
+        size={size}
+        variant={variant}
+        color={color}
+        className={`w-full ${className}`}
+      >
         {buttonText}
       </Button>
     </Link>

@@ -1,6 +1,6 @@
 import request from "request";
 import { google } from "googleapis";
-import key from "../instashare-secrets.json";
+import key from "../webtoolseasy-452118-670a03d83db4.json";
 import { getAllUrlsFromSitemap } from "./indexing-utils";
 
 const updatedUrls: string[] = [];

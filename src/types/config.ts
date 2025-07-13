@@ -27,6 +27,7 @@ export enum ApplicationIds {
   JS_COMPILER = "jscompiler",
   TEXT_EDITOR = "texteditor",
   CASE_CONVERETR = "caseconverter",
+  IMAGE_TO_TEXT = "imagetotext",
 }
 
 export interface BaseAppConfig {

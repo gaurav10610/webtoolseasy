@@ -7,7 +7,6 @@ import {
 import { DescriptionBlock } from "@/types/description";
 import {
   AppHeading,
-  PageTags,
   RelatedTools,
   ToolDescription,
 } from "@/components/commonComponents";
@@ -47,6 +46,7 @@ export default async function WebToolLayout(
   const { descriptionData, componentConfig } = await import(
     `@/data/tools/${params.pageUrl}`
   );
+
   const toolDescriptionData = descriptionData as DescriptionBlock[];
   const toolConfigData = componentConfig as ApplicationConfig;
 
@@ -82,7 +82,6 @@ export default async function WebToolLayout(
           key={getRandomId()}
           descriptionData={toolDescriptionData}
         />
-        <PageTags key={getRandomId()} tags={toolConfigData.tags} />
       </div>
       <BaseToolsAds className="w-full md:w-[20%]" />
     </div>

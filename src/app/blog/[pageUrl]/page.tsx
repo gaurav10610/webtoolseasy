@@ -7,8 +7,6 @@ import { BlogEntity } from "@/types/domain-entities";
 import { join, map } from "lodash-es";
 import fs from "fs";
 import { SocialShareButtons } from "@/components/socialShareButtons";
-import { getRandomId } from "@/util/commonUtils";
-import { Tag } from "@/components/lib/tags";
 import { H1Heading } from "@/components/baseComponents/headings";
 import { PageMetadata } from "@/components/baseComponents/pageMetadata";
 
@@ -80,16 +78,6 @@ export async function generateStaticParams() {
   return staticParams;
 }
 
-const PageTags = ({ tags }: { tags: string[] }) => {
-  return (
-    <div className="flex flex-row gap-2 justify-center flex-wrap">
-      {map(tags, (tag) => (
-        <Tag label={tag} key={getRandomId()} color="info" />
-      ))}
-    </div>
-  );
-};
-
 export default async function BlogPage(
   props: Readonly<{
     params: Promise<{ [key: string]: string }>;
@@ -126,7 +114,6 @@ export default async function BlogPage(
         updatedAt={jsonData.updatedAt}
       />
       {parsedContent}
-      <PageTags tags={jsonData.tags} />
     </div>
   );
 }

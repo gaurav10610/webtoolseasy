@@ -1,6 +1,7 @@
 import { getRandomId } from "@/util/commonUtils";
-import { Link, Typography } from "@mui/material";
 import { map } from "lodash-es";
+import { ButtonWithLink } from "./lib/buttons";
+import { Typography } from "@mui/material";
 
 export const menuItems = [
   {
@@ -15,24 +16,22 @@ export const menuItems = [
 
 export default function AppMenu({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`w-full flex flex-row gap-3 justify-start md:gap-5 ${className}`}
-    >
+    <div className={`flex flex-row gap-2 justify-start ${className}`}>
       {map(menuItems, (menuItem) => (
-        <Link
-          key={getRandomId()}
+        <ButtonWithLink
+          buttonText={
+            <Typography color="primary" variant="body2">
+              {menuItem.label}
+            </Typography>
+          }
           href={menuItem.routeLink}
-          className="!no-underline"
+          key={getRandomId()}
           title={`Go to ${menuItem.label} Page`}
-        >
-          <Typography
-            variant="body1"
-            className="text-white !font-semibold !"
-            color="textPrimary"
-          >
-            {menuItem.label}
-          </Typography>
-        </Link>
+          size="small"
+          variant="outlined"
+          color="primary"
+          className="!capitalize"
+        />
       ))}
     </div>
   );
