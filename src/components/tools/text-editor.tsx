@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { SingleCodeEditorWithHeader } from "../codeEditors";
-import { CodeEditorProps } from "../lib/editor";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { usePathname } from "next/navigation";
 import { ToolComponentProps } from "@/types/component";
@@ -23,6 +21,10 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+import { CodeEditorPropsV2 } from "../lib/editor";
 
 export default function TextEditor({
   hostname,
@@ -42,14 +44,14 @@ export default function TextEditor({
     setRawCode(value);
   };
 
-  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorProps>({
+  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorPropsV2>({
     language: "text/plain",
     value: rawCode,
     onChange: onRawCodeChange,
-    className: "h-[20rem] md:h-[30rem] w-full",
     editorOptions: {
       wordWrap: "on",
     },
+    className: "w-full h-full",
   });
 
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -85,6 +87,8 @@ export default function TextEditor({
     document.body.removeChild(element); // Remove the element after download
   };
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   function ControlButtons() {
     return (
       <div className="flex flex-col gap-2 w-full md:flex-row">
@@ -109,6 +113,26 @@ export default function TextEditor({
           startIcon={<DownloadIcon />}
           onClick={handleDownloadTextFile}
         />
+        {!isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Enter Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<OpenInFullIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+        {isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Close Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<CloseFullscreenIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
       </div>
     );
   }
@@ -153,7 +177,11 @@ export default function TextEditor({
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full items-center">
+    <div
+      className={`flex flex-col gap-3 w-full items-center ${
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      }`}
+    >
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -161,11 +189,13 @@ export default function TextEditor({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      {/* <CodeEditorOptions /> */}
-      <SingleCodeEditorWithHeader
+      <SingleCodeEditorWithHeaderV2
         codeEditorProps={codeEditorProps}
         themeOption="vs-dark"
-        className="h-[20rem] md:h-[30rem] w-[80%] md:w-[100%]"
+        editorHeading="Javascript Code"
+        className={`w-[80%] md:w-full h-[30rem] ${
+          isFullScreen ? "md:h-full" : ""
+        }`}
       />
     </div>
   );
