@@ -149,7 +149,7 @@ export default function JsonFormatter({
             className: "w-full h-full",
           }}
           themeOption="vs-dark"
-          editorHeading="Javascript Code"
+          editorHeading="JSON Code"
           className="w-[80%] md:w-[49%]"
         />
         <SingleCodeEditorWithHeaderV2
