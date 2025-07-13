@@ -82,7 +82,6 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   onChange,
   editorOptions = {},
   handleEditorDidMount,
-  className = "",
 }) => {
   const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,
@@ -93,7 +92,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   };
 
   return (
-    <div className={className}>
+    <div className="h-full w-full">
       <MonacoEditor
         width="100%"
         height="100%"
