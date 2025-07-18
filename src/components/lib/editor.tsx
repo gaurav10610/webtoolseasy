@@ -10,7 +10,6 @@ export interface DiffEditorProps {
   value: string;
   editorOptions?: editor.IStandaloneDiffEditorConstructionOptions;
   onChange?: (newValue: string, event: unknown) => void;
-  className?: string;
 }
 
 export interface CodeEditorPropsV2 {
@@ -67,7 +66,6 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
   language,
   onChange,
   theme = "vs-dark",
-  className = "",
 }) => {
   const defaultEditorOptions: editor.IStandaloneDiffEditorConstructionOptions =
     {
@@ -80,7 +78,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
     };
 
   return (
-    <div className={className}>
+    <div className="h-full w-full border-2 border-gray-300">
       <MonacoDiffEditor
         width="100%"
         height="100%"
@@ -91,6 +89,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
         options={{
           ...defaultEditorOptions,
           ...editorOptions,
+          automaticLayout: true,
         }}
         {...(onChange && { onChange })}
       />

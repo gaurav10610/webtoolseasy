@@ -178,7 +178,7 @@ export default function TextEditor({
 
   return (
     <div
-      className={`flex flex-col gap-3 w-full items-center ${
+      className={`flex flex-col gap-3 w-full ${
         isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
       }`}
     >
@@ -189,14 +189,17 @@ export default function TextEditor({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      <SingleCodeEditorWithHeaderV2
-        codeEditorProps={codeEditorProps}
-        themeOption="vs-dark"
-        editorHeading="Javascript Code"
-        className={`w-[80%] md:w-full h-[30rem] ${
+      <div
+        className={`w-full h-[20rem] md:h-[30rem] ${
           isFullScreen ? "md:h-full" : ""
         }`}
-      />
+      >
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={codeEditorProps}
+          themeOption="vs-dark"
+          className="w-[80%] md:w-full"
+        />
+      </div>
     </div>
   );
 }

@@ -63,7 +63,7 @@ export function DiffEditorsWithHeader({
   themeOption: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`flex flex-col gap-2 h-full ${className}`}>
       <div className="w-full flex flex-row justify-around">
         <Typography
           variant="body1"
@@ -84,7 +84,6 @@ export function DiffEditorsWithHeader({
         language={diffEditorProps.language}
         value={diffEditorProps.value}
         onChange={diffEditorProps.onChange}
-        className={diffEditorProps.className}
         original={diffEditorProps.original}
         theme={themeOption}
         editorOptions={{
