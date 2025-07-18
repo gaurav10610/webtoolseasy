@@ -26,6 +26,8 @@ import IFrameWithLabel from "../iFrame";
 import { ButtonWithHandler } from "../lib/buttons";
 import { CodeEditorPropsV2 } from "../lib/editor";
 import { SnackBarWithPosition } from "../lib/snackBar";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 
 export default function JavascriptCompiler({
   hostname,
@@ -280,6 +282,8 @@ export default function JavascriptCompiler({
     setIFrameSourceCode(getHtmlTemplate(rawCode));
   };
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   function ControlButtons() {
     return (
       <div className="flex flex-col gap-2 w-full md:flex-row">
@@ -311,12 +315,36 @@ export default function JavascriptCompiler({
           startIcon={<LinkIcon />}
           onClick={handleLinkCopy}
         />
+        {!isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Enter Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<OpenInFullIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+        {isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Close Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<CloseFullscreenIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div
+      className={`flex flex-col gap-3 w-full ${
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      }`}
+    >
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -324,20 +352,22 @@ export default function JavascriptCompiler({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      <div className="flex flex-col gap-2 w-full items-center md:flex-row">
-        <div className="w-[80%] h-[20rem] md:w-[49%] md:h-[30rem]">
-          <SingleCodeEditorWithHeaderV2
-            codeEditorProps={codeEditorProps}
-            themeOption="vs-dark"
-            editorHeading="Javascript Code"
-          />
-        </div>
-        <div className="w-[80%] h-[20rem] md:w-[49%] md:h-[30rem]">
-          <IFrameWithLabel
-            iFrameSourceDoc={iFrameSourceCode}
-            heading="Console Output"
-          />
-        </div>
+      <div
+        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
+          isFullScreen ? "md:h-full" : ""
+        }`}
+      >
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={codeEditorProps}
+          themeOption="vs-dark"
+          editorHeading="Javascript Code"
+          className="w-[80%] md:w-[49%]"
+        />
+        <IFrameWithLabel
+          iFrameSourceDoc={iFrameSourceCode}
+          heading="Console Output"
+          className="w-[80%] md:w-[49%]"
+        />
       </div>
     </div>
   );

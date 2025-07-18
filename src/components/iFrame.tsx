@@ -10,9 +10,7 @@ export default function IFrameWithLabel({
   className?: string;
 }>) {
   return (
-    <div
-      className={`flex flex-col justify-end w-full h-full gap-2 ${className}`}
-    >
+    <div className={`flex flex-col justify-end h-full gap-2 ${className}`}>
       <Typography
         variant="body1"
         color="textSecondary"
