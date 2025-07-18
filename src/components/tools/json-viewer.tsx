@@ -1,7 +1,6 @@
 "use client";
 
 import { ToolComponentProps } from "@/types/component";
-import { SingleCodeEditorWithHeader } from "../codeEditors";
 import { Typography } from "@mui/material";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -17,6 +16,9 @@ import LinkIcon from "@mui/icons-material/Link";
 import { allExpanded, defaultStyles, JsonView } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 import { SnackBarWithPosition } from "../lib/snackBar";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 export default function JsonViewer({
   hostname,
@@ -63,6 +65,8 @@ export default function JsonViewer({
     });
   };
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   function ControlButtons() {
     return (
       <div className="flex flex-col md:flex-row gap-2 w-full">
@@ -80,12 +84,36 @@ export default function JsonViewer({
           startIcon={<LinkIcon />}
           onClick={handleLinkCopy}
         />
+        {!isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Enter Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<OpenInFullIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+        {isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Close Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<CloseFullscreenIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2 w-full items-center">
+    <div
+      className={`flex flex-col gap-3 w-full ${
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      }`}
+    >
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -93,42 +121,42 @@ export default function JsonViewer({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      <div className="flex flex-col md:flex-row gap-2 h-full w-full items-center">
-        <SingleCodeEditorWithHeader
-          editorHeading="JSON Code"
-          themeOption="vs-dark"
-          editorOptions={{
-            fontSize: 14,
-          }}
+      <div
+        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
+          isFullScreen ? "md:h-full" : ""
+        }`}
+      >
+        <SingleCodeEditorWithHeaderV2
           codeEditorProps={{
             language: "json",
             value: rawCode,
-            className: "h-full w-full",
             onChange: onRawCodeChange,
             editorOptions: {
               wordWrap: "on",
             },
+            className: "w-full h-full",
           }}
-          className="h-[20rem] md:h-[30rem] w-[80%] md:w-full"
+          themeOption="vs-dark"
+          editorHeading="JSON Code"
+          className="w-[80%] md:w-[49%]"
         />
-        <div className="flex flex-col gap-2 w-[80%] md:w-full md:h-[30rem] mt-7 md:mt-0">
+        <div className="flex flex-col gap-2 h-full w-[80%] md:w-[49%]">
           <Typography
             variant="body1"
             color="textSecondary"
             className="!text-xl !font-semibold"
           >
-            Json Viewer
+            JSON Viewer
           </Typography>
-          <div className="flex flex-col gap-2 w-full h-full border-2 border-gray-300">
-            <JsonView
-              data={JSON.parse(rawCode)}
-              shouldExpandNode={allExpanded}
-              style={{
-                ...defaultStyles,
-                container: "w-full h-full overflow-y-scroll",
-              }}
-            />
-          </div>
+          <JsonView
+            data={JSON.parse(rawCode)}
+            shouldExpandNode={allExpanded}
+            style={{
+              ...defaultStyles,
+              container:
+                "w-full h-full overflow-y-scroll border-2 border-gray-300 p-2",
+            }}
+          />
         </div>
       </div>
     </div>

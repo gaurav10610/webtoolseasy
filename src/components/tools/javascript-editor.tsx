@@ -25,6 +25,8 @@ import { html_beautify } from "js-beautify";
 import CodeIcon from "@mui/icons-material/Code";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 
 export default function JavascriptEditor({
   hostname,
@@ -146,6 +148,8 @@ export default function JavascriptEditor({
     );
   };
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   function ControlButtons() {
     return (
       <div className="flex flex-col gap-2 w-full md:flex-row">
@@ -170,12 +174,36 @@ export default function JavascriptEditor({
           startIcon={<LinkIcon />}
           onClick={handleLinkCopy}
         />
+        {!isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Enter Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<OpenInFullIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+        {isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Close Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<CloseFullscreenIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div
+      className={`flex flex-col gap-3 w-full ${
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      }`}
+    >
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -183,17 +211,23 @@ export default function JavascriptEditor({
         handleClose={handleSnackBarClose}
       />
       <ControlButtons />
-      <div className="flex flex-col gap-2 w-full items-center md:flex-row">
-        <div className="w-[80%] h-[20rem] md:w-[49%] md:h-[30rem]">
-          <SingleCodeEditorWithHeaderV2
-            codeEditorProps={codeEditorProps}
-            themeOption="vs-dark"
-            editorHeading="HTML Code"
-          />
-        </div>
-        <div className="w-[80%] h-[20rem] md:w-[49%] md:h-[30rem]">
-          <IFrameWithLabel iFrameSourceDoc={rawCode} heading="HTML Preview" />
-        </div>
+      <div
+        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
+          isFullScreen ? "md:h-full" : ""
+        }`}
+      >
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={codeEditorProps}
+          themeOption="vs-dark"
+          editorHeading="HTML Code"
+          className="w-[80%] md:w-[49%]"
+        />
+
+        <IFrameWithLabel
+          iFrameSourceDoc={rawCode}
+          heading="HTML Preview"
+          className="w-[80%] md:w-[49%]"
+        />
       </div>
     </div>
   );
