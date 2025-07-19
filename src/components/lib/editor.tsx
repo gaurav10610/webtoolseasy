@@ -7,17 +7,14 @@ export interface DiffEditorProps {
   theme?: string;
   value: string;
   editorOptions?: editor.IStandaloneDiffEditorConstructionOptions;
-  onChange?: (newValue: string, event: unknown) => void;
+  onChange?: (newValue: string) => void;
 }
 
 export interface CodeEditorPropsV2 {
   language: string;
   theme?: string;
   value: string;
-  onChange?: (
-    value: string | undefined,
-    ev: editor.IModelContentChangedEvent
-  ) => void;
+  onChange?: (value: string) => void;
   editorOptions?: editor.IStandaloneEditorConstructionOptions;
   handleEditorDidMount?: (editor: editor.IStandaloneCodeEditor | null) => void;
   className?: string;
@@ -51,7 +48,11 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
           ...defaultEditorOptions,
           ...editorOptions,
         }}
-        {...(onChange && { onChange })}
+        {...(onChange && {
+          onChange: (value: string | undefined) => {
+            onChange(value ? (value as string) : "");
+          },
+        })}
         {...(handleEditorDidMount && { editorDidMount: handleEditorDidMount })}
       />
     </div>
