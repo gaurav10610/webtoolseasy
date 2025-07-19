@@ -1,6 +1,4 @@
-"use client";
-
-import MonacoEditor, { monaco, MonacoDiffEditor } from "react-monaco-editor";
+import Editor, { DiffEditor as MonacoDiffEditor } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 
 export interface DiffEditorProps {
@@ -16,11 +14,12 @@ export interface CodeEditorPropsV2 {
   language: string;
   theme?: string;
   value: string;
-  onChange?: (value: string) => void;
-  editorOptions?: editor.IStandaloneEditorConstructionOptions;
-  handleEditorDidMount?: (
-    editor: monaco.editor.IStandaloneCodeEditor | null
+  onChange?: (
+    value: string | undefined,
+    ev: editor.IModelContentChangedEvent
   ) => void;
+  editorOptions?: editor.IStandaloneEditorConstructionOptions;
+  handleEditorDidMount?: (editor: editor.IStandaloneCodeEditor | null) => void;
   className?: string;
 }
 
@@ -42,7 +41,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
 
   return (
     <div className="h-full w-full">
-      <MonacoEditor
+      <Editor
         width="100%"
         height="100%"
         language={language}
@@ -82,7 +81,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
       <MonacoDiffEditor
         width="100%"
         height="100%"
-        value={value}
+        modified={value}
         language={language}
         original={original}
         theme={theme}
