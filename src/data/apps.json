@@ -15,6 +15,14 @@
     "iconRelativeUrl": "html.svg",
     "category": "Online Editors"
   },
+  "pythoncompiler": {
+    "applicationId": "pythoncompiler",
+    "displayText": "Online Python Compiler",
+    "iconName": "js-icon",
+    "navigateUrl": "tools/python-compiler",
+    "iconRelativeUrl": "js-icon.svg",
+    "category": "Online Editors"
+  },
   "compoundinterestcalculator": {
     "applicationId": "compoundinterestcalculator",
     "displayText": "Compound Interest Calculator",
