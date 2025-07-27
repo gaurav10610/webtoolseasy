@@ -49,7 +49,7 @@ export default function TextCompare() {
   return (
     <div
       className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+        isFullScreen ? "fixed inset-0 z-50 bg-white h-full p-4" : "relative"
       }`}
     >
       <ControlButtons />

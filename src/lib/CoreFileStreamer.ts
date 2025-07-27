@@ -69,6 +69,39 @@ export class CoreFileStreamer {
     });
   }
 
+  public readBlockAsText(
+    length: number = this.defaultChunkSize
+  ): Promise<string> {
+    const fileReader: FileReader = new FileReader();
+    const blob: Blob = this.file.slice(this.offset, this.offset + length);
+
+    return new Promise<string>((resolve, reject) => {
+      fileReader.onloadend = (event: ProgressEvent) => {
+        const target: FileReader = event.target as FileReader;
+        if (target.error == null) {
+          const result: string = target.result as string;
+          this.offset += blob.size;
+          resolve(result);
+        } else {
+          reject(target.error);
+        }
+      };
+      fileReader.readAsText(blob);
+    });
+  }
+
+  public async readFullFileAsText(): Promise<string> {
+    this.rewind();
+    let content = "";
+
+    while (!this.isEndOfFile()) {
+      const chunk = await this.readBlockAsText();
+      content += chunk;
+    }
+
+    return content;
+  }
+
   private getFileSize(): number {
     return this.file.size;
   }

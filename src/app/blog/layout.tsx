@@ -6,10 +6,28 @@ export default function BlogLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col md:flex-row gap-2 w-full h-full overflow-y-auto pb-2">
-      <BaseToolsAds className="w-full md:w-[20%]" />
-      {children}
-      <BaseToolsAds className="w-full md:w-[20%]" />
+    <div className="w-full px-2 py-4">
+      {/* Desktop Layout with 60% restriction */}
+      <div className="hidden md:flex w-full max-w-none">
+        {/* Left sidebar - 20% */}
+        <div className="w-[20%] pr-2">
+          <BaseToolsAds className="w-full" />
+        </div>
+
+        {/* Main content area - 60% */}
+        <div className="w-[60%] px-2">{children}</div>
+
+        {/* Right sidebar - 20% */}
+        <div className="w-[20%] pl-2">
+          <BaseToolsAds className="w-full" />
+        </div>
+      </div>
+
+      {/* Mobile Layout - Full width */}
+      <div className="flex md:hidden flex-col w-full">
+        {children}
+        <BaseToolsAds className="w-full mt-4" />
+      </div>
     </div>
   );
 }

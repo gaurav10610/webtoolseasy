@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Alert from "@mui/material/Alert";
 import isEmpty from "lodash-es/isEmpty";
 import map from "lodash-es/map";
 import { ReactNode } from "react";
@@ -69,5 +70,77 @@ export function BasicTable({
         <TableBody>{tableRows}</TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+// Enhanced table for CSV data with sticky headers and custom styling
+export function CsvDataTable({
+  headers = [],
+  rows = [],
+  maxHeight = "400px",
+  stickyHeader = true,
+  className = "",
+}: Readonly<{
+  headers?: string[];
+  rows?: string[][];
+  maxHeight?: string;
+  stickyHeader?: boolean;
+  className?: string;
+}>) {
+  if (isEmpty(headers) && isEmpty(rows)) {
+    return null;
+  }
+
+  return (
+    <div className={`overflow-auto ${className}`} style={{ maxHeight }}>
+      <TableContainer component={Paper}>
+        <Table stickyHeader={stickyHeader}>
+          <TableHead>
+            <TableRow>
+              {headers.map((header, index) => (
+                <TableCell
+                  key={index}
+                  sx={{
+                    fontWeight: "bold",
+                    backgroundColor: "#f5f5f5",
+                    minWidth: "120px",
+                  }}
+                >
+                  {header}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, rowIndex) => (
+              <TableRow key={rowIndex} hover>
+                {row.map((cell, cellIndex) => (
+                  <TableCell key={cellIndex} sx={{ maxWidth: "200px" }}>
+                    {cell}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
+}
+
+// Alert wrapper component
+export function AlertMessage({
+  severity = "error",
+  message,
+  className = "",
+}: Readonly<{
+  severity?: "error" | "warning" | "info" | "success";
+  message: string;
+  className?: string;
+}>) {
+  return (
+    <div className={`mb-4 ${className}`}>
+      <Alert severity={severity}>{message}</Alert>
+    </div>
   );
 }

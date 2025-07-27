@@ -101,9 +101,44 @@ export default function Home() {
   delete categoryWiseAppList["undefined"];
 
   return (
-    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full overflow-y-auto">
-      <BaseToolsAds className="w-full md:w-[20%]" />
-      <div className="flex flex-col gap-4 items-center w-full">
+    <div className="w-full px-2 py-4">
+      {/* Desktop Layout with 60% restriction */}
+      <div className="hidden md:flex w-full max-w-none">
+        {/* Left sidebar - 20% */}
+        <div className="w-[20%] pr-2">
+          <BaseToolsAds className="w-full" />
+        </div>
+
+        {/* Main content area - 60% */}
+        <div className="w-[60%] px-2">
+          <div className="flex flex-col gap-4 items-center w-full">
+            <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
+            <SocialShareButtons
+              pageUrl={`${process.env.HOSTNAME}`}
+              heading={pageTitle}
+            />
+            <div className="flex flex-col gap-10 w-full mt-5">
+              {map(categoryWiseAppList, (configs, category) => {
+                return (
+                  <SectionAppList
+                    key={getRandomId()}
+                    category={category}
+                    configs={configs}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Right sidebar - 20% */}
+        <div className="w-[20%] pl-2">
+          <BaseToolsAds className="w-full" />
+        </div>
+      </div>
+
+      {/* Mobile Layout - Full width */}
+      <div className="flex md:hidden flex-col gap-4 items-center w-full">
         <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
         <SocialShareButtons
           pageUrl={`${process.env.HOSTNAME}`}
@@ -120,8 +155,8 @@ export default function Home() {
             );
           })}
         </div>
+        <BaseToolsAds className="w-full" />
       </div>
-      <BaseToolsAds className="w-full md:w-[20%]" />
     </div>
   );
 }
