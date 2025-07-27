@@ -29,6 +29,7 @@ export enum ApplicationIds {
   CASE_CONVERETR = "caseconverter",
   IMAGE_TO_TEXT = "imagetotext",
   PYTHON_COMPILER = "pythoncompiler",
+  CSV_VIEWER = "csvviewer",
 }
 
 export interface BaseAppConfig {
