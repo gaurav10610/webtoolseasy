@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { Typography, Card, CardContent, Alert, Button } from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
+import {
+  FILE_TYPE_PRESETS,
+  FILE_SIZE_PRESETS,
+} from "../../util/fileValidation";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { usePathname } from "next/navigation";
@@ -53,12 +57,32 @@ export default function ImageToTextConverter({
     setIsSnackBarOpen(false);
   };
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = (files: FileList) => {
+    const file = files[0]; // Get the first file
+
+    // Clean up previous image preview URL
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
     setSelectedImage(file);
     setImagePreview(URL.createObjectURL(file));
     setError("");
     setExtractedText("");
   };
+
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
   const extractTextFromImage = async () => {
     if (!selectedImage) {
@@ -143,6 +167,11 @@ export default function ImageToTextConverter({
   };
 
   const clearAll = () => {
+    // Clean up image preview URL
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
     setSelectedImage(null);
     setImagePreview("");
     setExtractedText("");
@@ -228,11 +257,14 @@ export default function ImageToTextConverter({
       {/* File Upload Section */}
       <FileUploadWithDragDrop
         onFileSelect={handleFileSelect}
+        onError={handleError}
         accept="image/*"
+        multiple={false}
+        allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+        maxSize={FILE_SIZE_PRESETS.LARGE}
         title="Upload Image"
-        description="Select or drag and drop your image here"
-        allowedTypes={[".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"]}
-        maxFileSize={10}
+        subtitle="Select or drag and drop your image here"
+        supportText="Supports JPG, PNG, GIF, BMP, WebP formats up to 10MB"
         disabled={isProcessing}
       />
 
