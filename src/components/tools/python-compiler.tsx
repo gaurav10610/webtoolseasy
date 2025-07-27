@@ -23,6 +23,7 @@ import { ButtonWithHandler } from "../lib/buttons";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { CircularProgressWithLabel } from "../lib/progress";
 import { Typography } from "@mui/material";
+import format from "python-format-js";
 
 // Type definitions for Pyodide
 interface PyodideInterface {
@@ -71,8 +72,8 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
   }, [rawCode, hostname, currentPath]);
 
   const formatCode = useCallback(() => {
-    // Optional: Add formatting logic here
-  }, []);
+    setRawCode(format(rawCode));
+  }, [rawCode]);
 
   const [output, setOutput] = useState("");
   const [pyodideLoading, setPyodideLoading] = useState(true);
@@ -106,7 +107,9 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
       setPyodideLoading(false);
       setPyodideProgress(100);
     } catch (error) {
-      console.error("Failed to load Pyodide:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Failed to load Pyodide:", error);
+      }
       setOutput("Error: Failed to load Python environment");
       setPyodideLoading(false);
     }
