@@ -3,7 +3,12 @@
 
 import { find, isEmpty, isNil, map, toUpper } from "lodash-es";
 import { useState } from "react";
-import { ImagesPreview, NoFilesState } from "../fileComponents";
+import { FileUploadWithDragDrop } from "../lib/fileUpload";
+import { FilePreview } from "../lib/filePreview";
+import {
+  FILE_TYPE_PRESETS,
+  FILE_SIZE_PRESETS,
+} from "../../util/fileValidation";
 import {
   FormControl,
   InputLabel,
@@ -32,12 +37,10 @@ export default function CropImage() {
   const formatList = ["png", "jpeg", "webp", "bmp", "ico"];
   const [imageFormat, setImageFormat] = useState<string>(formatList[0]);
 
-  const onFilesSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) {
-      return;
-    }
-    const files = event.target.files;
-    const newFiles = map(Array.from(files), (file) => ({
+  const [error, setError] = useState("");
+
+  const handleFileSelect = (files: FileList) => {
+    const newFiles = Array.from(files).map((file) => ({
       id: crypto.randomUUID(),
       originalFile: file,
     }));
@@ -47,10 +50,8 @@ export default function CropImage() {
     }
   };
 
-  const openFileDialog = () => {
-    const input = document.getElementById("file") as HTMLInputElement;
-    input.type = "file";
-    input.click();
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   const croppedImage = ({
@@ -193,37 +194,80 @@ export default function CropImage() {
 
   return (
     <div className="flex flex-col w-full gap-3">
-      <input
-        id="file"
-        type="file"
-        className="hidden"
-        onChange={onFilesSelection}
-        multiple
-        accept=".jpg,.jpeg,.png,.webp,.bmp"
-      />
-      {isEmpty(fileList) && <NoFilesState openFileDialog={openFileDialog} />}
+      {/* Error message */}
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <Typography variant="body2" className="text-red-800">
+            {error}
+          </Typography>
+        </div>
+      )}
+
+      {/* File Upload */}
+      {isEmpty(fileList) && (
+        <FileUploadWithDragDrop
+          accept="image/*"
+          multiple={true}
+          allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+          maxSize={FILE_SIZE_PRESETS.LARGE}
+          onFileSelect={handleFileSelect}
+          onError={handleError}
+          title="Upload Images to Crop"
+          subtitle="Drag and drop your images here or click to browse"
+          supportText="Supports JPG, PNG, WebP, GIF formats up to 10MB each"
+        />
+      )}
+
+      {/* Add More Images Button */}
       {!isEmpty(fileList) && (
         <div className="w-full flex flex-row justify-end">
           <ButtonWithHandler
             buttonText="Add More Images"
-            onClick={openFileDialog}
+            onClick={() => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.multiple = true;
+              input.accept = "image/*";
+              input.onchange = (e) => {
+                const files = (e.target as HTMLInputElement).files;
+                if (files) handleFileSelect(files);
+              };
+              input.click();
+            }}
             size="small"
             startIcon={<AddIcon />}
           />
         </div>
       )}
+
+      {/* File Preview */}
       {!isEmpty(fileList) && (
-        <Typography variant="h5" color="textSecondary">
-          Selected Images
-        </Typography>
+        <>
+          <Typography variant="h5" color="textSecondary">
+            Selected Images
+          </Typography>
+          <FilePreview
+            files={fileList.map((file) => ({
+              id: file.id,
+              file: file.originalFile,
+              preview: URL.createObjectURL(file.originalFile),
+              isSelected: selectedFile?.id === file.id,
+            }))}
+            onFileSelect={selectImageHandler}
+            onFileRemove={(id) => {
+              const newFileList = fileList.filter((f) => f.id !== id);
+              setFileList(newFileList);
+              if (selectedFile?.id === id) {
+                setSelectedFile(newFileList.length > 0 ? newFileList[0] : null);
+              }
+            }}
+            previewSize="medium"
+            layout="grid"
+          />
+        </>
       )}
-      {!isEmpty(fileList) && (
-        <ImagesPreview
-          selectedFile={selectedFile}
-          fileList={fileList}
-          selectImageHandler={selectImageHandler}
-        />
-      )}
+
+      {/* Crop Section */}
       {!isNil(selectedFile) && (
         <Typography variant="h5" color="textSecondary">
           Crop & Preview
