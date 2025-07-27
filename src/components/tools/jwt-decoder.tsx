@@ -203,7 +203,6 @@ export default function JwtDecoder({
             codeEditorProps={{
               language: "json",
               value: decodedJwtTokenHeaders,
-              onChange: onRawCodeChange,
               editorOptions: {
                 wordWrap: "on",
                 readOnly: true,
@@ -219,7 +218,6 @@ export default function JwtDecoder({
             codeEditorProps={{
               language: "json",
               value: decodedJwtToken,
-              onChange: onRawCodeChange,
               editorOptions: {
                 wordWrap: "on",
                 readOnly: true,
