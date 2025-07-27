@@ -251,7 +251,21 @@ captured
         autoHideDuration={2000}
         handleClose={handleSnackBarClose}
       />
-      {pyodideLoading && <CircularProgressWithLabel value={pyodideProgress} />}
+      {pyodideLoading && (
+        <div className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <Typography
+            variant="h6"
+            color="textPrimary"
+            className="font-semibold"
+          >
+            Loading Python environment...
+          </Typography>
+          <CircularProgressWithLabel value={pyodideProgress} />
+          <Typography variant="body2" color="textSecondary">
+            Please wait while we initialize the Python runtime
+          </Typography>
+        </div>
+      )}
       <ControlButtons />
       <div
         className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
