@@ -20,7 +20,7 @@
     "displayText": "Online Python Compiler",
     "iconName": "js-icon",
     "navigateUrl": "tools/python-compiler",
-    "iconRelativeUrl": "js-icon.svg",
+    "iconRelativeUrl": "python-icon.svg",
     "category": "Online Editors"
   },
   "compoundinterestcalculator": {
