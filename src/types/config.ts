@@ -28,6 +28,7 @@ export enum ApplicationIds {
   TEXT_EDITOR = "texteditor",
   CASE_CONVERETR = "caseconverter",
   IMAGE_TO_TEXT = "imagetotext",
+  PYTHON_COMPILER = "pythoncompiler",
 }
 
 export interface BaseAppConfig {
