@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { Typography, Card, CardContent, Alert, Button } from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
+import {
+  FILE_TYPE_PRESETS,
+  FILE_SIZE_PRESETS,
+} from "../../util/fileValidation";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { usePathname } from "next/navigation";
@@ -53,12 +57,32 @@ export default function ImageToTextConverter({
     setIsSnackBarOpen(false);
   };
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = (files: FileList) => {
+    const file = files[0]; // Get the first file
+
+    // Clean up previous image preview URL
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
     setSelectedImage(file);
     setImagePreview(URL.createObjectURL(file));
     setError("");
     setExtractedText("");
   };
+
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
   const extractTextFromImage = async () => {
     if (!selectedImage) {
@@ -143,6 +167,11 @@ export default function ImageToTextConverter({
   };
 
   const clearAll = () => {
+    // Clean up image preview URL
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+
     setSelectedImage(null);
     setImagePreview("");
     setExtractedText("");
@@ -201,13 +230,15 @@ export default function ImageToTextConverter({
   );
 
   return (
-    <div className="flex flex-col gap-3 w-full relative">
-      <div className="flex justify-between items-center flex-wrap gap-2 min-w-0">
+    <div className="flex flex-col gap-4 w-full h-full">
+      {/* Header Section */}
+      <div className="flex justify-between items-center flex-wrap gap-2">
         <Typography variant="h4" component="h1" className="truncate">
           Free Image to Text Converter
         </Typography>
       </div>
 
+      {/* Snackbar */}
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -217,28 +248,29 @@ export default function ImageToTextConverter({
         horizontal="center"
       />
 
+      {/* Control Buttons */}
       <ControlButtons />
 
-      {error && (
-        <Alert severity="error" className="mb-4">
-          {error}
-        </Alert>
-      )}
+      {/* Error Alert */}
+      {error && <Alert severity="error">{error}</Alert>}
 
       {/* File Upload Section */}
       <FileUploadWithDragDrop
         onFileSelect={handleFileSelect}
+        onError={handleError}
         accept="image/*"
+        multiple={false}
+        allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+        maxSize={FILE_SIZE_PRESETS.LARGE}
         title="Upload Image"
-        description="Select or drag and drop your image here"
-        allowedTypes={[".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"]}
-        maxFileSize={10}
+        subtitle="Select or drag and drop your image here"
+        supportText="Supports JPG, PNG, GIF, BMP, WebP formats up to 10MB"
         disabled={isProcessing}
       />
 
       {/* Processing Progress */}
       {isProcessing && (
-        <Card className="mb-4">
+        <Card>
           <CardContent>
             <div className="flex items-center justify-between mb-2">
               <span className="text-blue-800 font-medium">
@@ -259,23 +291,20 @@ export default function ImageToTextConverter({
         </Card>
       )}
 
-      <div className="flex flex-col w-full gap-4 flex-grow min-w-0 md:flex-row">
+      <div className="flex flex-col w-full gap-4 flex-grow min-w-0 md:flex-row md:h-[500px]">
         {/* Image Preview Section */}
-        <div className="w-full md:w-1/2 min-h-0">
+        <div className="w-full md:w-1/2 flex flex-col min-h-0">
           <Typography variant="h6" className="mb-3 flex items-center gap-2">
             <ImageIcon />
             Image Preview
           </Typography>
-          <div className="border border-gray-200 rounded-lg bg-white min-h-[300px] flex items-center justify-center">
+          <div className="flex-1 border border-gray-200 rounded-lg bg-white flex items-center justify-center overflow-hidden">
             {imagePreview ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={imagePreview}
                 alt="Preview"
-                className="max-w-full max-h-full object-contain rounded-lg"
-                style={{
-                  maxHeight: "400px",
-                }}
+                className="max-w-full max-h-full object-contain"
               />
             ) : (
               <div className="text-center text-gray-500 p-8">
@@ -289,24 +318,44 @@ export default function ImageToTextConverter({
         </div>
 
         {/* Extracted Text Section */}
-        <div className="w-full md:w-1/2 min-h-0">
-          <div className="h-full min-h-[300px]">
-            <SingleCodeEditorWithHeaderV2
-              editorHeading="Extracted Text"
-              codeEditorProps={{
-                language: "plaintext",
-                value: extractedText,
-                onChange: setExtractedText,
-                className: "h-full",
-                editorOptions: {
-                  wordWrap: "on",
-                  lineNumbers: "off",
-                  minimap: { enabled: false },
-                },
-              }}
-              themeOption="vs-light"
-              className="w-full !h-[20rem] md:h-[30rem] min-w-0"
-            />
+        <div className="w-full md:w-1/2 flex flex-col min-h-0">
+          <Typography variant="h6" className="mb-3 flex items-center gap-2">
+            <TextFieldsIcon />
+            Extracted Text
+          </Typography>
+          <div className="flex-1 border border-gray-200 rounded-lg bg-white overflow-hidden">
+            {extractedText || selectedImage ? (
+              <SingleCodeEditorWithHeaderV2
+                codeEditorProps={{
+                  language: "plaintext",
+                  value:
+                    extractedText ||
+                    "Click 'Extract Text' to get text from your image...",
+                  onChange: setExtractedText,
+                  className: "h-full",
+                  editorOptions: {
+                    wordWrap: "on",
+                    lineNumbers: "off",
+                    minimap: { enabled: false },
+                    scrollBeyondLastLine: false,
+                    fontSize: 14,
+                    padding: { top: 16, bottom: 16 },
+                    readOnly: !extractedText,
+                  },
+                }}
+                themeOption="vs-light"
+                className="w-full h-full border-0 rounded-lg"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-center text-gray-500 p-8">
+                <div>
+                  <TextFieldsIcon className="text-6xl mb-4" />
+                  <Typography variant="body1">
+                    Upload an image to extract text
+                  </Typography>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

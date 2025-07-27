@@ -1,136 +1,164 @@
 "use client";
 
-import { useState, useRef, DragEvent } from "react";
-import { Typography } from "@mui/material";
+import React, { useRef, useState, useCallback } from "react";
+import { Typography, LinearProgress } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import {
+  validateFiles,
+  FileValidationOptions,
+} from "../../util/fileValidation";
 
-interface FileUploadProps {
-  onFileSelect: (file: File) => void;
+interface FileUploadProps extends FileValidationOptions {
   accept?: string;
   multiple?: boolean;
-  title?: string;
-  description?: string;
-  isUploading?: boolean;
-  uploadProgress?: number;
+  onFileSelect: (files: FileList) => void;
+  onError?: (error: string) => void;
   disabled?: boolean;
-  maxFileSize?: number; // in MB
-  allowedTypes?: string[];
+  children?: React.ReactNode;
+  className?: string;
+  title?: string;
+  subtitle?: string;
+  showProgress?: boolean;
+  progress?: number;
+  dragText?: string;
+  supportText?: string;
 }
 
-export const FileUploadWithDragDrop = ({
-  onFileSelect,
+export function FileUploadWithDragDrop({
   accept = "*/*",
   multiple = false,
-  title = "Upload File",
-  description = "Select or drag and drop your file here",
-  isUploading = false,
-  uploadProgress = 0,
+  maxSize,
+  allowedTypes,
+  allowedExtensions,
+  minSize,
+  onFileSelect,
+  onError,
   disabled = false,
-  maxFileSize = 50,
-  allowedTypes = [],
-}: FileUploadProps) => {
+  children,
+  className = "",
+  title,
+  subtitle,
+  showProgress = false,
+  progress = 0,
+  dragText,
+  supportText,
+}: FileUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false);
-  const [error, setError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = (file: File): boolean => {
-    setError("");
+  const handleFileSelect = useCallback(
+    (files: FileList | null) => {
+      if (!files || files.length === 0) return;
 
-    // Check file size
-    const fileSizeMB = file.size / 1024 / 1024;
-    if (fileSizeMB > maxFileSize) {
-      setError(`File size exceeds ${maxFileSize}MB limit`);
-      return false;
-    }
-
-    // Check file type if allowedTypes is specified
-    if (allowedTypes.length > 0) {
-      const isValidType = allowedTypes.some((type) => {
-        if (type.startsWith(".")) {
-          return file.name.toLowerCase().endsWith(type.toLowerCase());
-        }
-        return file.type.includes(type);
+      const validationResult = validateFiles(files, {
+        maxSize,
+        allowedTypes,
+        allowedExtensions,
+        minSize,
       });
 
-      if (!isValidType) {
-        setError(
-          `File type not supported. Allowed types: ${allowedTypes.join(", ")}`
-        );
-        return false;
+      if (!validationResult.isValid) {
+        onError?.(validationResult.error || "File validation failed");
+        return;
       }
-    }
 
-    return true;
-  };
+      onFileSelect(files);
+    },
+    [onFileSelect, maxSize, allowedTypes, allowedExtensions, minSize, onError]
+  );
 
-  const handleFileSelect = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      handleFileSelect(event.target.files);
+      // Reset input value to allow selecting the same file again
+      if (event.target) {
+        event.target.value = "";
+      }
+    },
+    [handleFileSelect]
+  );
 
-    const file = files[0];
-    if (validateFile(file)) {
-      onFileSelect(file);
-    }
-  };
+  const handleDragOver = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!disabled) {
+        setIsDragOver(true);
+      }
+    },
+    [disabled]
+  );
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleFileSelect(event.target.files);
-  };
-
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    if (!disabled && !isUploading) {
-      setIsDragOver(true);
+    // Only set isDragOver to false if we're leaving the drop zone completely
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX;
+    const y = event.clientY;
+
+    if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) {
+      setIsDragOver(false);
     }
-  };
+  }, []);
 
-  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragOver(false);
-  };
+  const handleDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setIsDragOver(false);
 
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragOver(false);
+      if (disabled) return;
 
-    if (disabled || isUploading) return;
+      const files = event.dataTransfer.files;
+      handleFileSelect(files);
+    },
+    [disabled, handleFileSelect]
+  );
 
-    const files = event.dataTransfer.files;
-    handleFileSelect(files);
-  };
-
-  const handleClick = () => {
-    if (!disabled && !isUploading && fileInputRef.current) {
+  const openFileDialog = useCallback(() => {
+    if (!disabled && fileInputRef.current) {
       fileInputRef.current.click();
     }
-  };
-
-  const getBorderColor = () => {
-    if (error) return "border-red-300";
-    if (isDragOver) return "border-blue-500";
-    return "border-gray-300";
-  };
-
-  const getBackgroundColor = () => {
-    if (error) return "bg-red-50";
-    if (isDragOver) return "bg-blue-50";
-    if (isUploading) return "bg-gray-100";
-    return "bg-gray-50 hover:bg-gray-100";
-  };
+  }, [disabled]);
 
   return (
-    <div className="mb-4 min-w-0">
-      <Typography variant="h6" className="mb-3">
-        {title}
-      </Typography>
+    <div className={`mb-4 min-w-0 ${className}`}>
+      {title && (
+        <Typography variant="h6" className="mb-3">
+          {title}
+        </Typography>
+      )}
+
       <div
-        className={`border-2 border-dashed ${getBorderColor()} rounded-lg p-6 ${getBackgroundColor()} transition-colors min-w-0 cursor-pointer`}
+        className={`
+          border-2 border-dashed rounded-lg p-6 transition-all duration-200 min-w-0
+          ${
+            isDragOver
+              ? "border-blue-400 bg-blue-50"
+              : "border-gray-300 bg-gray-50"
+          }
+          ${
+            disabled
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-100 cursor-pointer"
+          }
+        `}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={handleClick}
+        onClick={openFileDialog}
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        onKeyDown={(e) => {
+          if ((e.key === "Enter" || e.key === " ") && !disabled) {
+            e.preventDefault();
+            openFileDialog();
+          }
+        }}
+        aria-label={`Upload files. ${
+          accept !== "*/*" ? `Accepted formats: ${accept}` : ""
+        }`}
       >
         <input
           ref={fileInputRef}
@@ -139,44 +167,52 @@ export const FileUploadWithDragDrop = ({
           multiple={multiple}
           onChange={handleInputChange}
           className="hidden"
-          disabled={disabled || isUploading}
+          disabled={disabled}
+          aria-hidden="true"
         />
-        <div
-          className={`flex flex-col items-center justify-center text-gray-600 hover:text-gray-800 ${
-            disabled || isUploading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          <UploadFileIcon className="mb-2 text-4xl" />
-          <span className="text-lg font-medium break-words">
-            {isUploading ? `Processing... ${uploadProgress}%` : description}
-          </span>
-          <span className="text-sm text-gray-500 mt-1 break-words text-center">
-            {allowedTypes.length > 0 && !error && (
-              <>Supported formats: {allowedTypes.join(", ")}</>
-            )}
-            {maxFileSize && !error && <> • Max size: {maxFileSize}MB</>}
-          </span>
-          {error && (
-            <span className="text-sm text-red-500 mt-1 break-words text-center">
-              {error}
-            </span>
-          )}
-        </div>
 
-        {isUploading && (
+        {children || (
+          <div className="flex flex-col items-center justify-center text-gray-600 hover:text-gray-800">
+            <UploadFileIcon className="mb-2 text-4xl" />
+            <span className="text-lg font-medium break-words text-center">
+              {dragText ||
+                (showProgress && progress > 0
+                  ? `Processing... ${progress}%`
+                  : "Select or drag and drop your files here")}
+            </span>
+            {subtitle && (
+              <span className="text-sm text-gray-500 mt-1 break-words text-center">
+                {subtitle}
+              </span>
+            )}
+            {supportText && (
+              <span className="text-sm text-gray-500 mt-1 break-words text-center">
+                {supportText}
+              </span>
+            )}
+            {maxSize && (
+              <span className="text-xs text-gray-400 mt-1 break-words text-center">
+                Maximum file size: {(maxSize / (1024 * 1024)).toFixed(1)} MB
+              </span>
+            )}
+          </div>
+        )}
+
+        {showProgress && progress > 0 && (
           <div className="mt-4">
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
-            </div>
+            <LinearProgress
+              variant="determinate"
+              value={progress}
+              className="rounded-full"
+            />
             <p className="text-sm text-gray-600 mt-2 text-center break-words">
-              Processing file...
+              Loading file in chunks for optimal performance...
             </p>
           </div>
         )}
       </div>
     </div>
   );
-};
+}
+
+export default FileUploadWithDragDrop;
