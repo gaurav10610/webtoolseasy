@@ -122,9 +122,51 @@ export default function PythonCompiler({
     }
 
     try {
+      // Clear any previous output
+      setOutput("");
+
+      // Capture stdout using Pyodide's runPython with sys.stdout redirection
+      await pyodideRef.current.runPythonAsync(`
+import sys
+from io import StringIO
+
+# Redirect stdout to capture print statements
+old_stdout = sys.stdout
+sys.stdout = StringIO()
+      `);
+
+      // Run the user's code
       const result = await pyodideRef.current.runPythonAsync(rawCode);
-      setOutput(String(result) || "Code executed successfully (no output)");
+
+      // Get the captured stdout
+      const capturedOutput = await pyodideRef.current.runPythonAsync(`
+captured = sys.stdout.getvalue()
+sys.stdout = old_stdout
+captured
+      `);
+
+      // Combine stdout and return value
+      let finalOutput = "";
+      if (capturedOutput && String(capturedOutput).trim()) {
+        finalOutput += String(capturedOutput);
+      }
+      if (
+        result !== undefined &&
+        result !== null &&
+        String(result) !== "None"
+      ) {
+        if (finalOutput) finalOutput += "\n";
+        finalOutput += String(result);
+      }
+
+      setOutput(finalOutput || "Code executed successfully (no output)");
     } catch (error) {
+      // Restore stdout in case of error
+      try {
+        await pyodideRef.current.runPythonAsync("sys.stdout = old_stdout");
+      } catch {
+        // Ignore restore errors
+      }
       setOutput(`Error: ${error}`);
     }
   };
@@ -232,8 +274,8 @@ export default function PythonCompiler({
           >
             Output
           </Typography>
-          <div className="w-full h-full scroll-auto border-2 border-gray-300">
-            {output}
+          <div className="w-full h-full overflow-auto p-3 bg-gray-100 border-2 border-gray-300 rounded font-mono text-sm whitespace-pre-wrap">
+            {output || "Run your Python code to see output here..."}
           </div>
         </div>
       </div>
