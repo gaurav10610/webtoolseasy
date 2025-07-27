@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import CodeIcon from "@mui/icons-material/Code";
@@ -33,10 +33,8 @@ export default function PythonCompiler({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `
-  print("Hello, World!")
-  print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")
-  `;
+  const initialValue = `print("Hello, World!")
+print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
 
   const codeQueryParam = queryParams.content;
   const currentPath = usePathname();
@@ -45,9 +43,9 @@ export default function PythonCompiler({
     codeQueryParam ? decodeText(codeQueryParam) : initialValue
   );
 
-  const onRawCodeChange = (value: string) => {
+  const onRawCodeChange = useCallback((value: string) => {
     setRawCode(value);
-  };
+  }, []);
 
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");
@@ -56,13 +54,13 @@ export default function PythonCompiler({
     setIsSnackBarOpen(false);
   };
 
-  const handleTextCopy = () => {
+  const handleTextCopy = useCallback(() => {
     copyToClipboard(rawCode);
     setSnackBarMessage("Copied Formatted Code to Clipboard!");
     setIsSnackBarOpen(true);
-  };
+  }, [rawCode]);
 
-  const handleLinkCopy = () => {
+  const handleLinkCopy = useCallback(() => {
     compressStringToBase64(rawCode).then((compressedData) => {
       copyToClipboard(
         `${hostname}${currentPath}?content=${encodeText(compressedData)}`
@@ -70,11 +68,11 @@ export default function PythonCompiler({
       setSnackBarMessage("Copied Link to Clipboard!");
       setIsSnackBarOpen(true);
     });
-  };
+  }, [rawCode, hostname, currentPath]);
 
-  const formatCode = () => {
+  const formatCode = useCallback(() => {
     // Optional: Add formatting logic here
-  };
+  }, []);
 
   const [output, setOutput] = useState("");
   const [pyodideLoading, setPyodideLoading] = useState(true);
@@ -86,39 +84,39 @@ export default function PythonCompiler({
     setScriptLoaded(true);
   };
 
-  useEffect(() => {
-    const loadPyodide = async () => {
-      if (!scriptLoaded || typeof window === "undefined") return;
+  const loadPyodide = useCallback(async () => {
+    if (!scriptLoaded || typeof window === "undefined") return;
 
-      try {
-        setPyodideLoading(true);
-        setPyodideProgress(30);
+    try {
+      setPyodideLoading(true);
+      setPyodideProgress(30);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const pyodide = await (window as any).loadPyodide({
-          indexURL: "https://cdn.jsdelivr.net/" + "pyodide/v0.25.0/full/",
-          monitorRunAsync: (msg: string, progress: number | null) => {
-            if (progress != null) {
-              const adjustedProgress = 30 + Math.round(progress * 70);
-              setPyodideProgress(adjustedProgress);
-            }
-          },
-        });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pyodide = await (window as any).loadPyodide({
+        indexURL: "https://cdn.jsdelivr.net/" + "pyodide/v0.25.0/full/",
+        monitorRunAsync: (msg: string, progress: number | null) => {
+          if (progress != null) {
+            const adjustedProgress = 30 + Math.round(progress * 70);
+            setPyodideProgress(adjustedProgress);
+          }
+        },
+      });
 
-        pyodideRef.current = pyodide;
-        setPyodideLoading(false);
-        setPyodideProgress(100);
-      } catch (error) {
-        console.error("Failed to load Pyodide:", error);
-        setOutput("Error: Failed to load Python environment");
-        setPyodideLoading(false);
-      }
-    };
-
-    loadPyodide();
+      pyodideRef.current = pyodide;
+      setPyodideLoading(false);
+      setPyodideProgress(100);
+    } catch (error) {
+      console.error("Failed to load Pyodide:", error);
+      setOutput("Error: Failed to load Python environment");
+      setPyodideLoading(false);
+    }
   }, [scriptLoaded]);
 
-  const runCode = async () => {
+  useEffect(() => {
+    loadPyodide();
+  }, [loadPyodide]);
+
+  const runCode = useCallback(async () => {
     if (!pyodideRef.current) {
       setOutput("Error: Python environment not ready");
       return;
@@ -128,55 +126,46 @@ export default function PythonCompiler({
       // Clear any previous output
       setOutput("");
 
-      // Capture stdout using Pyodide's runPython with sys.stdout redirection
-      await pyodideRef.current.runPythonAsync(`
+      // Setup stdout capture and run code in one go to reduce async calls
+      const result = await pyodideRef.current.runPythonAsync(`
 import sys
 from io import StringIO
 
 # Redirect stdout to capture print statements
 old_stdout = sys.stdout
 sys.stdout = StringIO()
-      `);
 
-      // Run the user's code
-      const result = await pyodideRef.current.runPythonAsync(rawCode);
+try:
+    # Execute user code
+    result = None
+    exec("""${rawCode.replace(/"/g, '\\"').replace(/\n/g, "\\n")}""")
+finally:
+    # Always restore stdout
+    captured = sys.stdout.getvalue()
+    sys.stdout = old_stdout
 
-      // Get the captured stdout
-      const capturedOutput = await pyodideRef.current.runPythonAsync(`
-captured = sys.stdout.getvalue()
-sys.stdout = old_stdout
 captured
       `);
 
-      // Combine stdout and return value
-      let finalOutput = "";
-      if (capturedOutput && String(capturedOutput).trim()) {
-        finalOutput += String(capturedOutput);
-      }
-      if (
-        result !== undefined &&
-        result !== null &&
-        String(result) !== "None"
-      ) {
-        if (finalOutput) finalOutput += "\n";
-        finalOutput += String(result);
-      }
-
-      setOutput(finalOutput || "Code executed successfully (no output)");
+      setOutput(
+        String(result).trim() || "Code executed successfully (no output)"
+      );
     } catch (error) {
-      // Restore stdout in case of error
+      // Ensure stdout is restored even on error
       try {
-        await pyodideRef.current.runPythonAsync("sys.stdout = old_stdout");
+        await pyodideRef.current.runPythonAsync(
+          "sys.stdout = old_stdout if 'old_stdout' in globals() else sys.stdout"
+        );
       } catch {
         // Ignore restore errors
       }
       setOutput(`Error: ${error}`);
     }
-  };
+  }, [rawCode]);
 
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  function ControlButtons() {
+  const ControlButtons = useCallback(() => {
     return (
       <div className="flex flex-col gap-2 w-full md:flex-row">
         <ButtonWithHandler
@@ -229,7 +218,21 @@ captured
         )}
       </div>
     );
-  }
+  }, [runCode, formatCode, handleTextCopy, handleLinkCopy, isFullScreen]);
+
+  const editorProps = useMemo(
+    () => ({
+      language: "python" as const,
+      value: rawCode,
+      onChange: onRawCodeChange,
+      editorOptions: {
+        wordWrap: "on" as const,
+        fontSize: 12,
+      },
+      className: "w-full h-full",
+    }),
+    [rawCode, onRawCodeChange]
+  );
 
   return (
     <div
@@ -256,16 +259,7 @@ captured
         }`}
       >
         <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "python",
-            value: rawCode,
-            onChange: onRawCodeChange,
-            editorOptions: {
-              wordWrap: "on",
-              fontSize: 12,
-            },
-            className: "w-full h-full",
-          }}
+          codeEditorProps={editorProps}
           themeOption="vs-dark"
           editorHeading="Python Code"
           className="w-[80%] md:w-[49%]"
