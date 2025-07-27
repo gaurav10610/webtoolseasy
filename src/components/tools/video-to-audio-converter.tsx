@@ -5,7 +5,11 @@ import { ConversionState, VideoFileData } from "@/types/file";
 import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
 import { cloneDeep, find, includes, isEmpty, isNil, map } from "lodash-es";
 import { FFmpegFormat } from "@/types/ffmpeg";
-import { NoFilesState } from "../fileComponents";
+import { FileUploadWithDragDrop } from "../lib/fileUpload";
+import {
+  FILE_TYPE_PRESETS,
+  FILE_SIZE_PRESETS,
+} from "../../util/fileValidation";
 import { ButtonWithHandler } from "../lib/buttons";
 import AddIcon from "@mui/icons-material/Add";
 import { PaperWithChildren } from "../lib/papers";
@@ -37,13 +41,10 @@ export default function VideoToAudioConverter() {
   const [snackBarColor, setSnackBarColor] = useState<
     "success" | "info" | "warning" | "error"
   >("success");
+  const [error, setError] = useState("");
 
-  const onFilesSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) {
-      return;
-    }
-    const files = event.target.files;
-    const newFiles: VideoFileData[] = map(Array.from(files), (file) => {
+  const handleFileSelect = (files: FileList) => {
+    const newFiles: VideoFileData[] = Array.from(files).map((file) => {
       const fileExtension = getFileExtension(file.name);
       const formatId = getFileFormatId(fileExtension);
 
@@ -78,12 +79,11 @@ export default function VideoToAudioConverter() {
       return videoFileData;
     });
     setFileList([...fileList, ...newFiles]);
+    setError(""); // Clear any previous errors
   };
 
-  const openFileDialog = () => {
-    const input = document.getElementById("file") as HTMLInputElement;
-    input.type = "file";
-    input.click();
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   const onTargetFormatChange = (selectedFormatId: string, fileId: string) => {
@@ -145,7 +145,7 @@ export default function VideoToAudioConverter() {
     const file = new Blob(
       [
         videoFileData!.convertedData[videoFileData!.selectedTargetFormatId]!
-          .data!,
+          .data! as unknown as ArrayBuffer,
       ],
       {
         type: getMimeType(videoFileData!.selectedTargetFormatId),
@@ -310,25 +310,54 @@ export default function VideoToAudioConverter() {
         handleClose={handleSnackBarClose}
         color={snackBarColor}
       />
-      <input
-        id="file"
-        type="file"
-        className="hidden"
-        onChange={onFilesSelection}
-        multiple
-        accept=".mp4,.webm,.ogv,.mkv,.ogm,.avi"
-      />
-      {isEmpty(fileList) && <NoFilesState openFileDialog={openFileDialog} />}
+
+      {/* Error message */}
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <Typography variant="body2" className="text-red-800">
+            {error}
+          </Typography>
+        </div>
+      )}
+
+      {/* File Upload */}
+      {isEmpty(fileList) && (
+        <FileUploadWithDragDrop
+          accept="video/*"
+          multiple={true}
+          allowedTypes={FILE_TYPE_PRESETS.VIDEOS}
+          maxSize={FILE_SIZE_PRESETS.HUGE}
+          onFileSelect={handleFileSelect}
+          onError={handleError}
+          title="Upload Videos to Convert to Audio"
+          subtitle="Drag and drop your video files here or click to browse"
+          supportText="Supports MP4, WebM, AVI, MOV formats up to 100MB each"
+        />
+      )}
+
+      {/* Add More Videos Button */}
       {!isEmpty(fileList) && (
         <div className="w-full flex flex-row justify-end mb-3">
           <ButtonWithHandler
-            buttonText="Add More Images"
-            onClick={openFileDialog}
+            buttonText="Add More Videos"
+            onClick={() => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.multiple = true;
+              input.accept = "video/*";
+              input.onchange = (e) => {
+                const files = (e.target as HTMLInputElement).files;
+                if (files) handleFileSelect(files);
+              };
+              input.click();
+            }}
             size="small"
             startIcon={<AddIcon />}
           />
         </div>
       )}
+
+      {/* Video Files List */}
       {!isEmpty(fileList) && <VideoFiles fileList={fileList} />}
     </div>
   );
