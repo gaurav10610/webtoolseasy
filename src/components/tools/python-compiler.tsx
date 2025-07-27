@@ -22,6 +22,7 @@ import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { ButtonWithHandler } from "../lib/buttons";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { CircularProgressWithLabel } from "../lib/progress";
+import { Typography } from "@mui/material";
 
 // Type definitions for Pyodide
 interface PyodideInterface {
@@ -32,10 +33,7 @@ export default function PythonCompiler({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `
-import sys
-sys.version
-`;
+  const initialValue = 'print("Hello, World!")\n';
 
   const codeQueryParam = queryParams.content;
   const currentPath = usePathname();
@@ -226,8 +224,17 @@ sys.version
           editorHeading="Python Code"
           className="w-[80%] md:w-[49%]"
         />
-        <div className="w-[80%] md:w-[49%] whitespace-pre-wrap break-words text-sm bg-gray-100 p-2 rounded shadow-inner">
-          {output}
+        <div className="flex flex-col justify-end h-full gap-2 w-[80%] md:w-[49%]">
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            className="!text-xl !font-semibold"
+          >
+            Output
+          </Typography>
+          <div className="w-full h-full scroll-auto border-2 border-gray-300">
+            {output}
+          </div>
         </div>
       </div>
     </div>
