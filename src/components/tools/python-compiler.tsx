@@ -33,7 +33,10 @@ export default function PythonCompiler({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = 'print("Hello, World!")\n';
+  const initialValue = `
+  print("Hello, World!")
+  print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")
+  `;
 
   const codeQueryParam = queryParams.content;
   const currentPath = usePathname();
@@ -259,6 +262,7 @@ captured
             onChange: onRawCodeChange,
             editorOptions: {
               wordWrap: "on",
+              fontSize: 12,
             },
             className: "w-full h-full",
           }}
