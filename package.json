@@ -59,6 +59,7 @@
     "nanoid": "^5.0.7",
     "next": "15.1.6",
     "next-share": "^0.27.0",
+    "python-format-js": "^1.4.3",
     "qrcode": "^1.5.4",
     "react": "19.0.0",
     "react-cron-generator": "^2.0.17",
