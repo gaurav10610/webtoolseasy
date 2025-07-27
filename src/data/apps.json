@@ -39,6 +39,14 @@
     "iconRelativeUrl": "xml.svg",
     "category": "Programming"
   },
+  "csvviewer": {
+    "applicationId": "csvviewer",
+    "displayText": "CSV Viewer",
+    "iconName": "csv-icon",
+    "navigateUrl": "tools/csv-viewer",
+    "iconRelativeUrl": "csv-icon.svg",
+    "category": "Programming"
+  },
   "qrcodegenerator": {
     "applicationId": "qrcodegenerator",
     "displayText": "QR Code Generator",
