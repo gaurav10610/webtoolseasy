@@ -263,8 +263,8 @@ Sarah Wilson,28,Toronto,Canada`;
 
   return (
     <div
-      className={`flex flex-col gap-3 w-full max-w-full overflow-hidden ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      className={`flex flex-col gap-3 w-full ${
+        isFullScreen ? "fixed inset-0 z-50 bg-white h-full p-4" : "relative"
       }`}
     >
       <div className="flex justify-between items-center flex-wrap gap-2 min-w-0">
@@ -294,6 +294,7 @@ Sarah Wilson,28,Toronto,Canada`;
             buttonText={isFullScreen ? "Exit Fullscreen" : "Fullscreen"}
             variant="outlined"
             size="small"
+            className="!hidden md:!flex"
           />
         </div>
       </div>
@@ -381,6 +382,7 @@ Sarah Wilson,28,Toronto,Canada`;
               className: "h-full",
             }}
             themeOption="vs-dark"
+            className="w-full !h-[20rem] md:h-[30rem] min-w-0"
           />
         </div>
 
@@ -401,7 +403,7 @@ Sarah Wilson,28,Toronto,Canada`;
             </div>
             <div
               className="overflow-auto w-full border border-gray-200 rounded-lg bg-white"
-              style={{ maxWidth: "100%" }}
+              style={{ maxWidth: "100%", minWidth: 0 }}
             >
               <CsvDataTable
                 headers={csvData.headers}

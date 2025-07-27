@@ -21,7 +21,9 @@ export default function RootLayout({
               <GoogleAnalytics gaId={process.env.GA_CODE!} />
             )}
             <HeaderAppBar className="mb-4" />
-            <div className="p-2 w-full h-full relative mb-4">{children}</div>
+            <main className="w-full min-h-screen">
+              <div className="w-full mx-auto">{children}</div>
+            </main>
             <div className="flex flex-row w-full gap-2 mb-4 p-2">
               <span className="hidden md:block w-[20%]"></span>
               <CommonSiteData className="w-full" />

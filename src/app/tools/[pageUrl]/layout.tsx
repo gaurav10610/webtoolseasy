@@ -193,13 +193,44 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   const toolUrl = `${process.env.HOSTNAME}/tools/${params.pageUrl}`;
 
   return (
-    <div className="flex flex-col md:flex-row gap-2 p-2 w-full h-full flex-grow overflow-y-auto">
-      <SidePanel
-        className="hidden w-[20%] md:flex"
-        appConfigJson={appListConfig}
-        pageUrl={params.pageUrl}
-      />
-      <div className="flex flex-col gap-5 w-full">
+    <div className="w-full px-2 py-4">
+      {/* Desktop Layout with 60% restriction */}
+      <div className="hidden md:flex w-full max-w-none">
+        {/* Left sidebar - 20% */}
+        <div className="w-[20%] pr-2">
+          <SidePanel
+            className="w-full"
+            appConfigJson={appListConfig}
+            pageUrl={params.pageUrl}
+          />
+        </div>
+
+        {/* Main content area - 60% */}
+        <div className="w-[60%] px-2">
+          <div className="flex flex-col gap-5 w-full max-w-full">
+            <AppHeading heading={toolConfigData.mainHeading!} />
+            <SocialShareButtons
+              pageUrl={toolUrl}
+              heading={toolConfigData.pageTitle}
+            />
+            <div className="flex flex-col gap-2 w-full max-w-full">
+              {children}
+            </div>
+            {relatedToolsConfigs.length > 0 && (
+              <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
+            )}
+            <ToolDescription descriptionData={toolDescriptionData} />
+          </div>
+        </div>
+
+        {/* Right sidebar - 20% */}
+        <div className="w-[20%] pl-2">
+          <BaseToolsAds className="w-full" />
+        </div>
+      </div>
+
+      {/* Mobile Layout - Full width */}
+      <div className="flex md:hidden flex-col gap-5 w-full">
         <AppHeading heading={toolConfigData.mainHeading!} />
         <SocialShareButtons
           pageUrl={toolUrl}
@@ -210,8 +241,8 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
           <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
         )}
         <ToolDescription descriptionData={toolDescriptionData} />
+        <BaseToolsAds className="w-full" />
       </div>
-      <BaseToolsAds className="w-full md:w-[20%]" />
     </div>
   );
 }
