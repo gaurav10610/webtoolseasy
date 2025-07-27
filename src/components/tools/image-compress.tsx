@@ -1,9 +1,20 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { find, isEmpty, isNil, map, toUpper } from "lodash-es";
 import { useState } from "react";
-import { ImagesPreview, NoFilesState } from "../fileComponents";
+import { FileUploadWithDragDrop } from "../lib/fileUpload";
+import { FilePreview } from "../lib/filePreview";
+import {
+  FILE_TYPE_PRESETS,
+  FILE_SIZE_PRESETS,
+} from "../../util/fileValidation";
+import { ButtonWithHandler } from "../lib/buttons";
+import AddIcon from "@mui/icons-material/Add";
+import { BaseFileData } from "@/types/file";
+import imageCompression from "browser-image-compression";
+import { formatBytes } from "@/util/commonUtils";
+import SettingsIcon from "@mui/icons-material/Settings";
+import DownloadIcon from "@mui/icons-material/Download";
 import {
   FormControl,
   InputLabel,
@@ -13,13 +24,6 @@ import {
   Slider,
   Typography,
 } from "@mui/material";
-import { ButtonWithHandler } from "../lib/buttons";
-import AddIcon from "@mui/icons-material/Add";
-import { BaseFileData } from "@/types/file";
-import imageCompression from "browser-image-compression";
-import { formatBytes } from "@/util/commonUtils";
-import SettingsIcon from "@mui/icons-material/Settings";
-import DownloadIcon from "@mui/icons-material/Download";
 
 interface CompressOptions {
   signal: AbortSignal;
@@ -41,24 +45,22 @@ interface ImageFileData extends BaseFileData {
 export default function ImageCompress() {
   const [fileList, setFileList] = useState<ImageFileData[]>([]);
   const [selectedFile, setSelectedFile] = useState<ImageFileData | null>(null);
+  const [error, setError] = useState("");
 
-  const onFilesSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) {
-      return;
-    }
-    const files = event.target.files;
-
-    const newFiles = map(Array.from(files), (file) => ({
+  const handleFileSelect = (files: FileList) => {
+    const newFiles = Array.from(files).map((file) => ({
       id: crypto.randomUUID(),
       originalFile: file,
+      compressedFile: undefined,
       compressProgress: 0,
       isCompressed: false,
-      inProgress: false,
       compressOptions: {
         signal: new AbortController().signal,
         maxSizeMB: (0.9 * file.size) / 1024 / 1024,
         useWebWorker: true,
       },
+      inProgress: false,
+      error: undefined,
       compressionRate: 10,
       maxFileSize: 0.9 * file.size,
     }));
@@ -69,10 +71,8 @@ export default function ImageCompress() {
     }
   };
 
-  const openFileDialog = () => {
-    const input = document.getElementById("file") as HTMLInputElement;
-    input.type = "file";
-    input.click();
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   const compressImage = () => {
@@ -285,44 +285,100 @@ export default function ImageCompress() {
 
   return (
     <div className="flex flex-col w-full gap-3">
-      <input
-        id="file"
-        type="file"
-        className="hidden"
-        onChange={onFilesSelection}
-        multiple
-        accept=".jpg,.jpeg,.png,.webp,.bmp"
-      />
-      {isEmpty(fileList) && <NoFilesState openFileDialog={openFileDialog} />}
+      {/* Error message */}
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <Typography variant="body2" className="text-red-800">
+            {error}
+          </Typography>
+        </div>
+      )}
+
+      {/* File Upload */}
+      {isEmpty(fileList) && (
+        <FileUploadWithDragDrop
+          accept="image/*"
+          multiple={true}
+          allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+          maxSize={FILE_SIZE_PRESETS.LARGE}
+          onFileSelect={handleFileSelect}
+          onError={handleError}
+          title="Upload Images to Compress"
+          subtitle="Drag and drop your images here or click to browse"
+          supportText="Supports JPG, PNG, WebP, BMP formats up to 10MB each"
+        />
+      )}
+
+      {/* Add More Images Button */}
       {!isEmpty(fileList) && (
         <div className="w-full flex flex-row justify-end">
           <ButtonWithHandler
             buttonText="Add More Images"
-            onClick={openFileDialog}
+            onClick={() => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.multiple = true;
+              input.accept = "image/*";
+              input.onchange = (e) => {
+                const files = (e.target as HTMLInputElement).files;
+                if (files) handleFileSelect(files);
+              };
+              input.click();
+            }}
             size="small"
             startIcon={<AddIcon />}
           />
         </div>
       )}
+
+      {/* File Preview */}
       {!isEmpty(fileList) && (
-        <Typography variant="h5" color="textSecondary">
-          Selected Images
-        </Typography>
+        <>
+          <Typography variant="h5" color="textSecondary">
+            Selected Images
+          </Typography>
+          <FilePreview
+            files={fileList.map((file) => ({
+              id: file.id,
+              file: file.originalFile,
+              preview: URL.createObjectURL(file.originalFile),
+              isSelected: selectedFile?.id === file.id,
+              showProgress: file.inProgress,
+              progress: file.compressProgress,
+              status: file.inProgress
+                ? "processing"
+                : file.isCompressed
+                ? "completed"
+                : "idle",
+              statusText: file.inProgress
+                ? "Compressing..."
+                : file.isCompressed
+                ? "Compressed"
+                : undefined,
+            }))}
+            onFileSelect={selectImageHandler}
+            onFileRemove={(id) => {
+              const newFileList = fileList.filter((f) => f.id !== id);
+              setFileList(newFileList);
+              if (selectedFile?.id === id) {
+                setSelectedFile(newFileList.length > 0 ? newFileList[0] : null);
+              }
+            }}
+            previewSize="medium"
+            layout="grid"
+          />
+        </>
       )}
-      {!isEmpty(fileList) && (
-        <ImagesPreview
-          selectedFile={selectedFile}
-          fileList={map(fileList, ({ id, originalFile }) => ({
-            id,
-            originalFile,
-          }))}
-          selectImageHandler={selectImageHandler}
-        />
-      )}
+
+      {/* Compression Settings */}
       {!isNil(selectedFile) && (
         <CompressionSettings selectedFile={selectedFile} />
       )}
+
+      {/* Progress Loader */}
       {!isNil(selectedFile) && selectedFile.inProgress && <ProgressLoader />}
+
+      {/* Compressed Image Preview */}
       {!isNil(selectedFile) &&
         !isNil(selectedFile.compressedFile) &&
         !selectedFile.inProgress && (
