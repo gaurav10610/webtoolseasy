@@ -3,14 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/html-formatter";
-const pageTitle =
-  "HTML Beautifier and Formatter: Beautify and Format HTML Code";
+const pageTitle = "HTML Formatter Online Free - Beautify HTML Code";
 const pageDescription =
-  "Beautify your HTML code with ease with our free online HTML beautifier tool. No download required, no sign-up required.";
+  "Free HTML formatter and beautifier. Clean, indent, and format HTML code online. Improve readability and code structure.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
 
 const keywords =
-  "online HTML beautifier,beautify HTML code,HTML beautifier tool,HTML code formatter,HTML code style,improve HTML code readability,make HTML code more consistent,follow HTML code style guidelines,free HTML beautifier,HTML code formatting errors";
+  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html,html tool";
 
 export const metadata: Metadata = {
   alternates: {

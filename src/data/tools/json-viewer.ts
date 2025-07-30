@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/json-viewer";
-const pageTitle = "Free Online JSON Viewer: View Your JSON in a Tree Structure";
+const pageTitle = "JSON Viewer Online Free - View JSON Tree Structure";
 const pageDescription =
-  "View your JSON data in a tree structure with our free online JSON viewer tool. No download required, no sign-up required.";
+  "Free JSON viewer to visualize JSON data in tree format. Expand, collapse, search JSON objects. No download required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-viewer.png`;
 
 const keywords =
-  "online JSON viewer,view JSON data,JSON tree structure,JSON data tree,JSON data viewer,JSON viewer tool,free JSON viewer,JSON beautifier,expand and collapse,search JSON data";
+  "json viewer,json tree viewer,view json online,json visualizer,json formatter,json prettifier,json explorer,json parser,json tool,validate json";
 
 export const metadata: Metadata = {
   alternates: {

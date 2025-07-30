@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/markdown-editor";
-const pageTitle = "Free Online Markdown Editor: Preview Markdown in Real Time";
+const pageTitle = "Markdown Editor Online Free - Live Preview & Export";
 const pageDescription =
-  "Write, edit and preview Markdown in real time with our free online Markdown editor. Create, edit and preview ReadME and Md Online.";
+  "Free online Markdown editor with live preview. Write, edit, export to HTML, PDF. Real-time syntax highlighting and formatting.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-editor.png`;
 
 const keywords =
-  "online Markdown editor,write Markdown,preview Markdown,real-time preview,export Markdown to HTML,export Markdown to PDF,export Markdown to Microsoft Word,free Markdown editor,no download required,supports Markdown syntax,Markdown syntax highlighting,share Markdown documents,md editors,md markup editor,md editor online";
+  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter,readme editor";
 
 export const metadata: Metadata = {
   alternates: {

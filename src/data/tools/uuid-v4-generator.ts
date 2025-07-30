@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/uuid-v4-generator";
-const pageTitle = "UUID v4 Generator: Generate Single or Bulk UUID v4";
+const pageTitle = "UUID Generator Online Free - Generate UUID v4 Bulk";
 const pageDescription =
-  "Our free online UUID v4 generator tool is a quick and easy way to generate universally unique identifiers (UUIDs), either individually or in bulk.";
+  "Free UUID v4 generator online. Create single or bulk UUIDs instantly. Copy, download multiple unique identifiers for development.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "UUID v4 generator, UUID generator online, UUID generator free, UUID v4, UUID, universally unique identifier, GUID, globally unique identifier, generate UUID, generate UUID online, generate UUID free";
+  "uuid generator,uuid v4 generator,generate uuid online,uuid creator,unique identifier generator,bulk uuid,random uuid,guid generator,uuid tool";
 
 export const metadata: Metadata = {
   alternates: {

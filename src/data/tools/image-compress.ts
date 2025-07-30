@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/image-compress";
-const pageTitle = "Free Image Compressor: Reduce Image File Size";
+const pageTitle = "Image Compressor Free - Reduce Photo File Size";
 const pageDescription =
-  "Compress your images for free with our online image compressor. Reduce image file size without losing quality, perfect for websites, social media, and more.";
+  "Free image compressor to reduce file size. Compress JPG, PNG, WEBP images while maintaining quality. Perfect for web optimization.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-compressor.png`;
 
 const keywords =
-  "free image compressor,online image compressor,reduce image file size,optimize images for web,share images online,compress JPEG images,compress PNG images,compress GIF images,compress BMP images,image compression,image optimization,image resizer,image optimizer,web-optimized images,picture compressor,pic compressor,photo size reducer,reduce resolution of image";
+  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,image compression tool";
 
 export const metadata: Metadata = {
   alternates: {

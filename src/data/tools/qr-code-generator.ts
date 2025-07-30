@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/qr-code-generator";
-const pageTitle = "Free QR Code Generator: Generate QR Codes with Free Text";
+const pageTitle = "QR Code Generator Free - Create Custom QR Codes";
 const pageDescription =
-  "Generate custom QR codes for free with our easy to use online QR code generator tool. QR code builder. Generate QR code with free text.";
+  "Free QR code generator for text, URLs, WiFi, contact info. Create custom QR codes instantly. Download PNG, SVG formats.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
-  "online qr code generator,qr code generator,qr code,create qr code,qr code types,free qr code generator,generate qr,qr code builder,quick response code";
+  "qr code generator,create qr code,qr code maker,free qr generator,qr code creator,custom qr code,generate qr online,qr builder,quick response code";
 
 export const metadata: Metadata = {
   alternates: {

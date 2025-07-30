@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/base64-encode";
-const pageTitle = "File to Base64 Encoder: Convert Any File to Base64";
+const pageTitle = "Base64 Encoder Free - Convert Files to Base64 Online";
 const pageDescription =
-  "Convert any file to Base64 with ease with our free online file to the Base64 encoder tool. Image, Text, PDF or File to Base64.";
+  "Free Base64 encoder to convert any file to Base64 format. Support images, PDFs, text files. No upload limits, instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-encode.png`;
 
 const keywords =
-  "online file to Base64 encoder,convert file to Base64,file to Base64 encoder tool,Base64 encoding,Base64 decoding,Base64 secure,Base64 transmission,Base64 storage,free file to Base64 encoder,no download required,supports all file formats,easy to use,customizable settings,Base64 encoding scheme,store encoded data securely,image to Base64,text to Base64,pdf to Base64";
+  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder,file converter";
 
 export const metadata: Metadata = {
   alternates: {

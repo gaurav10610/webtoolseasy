@@ -3,12 +3,12 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/jwt-decoder";
-const pageTitle = "Online JWT Decoder: Validate and Decode JSON Web Token";
+const pageTitle = "JWT Decoder Online Free - Decode JSON Web Tokens";
 const pageDescription =
-  "Our free online JWT decoder tool is a quick and easy way to decode JSON Web Tokens (JWTs). Decode JWT header and body. Validate JWT Token Online.";
+  "Free JWT decoder to decode and validate JSON Web Tokens. View header, payload, signature. Debug JWT tokens online securely.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/jwt-decoder.png`;
 const keywords =
-  "JWT decoder, JWT decoder online, JWT decoder free, JWT decoder tool, decode JWT, decode JWT online, decode JWT free, JWT debugger, JSON Web Token decoder, JSON Web Token decoder online, JSON Web Token decoder free, decode JWT header, validate JWT, validate JSON Web Token";
+  "jwt decoder,decode jwt online,jwt debugger,json web token decoder,jwt validator,jwt parser,jwt tool,validate jwt,jwt analyzer,decode token";
 
 export const metadata: Metadata = {
   alternates: {

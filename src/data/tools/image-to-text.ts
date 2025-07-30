@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { ApplicationIds } from "@/types/config";
 
 const navigationUrl = "/tools/image-to-text";
-const pageTitle = "Free Image to Text Converter | OCR Tool Online";
+const pageTitle = "Image to Text Converter Free - OCR Extract Text";
 const pageDescription =
-  "Convert images to text instantly with our powerful OCR tool. Extract text from JPG, PNG, JPEG, and other image formats. Free online image to text converter with accurate text recognition. Perfect for digitizing documents, photos, and scanned files.";
+  "Free OCR tool to extract text from images. Convert JPG, PNG to editable text instantly. Accurate text recognition online.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-to-text.png`;
 
 const keywords =
-  "image to text converter, extract text from image, OCR online free, convert image to text, photo to text converter, picture text extractor, scan to text, JPG to text, PNG to text, image text recognition, document digitization, text extraction tool";
+  "image to text,ocr online,extract text from image,photo to text,image text converter,jpg to text,png to text,text recognition,ocr tool,picture to text";
 
 export const metadata: Metadata = {
   alternates: {
