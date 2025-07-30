@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/crop-image";
-const pageTitle = "Free Image Cropper: Crop Your Photos Online For Free";
+const pageTitle = "Image Cropper Online Free - Crop Photos with Precision";
 const pageDescription =
-  "Crop your images online for free with our easy-to-use image cropper. No download required, no sign-up required. Crop JPG, PNG, WEBP, BMP For Free.";
+  "Free online image cropper with professional features. Crop JPG, PNG, WEBP images using aspect ratio presets, precision controls, and manual positioning. No signup required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-cropper.png`;
 
 const keywords =
-  "free image cropper,online image cropper,crop images online,crop JPEG images,crop PNG images,crop GIF images,crop BMP images,image cropping,image composition,image aspect ratio,social media image cropping,website image cropping,remove unwanted parts of an image,resize an image,create a square image";
+  "image cropper,crop image online,free photo cropper,crop photos,image crop tool,online image editor,photo editing,aspect ratio cropper,crop jpeg,crop png,social media image cropper,picture cropper,resize images,photo resizer";
 
 export const metadata: Metadata = {
   alternates: {
@@ -47,54 +47,64 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: "Free Online Image Cropper: Crop JPG, PNG, WEBP, BMP Images",
+  mainHeading: "Free Online Image Cropper - Crop Your Photos Instantly",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
-  relatedTools: [ApplicationIds.IMAGE_COMPRESSOR],
+  relatedTools: [ApplicationIds.IMAGE_COMPRESSOR, ApplicationIds.IMAGE_TO_TEXT],
 };
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "Why Use an Image Cropper?",
+    heading: "Why Use Our Free Image Cropper?",
     listData: [
-      "To remove unwanted parts of an image. This can be useful for improving the composition of an image or for removing distracting elements.",
-      "To resize an image to a specific size. This can be useful for sharing images on social media or for using images on a website.",
-      "To create a square image. Square images are often preferred for social media platforms and for sharing on mobile devices.",
+      "Crop images online without downloading software or creating accounts.",
+      "Professional quality results with precise positioning and aspect ratio controls.",
+      "Perfect for social media posts, profile pictures, and website images.",
+      "Support for popular formats including JPEG, PNG, WEBP, and BMP files.",
+      "Mobile-friendly interface that works on phones, tablets, and computers.",
+      "Instant preview shows exactly how your cropped image will look.",
     ],
   },
   {
-    heading: "Features of Our Free Online Image Cropper",
+    heading: "Powerful Features for Perfect Photo Cropping",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Crop your images directly from your web browser.",
-      "Supports multiple image formats. Crop JPEG, PNG, GIF, and BMP images.",
-      "Easy to use. Simply upload your image and drag the crop box to the desired size and location.",
-      "Save your cropped images in the desired format.",
+      "Smart aspect ratio presets for Instagram (1:1), YouTube (16:9), and standard formats.",
+      "Drag and drop multiple images for quick batch photo editing.",
+      "Manual input controls for exact pixel positioning and sizing.",
+      "Real-time sliders make adjusting crop area smooth and intuitive.",
+      "Switch between pixel and percentage measurements for different workflows.",
+      "One-click reset to start over if you want to try different crop settings.",
+      "Download in multiple formats optimized for web, print, or social sharing.",
     ],
   },
   {
-    heading: "How to Use Our Free Online Image Cropper",
+    heading: "How to Crop Images Online (Step by Step)",
     listData: [
-      'Go to our website and click the "Upload Image" button.',
-      "Select the image you want to crop.",
-      "Drag the crop box to the desired size and location.",
-      'Click the "Crop Image" button.',
-      "Save your cropped image.",
+      "Upload your photo by dragging it onto the page or clicking browse.",
+      "Choose an aspect ratio preset or select 'Free Crop' for custom dimensions.",
+      "Drag the crop box or use sliders to position and resize the selection.",
+      "Use manual input fields for precise measurements when needed.",
+      "Preview your cropped image in real-time as you make adjustments.",
+      "Select your preferred output format (PNG, JPEG, WEBP, BMP, or ICO).",
+      "Click download to save your perfectly cropped image to your device.",
     ],
   },
   {
-    heading: "Tips for Using an Image Cropper",
+    heading: "Best Practices for Image Cropping",
     listData: [
-      "Consider the composition of your image. When cropping an image, it is important to consider the composition. Try to crop your image in a way that highlights the most important elements and creates a balanced and visually appealing image.",
-      "Use the crop ratio tool. Many image croppers have a crop ratio tool that allows you to crop your image to a specific aspect ratio. This can be useful for cropping images for social media or for using images on a website.",
-      "Save a copy of the original image. Before cropping your image, it is a good idea to save a copy of the original image. This way, you can always go back to the original image if you are not happy with the cropped image.",
+      "Use 1:1 square crops for Instagram posts and profile pictures across social platforms.",
+      "Choose 16:9 widescreen ratio for YouTube thumbnails and landscape website headers.",
+      "Apply 4:3 standard ratio for traditional photo frames and presentations.",
+      "Enable aspect ratio lock to maintain proportions when resizing crop area.",
+      "Save originals before cropping so you can create different versions later.",
+      "Consider the main subject when positioning your crop for better composition.",
     ],
   },
   {
     blockData: [
-      "Our free online image cropper is a great way to crop your images online for free. It is easy to use and supports multiple image formats. With our image cropper, you can remove unwanted parts of an image, resize an image to a specific size, or create a square image.",
+      "Our free image cropper combines ease of use with professional features, making it the perfect tool for content creators, social media managers, bloggers, and anyone who needs to crop photos quickly. Whether you're preparing images for Instagram, creating website graphics, or editing personal photos, our online tool delivers high-quality results without the need for expensive photo editing software.",
     ],
   },
 ];
