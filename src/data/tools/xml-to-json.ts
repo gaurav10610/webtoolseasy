@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/xml-to-json";
-const pageTitle = "Free Online XML to JSON Converter: Convert XML to JSON";
+const pageTitle = "XML to JSON Converter Free - Convert XML Online";
 const pageDescription =
-  "Convert XML to JSON with ease with our free online XML to JSON converter. No download required, no sign-up required.";
+  "Free XML to JSON converter online. Transform XML data to JSON format instantly. Easy conversion with validation and formatting.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/xml-to-json.png`;
 
 const keywords =
-  "online XML to JSON converter,XML to JSON converter,XML to JSON,XML to JSON conversion,XML to JSON tool,free XML to JSON converter,no download required,supports all XML versions,easy to use,customizable settings,XML and JSON,XML to JSON best practices,JSON validator";
+  "xml to json converter,convert xml to json,xml json converter,xml parser,json converter,data converter,xml transformation,format converter";
 
 export const metadata: Metadata = {
   alternates: {

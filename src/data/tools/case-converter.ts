@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/case-converter";
-const pageTitle = "Online Case Converter: Convert Text to Uppercase, Lowercase";
+const pageTitle = "Text Case Converter Free - Upper Lower Title Case";
 const pageDescription =
-  "Convert text to any case with ease using our free online case converter tool. Convert text to uppercase, lowercase, sentence case, title case, and more.";
+  "Free online text case converter. Convert to uppercase, lowercase, title case, sentence case instantly. Bulk text formatting tool.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/case-converter.png`;
 
 const keywords =
-  "case converter,convert text to any case,free case converter,easy to use,uppercase,lowercase,sentence case,title case,case types,format text,learn about case";
+  "case converter,text case converter,uppercase converter,lowercase converter,title case,sentence case,text formatter,convert case online,text tool";
 
 export const metadata: Metadata = {
   alternates: {

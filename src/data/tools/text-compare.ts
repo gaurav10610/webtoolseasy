@@ -3,11 +3,11 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/text-compare";
-const pageTitle = "Online Text Compare Tool: Compare Two Texts Side by Side";
-const pageDescription = `Our text compare tool is a quick and easy way to compare two texts for similarities and differences. It's perfect for students, writers, bloggers.`;
+const pageTitle = "Text Compare Tool Free - Compare Text Differences";
+const pageDescription = `Free online text comparison tool. Compare two texts side by side, highlight differences, find similarities. Perfect for documents.`;
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-diff.png`;
 const keywords =
-  "text compare tool, text comparison tool, text diff tool, compare text online, compare text files, compare text documents, plagiarism checker, compare documents for similarity, compare two texts, text similarity checker, compare text online free, text compare online, compare text ignore whitespace";
+  "text compare,compare text online,text diff tool,text comparison,compare documents,text difference,file compare,document compare,text checker";
 
 export const metadata: Metadata = {
   alternates: {
