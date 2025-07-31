@@ -250,9 +250,9 @@
   "pdf-editor": {
     "applicationId": "pdf-editor",
     "displayText": "PDF Editor",
-    "iconName": "pdf-editor-icon",
+    "iconName": "pdf-icon",
     "navigateUrl": "tools/pdf-editor",
-    "iconRelativeUrl": "markdown.svg",
+    "iconRelativeUrl": "pdf-icon.svg",
     "category": "Online Editors"
   }
 }

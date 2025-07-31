@@ -121,7 +121,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setCurrentRotation(0); // Reset rotation for new file
         // Store the original file data for the PDF viewer - use original file
         setPdfDocumentData(newFiles[0].file);
-        setDocumentKey(`initial-${Date.now()}`);
+        setDocumentKey(`file-${newFiles[0].id}`); // Use file ID for stable key
       }
       setIsProcessing(false);
     },
@@ -222,7 +222,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       try {
         // Calculate the new total rotation
         const newTotalRotation = (currentRotation + rotationDegrees) % 360;
-        
+
         const page = selectedFile.document.getPage(currentPage - 1);
         // Set the absolute rotation, not relative
         page.setRotation(degrees(newTotalRotation));
@@ -242,7 +242,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
         // Update the PDF document data for the viewer
         setPdfDocumentData(updatedFile);
-        setDocumentKey(`rotated-${Date.now()}`);
+        setDocumentKey(`file-${selectedFile.id}-rotated`); // Stable key for rotated version
 
         // Also update the selectedFile's document to the rotated version
         // so subsequent rotations are applied to the already rotated document
@@ -264,7 +264,9 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         // Track total rotation
         setCurrentRotation(newTotalRotation);
 
-        showMessage(`Page rotated ${rotationDegrees} degrees (Total: ${newTotalRotation}°)`);
+        showMessage(
+          `Page rotated ${rotationDegrees} degrees (Total: ${newTotalRotation}°)`
+        );
       } catch (err) {
         console.error("Error rotating page:", err);
         setError("Failed to rotate page");
@@ -292,11 +294,23 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       };
 
       setTextAnnotations((prev) => [...prev, newAnnotation]);
-      setTextInput("");
-      showMessage("Text annotation added");
+      // Don't clear textInput immediately - let user add multiple annotations with same text
+      showMessage(
+        `Text annotation "${textInput}" added at page ${currentPage}`
+      );
     },
     [textInput, fontSize, textColor, currentPage]
   );
+
+  const removeAnnotation = useCallback((annotationId: string) => {
+    setTextAnnotations((prev) => prev.filter((ann) => ann.id !== annotationId));
+    showMessage("Annotation removed");
+  }, []);
+
+  const clearAllAnnotations = useCallback(() => {
+    setTextAnnotations([]);
+    showMessage("All annotations cleared");
+  }, []);
 
   const saveAnnotatedPDF = useCallback(async () => {
     if (!selectedFile || !selectedFile.document) {
@@ -369,7 +383,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setCurrentRotation(0); // Reset rotation for new file
         // Load the PDF data for the viewer - use original file
         setPdfDocumentData(file.file);
-        setDocumentKey(`selected-${Date.now()}`);
+        setDocumentKey(`file-${file.id}`); // Use file ID for stable key
       }
     },
     [pdfFiles]
@@ -381,8 +395,8 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
     setCurrentPage(1);
   };
 
-  // PDF Viewer Component
-  const PDFViewer = () => {
+  // PDF Viewer Component - Memoized to prevent unnecessary re-renders
+  const PDFViewer = React.memo(() => {
     if (!selectedFile) return null;
 
     return (
@@ -444,55 +458,100 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
           </div>
 
           <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50 min-h-96 flex justify-center items-center overflow-auto">
-            <Document
-              key={`${selectedFile.id}-${documentKey}`}
-              file={pdfDocumentData || selectedFile.file}
-              onLoadSuccess={onDocumentLoadSuccess}
-              loading={
-                <div className="text-center py-8">
-                  <Typography>Loading PDF...</Typography>
-                </div>
-              }
-              error={
-                <div className="text-center py-8">
-                  <Typography color="error">
-                    Failed to load PDF. Please try a different file.
-                  </Typography>
-                </div>
-              }
-            >
-              <Page
-                pageNumber={currentPage}
-                scale={zoom}
-                onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-                  if (isAnnotationMode) {
-                    const rect = event.currentTarget.getBoundingClientRect();
-                    const x = event.clientX - rect.left;
-                    const y = event.clientY - rect.top;
-                    addTextAnnotation(x, y);
-                  }
-                }}
-                className={`cursor-pointer shadow-lg ${
-                  isAnnotationMode ? "border-2 border-blue-400" : ""
-                }`}
-                renderTextLayer={false}
-                renderAnnotationLayer={false}
-              />
-            </Document>
+            <div className="relative">
+              <Document
+                key={documentKey} // Use stable document key
+                file={pdfDocumentData || selectedFile.file}
+                onLoadSuccess={onDocumentLoadSuccess}
+                loading={
+                  <div className="text-center py-8">
+                    <Typography>Loading PDF...</Typography>
+                  </div>
+                }
+                error={
+                  <div className="text-center py-8">
+                    <Typography color="error">
+                      Failed to load PDF. Please try a different file.
+                    </Typography>
+                  </div>
+                }
+              >
+                <Page
+                  pageNumber={currentPage}
+                  scale={zoom}
+                  onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                    if (isAnnotationMode) {
+                      const rect = event.currentTarget.getBoundingClientRect();
+                      const x = event.clientX - rect.left;
+                      const y = event.clientY - rect.top;
+                      addTextAnnotation(x, y);
+                    }
+                  }}
+                  className={`cursor-pointer shadow-lg ${
+                    isAnnotationMode ? "border-2 border-blue-400" : ""
+                  }`}
+                  renderTextLayer={false}
+                  renderAnnotationLayer={false}
+                />
+              </Document>
+
+              {/* Overlay annotations for current page */}
+              {textAnnotations
+                .filter(
+                  (annotation) => annotation.pageIndex === currentPage - 1
+                )
+                .map((annotation) => (
+                  <div
+                    key={annotation.id}
+                    style={{
+                      position: "absolute",
+                      left: annotation.x,
+                      top: annotation.y,
+                      fontSize: `${annotation.fontSize * zoom}px`,
+                      color: annotation.color,
+                      fontFamily: "Helvetica, Arial, sans-serif",
+                      pointerEvents: isAnnotationMode ? "auto" : "none",
+                      cursor: isAnnotationMode ? "pointer" : "default",
+                      backgroundColor: isAnnotationMode
+                        ? "rgba(255, 255, 0, 0.3)"
+                        : "transparent",
+                      padding: isAnnotationMode ? "2px 4px" : "0",
+                      borderRadius: isAnnotationMode ? "3px" : "0",
+                      maxWidth: "200px",
+                      wordWrap: "break-word",
+                      userSelect: "none",
+                    }}
+                    onClick={(e) => {
+                      if (isAnnotationMode) {
+                        e.stopPropagation();
+                        removeAnnotation(annotation.id);
+                      }
+                    }}
+                    title={
+                      isAnnotationMode
+                        ? "Click to remove this annotation"
+                        : annotation.text
+                    }
+                  >
+                    {annotation.text}
+                  </div>
+                ))}
+            </div>
           </div>
 
           {isAnnotationMode && (
             <Alert severity="info" className="mt-4">
               <strong>Annotation Mode Active:</strong> Click anywhere on the PDF
-              to add text annotations. Make sure to enter text in the annotation
-              tools above first.
+              to add text annotations. Click on existing annotations to remove
+              them. Make sure to enter text in the annotation tools above first.
             </Alert>
           )}
         </CardContent>
       </Card>
     );
-  };
+  });
 
+  PDFViewer.displayName = "PDFViewer";
   return (
     <div className="flex flex-col w-full gap-4">
       <SnackBarWithPosition
@@ -606,7 +665,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                   >
                     Split PDF
                   </Button>
-                  
+
                   <div className="flex gap-1">
                     <Button
                       startIcon={<RotateIcon />}
@@ -640,7 +699,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                       270°
                     </Button>
                   </div>
-                  
+
                   {currentRotation > 0 && (
                     <Button
                       onClick={() => rotatePage(-currentRotation)}
@@ -653,7 +712,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                       Reset (Currently: {currentRotation}°)
                     </Button>
                   )}
-                  
+
                   <Button
                     startIcon={<DownloadIcon />}
                     onClick={saveAnnotatedPDF}
@@ -725,8 +784,51 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                       />
                     </div>
 
+                    {textAnnotations.length > 0 && (
+                      <div className="space-y-2">
+                        <Typography
+                          variant="body2"
+                          className="text-xs font-medium"
+                        >
+                          Annotations ({textAnnotations.length}):
+                        </Typography>
+                        <div className="max-h-32 overflow-y-auto space-y-1">
+                          {textAnnotations.map((annotation) => (
+                            <div
+                              key={annotation.id}
+                              className="flex justify-between items-center p-2 bg-gray-100 rounded text-xs"
+                            >
+                              <span className="truncate flex-1">
+                                Page {annotation.pageIndex + 1}: &ldquo;
+                                {annotation.text}&rdquo;
+                              </span>
+                              <Button
+                                size="small"
+                                onClick={() => removeAnnotation(annotation.id)}
+                                color="error"
+                                variant="text"
+                                className="text-xs min-w-0 px-1"
+                              >
+                                ×
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                        <Button
+                          onClick={clearAllAnnotations}
+                          size="small"
+                          variant="outlined"
+                          color="secondary"
+                          fullWidth
+                        >
+                          Clear All
+                        </Button>
+                      </div>
+                    )}
+
                     <Alert severity="info" className="text-xs">
-                      Click on PDF to add text
+                      Click on PDF to add text. Click on existing annotations to
+                      remove them.
                     </Alert>
                   </div>
                 )}
