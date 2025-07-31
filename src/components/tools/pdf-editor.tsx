@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { 
-  Typography, 
-  Card, 
-  CardContent, 
-  Alert, 
+import {
+  Typography,
+  Card,
+  CardContent,
+  Alert,
   TextField,
   Switch,
   FormControlLabel,
   Slider,
-  Button
+  Button,
 } from "@mui/material";
 import { Document, Page, pdfjs } from "react-pdf";
 import { PDFDocument, rgb, StandardFonts, degrees } from "pdf-lib";
@@ -38,7 +38,7 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
 // Set up PDF.js worker
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   // Use local worker file to avoid CDN issues
   pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 }
@@ -68,14 +68,17 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [textAnnotations, setTextAnnotations] = useState<TextAnnotation[]>([]);
   const [isAnnotationMode, setIsAnnotationMode] = useState(false);
-  const [textInput, setTextInput] = useState('');
+  const [textInput, setTextInput] = useState("");
   const [fontSize, setFontSize] = useState(12);
-  const [textColor, setTextColor] = useState('#000000');
-  const [error, setError] = useState('');
+  const [textColor, setTextColor] = useState("#000000");
+  const [error, setError] = useState("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState('');
+  const [snackBarMessage, setSnackBarMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [numPages, setNumPages] = useState<number>(0);
+  const [pdfDocumentData, setPdfDocumentData] = useState<File | null>(null);
+  const [documentKey, setDocumentKey] = useState<string>("");
+  const [currentRotation, setCurrentRotation] = useState<number>(0);
 
   // Snackbar handler
   const handleSnackBarClose = () => setIsSnackBarOpen(false);
@@ -86,37 +89,44 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   };
 
   // File handling
-  const handleFileSelect = useCallback(async (files: FileList) => {
-    setIsProcessing(true);
-    const newFiles: PDFFile[] = [];
+  const handleFileSelect = useCallback(
+    async (files: FileList) => {
+      setIsProcessing(true);
+      const newFiles: PDFFile[] = [];
 
-    for (const file of Array.from(files)) {
-      if (file.type === 'application/pdf') {
-        try {
-          const arrayBuffer = await file.arrayBuffer();
-          const pdfDoc = await PDFDocument.load(arrayBuffer);
-          
-          const pdfFile: PDFFile = {
-            id: crypto.randomUUID(),
-            file,
-            document: pdfDoc,
-            numPages: pdfDoc.getPageCount(),
-          };
-          
-          newFiles.push(pdfFile);
-        } catch (err) {
-          console.error('Error loading PDF:', err);
-          setError(`Failed to load PDF: ${file.name}`);
+      for (const file of Array.from(files)) {
+        if (file.type === "application/pdf") {
+          try {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+            const pdfFile: PDFFile = {
+              id: crypto.randomUUID(),
+              file,
+              document: pdfDoc,
+              numPages: pdfDoc.getPageCount(),
+            };
+
+            newFiles.push(pdfFile);
+          } catch (err) {
+            console.error("Error loading PDF:", err);
+            setError(`Failed to load PDF: ${file.name}`);
+          }
         }
       }
-    }
 
-    setPdfFiles(prev => [...prev, ...newFiles]);
-    if (newFiles.length > 0 && !selectedFile) {
-      setSelectedFile(newFiles[0]);
-    }
-    setIsProcessing(false);
-  }, [selectedFile]);
+      setPdfFiles((prev) => [...prev, ...newFiles]);
+      if (newFiles.length > 0 && !selectedFile) {
+        setSelectedFile(newFiles[0]);
+        setCurrentRotation(0); // Reset rotation for new file
+        // Store the original file data for the PDF viewer - use original file
+        setPdfDocumentData(newFiles[0].file);
+        setDocumentKey(`initial-${Date.now()}`);
+      }
+      setIsProcessing(false);
+    },
+    [selectedFile]
+  );
 
   const handleError = useCallback((errorMessage: string) => {
     setError(errorMessage);
@@ -125,43 +135,46 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   // PDF Operations
   const mergePDFs = useCallback(async () => {
     if (pdfFiles.length < 2) {
-      showMessage('Please upload at least 2 PDF files to merge');
+      showMessage("Please upload at least 2 PDF files to merge");
       return;
     }
 
     setIsProcessing(true);
     try {
       const mergedPdf = await PDFDocument.create();
-      
+
       for (const pdfFile of pdfFiles) {
         if (pdfFile.document) {
-          const pages = await mergedPdf.copyPages(pdfFile.document, pdfFile.document.getPageIndices());
-          pages.forEach(page => mergedPdf.addPage(page));
+          const pages = await mergedPdf.copyPages(
+            pdfFile.document,
+            pdfFile.document.getPageIndices()
+          );
+          pages.forEach((page) => mergedPdf.addPage(page));
         }
       }
 
       const pdfBytes = await mergedPdf.save();
       const uint8Array = new Uint8Array(pdfBytes);
-      const blob = new Blob([uint8Array], { type: 'application/pdf' });
+      const blob = new Blob([uint8Array], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
+
+      const link = document.createElement("a");
       link.href = url;
-      link.download = 'merged-document.pdf';
+      link.download = "merged-document.pdf";
       link.click();
-      
+
       URL.revokeObjectURL(url);
-      showMessage('PDFs merged successfully!');
+      showMessage("PDFs merged successfully!");
     } catch (err) {
-      console.error('Error merging PDFs:', err);
-      setError('Failed to merge PDFs');
+      console.error("Error merging PDFs:", err);
+      setError("Failed to merge PDFs");
     }
     setIsProcessing(false);
   }, [pdfFiles]);
 
   const splitPDF = useCallback(async () => {
     if (!selectedFile || !selectedFile.document) {
-      showMessage('Please select a PDF file to split');
+      showMessage("Please select a PDF file to split");
       return;
     }
 
@@ -177,68 +190,117 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
         const pdfBytes = await newPdf.save();
         const uint8Array = new Uint8Array(pdfBytes);
-        const blob = new Blob([uint8Array], { type: 'application/pdf' });
+        const blob = new Blob([uint8Array], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
+
+        const link = document.createElement("a");
         link.href = url;
-        link.download = `${selectedFile.file.name.replace('.pdf', '')}-page-${i + 1}.pdf`;
+        link.download = `${selectedFile.file.name.replace(".pdf", "")}-page-${
+          i + 1
+        }.pdf`;
         link.click();
-        
+
         URL.revokeObjectURL(url);
       }
 
       showMessage(`PDF split into ${pageCount} pages successfully!`);
     } catch (err) {
-      console.error('Error splitting PDF:', err);
-      setError('Failed to split PDF');
+      console.error("Error splitting PDF:", err);
+      setError("Failed to split PDF");
     }
     setIsProcessing(false);
   }, [selectedFile]);
 
-  const rotatePage = useCallback(async (rotationDegrees: number) => {
-    if (!selectedFile || !selectedFile.document) {
-      showMessage('Please select a PDF file');
-      return;
-    }
+  const rotatePage = useCallback(
+    async (rotationDegrees: number) => {
+      if (!selectedFile || !selectedFile.document) {
+        showMessage("Please select a PDF file");
+        return;
+      }
 
-    setIsProcessing(true);
-    try {
-      const page = selectedFile.document.getPage(currentPage - 1);
-      page.setRotation(degrees(rotationDegrees));
-      
-      showMessage(`Page rotated ${rotationDegrees} degrees`);
-    } catch (err) {
-      console.error('Error rotating page:', err);
-      setError('Failed to rotate page');
-    }
-    setIsProcessing(false);
-  }, [selectedFile, currentPage]);
+      setIsProcessing(true);
+      try {
+        // Calculate the new total rotation
+        const newTotalRotation = (currentRotation + rotationDegrees) % 360;
+        
+        const page = selectedFile.document.getPage(currentPage - 1);
+        // Set the absolute rotation, not relative
+        page.setRotation(degrees(newTotalRotation));
 
-  const addTextAnnotation = useCallback(async (x: number, y: number) => {
-    if (!textInput.trim()) {
-      showMessage('Please enter text to add');
-      return;
-    }
+        // Generate updated PDF data to refresh the preview
+        const updatedPdfBytes = await selectedFile.document.save();
+        const uint8Array = new Uint8Array(updatedPdfBytes);
+        const blob = new Blob([uint8Array], { type: "application/pdf" });
+        const updatedFile = new File(
+          [blob],
+          `rotated_${selectedFile.file.name}`,
+          {
+            type: "application/pdf",
+            lastModified: Date.now(),
+          }
+        );
 
-    const newAnnotation: TextAnnotation = {
-      id: crypto.randomUUID(),
-      text: textInput,
-      x,
-      y,
-      fontSize,
-      color: textColor,
-      pageIndex: currentPage - 1,
-    };
+        // Update the PDF document data for the viewer
+        setPdfDocumentData(updatedFile);
+        setDocumentKey(`rotated-${Date.now()}`);
 
-    setTextAnnotations(prev => [...prev, newAnnotation]);
-    setTextInput('');
-    showMessage('Text annotation added');
-  }, [textInput, fontSize, textColor, currentPage]);
+        // Also update the selectedFile's document to the rotated version
+        // so subsequent rotations are applied to the already rotated document
+        const updatedPdfDoc = await PDFDocument.load(updatedPdfBytes);
+        const updatedPdfFile: PDFFile = {
+          ...selectedFile,
+          file: updatedFile,
+          document: updatedPdfDoc,
+        };
+
+        // Update the selectedFile and the pdfFiles array
+        setSelectedFile(updatedPdfFile);
+        setPdfFiles((prev) =>
+          prev.map((file) =>
+            file.id === selectedFile.id ? updatedPdfFile : file
+          )
+        );
+
+        // Track total rotation
+        setCurrentRotation(newTotalRotation);
+
+        showMessage(`Page rotated ${rotationDegrees} degrees (Total: ${newTotalRotation}°)`);
+      } catch (err) {
+        console.error("Error rotating page:", err);
+        setError("Failed to rotate page");
+      }
+      setIsProcessing(false);
+    },
+    [selectedFile, currentPage, currentRotation]
+  );
+
+  const addTextAnnotation = useCallback(
+    async (x: number, y: number) => {
+      if (!textInput.trim()) {
+        showMessage("Please enter text to add");
+        return;
+      }
+
+      const newAnnotation: TextAnnotation = {
+        id: crypto.randomUUID(),
+        text: textInput,
+        x,
+        y,
+        fontSize,
+        color: textColor,
+        pageIndex: currentPage - 1,
+      };
+
+      setTextAnnotations((prev) => [...prev, newAnnotation]);
+      setTextInput("");
+      showMessage("Text annotation added");
+    },
+    [textInput, fontSize, textColor, currentPage]
+  );
 
   const saveAnnotatedPDF = useCallback(async () => {
     if (!selectedFile || !selectedFile.document) {
-      showMessage('Please select a PDF file');
+      showMessage("Please select a PDF file");
       return;
     }
 
@@ -248,10 +310,10 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
       // Add text annotations
-      textAnnotations.forEach(annotation => {
+      textAnnotations.forEach((annotation) => {
         const page = pdfDoc.getPage(annotation.pageIndex);
         const { height } = page.getSize();
-        
+
         page.drawText(annotation.text, {
           x: annotation.x,
           y: height - annotation.y,
@@ -267,38 +329,51 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
       const pdfBytes = await pdfDoc.save();
       const uint8Array = new Uint8Array(pdfBytes);
-      const blob = new Blob([uint8Array], { type: 'application/pdf' });
+      const blob = new Blob([uint8Array], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
+
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${selectedFile.file.name.replace('.pdf', '')}-annotated.pdf`;
+      link.download = `${selectedFile.file.name.replace(
+        ".pdf",
+        ""
+      )}-annotated.pdf`;
       link.click();
-      
+
       URL.revokeObjectURL(url);
-      showMessage('Annotated PDF saved successfully!');
+      showMessage("Annotated PDF saved successfully!");
     } catch (err) {
-      console.error('Error saving annotated PDF:', err);
-      setError('Failed to save annotated PDF');
+      console.error("Error saving annotated PDF:", err);
+      setError("Failed to save annotated PDF");
     }
     setIsProcessing(false);
   }, [selectedFile, textAnnotations]);
 
-  const removeFile = useCallback((id: string) => {
-    setPdfFiles(prev => prev.filter(file => file.id !== id));
-    if (selectedFile?.id === id) {
-      setSelectedFile(null);
-      setCurrentPage(1);
-    }
-  }, [selectedFile]);
+  const removeFile = useCallback(
+    (id: string) => {
+      setPdfFiles((prev) => prev.filter((file) => file.id !== id));
+      if (selectedFile?.id === id) {
+        setSelectedFile(null);
+        setCurrentPage(1);
+      }
+    },
+    [selectedFile]
+  );
 
-  const selectFile = useCallback((id: string) => {
-    const file = pdfFiles.find(f => f.id === id);
-    if (file) {
-      setSelectedFile(file);
-      setCurrentPage(1);
-    }
-  }, [pdfFiles]);
+  const selectFile = useCallback(
+    async (id: string) => {
+      const file = pdfFiles.find((f) => f.id === id);
+      if (file) {
+        setSelectedFile(file);
+        setCurrentPage(1);
+        setCurrentRotation(0); // Reset rotation for new file
+        // Load the PDF data for the viewer - use original file
+        setPdfDocumentData(file.file);
+        setDocumentKey(`selected-${Date.now()}`);
+      }
+    },
+    [pdfFiles]
+  );
 
   // PDF Document Load Handler
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
@@ -321,7 +396,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
             <div className="flex items-center gap-2">
               <Button
                 startIcon={<ZoomOutIcon />}
-                onClick={() => setZoom(prev => Math.max(0.5, prev - 0.1))}
+                onClick={() => setZoom((prev) => Math.max(0.5, prev - 0.1))}
                 size="small"
                 variant="outlined"
               />
@@ -330,7 +405,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
               </Typography>
               <Button
                 startIcon={<ZoomInIcon />}
-                onClick={() => setZoom(prev => Math.min(2.0, prev + 0.1))}
+                onClick={() => setZoom((prev) => Math.min(2.0, prev + 0.1))}
                 size="small"
                 variant="outlined"
               />
@@ -343,7 +418,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
             </Typography>
             <div className="flex gap-2">
               <Button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
                 size="small"
                 variant="outlined"
@@ -354,7 +429,11 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                 {currentPage} / {numPages || selectedFile.numPages}
               </Typography>
               <Button
-                onClick={() => setCurrentPage(prev => Math.min(numPages || selectedFile.numPages, prev + 1))}
+                onClick={() =>
+                  setCurrentPage((prev) =>
+                    Math.min(numPages || selectedFile.numPages, prev + 1)
+                  )
+                }
                 disabled={currentPage === (numPages || selectedFile.numPages)}
                 size="small"
                 variant="outlined"
@@ -366,7 +445,8 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
           <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50 min-h-96 flex justify-center items-center overflow-auto">
             <Document
-              file={selectedFile.file}
+              key={`${selectedFile.id}-${documentKey}`}
+              file={pdfDocumentData || selectedFile.file}
               onLoadSuccess={onDocumentLoadSuccess}
               loading={
                 <div className="text-center py-8">
@@ -375,7 +455,9 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
               }
               error={
                 <div className="text-center py-8">
-                  <Typography color="error">Failed to load PDF. Please try a different file.</Typography>
+                  <Typography color="error">
+                    Failed to load PDF. Please try a different file.
+                  </Typography>
                 </div>
               }
             >
@@ -390,7 +472,9 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                     addTextAnnotation(x, y);
                   }
                 }}
-                className={`cursor-pointer shadow-lg ${isAnnotationMode ? 'border-2 border-blue-400' : ''}`}
+                className={`cursor-pointer shadow-lg ${
+                  isAnnotationMode ? "border-2 border-blue-400" : ""
+                }`}
                 renderTextLayer={false}
                 renderAnnotationLayer={false}
               />
@@ -399,8 +483,9 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
           {isAnnotationMode && (
             <Alert severity="info" className="mt-4">
-              <strong>Annotation Mode Active:</strong> Click anywhere on the PDF to add text annotations. 
-              Make sure to enter text in the annotation tools above first.
+              <strong>Annotation Mode Active:</strong> Click anywhere on the PDF
+              to add text annotations. Make sure to enter text in the annotation
+              tools above first.
             </Alert>
           )}
         </CardContent>
@@ -418,15 +503,13 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       />
 
       {error && (
-        <Alert severity="error" onClose={() => setError('')}>
+        <Alert severity="error" onClose={() => setError("")}>
           {error}
         </Alert>
       )}
 
       {isProcessing && (
-        <Alert severity="info">
-          Processing PDF... Please wait.
-        </Alert>
+        <Alert severity="info">Processing PDF... Please wait.</Alert>
       )}
 
       {/* File Upload Section */}
@@ -461,10 +544,10 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                   <Button
                     startIcon={<AddIcon />}
                     onClick={() => {
-                      const input = document.createElement('input');
-                      input.type = 'file';
+                      const input = document.createElement("input");
+                      input.type = "file";
                       input.multiple = true;
-                      input.accept = 'application/pdf';
+                      input.accept = "application/pdf";
                       input.onchange = (e) => {
                         const files = (e.target as HTMLInputElement).files;
                         if (files) handleFileSelect(files);
@@ -479,7 +562,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                 </div>
 
                 <FilePreview
-                  files={pdfFiles.map(file => ({
+                  files={pdfFiles.map((file) => ({
                     id: file.id,
                     file: file.file,
                     preview: undefined,
@@ -496,8 +579,10 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
             {/* PDF Operations */}
             <Card>
               <CardContent>
-                <Typography variant="h6" className="mb-4">PDF Operations</Typography>
-                
+                <Typography variant="h6" className="mb-4">
+                  PDF Operations
+                </Typography>
+
                 <div className="space-y-2">
                   <Button
                     startIcon={<MergeIcon />}
@@ -521,17 +606,54 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                   >
                     Split PDF
                   </Button>
-                  <Button
-                    startIcon={<RotateIcon />}
-                    onClick={() => rotatePage(90)}
-                    disabled={!selectedFile || isProcessing}
-                    fullWidth
-                    variant="contained"
-                    color="info"
-                    size="small"
-                  >
-                    Rotate 90°
-                  </Button>
+                  
+                  <div className="flex gap-1">
+                    <Button
+                      startIcon={<RotateIcon />}
+                      onClick={() => rotatePage(90)}
+                      disabled={!selectedFile || isProcessing}
+                      variant="contained"
+                      color="info"
+                      size="small"
+                      className="flex-1"
+                    >
+                      90°
+                    </Button>
+                    <Button
+                      onClick={() => rotatePage(180)}
+                      disabled={!selectedFile || isProcessing}
+                      variant="contained"
+                      color="info"
+                      size="small"
+                      className="flex-1"
+                    >
+                      180°
+                    </Button>
+                    <Button
+                      onClick={() => rotatePage(270)}
+                      disabled={!selectedFile || isProcessing}
+                      variant="contained"
+                      color="info"
+                      size="small"
+                      className="flex-1"
+                    >
+                      270°
+                    </Button>
+                  </div>
+                  
+                  {currentRotation > 0 && (
+                    <Button
+                      onClick={() => rotatePage(-currentRotation)}
+                      disabled={!selectedFile || isProcessing}
+                      fullWidth
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
+                    >
+                      Reset (Currently: {currentRotation}°)
+                    </Button>
+                  )}
+                  
                   <Button
                     startIcon={<DownloadIcon />}
                     onClick={saveAnnotatedPDF}
@@ -550,8 +672,10 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
             {/* Annotation Tools */}
             <Card>
               <CardContent>
-                <Typography variant="h6" className="mb-4">Annotation Tools</Typography>
-                
+                <Typography variant="h6" className="mb-4">
+                  Annotation Tools
+                </Typography>
+
                 <FormControlLabel
                   control={
                     <Switch
@@ -573,9 +697,11 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                       size="small"
                       placeholder="Enter text"
                     />
-                    
+
                     <div className="flex gap-2 items-center">
-                      <Typography variant="body2" className="text-xs">Size:</Typography>
+                      <Typography variant="body2" className="text-xs">
+                        Size:
+                      </Typography>
                       <Slider
                         value={fontSize}
                         onChange={(_, value) => setFontSize(value as number)}
@@ -586,9 +712,11 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                         size="small"
                       />
                     </div>
-                    
+
                     <div className="flex gap-2 items-center">
-                      <Typography variant="body2" className="text-xs">Color:</Typography>
+                      <Typography variant="body2" className="text-xs">
+                        Color:
+                      </Typography>
                       <input
                         type="color"
                         value={textColor}
