@@ -30,6 +30,7 @@ export enum ApplicationIds {
   IMAGE_TO_TEXT = "imagetotext",
   PYTHON_COMPILER = "pythoncompiler",
   CSV_VIEWER = "csvviewer",
+  PDF_EDITOR = "pdf-editor",
 }
 
 export interface BaseAppConfig {

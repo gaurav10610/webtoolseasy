@@ -246,5 +246,13 @@
     "navigateUrl": "tools/text-editor",
     "iconRelativeUrl": "text-icon.svg",
     "category": "Online Editors"
+  },
+  "pdf-editor": {
+    "applicationId": "pdf-editor",
+    "displayText": "PDF Editor",
+    "iconName": "pdf-icon",
+    "navigateUrl": "tools/pdf-editor",
+    "iconRelativeUrl": "pdf-icon.svg",
+    "category": "Online Editors"
   }
 }
