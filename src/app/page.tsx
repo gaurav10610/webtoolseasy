@@ -26,8 +26,7 @@ const pageDescription =
 const keywords =
   "free online web tools, online productivity tools, web development tools, free web utilities, online tools for developers, productivity software, developer resources, daily task utilities, easy-to-use web apps, comprehensive tool suite, online converters, online calculators, text tools, coding utilities";
 
-// Feature flags
-const ENABLE_POPULAR_TOOLS = false; // Set to true to enable popular tools section
+const ENABLE_POPULAR_TOOLS = false;
 
 export const metadata: Metadata = {
   alternates: {
@@ -64,7 +63,6 @@ export const metadata: Metadata = {
   keywords,
 };
 
-// Enhanced App Discovery Filter Component (Server-side with Forms)
 function AppDiscoveryFilters({
   categories,
   selectedCategory,
@@ -81,16 +79,14 @@ function AppDiscoveryFilters({
   return (
     <Box className="w-full mb-6">
       <Fade in={true} timeout={800}>
-        <div className="flex flex-col gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-          {/* Header */}
-          <div className="flex items-center gap-2 mb-2">
+        <section className="flex flex-col gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+          <header className="flex items-center gap-2 mb-2">
             <FilterListIcon color="primary" />
             <Typography variant="h6" className="!font-medium">
               Discover Tools ({filteredCount} of {totalTools})
             </Typography>
-          </div>
+          </header>
 
-          {/* Search Form */}
           <form method="GET" className="w-full">
             {selectedCategory && (
               <input type="hidden" name="category" value={selectedCategory} />
@@ -112,8 +108,7 @@ function AppDiscoveryFilters({
             />
           </form>
 
-          {/* Category Filters */}
-          <div className="flex flex-wrap gap-2">
+          <nav className="flex flex-wrap gap-2" aria-label="Category filters">
             <Link
               href={
                 searchQuery
@@ -151,9 +146,8 @@ function AppDiscoveryFilters({
                 </Link>
               );
             })}
-          </div>
+          </nav>
 
-          {/* Active Filters Display */}
           {(selectedCategory || searchQuery) && (
             <div className="flex items-center gap-2 pt-2 border-t border-blue-200">
               <Typography variant="body2" color="textSecondary">
@@ -195,13 +189,12 @@ function AppDiscoveryFilters({
               )}
             </div>
           )}
-        </div>
+        </section>
       </Fade>
     </Box>
   );
 }
 
-// Popular Tools Component
 function PopularToolsSection({
   allApps,
   isMobile = false,
@@ -220,17 +213,19 @@ function PopularToolsSection({
 
   return (
     <Fade in={true} timeout={1000}>
-      <Box
+      <section
         className={`${
           isMobile ? "p-4" : "p-6"
         } bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200`}
+        aria-labelledby="popular-tools-heading"
       >
-        <div
+        <header
           className={`flex items-center ${
             isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
           }`}
         >
           <Typography
+            id="popular-tools-heading"
             variant={isMobile ? "h6" : "h5"}
             className="!font-semibold !text-purple-800"
           >
@@ -242,7 +237,7 @@ function PopularToolsSection({
             variant="outlined"
             size="small"
           />
-        </div>
+        </header>
         <div
           className={`grid ${
             isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-3 gap-4"
@@ -263,7 +258,7 @@ function PopularToolsSection({
             </div>
           ))}
         </div>
-      </Box>
+      </section>
     </Fade>
   );
 }
@@ -281,9 +276,9 @@ function SectionAppList({
 
   return (
     <Fade in={true} timeout={600}>
-      <div className="flex flex-col gap-4 w-full">
+      <section className="flex flex-col gap-4 w-full">
         {showCategoryTitle && (
-          <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
+          <header className="flex items-center gap-3 pb-2 border-b border-gray-200">
             <Typography
               key={getRandomId()}
               variant="h2"
@@ -298,12 +293,12 @@ function SectionAppList({
               variant="outlined"
               color="primary"
             />
-          </div>
+          </header>
         )}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
           {map(configs, (config, index) => {
             return (
-              <div
+              <article
                 key={getRandomId()}
                 className="w-full"
                 style={{
@@ -314,17 +309,16 @@ function SectionAppList({
                   config={config}
                   className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100"
                 />
-              </div>
+              </article>
             );
           })}
-          {/* Fill empty columns on desktop */}
           {map(new Array(emptyColumns), () => {
             return (
               <div key={getRandomId()} className="w-full hidden md:block" />
             );
           })}
         </div>
-      </div>
+      </section>
     </Fade>
   );
 }
@@ -369,22 +363,18 @@ export default async function Home({
   // Remove undefined category
   delete categoryWiseAppList["undefined"];
 
-  // Get all unique categories for filters
   const allCategories = Array.from(
     new Set(allApps.map((app) => app.category))
   ).filter(Boolean);
 
   return (
-    <div className="w-full px-2 py-4">
-      {/* Desktop Layout with 60% restriction */}
+    <main className="w-full px-2 py-4">
       <div className="hidden md:flex w-full max-w-none">
-        {/* Left sidebar - 20% */}
-        <div className="w-[20%] pr-2">
+        <aside className="w-[20%] pr-2">
           <BaseToolsAds className="w-full" />
-        </div>
+        </aside>
 
-        {/* Main content area - 60% */}
-        <div className="w-[60%] px-2">
+        <section className="w-[60%] px-2">
           <div className="flex flex-col gap-4 items-center w-full">
             <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
             <SocialShareButtons
@@ -392,7 +382,6 @@ export default async function Home({
               heading={pageTitle}
             />
 
-            {/* Enhanced App Discovery Filters */}
             <AppDiscoveryFilters
               categories={allCategories}
               selectedCategory={selectedCategory}
@@ -401,10 +390,12 @@ export default async function Home({
               filteredCount={filteredApps.length}
             />
 
-            {/* Quick Stats */}
             {!selectedCategory && !searchQuery && (
               <Fade in={true} timeout={1200}>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4">
+                <nav
+                  className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4"
+                  aria-label="Quick category access"
+                >
                   {allCategories.slice(0, 4).map((category) => {
                     const categoryCount = allApps.filter(
                       (app) => app.category === category
@@ -433,33 +424,30 @@ export default async function Home({
                       </Link>
                     );
                   })}
-                </div>
+                </nav>
               </Fade>
             )}
 
-            {/* Results */}
             {filteredApps.length > 0 ? (
               <div className="flex flex-col gap-8 w-full mt-5">
-                {/* Featured Tools Section (only show when no filters applied and feature is enabled) */}
                 {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
                   <PopularToolsSection allApps={allApps} />
                 )}
 
-                {/* All Categories */}
                 {map(categoryWiseAppList, (configs, category) => {
                   return (
                     <SectionAppList
                       key={getRandomId()}
                       category={category}
                       configs={configs}
-                      showCategoryTitle={!searchQuery} // Hide category titles when searching
+                      showCategoryTitle={!searchQuery}
                     />
                   );
                 })}
               </div>
             ) : (
               <Fade in={true} timeout={600}>
-                <Box className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
                   <Typography
                     variant="h6"
                     color="textSecondary"
@@ -474,28 +462,24 @@ export default async function Home({
                   >
                     Try adjusting your search or removing filters
                   </Typography>
-                  <div className="flex justify-center gap-2 flex-wrap">
-                    <Link href="/" className="no-underline">
-                      <Chip
-                        label="Clear All Filters"
-                        color="primary"
-                        className="cursor-pointer"
-                      />
-                    </Link>
-                  </div>
-                </Box>
+                  <Link href="/" className="no-underline">
+                    <Chip
+                      label="Clear All Filters"
+                      color="primary"
+                      className="cursor-pointer"
+                    />
+                  </Link>
+                </div>
               </Fade>
             )}
           </div>
-        </div>
+        </section>
 
-        {/* Right sidebar - 20% */}
-        <div className="w-[20%] pl-2">
+        <aside className="w-[20%] pl-2">
           <BaseToolsAds className="w-full" />
-        </div>
+        </aside>
       </div>
 
-      {/* Mobile Layout - Full width */}
       <div className="flex md:hidden flex-col gap-4 items-center w-full">
         <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
         <SocialShareButtons
@@ -503,7 +487,6 @@ export default async function Home({
           heading={pageTitle}
         />
 
-        {/* Enhanced App Discovery Filters - Mobile */}
         <AppDiscoveryFilters
           categories={allCategories}
           selectedCategory={selectedCategory}
@@ -512,29 +495,26 @@ export default async function Home({
           filteredCount={filteredApps.length}
         />
 
-        {/* Results - Mobile */}
         {filteredApps.length > 0 ? (
           <div className="flex flex-col gap-8 w-full mt-5">
-            {/* Featured Tools Section - Mobile (only show when no filters applied and feature is enabled) */}
             {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
               <PopularToolsSection allApps={allApps} isMobile={true} />
             )}
 
-            {/* All Categories - Mobile */}
             {map(categoryWiseAppList, (configs, category) => {
               return (
                 <SectionAppList
                   key={getRandomId()}
                   category={category}
                   configs={configs}
-                  showCategoryTitle={!searchQuery} // Hide category titles when searching
+                  showCategoryTitle={!searchQuery}
                 />
               );
             })}
           </div>
         ) : (
           <Fade in={true} timeout={600}>
-            <Box className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
               <Typography variant="h6" color="textSecondary" className="mb-4">
                 🔍 No tools found
               </Typography>
@@ -552,11 +532,11 @@ export default async function Home({
                   className="cursor-pointer"
                 />
               </Link>
-            </Box>
+            </div>
           </Fade>
         )}
         <BaseToolsAds className="w-full" />
       </div>
-    </div>
+    </main>
   );
 }
