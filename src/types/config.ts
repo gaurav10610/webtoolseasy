@@ -31,6 +31,7 @@ export enum ApplicationIds {
   PYTHON_COMPILER = "pythoncompiler",
   CSV_VIEWER = "csvviewer",
   PDF_EDITOR = "pdf-editor",
+  SPEECH_TO_TEXT = "speech-to-text",
 }
 
 export interface BaseAppConfig {
