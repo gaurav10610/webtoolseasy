@@ -26,6 +26,9 @@ const pageDescription =
 const keywords =
   "free online web tools, online productivity tools, web development tools, free web utilities, online tools for developers, productivity software, developer resources, daily task utilities, easy-to-use web apps, comprehensive tool suite, online converters, online calculators, text tools, coding utilities";
 
+// Feature flags
+const ENABLE_POPULAR_TOOLS = false; // Set to true to enable popular tools section
+
 export const metadata: Metadata = {
   alternates: {
     canonical: `${process.env.HOSTNAME}`,
@@ -195,6 +198,73 @@ function AppDiscoveryFilters({
         </div>
       </Fade>
     </Box>
+  );
+}
+
+// Popular Tools Component
+function PopularToolsSection({
+  allApps,
+  isMobile = false,
+}: Readonly<{
+  allApps: AppNavigationConfig[];
+  isMobile?: boolean;
+}>) {
+  const featuredTools = [
+    ...allApps
+      .filter((app) => app.category === "Programming")
+      .slice(0, isMobile ? 2 : 3),
+    ...allApps
+      .filter((app) => app.category === "Text")
+      .slice(0, isMobile ? 2 : 3),
+  ];
+
+  return (
+    <Fade in={true} timeout={1000}>
+      <Box
+        className={`${
+          isMobile ? "p-4" : "p-6"
+        } bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200`}
+      >
+        <div
+          className={`flex items-center ${
+            isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
+          }`}
+        >
+          <Typography
+            variant={isMobile ? "h6" : "h5"}
+            className="!font-semibold !text-purple-800"
+          >
+            🌟 Popular Tools
+          </Typography>
+          <Chip
+            label="Most Used"
+            color="secondary"
+            variant="outlined"
+            size="small"
+          />
+        </div>
+        <div
+          className={`grid ${
+            isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-3 gap-4"
+          }`}
+        >
+          {featuredTools.map((config, index) => (
+            <div
+              key={getRandomId()}
+              className="w-full"
+              style={{ animationDelay: `${index * 150}ms` }}
+            >
+              <AppHomeCard
+                config={config}
+                className={`w-full h-full ${
+                  isMobile ? "p-3" : "p-4"
+                } hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-purple-200 bg-white`}
+              />
+            </div>
+          ))}
+        </div>
+      </Box>
+    </Fade>
   );
 }
 
@@ -370,48 +440,9 @@ export default async function Home({
             {/* Results */}
             {filteredApps.length > 0 ? (
               <div className="flex flex-col gap-8 w-full mt-5">
-                {/* Featured Tools Section (only show when no filters applied) */}
-                {!selectedCategory && !searchQuery && (
-                  <Fade in={true} timeout={1000}>
-                    <Box className="p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Typography
-                          variant="h5"
-                          className="!font-semibold !text-purple-800"
-                        >
-                          🌟 Popular Tools
-                        </Typography>
-                        <Chip
-                          label="Most Used"
-                          color="secondary"
-                          variant="outlined"
-                          size="small"
-                        />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Show first 6 tools from Programming and Text categories */}
-                        {[
-                          ...allApps
-                            .filter((app) => app.category === "Programming")
-                            .slice(0, 3),
-                          ...allApps
-                            .filter((app) => app.category === "Text")
-                            .slice(0, 3),
-                        ].map((config, index) => (
-                          <div
-                            key={getRandomId()}
-                            className="w-full"
-                            style={{ animationDelay: `${index * 150}ms` }}
-                          >
-                            <AppHomeCard
-                              config={config}
-                              className="w-full h-full p-4 hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-purple-200 bg-white"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </Box>
-                  </Fade>
+                {/* Featured Tools Section (only show when no filters applied and feature is enabled) */}
+                {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
+                  <PopularToolsSection allApps={allApps} />
                 )}
 
                 {/* All Categories */}
@@ -484,48 +515,9 @@ export default async function Home({
         {/* Results - Mobile */}
         {filteredApps.length > 0 ? (
           <div className="flex flex-col gap-8 w-full mt-5">
-            {/* Featured Tools Section - Mobile (only show when no filters applied) */}
-            {!selectedCategory && !searchQuery && (
-              <Fade in={true} timeout={1000}>
-                <Box className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
-                  <div className="flex items-center gap-2 mb-4 flex-wrap">
-                    <Typography
-                      variant="h6"
-                      className="!font-semibold !text-purple-800"
-                    >
-                      🌟 Popular Tools
-                    </Typography>
-                    <Chip
-                      label="Most Used"
-                      color="secondary"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 gap-3">
-                    {/* Show first 4 tools from different categories on mobile */}
-                    {[
-                      ...allApps
-                        .filter((app) => app.category === "Programming")
-                        .slice(0, 2),
-                      ...allApps
-                        .filter((app) => app.category === "Text")
-                        .slice(0, 2),
-                    ].map((config, index) => (
-                      <div
-                        key={getRandomId()}
-                        className="w-full"
-                        style={{ animationDelay: `${index * 150}ms` }}
-                      >
-                        <AppHomeCard
-                          config={config}
-                          className="w-full h-full p-3 hover:shadow-lg transition-all duration-300 border-2 border-purple-200 bg-white"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </Box>
-              </Fade>
+            {/* Featured Tools Section - Mobile (only show when no filters applied and feature is enabled) */}
+            {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
+              <PopularToolsSection allApps={allApps} isMobile={true} />
             )}
 
             {/* All Categories - Mobile */}
