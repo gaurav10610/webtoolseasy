@@ -32,6 +32,7 @@ export enum ApplicationIds {
   CSV_VIEWER = "csvviewer",
   PDF_EDITOR = "pdf-editor",
   SPEECH_TO_TEXT = "speech-to-text",
+  REGEX_TESTER = "regex-tester",
 }
 
 export interface BaseAppConfig {

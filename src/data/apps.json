@@ -262,5 +262,13 @@
     "navigateUrl": "tools/speech-to-text",
     "iconRelativeUrl": "speech-to-text-icon.svg",
     "category": "Text"
+  },
+  "regex-tester": {
+    "applicationId": "regex-tester",
+    "displayText": "Regex Tester Online",
+    "iconName": "regex-icon",
+    "navigateUrl": "tools/regex-tester",
+    "iconRelativeUrl": "regex-icon.svg",
+    "category": "Programming"
   }
 }
