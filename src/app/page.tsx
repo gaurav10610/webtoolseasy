@@ -19,12 +19,11 @@ import { SocialShareButtons } from "@/components/socialShareButtons";
 import { BaseToolsAds } from "@/components/baseAds";
 import Link from "next/link";
 
-const pageTitle =
-  "Free Online Web Tools for Productivity, Development & Utilities";
+const pageTitle = "Free Online Tools - Web Utilities & Productivity";
 const pageDescription =
-  "Discover a comprehensive suite of free online web tools for productivity, development, and various utilities. Enhance your workflow with our easy-to-use solutions for everyday tasks and professional projects!";
+  "Access 30+ free online tools for development, text editing, media conversion & more. No downloads required. Boost productivity instantly.";
 const keywords =
-  "free online web tools, online productivity tools, web development tools, free web utilities, online tools for developers, productivity software, developer resources, daily task utilities, easy-to-use web apps, comprehensive tool suite, online converters, online calculators, text tools, coding utilities";
+  "free online tools, web utilities, productivity tools, developer tools, text editor online, converter tools, no download required";
 
 const ENABLE_POPULAR_TOOLS = false;
 
@@ -376,7 +375,7 @@ export default async function Home({
 
         <section className="w-[60%] px-2">
           <div className="flex flex-col gap-4 items-center w-full">
-            <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
+            <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
             <SocialShareButtons
               pageUrl={`${process.env.HOSTNAME}`}
               heading={pageTitle}
@@ -481,7 +480,7 @@ export default async function Home({
       </div>
 
       <div className="flex md:hidden flex-col gap-4 items-center w-full">
-        <AppHeading heading="Free Online Web Tools for Productivity, Development & Utilities" />
+        <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
         <SocialShareButtons
           pageUrl={`${process.env.HOSTNAME}`}
           heading={pageTitle}
