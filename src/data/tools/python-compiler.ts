@@ -3,9 +3,9 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/python-compiler";
-const pageTitle = "Online Python Compiler (Interpreter): Run Python in Browser";
+const pageTitle = "Online Python Compiler - Run Python Code Free";
 const pageDescription =
-  "Our free online Python compiler lets you write, run, and test Python code directly in your browser. No setup required. Perfect for learning, practicing, and quick scripting. Execute Python 3 code instantly.";
+  "Free online Python compiler & interpreter. Write, run, and test Python 3 code in your browser instantly. No setup required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/python-compiler.png`;
 
 const keywords =
