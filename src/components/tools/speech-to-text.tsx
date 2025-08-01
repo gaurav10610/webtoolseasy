@@ -32,6 +32,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 import SettingsIcon from "@mui/icons-material/Settings";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -119,6 +122,8 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
   const [isPaused, setIsPaused] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
+  const [editableTranscript, setEditableTranscript] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
   const [language, setLanguage] = useState("en-US");
   const [continuous, setContinuous] = useState(true);
   const [interimResults, setInterimResults] = useState(true);
@@ -288,14 +293,52 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
   const clearTranscript = useCallback(() => {
     setTranscript("");
     setInterimTranscript("");
+    setEditableTranscript("");
     setResults([]);
     setConfidence(null);
+    setIsEditMode(false);
     showMessage("Transcript cleared");
   }, []);
 
+  // Toggle edit mode
+  const toggleEditMode = useCallback(() => {
+    if (isRecording) {
+      showMessage("Cannot edit while recording. Stop recording first.");
+      return;
+    }
+
+    if (!isEditMode) {
+      // Enter edit mode
+      setEditableTranscript(transcript);
+      setIsEditMode(true);
+      showMessage("Edit mode enabled");
+    } else {
+      // Cancel edit mode
+      setIsEditMode(false);
+      showMessage("Edit mode cancelled");
+    }
+  }, [isEditMode, transcript, isRecording]);
+
+  // Save edited transcript
+  const saveEditedTranscript = useCallback(() => {
+    setTranscript(editableTranscript);
+    setIsEditMode(false);
+    showMessage("Transcript saved");
+  }, [editableTranscript]);
+
+  // Handle transcript edit
+  const handleTranscriptEdit = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setEditableTranscript(event.target.value);
+    },
+    []
+  );
+
   // Copy to clipboard
   const copyToClipboard = useCallback(async () => {
-    const textToCopy = transcript + interimTranscript;
+    const textToCopy = isEditMode
+      ? editableTranscript
+      : transcript + interimTranscript;
     if (!textToCopy.trim()) {
       showMessage("No text to copy");
       return;
@@ -307,11 +350,13 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     } catch {
       setError("Failed to copy text to clipboard");
     }
-  }, [transcript, interimTranscript]);
+  }, [transcript, interimTranscript, isEditMode, editableTranscript]);
 
   // Download as text file
   const downloadTranscript = useCallback(() => {
-    const textToDownload = transcript + interimTranscript;
+    const textToDownload = isEditMode
+      ? editableTranscript
+      : transcript + interimTranscript;
     if (!textToDownload.trim()) {
       showMessage("No text to download");
       return;
@@ -327,7 +372,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     link.click();
     URL.revokeObjectURL(url);
     showMessage("Transcript downloaded");
-  }, [transcript, interimTranscript]);
+  }, [transcript, interimTranscript, isEditMode, editableTranscript]);
 
   // Format recording time
   const formatTime = (seconds: number) => {
@@ -403,17 +448,54 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
             <Button
               startIcon={<ClearIcon />}
               onClick={clearTranscript}
-              disabled={!transcript && !interimTranscript}
+              disabled={
+                !transcript && !interimTranscript && !editableTranscript
+              }
               variant="outlined"
               color="warning"
             >
               Clear
             </Button>
 
+            {!isEditMode && (
+              <Button
+                startIcon={<EditIcon />}
+                onClick={toggleEditMode}
+                disabled={!transcript.trim() || isRecording}
+                variant="outlined"
+                color="info"
+              >
+                Edit
+              </Button>
+            )}
+
+            {isEditMode && (
+              <>
+                <Button
+                  startIcon={<SaveIcon />}
+                  onClick={saveEditedTranscript}
+                  variant="contained"
+                  color="success"
+                >
+                  Save
+                </Button>
+                <Button
+                  startIcon={<CancelIcon />}
+                  onClick={toggleEditMode}
+                  variant="outlined"
+                  color="error"
+                >
+                  Cancel
+                </Button>
+              </>
+            )}
+
             <Button
               startIcon={<CopyIcon />}
               onClick={copyToClipboard}
-              disabled={!transcript && !interimTranscript}
+              disabled={
+                !transcript && !interimTranscript && !editableTranscript
+              }
               variant="outlined"
             >
               Copy
@@ -422,7 +504,9 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
             <Button
               startIcon={<DownloadIcon />}
               onClick={downloadTranscript}
-              disabled={!transcript && !interimTranscript}
+              disabled={
+                !transcript && !interimTranscript && !editableTranscript
+              }
               variant="outlined"
               color="success"
             >
@@ -513,32 +597,81 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
       {/* Transcript Display */}
       <Card>
         <CardContent>
-          <Typography variant="h6" className="mb-4">
-            Live Transcript
-          </Typography>
+          <div className="flex items-center justify-between mb-4">
+            <Typography variant="h6">
+              {isEditMode ? "Edit Transcript" : "Live Transcript"}
+            </Typography>
+            {isEditMode && (
+              <Chip
+                label="Edit Mode"
+                color="info"
+                variant="filled"
+                size="small"
+              />
+            )}
+          </div>
 
           <div className="border rounded-lg p-4 min-h-48 bg-gray-50">
             <TextareaAutosize
-              value={transcript + interimTranscript}
-              placeholder="Your speech will appear here as you speak..."
+              value={
+                isEditMode ? editableTranscript : transcript + interimTranscript
+              }
+              onChange={isEditMode ? handleTranscriptEdit : undefined}
+              placeholder={
+                isEditMode
+                  ? "Edit your transcript here..."
+                  : "Your speech will appear here as you speak..."
+              }
               className="w-full border-none resize-none bg-transparent outline-none"
               minRows={6}
-              style={{ fontSize: "16px", lineHeight: 1.5 }}
-              readOnly
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.5,
+                backgroundColor: isEditMode ? "#fff" : "transparent",
+                border: isEditMode ? "1px solid #ddd" : "none",
+                borderRadius: isEditMode ? "4px" : "0",
+                paddingTop: isEditMode ? "8px" : "0",
+                paddingRight: isEditMode ? "8px" : "0",
+                paddingBottom: isEditMode ? "8px" : "0",
+                paddingLeft: isEditMode ? "8px" : "0",
+              }}
+              readOnly={!isEditMode}
+              disabled={isRecording && !isEditMode}
             />
           </div>
 
-          {(transcript || interimTranscript) && (
+          {(transcript || interimTranscript || editableTranscript) && (
             <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
               <span>
                 Words:{" "}
                 {
-                  (transcript + interimTranscript)
+                  (isEditMode
+                    ? editableTranscript
+                    : transcript + interimTranscript
+                  )
                     .split(/\s+/)
                     .filter((word) => word.length > 0).length
                 }
               </span>
-              <span>Characters: {(transcript + interimTranscript).length}</span>
+              <span>
+                Characters:{" "}
+                {
+                  (isEditMode
+                    ? editableTranscript
+                    : transcript + interimTranscript
+                  ).length
+                }
+              </span>
+            </div>
+          )}
+
+          {isEditMode && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <Typography variant="body2" color="primary">
+                <strong>Edit Mode:</strong> You can now edit the transcript
+                directly. Click &quot;Save&quot; to apply changes or
+                &quot;Cancel&quot; to discard them.
+              </Typography>
             </div>
           )}
         </CardContent>
@@ -586,7 +719,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
             Tips for Better Recognition
           </Typography>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Typography variant="subtitle2" color="primary" gutterBottom>
                 Audio Quality
@@ -608,6 +741,18 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
                 <li>• Use Chrome, Edge, or Safari</li>
                 <li>• Ensure stable internet connection</li>
                 <li>• Keep browser tab active</li>
+              </ul>
+            </div>
+
+            <div>
+              <Typography variant="subtitle2" color="primary" gutterBottom>
+                Editing Features
+              </Typography>
+              <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                <li>• Click &quot;Edit&quot; to modify transcript</li>
+                <li>• Make corrections or additions</li>
+                <li>• Save changes or cancel editing</li>
+                <li>• Export edited version</li>
               </ul>
             </div>
           </div>
