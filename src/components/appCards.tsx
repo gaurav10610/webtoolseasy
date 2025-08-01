@@ -38,12 +38,14 @@ export async function RelatedToolCard({
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
   return (
     <PaperWithChildren variant="elevation" elevation={3} className={className}>
-      <Link href={`../${config.navigateUrl}`}>
-        <div className="flex flex-row gap-2 w-full justify-center items-center p-3">
+      <Link href={`../${config.navigateUrl}`} className="!no-underline">
+        <div className="flex flex-row gap-2 w-full justify-center items-center p-3 overflow-hidden">
           <CustomSvgIcon size="medium">
             {React.createElement(svgIcon.default)}
           </CustomSvgIcon>
-          {config.displayText}
+          <Typography className="truncate whitespace-nowrap text-center flex-1 min-w-0">
+            {config.displayText}
+          </Typography>
         </div>
       </Link>
     </PaperWithChildren>

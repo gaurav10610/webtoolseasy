@@ -32,9 +32,11 @@ export function RelatedTools({
       <Typography key={getRandomId()} variant="h2" fontSize={"inherit"}>
         Related Tools
       </Typography>
-      <div className="flex flex-col md:flex-row gap-2 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full">
         {map(relatedToolsConfigs, (relatedToolConfig) => (
-          <RelatedToolCard key={getRandomId()} config={relatedToolConfig} />
+          <div key={getRandomId()} className="w-full">
+            <RelatedToolCard config={relatedToolConfig} />
+          </div>
         ))}
       </div>
     </div>
