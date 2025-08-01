@@ -254,5 +254,13 @@
     "navigateUrl": "tools/pdf-editor",
     "iconRelativeUrl": "pdf-icon.svg",
     "category": "Online Editors"
+  },
+  "speech-to-text": {
+    "applicationId": "speech-to-text",
+    "displayText": "Speech to Text Converter",
+    "iconName": "speech-icon",
+    "navigateUrl": "tools/speech-to-text",
+    "iconRelativeUrl": "speech-to-text-icon.svg",
+    "category": "Text"
   }
 }
