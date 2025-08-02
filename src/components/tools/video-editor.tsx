@@ -756,6 +756,9 @@ export default function VideoEditor() {
   };
 
   const formatTime = (seconds: number) => {
+    if (isNaN(seconds) || seconds < 0) {
+      return "0:00";
+    }
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
@@ -1078,7 +1081,11 @@ export default function VideoEditor() {
                   <Box className="flex-1 mx-4">
                     <Slider
                       value={
-                        currentClip
+                        currentClip &&
+                        !isNaN(currentTime) &&
+                        !isNaN(currentClip.trimStart) &&
+                        !isNaN(currentClip.trimEnd) &&
+                        currentClip.trimEnd > currentClip.trimStart
                           ? ((currentTime - currentClip.trimStart) /
                               (currentClip.trimEnd - currentClip.trimStart)) *
                             100
@@ -1131,8 +1138,8 @@ export default function VideoEditor() {
                       Start:
                     </Typography>
                     <Slider
-                      value={currentClip.trimStart}
-                      max={currentClip.duration}
+                      value={currentClip?.trimStart || 0}
+                      max={currentClip?.duration || 100}
                       step={0.1}
                       onChange={(_, value) =>
                         updateClipTrim(
@@ -1147,8 +1154,8 @@ export default function VideoEditor() {
                       End:
                     </Typography>
                     <Slider
-                      value={currentClip.trimEnd}
-                      max={currentClip.duration}
+                      value={currentClip?.trimEnd || 0}
+                      max={currentClip?.duration || 100}
                       step={0.1}
                       onChange={(_, value) =>
                         updateClipTrim(
@@ -1231,33 +1238,33 @@ export default function VideoEditor() {
                           <TextField
                             label="Start Time"
                             type="number"
-                            value={overlay.startTime}
+                            value={overlay.startTime || 0}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
-                                startTime: parseFloat(e.target.value),
+                                startTime: parseFloat(e.target.value) || 0,
                               })
                             }
                             size="small"
                             inputProps={{
                               step: 0.1,
                               min: 0,
-                              max: currentClip.duration,
+                              max: currentClip?.duration || 100,
                             }}
                           />
                           <TextField
                             label="End Time"
                             type="number"
-                            value={overlay.endTime}
+                            value={overlay.endTime || 5}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
-                                endTime: parseFloat(e.target.value),
+                                endTime: parseFloat(e.target.value) || 5,
                               })
                             }
                             size="small"
                             inputProps={{
                               step: 0.1,
                               min: 0,
-                              max: currentClip.duration,
+                              max: currentClip?.duration || 100,
                             }}
                           />
                         </Stack>
@@ -1266,10 +1273,10 @@ export default function VideoEditor() {
                           <TextField
                             label="Font Size"
                             type="number"
-                            value={overlay.fontSize}
+                            value={overlay.fontSize || 24}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
-                                fontSize: parseInt(e.target.value),
+                                fontSize: parseInt(e.target.value) || 24,
                               })
                             }
                             size="small"
@@ -1278,7 +1285,7 @@ export default function VideoEditor() {
                           <TextField
                             label="Color"
                             type="color"
-                            value={overlay.color}
+                            value={overlay.color || "#ffffff"}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
                                 color: e.target.value,
@@ -1292,10 +1299,10 @@ export default function VideoEditor() {
                           <TextField
                             label="X Position (%)"
                             type="number"
-                            value={Math.round(overlay.x * 100) / 100}
+                            value={Math.round((overlay.x || 50) * 100) / 100}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
-                                x: parseFloat(e.target.value),
+                                x: parseFloat(e.target.value) || 50,
                               })
                             }
                             size="small"
@@ -1304,10 +1311,10 @@ export default function VideoEditor() {
                           <TextField
                             label="Y Position (%)"
                             type="number"
-                            value={Math.round(overlay.y * 100) / 100}
+                            value={Math.round((overlay.y || 50) * 100) / 100}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
-                                y: parseFloat(e.target.value),
+                                y: parseFloat(e.target.value) || 50,
                               })
                             }
                             size="small"
@@ -1399,7 +1406,7 @@ export default function VideoEditor() {
                             {filter.type}
                           </Typography>
                           <Slider
-                            value={filter.value}
+                            value={filter.value || 0}
                             onChange={(_, value) =>
                               updateFilter(filter.id, value as number)
                             }
@@ -1409,7 +1416,7 @@ export default function VideoEditor() {
                             className="flex-1"
                           />
                           <Typography variant="caption" className="min-w-12">
-                            {filter.value}
+                            {filter.value || 0}
                             {filter.type === "blur" ? "px" : "%"}
                           </Typography>
                           <IconButton
