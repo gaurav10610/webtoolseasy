@@ -6,6 +6,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";
+import { AdSense } from "@/components/adSense";
 
 export default function RootLayout({
   children,
@@ -14,6 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <AdSense pId={process.env.ADSENSE_PUBLISHER_ID!} />
+      </head>
       <body className={robotoFont.variable}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
