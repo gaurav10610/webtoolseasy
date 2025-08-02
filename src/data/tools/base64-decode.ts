@@ -18,7 +18,14 @@ export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
   metadataBase: new URL(process.env.HOSTNAME!),
-  icons: "/favicon.png",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
   keywords,
   openGraph: {
     title: pageTitle,
