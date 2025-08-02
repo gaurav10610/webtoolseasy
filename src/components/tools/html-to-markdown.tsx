@@ -10,6 +10,11 @@ import {
   CloseFullscreen as CloseFullscreenIcon,
 } from "@mui/icons-material";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Typography } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import CodeIcon from "@mui/icons-material/Code";
 import { usePathname } from "next/navigation";
 import {
   compressStringToBase64,
@@ -40,6 +45,7 @@ const HtmlToMarkdown: React.FC = () => {
   </body>
 </html>`);
   const [markdown, setMarkdown] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -103,6 +109,15 @@ const HtmlToMarkdown: React.FC = () => {
           startIcon={<LinkIcon />}
           onClick={handleLinkCopy}
         />
+        <ButtonWithHandler
+          buttonText={
+            showPreview ? "Show Markdown Code" : "Show Markdown Preview"
+          }
+          variant="outlined"
+          size="small"
+          startIcon={showPreview ? <CodeIcon /> : <VisibilityIcon />}
+          onClick={() => setShowPreview((prev) => !prev)}
+        />
         {!isFullScreen && (
           <ButtonWithHandler
             buttonText="Enter Full Screen"
@@ -159,20 +174,38 @@ const HtmlToMarkdown: React.FC = () => {
           editorHeading="HTML Input"
           className="w-[80%] md:w-[49%]"
         />
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "markdown",
-            value: markdown,
-            onChange: () => {},
-            editorOptions: {
-              readOnly: true,
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="Markdown Output"
-          className="w-[80%] md:w-[49%]"
-        />
+        {!showPreview ? (
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={{
+              language: "markdown",
+              value: markdown,
+              onChange: () => {},
+              editorOptions: {
+                readOnly: true,
+              },
+              className: "w-full h-full",
+            }}
+            themeOption="vs-dark"
+            editorHeading="Markdown Output"
+            className="w-[80%] md:w-[49%]"
+          />
+        ) : (
+          <div className="w-[80%] md:w-[49%] h-full flex flex-col gap-2 justify-end">
+            <Typography
+              variant="body1"
+              color="textSecondary"
+              className="!text-xl !font-semibold flex items-center"
+            >
+              <VisibilityIcon className="mr-2 text-gray-500" fontSize="small" />
+              Markdown Preview
+            </Typography>
+            <div className="flex-1 overflow-auto bg-white border-2 border-gray-300 rounded-md p-4 prose max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {markdown}
+              </ReactMarkdown>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
