@@ -86,9 +86,12 @@ export default function VideoEditor() {
     "success" | "info" | "warning" | "error"
   >("success");
   const [error, setError] = useState("");
+  const [realTimePreview, setRealTimePreview] = useState(true);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null); // Hidden video for processing
+  const animationFrameRef = useRef<number | null>(null);
 
   // Initialize FFmpeg
   useEffect(() => {
@@ -117,6 +120,204 @@ export default function VideoEditor() {
       // Don't set currentTime here - let onLoadedMetadata handle it
     }
   }, [currentClip]);
+
+  // Real-time preview rendering
+  const renderPreview = useCallback(() => {
+    if (!videoRef.current || !canvasRef.current || !currentClip) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx || video.readyState < 2) return;
+
+    // Get the display dimensions of the video element
+    const displayWidth = video.offsetWidth || 640;
+    const displayHeight = video.offsetHeight || 360;
+
+    // Only update canvas size if dimensions have changed significantly
+    const tolerance = 2; // Allow small differences
+    if (
+      Math.abs(canvas.width - displayWidth) > tolerance ||
+      Math.abs(canvas.height - displayHeight) > tolerance
+    ) {
+      canvas.width = displayWidth;
+      canvas.height = displayHeight;
+    }
+
+    // Clear canvas with black background
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate aspect ratios
+    const videoAspectRatio = video.videoWidth / video.videoHeight;
+    const canvasAspectRatio = canvas.width / canvas.height;
+
+    let drawWidth, drawHeight, drawX, drawY;
+
+    // Calculate dimensions to maintain aspect ratio (letterbox/pillarbox as needed)
+    if (videoAspectRatio > canvasAspectRatio) {
+      // Video is wider than canvas - fit width, letterbox height
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / videoAspectRatio;
+      drawX = 0;
+      drawY = (canvas.height - drawHeight) / 2;
+    } else {
+      // Video is taller than canvas - fit height, pillarbox width
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * videoAspectRatio;
+      drawX = (canvas.width - drawWidth) / 2;
+      drawY = 0;
+    }
+
+    // Apply video filters using canvas context
+    ctx.save();
+
+    // Apply video effects
+    if (filters.length > 0) {
+      const filterStrings: string[] = [];
+      filters.forEach((filter) => {
+        switch (filter.type) {
+          case "brightness":
+            const brightness = 1 + (filter.value - 100) / 100;
+            filterStrings.push(`brightness(${brightness})`);
+            break;
+          case "contrast":
+            const contrast = filter.value / 100;
+            filterStrings.push(`contrast(${contrast})`);
+            break;
+          case "saturation":
+            const saturation = filter.value / 100;
+            filterStrings.push(`saturate(${saturation})`);
+            break;
+          case "blur":
+            filterStrings.push(`blur(${filter.value}px)`);
+            break;
+        }
+      });
+
+      if (filterStrings.length > 0) {
+        ctx.filter = filterStrings.join(" ");
+      }
+    }
+
+    // Draw the video frame with proper aspect ratio
+    ctx.drawImage(video, drawX, drawY, drawWidth, drawHeight);
+
+    ctx.restore();
+
+    // Apply text overlays
+    textOverlays.forEach((overlay) => {
+      const currentTime = video.currentTime;
+      if (currentTime >= overlay.startTime && currentTime <= overlay.endTime) {
+        ctx.save();
+
+        // Calculate the actual video drawing area (same calculations as above)
+        const videoAspectRatio = video.videoWidth / video.videoHeight;
+        const canvasAspectRatio = canvas.width / canvas.height;
+
+        let drawWidth, drawHeight, drawX, drawY;
+
+        if (videoAspectRatio > canvasAspectRatio) {
+          drawWidth = canvas.width;
+          drawHeight = canvas.width / videoAspectRatio;
+          drawX = 0;
+          drawY = (canvas.height - drawHeight) / 2;
+        } else {
+          drawHeight = canvas.height;
+          drawWidth = canvas.height * videoAspectRatio;
+          drawX = (canvas.width - drawWidth) / 2;
+          drawY = 0;
+        }
+
+        // Scale font size based on the actual video drawing area
+        const scaleFactor = Math.min(drawWidth / 640, drawHeight / 360);
+        const scaledFontSize = Math.max(12, overlay.fontSize * scaleFactor);
+
+        ctx.font = `${scaledFontSize}px ${overlay.fontFamily}`;
+        ctx.fillStyle = overlay.color;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+
+        // Calculate position as percentage of the actual video drawing area
+        const x = drawX + (overlay.x / 100) * drawWidth;
+        const y = drawY + (overlay.y / 100) * drawHeight;
+
+        // Add text stroke for better visibility
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = Math.max(1, scaledFontSize / 12);
+        ctx.strokeText(overlay.text, x, y);
+        ctx.fillText(overlay.text, x, y);
+
+        ctx.restore();
+      }
+    });
+
+    // Continue animation frame
+    if (isPlaying) {
+      animationFrameRef.current = requestAnimationFrame(renderPreview);
+    }
+  }, [currentClip, filters, textOverlays, isPlaying]);
+
+  // Start/stop real-time rendering based on playback state
+  useEffect(() => {
+    if (realTimePreview && isPlaying && currentClip) {
+      renderPreview();
+    } else if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+      // Render a single frame when paused
+      if (realTimePreview) {
+        renderPreview();
+      }
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+  }, [isPlaying, currentClip, realTimePreview, renderPreview]);
+
+  // Re-render when effects or overlays change
+  useEffect(() => {
+    if (realTimePreview && !isPlaying && currentClip) {
+      renderPreview();
+    }
+  }, [
+    filters,
+    textOverlays,
+    currentClip,
+    isPlaying,
+    realTimePreview,
+    renderPreview,
+  ]);
+
+  // Handle video element resize for responsive canvas
+  useEffect(() => {
+    if (!videoRef.current || !realTimePreview) return;
+
+    const video = videoRef.current;
+    let resizeTimeout: NodeJS.Timeout;
+
+    const resizeObserver = new ResizeObserver(() => {
+      // Debounce resize events to avoid excessive re-renders
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (currentClip && !isPlaying) {
+          renderPreview();
+        }
+      }, 100);
+    });
+
+    resizeObserver.observe(video);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(resizeTimeout);
+    };
+  }, [realTimePreview, currentClip, isPlaying, renderPreview]);
 
   const handleFileSelect = useCallback(
     (files: FileList) => {
@@ -538,9 +739,24 @@ export default function VideoEditor() {
             <>
               {/* Video Player */}
               <PaperWithChildren className="p-4" variant="elevation">
-                <Typography variant="h6" className="mb-3">
-                  Video Preview
-                </Typography>
+                <div className="flex justify-between items-center mb-3">
+                  <Typography variant="h6">Video Preview</Typography>
+                  <div className="flex items-center gap-2">
+                    <Typography variant="caption" color="text.secondary">
+                      {realTimePreview
+                        ? "Effects applied in real-time"
+                        : "Effects shown on export only"}
+                    </Typography>
+                    <Button
+                      onClick={() => setRealTimePreview(!realTimePreview)}
+                      variant={realTimePreview ? "contained" : "outlined"}
+                      size="small"
+                      color={realTimePreview ? "primary" : "secondary"}
+                    >
+                      {realTimePreview ? "Real-time ON" : "Real-time OFF"}
+                    </Button>
+                  </div>
+                </div>
                 <div className="relative bg-black rounded-lg overflow-hidden mb-4">
                   <video
                     ref={videoRef}
@@ -585,8 +801,36 @@ export default function VideoEditor() {
                       console.log("Video seek completed");
                     }}
                     controls={false}
+                    style={{
+                      display:
+                        realTimePreview &&
+                        (filters.length > 0 || textOverlays.length > 0)
+                          ? "none"
+                          : "block",
+                    }}
                   />
-                  <canvas ref={canvasRef} className="hidden" />
+
+                  {/* Canvas overlay for real-time effects preview */}
+                  <canvas
+                    ref={canvasRef}
+                    className="w-full h-auto max-h-96"
+                    style={{
+                      display:
+                        realTimePreview &&
+                        (filters.length > 0 || textOverlays.length > 0)
+                          ? "block"
+                          : "none",
+                      backgroundColor: "black",
+                      objectFit: "contain",
+                    }}
+                  />
+
+                  {/* Hidden preview video for processing */}
+                  <video
+                    ref={previewVideoRef}
+                    className="hidden"
+                    crossOrigin="anonymous"
+                  />
                 </div>
 
                 {/* Player Controls */}
@@ -802,6 +1046,33 @@ export default function VideoEditor() {
                               })
                             }
                             size="small"
+                          />
+                        </Stack>
+
+                        <Stack direction="row" spacing={2} className="mt-2">
+                          <TextField
+                            label="X Position (%)"
+                            type="number"
+                            value={overlay.x}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                x: parseFloat(e.target.value),
+                              })
+                            }
+                            size="small"
+                            inputProps={{ min: 0, max: 100, step: 1 }}
+                          />
+                          <TextField
+                            label="Y Position (%)"
+                            type="number"
+                            value={overlay.y}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                y: parseFloat(e.target.value),
+                              })
+                            }
+                            size="small"
+                            inputProps={{ min: 0, max: 100, step: 1 }}
                           />
                         </Stack>
                       </CardContent>
