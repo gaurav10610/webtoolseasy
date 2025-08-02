@@ -6,7 +6,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -32,7 +31,6 @@ export default function RootLayout({
             </div>
           </ThemeProvider>
         </AppRouterCacheProvider>
-        <SpeedInsights />
       </body>
     </html>
   );
