@@ -64,7 +64,14 @@ export async function generateMetadata() {
     },
     title: pageTitle,
     description: pageDescription,
-    icons: "/favicon.png",
+    icons: {
+      icon: [
+        { url: "/favicon.ico" },
+        { url: "/favicon.png", type: "image/png" },
+      ],
+      shortcut: "/favicon.ico",
+      apple: "/favicon.png",
+    },
     authors: {
       name: "Gaurav Kumar Yadav",
     },
