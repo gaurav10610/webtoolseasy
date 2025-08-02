@@ -87,10 +87,17 @@ export default function VideoEditor() {
   >("success");
   const [error, setError] = useState("");
   const [realTimePreview, setRealTimePreview] = useState(true);
+  const [selectedOverlayId, setSelectedOverlayId] = useState<string | null>(
+    null
+  );
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedOverlayId, setDraggedOverlayId] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const previewVideoRef = useRef<HTMLVideoElement>(null); // Hidden video for processing
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
+  const overlayContainerRef = useRef<HTMLDivElement>(null);
+
   const animationFrameRef = useRef<number | null>(null);
 
   // Initialize FFmpeg
@@ -206,10 +213,14 @@ export default function VideoEditor() {
 
     ctx.restore();
 
-    // Apply text overlays
+    // Apply text overlays (skip the one being dragged)
     textOverlays.forEach((overlay) => {
       const currentTime = video.currentTime;
-      if (currentTime >= overlay.startTime && currentTime <= overlay.endTime) {
+      if (
+        currentTime >= overlay.startTime &&
+        currentTime <= overlay.endTime &&
+        overlay.id !== draggedOverlayId
+      ) {
         ctx.save();
 
         // Calculate the actual video drawing area (same calculations as above)
@@ -257,7 +268,7 @@ export default function VideoEditor() {
     if (isPlaying) {
       animationFrameRef.current = requestAnimationFrame(renderPreview);
     }
-  }, [currentClip, filters, textOverlays, isPlaying]);
+  }, [currentClip, filters, textOverlays, isPlaying, draggedOverlayId]);
 
   // Start/stop real-time rendering based on playback state
   useEffect(() => {
@@ -512,16 +523,97 @@ export default function VideoEditor() {
     setTextOverlays((prev) => [...prev, newOverlay]);
   };
 
-  const updateTextOverlay = (id: string, updates: Partial<TextOverlay>) => {
-    setTextOverlays((prev) =>
-      prev.map((overlay) =>
-        overlay.id === id ? { ...overlay, ...updates } : overlay
-      )
-    );
-  };
+  const updateTextOverlay = useCallback(
+    (id: string, updates: Partial<TextOverlay>) => {
+      setTextOverlays((prev) =>
+        prev.map((overlay) =>
+          overlay.id === id ? { ...overlay, ...updates } : overlay
+        )
+      );
+    },
+    []
+  );
 
   const removeTextOverlay = (id: string) => {
     setTextOverlays((prev) => prev.filter((overlay) => overlay.id !== id));
+    if (selectedOverlayId === id) {
+      setSelectedOverlayId(null);
+    }
+  };
+
+  // Handle drag start for text overlays
+  const handleOverlayMouseDown = useCallback(
+    (e: React.MouseEvent, overlayId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const container = overlayContainerRef.current;
+      if (!container) return;
+
+      const overlay = textOverlays.find((o) => o.id === overlayId);
+      if (!overlay) return;
+
+      setSelectedOverlayId(overlayId);
+      setIsDragging(true);
+      setDraggedOverlayId(overlayId);
+
+      const dragState = {
+        isDragging: true,
+        draggedOverlayId: overlayId,
+        startX: e.clientX,
+        startY: e.clientY,
+        initialX: overlay.x,
+        initialY: overlay.y,
+      };
+
+      // Add global mouse events
+      const handleMouseMove = (event: MouseEvent) => {
+        if (!overlayContainerRef.current) return;
+
+        const container = overlayContainerRef.current;
+        const rect = container.getBoundingClientRect();
+
+        const deltaX = event.clientX - dragState.startX;
+        const deltaY = event.clientY - dragState.startY;
+
+        // Convert pixel movement to percentage
+        const deltaXPercent = (deltaX / rect.width) * 100;
+        const deltaYPercent = (deltaY / rect.height) * 100;
+
+        const newX = Math.max(
+          0,
+          Math.min(100, dragState.initialX + deltaXPercent)
+        );
+        const newY = Math.max(
+          0,
+          Math.min(100, dragState.initialY + deltaYPercent)
+        );
+
+        updateTextOverlay(overlayId, { x: newX, y: newY });
+      };
+
+      const handleMouseUp = () => {
+        // Remove global mouse events
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+
+        // Reset dragging state
+        setIsDragging(false);
+        setDraggedOverlayId(null);
+      };
+
+      // Add global mouse events
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    },
+    [textOverlays, updateTextOverlay]
+  );
+
+  // Handle overlay container click (deselect when clicking empty area)
+  const handleOverlayContainerClick = (e: React.MouseEvent) => {
+    if (e.target === overlayContainerRef.current) {
+      setSelectedOverlayId(null);
+    }
   };
 
   const addFilter = (type: VideoFilter["type"]) => {
@@ -825,6 +917,72 @@ export default function VideoEditor() {
                     }}
                   />
 
+                  {/* Draggable Text Overlay Container */}
+                  <div
+                    ref={overlayContainerRef}
+                    className="absolute inset-0 pointer-events-none"
+                    onClick={handleOverlayContainerClick}
+                    style={{
+                      display: textOverlays.length > 0 ? "block" : "none",
+                      zIndex: 10,
+                    }}
+                  >
+                    {textOverlays.map((overlay) => {
+                      const currentVideoTime =
+                        videoRef.current?.currentTime || 0;
+                      const isVisible =
+                        currentVideoTime >= overlay.startTime &&
+                        currentVideoTime <= overlay.endTime;
+
+                      if (!isVisible) return null;
+
+                      return (
+                        <div
+                          key={overlay.id}
+                          className={`absolute cursor-move select-none transition-all duration-200 pointer-events-auto ${
+                            selectedOverlayId === overlay.id
+                              ? "ring-2 ring-blue-400 ring-opacity-60 bg-blue-100 bg-opacity-20"
+                              : "hover:ring-1 hover:ring-white hover:ring-opacity-40"
+                          }`}
+                          style={{
+                            left: `${overlay.x}%`,
+                            top: `${overlay.y}%`,
+                            transform: "translate(-50%, -50%)",
+                            fontSize: `${overlay.fontSize}px`,
+                            color: overlay.color,
+                            fontFamily: overlay.fontFamily,
+                            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                            padding: "4px 8px",
+                            borderRadius: "4px",
+                            minWidth: "20px",
+                            minHeight: "20px",
+                            zIndex: selectedOverlayId === overlay.id ? 20 : 15,
+                            userSelect: "none",
+                            WebkitUserSelect: "none",
+                            // Make transparent when canvas is showing and not being dragged, but keep interactive
+                            opacity:
+                              realTimePreview &&
+                              (filters.length > 0 || textOverlays.length > 0) &&
+                              overlay.id !== draggedOverlayId
+                                ? 0
+                                : 1,
+                            // Always keep pointer events enabled for dragging
+                            pointerEvents: "auto",
+                          }}
+                          onMouseDown={(e) =>
+                            handleOverlayMouseDown(e, overlay.id)
+                          }
+                          title="Drag to reposition text"
+                        >
+                          {overlay.text}
+                          {selectedOverlayId === overlay.id && (
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full"></div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
                   {/* Hidden preview video for processing */}
                   <video
                     ref={previewVideoRef}
@@ -960,7 +1118,12 @@ export default function VideoEditor() {
                   {textOverlays.map((overlay) => (
                     <Card
                       key={overlay.id}
-                      className="mb-2 border border-blue-200 shadow-sm"
+                      className={`mb-2 border shadow-sm transition-all ${
+                        selectedOverlayId === overlay.id
+                          ? "border-blue-400 bg-blue-50"
+                          : "border-blue-200"
+                      }`}
+                      onClick={() => setSelectedOverlayId(overlay.id)}
                     >
                       <CardContent className="p-3">
                         <Stack
@@ -981,7 +1144,10 @@ export default function VideoEditor() {
                             className="flex-1"
                           />
                           <IconButton
-                            onClick={() => removeTextOverlay(overlay.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeTextOverlay(overlay.id);
+                            }}
                             color="error"
                           >
                             <Delete />
@@ -1053,28 +1219,39 @@ export default function VideoEditor() {
                           <TextField
                             label="X Position (%)"
                             type="number"
-                            value={overlay.x}
+                            value={Math.round(overlay.x * 100) / 100}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
                                 x: parseFloat(e.target.value),
                               })
                             }
                             size="small"
-                            inputProps={{ min: 0, max: 100, step: 1 }}
+                            inputProps={{ min: 0, max: 100, step: 0.1 }}
                           />
                           <TextField
                             label="Y Position (%)"
                             type="number"
-                            value={overlay.y}
+                            value={Math.round(overlay.y * 100) / 100}
                             onChange={(e) =>
                               updateTextOverlay(overlay.id, {
                                 y: parseFloat(e.target.value),
                               })
                             }
                             size="small"
-                            inputProps={{ min: 0, max: 100, step: 1 }}
+                            inputProps={{ min: 0, max: 100, step: 0.1 }}
                           />
                         </Stack>
+
+                        {selectedOverlayId === overlay.id && (
+                          <Typography
+                            variant="caption"
+                            color="primary"
+                            className="mt-2 block"
+                          >
+                            💡 Tip: Drag the text directly on the video to
+                            reposition it
+                          </Typography>
+                        )}
                       </CardContent>
                     </Card>
                   ))}
@@ -1086,7 +1263,7 @@ export default function VideoEditor() {
                       className="text-center py-4 bg-white rounded border border-dashed border-blue-300"
                     >
                       No text overlays added yet. Click &quot;Add Text&quot; to
-                      start.
+                      add draggable text to your video.
                     </Typography>
                   )}
                 </div>
