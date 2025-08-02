@@ -507,227 +507,289 @@ export default function VideoEditor() {
                     {isMuted ? <VolumeOff /> : <VolumeUp />}
                   </IconButton>
                 </Stack>
-
-                {/* Trim Controls */}
-                <Typography variant="subtitle2" className="mb-2">
-                  Trim Video
-                </Typography>
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography variant="caption">Start:</Typography>
-                  <Slider
-                    value={currentClip.trimStart}
-                    max={currentClip.duration}
-                    step={0.1}
-                    onChange={(_, value) =>
-                      updateClipTrim(
-                        currentClip.id,
-                        value as number,
-                        currentClip.trimEnd
-                      )
-                    }
-                    sx={{ flex: 1 }}
-                  />
-                  <Typography variant="caption">End:</Typography>
-                  <Slider
-                    value={currentClip.trimEnd}
-                    max={currentClip.duration}
-                    step={0.1}
-                    onChange={(_, value) =>
-                      updateClipTrim(
-                        currentClip.id,
-                        currentClip.trimStart,
-                        value as number
-                      )
-                    }
-                    sx={{ flex: 1 }}
-                  />
-                </Stack>
-                <Typography variant="caption" color="text.secondary">
-                  Trimmed duration:{" "}
-                  {formatTime(currentClip.trimEnd - currentClip.trimStart)}
-                </Typography>
               </PaperWithChildren>
 
-              {/* Text Overlays */}
+              {/* Video Editing Controls */}
               <PaperWithChildren className="p-4" variant="elevation">
-                <div className="flex justify-between items-center mb-3">
-                  <Typography variant="h6">Text Overlays</Typography>
-                  <Button
-                    onClick={addTextOverlay}
-                    startIcon={<TextFields />}
-                    variant="outlined"
+                <Typography variant="h6" className="mb-4">
+                  Video Editing Controls
+                </Typography>
+
+                {/* Trim Controls Section */}
+                <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
+                  <Typography
+                    variant="subtitle1"
+                    className="mb-3 font-medium text-blue-700"
                   >
-                    Add Text
-                  </Button>
-                </div>
-
-                {textOverlays.map((overlay) => (
-                  <Card key={overlay.id} className="mb-2">
-                    <CardContent className="p-3">
-                      <Stack
-                        direction="row"
-                        spacing={2}
-                        alignItems="center"
-                        className="mb-2"
-                      >
-                        <TextField
-                          label="Text"
-                          value={overlay.text}
-                          onChange={(e) =>
-                            updateTextOverlay(overlay.id, {
-                              text: e.target.value,
-                            })
-                          }
-                          size="small"
-                          className="flex-1"
-                        />
-                        <IconButton
-                          onClick={() => removeTextOverlay(overlay.id)}
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </Stack>
-
-                      <Stack direction="row" spacing={2} className="mb-2">
-                        <TextField
-                          label="Start Time"
-                          type="number"
-                          value={overlay.startTime}
-                          onChange={(e) =>
-                            updateTextOverlay(overlay.id, {
-                              startTime: parseFloat(e.target.value),
-                            })
-                          }
-                          size="small"
-                          inputProps={{
-                            step: 0.1,
-                            min: 0,
-                            max: currentClip.duration,
-                          }}
-                        />
-                        <TextField
-                          label="End Time"
-                          type="number"
-                          value={overlay.endTime}
-                          onChange={(e) =>
-                            updateTextOverlay(overlay.id, {
-                              endTime: parseFloat(e.target.value),
-                            })
-                          }
-                          size="small"
-                          inputProps={{
-                            step: 0.1,
-                            min: 0,
-                            max: currentClip.duration,
-                          }}
-                        />
-                      </Stack>
-
-                      <Stack direction="row" spacing={2}>
-                        <TextField
-                          label="Font Size"
-                          type="number"
-                          value={overlay.fontSize}
-                          onChange={(e) =>
-                            updateTextOverlay(overlay.id, {
-                              fontSize: parseInt(e.target.value),
-                            })
-                          }
-                          size="small"
-                          inputProps={{ min: 8, max: 72 }}
-                        />
-                        <TextField
-                          label="Color"
-                          type="color"
-                          value={overlay.color}
-                          onChange={(e) =>
-                            updateTextOverlay(overlay.id, {
-                              color: e.target.value,
-                            })
-                          }
-                          size="small"
-                        />
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                ))}
-
-                {textOverlays.length === 0 && (
-                  <Typography variant="body2" color="text.secondary">
-                    No text overlays added yet. Click &quot;Add Text&quot; to
-                    start.
+                    📹 Trim Video
                   </Typography>
-                )}
-              </PaperWithChildren>
-
-              {/* Video Filters */}
-              <PaperWithChildren className="p-4" variant="elevation">
-                <div className="flex justify-between items-center mb-3">
-                  <Typography variant="h6">Video Effects</Typography>
-                  <Stack direction="row" spacing={1}>
-                    <Button
-                      onClick={() => addFilter("brightness")}
-                      size="small"
-                    >
-                      Brightness
-                    </Button>
-                    <Button onClick={() => addFilter("contrast")} size="small">
-                      Contrast
-                    </Button>
-                    <Button
-                      onClick={() => addFilter("saturation")}
-                      size="small"
-                    >
-                      Saturation
-                    </Button>
-                    <Button onClick={() => addFilter("blur")} size="small">
-                      Blur
-                    </Button>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                    className="mb-2"
+                  >
+                    <Typography variant="caption" className="min-w-12">
+                      Start:
+                    </Typography>
+                    <Slider
+                      value={currentClip.trimStart}
+                      max={currentClip.duration}
+                      step={0.1}
+                      onChange={(_, value) =>
+                        updateClipTrim(
+                          currentClip.id,
+                          value as number,
+                          currentClip.trimEnd
+                        )
+                      }
+                      sx={{ flex: 1 }}
+                    />
+                    <Typography variant="caption" className="min-w-12">
+                      End:
+                    </Typography>
+                    <Slider
+                      value={currentClip.trimEnd}
+                      max={currentClip.duration}
+                      step={0.1}
+                      onChange={(_, value) =>
+                        updateClipTrim(
+                          currentClip.id,
+                          currentClip.trimStart,
+                          value as number
+                        )
+                      }
+                      sx={{ flex: 1 }}
+                    />
                   </Stack>
+                  <Typography variant="caption" color="text.secondary">
+                    Trimmed duration:{" "}
+                    {formatTime(currentClip.trimEnd - currentClip.trimStart)}
+                  </Typography>
                 </div>
 
-                {filters.map((filter) => (
-                  <Card key={filter.id} className="mb-2">
-                    <CardContent className="p-3">
-                      <Stack direction="row" spacing={2} alignItems="center">
-                        <Typography
-                          variant="body2"
-                          className="capitalize min-w-20"
-                        >
-                          {filter.type}
-                        </Typography>
-                        <Slider
-                          value={filter.value}
-                          onChange={(_, value) =>
-                            updateFilter(filter.id, value as number)
-                          }
-                          min={filter.type === "blur" ? 0 : 0}
-                          max={filter.type === "blur" ? 10 : 200}
-                          step={filter.type === "blur" ? 0.1 : 1}
-                          className="flex-1"
-                        />
-                        <Typography variant="caption" className="min-w-12">
-                          {filter.value}
-                          {filter.type === "blur" ? "px" : "%"}
-                        </Typography>
-                        <IconButton
-                          onClick={() => removeFilter(filter.id)}
-                          color="error"
-                          size="small"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                ))}
+                {/* Divider */}
+                <div className="border-t border-gray-200 my-6"></div>
 
-                {filters.length === 0 && (
-                  <Typography variant="body2" color="text.secondary">
-                    No effects applied. Use the buttons above to add effects.
-                  </Typography>
-                )}
+                {/* Text Overlays Section */}
+                <div className="mb-6 p-4 bg-blue-50 rounded-lg border">
+                  <div className="flex justify-between items-center mb-3">
+                    <Typography
+                      variant="subtitle1"
+                      className="font-medium text-blue-700"
+                    >
+                      📝 Text Overlays
+                    </Typography>
+                    <Button
+                      onClick={addTextOverlay}
+                      startIcon={<TextFields />}
+                      variant="outlined"
+                      size="small"
+                    >
+                      Add Text
+                    </Button>
+                  </div>
+
+                  {textOverlays.map((overlay) => (
+                    <Card
+                      key={overlay.id}
+                      className="mb-2 border border-blue-200 shadow-sm"
+                    >
+                      <CardContent className="p-3">
+                        <Stack
+                          direction="row"
+                          spacing={2}
+                          alignItems="center"
+                          className="mb-2"
+                        >
+                          <TextField
+                            label="Text"
+                            value={overlay.text}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                text: e.target.value,
+                              })
+                            }
+                            size="small"
+                            className="flex-1"
+                          />
+                          <IconButton
+                            onClick={() => removeTextOverlay(overlay.id)}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Stack>
+
+                        <Stack direction="row" spacing={2} className="mb-2">
+                          <TextField
+                            label="Start Time"
+                            type="number"
+                            value={overlay.startTime}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                startTime: parseFloat(e.target.value),
+                              })
+                            }
+                            size="small"
+                            inputProps={{
+                              step: 0.1,
+                              min: 0,
+                              max: currentClip.duration,
+                            }}
+                          />
+                          <TextField
+                            label="End Time"
+                            type="number"
+                            value={overlay.endTime}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                endTime: parseFloat(e.target.value),
+                              })
+                            }
+                            size="small"
+                            inputProps={{
+                              step: 0.1,
+                              min: 0,
+                              max: currentClip.duration,
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack direction="row" spacing={2}>
+                          <TextField
+                            label="Font Size"
+                            type="number"
+                            value={overlay.fontSize}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                fontSize: parseInt(e.target.value),
+                              })
+                            }
+                            size="small"
+                            inputProps={{ min: 8, max: 72 }}
+                          />
+                          <TextField
+                            label="Color"
+                            type="color"
+                            value={overlay.color}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                color: e.target.value,
+                              })
+                            }
+                            size="small"
+                          />
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  {textOverlays.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4 bg-white rounded border border-dashed border-blue-300"
+                    >
+                      No text overlays added yet. Click &quot;Add Text&quot; to
+                      start.
+                    </Typography>
+                  )}
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-gray-200 my-6"></div>
+
+                {/* Video Effects Section */}
+                <div className="p-4 bg-purple-50 rounded-lg border">
+                  <div className="flex justify-between items-center mb-3">
+                    <Typography
+                      variant="subtitle1"
+                      className="font-medium text-purple-700"
+                    >
+                      ✨ Video Effects
+                    </Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap">
+                      <Button
+                        onClick={() => addFilter("brightness")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Brightness
+                      </Button>
+                      <Button
+                        onClick={() => addFilter("contrast")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Contrast
+                      </Button>
+                      <Button
+                        onClick={() => addFilter("saturation")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Saturation
+                      </Button>
+                      <Button
+                        onClick={() => addFilter("blur")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Blur
+                      </Button>
+                    </Stack>
+                  </div>
+
+                  {filters.map((filter) => (
+                    <Card
+                      key={filter.id}
+                      className="mb-2 border border-purple-200 shadow-sm"
+                    >
+                      <CardContent className="p-3">
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Typography
+                            variant="body2"
+                            className="capitalize min-w-20"
+                          >
+                            {filter.type}
+                          </Typography>
+                          <Slider
+                            value={filter.value}
+                            onChange={(_, value) =>
+                              updateFilter(filter.id, value as number)
+                            }
+                            min={filter.type === "blur" ? 0 : 0}
+                            max={filter.type === "blur" ? 10 : 200}
+                            step={filter.type === "blur" ? 0.1 : 1}
+                            className="flex-1"
+                          />
+                          <Typography variant="caption" className="min-w-12">
+                            {filter.value}
+                            {filter.type === "blur" ? "px" : "%"}
+                          </Typography>
+                          <IconButton
+                            onClick={() => removeFilter(filter.id)}
+                            color="error"
+                            size="small"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  {filters.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4 bg-white rounded border border-dashed border-purple-300"
+                    >
+                      No effects applied. Use the buttons above to add effects.
+                    </Typography>
+                  )}
+                </div>
               </PaperWithChildren>
 
               {/* Export */}
