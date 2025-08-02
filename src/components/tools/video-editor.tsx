@@ -793,31 +793,107 @@ export default function VideoEditor() {
               {clips.map((clip) => (
                 <Card
                   key={clip.id}
-                  className={`cursor-pointer transition-all ${
-                    currentClip?.id === clip.id ? "ring-2 ring-blue-500" : ""
+                  className={`cursor-pointer transition-all duration-300 ${
+                    currentClip?.id === clip.id
+                      ? "ring-4 ring-blue-500 ring-opacity-100 shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-400 transform scale-105"
+                      : "hover:shadow-lg hover:ring-2 hover:ring-blue-200 hover:scale-102 transform"
                   }`}
+                  style={{
+                    boxShadow:
+                      currentClip?.id === clip.id
+                        ? "0 25px 50px -12px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)"
+                        : undefined,
+                  }}
                   onClick={() => selectClip(clip)}
                 >
-                  <CardContent className="p-3">
-                    <div className="flex items-center gap-2 mb-2">
-                      <VideoLibraryIcon color="primary" />
+                  <CardContent className="p-3 relative">
+                    {/* Selected Video Gradient Overlay */}
+                    {currentClip?.id === clip.id && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-blue-400/10 rounded-lg pointer-events-none" />
+                    )}
+
+                    <div className="flex items-center gap-2 mb-2 relative z-10">
+                      <div
+                        className={`p-1 rounded-full transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"
+                            : "bg-gray-100"
+                        }`}
+                      >
+                        <VideoLibraryIcon
+                          className={`transition-all duration-300 ${
+                            currentClip?.id === clip.id
+                              ? "text-white drop-shadow-md"
+                              : "text-gray-600"
+                          }`}
+                          fontSize="small"
+                        />
+                      </div>
                       <Typography
                         variant="body2"
-                        className="font-medium truncate"
+                        className={`font-medium truncate transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "text-blue-900 font-semibold drop-shadow-sm"
+                            : "text-gray-700"
+                        }`}
                       >
                         {clip.name}
                       </Typography>
+                      {currentClip?.id === clip.id && (
+                        <div className="ml-auto flex items-center gap-1">
+                          <div className="relative">
+                            <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse shadow-lg"></div>
+                            <div className="absolute inset-0 w-3 h-3 bg-blue-400 rounded-full animate-ping opacity-60"></div>
+                          </div>
+                          <Typography
+                            variant="caption"
+                            className="text-blue-700 font-medium bg-blue-100 px-2 py-0.5 rounded-full text-xs"
+                          >
+                            ACTIVE
+                          </Typography>
+                        </div>
+                      )}
                     </div>
-                    <Typography variant="caption" color="text.secondary">
-                      Duration: {formatTime(clip.duration)}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      className="block"
-                    >
-                      Size: {formatBytes(clip.file.size)}
-                    </Typography>
+                    <div className="space-y-1 relative z-10">
+                      <Typography
+                        variant="caption"
+                        className={`block transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "text-blue-700 font-medium"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        <span
+                          className={
+                            currentClip?.id === clip.id
+                              ? "text-blue-600 font-semibold"
+                              : ""
+                          }
+                        >
+                          Duration:
+                        </span>{" "}
+                        {formatTime(clip.duration)}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        className={`block transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "text-blue-700 font-medium"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        <span
+                          className={
+                            currentClip?.id === clip.id
+                              ? "text-blue-600 font-semibold"
+                              : ""
+                          }
+                        >
+                          Size:
+                        </span>{" "}
+                        {formatBytes(clip.file.size)}
+                      </Typography>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
