@@ -107,39 +107,72 @@ export default function VideoEditor() {
     initFFmpeg();
   }, []);
 
-  const handleFileSelect = useCallback((files: FileList) => {
-    const newClips: VideoClip[] = Array.from(files).map((file) => {
-      const videoElement = document.createElement("video");
-      videoElement.src = URL.createObjectURL(file);
+  // Handle video loading when currentClip changes
+  useEffect(() => {
+    if (currentClip && videoRef.current && currentClip.videoElement) {
+      const video = videoRef.current;
+      video.src = currentClip.videoElement.src;
+      video.load();
+      setIsPlaying(false);
+      // Don't set currentTime here - let onLoadedMetadata handle it
+    }
+  }, [currentClip]);
 
-      return {
-        id: getRandomId(),
-        file,
-        name: file.name,
-        duration: 0,
-        startTime: 0,
-        endTime: 0,
-        trimStart: 0,
-        trimEnd: 0,
-        videoElement,
-      };
-    });
+  const handleFileSelect = useCallback(
+    (files: FileList) => {
+      const newClips: VideoClip[] = Array.from(files).map((file) => {
+        const videoElement = document.createElement("video");
+        videoElement.src = URL.createObjectURL(file);
 
-    // Load video metadata
-    newClips.forEach((clip) => {
-      if (clip.videoElement) {
-        clip.videoElement.addEventListener("loadedmetadata", () => {
-          clip.duration = clip.videoElement!.duration;
-          clip.endTime = clip.duration;
-          clip.trimEnd = clip.duration;
-          setClips((prev) => [...prev.filter((c) => c.id !== clip.id), clip]);
-        });
-      }
-    });
+        return {
+          id: getRandomId(),
+          file,
+          name: file.name,
+          duration: 0,
+          startTime: 0,
+          endTime: 0,
+          trimStart: 0,
+          trimEnd: 0,
+          videoElement,
+        };
+      });
 
-    setClips((prev) => [...prev, ...newClips]);
-    setError("");
-  }, []);
+      // Track metadata loading for auto-selection
+      let firstClipLoaded = false;
+
+      // Load video metadata
+      newClips.forEach((clip, index) => {
+        if (clip.videoElement) {
+          clip.videoElement.addEventListener("loadedmetadata", () => {
+            clip.duration = clip.videoElement!.duration;
+            clip.endTime = clip.duration;
+            clip.trimEnd = clip.duration;
+
+            setClips((prev) => {
+              const updatedClips = [
+                ...prev.filter((c) => c.id !== clip.id),
+                clip,
+              ];
+
+              // Auto-select the first clip if no clip is currently selected and this is the first uploaded clip
+              if (!firstClipLoaded && index === 0 && !currentClip) {
+                firstClipLoaded = true;
+                setTimeout(() => {
+                  setCurrentClip(clip);
+                }, 100); // Small delay to ensure UI is ready
+              }
+
+              return updatedClips;
+            });
+          });
+        }
+      });
+
+      setClips((prev) => [...prev, ...newClips]);
+      setError("");
+    },
+    [currentClip]
+  );
 
   const handleError = useCallback((errorMessage: string) => {
     setError(errorMessage);
@@ -147,21 +180,53 @@ export default function VideoEditor() {
 
   const selectClip = (clip: VideoClip) => {
     setCurrentClip(clip);
-    if (videoRef.current && clip.videoElement) {
-      videoRef.current.src = clip.videoElement.src;
-      videoRef.current.currentTime = clip.trimStart;
-    }
+    setIsPlaying(false); // Reset play state when switching clips
   };
 
-  const handlePlayPause = () => {
-    if (!videoRef.current) return;
-
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
+  const handlePlayPause = async () => {
+    if (!videoRef.current || !currentClip) {
+      console.log("No video ref or current clip");
+      return;
     }
-    setIsPlaying(!isPlaying);
+
+    const video = videoRef.current;
+
+    try {
+      if (isPlaying) {
+        video.pause();
+        setIsPlaying(false);
+      } else {
+        // Ensure video is ready for playback
+        if (video.readyState < 2) {
+          console.log("Video not ready, readyState:", video.readyState);
+          // Show a loading message instead of reloading
+          setSnackBarMessage("Video is still loading, please wait...");
+          setSnackBarColor("info");
+          setIsSnackBarOpen(true);
+          return;
+        }
+
+        // Ensure we're at the correct start position before playing
+        if (Math.abs(video.currentTime - currentClip.trimStart) > 0.1) {
+          video.currentTime = currentClip.trimStart;
+          // Wait a moment for the seek to complete
+          await new Promise((resolve) => setTimeout(resolve, 50));
+        }
+
+        await video.play();
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("Error playing/pausing video:", error);
+      setIsPlaying(false);
+
+      // Show user-friendly error
+      setSnackBarMessage(
+        "Unable to play video. Please try selecting the video again."
+      );
+      setSnackBarColor("warning");
+      setIsSnackBarOpen(true);
+    }
   };
 
   const handleTimeUpdate = () => {
@@ -170,10 +235,17 @@ export default function VideoEditor() {
     const time = videoRef.current.currentTime;
     setCurrentTime(time);
 
-    // Auto-pause at trim end
-    if (time >= currentClip.trimEnd) {
+    // Auto-pause at trim end (with small buffer to avoid edge cases)
+    if (time >= currentClip.trimEnd - 0.1) {
       videoRef.current.pause();
       setIsPlaying(false);
+      // Reset to trim start for next playback
+      setTimeout(() => {
+        if (videoRef.current && currentClip) {
+          videoRef.current.currentTime = currentClip.trimStart;
+          setCurrentTime(currentClip.trimStart);
+        }
+      }, 100);
     }
   };
 
@@ -183,8 +255,26 @@ export default function VideoEditor() {
     const newTime =
       currentClip.trimStart +
       (value / 100) * (currentClip.trimEnd - currentClip.trimStart);
-    videoRef.current.currentTime = newTime;
+
+    const video = videoRef.current;
+    const wasPlaying = !video.paused;
+
+    // Pause if playing to avoid conflicts during seek
+    if (wasPlaying) {
+      video.pause();
+    }
+
+    video.currentTime = newTime;
     setCurrentTime(newTime);
+
+    // Resume playing if it was playing before
+    if (wasPlaying) {
+      setTimeout(() => {
+        video
+          .play()
+          .catch((err) => console.error("Error resuming playback:", err));
+      }, 100);
+    }
   };
 
   const updateClipTrim = (
@@ -458,8 +548,41 @@ export default function VideoEditor() {
                     onTimeUpdate={handleTimeUpdate}
                     onLoadedMetadata={() => {
                       if (videoRef.current && currentClip) {
-                        videoRef.current.currentTime = currentClip.trimStart;
+                        // Ensure the video is ready before setting time
+                        const video = videoRef.current;
+                        if (video.readyState >= 1) {
+                          video.currentTime = currentClip.trimStart;
+                          setCurrentTime(currentClip.trimStart);
+                        }
+                        setIsPlaying(false); // Reset playing state when new video loads
                       }
+                    }}
+                    onCanPlay={() => {
+                      // Only set currentTime if it's not already at the correct position
+                      if (videoRef.current && currentClip) {
+                        const video = videoRef.current;
+                        if (
+                          Math.abs(video.currentTime - currentClip.trimStart) >
+                          0.1
+                        ) {
+                          video.currentTime = currentClip.trimStart;
+                          setCurrentTime(currentClip.trimStart);
+                        }
+                      }
+                    }}
+                    onPlay={() => {
+                      setIsPlaying(true);
+                      console.log("Video started playing");
+                    }}
+                    onPause={() => {
+                      setIsPlaying(false);
+                      console.log("Video paused");
+                    }}
+                    onSeeking={() => {
+                      console.log("Video seeking...");
+                    }}
+                    onSeeked={() => {
+                      console.log("Video seek completed");
                     }}
                     controls={false}
                   />
