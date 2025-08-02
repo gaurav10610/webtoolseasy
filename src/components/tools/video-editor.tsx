@@ -90,7 +90,6 @@ export default function VideoEditor() {
   const [selectedOverlayId, setSelectedOverlayId] = useState<string | null>(
     null
   );
-  const [isDragging, setIsDragging] = useState(false);
   const [draggedOverlayId, setDraggedOverlayId] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -554,7 +553,6 @@ export default function VideoEditor() {
       if (!overlay) return;
 
       setSelectedOverlayId(overlayId);
-      setIsDragging(true);
       setDraggedOverlayId(overlayId);
 
       const dragState = {
@@ -598,7 +596,6 @@ export default function VideoEditor() {
         document.removeEventListener("mouseup", handleMouseUp);
 
         // Reset dragging state
-        setIsDragging(false);
         setDraggedOverlayId(null);
       };
 
@@ -960,11 +957,11 @@ export default function VideoEditor() {
                             userSelect: "none",
                             WebkitUserSelect: "none",
                             // Make transparent when canvas is showing and not being dragged, but keep interactive
-                            opacity:
-                              realTimePreview &&
-                              (filters.length > 0 || textOverlays.length > 0) &&
-                              overlay.id !== draggedOverlayId
-                                ? 0
+                            opacity: 
+                              realTimePreview && 
+                              (filters.length > 0 || textOverlays.length > 0) && 
+                              overlay.id !== draggedOverlayId 
+                                ? 0 
                                 : 1,
                             // Always keep pointer events enabled for dragging
                             pointerEvents: "auto",
