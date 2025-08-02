@@ -1,0 +1,168 @@
+"use client";
+
+import React, { useState } from "react";
+import { ButtonWithHandler } from "../lib/buttons";
+import { SnackBarWithPosition } from "../lib/snackBar";
+import {
+  ContentCopy,
+  Link as LinkIcon,
+  OpenInFull as OpenInFullIcon,
+  CloseFullscreen as CloseFullscreenIcon,
+} from "@mui/icons-material";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+import { usePathname } from "next/navigation";
+import {
+  compressStringToBase64,
+  copyToClipboard,
+  encodeText,
+} from "@/util/commonUtils";
+import TurndownService from "turndown";
+
+const turndownService = new TurndownService();
+
+function htmlToMarkdown(html: string): string {
+  return turndownService.turndown(html);
+}
+
+const HtmlToMarkdown: React.FC = () => {
+  const [html, setHtml] = useState("");
+  const [markdown, setMarkdown] = useState("");
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const currentPath = usePathname();
+  const hostname = typeof window !== "undefined" ? window.location.origin : "";
+
+  const handleConvert = () => {
+    try {
+      const md = htmlToMarkdown(html);
+      setMarkdown(md);
+      setSnackBarMessage("HTML converted to Markdown successfully!");
+      setIsSnackBarOpen(true);
+    } catch (e) {
+      console.error("Conversion error:", e);
+      setSnackBarMessage("Invalid HTML input.");
+      setIsSnackBarOpen(true);
+    }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(markdown);
+    setSnackBarMessage("Markdown copied!");
+    setIsSnackBarOpen(true);
+  };
+
+  const handleLinkCopy = () => {
+    compressStringToBase64(html).then((compressedData) => {
+      copyToClipboard(
+        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
+      );
+      setSnackBarMessage("Copied Link to Clipboard!");
+      setIsSnackBarOpen(true);
+    });
+  };
+
+  const handleSnackBarClose = () => {
+    setIsSnackBarOpen(false);
+  };
+
+  function ControlButtons() {
+    return (
+      <div className="flex flex-col md:flex-row gap-2 w-full">
+        <ButtonWithHandler
+          buttonText="Convert HTML to Markdown"
+          variant="contained"
+          onClick={handleConvert}
+          size="small"
+        />
+        <ButtonWithHandler
+          buttonText="Copy Markdown"
+          variant="outlined"
+          size="small"
+          startIcon={<ContentCopy />}
+          onClick={handleCopy}
+        />
+        <ButtonWithHandler
+          buttonText="Copy Shareable Link"
+          variant="outlined"
+          size="small"
+          startIcon={<LinkIcon />}
+          onClick={handleLinkCopy}
+        />
+        {!isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Enter Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<OpenInFullIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+        {isFullScreen && (
+          <ButtonWithHandler
+            buttonText="Close Full Screen"
+            variant="outlined"
+            size="small"
+            startIcon={<CloseFullscreenIcon />}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+            className="!hidden md:!flex"
+          />
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`flex flex-col gap-3 w-full ${
+        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+      }`}
+    >
+      <SnackBarWithPosition
+        message={snackBarMessage}
+        open={isSnackBarOpen}
+        autoHideDuration={2000}
+        handleClose={handleSnackBarClose}
+      />
+      <ControlButtons />
+      <div
+        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
+          isFullScreen ? "md:h-full" : ""
+        }`}
+      >
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={{
+            language: "html",
+            value: html,
+            onChange: setHtml,
+            editorOptions: {
+              wordWrap: "on",
+            },
+            className: "w-full h-full",
+          }}
+          themeOption="vs-dark"
+          editorHeading="HTML Input"
+          className="w-[80%] md:w-[49%]"
+        />
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={{
+            language: "markdown",
+            value: markdown,
+            onChange: () => {},
+            editorOptions: {
+              readOnly: true,
+            },
+            className: "w-full h-full",
+          }}
+          themeOption="vs-dark"
+          editorHeading="Markdown Output"
+          className="w-[80%] md:w-[49%]"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default HtmlToMarkdown;
