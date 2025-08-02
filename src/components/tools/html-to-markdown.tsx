@@ -25,7 +25,20 @@ function htmlToMarkdown(html: string): string {
 }
 
 const HtmlToMarkdown: React.FC = () => {
-  const [html, setHtml] = useState("");
+  const [html, setHtml] = useState(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sample HTML</title>
+  </head>
+  <body>
+    <h1>Hello, World!</h1>
+    <p>This is a <strong>sample</strong> HTML snippet.</p>
+    <ul>
+      <li>Item 1</li>
+      <li>Item 2</li>
+    </ul>
+  </body>
+</html>`);
   const [markdown, setMarkdown] = useState("");
   const [snackBarMessage, setSnackBarMessage] = useState("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
