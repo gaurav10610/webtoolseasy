@@ -957,11 +957,11 @@ export default function VideoEditor() {
                             userSelect: "none",
                             WebkitUserSelect: "none",
                             // Make transparent when canvas is showing and not being dragged, but keep interactive
-                            opacity: 
-                              realTimePreview && 
-                              (filters.length > 0 || textOverlays.length > 0) && 
-                              overlay.id !== draggedOverlayId 
-                                ? 0 
+                            opacity:
+                              realTimePreview &&
+                              (filters.length > 0 || textOverlays.length > 0) &&
+                              overlay.id !== draggedOverlayId
+                                ? 0
                                 : 1,
                             // Always keep pointer events enabled for dragging
                             pointerEvents: "auto",
