@@ -8,6 +8,7 @@ import {
   Link as LinkIcon,
   OpenInFull as OpenInFullIcon,
   CloseFullscreen as CloseFullscreenIcon,
+  SwapHoriz as SwapHorizIcon,
 } from "@mui/icons-material";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import ReactMarkdown from "react-markdown";
@@ -90,10 +91,11 @@ const HtmlToMarkdown: React.FC = () => {
     return (
       <div className="flex flex-col md:flex-row gap-2 w-full">
         <ButtonWithHandler
-          buttonText="Convert HTML to Markdown"
+          buttonText="Convert"
           variant="contained"
           onClick={handleConvert}
           size="small"
+          startIcon={<SwapHorizIcon />}
         />
         <ButtonWithHandler
           buttonText="Copy Markdown"
@@ -110,9 +112,7 @@ const HtmlToMarkdown: React.FC = () => {
           onClick={handleLinkCopy}
         />
         <ButtonWithHandler
-          buttonText={
-            showPreview ? "Show Markdown Code" : "Show Markdown Preview"
-          }
+          buttonText={showPreview ? "Markdown Output" : "Preview Markdown"}
           variant="outlined"
           size="small"
           startIcon={showPreview ? <CodeIcon /> : <VisibilityIcon />}
