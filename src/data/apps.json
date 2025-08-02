@@ -270,5 +270,13 @@
     "navigateUrl": "tools/regex-tester",
     "iconRelativeUrl": "regex-icon.svg",
     "category": "Programming"
+  },
+  "html-to-markdown": {
+    "applicationId": "html-to-markdown",
+    "displayText": "HTML to Markdown Converter",
+    "iconName": "markdown",
+    "navigateUrl": "tools/html-to-markdown",
+    "iconRelativeUrl": "markdown.svg",
+    "category": "Programming"
   }
 }

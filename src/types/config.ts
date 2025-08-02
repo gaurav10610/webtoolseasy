@@ -33,6 +33,7 @@ export enum ApplicationIds {
   PDF_EDITOR = "pdf-editor",
   SPEECH_TO_TEXT = "speech-to-text",
   REGEX_TESTER = "regex-tester",
+  HTML_TO_MARKDOWN = "html-to-markdown",
 }
 
 export interface BaseAppConfig {
