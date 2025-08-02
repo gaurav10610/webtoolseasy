@@ -20,9 +20,11 @@ import { usePathname } from "next/navigation";
 import {
   compressStringToBase64,
   copyToClipboard,
+  decodeText,
   encodeText,
 } from "@/util/commonUtils";
 import TurndownService from "turndown";
+import { ToolComponentProps } from "@/types/component";
 
 const turndownService = new TurndownService();
 
@@ -30,29 +32,35 @@ function htmlToMarkdown(html: string): string {
   return turndownService.turndown(html);
 }
 
-const HtmlToMarkdown: React.FC = () => {
-  const [html, setHtml] = useState(`<!DOCTYPE html>
+export default function HtmlToMarkdown({
+  hostname,
+  queryParams,
+}: Readonly<ToolComponentProps>) {
+  const initialValue = `<!DOCTYPE html>
 <html>
-  <head>
-    <title>Sample HTML</title>
-  </head>
-  <body>
-    <h1>Hello, World!</h1>
-    <p>This is a <strong>sample</strong> HTML snippet.</p>
-    <ul>
-      <li>Item 1</li>
-      <li>Item 2</li>
-    </ul>
-  </body>
-</html>`);
+<head>
+    <title>Page Title</title>
+</head>
+<body>
+    <h1>This is an Online HTML Editor</h1>
+    <p style="color:red">
+        WebToolsEasy is Great. Explore more such free tools.
+    </p>
+</body>
+</html>`;
+
+  const codeQueryParam = queryParams.content;
+  const currentPath = usePathname();
+
+  const [html, setHtml] = useState(
+    codeQueryParam ? decodeText(codeQueryParam) : initialValue
+  );
+
   const [markdown, setMarkdown] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
-
-  const currentPath = usePathname();
-  const hostname = typeof window !== "undefined" ? window.location.origin : "";
 
   const handleConvert = () => {
     try {
@@ -209,6 +217,4 @@ const HtmlToMarkdown: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default HtmlToMarkdown;
+}
