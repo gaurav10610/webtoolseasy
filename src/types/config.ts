@@ -34,6 +34,7 @@ export enum ApplicationIds {
   SPEECH_TO_TEXT = "speech-to-text",
   REGEX_TESTER = "regex-tester",
   HTML_TO_MARKDOWN = "html-to-markdown",
+  VIDEO_EDITOR = "video-editor",
 }
 
 export interface BaseAppConfig {
