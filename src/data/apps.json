@@ -278,5 +278,13 @@
     "navigateUrl": "tools/html-to-markdown",
     "iconRelativeUrl": "markdown.svg",
     "category": "Programming"
+  },
+  "video-editor": {
+    "applicationId": "video-editor",
+    "displayText": "Video Editor Online",
+    "iconName": "video-editor",
+    "navigateUrl": "tools/video-editor",
+    "iconRelativeUrl": "video-convert.svg",
+    "category": "Media"
   }
 }
