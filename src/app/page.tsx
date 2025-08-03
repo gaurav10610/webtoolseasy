@@ -7,7 +7,6 @@ import {
   Typography,
   Chip,
   Box,
-  Fade,
   TextField,
   InputAdornment,
 } from "@mui/material";
@@ -23,6 +22,8 @@ import {
   generateOrganizationSchema,
   generateWebsiteSchema,
 } from "@/components/structuredData";
+import { SkeletonWithProps } from "@/components/lib/skeletons";
+import { Suspense } from "react";
 
 const pageTitle = "Free Online Tools - Web Utilities & Productivity";
 const pageDescription =
@@ -86,119 +87,113 @@ function AppDiscoveryFilters({
 }>) {
   return (
     <Box className="w-full mb-6">
-      <Fade in={true} timeout={800}>
-        <section className="flex flex-col gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-          <header className="flex items-center gap-2 mb-2">
-            <FilterListIcon color="primary" />
-            <Typography variant="h6" className="!font-medium">
-              Discover Tools ({filteredCount} of {totalTools})
-            </Typography>
-          </header>
+      <section className="flex flex-col gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+        <header className="flex items-center gap-2 mb-2">
+          <FilterListIcon color="primary" />
+          <Typography variant="h6" className="!font-medium">
+            Discover Tools ({filteredCount} of {totalTools})
+          </Typography>
+        </header>
 
-          <form method="GET" className="w-full">
-            {selectedCategory && (
-              <input type="hidden" name="category" value={selectedCategory} />
-            )}
-            <TextField
-              name="search"
-              placeholder="Search tools by name or description... (Press Enter to search)"
-              size="small"
-              fullWidth
-              defaultValue={searchQuery || ""}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
-              }}
-              className="mb-3"
-            />
-          </form>
-
-          <nav className="flex flex-wrap gap-2" aria-label="Category filters">
-            <Link
-              href={
-                searchQuery
-                  ? `/?search=${encodeURIComponent(searchQuery)}`
-                  : "/"
-              }
-              className="no-underline"
-            >
-              <Chip
-                label="All Categories"
-                variant={!selectedCategory ? "filled" : "outlined"}
-                color={!selectedCategory ? "primary" : "default"}
-                className="cursor-pointer hover:shadow-md transition-shadow"
-              />
-            </Link>
-            {map(categories, (category) => {
-              const href = searchQuery
-                ? `/?category=${encodeURIComponent(
-                    category
-                  )}&search=${encodeURIComponent(searchQuery)}`
-                : `/?category=${encodeURIComponent(category)}`;
-
-              return (
-                <Link key={getRandomId()} href={href} className="no-underline">
-                  <Chip
-                    label={category}
-                    variant={
-                      selectedCategory === category ? "filled" : "outlined"
-                    }
-                    color={
-                      selectedCategory === category ? "primary" : "default"
-                    }
-                    className="cursor-pointer hover:shadow-md transition-shadow"
-                  />
-                </Link>
-              );
-            })}
-          </nav>
-
-          {(selectedCategory || searchQuery) && (
-            <div className="flex items-center gap-2 pt-2 border-t border-blue-200">
-              <Typography variant="body2" color="textSecondary">
-                Active filters:
-              </Typography>
-              {selectedCategory && (
-                <Link
-                  href={
-                    searchQuery
-                      ? `/?search=${encodeURIComponent(searchQuery)}`
-                      : "/"
-                  }
-                  className="no-underline"
-                >
-                  <Chip
-                    label={`Category: ${selectedCategory}`}
-                    size="small"
-                    color="secondary"
-                    className="cursor-pointer"
-                  />
-                </Link>
-              )}
-              {searchQuery && (
-                <Link
-                  href={
-                    selectedCategory
-                      ? `/?category=${encodeURIComponent(selectedCategory)}`
-                      : "/"
-                  }
-                  className="no-underline"
-                >
-                  <Chip
-                    label={`Search: ${searchQuery}`}
-                    size="small"
-                    color="secondary"
-                    className="cursor-pointer"
-                  />
-                </Link>
-              )}
-            </div>
+        <form method="GET" className="w-full">
+          {selectedCategory && (
+            <input type="hidden" name="category" value={selectedCategory} />
           )}
-        </section>
-      </Fade>
+          <TextField
+            name="search"
+            placeholder="Search tools by name or description... (Press Enter to search)"
+            size="small"
+            fullWidth
+            defaultValue={searchQuery || ""}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+            className="mb-3"
+          />
+        </form>
+
+        <nav className="flex flex-wrap gap-2" aria-label="Category filters">
+          <Link
+            href={
+              searchQuery ? `/?search=${encodeURIComponent(searchQuery)}` : "/"
+            }
+            className="no-underline"
+          >
+            <Chip
+              label="All Categories"
+              variant={!selectedCategory ? "filled" : "outlined"}
+              color={!selectedCategory ? "primary" : "default"}
+              className="cursor-pointer hover:shadow-md transition-shadow"
+            />
+          </Link>
+          {map(categories, (category) => {
+            const href = searchQuery
+              ? `/?category=${encodeURIComponent(
+                  category
+                )}&search=${encodeURIComponent(searchQuery)}`
+              : `/?category=${encodeURIComponent(category)}`;
+
+            return (
+              <Link key={getRandomId()} href={href} className="no-underline">
+                <Chip
+                  label={category}
+                  variant={
+                    selectedCategory === category ? "filled" : "outlined"
+                  }
+                  color={selectedCategory === category ? "primary" : "default"}
+                  className="cursor-pointer hover:shadow-md transition-shadow"
+                />
+              </Link>
+            );
+          })}
+        </nav>
+
+        {(selectedCategory || searchQuery) && (
+          <div className="flex items-center gap-2 pt-2 border-t border-blue-200">
+            <Typography variant="body2" color="textSecondary">
+              Active filters:
+            </Typography>
+            {selectedCategory && (
+              <Link
+                href={
+                  searchQuery
+                    ? `/?search=${encodeURIComponent(searchQuery)}`
+                    : "/"
+                }
+                className="no-underline"
+              >
+                <Chip
+                  label={`Category: ${selectedCategory}`}
+                  size="small"
+                  color="secondary"
+                  className="cursor-pointer"
+                />
+              </Link>
+            )}
+            {searchQuery && (
+              <Link
+                href={
+                  selectedCategory
+                    ? `/?category=${encodeURIComponent(selectedCategory)}`
+                    : "/"
+                }
+                className="no-underline"
+              >
+                <Chip
+                  label={`Search: ${searchQuery}`}
+                  size="small"
+                  color="secondary"
+                  className="cursor-pointer"
+                />
+              </Link>
+            )}
+          </div>
+        )}
+      </section>
     </Box>
   );
 }
@@ -220,36 +215,54 @@ function PopularToolsSection({
   ];
 
   return (
-    <Fade in={true} timeout={1000}>
-      <section
-        className={`${
-          isMobile ? "p-4" : "p-6"
-        } bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200`}
-        aria-labelledby="popular-tools-heading"
+    <section
+      className={`${
+        isMobile ? "p-4" : "p-6"
+      } bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200`}
+      aria-labelledby="popular-tools-heading"
+    >
+      <header
+        className={`flex items-center ${
+          isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
+        }`}
       >
-        <header
-          className={`flex items-center ${
-            isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
-          }`}
+        <Typography
+          id="popular-tools-heading"
+          variant={isMobile ? "h6" : "h5"}
+          className="!font-semibold !text-purple-800"
         >
-          <Typography
-            id="popular-tools-heading"
-            variant={isMobile ? "h6" : "h5"}
-            className="!font-semibold !text-purple-800"
-          >
-            🌟 Popular Tools
-          </Typography>
-          <Chip
-            label="Most Used"
-            color="secondary"
-            variant="outlined"
-            size="small"
-          />
-        </header>
-        <div
-          className={`grid ${
-            isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-3 gap-4"
-          }`}
+          🌟 Popular Tools
+        </Typography>
+        <Chip
+          label="Most Used"
+          color="secondary"
+          variant="outlined"
+          size="small"
+        />
+      </header>
+      <div
+        className={`grid ${
+          isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-3 gap-4"
+        }`}
+      >
+        <Suspense
+          fallback={
+            <div
+              className={`grid ${
+                isMobile
+                  ? "grid-cols-1 gap-3"
+                  : "grid-cols-1 md:grid-cols-3 gap-4"
+              }`}
+            >
+              {Array.from({ length: featuredTools.length }, (_, i) => (
+                <SkeletonWithProps
+                  key={i}
+                  height={200}
+                  className="rounded-lg"
+                />
+              ))}
+            </div>
+          }
         >
           {featuredTools.map((config, index) => (
             <div
@@ -265,9 +278,9 @@ function PopularToolsSection({
               />
             </div>
           ))}
-        </div>
-      </section>
-    </Fade>
+        </Suspense>
+      </div>
+    </section>
   );
 }
 
@@ -283,27 +296,39 @@ function SectionAppList({
   const emptyColumns = 4 - (configs.length % 4);
 
   return (
-    <Fade in={true} timeout={600}>
-      <section className="flex flex-col gap-4 w-full">
-        {showCategoryTitle && (
-          <header className="flex items-center gap-3 pb-2 border-b border-gray-200">
-            <Typography
-              key={getRandomId()}
-              variant="h2"
-              className="!text-xl md:!text-2xl !font-medium !text-gray-800"
-              color="textSecondary"
-            >
-              {category}
-            </Typography>
-            <Chip
-              label={`${configs.length} tools`}
-              size="small"
-              variant="outlined"
-              color="primary"
-            />
-          </header>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+    <section className="flex flex-col gap-4 w-full">
+      {showCategoryTitle && (
+        <header className="flex items-center gap-3 pb-2 border-b border-gray-200">
+          <Typography
+            key={getRandomId()}
+            variant="h2"
+            className="!text-xl md:!text-2xl !font-medium !text-gray-800"
+            color="textSecondary"
+          >
+            {category}
+          </Typography>
+          <Chip
+            label={`${configs.length} tools`}
+            size="small"
+            variant="outlined"
+            color="primary"
+          />
+        </header>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+              {Array.from({ length: Math.min(configs.length, 8) }, (_, i) => (
+                <SkeletonWithProps
+                  key={i}
+                  height={180}
+                  className="rounded-lg"
+                />
+              ))}
+            </div>
+          }
+        >
           {map(configs, (config, index) => {
             return (
               <article
@@ -325,9 +350,9 @@ function SectionAppList({
               <div key={getRandomId()} className="w-full hidden md:block" />
             );
           })}
-        </div>
-      </section>
-    </Fade>
+        </Suspense>
+      </div>
+    </section>
   );
 }
 
@@ -413,10 +438,22 @@ export default async function Home({
               />
 
               {!selectedCategory && !searchQuery && (
-                <Fade in={true} timeout={1200}>
-                  <nav
-                    className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4"
-                    aria-label="Quick category access"
+                <nav
+                  className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4"
+                  aria-label="Quick category access"
+                >
+                  <Suspense
+                    fallback={
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4">
+                        {Array.from({ length: 4 }, (_, i) => (
+                          <SkeletonWithProps
+                            key={i}
+                            height={80}
+                            className="rounded-lg"
+                          />
+                        ))}
+                      </div>
+                    }
                   >
                     {allCategories.slice(0, 4).map((category) => {
                       const categoryCount = allApps.filter(
@@ -446,8 +483,8 @@ export default async function Home({
                         </Link>
                       );
                     })}
-                  </nav>
-                </Fade>
+                  </Suspense>
+                </nav>
               )}
 
               {filteredApps.length > 0 ? (
@@ -470,31 +507,29 @@ export default async function Home({
                   })}
                 </div>
               ) : (
-                <Fade in={true} timeout={600}>
-                  <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
-                    <Typography
-                      variant="h6"
-                      color="textSecondary"
-                      className="mb-4"
-                    >
-                      🔍 No tools found matching your criteria
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      className="mb-4"
-                    >
-                      Try adjusting your search or removing filters
-                    </Typography>
-                    <Link href="/" className="no-underline">
-                      <Chip
-                        label="Clear All Filters"
-                        color="primary"
-                        className="cursor-pointer"
-                      />
-                    </Link>
-                  </div>
-                </Fade>
+                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                  <Typography
+                    variant="h6"
+                    color="textSecondary"
+                    className="mb-4"
+                  >
+                    🔍 No tools found matching your criteria
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className="mb-4"
+                  >
+                    Try adjusting your search or removing filters
+                  </Typography>
+                  <Link href="/" className="no-underline">
+                    <Chip
+                      label="Clear All Filters"
+                      color="primary"
+                      className="cursor-pointer"
+                    />
+                  </Link>
+                </div>
               )}
             </div>
           </section>
@@ -537,27 +572,25 @@ export default async function Home({
               })}
             </div>
           ) : (
-            <Fade in={true} timeout={600}>
-              <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
-                <Typography variant="h6" color="textSecondary" className="mb-4">
-                  🔍 No tools found
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  className="mb-4"
-                >
-                  Try adjusting your search or removing filters
-                </Typography>
-                <Link href="/" className="no-underline">
-                  <Chip
-                    label="Clear Filters"
-                    color="primary"
-                    className="cursor-pointer"
-                  />
-                </Link>
-              </div>
-            </Fade>
+            <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
+              <Typography variant="h6" color="textSecondary" className="mb-4">
+                🔍 No tools found
+              </Typography>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                className="mb-4"
+              >
+                Try adjusting your search or removing filters
+              </Typography>
+              <Link href="/" className="no-underline">
+                <Chip
+                  label="Clear Filters"
+                  color="primary"
+                  className="cursor-pointer"
+                />
+              </Link>
+            </div>
           )}
           <BaseToolsAds className="w-full" />
         </div>
