@@ -82,11 +82,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Common Cron Scheduling Use Cases",
     blockData: [
-      "• **System Maintenance**: Schedule backups, log rotations, and cleanup tasks",
-      "• **Data Processing**: Automate ETL jobs, report generation, and batch processing",
-      "• **Web Development**: Cache clearing, sitemap updates, and monitoring tasks",
-      "• **DevOps**: Deployment automation, health checks, and resource monitoring",
-      "• **Content Management**: Automated publishing, email campaigns, and content updates",
+      "**System Maintenance**: Schedule backups, log rotations, and cleanup tasks",
+      "**Data Processing**: Automate ETL jobs, report generation, and batch processing",
+      "**Web Development**: Cache clearing, sitemap updates, and monitoring tasks",
+      "**DevOps**: Deployment automation, health checks, and resource monitoring",
+      "**Content Management**: Automated publishing, email campaigns, and content updates",
     ],
   },
   {

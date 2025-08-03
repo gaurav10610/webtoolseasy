@@ -83,11 +83,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Perfect for JavaScript Development",
     blockData: [
-      "• **Learning**: Practice JavaScript concepts with immediate feedback and results",
-      "• **Prototyping**: Quickly test algorithms, functions, and logic before implementation",
-      "• **Teaching**: Share interactive code examples with students and colleagues",
-      "• **Debugging**: Isolate and test specific code sections to identify issues",
-      "• **Experimentation**: Try new JavaScript features and libraries safely",
+      "**Learning**: Practice JavaScript concepts with immediate feedback and results",
+      "**Prototyping**: Quickly test algorithms, functions, and logic before implementation",
+      "**Teaching**: Share interactive code examples with students and colleagues",
+      "**Debugging**: Isolate and test specific code sections to identify issues",
+      "**Experimentation**: Try new JavaScript features and libraries safely",
     ],
   },
   {

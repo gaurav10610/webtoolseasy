@@ -114,11 +114,122 @@ function DescriptionDataBlockData({
 }: Readonly<{
   blockData: string[];
 }>) {
+  const parseMarkdownText = (text: string) => {
+    // Convert **bold** to actual bold formatting
+    const boldRegex = /\*\*(.*?)\*\*/g;
+    // Convert `code` to code formatting
+    const codeRegex = /`([^`]+)`/g;
+    // Convert [link text](url) to actual links
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+    const parts = [];
+    let keyCounter = 0;
+
+    // First, find all patterns and their positions
+    const patterns = [];
+
+    // Find bold patterns
+    let match;
+    while ((match = boldRegex.exec(text)) !== null) {
+      patterns.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        type: "bold",
+        content: match[1],
+        fullMatch: match[0],
+      });
+    }
+
+    // Find code patterns
+    boldRegex.lastIndex = 0; // Reset regex
+    while ((match = codeRegex.exec(text)) !== null) {
+      patterns.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        type: "code",
+        content: match[1],
+        fullMatch: match[0],
+      });
+    }
+
+    // Find link patterns
+    codeRegex.lastIndex = 0; // Reset regex
+    while ((match = linkRegex.exec(text)) !== null) {
+      patterns.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        type: "link",
+        content: match[1],
+        url: match[2],
+        fullMatch: match[0],
+      });
+    }
+
+    // Sort patterns by start position
+    patterns.sort((a, b) => a.start - b.start);
+
+    // Process patterns in order
+    let lastIndex = 0;
+    patterns.forEach((pattern) => {
+      // Add text before this pattern
+      if (pattern.start > lastIndex) {
+        const textBefore = text.slice(lastIndex, pattern.start);
+        if (textBefore) parts.push(textBefore);
+      }
+
+      // Add the formatted pattern
+      if (pattern.type === "bold") {
+        parts.push(
+          <strong key={`bold-${keyCounter++}`} style={{ fontWeight: 600 }}>
+            {pattern.content}
+          </strong>
+        );
+      } else if (pattern.type === "code") {
+        parts.push(
+          <code
+            key={`code-${keyCounter++}`}
+            style={{
+              backgroundColor: "#f5f5f5",
+              padding: "2px 4px",
+              borderRadius: "3px",
+              fontFamily: "monospace",
+              fontSize: "0.9em",
+            }}
+          >
+            {pattern.content}
+          </code>
+        );
+      } else if (pattern.type === "link") {
+        parts.push(
+          <a
+            key={`link-${keyCounter++}`}
+            href={pattern.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#1976d2", textDecoration: "underline" }}
+          >
+            {pattern.content}
+          </a>
+        );
+      }
+
+      lastIndex = pattern.end;
+    });
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      const remainingText = text.slice(lastIndex);
+      if (remainingText) parts.push(remainingText);
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   return (
     <div key={getRandomId()} className="flex flex-col gap-2 w-full">
       {map(blockData, (data) => (
         <Typography key={getRandomId()} variant="body1" color="textSecondary">
-          {data}
+          {parseMarkdownText(data)}
         </Typography>
       ))}
     </div>
@@ -130,13 +241,124 @@ function DescriptionDataListData({
 }: Readonly<{
   listData: string[];
 }>) {
+  const parseMarkdownText = (text: string) => {
+    // Convert **bold** to actual bold formatting
+    const boldRegex = /\*\*(.*?)\*\*/g;
+    // Convert `code` to code formatting
+    const codeRegex = /`([^`]+)`/g;
+    // Convert [link text](url) to actual links
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+    const parts = [];
+    let keyCounter = 0;
+
+    // First, find all patterns and their positions
+    const patterns = [];
+
+    // Find bold patterns
+    let match;
+    while ((match = boldRegex.exec(text)) !== null) {
+      patterns.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        type: "bold",
+        content: match[1],
+        fullMatch: match[0],
+      });
+    }
+
+    // Find code patterns
+    boldRegex.lastIndex = 0; // Reset regex
+    while ((match = codeRegex.exec(text)) !== null) {
+      patterns.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        type: "code",
+        content: match[1],
+        fullMatch: match[0],
+      });
+    }
+
+    // Find link patterns
+    codeRegex.lastIndex = 0; // Reset regex
+    while ((match = linkRegex.exec(text)) !== null) {
+      patterns.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        type: "link",
+        content: match[1],
+        url: match[2],
+        fullMatch: match[0],
+      });
+    }
+
+    // Sort patterns by start position
+    patterns.sort((a, b) => a.start - b.start);
+
+    // Process patterns in order
+    let lastIndex = 0;
+    patterns.forEach((pattern) => {
+      // Add text before this pattern
+      if (pattern.start > lastIndex) {
+        const textBefore = text.slice(lastIndex, pattern.start);
+        if (textBefore) parts.push(textBefore);
+      }
+
+      // Add the formatted pattern
+      if (pattern.type === "bold") {
+        parts.push(
+          <strong key={`bold-${keyCounter++}`} style={{ fontWeight: 600 }}>
+            {pattern.content}
+          </strong>
+        );
+      } else if (pattern.type === "code") {
+        parts.push(
+          <code
+            key={`code-${keyCounter++}`}
+            style={{
+              backgroundColor: "#f5f5f5",
+              padding: "2px 4px",
+              borderRadius: "3px",
+              fontFamily: "monospace",
+              fontSize: "0.9em",
+            }}
+          >
+            {pattern.content}
+          </code>
+        );
+      } else if (pattern.type === "link") {
+        parts.push(
+          <a
+            key={`link-${keyCounter++}`}
+            href={pattern.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#1976d2", textDecoration: "underline" }}
+          >
+            {pattern.content}
+          </a>
+        );
+      }
+
+      lastIndex = pattern.end;
+    });
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      const remainingText = text.slice(lastIndex);
+      if (remainingText) parts.push(remainingText);
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   return (
     <div key={getRandomId()} className="flex flex-col gap-2 w-full">
       {map(listData, (data) => (
         <div key={getRandomId()} className="flex flex-row gap-2 w-full">
           <KeyboardArrowRightIcon />
           <Typography key={getRandomId()} variant="body1" color="textSecondary">
-            {data}
+            {parseMarkdownText(data)}
           </Typography>
         </div>
       ))}

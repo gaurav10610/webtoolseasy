@@ -96,11 +96,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Common Use Cases for GUIDs",
     blockData: [
-      "• **Database Keys**: Primary keys for distributed databases and microservices",
-      "• **API Development**: Unique request IDs and resource identifiers",
-      "• **File Systems**: Unique file and directory identification",
-      "• **Session Management**: Secure user session tokens and cookies",
-      "• **Software Development**: Component IDs, version tracking, and debugging",
+      "**Database Keys**: Primary keys for distributed databases and microservices",
+      "**API Development**: Unique request IDs and resource identifiers",
+      "**File Systems**: Unique file and directory identification",
+      "**Session Management**: Secure user session tokens and cookies",
+      "**Software Development**: Component IDs, version tracking, and debugging",
     ],
   },
 ];

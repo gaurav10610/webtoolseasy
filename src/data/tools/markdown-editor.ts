@@ -83,11 +83,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Perfect for Content Creation",
     blockData: [
-      "• **Technical Documentation**: Create API docs, user manuals, and project documentation",
-      "• **Blog Writing**: Draft and preview blog posts with proper formatting",
-      "• **README Files**: Design project descriptions for GitHub and GitLab repositories",
-      "• **Note Taking**: Organize structured notes with headings, lists, and links",
-      "• **Academic Writing**: Format research papers with citations and references",
+      "**Technical Documentation**: Create API docs, user manuals, and project documentation",
+      "**Blog Writing**: Draft and preview blog posts with proper formatting",
+      "**README Files**: Design project descriptions for GitHub and GitLab repositories",
+      "**Note Taking**: Organize structured notes with headings, lists, and links",
+      "**Academic Writing**: Format research papers with citations and references",
     ],
   },
   {

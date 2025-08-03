@@ -90,13 +90,13 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
   {
-    heading: "Popular Base64 Encoding Use Cases",
+    heading: "Common Use Cases for Base64 Encoding",
     blockData: [
-      "• **Web Development**: Embed images directly in CSS or HTML using data URIs",
-      "• **API Development**: Send binary data through JSON APIs and REST services",
-      "• **Email Integration**: Attach files to automated emails and notifications",
-      "• **Database Storage**: Store small files as text in database fields",
-      "• **Configuration Files**: Include binary assets in config files and templates",
+      "**Web Development**: Embed images directly in CSS and HTML files",
+      "**API Integration**: Send binary data through JSON APIs and web services",
+      "**Email Attachments**: Include files in email systems and MIME encoding",
+      "**Data Storage**: Store binary data in text-based databases and configurations",
+      "**Cross-Platform Transfer**: Share files between different systems and platforms",
     ],
   },
 ];

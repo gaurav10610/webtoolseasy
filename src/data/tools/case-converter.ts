@@ -84,11 +84,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Use Cases for Case Conversion",
     blockData: [
-      "• **Programming**: Convert variable names between camelCase, snake_case, and PascalCase",
-      "• **Content Writing**: Format titles, headings, and social media posts correctly",
-      "• **Data Processing**: Standardize text data for databases and spreadsheets",
-      "• **SEO Optimization**: Create properly formatted URLs and meta tags",
-      "• **Documentation**: Ensure consistent formatting across technical documents",
+      "**Programming**: Convert variable names between camelCase, snake_case, and PascalCase",
+      "**Content Writing**: Format titles, headings, and social media posts correctly",
+      "**Data Processing**: Standardize text data for databases and spreadsheets",
+      "**SEO Optimization**: Create properly formatted URLs and meta tags",
+      "**Documentation**: Ensure consistent formatting across technical documents",
     ],
   },
   {

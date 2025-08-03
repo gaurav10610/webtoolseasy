@@ -97,11 +97,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Benefits for Web Developers",
     blockData: [
-      "• **Code Maintenance**: Easily modify complex stylesheets and cascade rules",
-      "• **Team Collaboration**: Maintain consistent CSS formatting across development teams",
-      "• **Debugging**: Quickly identify CSS syntax errors and specificity issues",
-      "• **Performance**: Clean CSS helps with file compression and caching",
-      "• **Learning**: Understand CSS structure and best practices through formatted examples",
+      "**Code Maintenance**: Easily modify complex stylesheets and cascade rules",
+      "**Team Collaboration**: Maintain consistent CSS formatting across development teams",
+      "**Debugging**: Quickly identify CSS syntax errors and specificity issues",
+      "**Performance**: Clean CSS helps with file compression and caching",
+      "**Learning**: Understand CSS structure and best practices through formatted examples",
     ],
   },
 ];

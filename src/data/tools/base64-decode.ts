@@ -92,11 +92,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Common Use Cases for Base64 Decoding",
     blockData: [
-      "• **Web Development**: Decode Base64 images embedded in CSS or HTML",
-      "• **Email Processing**: Extract attachments from Base64 encoded email content",
-      "• **API Integration**: Process Base64 data from REST APIs and web services",
-      "• **Data Recovery**: Restore files from Base64 backup strings",
-      "• **Debugging**: Analyze encoded data during development and testing",
+      "**Web Development**: Decode Base64 images embedded in CSS or HTML",
+      "**Email Processing**: Extract attachments from Base64 encoded email content",
+      "**API Integration**: Process Base64 data from REST APIs and web services",
+      "**Data Recovery**: Restore files from Base64 backup strings",
+      "**Debugging**: Analyze encoded data during development and testing",
     ],
   },
 ];

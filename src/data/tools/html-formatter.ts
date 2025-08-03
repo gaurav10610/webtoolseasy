@@ -97,11 +97,11 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "Benefits for Web Developers",
     blockData: [
-      "• **Code Maintenance**: Easily read and modify complex HTML structures",
-      "• **Team Collaboration**: Ensure consistent code formatting across projects",
-      "• **Debugging**: Quickly identify HTML syntax errors and nesting issues",
-      "• **Learning**: Understand HTML structure and best practices through formatted examples",
-      "• **SEO Optimization**: Clean HTML improves search engine crawling and indexing",
+      "**Code Maintenance**: Easily read and modify complex HTML structures",
+      "**Team Collaboration**: Ensure consistent code formatting across projects",
+      "**Debugging**: Quickly identify HTML syntax errors and nesting issues",
+      "**Learning**: Understand HTML structure and best practices through formatted examples",
+      "**SEO Optimization**: Clean HTML improves search engine crawling and indexing",
     ],
   },
 ];
