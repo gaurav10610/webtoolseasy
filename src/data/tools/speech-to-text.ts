@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL(process.env.HOSTNAME!),
+  icons: {
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
   alternates: {
     canonical: navigationUrl,
   },
