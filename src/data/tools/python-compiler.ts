@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/python-compiler";
-const pageTitle = "Online Python Compiler - Run Python Code Free";
+const pageTitle = "Python Compiler Online - Run Python Code Free";
 const pageDescription =
-  "Free online Python compiler & interpreter. Write, run, and test Python 3 code in your browser instantly. No setup required.";
+  "Run and execute Python 3 code instantly in your browser. Free online Python compiler and interpreter with debugging tools. No setup required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/python-compiler.png`;
 
 const keywords =
-  "online python compiler, python compiler online, run python online, python interpreter online, online python editor, execute python online, python code runner, free python compiler, python in browser, online python ide, python sandbox, test python code online, python 3 compiler";
+  "python compiler online,run python online,python interpreter online,online python editor,execute python online,python code runner,python 3 compiler";
 
 export const metadata: Metadata = {
   alternates: {

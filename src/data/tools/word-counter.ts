@@ -3,14 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/word-counter";
-const pageTitle =
-  "Free Word Count Tool: Count Words, Characters, and Sentences";
+const pageTitle = "Word Counter - Count Words, Characters & Sentences";
 const pageDescription =
-  "Our free online word, character, and sentence count tool is quick, and easy, and lets you count the number of words, characters, and sentences in your text.";
+  "Count words, characters, and sentences in your text instantly. Free online word counter tool with detailed statistics for writing and content creation.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/word-counter.png`;
 
 const keywords =
-  "word count tool, character count tool, sentence count tool, free word count tool, free character count tool, free sentence count tool, online word count tool, online character count tool, online sentence count tool, word counter, character counter, sentence counter, word count, character count, sentence count";
+  "word counter,character counter,sentence counter,word count tool,character count tool,text statistics,writing tool,content analysis";
 
 export const metadata: Metadata = {
   alternates: {
@@ -21,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

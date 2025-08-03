@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/case-converter";
-const pageTitle = "Text Case Converter Free - Upper Lower Title Case";
+const pageTitle = "Text Case Converter - Upper Lower Title Case Online";
 const pageDescription =
-  "Free online text case converter. Convert to uppercase, lowercase, title case, sentence case instantly. Bulk text formatting tool.";
+  "Convert text to uppercase, lowercase, title case, or sentence case instantly. Free online case converter tool for all your text formatting needs.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/case-converter.png`;
 
 const keywords =
-  "case converter,text case converter,uppercase converter,lowercase converter,title case,sentence case,text formatter,convert case online,text tool";
+  "case converter,text case converter,uppercase converter,lowercase converter,title case,sentence case,text formatter,convert case online";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

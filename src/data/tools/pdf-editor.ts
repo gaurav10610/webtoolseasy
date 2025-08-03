@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/pdf-editor";
-const pageTitle = "PDF Editor Free - Edit, Merge & Split PDFs Online";
+const pageTitle = "PDF Editor Online - Edit, Merge & Split PDFs Free";
 const pageDescription =
-  "Edit, merge, split, rotate, and annotate PDF files online for free. Add text, combine multiple PDFs, extract pages without registration.";
+  "Edit, merge, split, rotate, and annotate PDF files online for free. Add text, combine multiple PDFs, extract pages without registration or downloads.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-editor.png`;
 
 const keywords =
-  "pdf editor,merge pdf,split pdf,pdf annotate,edit pdf online,pdf merger,rotate pdf,pdf tools,combine pdf,pdf splitter";
+  "pdf editor,merge pdf,split pdf,pdf annotate,edit pdf online,pdf merger,rotate pdf,combine pdf,pdf splitter";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -61,8 +58,8 @@ export const componentConfig: ApplicationConfig = {
   icons: [
     {
       iconName: "pdf-editor",
-      iconRelativeUrl: "markdown.svg"
-    }
+      iconRelativeUrl: "markdown.svg",
+    },
   ],
   relatedTools: [
     ApplicationIds.IMAGE_TO_TEXT,
@@ -70,8 +67,8 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.IMAGE_COMPRESSOR,
     ApplicationIds.TEXT_COMPARE,
     ApplicationIds.MARKDOWN_EDITOR,
-    ApplicationIds.BASE64_ENCODE
-  ]
+    ApplicationIds.BASE64_ENCODE,
+  ],
 };
 
 export const descriptionData: DescriptionBlock[] = [

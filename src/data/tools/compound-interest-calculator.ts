@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/compound-interest-calculator";
-const pageTitle = "Compound Interest Calculator: Calculate Compound Interest";
+const pageTitle = "Compound Interest Calculator - Investment Growth Tool";
 const pageDescription =
-  "Calculate compound interest with our compound interest calculator. Simply enter your amount, interest rate, and investment term, to calculate compound interest.";
+  "Calculate compound interest for investments and savings. Free calculator shows growth over time with customizable interest rates and compounding periods.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/compound-interest-calculator.png`;
 
 const keywords =
-  "compound interest calculator,calculate compound interest,compound interest,future earnings calculator,investment calculator,financial calculator,free compound interest calculator,no download required,easy to use,customizable settings,compounding frequency,reinvest earnings,financial goals,financial planning";
+  "compound interest calculator,investment calculator,financial calculator,savings calculator,interest rate calculator,future value calculator";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

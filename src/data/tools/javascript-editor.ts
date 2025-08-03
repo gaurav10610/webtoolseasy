@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/javascript-editor";
-const pageTitle = "Online JavaScript Editor: Write and Edit JavaScript Code";
+const pageTitle = "JavaScript Editor Online - Write & Edit JS Code";
 const pageDescription =
-  "Write, edit, and run JavaScript code directly from your browser with our free online JavaScript editor. Create interactive web pages with ease.";
+  "Write, edit, and run JavaScript code with live preview. Free online JS editor with syntax highlighting, error checking, and code completion features.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-editor.png`;
 
 const keywords =
-  "online JavaScript editor,write JavaScript code,edit JavaScript code,run JavaScript code,free JavaScript editor,supports all JavaScript elements and attributes,syntax highlighting,code completion,error checking,live previews,code sharing,tips for using an online JavaScript editor,test your code before publishing,online js editor,js online editor,javascript ide online,js ide online,java script online editor,javascript compile online";
+  "javascript editor online,js editor,online javascript editor,javascript ide online,write javascript code,edit javascript code,js code editor";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

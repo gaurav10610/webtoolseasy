@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/javascript-compiler";
-const pageTitle = "Online JavaScript Compiler: Compile JS Code in Browser";
+const pageTitle = "JavaScript Compiler Online - Run JS Code in Browser";
 const pageDescription =
-  "Compile and execute JavaScript code directly in your browser with our lightning-fast, feature-rich online compiler. Perfect for beginners, students, and professionals alike.";
+  "Compile and execute JavaScript code instantly in your browser. Free online JS compiler with debugging tools perfect for learning and testing code.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/javascript-compiler.png`;
 
 const keywords =
-  "online javascript compiler, javascript compiler, javascript online, run javascript online, code javascript online, free javascript compiler, compile js online, online js compiler, run javascript in browser, run js in browser";
+  "javascript compiler online,js compiler,run javascript online,javascript online,execute js code,online js compiler,javascript code runner";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

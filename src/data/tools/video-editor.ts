@@ -3,14 +3,14 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/video-editor";
-const pageTitle = "Free Video Editor Online - Edit, Trim & Add Effects";
+const pageTitle = "Video Editor Online - Edit, Trim & Add Effects Free";
 const pageDescription =
-  "Edit videos online for free. Cut, trim, add text & effects instantly. Professional video editor with real-time preview. No download.";
+  "Edit videos online for free with cutting, trimming, text overlay, and effects. Professional video editor with real-time preview. No downloads required.";
 
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/video-editor.png`;
 
 const keywords =
-  "video editor online,edit video free,online video editor,video editing tool,cut video online,trim video,video effects,add text to video,video editor no download,free video editor,mp4 editor,video cutter,video trimmer";
+  "video editor online,edit video free,online video editor,video editing tool,cut video online,trim video,video effects,add text to video";
 
 export const metadata: Metadata = {
   alternates: {

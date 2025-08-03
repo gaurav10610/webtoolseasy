@@ -3,11 +3,11 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/text-compare";
-const pageTitle = "Text Compare Tool Free - Compare Text Differences";
-const pageDescription = `Free online text comparison tool. Compare two texts side by side, highlight differences, find similarities. Perfect for documents.`;
+const pageTitle = "Text Compare Tool - Compare Text Differences Online";
+const pageDescription = `Compare two texts side by side and highlight differences instantly. Free online text comparison tool perfect for documents, code, and content analysis.`;
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-diff.png`;
 const keywords =
-  "text compare,compare text online,text diff tool,text comparison,compare documents,text difference,file compare,document compare,text checker";
+  "text compare,compare text online,text diff tool,text comparison,compare documents,text difference,document compare,text checker";
 
 export const metadata: Metadata = {
   alternates: {
@@ -18,10 +18,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

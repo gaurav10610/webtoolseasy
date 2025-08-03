@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/video-to-audio-converter";
-const pageTitle = "Video to Audio Converter Free - Extract Audio MP3";
+const pageTitle = "Video to Audio Converter - Extract MP3 from Video";
 const pageDescription =
-  "Free online video to audio converter. Extract MP3, WAV from MP4, AVI, MKV videos. No upload limits, high quality results.";
+  "Convert video to audio online for free. Extract MP3, WAV from MP4, AVI, MKV videos with high quality results. No upload limits or registration.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/video-to-audio-converter.png`;
 
 const keywords =
-  "video to audio converter,extract audio from video,mp4 to mp3,video to mp3,audio extractor,convert video online,mp4 to wav,video converter,audio converter";
+  "video to audio converter,extract audio from video,mp4 to mp3,video to mp3,audio extractor,convert video online,mp4 to wav";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/password-generator";
-const pageTitle = "Free Password Generator: Generate Strong & Secure Passwords";
+const pageTitle = "Password Generator - Create Strong Secure Passwords";
 const pageDescription =
-  "Generate strong, random, unique and secure passwords with our free password generator tool. Generate single passwords or generate passwords in bulk.";
+  "Generate strong, secure passwords instantly. Free password generator with customizable length, characters, and bulk generation. Enhance your security now.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/password-generator.png`;
 
 const keywords =
-  "password generator,strong password generator,create secure passwords,unique passwords,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator";
+  "password generator,strong password generator,secure passwords,random password generator,password creator,bulk password generator,password maker";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

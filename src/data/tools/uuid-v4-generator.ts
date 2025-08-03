@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/uuid-v4-generator";
-const pageTitle = "UUID Generator Online Free - Generate UUID v4 Bulk";
+const pageTitle = "UUID v4 Generator - Generate Random UUIDs Online";
 const pageDescription =
-  "Free UUID v4 generator online. Create single or bulk UUIDs instantly. Copy, download multiple unique identifiers for development.";
+  "Generate random UUID v4 identifiers instantly. Create single or bulk UUIDs for development projects. Copy, download multiple unique identifiers easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "uuid generator,uuid v4 generator,generate uuid online,uuid creator,unique identifier generator,bulk uuid,random uuid,guid generator,uuid tool";
+  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

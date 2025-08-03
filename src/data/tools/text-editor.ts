@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/text-editor";
-const pageTitle = "Online Text Editor: Write, Edit Plain Text on Notepad";
+const pageTitle = "Text Editor Online - Write & Edit Plain Text";
 const pageDescription =
-  "Unleash your inner novelist, blogger, or student with our distraction-free online text editor. Write with laser focus, format with ease, and access your work from anywhere.";
+  "Write and edit text online with our distraction-free editor. Perfect for notes, articles, and creative writing. Access your work from anywhere securely.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-editor.png`;
 
 const keywords =
-  "online text editor, online notepad, writing tool, distraction-free writing, cloud-based storage, real-time collaboration, export options, focus mode, writing tips, creative writing, student writing, professional writing";
+  "online text editor,online notepad,writing tool,distraction-free writing,text editor online,plain text editor,notepad online";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

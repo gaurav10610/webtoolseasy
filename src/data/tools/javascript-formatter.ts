@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/javascript-formatter";
-const pageTitle = "JavaScript Beautifier and Formatter: Beautify and Format JS";
+const pageTitle = "JavaScript Formatter - Beautify & Format JS Code";
 const pageDescription =
-  "Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.";
+  "Format and beautify JavaScript code online for free. Clean, indent, and organize JS code with proper structure. Improve code readability instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-format.png`;
 
 const keywords =
-  "online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors";
+  "javascript formatter,js formatter,beautify javascript,format javascript online,javascript beautifier,javascript prettifier,js code formatter";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/html-editor";
-const pageTitle = "Online HTML and CSS Editor with Real-Time Preview";
+const pageTitle = "HTML CSS Editor Online - Live Preview & Code Editor";
 const pageDescription =
-  "Write, edit, and run HTML and CSS code directly from your browser with our free online HTML and CSS editor. Create responsive web pages with ease.";
+  "Write, edit, and run HTML & CSS code with real-time preview. Free online editor with syntax highlighting, code completion, and responsive design testing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-editor.png`;
 
 const keywords =
-  "online HTML and CSS editor,write HTML code,edit HTML code,run HTML code,write CSS code,edit CSS code,run CSS code,free HTML and CSS editor,supports all HTML and CSS elements and attributes,syntax highlighting,code completion,error checking,live previews,tips for using an online HTML and CSS editor,test your code before publishing,html composer,html editor in html,html ide online,online webpage editor";
+  "html editor online,css editor,html css editor,live preview,online web editor,html code editor,css code editor,web development tool";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

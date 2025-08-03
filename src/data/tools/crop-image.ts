@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/crop-image";
-const pageTitle = "Image Cropper Online Free - Crop Photos with Precision";
+const pageTitle = "Image Cropper Online - Crop Photos Free & Precision";
 const pageDescription =
-  "Free online image cropper with professional features. Crop JPG, PNG, WEBP images using aspect ratio presets, precision controls, and manual positioning. No signup required.";
+  "Crop images online with precision tools and aspect ratio presets. Free photo cropper supports JPG, PNG, WEBP. No registration required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-cropper.png`;
 
 const keywords =
-  "image cropper,crop image online,free photo cropper,crop photos,image crop tool,online image editor,photo editing,aspect ratio cropper,crop jpeg,crop png,social media image cropper,picture cropper,resize images,photo resizer";
+  "image cropper,crop image online,photo cropper,crop photos,image crop tool,online image editor,photo editing,aspect ratio cropper";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

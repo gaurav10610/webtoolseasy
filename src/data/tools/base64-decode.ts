@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/base64-decode";
-const pageTitle = "Base64 to File Decoder: Convert Base64 to Any File Format";
+const pageTitle = "Base64 Decoder Free - Convert Base64 to File Online";
 const pageDescription =
-  "Convert Base64 to any file format with ease with our free online Base64 to file decoder tool. Decode Base64 to Image, Text, PDF and File.";
+  "Decode Base64 to images, PDFs, text files instantly. Free online Base64 decoder supports all formats. No uploads, secure browser-based conversion.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-decode.png`;
 
 const keywords =
-  "online Base64 to file decoder,decode Base64 to file,Base64 to file decoder tool,Base64 decoding,Base64 encoding,Base64 secure,Base64 transmission,Base64 storage,free Base64 to file decoder,no download required,supports all Base64 encoding schemes,supports all file formats,easy to use,Base64 decoding scheme,store decoded files securely, Base64 to image, Base64 to text, Base64 to pdf";
+  "base64 decoder,decode base64 online,base64 to file,base64 to image,base64 to pdf,base64 converter,base64 decode tool,online decoder,file decoder";
 
 export const metadata: Metadata = {
   alternates: {
@@ -19,10 +19,7 @@ export const metadata: Metadata = {
   description: pageDescription,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

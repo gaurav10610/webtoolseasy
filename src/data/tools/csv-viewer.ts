@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/csv-viewer";
-const pageTitle = "Free CSV Viewer - Handle Large Files with Streaming";
+const pageTitle = "CSV Viewer Online - Handle Large Files with Streaming";
 const pageDescription =
-  "View and edit large CSV files with our free online CSV viewer. Advanced streaming technology handles multi-GB files efficiently. Upload files or paste CSV data to see it in a clean table format. No download required, no sign-up required.";
+  "View and edit large CSV files efficiently with our streaming CSV viewer. Handle multi-GB files, search data, and export results. No file size limits.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-viewer.png`;
 
 const keywords =
-  "online CSV viewer,large CSV file viewer,CSV streaming,multi-GB CSV files,CSV file viewer,CSV editor,CSV to table,view CSV data,CSV file editor,free CSV viewer,CSV data viewer,upload large CSV file,CSV table viewer,CSV file reader,memory efficient CSV";
+  "csv viewer online,large csv file viewer,csv streaming,csv file viewer,csv editor,csv to table,view csv data,csv table viewer";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

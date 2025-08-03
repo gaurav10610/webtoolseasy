@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/qr-code-generator";
-const pageTitle = "QR Code Generator Free - Create Custom QR Codes";
+const pageTitle = "QR Code Generator - Create Custom QR Codes Free";
 const pageDescription =
-  "Free QR code generator for text, URLs, WiFi, contact info. Create custom QR codes instantly. Download PNG, SVG formats.";
+  "Generate QR codes for text, URLs, WiFi, contact info instantly. Free QR code creator with customization options. Download PNG, SVG formats easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
-  "qr code generator,create qr code,qr code maker,free qr generator,qr code creator,custom qr code,generate qr online,qr builder,quick response code";
+  "qr code generator,create qr code,qr code maker,free qr generator,qr code creator,custom qr code,generate qr online,qr builder";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

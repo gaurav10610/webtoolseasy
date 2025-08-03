@@ -3,12 +3,12 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/jwt-decoder";
-const pageTitle = "JWT Decoder Online Free - Decode JSON Web Tokens";
+const pageTitle = "JWT Decoder Online - Decode JSON Web Tokens Free";
 const pageDescription =
-  "Free JWT decoder to decode and validate JSON Web Tokens. View header, payload, signature. Debug JWT tokens online securely.";
+  "Decode and validate JSON Web Tokens online. View JWT header, payload, signature details securely. Free JWT debugger for developers and API testing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/jwt-decoder.png`;
 const keywords =
-  "jwt decoder,decode jwt online,jwt debugger,json web token decoder,jwt validator,jwt parser,jwt tool,validate jwt,jwt analyzer,decode token";
+  "jwt decoder,decode jwt online,jwt debugger,json web token decoder,jwt validator,jwt parser,jwt analyzer,validate jwt";
 
 export const metadata: Metadata = {
   alternates: {
@@ -19,10 +19,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

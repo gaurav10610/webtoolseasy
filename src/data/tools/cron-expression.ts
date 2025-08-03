@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/cron-expression";
-const pageTitle = "Online Cron Expression Generator: Create Cron Expressions";
+const pageTitle = "Cron Expression Generator - Create Cron Jobs Online";
 const pageDescription =
-  "Generate cron expressions for your tasks with ease with our free online cron expression generator tool. Graphically generate cron expressions online.";
+  "Generate cron expressions visually with our free online tool. Create scheduled tasks easily with interactive interface and real-time validation.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
-  "online cron expression generator,generate cron expression,cron expression generator tool,cron expression,cron job,schedule task,free cron expression generator,supports all cron expression fields";
+  "cron expression generator,cron job generator,cron expression builder,schedule tasks,cron maker,crontab generator,task scheduler";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

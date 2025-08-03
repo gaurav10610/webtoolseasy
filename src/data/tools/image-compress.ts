@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/image-compress";
-const pageTitle = "Image Compressor Free - Reduce Photo File Size";
+const pageTitle = "Image Compressor Online - Reduce Photo File Size";
 const pageDescription =
-  "Free image compressor to reduce file size. Compress JPG, PNG, WEBP images while maintaining quality. Perfect for web optimization.";
+  "Compress images online while maintaining quality. Free tool reduces JPG, PNG, WEBP file sizes for web optimization. No uploads, secure compression.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-compressor.png`;
 
 const keywords =
-  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,image compression tool";
+  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,web optimization";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

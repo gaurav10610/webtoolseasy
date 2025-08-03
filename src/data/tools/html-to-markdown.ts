@@ -2,11 +2,11 @@ import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
-const pageTitle = "HTML to Markdown Converter - Free Online Tool";
+const pageTitle = "HTML to Markdown Converter - Fast & Accurate Online";
 const pageDescription =
-  "Convert HTML to Markdown instantly. Free, fast & accurate HTML to MD converter. Works in browser, no upload needed. Perfect for devs & writers.";
+  "Convert HTML to Markdown instantly with our free online converter. Accurate, fast conversion works entirely in browser. Perfect for developers and writers.";
 const keywords =
-  "html to markdown, html to markdown converter, html2md, html markdown online, html to md, html2markdown, html to markdown tool, html to markdown free, html to markdown in browser, html to markdown fast, html to markdown accurate, html to markdown privacy";
+  "html to markdown,html to markdown converter,html2md,html markdown online,html to md,html2markdown,html markdown tool,convert html markdown";
 const navigationUrl = "/tools/html-to-markdown";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/html-to-markdown.png`;
 

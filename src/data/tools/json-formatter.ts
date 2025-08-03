@@ -3,14 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/json-formatter";
-const pageTitle =
-  "JSON Beautifier and Formatter: Beautify and Format Your JSON";
+const pageTitle = "JSON Formatter - Beautify & Format JSON Data Online";
 const pageDescription =
-  "Beautify and format your JSON data with ease with our free online JSON beautifier and formatter tool. No download required, no sign-up required.";
+  "Format and beautify JSON data with our free online JSON formatter. Clean, indent, and validate JSON with syntax highlighting and error detection.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-format.png`;
 
 const keywords =
-  "online JSON beautifier and formatter,beautify JSON data,format JSON data,JSON beautifier and formatter tool,JSON data formatter,JSON data style,improve JSON data readability,make JSON data more consistent,follow JSON data style guidelines,free JSON beautifier and formatter,JSON data formatting errors";
+  "json formatter,json beautifier,format json online,json validator,beautify json,json prettifier,json parser,validate json";
 
 export const metadata: Metadata = {
   alternates: {
@@ -21,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

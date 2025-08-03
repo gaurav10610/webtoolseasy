@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/markdown-editor";
-const pageTitle = "Markdown Editor Online Free - Live Preview & Export";
+const pageTitle = "Markdown Editor Online - Live Preview & Export";
 const pageDescription =
-  "Free online Markdown editor with live preview. Write, edit, export to HTML, PDF. Real-time syntax highlighting and formatting.";
+  "Write and edit Markdown with live preview. Free online editor with syntax highlighting, export to HTML/PDF, and real-time formatting assistance.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-editor.png`;
 
 const keywords =
-  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter,readme editor";
+  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

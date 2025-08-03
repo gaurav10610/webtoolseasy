@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/html-formatter";
-const pageTitle = "HTML Formatter Online Free - Beautify HTML Code";
+const pageTitle = "HTML Formatter Online - Beautify & Format HTML Code";
 const pageDescription =
-  "Free HTML formatter and beautifier. Clean, indent, and format HTML code online. Improve readability and code structure.";
+  "Format and beautify HTML code online for free. Clean, indent, and organize HTML markup with proper structure. Improve code readability instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
 
 const keywords =
-  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html,html tool";
+  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

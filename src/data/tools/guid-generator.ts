@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/guid-generator";
-const pageTitle = "Online GUID Generator: Generate Single or Bulk GUID";
+const pageTitle = "GUID Generator Online - Generate Single or Bulk GUIDs";
 const pageDescription =
-  "Our free online GUID generator tool is a quick and easy way to generate globally unique identifiers (GUIDs), either individually or in bulk.";
+  "Generate globally unique identifiers (GUIDs) instantly. Create single or bulk GUIDs for your development projects. Copy and download results easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/guid-generator.png`;
 
 const keywords =
-  "GUID generator, GUID generator online, GUID generator free, GUID, globally unique identifier, UUID, universally unique identifier, generate GUID, generate GUID online, generate GUID free, single GUID, bulk GUID, bulk GUID generator";
+  "guid generator,guid generator online,uuid generator,globally unique identifier,generate guid,bulk guid generator,unique id generator";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
