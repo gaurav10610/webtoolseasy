@@ -62,34 +62,43 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
+    heading: "Online JavaScript Compiler and Runtime Environment",
     blockData: [
-      "Need a quick and reliable way to test your JavaScript code snippets or experiment with new concepts? Look no further than our free online JavaScript compiler! Effortlessly write, run, and debug your code directly within your browser, without any setup or installations required.",
+      "Our free online JavaScript compiler provides a complete development environment for writing, executing, and testing JavaScript code directly in your browser. Features ES6+ support, real-time execution, debugging tools, and console output for comprehensive JavaScript development experience.",
+      "Perfect for learning JavaScript programming, testing algorithms, debugging code snippets, and rapid prototyping. The compiler supports modern JavaScript features including async/await, arrow functions, and object destructuring for contemporary web development.",
     ],
   },
   {
-    heading: "Key Features of Online JavaScript Compiler",
+    heading: "Advanced JavaScript Execution Features",
     listData: [
-      `Instant Compilation: Experience lightning-fast code execution thanks to our cutting-edge compiler technology.`,
-      `Browser-Based: Access the compiler anytime, anywhere, from any device with an internet connection.`,
-      `Debugging Tools: Pinpoint errors efficiently with helpful error messages and debugging features.`,
-      `Code Sharing: Easily share your code creations with others via unique URLs.`,
-      `Beginner-Friendly: Ideal for learning JavaScript with a user-friendly interface and clear syntax highlighting.`,
-      `Perfect for Professionals: Streamline your development workflow by quickly testing code snippets and ideas.`,
-      `Security: Your javascript code is 100% secured as it won't leave the browser and javascript code will be compiled, run in browser only.`,
+      "Modern ES6+ JavaScript support with latest syntax features",
+      "Real-time code execution with immediate console output",
+      "Integrated debugging tools and error detection",
+      "Syntax highlighting and auto-completion",
+      "Support for async/await and Promise-based programming",
+      "DOM manipulation and event handling capabilities",
+      "Code sharing and export functionality",
     ],
   },
   {
-    heading: "Unlock the Power of JavaScript Today:",
-    listData: [
-      `Write Your Code: Type your JavaScript code directly into the editor, making use of the intuitive code completion and syntax highlighting features.`,
-      `Click "Run": Witness your code come to life as it's compiled and executed in a matter of seconds.`,
-      `Review Results: Analyze the output in the console and use debugging tools to troubleshoot any errors.`,
-      `Share and Collaborate: Share your code with ease using the generated URL, enabling seamless collaboration and knowledge sharing.`,
-    ],
-  },
-  {
+    heading: "Ideal for JavaScript Development",
     blockData: [
-      "Start coding today! Visit our online JavaScript compiler now and unleash your programming potential.",
+      "• **Web Developers**: Test JavaScript functions, algorithms, and browser APIs quickly",
+      "• **Students**: Learn JavaScript concepts with immediate feedback and visualization",
+      "• **Professionals**: Debug code snippets and validate logic before implementation",
+      "• **Educators**: Create interactive JavaScript examples for teaching",
+      "• **Freelancers**: Prototype client solutions and demonstrate JavaScript concepts",
+    ],
+  },
+  {
+    heading: "Supported JavaScript Technologies",
+    listData: [
+      "Modern ECMAScript features (ES6, ES7, ES8+)",
+      "Asynchronous programming with Promises and async/await",
+      "Object-oriented programming with classes and modules",
+      "Functional programming with higher-order functions",
+      "JSON manipulation and API interaction",
+      "Browser APIs and web development features",
     ],
   },
 ];

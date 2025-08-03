@@ -62,43 +62,43 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "Why Use an Online Video to Audio Converter?",
-    listData: [
-      "To extract the audio from a video. This can be useful for creating podcasts, audiobooks, or simply for listening to the audio from a video without having to watch the video.",
-      "To convert a video to a different audio format. For example, you might want to convert a video to MP3 format so that you can listen to it on your MP3 player.",
-      "To reduce the file size of a video. Audio files are typically smaller than video files, so converting a video to audio can help to reduce the file size and make it easier to share or store.",
-    ],
-  },
-  {
-    heading: "Features of Our Online Video to Audio Converter Tool",
-    listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Convert your videos to audio directly from your web browser.",
-      "Supports multiple video formats. Convert MP4, AVI, MOV, WEBM, and other popular video formats to audio.",
-      "Converts videos to high-quality MP3 files. Our converter uses advanced algorithms to extract the audio from your videos in high quality.",
-      'Easy to use. Simply upload your video and click the "Convert" button.',
-    ],
-  },
-  {
-    heading: "How to Use Our Online Video to Audio Converter Tool",
-    listData: [
-      'Go to our website and click the "Upload Video" button.',
-      "Select the video you want to convert to audio.",
-      'Click the "Convert" button.',
-      "Download your converted audio file.",
-    ],
-  },
-  {
-    heading: "Tips for Using an Online Video to Audio Converter",
-    listData: [
-      "Choose a video that is in a supported format. Our converter supports a wide range of video formats, but it is always best to check to make sure that your video is in a supported format before uploading it.",
-      "Make sure that your video has a good audio quality. The quality of the converted audio file will depend on the quality of the audio in the original video. If the original video has poor audio quality, the converted audio file will also have poor audio quality.",
-      "Choose the right audio format for your needs. If you are converting a video to audio to listen to it on your MP3 player, you will want to choose the MP3 audio format. If you are converting a video to audio to create a podcast, you might want to choose the AAC audio format.",
-    ],
-  },
-  {
+    heading: "Free Online Video to Audio Converter",
     blockData: [
-      "Our free online video to audio converter tool is a great way to extract the audio from your videos easily. It is easy to use and supports multiple video formats. With our converter, you can create podcasts, audiobooks, or simply listen to the audio from your videos without having to watch the video.",
+      "Convert video files to high-quality audio formats with our free online video to audio converter. Extract audio tracks from MP4, AVI, MOV, WebM, and other video formats to create MP3, WAV, or other audio files. Perfect for creating podcasts, audiobooks, music libraries, or extracting soundtracks.",
+      "Our browser-based converter ensures your files remain private while providing fast, efficient conversion without quality loss. Support for multiple output formats and customizable audio quality settings makes it ideal for both personal and professional use.",
+    ],
+  },
+  {
+    heading: "Supported Video and Audio Formats",
+    listData: [
+      "Input: MP4, AVI, MOV, WebM, MKV, FLV, WMV, 3GP",
+      "Output: MP3, WAV, AAC, OGG, M4A, FLAC",
+      "High-quality audio extraction up to 320kbps",
+      "Batch conversion for multiple files",
+      "Preserve original audio quality or customize settings",
+      "Support for videos up to 2GB in size",
+      "Fast conversion with real-time progress tracking",
+    ],
+  },
+  {
+    heading: "Perfect for Content Creation",
+    blockData: [
+      "• **Podcasters**: Extract audio from video interviews and recordings",
+      "• **Musicians**: Convert music videos to audio files for offline listening",
+      "• **Students**: Create audio study materials from lecture videos",
+      "• **Content Creators**: Extract soundtracks and voice-overs from videos",
+      "• **Professionals**: Convert webinar and meeting recordings to audio",
+    ],
+  },
+  {
+    heading: "Advanced Conversion Features",
+    listData: [
+      "Privacy-focused: All processing happens in your browser",
+      "No file size limits for standard conversions",
+      "Customizable audio bitrate and quality settings",
+      "Trim and edit audio during conversion process",
+      "Instant download without waiting queues",
+      "Cross-platform compatibility (Windows, Mac, Linux, mobile)",
     ],
   },
 ];

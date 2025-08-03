@@ -62,49 +62,43 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is Markdown?",
+    heading: "Online Markdown Editor with Live Preview",
     blockData: [
-      "Markdown is a lightweight markup language that allows you to create formatted text using a plain text editor. Markdown is commonly used to create README files, blog posts, and documentation.",
+      "Our free online Markdown editor provides a complete writing environment for creating, editing, and previewing Markdown documents in real-time. Features split-screen editing with instant HTML preview, syntax highlighting, and export options for various file formats.",
+      "Perfect for technical documentation, blog posts, README files, and collaborative writing projects. The editor supports GitHub Flavored Markdown (GFM) including tables, code blocks, and task lists for comprehensive document creation.",
     ],
   },
   {
-    heading: "Why Use an Online Markdown Editor?",
+    heading: "Advanced Markdown Features Supported",
     listData: [
-      "To write and preview Markdown in real time. Most online Markdown editors allow you to see the preview of your Markdown as you write it. This makes it easy to see how your formatted text will look before you publish it.",
-      "To collaborate with others on Markdown documents. Some online Markdown editors allow you to collaborate with others on Markdown documents in real time. This can be useful for creating team documentation or blog posts.",
-      "To export your Markdown documents to different formats. Most online Markdown editors allow you to export your Markdown documents to different formats, such as HTML, PDF, and Microsoft Word. This makes it easy to share your Markdown documents with others who do not use Markdown.",
+      "GitHub Flavored Markdown (GFM) with tables and task lists",
+      "Syntax highlighting for code blocks in multiple languages",
+      "Live preview with synchronized scrolling",
+      "Mathematical equations with LaTeX/MathJax support",
+      "Mermaid diagrams for flowcharts and graphs",
+      "Export to HTML, PDF, and plain text formats",
+      "Auto-save and document version history",
     ],
   },
   {
-    heading: "Features of Our Online Markdown Editor",
-    listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Write and preview Markdown directly from your web browser.",
-      "Supports Markdown syntax. Our editor supports all the standard Markdown syntax, as well as some additional features such as GFM and CommonMark.",
-      "Real-time preview. See the preview of your Markdown as you write it.",
-      "Export to different formats. Export your Markdown documents to HTML, PDF, and Microsoft Word.",
-    ],
-  },
-  {
-    heading: "How to Use Our Online Markdown Editor",
-    listData: [
-      'Go to our website and click the "Start Writing" button.',
-      "Type your Markdown in the editor.",
-      "See the preview of your Markdown in the sidebar.",
-      'When you are finished writing, click the "Export" button to export your document to a different format.',
-    ],
-  },
-  {
-    heading: "Tips for Using an Online Markdown Editor",
-    listData: [
-      "Use the preview to see how your formatted text will look. The preview is a great way to see how your Markdown will look before you publish it.",
-      "Use the syntax highlighting to make your Markdown more readable. The syntax highlighting will highlight the different elements of your Markdown, such as headings, links, and code blocks.",
-      "Use the export feature to share your Markdown documents with others. The export feature makes it easy to share your Markdown documents with others who do not use Markdown.",
-    ],
-  },
-  {
+    heading: "Perfect for Content Creation",
     blockData: [
-      "Our free online Markdown editor is a great way to write and preview Markdown in real time. It is easy to use and supports all the standard Markdown syntax. With our editor, you can create README files, blog posts, documentation, and more.",
+      "• **Technical Documentation**: Create API docs, user manuals, and project documentation",
+      "• **Blog Writing**: Draft and preview blog posts with proper formatting",
+      "• **README Files**: Design project descriptions for GitHub and GitLab repositories",
+      "• **Note Taking**: Organize structured notes with headings, lists, and links",
+      "• **Academic Writing**: Format research papers with citations and references",
+    ],
+  },
+  {
+    heading: "Enhanced Writing Experience",
+    listData: [
+      "Distraction-free writing interface with focus mode",
+      "Real-time word count and reading time estimates",
+      "Customizable themes for comfortable writing sessions",
+      "Keyboard shortcuts for rapid formatting",
+      "Image embedding with drag-and-drop support",
+      "Table editing with visual grid interface",
     ],
   },
 ];

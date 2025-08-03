@@ -64,47 +64,39 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is Base64 Decoding?",
     blockData: [
-      "Base64 decoding is the process of converting a Base64 encoded string back to binary data. Base64 encoding is a way to convert binary data into a string of ASCII characters. This is useful for storing and transmitting binary data in text-based formats, such as email or XML.",
+      "Base64 decoding converts encoded Base64 strings back to their original file format. Our free online Base64 decoder helps you convert Base64 encoded data to images, PDFs, text files, and other document types instantly.",
+      "Base64 encoding is commonly used in web applications, email attachments, and data transmission. When you need to decode Base64 strings, our tool provides secure, browser-based conversion without uploading files to servers.",
     ],
   },
   {
-    heading: "Why Use a Base64 to File Decoder?",
+    heading: "How to Use Our Base64 to File Decoder",
     listData: [
-      "To decode Base64 encoded files. Base64 encoded files are often used to store and transmit binary files in text-based formats. A Base64 to file decoder can be used to decode these files back to their original binary form.",
-      "To debug Base64 encoded files. If you are having trouble with a Base64 encoded file, a Base64 to file decoder can be used to debug the file. This can help you to identify and fix any problems with the file.",
-      "To learn more about Base64 encoding. Base64 encoding is a powerful data format, but it can be difficult to learn. A Base64 to file decoder can be used to learn more about Base64 encoding by displaying the decoded data in its original binary form.",
+      "Paste your Base64 encoded string into the input field",
+      "The tool automatically detects the file type and shows a preview",
+      "Download the decoded file or copy the text content",
+      "Works with images (JPG, PNG, GIF), documents (PDF, TXT), and other file formats",
+      "No file size limits or registration required",
     ],
   },
   {
-    heading: "Features of Our Online Base64 to File Decoder Tool",
+    heading: "Why Choose Our Online Base64 Decoder?",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Decode your Base64 data directly from your web browser.",
-      "Supports all Base64 encoding schemes. Our decoder supports all Base64 encoding schemes, including standard Base64, URL-safe Base64, and MIME Base64.",
-      "Supports all file formats. Our decoder can decode Base64 encoded data into any file format, including text files, image files, video files, and audio files.",
-      'Easy to use. Simply paste your Base64 encoded data into the editor and select the output file format. Then, click the "Decode" button.',
-      "Customizable settings. You can customize the settings of our decoder to match your personal preferences.",
+      "100% free with no hidden costs or premium features",
+      "Secure processing - all decoding happens in your browser",
+      "Supports all Base64 variants including URL-safe and MIME encoding",
+      "Instant results with real-time preview for supported file types",
+      "Works on desktop, tablet, and mobile devices",
+      "No software installation or account creation needed",
     ],
   },
   {
-    heading: "How to Use Our Online Base64 to File Decoder Tool",
-    listData: [
-      "Paste your Base64 encoded data into the editor.",
-      'Click the "Decode" button.',
-      'Download your decoded file by clicking the "Download" button.',
-    ],
-  },
-  {
-    heading: "Tips for Using a Base64 to File Decoder",
-    listData: [
-      "Choose a secure Base64 to file decoder. Make sure to choose a Base64 to file decoder that is secure and that will not leak your data.",
-      "Use a consistent decoding scheme. Choose a Base64 decoding scheme and use it consistently throughout your project. This will make it easier to decode your data later.",
-      "Store your decoded files securely. Once you have decoded your files, make sure to store them securely. Decoded files are still vulnerable to attack, so it is important to store them securely.",
-    ],
-  },
-  {
+    heading: "Common Use Cases for Base64 Decoding",
     blockData: [
-      "Our free online Base64 to file decoder tool is a great way to convert Base64 to any file format with ease. It is easy to use and supports all Base64 encoding schemes and file formats. With our decoder, you can easily decode Base64 encoded files, debug Base64 encoded files, and learn more about Base64 encoding.",
+      "• **Web Development**: Decode Base64 images embedded in CSS or HTML",
+      "• **Email Processing**: Extract attachments from Base64 encoded email content",
+      "• **API Integration**: Process Base64 data from REST APIs and web services",
+      "• **Data Recovery**: Restore files from Base64 backup strings",
+      "• **Debugging**: Analyze encoded data during development and testing",
     ],
   },
 ];

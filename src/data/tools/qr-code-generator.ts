@@ -61,51 +61,42 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is a QR Code?",
+    heading: "What is a QR Code Generator?",
     blockData: [
-      "A QR code (Quick Response code) is a two-dimensional barcode that can be scanned with a smartphone or tablet camera. QR codes can be used to store a variety of information, such as website URLs, contact information, text messages, and even Wi-Fi passwords.",
+      "A QR code generator creates Quick Response codes that can store website URLs, contact information, WiFi passwords, and plain text. Our free online QR code generator instantly creates scannable codes for smartphones and tablets.",
+      "QR codes bridge the gap between physical and digital worlds, making it easy to share information without typing. Generate custom QR codes for marketing, business cards, events, and personal use with our user-friendly tool.",
     ],
   },
   {
-    heading: "Why Use a QR Code Generator?",
+    heading: "How to Create QR Codes Online",
     listData: [
-      "To create QR codes for your website or business. QR codes can be used to make it easier for people to visit your website or learn more about your business. You can place QR codes on your business cards, flyers, and other marketing materials.",
-      "To create QR codes for your social media profiles. QR codes can be used to make it easier for people to follow you on social media. You can place QR codes on your website and in your email signature.",
-      "To create QR codes for events and promotions. QR codes can be used to provide people with more information about upcoming events or promotions. You can place QR codes on posters, flyers, and tickets.",
+      "Enter your text, URL, or data into the input field",
+      "Choose your preferred QR code size and error correction level",
+      "Generate the QR code instantly with real-time preview",
+      "Download in multiple formats: PNG, JPEG, SVG, or WEBP",
+      "Test your QR code with any smartphone camera or QR scanner app",
     ],
   },
   {
-    heading: "Features of Our Online QR Code Generator Tool",
+    heading: "Why Choose Our QR Code Generator?",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Generate QR codes directly from your web browser.",
-      "Supports all QR code types. Our generator supports all QR code types, including standard QR codes, URL QR codes, vCard QR codes, and more.",
-      "Easy to use. Simply enter the information you want to encode in the QR text-box and the qr code will be generated automatically.",
-      "Multiple download option, you may either save qr as SVG or download qr in PNG, JPEG, WEBP as an image.",
-      "Copy shareable link for the generated qr.",
-      "Generate QR code with free text.",
+      "Completely free with unlimited QR code generation",
+      "High-quality output suitable for print and digital use",
+      "Multiple download formats for different use cases",
+      "No registration required - start creating QR codes immediately",
+      "Mobile-optimized interface works on all devices",
+      "Customizable size and error correction for optimal scanning",
     ],
   },
   {
-    heading: "How to Use Our Online QR Code Generator Tool",
-    listData: [
-      "Go to our website and enter the information you want to encode in the QR code.",
-      "Enter the QR text in the text-box and the qr code will be generated automatically.",
-      "View your generated QR code in the sidebar.",
-      "Download your QR code in multiple supported formats i.e SVG, JPEG, PNG and WEBP.",
-    ],
-  },
-  {
-    heading: "Tips for Using a QR Code Generator",
-    listData: [
-      "Use a high-quality QR code generator. Not all QR code generators are created equal. Some generators may produce QR codes that are difficult to scan or that do not work properly. Make sure to use a high-quality QR code generator to ensure that your QR codes are scannable and reliable.",
-      "Test your QR codes before using them. Once you have generated a QR code, be sure to test it before using it. Scan the QR code with your smartphone or tablet camera to make sure that it works properly.",
-      "Place your QR codes in strategic locations. When placing your QR codes, make sure to place them in locations where they are likely to be seen and scanned. For example, you could place QR codes on your business cards, flyers, and marketing materials. You could also place QR codes on your website and in your email signature.",
-    ],
-  },
-  {
+    heading: "Popular QR Code Use Cases",
     blockData: [
-      "Our free online QR code generator tool is a great way to create custom QR codes in seconds. It is easy to use and supports all QR code types. With our generator, you can easily create QR codes for your website, business, social media profiles, events, and promotions.",
+      "• **Business Marketing**: Add QR codes to business cards, flyers, and promotional materials",
+      "• **Restaurant Menus**: Create contactless digital menus for safer dining experiences",
+      "• **WiFi Sharing**: Generate QR codes for easy WiFi password sharing with guests",
+      "• **Event Registration**: Streamline event check-ins and information sharing",
+      "• **Social Media**: Quick links to your social profiles and contact information",
+      "• **Product Information**: Link physical products to digital content and reviews",
     ],
   },
 ];

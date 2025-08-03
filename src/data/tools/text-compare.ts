@@ -60,64 +60,43 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
+    heading: "Advanced Text Comparison and Diff Tool",
     blockData: [
-      `Looking for a quick and easy way to compare two texts for similarity and differences? Try our free online text compare tool! It's simple to use and completely free.`,
-      'To use the tool, simply copy and paste your texts into the text boxes and click the "Compare" button. The tool will instantly calculate the similarity percentage between the two texts and show you the differences. You can also view a side-by-side comparison of the two texts to see how they differ.',
-      `Our text compare tool is perfect for students, writers, bloggers, and anyone else who needs to check the originality of their work. It's also great for checking for plagiarism and ensuring that your work is unique.`,
+      "Our free online text comparison tool provides detailed side-by-side text analysis, highlighting differences, additions, and deletions between two documents. Perfect for comparing versions, detecting changes, and analyzing text similarity with precise word-level and character-level diff visualization.",
+      "Whether you're a developer comparing code versions, a writer checking document revisions, or a student analyzing text variations, our tool delivers comprehensive comparison results with highlighted differences and similarity percentages.",
     ],
   },
   {
-    heading:
-      "Here are some of the benefits of using our free online text compare tool:",
+    heading: "Comprehensive Text Analysis Features",
     listData: [
-      `It's quick and easy to use.`,
-      `It's completely free.`,
-      `It's accurate and reliable.`,
-      `It calculates the similarity percentage between two texts.`,
-      `It shows you the differences between two texts.`,
-      `It provides a side-by-side comparison of two texts.`,
-      `It's perfect for students, writers, bloggers, and anyone else who needs to check the originality of their work.`,
-      `It's great for checking for plagiarism and ensuring that your work is unique.`,
+      "Side-by-side text comparison with highlighted differences",
+      "Word-level and character-level diff detection",
+      "Similarity percentage calculation and analysis",
+      "Color-coded highlighting for additions, deletions, and changes",
+      "Line-by-line comparison for structured text analysis",
+      "Export comparison results in multiple formats",
+      "Real-time comparison as you type or paste text",
     ],
   },
   {
-    heading:
-      "Here are some examples of how you can use our free online text compare tool:",
-    listData: [
-      "Students can use the tool to check the originality of their essays and assignments.",
-      "Writers can use the tool to check for plagiarism in their articles and blog posts.",
-      "Bloggers can use the tool to compare their blog posts to other blog posts to see if they are similar.",
-      "Anyone can use the tool to compare any two texts to see if they are similar.",
-    ],
-  },
-  {
-    heading: "How to use our free online text compare tool:",
-    listData: [
-      "Copy and paste your texts into the text boxes.",
-      "The tool will instantly show you the differences.",
-      "You can also view a side-by-side comparison of the two texts to see how they differ.",
-    ],
-  },
-  {
-    heading: "Tips for using our free online text compare tool:",
-    listData: [
-      "Make sure to copy and paste all of your text into the text boxes, including any spaces, line breaks, and punctuation.",
-      "If you need to compare a large amount of text, you can break it down into smaller sections and compare them one at a time.",
-      'You can also use the tool to compare two text files. Simply upload the files to the tool and click the "Compare" button.',
-    ],
-  },
-  {
-    heading: "Benefits of using our free online text compare tool:",
-    listData: [
-      "Our tool is quick and easy to use.",
-      "Our tool is completely free.",
-      "Our tool is accurate and reliable.",
-      "Our tool is versatile and can be used for a variety of tasks, such as checking the originality of work, checking for plagiarism, and comparing two texts for similarity.",
-    ],
-  },
-  {
+    heading: "Perfect for Multiple Use Cases",
     blockData: [
-      "No matter what your needs are, our free online text compare tool is a valuable resource. Try it today and see how easy it is to use!",
+      "• **Document Review**: Compare contract versions, policy updates, and legal documents",
+      "• **Content Writing**: Check article revisions, blog post updates, and copy variations",
+      "• **Academic Work**: Analyze text differences for research and plagiarism detection",
+      "• **Code Comparison**: Compare code snippets, configuration files, and scripts",
+      "• **Translation Work**: Compare original and translated text versions",
+    ],
+  },
+  {
+    heading: "Advanced Comparison Options",
+    listData: [
+      "Ignore whitespace and formatting differences",
+      "Case-sensitive or case-insensitive comparison modes",
+      "Highlight-only mode for additions and deletions",
+      "Statistical analysis with word count and character count",
+      "Unified diff format output for technical users",
+      "Split-view and inline comparison layouts",
     ],
   },
 ];

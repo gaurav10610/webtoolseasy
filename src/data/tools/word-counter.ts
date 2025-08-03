@@ -62,66 +62,42 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
+    heading: "Why Use a Word Counter Tool?",
     blockData: [
-      `Looking for a quick and easy way to count the words, characters, and sentences in your writing? Try our free online word, character, and sentence count tool! It's simple to use and completely free.`,
-      `To use the tool, simply copy and paste your text into the text box and click the "Count" button. The tool will instantly calculate the number of words, characters, and sentences in your text. It will also show you the character count with and without spaces, so you can choose the count that's right for you.`,
-      `Our word, character, and sentence count tool is perfect for students, writers, bloggers, social media marketers, and anyone else who needs to keep track of the length of their writing. It's also great for checking word and character limits for specific platforms, such as Twitter, Facebook, and LinkedIn.`,
+      "Our free online word counter instantly analyzes your text to provide accurate word, character, and sentence counts. Perfect for writers, students, and content creators who need to meet specific length requirements.",
+      "Whether you're writing essays, articles, social media posts, or academic papers, our tool helps you stay within word limits and optimize your content length for better engagement and readability.",
     ],
   },
   {
-    heading:
-      "Here are some of the benefits of using our free online word, character, and sentence count tool:",
+    heading: "How to Count Words and Characters",
     listData: [
-      `It's quick and easy to use.`,
-      `It's completely free.`,
-      `It's accurate and reliable.`,
-      `It counts words, characters, and sentences.`,
-      `It shows you the character count with and without spaces.`,
-      `It's perfect for students, writers, bloggers, social media marketers, and anyone else who needs to keep track of the length of their writing.`,
-      `It's great for checking word and character limits for specific platforms.`,
+      "Paste your text into the text area or start typing directly",
+      "Get instant real-time counts as you type or edit",
+      "View detailed statistics: words, characters, sentences, and paragraphs",
+      "See character counts both with and without spaces",
+      "Perfect for checking platform-specific limits (Twitter, Facebook, LinkedIn)",
     ],
   },
   {
-    heading:
-      "Here are some examples of how you can use our free online word, character, and sentence count tool:",
+    heading: "Word Counter Features",
     listData: [
-      "Students can use the tool to check the word count of their essays and assignments to make sure they meet the length requirements.",
-      `Writers can use the tool to track the length of their articles and blog posts to make sure they're not too long or too short.`,
-      `Bloggers can use the tool to check the word count of their blog posts to make sure they're optimized for search engines.`,
-      `Social media marketers can use the tool to check the character count of their tweets, Facebook posts, and other social media posts to make sure they stay within the character limits.`,
+      "Real-time counting as you type with instant updates",
+      "Detailed text statistics including reading time estimates",
+      "Character count with and without spaces for precise measurements",
+      "Sentence and paragraph counting for structural analysis",
+      "Works offline - no internet required after page loads",
+      "Mobile-friendly interface for counting text on any device",
     ],
   },
   {
-    heading:
-      "How to use our free online word, character, and sentence count tool:",
-    listData: [
-      `Copy and paste your text into the text box.`,
-      `The tool will instantly calculate the number of words, characters, and sentences in your text.`,
-      `The tool will also show you the character count with and without spaces.`,
-    ],
-  },
-  {
-    heading:
-      "Tips for using our free online word, character, and sentence count tool:",
-    listData: [
-      "Make sure to copy and paste all of your text into the text box, including any spaces, line breaks, and punctuation.",
-      "If you need to check the word count of a specific section of text, simply select that section of text and copy and paste it into the text box.",
-      "You can also use the tool to check the word count of multiple documents. Simply separate each document with a line break.",
-    ],
-  },
-  {
-    heading:
-      "Benefits of using our free online word, character, and sentence count tool:",
-    listData: [
-      "Our tool is quick and easy to use.",
-      "Our tool is completely free.",
-      "Our tool is accurate and reliable.",
-      "Our tool is versatile and can be used for a variety of tasks, such as checking the word count of essays, articles, blog posts, social media posts, and more.",
-    ],
-  },
-  {
+    heading: "Popular Use Cases for Word Counting",
     blockData: [
-      `No matter what your needs are, our free online word, character, and sentence count tool is a valuable resource. Try it today and see how easy it is to use!`,
+      "• **Academic Writing**: Meet essay and research paper word requirements",
+      "• **Content Marketing**: Optimize blog posts and articles for SEO",
+      "• **Social Media**: Stay within character limits for Twitter, Facebook, Instagram",
+      "• **Creative Writing**: Track progress on novels, short stories, and scripts",
+      "• **Professional Documents**: Ensure resumes, cover letters meet length guidelines",
+      "• **SEO Content**: Create content with optimal word counts for search rankings",
     ],
   },
 ];

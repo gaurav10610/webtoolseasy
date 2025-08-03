@@ -62,50 +62,44 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is a Case Converter?",
+    heading: "What is Text Case Conversion?",
     blockData: [
-      "A case converter is a tool that can be used to convert text to any case. This includes uppercase, lowercase, sentence case, title case, and more. Case converters are often used to format text for different purposes, such as writing emails, creating documents, and publishing content online.",
+      "Text case conversion transforms text between different letter cases including uppercase, lowercase, title case, sentence case, and camelCase. Our free online case converter tool helps writers, developers, and content creators quickly format text for various purposes without manual retyping.",
+      "Whether you're formatting headings, coding variable names, or preparing content for publication, our case converter handles multiple text transformations instantly. It supports advanced formatting options like alternating case, inverse case, and programming-specific formats.",
     ],
   },
   {
-    heading: "Why Use a Case Converter?",
+    heading: "Available Text Case Formats",
     listData: [
-      "To format text for different purposes. Case converters can be used to format text for different purposes, such as writing emails, creating documents, and publishing content online. For example, you may want to use title case for the title of a blog post or sentence case for the body of an email.",
-      "To correct errors in case. Case converters can also be used to correct errors in case. For example, if you accidentally type a sentence in all caps, you can use a case converter to convert it to sentence case.",
-      "To learn more about case. Case converters can also be used to learn more about case. For example, you can use a case converter to see how different types of case are used in different contexts.",
+      "UPPERCASE - Converts all letters to capital letters",
+      "lowercase - Converts all letters to small letters",
+      "Title Case - Capitalizes First Letter Of Each Word",
+      "Sentence case - Capitalizes only the first letter",
+      "camelCase - Removes spaces and capitalizes each word except first",
+      "PascalCase - Like camelCase but capitalizes the first word too",
+      "snake_case - Replaces spaces with underscores and uses lowercase",
+      "kebab-case - Replaces spaces with hyphens and uses lowercase",
     ],
   },
   {
-    heading: "Features of Our Online Case Converter Tool",
-    listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Convert text to any case directly from your web browser.",
-      "Supports all case types. Our converter supports all case types, including uppercase, lowercase, sentence case, title case, and more.",
-      'Easy to use. Simply paste your text into the converter and select the desired case type. Then, click the "Convert" button.',
-      "Customizable settings. You can customize the settings of our converter to match your personal preferences. For example, you can choose to capitalize the first letter of each word or to capitalize all pronouns.",
-    ],
-  },
-  {
-    heading: "How to Use Our Online Case Converter Tool",
-    listData: [
-      "Go to our website and paste your text into the converter.",
-      "Select the desired case type from the dropdown menu.",
-      'Click the "Convert" button.',
-      "View your converted text in the sidebar.",
-      "Copy and paste your converted text into your project.",
-    ],
-  },
-  {
-    heading: "Tips for Using a Case Converter",
-    listData: [
-      "Choose a high-quality case converter. Not all case converters are created equal. Some converters may not produce accurate results or may not support all case types. Make sure to choose a high-quality case converter to ensure that your converted text is accurate and reliable.",
-      "Test your converted text. Once you have converted your text, be sure to test it to make sure that it is accurate. You can do this by reading it over carefully or by using a spell checker.",
-      "Understand the different types of case. There are many different types of case, each with its own rules. It is important to understand the different types of case before using a case converter. This will help you to choose the correct case type for your needs.",
-    ],
-  },
-  {
+    heading: "Use Cases for Case Conversion",
     blockData: [
-      "Our free online case converter tool is a great way to convert text to any case with ease. It is easy to use and supports all case types. With our converter, you can easily format text for different purposes, correct errors in case, and learn more about case.",
+      "• **Programming**: Convert variable names between camelCase, snake_case, and PascalCase",
+      "• **Content Writing**: Format titles, headings, and social media posts correctly",
+      "• **Data Processing**: Standardize text data for databases and spreadsheets",
+      "• **SEO Optimization**: Create properly formatted URLs and meta tags",
+      "• **Documentation**: Ensure consistent formatting across technical documents",
+    ],
+  },
+  {
+    heading: "Why Use Our Case Converter Tool?",
+    listData: [
+      "Instant conversion between 8+ different text formats",
+      "Preserves text structure while changing case",
+      "Handles special characters and numbers correctly",
+      "Perfect for bulk text processing and formatting",
+      "No character limits or usage restrictions",
+      "Works on any device with copy/paste functionality",
     ],
   },
 ];
