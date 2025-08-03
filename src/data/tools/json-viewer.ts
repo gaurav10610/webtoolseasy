@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/json-viewer";
-const pageTitle = "JSON Viewer Online Free - View JSON Tree Structure";
+const pageTitle = "JSON Viewer Online - View JSON Tree Structure";
 const pageDescription =
-  "Free JSON viewer to visualize JSON data in tree format. Expand, collapse, search JSON objects. No download required.";
+  "Visualize JSON data in tree format with our free online JSON viewer. Expand, collapse, search JSON objects and arrays. Perfect for debugging and analysis.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-viewer.png`;
 
 const keywords =
-  "json viewer,json tree viewer,view json online,json visualizer,json formatter,json prettifier,json explorer,json parser,json tool,validate json";
+  "json viewer,json tree viewer,view json online,json visualizer,json formatter,json explorer,json parser,validate json";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

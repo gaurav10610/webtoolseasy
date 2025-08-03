@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/image-compress";
-const pageTitle = "Image Compressor Free - Reduce Photo File Size";
+const pageTitle = "Image Compressor Online - Reduce Photo File Size";
 const pageDescription =
-  "Free image compressor to reduce file size. Compress JPG, PNG, WEBP images while maintaining quality. Perfect for web optimization.";
+  "Compress images online while maintaining quality. Free tool reduces JPG, PNG, WEBP file sizes for web optimization. No uploads, secure compression.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-compressor.png`;
 
 const keywords =
-  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,image compression tool";
+  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,web optimization";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -65,42 +62,42 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "Why Use an Image Compressor?",
-    listData: [
-      `To improve website performance. Smaller image files load faster, which can improve your website's loading speed and SEO.`,
-      "To save storage space. Compressed images take up less space on your computer or server.",
-      "To share images online. Many social media platforms and other websites have image size restrictions, so compressing your images can help you share them without any problems.",
-    ],
-  },
-  {
-    heading: "Features of Our Free Online Image Compressor",
-    listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Compress your images directly from your web browser.",
-      "Supports multiple image formats. Compress JPEG, PNG, WEBP & BMP images.",
-      "Reduces image file size without losing quality. Our image compressor uses advanced algorithms to reduce file size without sacrificing quality.",
-      'Easy to use. Simply upload your images and click the "Compress" button.',
-    ],
-  },
-  {
-    heading: "How to Use Our Free Online Image Compressor",
-    listData: [
-      'Go to our website and click the "Upload Images" button.',
-      "Select the images you want to compress.",
-      'Click the "Compress" button.',
-      "Download your compressed images.",
-    ],
-  },
-  {
-    heading: "Tips for Using an Image Compressor",
-    listData: [
-      "Choose the right compression level. The higher the compression level, the smaller the file size will be, but the image quality may also decrease. Experiment with different compression levels to find the best balance between file size and quality.",
-      "Resize your images before compressing them. This can help to further reduce the file size without sacrificing quality.",
-    ],
-  },
-  {
+    heading: "Why Compress Images for Web Optimization?",
     blockData: [
-      "Our free online image compressor is a great way to reduce image file size without losing quality. It is easy to use and supports multiple image formats. With our image compressor, you can improve website performance, save storage space, and share images online without any problems.",
+      "Image compression reduces file sizes while maintaining visual quality, making your website load faster and improving user experience. Our free online image compressor optimizes JPG, PNG, and WEBP images for better web performance.",
+      "Smaller image files mean faster page loading times, improved SEO rankings, and reduced bandwidth usage. Compress images before uploading to websites, social media, or sharing online.",
+    ],
+  },
+  {
+    heading: "How to Compress Images Online",
+    listData: [
+      "Upload your images by dragging and dropping or clicking to select files",
+      "Choose compression level: high quality, balanced, or maximum compression",
+      "Process multiple images simultaneously with batch compression",
+      "Download compressed images individually or as a ZIP file",
+      "Compare before and after file sizes to see compression results",
+    ],
+  },
+  {
+    heading: "Image Compression Features",
+    listData: [
+      "Free unlimited image compression with no file size restrictions",
+      "Supports JPG, PNG, WEBP, and BMP image formats",
+      "Advanced compression algorithms preserve image quality",
+      "Batch processing for compressing multiple images at once",
+      "Client-side processing keeps your images private and secure",
+      "Instant results with real-time compression preview",
+    ],
+  },
+  {
+    heading: "Image Optimization Best Practices",
+    blockData: [
+      "• **Web Performance**: Optimize images to achieve faster page load speeds",
+      "• **SEO Benefits**: Faster sites rank higher in search engine results",
+      "• **Mobile Optimization**: Compressed images load quickly on mobile devices",
+      "• **Storage Savings**: Reduce server storage costs and bandwidth usage",
+      "• **Social Media**: Meet platform size requirements while maintaining quality",
+      "• **Email Attachments**: Compress images to fit email size limits",
     ],
   },
 ];

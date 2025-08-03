@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/password-generator";
-const pageTitle = "Free Password Generator: Generate Strong & Secure Passwords";
+const pageTitle = "Password Generator - Create Strong Secure Passwords";
 const pageDescription =
-  "Generate strong, random, unique and secure passwords with our free password generator tool. Generate single passwords or generate passwords in bulk.";
+  "Generate strong, secure passwords instantly. Free password generator with customizable length, characters, and bulk generation. Enhance your security now.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/password-generator.png`;
 
 const keywords =
-  "password generator,strong password generator,create secure passwords,unique passwords,easy to remember passwords,easy to use password generator,free password generator,no sign-up required,advanced algorithms,password manager,generate password,choose password length,select password characters,save password,tips for creating strong passwords,at least 12 characters,mix of upper and lowercase letters, numbers, and symbols,avoid using words from a dictionary or personal details,different password for each account,pwd generator,passkey generator,random password generator";
+  "password generator,strong password generator,secure passwords,random password generator,password creator,bulk password generator,password maker";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -65,69 +62,42 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "Why Use a Password Generator?",
-    listData: [
-      "To create strong passwords. A strong password is at least 12 characters long and contains a mix of upper and lowercase letters, numbers, and symbols. It should not be a word that can be found in a dictionary or a personal detail such as your name or birthday.",
-      "To use different passwords for all your accounts. If you use the same password for multiple accounts and one of those accounts is hacked, your other accounts are also at risk. Using a password generator can help you create and manage unique passwords for all your accounts.",
-      "To make it easier to remember your passwords. A password generator can create strong, random passwords that are difficult to guess but easy for you to remember.",
-    ],
-  },
-  {
-    heading: "Features of Our Strong Password Generator",
-    listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Generate passwords directly from your web browser.",
-      "Creates strong, unique passwords. Our password generator uses advanced algorithms to create passwords that are difficult to guess.",
-      'Easy to use. Simply click the "Generate Password" button and your password will be generated.',
-      "Generate single password or generate passwords in bulk.",
-      "Save your passwords in a password manager. We recommend saving your passwords in a password manager to keep them safe and secure.",
-    ],
-  },
-  {
-    heading: "How to Use Our Strong Password Generator",
-    listData: [
-      'Go to our website and click the "Generate Password" button.',
-      "Choose the desired length of your password.",
-      "Select the types of characters you want to include in your password.",
-      'Click the "Generate Password" button again to generate a new password.',
-      "Save your password in a password manager.",
-    ],
-  },
-  {
-    heading: "Tips for Creating Strong Passwords",
-    listData: [
-      "Use at least 12 characters. The longer your password, the more difficult it is to crack.",
-      "Use a mix of upper and lowercase letters, numbers, and symbols. This makes your password more difficult to guess.",
-      "Avoid using words that can be found in a dictionary or personal details such as your name or birthday. These passwords are easy to guess.",
-      "Use a different password for each of your online accounts. This way, if one of your accounts is hacked, your other accounts are still safe.",
-    ],
-  },
-  {
+    heading: "Why Strong Passwords Matter for Security",
     blockData: [
-      "Our strong password generator is a great way to create strong, unique passwords for all your online accounts. It is easy to use and free to use. With our password generator, you can keep your accounts safe and secure from hackers.",
+      "Strong passwords are your first line of defense against cyber attacks and data breaches. Our free password generator creates cryptographically secure passwords that protect your accounts from hackers using brute force attacks.",
+      "With cyber crime increasing daily, using weak or repeated passwords puts your personal and financial information at risk. Generate unique passwords for every account to maintain maximum security.",
     ],
   },
   {
-    heading: "Disclaimer",
+    heading: "How to Generate Secure Passwords",
+    listData: [
+      "Choose your desired password length (12-128 characters recommended)",
+      "Select character types: uppercase, lowercase, numbers, and symbols",
+      "Generate single passwords or create up to 100 passwords in bulk",
+      "Copy passwords directly or download them as a secure text file",
+      "Use generated passwords immediately in password managers or accounts",
+    ],
+  },
+  {
+    heading: "Password Generator Features",
+    listData: [
+      "100% free with unlimited password generation",
+      "Cryptographically secure random password generation",
+      "Customizable length and character set options",
+      "Bulk password generation for multiple accounts",
+      "No data storage - passwords generated locally in your browser",
+      "Compatible with all password managers and security tools",
+    ],
+  },
+  {
+    heading: "Password Security Best Practices",
     blockData: [
-      `Generated passwords are provided as is without any kind of warranty.`,
-    ],
-  },
-  {
-    heading: "References",
-    links: [
-      {
-        displayText: "Read more about Password Strength at Wikipedia",
-        url: "https://en.wikipedia.org/wiki/Password_strength",
-      },
-      {
-        displayText: "Randomness Requirements for Security (RFC 4086)",
-        url: "https://www.rfc-editor.org/info/rfc4086",
-      },
-      {
-        displayText: `Preparation, Enforcement, and Comparison of Internationalized Strings Representing Usernames and Passwords (RFC 8265)`,
-        url: "https://www.rfc-editor.org/rfc/rfc8265",
-      },
+      "• **Use Unique Passwords**: Never reuse passwords across multiple accounts",
+      "• **Minimum Length**: Use at least 12 characters, preferably 16 or more",
+      "• **Mix Character Types**: Include uppercase, lowercase, numbers, and symbols",
+      "• **Avoid Personal Info**: Don't use names, birthdays, or dictionary words",
+      "• **Use Password Managers**: Store complex passwords securely with dedicated tools",
+      "• **Enable 2FA**: Add two-factor authentication for extra security layers",
     ],
   },
 ];

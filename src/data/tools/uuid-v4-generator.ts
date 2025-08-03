@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/uuid-v4-generator";
-const pageTitle = "UUID Generator Online Free - Generate UUID v4 Bulk";
+const pageTitle = "UUID v4 Generator - Generate Random UUIDs Online";
 const pageDescription =
-  "Free UUID v4 generator online. Create single or bulk UUIDs instantly. Copy, download multiple unique identifiers for development.";
+  "Generate random UUID v4 identifiers instantly. Create single or bulk UUIDs for development projects. Copy, download multiple unique identifiers easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "uuid generator,uuid v4 generator,generate uuid online,uuid creator,unique identifier generator,bulk uuid,random uuid,guid generator,uuid tool";
+  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -69,73 +66,43 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
+    heading: "UUID Version 4 Generator - Random UUIDs",
     blockData: [
-      "Universally unique identifiers (UUIDs) are also known as globally unique identifiers (GUIDs). They are 128-bit numbers that are used to identify information in computer systems. UUIDs are generated using a random number generator and are designed to be unique.",
-      "UUIDs are used in a variety of applications, such as database identifiers, session identifiers, and file identifiers. They are also used in distributed systems to ensure that all systems are using the same unique identifier for a given piece of information.",
-      'Our free online UUID v4 generator tool makes it easy to generate UUIDs, whether you need one or many. To use the tool, simply enter the number of UUIDs you need in the text box and click the "Generate" button. The tool will instantly generate a list of UUID v4s and show it to you. You can then copy and paste the list of UUIDs into your application.',
+      "Generate RFC 4122 compliant UUID version 4 identifiers using cryptographically strong random number generation. Our free UUID v4 generator creates universally unique identifiers perfect for database keys, API tokens, session management, and distributed system identification.",
+      "UUID v4 uses pure randomness to ensure uniqueness across different systems, applications, and time periods. Each generated UUID has extremely low collision probability, making them ideal for microservices, cloud applications, and any system requiring guaranteed unique identifiers.",
     ],
   },
   {
-    heading:
-      "Here are some of the benefits of using our free online UUID v4 generator tool:",
+    heading: "UUID Version 4 Specifications",
     listData: [
-      `It's quick and easy to use.`,
-      `It's completely free.`,
-      `It can generate single or bulk UUID v4s.`,
-      `It generates random and unique UUID v4s.`,
-      `It's perfect for developers, testers, and anyone else who needs to generate UUIDs.`,
-      `It's great for learning more about UUIDs and how they work.`,
+      "RFC 4122 compliant random UUID generation",
+      "128-bit identifier with 122 random bits",
+      "Standard format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+      "Cryptographically secure random number generation",
+      "Version 4 indicator in the 13th hexadecimal digit",
+      "Variant bits set according to RFC standards",
+      "Bulk generation up to 1000 UUIDs at once",
     ],
   },
   {
-    heading:
-      "Here are some examples of how you can use our free online UUID v4 generator tool:",
+    heading: "When to Use UUID Version 4",
+    blockData: [
+      "• **Database Design**: Primary keys for distributed databases and sharding",
+      "• **API Development**: Request tracking, resource identification, and session tokens",
+      "• **Microservices**: Service-to-service communication and event correlation",
+      "• **File Systems**: Unique file naming and temporary resource identification",
+      "• **Security**: Non-sequential identifiers that don't reveal creation patterns",
+    ],
+  },
+  {
+    heading: "UUID v4 vs Other Versions",
     listData: [
-      "Developers can use the tool to generate UUIDs for database identifiers, session identifiers, and file identifiers.",
-      "Testers can use the tool to generate UUIDs for test data.",
-      "Anyone can use the tool to generate UUIDs for any reason.",
-    ],
-  },
-  {
-    blockData: [
-      "No matter what your needs are, our free online UUID v4 generator tool is a valuable resource. Try it today and see how easy it is to use!",
-    ],
-  },
-  {
-    heading: "What is a UUID v4?",
-    blockData: [
-      "A UUID v4 is a version 4 UUID, which is generated using a random number generator. UUID v4s are the most commonly used type of UUID and are considered to be the most secure.",
-    ],
-  },
-  {
-    heading: "How to use our UUID v4 generator tool:",
-    blockData: [
-      'To use our UUID v4 generator tool, simply enter the number of UUIDs you need in the text box and click the "Generate" button. The tool will instantly generate a list of UUID v4s and show it to you. You can then copy and paste the list of UUIDs into your application.',
-    ],
-  },
-  {
-    heading: "Tips for using our UUID v4 generator tool:",
-    listData: [
-      "You can generate as many UUID v4s as you need.",
-      "You can also use our UUID v4 generator tool to generate UUID v4s in different formats, such as hexadecimal, base64, and URL safe.",
-    ],
-  },
-  {
-    blockData: [
-      "We hope you find our free online UUID v4 generator tool helpful!",
-    ],
-  },
-  {
-    heading: "References",
-    links: [
-      {
-        displayText: "Read more about UUIDs at Wikipedia",
-        url: "https://en.wikipedia.org/wiki/Universally_unique_identifier",
-      },
-      {
-        displayText: "RFC 4122",
-        url: "https://www.ietf.org/rfc/rfc4122.txt",
-      },
+      "No dependency on MAC address or timestamp (unlike v1)",
+      "Maximum privacy - no machine-identifying information",
+      "Completely random - unpredictable sequence generation",
+      "Suitable for public-facing systems and APIs",
+      "Better for security-sensitive applications",
+      "Ideal when you need pure randomness over time-based ordering",
     ],
   },
 ];

@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/css-formatter";
-const pageTitle = "CSS Formatter Online Free - Beautify CSS Code";
+const pageTitle = "CSS Formatter Online - Beautify & Format CSS Code";
 const pageDescription =
-  "Free CSS formatter and beautifier. Clean, indent, format CSS code online. Improve stylesheet readability and structure.";
+  "Format and beautify CSS code online for free. Clean, indent, and organize CSS stylesheets with proper structure. Improve code readability instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/css-format.png`;
 
 const keywords =
-  "css formatter,css beautifier,format css online,css code formatter,beautify css,css prettifier,clean css code,indent css,css tool";
+  "css formatter,css beautifier,format css online,css code formatter,beautify css,css prettifier,clean css code,indent css";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -70,49 +67,41 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is a CSS Beautifier and Formatter?",
+    heading: "What is CSS Formatting and Beautification?",
     blockData: [
-      "A CSS beautifier and formatter is a tool that takes your CSS code and formats it in a consistent and readable style. This can make your code easier to read, understand, and maintain.",
+      "CSS formatting transforms minified or unorganized CSS code into clean, readable stylesheets with proper indentation and spacing. Our free online CSS formatter helps developers beautify CSS code, making it easier to read, debug, and maintain across web projects.",
+      "Well-formatted CSS improves code organization, reduces development time, and ensures consistent styling standards. Whether you're working with compressed CSS files, legacy stylesheets, or generated code, our tool instantly beautifies your CSS structure.",
     ],
   },
   {
-    heading: "Why Use a CSS Beautifier and Formatter?",
+    heading: "How to Use Our CSS Formatter Tool",
     listData: [
-      "To improve the readability of your code. Well-formatted code is easier to read and understand, which can help you to write better code and to debug your code more easily.",
-      "To make your code more consistent. A CSS beautifier and formatter can help you to format your code in a consistent style, which can make your code more readable and maintainable.",
-      "To follow code style guidelines. Many companies have code style guidelines that they require their developers to follow. A CSS beautifier and formatter can help you to format your code in accordance with these guidelines.",
+      "Paste your CSS code into the input editor",
+      "Click 'Format' to automatically beautify your stylesheet",
+      "Choose indentation style (spaces or tabs) and size",
+      "Copy the formatted CSS or download as a .css file",
+      "Preview changes with syntax highlighting",
     ],
   },
   {
-    heading: "Features of Our Online CSS Beautifier and Formatter Tool",
+    heading: "Key Features of Our CSS Beautifier",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Beautify and format your CSS code directly from your web browser.",
-      "Supports all CSS features. Our beautifier and formatter supports all the features of the CSS language, including CSS3 and CSS4.",
-      'Easy to use. Simply paste your CSS code into the editor and click the "Beautify and Format" button.',
-      "Customizable settings. You can customize the settings of our beautifier and formatter to match your personal preferences.",
+      "Smart indentation with customizable spacing options",
+      "Proper selector and property alignment",
+      "Preserves CSS functionality while improving readability",
+      "Supports CSS3, Flexbox, Grid, and modern CSS features",
+      "Real-time formatting with instant preview",
+      "Handles nested CSS and media queries correctly",
     ],
   },
   {
-    heading: "How to Use Our Online CSS Beautifier and Formatter Tool",
-    listData: [
-      "Go to our website and paste your CSS code into the editor.",
-      'Click the "Beautify and Format" button.',
-      "View your beautified and formatted CSS code in the sidebar.",
-      "Copy and paste your beautified and formatted CSS code into your project.",
-    ],
-  },
-  {
-    heading: "Tips for Using a CSS Beautifier and Formatter",
-    listData: [
-      "Use a consistent code style. Choose a code style and use it consistently throughout your project. This will make your code more readable and maintainable.",
-      "Format your code before you commit it to a repository. This will help to ensure that your code is readable and maintainable for other developers.",
-      "Use a CSS beautifier and formatter to check for formatting errors. A CSS beautifier and formatter can help you to identify and fix formatting errors in your code.",
-    ],
-  },
-  {
+    heading: "Benefits for Web Developers",
     blockData: [
-      "Our free online CSS beautifier and formatter tool is a great way to beautify and format your CSS code with ease. It is easy to use and supports all the features of the CSS language. With our beautifier and formatter, you can improve the readability, consistency, and maintainability of your CSS code.",
+      "**Code Maintenance**: Easily modify complex stylesheets and cascade rules",
+      "**Team Collaboration**: Maintain consistent CSS formatting across development teams",
+      "**Debugging**: Quickly identify CSS syntax errors and specificity issues",
+      "**Performance**: Clean CSS helps with file compression and caching",
+      "**Learning**: Understand CSS structure and best practices through formatted examples",
     ],
   },
 ];

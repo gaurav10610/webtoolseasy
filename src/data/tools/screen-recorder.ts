@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/screen-recorder";
-const pageTitle = "Free Screen Recorder: Record Your Screen with Audio, Webcam";
+const pageTitle = "Screen Recorder Online - Record Screen with Audio";
 const pageDescription =
-  "Record your screen with audio and webcam for free with our online screen recorder. Record screen with no watermark and no time limit. No sign-up required.";
+  "Record your screen with audio and webcam for free. Online screen recorder with no watermark, no time limits. Perfect for tutorials and demos.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/screen-recorder.png`;
 
 const keywords =
-  "online screen recorder,free screen recorder,screen recorder with audio,screen recorder with webcam,screen recorder for tutorials,screen recorder for demos,screen recorder for video lectures,screen recorder for webinars,screen recorder for gameplay,screen recorder for Windows,screen recorder for Mac,screen recorder for Chromebook,screen recorder for Linux, no watermark, no time limit screen recording";
+  "screen recorder online,free screen recorder,screen recorder with audio,screen recorder webcam,record screen online,no watermark screen recorder";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

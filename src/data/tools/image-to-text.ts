@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { ApplicationIds } from "@/types/config";
 
 const navigationUrl = "/tools/image-to-text";
-const pageTitle = "Image to Text Converter Free - OCR Extract Text";
+const pageTitle = "Image to Text Converter - Free OCR Extract Text";
 const pageDescription =
-  "Free OCR tool to extract text from images. Convert JPG, PNG to editable text instantly. Accurate text recognition online.";
+  "Extract text from images using free OCR technology. Convert JPG, PNG to editable text instantly. Accurate text recognition for documents and photos.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-to-text.png`;
 
 const keywords =
-  "image to text,ocr online,extract text from image,photo to text,image text converter,jpg to text,png to text,text recognition,ocr tool,picture to text";
+  "image to text,ocr online,extract text from image,photo to text,image text converter,jpg to text,png to text,text recognition";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   description: pageDescription,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

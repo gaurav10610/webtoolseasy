@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/html-formatter";
-const pageTitle = "HTML Formatter Online Free - Beautify HTML Code";
+const pageTitle = "HTML Formatter Online - Beautify & Format HTML Code";
 const pageDescription =
-  "Free HTML formatter and beautifier. Clean, indent, and format HTML code online. Improve readability and code structure.";
+  "Format and beautify HTML code online for free. Clean, indent, and organize HTML markup with proper structure. Improve code readability instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
 
 const keywords =
-  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html,html tool";
+  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -70,49 +67,41 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is an HTML Beautifier?",
+    heading: "What is HTML Formatting and Beautification?",
     blockData: [
-      "An HTML beautifier is a tool that takes your HTML code and formats it in a consistent and readable style. This can make your code easier to read, understand, and maintain.",
+      "HTML formatting (also called HTML beautification) transforms minified or messy HTML code into clean, readable, and properly indented markup. Our free online HTML formatter helps developers organize HTML code with consistent spacing, line breaks, and proper tag alignment.",
+      "Well-formatted HTML improves code readability, makes debugging easier, and ensures consistent coding standards across development teams. Whether you're working with generated HTML, legacy code, or compressed markup, our tool instantly beautifies your HTML structure.",
     ],
   },
   {
-    heading: "Why Use an HTML Beautifier?",
+    heading: "How to Use Our HTML Formatter Tool",
     listData: [
-      "To improve the readability of your code. Well-formatted code is easier to read and understand, which can help you to write better code and to debug your code more easily.",
-      "To make your code more consistent. An HTML beautifier can help you to format your code in a consistent style, which can make your code more readable and maintainable.",
-      "To follow code style guidelines. Many companies have code style guidelines that they require their developers to follow. An HTML beautifier can help you to format your code in accordance with these guidelines.",
+      "Paste your HTML code into the input editor",
+      "Click 'Format' to automatically beautify and organize your code",
+      "Choose indentation preferences (spaces or tabs)",
+      "Copy the formatted HTML or download as a file",
+      "Preview the rendered output to verify formatting accuracy",
     ],
   },
   {
-    heading: "Features of Our Online HTML Beautifier Tool",
+    heading: "Key Features of Our HTML Beautifier",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Beautify your HTML code directly from your web browser.",
-      "Supports all HTML features. Our beautifier supports all the features of the HTML language, including HTML5 and HTML6.",
-      'Easy to use. Simply paste your HTML code into the editor and click the "Beautify" button.',
-      "Customizable settings. You can customize the settings of our beautifier to match your personal preferences.",
+      "Intelligent auto-indentation with customizable spacing",
+      "Proper tag nesting and hierarchy visualization",
+      "Preserves HTML structure while improving readability",
+      "Supports HTML5 and legacy HTML standards",
+      "Real-time formatting with instant preview",
+      "Works with embedded CSS and JavaScript code",
     ],
   },
   {
-    heading: "How to Use Our Online HTML Beautifier Tool",
-    listData: [
-      "Go to our website and paste your HTML code into the editor.",
-      'Click the "Beautify" button.',
-      "View your beautified HTML code in the sidebar.",
-      "Copy and paste your beautified HTML code into your project.",
-    ],
-  },
-  {
-    heading: "Tips for Using an HTML Beautifier",
-    listData: [
-      "Use a consistent code style. Choose a code style and use it consistently throughout your project. This will make your code more readable and maintainable.",
-      "Format your code before you commit it to a repository. This will help to ensure that your code is readable and maintainable for other developers.",
-      "Use an HTML beautifier to check for formatting errors. An HTML beautifier can help you to identify and fix formatting errors in your code.",
-    ],
-  },
-  {
+    heading: "Benefits for Web Developers",
     blockData: [
-      "Our free online HTML beautifier tool is a great way to beautify your HTML code with ease. It is easy to use and supports all the features of the HTML language. With our beautifier, you can improve the readability, consistency, and maintainability of your HTML code.",
+      "**Code Maintenance**: Easily read and modify complex HTML structures",
+      "**Team Collaboration**: Ensure consistent code formatting across projects",
+      "**Debugging**: Quickly identify HTML syntax errors and nesting issues",
+      "**Learning**: Understand HTML structure and best practices through formatted examples",
+      "**SEO Optimization**: Clean HTML improves search engine crawling and indexing",
     ],
   },
 ];

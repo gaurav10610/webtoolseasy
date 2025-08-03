@@ -2,11 +2,11 @@ import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
-const pageTitle = "Regex Tester Online - Test Regular Expressions Free";
+const pageTitle = "Regex Tester Online - Test Regular Expressions";
 const pageDescription =
-  "Free regex tester & validator. Test regular expressions with real-time matching, flags support, and detailed match results online.";
+  "Test and validate regular expressions with real-time matching. Free regex tester with flags support, detailed match results, and pattern debugging tools.";
 const keywords =
-  "regex tester, regular expression tester, regex validator, regex checker, regex debugger, regex online, pattern matching, regex flags, regex groups, regex tutorial";
+  "regex tester,regular expression tester,regex validator,regex checker,regex debugger,regex online,pattern matching,regex flags";
 const navigationUrl = "/tools/regex-tester";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/regex-tester.png`;
 

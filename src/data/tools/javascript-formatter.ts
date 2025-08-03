@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/javascript-formatter";
-const pageTitle = "JavaScript Beautifier and Formatter: Beautify and Format JS";
+const pageTitle = "JavaScript Formatter - Beautify & Format JS Code";
 const pageDescription =
-  "Beautify and format your JavaScript code with ease with our free online JavaScript beautifier and formatter tool. No download required, no sign-up required.";
+  "Format and beautify JavaScript code online for free. Clean, indent, and organize JS code with proper structure. Improve code readability instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-format.png`;
 
 const keywords =
-  "online JavaScript beautifier and formatter,beautify JavaScript code,format JavaScript code,JavaScript beautifier and formatter tool,JavaScript code formatter,JavaScript code style,improve JavaScript code readability,make JavaScript code more consistent,follow JavaScript code style guidelines,free JavaScript beautifier and formatter,no download required,supports all JavaScript features,JavaScript code formatting errors";
+  "javascript formatter,js formatter,beautify javascript,format javascript online,javascript beautifier,javascript prettifier,js code formatter";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -70,49 +67,41 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is a JavaScript Beautifier and Formatter?",
+    heading: "What is JavaScript Code Formatting?",
     blockData: [
-      "A JavaScript beautifier and formatter is a tool that takes your JavaScript code and formats it in a consistent and readable style. This can make your code easier to read, understand, and maintain.",
+      "JavaScript formatting transforms messy, minified, or inconsistent JavaScript code into clean, readable, and properly indented code. Our free online JavaScript formatter instantly beautifies your JS code with proper spacing, line breaks, and indentation.",
+      "Professional code formatting is essential for debugging, code reviews, and maintaining large JavaScript projects. Use our tool to make your code more readable and follow industry standards.",
     ],
   },
   {
-    heading: "Why Use a JavaScript Beautifier and Formatter?",
+    heading: "How to Format JavaScript Code",
     listData: [
-      "To improve the readability of your code. Well-formatted code is easier to read and understand, which can help you to write better code and to debug your code more easily.",
-      "To make your code more consistent. A JavaScript beautifier and formatter can help you to format your code in a consistent style, which can make your code more readable and maintainable.",
-      "To follow code style guidelines. Many companies have code style guidelines that they require their developers to follow. A JavaScript beautifier and formatter can help you to format your code in accordance with these guidelines.",
+      "Paste your minified or unformatted JavaScript code into the input area",
+      "Choose your preferred indentation style (spaces or tabs)",
+      "Click 'Format' to instantly beautify your JavaScript code",
+      "Copy the formatted code or download it as a .js file",
+      "Works with ES6, ES2017, Node.js, and all modern JavaScript syntax",
     ],
   },
   {
-    heading: "Features of Our Online JavaScript Beautifier and Formatter Tool",
+    heading: "Why Use Our JavaScript Formatter?",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Beautify and format your JavaScript code directly from your web browser.",
-      "Supports all JavaScript features. Our beautifier and formatter supports all the features of the JavaScript language, including ES6 and ES7.",
-      'Easy to use. Simply paste your JavaScript code into the editor and click the "Beautify and Format" button.',
-      "Customizable settings. You can customize the settings of our beautifier and formatter to match your personal preferences.",
+      "100% free online tool with no limitations or premium features",
+      "Supports latest JavaScript syntax including async/await and arrow functions",
+      "Customizable formatting options for different coding standards",
+      "Instant results with syntax highlighting for better code visualization",
+      "No file uploads required - all processing happens in your browser",
+      "Mobile-friendly interface for formatting code on any device",
     ],
   },
   {
-    heading: "How to Use Our Online JavaScript Beautifier and Formatter Tool",
-    listData: [
-      "Go to our website and paste your JavaScript code into the editor.",
-      'Click the "Beautify and Format" button.',
-      "View your beautified and formatted JavaScript code in the sidebar.",
-      "Copy and paste your beautified and formatted JavaScript code into your project.",
-    ],
-  },
-  {
-    heading: "Tips for Using a JavaScript Beautifier and Formatter",
-    listData: [
-      "Use a consistent code style. Choose a code style and use it consistently throughout your project. This will make your code more readable and maintainable.",
-      "Format your code before you commit it to a repository. This will help to ensure that your code is readable and maintainable for other developers.",
-      "Use a JavaScript beautifier and formatter to check for formatting errors. A JavaScript beautifier and formatter can help you to identify and fix formatting errors in your code.",
-    ],
-  },
-  {
+    heading: "JavaScript Formatting Best Practices",
     blockData: [
-      "Our free online JavaScript beautifier and formatter tool is a great way to beautify and format your JavaScript code with ease. It is easy to use and supports all the features of the JavaScript language. With our beautifier and formatter, you can improve the readability, consistency, and maintainability of your JavaScript code.",
+      "• **Consistent Indentation**: Use 2 or 4 spaces consistently throughout your codebase",
+      "• **Meaningful Variable Names**: Format helps reveal unclear variable naming patterns",
+      "• **Function Structure**: Proper formatting makes function boundaries and scope clear",
+      "• **Code Reviews**: Well-formatted code is easier to review and understand",
+      "• **Team Collaboration**: Consistent formatting reduces merge conflicts and improves teamwork",
     ],
   },
 ];

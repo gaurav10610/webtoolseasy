@@ -3,13 +3,13 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 
 const navigationUrl = "/tools/xml-to-json";
-const pageTitle = "XML to JSON Converter Free - Convert XML Online";
+const pageTitle = "XML to JSON Converter - Transform XML Data Online";
 const pageDescription =
-  "Free XML to JSON converter online. Transform XML data to JSON format instantly. Easy conversion with validation and formatting.";
+  "Convert XML to JSON format instantly with our free online converter. Transform XML data with validation and formatting. Easy, secure browser-based conversion.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/xml-to-json.png`;
 
 const keywords =
-  "xml to json converter,convert xml to json,xml json converter,xml parser,json converter,data converter,xml transformation,format converter";
+  "xml to json converter,convert xml to json,xml json converter,xml parser,json converter,data converter,xml transformation";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },

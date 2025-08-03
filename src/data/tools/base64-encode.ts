@@ -5,11 +5,11 @@ import { Metadata } from "next";
 const navigationUrl = "/tools/base64-encode";
 const pageTitle = "Base64 Encoder Free - Convert Files to Base64 Online";
 const pageDescription =
-  "Free Base64 encoder to convert any file to Base64 format. Support images, PDFs, text files. No upload limits, instant results.";
+  "Convert any file to Base64 format instantly. Free online encoder supports images, PDFs, documents. Secure browser-based encoding, no file uploads.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-encode.png`;
 
 const keywords =
-  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder,file converter";
+  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder";
 
 export const metadata: Metadata = {
   alternates: {
@@ -20,10 +20,7 @@ export const metadata: Metadata = {
   keywords,
   metadataBase: new URL(process.env.HOSTNAME!),
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/favicon.png",
   },
@@ -67,47 +64,39 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is Base64 Encoding?",
     blockData: [
-      "Base64 encoding is a way to convert binary data into a string of ASCII characters. This is useful for storing and transmitting binary data in text-based formats, such as email or XML.",
+      "Base64 encoding converts files and binary data into ASCII text strings for safe transmission and storage. Our free online Base64 encoder transforms images, documents, and other files into Base64 format instantly.",
+      "This encoding method is essential for web development, API integrations, and data storage where binary data needs to be represented as text. Use our tool to convert any file to Base64 without uploading to external servers.",
     ],
   },
   {
-    heading: "Why Use a File to Base64 Encoder?",
+    heading: "How to Convert Files to Base64",
     listData: [
-      "To store binary files in text-based formats. Base64 encoding allows you to store binary files in text-based formats, such as email or XML. This makes it easier to store and transmit binary files.",
-      "To transmit binary files over networks. Base64 encoding can be used to transmit binary files over networks that do not support binary data. For example, you can use Base64 encoding to transmit binary files over email.",
-      "To secure binary files. Base64 encoding can be used to secure binary files by making them more difficult to read and understand. For example, you can use Base64 encoding to secure passwords or other sensitive data.",
+      "Select or drag and drop your file into the upload area",
+      "Choose your preferred output format (with or without data URI prefix)",
+      "Click encode to generate the Base64 string instantly",
+      "Copy the result or download as a text file",
+      "Supports images, PDFs, documents, and other file types up to 50MB",
     ],
   },
   {
-    heading: "Features of Our Online File to Base64 Encoder Tool",
+    heading: "Why Use Our File to Base64 Encoder?",
     listData: [
-      "Free to use. No need to pay or sign up for an account.",
-      "No download required. Convert your files to Base64 directly from your web browser.",
-      "Supports all file formats. Our encoder supports all file formats, including text, images, videos, and audio.",
-      'Easy to use. Simply select your file and click the "Encode" button.',
-      "Customizable settings. You can customize the settings of our encoder to match your personal preferences.",
+      "Completely free with no file size restrictions or premium features",
+      "Client-side processing ensures your files never leave your device",
+      "Supports all file formats including images, documents, audio, and video",
+      "Generate clean Base64 strings or data URIs for immediate use",
+      "Mobile-friendly interface works on all devices and browsers",
+      "No registration, installation, or software download required",
     ],
   },
   {
-    heading: "How to Use Our Online File to Base64 Encoder Tool",
-    listData: [
-      "Go to our website and select the file you want to encode.",
-      'Click the "Encode" button.',
-      "View your encoded data in the sidebar.",
-      "Copy and paste your encoded data into your project.",
-    ],
-  },
-  {
-    heading: "Tips for Using a File to Base64 Encoder",
-    listData: [
-      "Choose a secure file to Base64 encoder. Make sure to choose a file to Base64 encoder that is secure and that will not leak your data.",
-      "Use a consistent encoding scheme. Choose a Base64 encoding scheme and use it consistently throughout your project. This will make it easier to decode your data later.",
-      "Store your encoded data securely. Once you have encoded your data, make sure to store it securely. Encoded data is still vulnerable to attack, so it is important to store it securely.",
-    ],
-  },
-  {
+    heading: "Common Use Cases for Base64 Encoding",
     blockData: [
-      "Our free online file to Base64 encoder tool is a great way to convert any file to Base64 with ease. It is easy to use and supports all file formats. With our encoder, you can easily store, transmit, and secure your binary files.",
+      "**Web Development**: Embed images directly in CSS and HTML files",
+      "**API Integration**: Send binary data through JSON APIs and web services",
+      "**Email Attachments**: Include files in email systems and MIME encoding",
+      "**Data Storage**: Store binary data in text-based databases and configurations",
+      "**Cross-Platform Transfer**: Share files between different systems and platforms",
     ],
   },
 ];
