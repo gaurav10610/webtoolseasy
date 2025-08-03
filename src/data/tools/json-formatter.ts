@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-formatter";
 const pageTitle = "JSON Formatter - Beautify & Format JSON Data Online";
@@ -28,14 +29,17 @@ export const metadata: Metadata = {
     title: pageTitle,
     type: "website",
     url: `${process.env.HOSTNAME}${navigationUrl}`,
+    description: pageDescription,
+    siteName: "WebToolsEasy",
     images: [
       {
         url: imageUrl,
         secureUrl: imageUrl,
+        width: 1200,
+        height: 630,
         alt: pageTitle,
       },
     ],
-    description: pageDescription,
   },
   twitter: {
     card: "summary_large_image",
@@ -63,6 +67,13 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.JS_FORMATTER,
     ApplicationIds.CSS_FORMATTER,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "json-formatter",
+    pageTitle,
+    mainHeading:
+      "Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

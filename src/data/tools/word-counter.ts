@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/word-counter";
 const pageTitle = "Word Counter - Count Words, Characters & Sentences";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.TEXT_COMPARE],
+  structuredData: createToolStructuredData({
+    pageUrl: "word-counter",
+    pageTitle,
+    mainHeading: "Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

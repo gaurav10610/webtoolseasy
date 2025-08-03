@@ -1,6 +1,7 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/compound-interest-calculator";
 const pageTitle = "Compound Interest Calculator - Investment Growth Tool";
@@ -58,6 +59,13 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [],
+  structuredData: createToolStructuredData({
+    pageUrl: "compound-interest-calculator",
+    pageTitle,
+    mainHeading:
+      "Compound Interest Calculator: Calculate Your Future Earnings with Ease",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

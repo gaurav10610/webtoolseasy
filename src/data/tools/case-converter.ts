@@ -1,6 +1,7 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/case-converter";
 const pageTitle = "Text Case Converter - Upper Lower Title Case Online";
@@ -58,6 +59,13 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [],
+  structuredData: createToolStructuredData({
+    pageUrl: "case-converter",
+    pageTitle,
+    mainHeading:
+      "Online Case Converter: Convert Text to Lowercase, Uppercase, Sentence Case & Title Case",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

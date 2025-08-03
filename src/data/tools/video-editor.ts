@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-editor";
 const pageTitle = "Video Editor Online - Edit, Trim & Add Effects Free";
@@ -72,6 +73,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.PDF_EDITOR,
     ApplicationIds.SPEECH_TO_TEXT,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "video-editor",
+    pageTitle,
+    mainHeading: "Free Online Video Editor - Edit, Cut, Trim & Add Effects",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

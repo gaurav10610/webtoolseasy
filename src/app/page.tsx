@@ -18,6 +18,11 @@ import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { BaseToolsAds } from "@/components/baseAds";
 import Link from "next/link";
+import {
+  StructuredData,
+  generateOrganizationSchema,
+  generateWebsiteSchema,
+} from "@/components/structuredData";
 
 const pageTitle = "Free Online Tools - Web Utilities & Productivity";
 const pageDescription =
@@ -366,180 +371,197 @@ export default async function Home({
   // Remove undefined category
   delete categoryWiseAppList["undefined"];
 
-  const allCategories = Array.from(
-    new Set(allApps.map((app) => app.category))
-  ).filter(Boolean);
+  const allCategories = [
+    ...new Set(
+      allApps
+        .map((app) => app.category)
+        .filter((category) => category && category.trim())
+    ),
+  ].sort();
+
+  // Generate structured data for home page
+  const organizationSchema = generateOrganizationSchema();
+  const websiteSchema = generateWebsiteSchema();
 
   return (
-    <main className="w-full px-2 py-4">
-      <div className="hidden md:flex w-full max-w-none">
-        <aside className="w-[20%] pr-2">
-          <BaseToolsAds className="w-full" />
-        </aside>
+    <>
+      {/* Structured Data */}
+      <StructuredData data={organizationSchema} />
+      <StructuredData data={websiteSchema} />
 
-        <section className="w-[60%] px-2">
-          <div className="flex flex-col gap-4 items-center w-full">
-            <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
-            <SocialShareButtons
-              pageUrl={`${process.env.HOSTNAME}`}
-              heading={pageTitle}
-            />
+      <div className="w-full px-2 py-4">
+        {/* Desktop Layout with 60% restriction */}
+        <div className="hidden md:flex w-full max-w-none">
+          <aside className="w-[20%] pr-2">
+            <BaseToolsAds className="w-full" />
+          </aside>
 
-            <AppDiscoveryFilters
-              categories={allCategories}
-              selectedCategory={selectedCategory}
-              searchQuery={searchQuery}
-              totalTools={allApps.length}
-              filteredCount={filteredApps.length}
-            />
+          <section className="w-[60%] px-2">
+            <div className="flex flex-col gap-4 items-center w-full">
+              <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
+              <SocialShareButtons
+                pageUrl={`${process.env.HOSTNAME}`}
+                heading={pageTitle}
+              />
 
-            {!selectedCategory && !searchQuery && (
-              <Fade in={true} timeout={1200}>
-                <nav
-                  className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4"
-                  aria-label="Quick category access"
-                >
-                  {allCategories.slice(0, 4).map((category) => {
-                    const categoryCount = allApps.filter(
-                      (app) => app.category === category
-                    ).length;
+              <AppDiscoveryFilters
+                categories={allCategories}
+                selectedCategory={selectedCategory}
+                searchQuery={searchQuery}
+                totalTools={allApps.length}
+                filteredCount={filteredApps.length}
+              />
+
+              {!selectedCategory && !searchQuery && (
+                <Fade in={true} timeout={1200}>
+                  <nav
+                    className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4"
+                    aria-label="Quick category access"
+                  >
+                    {allCategories.slice(0, 4).map((category) => {
+                      const categoryCount = allApps.filter(
+                        (app) => app.category === category
+                      ).length;
+                      return (
+                        <Link
+                          key={getRandomId()}
+                          href={`/?category=${encodeURIComponent(category)}`}
+                          className="no-underline"
+                        >
+                          <Box className="p-3 text-center bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300">
+                            <Typography
+                              variant="h6"
+                              className="!font-bold !text-blue-600"
+                            >
+                              {categoryCount}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="textSecondary"
+                              className="truncate"
+                            >
+                              {category}
+                            </Typography>
+                          </Box>
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </Fade>
+              )}
+
+              {filteredApps.length > 0 ? (
+                <div className="flex flex-col gap-8 w-full mt-5">
+                  {!selectedCategory &&
+                    !searchQuery &&
+                    ENABLE_POPULAR_TOOLS && (
+                      <PopularToolsSection allApps={allApps} />
+                    )}
+
+                  {map(categoryWiseAppList, (configs, category) => {
                     return (
-                      <Link
+                      <SectionAppList
                         key={getRandomId()}
-                        href={`/?category=${encodeURIComponent(category)}`}
-                        className="no-underline"
-                      >
-                        <Box className="p-3 text-center bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300">
-                          <Typography
-                            variant="h6"
-                            className="!font-bold !text-blue-600"
-                          >
-                            {categoryCount}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            className="truncate"
-                          >
-                            {category}
-                          </Typography>
-                        </Box>
-                      </Link>
+                        category={category}
+                        configs={configs}
+                        showCategoryTitle={!searchQuery}
+                      />
                     );
                   })}
-                </nav>
-              </Fade>
-            )}
-
-            {filteredApps.length > 0 ? (
-              <div className="flex flex-col gap-8 w-full mt-5">
-                {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
-                  <PopularToolsSection allApps={allApps} />
-                )}
-
-                {map(categoryWiseAppList, (configs, category) => {
-                  return (
-                    <SectionAppList
-                      key={getRandomId()}
-                      category={category}
-                      configs={configs}
-                      showCategoryTitle={!searchQuery}
-                    />
-                  );
-                })}
-              </div>
-            ) : (
-              <Fade in={true} timeout={600}>
-                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    className="mb-4"
-                  >
-                    🔍 No tools found matching your criteria
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    className="mb-4"
-                  >
-                    Try adjusting your search or removing filters
-                  </Typography>
-                  <Link href="/" className="no-underline">
-                    <Chip
-                      label="Clear All Filters"
-                      color="primary"
-                      className="cursor-pointer"
-                    />
-                  </Link>
                 </div>
-              </Fade>
-            )}
-          </div>
-        </section>
-
-        <aside className="w-[20%] pl-2">
-          <BaseToolsAds className="w-full" />
-        </aside>
-      </div>
-
-      <div className="flex md:hidden flex-col gap-4 items-center w-full">
-        <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
-        <SocialShareButtons
-          pageUrl={`${process.env.HOSTNAME}`}
-          heading={pageTitle}
-        />
-
-        <AppDiscoveryFilters
-          categories={allCategories}
-          selectedCategory={selectedCategory}
-          searchQuery={searchQuery}
-          totalTools={allApps.length}
-          filteredCount={filteredApps.length}
-        />
-
-        {filteredApps.length > 0 ? (
-          <div className="flex flex-col gap-8 w-full mt-5">
-            {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
-              <PopularToolsSection allApps={allApps} isMobile={true} />
-            )}
-
-            {map(categoryWiseAppList, (configs, category) => {
-              return (
-                <SectionAppList
-                  key={getRandomId()}
-                  category={category}
-                  configs={configs}
-                  showCategoryTitle={!searchQuery}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <Fade in={true} timeout={600}>
-            <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
-              <Typography variant="h6" color="textSecondary" className="mb-4">
-                🔍 No tools found
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                className="mb-4"
-              >
-                Try adjusting your search or removing filters
-              </Typography>
-              <Link href="/" className="no-underline">
-                <Chip
-                  label="Clear Filters"
-                  color="primary"
-                  className="cursor-pointer"
-                />
-              </Link>
+              ) : (
+                <Fade in={true} timeout={600}>
+                  <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                    <Typography
+                      variant="h6"
+                      color="textSecondary"
+                      className="mb-4"
+                    >
+                      🔍 No tools found matching your criteria
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      className="mb-4"
+                    >
+                      Try adjusting your search or removing filters
+                    </Typography>
+                    <Link href="/" className="no-underline">
+                      <Chip
+                        label="Clear All Filters"
+                        color="primary"
+                        className="cursor-pointer"
+                      />
+                    </Link>
+                  </div>
+                </Fade>
+              )}
             </div>
-          </Fade>
-        )}
-        <BaseToolsAds className="w-full" />
+          </section>
+
+          <aside className="w-[20%] pl-2">
+            <BaseToolsAds className="w-full" />
+          </aside>
+        </div>
+
+        <div className="flex md:hidden flex-col gap-4 items-center w-full">
+          <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
+          <SocialShareButtons
+            pageUrl={`${process.env.HOSTNAME}`}
+            heading={pageTitle}
+          />
+
+          <AppDiscoveryFilters
+            categories={allCategories}
+            selectedCategory={selectedCategory}
+            searchQuery={searchQuery}
+            totalTools={allApps.length}
+            filteredCount={filteredApps.length}
+          />
+
+          {filteredApps.length > 0 ? (
+            <div className="flex flex-col gap-8 w-full mt-5">
+              {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
+                <PopularToolsSection allApps={allApps} isMobile={true} />
+              )}
+
+              {map(categoryWiseAppList, (configs, category) => {
+                return (
+                  <SectionAppList
+                    key={getRandomId()}
+                    category={category}
+                    configs={configs}
+                    showCategoryTitle={!searchQuery}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <Fade in={true} timeout={600}>
+              <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
+                <Typography variant="h6" color="textSecondary" className="mb-4">
+                  🔍 No tools found
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  className="mb-4"
+                >
+                  Try adjusting your search or removing filters
+                </Typography>
+                <Link href="/" className="no-underline">
+                  <Chip
+                    label="Clear Filters"
+                    color="primary"
+                    className="cursor-pointer"
+                  />
+                </Link>
+              </div>
+            </Fade>
+          )}
+          <BaseToolsAds className="w-full" />
+        </div>
       </div>
-    </main>
+    </>
   );
 }

@@ -16,6 +16,7 @@ import { SocialShareButtons } from "@/components/socialShareButtons";
 import SidePanel from "@/components/sidePanel";
 import { BaseToolsAds } from "@/components/baseAds";
 import { notFound } from "next/navigation";
+import { StructuredData } from "@/components/structuredData";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -192,57 +193,76 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   // Memoize the hostname URL
   const toolUrl = `${process.env.HOSTNAME}/tools/${params.pageUrl}`;
 
-  return (
-    <div className="w-full px-2 py-4">
-      {/* Desktop Layout with 60% restriction */}
-      <div className="hidden md:flex w-full max-w-none">
-        {/* Left sidebar - 20% */}
-        <div className="w-[20%] pr-2">
-          <SidePanel
-            className="w-full"
-            appConfigJson={appListConfig}
-            pageUrl={params.pageUrl}
-          />
-        </div>
+  // Get structured data from tool config
+  const structuredData = toolConfigData.structuredData;
 
-        {/* Main content area - 60% */}
-        <div className="w-[60%] px-2">
-          <div className="flex flex-col gap-5 w-full max-w-full">
-            <AppHeading heading={toolConfigData.mainHeading!} />
-            <SocialShareButtons
-              pageUrl={toolUrl}
-              heading={toolConfigData.pageTitle}
+  return (
+    <>
+      {/* Structured Data */}
+      {structuredData?.webApplication && (
+        <StructuredData data={structuredData.webApplication} />
+      )}
+      {structuredData?.breadcrumb && (
+        <StructuredData data={structuredData.breadcrumb} />
+      )}
+      {structuredData?.organization && (
+        <StructuredData data={structuredData.organization} />
+      )}
+      {structuredData?.website && (
+        <StructuredData data={structuredData.website} />
+      )}
+
+      <div className="w-full px-2 py-4">
+        {/* Desktop Layout with 60% restriction */}
+        <div className="hidden md:flex w-full max-w-none">
+          {/* Left sidebar - 20% */}
+          <div className="w-[20%] pr-2">
+            <SidePanel
+              className="w-full"
+              appConfigJson={appListConfig}
+              pageUrl={params.pageUrl}
             />
-            <div className="flex flex-col gap-2 w-full max-w-full">
-              {children}
+          </div>
+
+          {/* Main content area - 60% */}
+          <div className="w-[60%] px-2">
+            <div className="flex flex-col gap-5 w-full max-w-full">
+              <AppHeading heading={toolConfigData.mainHeading!} />
+              <SocialShareButtons
+                pageUrl={toolUrl}
+                heading={toolConfigData.pageTitle}
+              />
+              <div className="flex flex-col gap-2 w-full max-w-full">
+                {children}
+              </div>
+              {relatedToolsConfigs.length > 0 && (
+                <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
+              )}
+              <ToolDescription descriptionData={toolDescriptionData} />
             </div>
-            {relatedToolsConfigs.length > 0 && (
-              <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
-            )}
-            <ToolDescription descriptionData={toolDescriptionData} />
+          </div>
+
+          {/* Right sidebar - 20% */}
+          <div className="w-[20%] pl-2">
+            <BaseToolsAds className="w-full" />
           </div>
         </div>
 
-        {/* Right sidebar - 20% */}
-        <div className="w-[20%] pl-2">
+        {/* Mobile Layout - Full width */}
+        <div className="flex md:hidden flex-col gap-5 w-full">
+          <AppHeading heading={toolConfigData.mainHeading!} />
+          <SocialShareButtons
+            pageUrl={toolUrl}
+            heading={toolConfigData.pageTitle}
+          />
+          <div className="flex flex-col gap-2 w-full">{children}</div>
+          {relatedToolsConfigs.length > 0 && (
+            <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
+          )}
+          <ToolDescription descriptionData={toolDescriptionData} />
           <BaseToolsAds className="w-full" />
         </div>
       </div>
-
-      {/* Mobile Layout - Full width */}
-      <div className="flex md:hidden flex-col gap-5 w-full">
-        <AppHeading heading={toolConfigData.mainHeading!} />
-        <SocialShareButtons
-          pageUrl={toolUrl}
-          heading={toolConfigData.pageTitle}
-        />
-        <div className="flex flex-col gap-2 w-full">{children}</div>
-        {relatedToolsConfigs.length > 0 && (
-          <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
-        )}
-        <ToolDescription descriptionData={toolDescriptionData} />
-        <BaseToolsAds className="w-full" />
-      </div>
-    </div>
+    </>
   );
 }

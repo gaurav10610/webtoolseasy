@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-compare";
 const pageTitle = "Text Compare Tool - Compare Text Differences Online";
@@ -56,6 +57,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.WORD_COUNTER],
+  structuredData: createToolStructuredData({
+    pageUrl: "text-compare",
+    pageTitle,
+    mainHeading: "Free Online Text Compare Tool: Find Differences Between Two Texts Easily",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-editor";
 const pageTitle = "Text Editor Online - Write & Edit Plain Text";
@@ -61,6 +62,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.WORD_COUNTER,
     ApplicationIds.CASE_CONVERETR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "text-editor",
+    pageTitle,
+    mainHeading: "Online Text Editor: Write, Edit Plain Text on Notepad",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

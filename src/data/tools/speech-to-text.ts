@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { Metadata } from "next";
 import { DescriptionBlock } from "@/types/description";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/speech-to-text";
 const pageTitle = "Speech to Text Converter - Voice Recognition Online";
@@ -133,6 +134,13 @@ const speechToTextConfig: ApplicationConfig = {
     ApplicationIds.MARKDOWN_EDITOR,
     ApplicationIds.TEXT_COMPARE,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "speech-to-text",
+    pageTitle,
+    mainHeading:
+      "Free Online Speech to Text Converter: Voice Recognition Made Easy",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

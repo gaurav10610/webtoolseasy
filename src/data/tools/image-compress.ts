@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/image-compress";
 const pageTitle = "Image Compressor Online - Reduce Photo File Size";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.IMAGE_CROPPER],
+  structuredData: createToolStructuredData({
+    pageUrl: "image-compress",
+    pageTitle,
+    mainHeading: "Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

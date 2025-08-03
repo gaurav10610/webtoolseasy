@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v4-generator";
 const pageTitle = "UUID v4 Generator - Generate Random UUIDs Online";
@@ -62,6 +63,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.UUID_VERSION1_GENERATOR,
     ApplicationIds.GUID_GENERATOR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "uuid-v4-generator",
+    pageTitle,
+    mainHeading: "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

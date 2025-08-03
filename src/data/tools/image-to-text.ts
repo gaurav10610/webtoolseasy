@@ -1,6 +1,7 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 import { ApplicationIds } from "@/types/config";
 
 const navigationUrl = "/tools/image-to-text";
@@ -65,6 +66,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.CASE_CONVERETR,
     ApplicationIds.BASE64_ENCODE,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "image-to-text",
+    pageTitle,
+    mainHeading: "Free Online Image to Text Converter: Extract Text from Images Instantly",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

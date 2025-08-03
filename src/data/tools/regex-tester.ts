@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const pageTitle = "Regex Tester Online - Test Regular Expressions";
 const pageDescription =
@@ -59,6 +60,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.JS_FORMATTER,
     ApplicationIds.JSON_FORMATTER,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "regex-tester",
+    pageTitle,
+    mainHeading: "Free Online Regex Tester - Test Regular Expressions & Validate Patterns",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

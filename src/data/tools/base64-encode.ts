@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/base64-encode";
 const pageTitle = "Base64 Encoder Free - Convert Files to Base64 Online";
@@ -58,6 +59,13 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.BASE64_DECODE],
+  structuredData: createToolStructuredData({
+    pageUrl: "base64-encode",
+    pageTitle,
+    mainHeading:
+      "Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

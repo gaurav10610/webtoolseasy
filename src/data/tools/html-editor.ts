@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-editor";
 const pageTitle = "HTML CSS Editor Online - Live Preview & Code Editor";
@@ -57,6 +58,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.JS_EDITOR],
+  structuredData: createToolStructuredData({
+    pageUrl: "html-editor",
+    pageTitle,
+    mainHeading: "Online HTML and CSS Editor with Real-Time Preview",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

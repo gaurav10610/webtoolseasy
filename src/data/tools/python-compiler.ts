@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/python-compiler";
 const pageTitle = "Python Compiler Online - Run Python Code Free";
@@ -61,6 +62,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.MARKDOWN_EDITOR,
     ApplicationIds.JS_COMPILER,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "python-compiler",
+    pageTitle,
+    mainHeading: "Online Python Compiler & Interpreter",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

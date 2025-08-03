@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/password-generator";
 const pageTitle = "Password Generator - Create Strong Secure Passwords";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.JWT_DECODER],
+  structuredData: createToolStructuredData({
+    pageUrl: "password-generator",
+    pageTitle,
+    mainHeading: "Free Online Password Generator: Create Strong, Secure & Random Passwords",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

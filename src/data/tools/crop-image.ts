@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/crop-image";
 const pageTitle = "Image Cropper Online - Crop Photos Free & Precision";
@@ -57,6 +58,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.IMAGE_COMPRESSOR, ApplicationIds.IMAGE_TO_TEXT],
+  structuredData: createToolStructuredData({
+    pageUrl: "crop-image",
+    pageTitle,
+    mainHeading: "Free Online Image Cropper - Crop Your Photos Instantly",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-viewer";
 const pageTitle = "CSV Viewer Online - Handle Large Files with Streaming";
@@ -62,6 +63,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.XML_TO_JSON,
     ApplicationIds.TEXT_EDITOR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "csv-viewer",
+    pageTitle,
+    mainHeading: "Free CSV Viewer - Handle Large Files with Streaming",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

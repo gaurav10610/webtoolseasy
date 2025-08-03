@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/screen-recorder";
 const pageTitle = "Screen Recorder Online - Record Screen with Audio";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.VIDEO_CONVERTER],
+  structuredData: createToolStructuredData({
+    pageUrl: "screen-recorder",
+    pageTitle,
+    mainHeading: "Free Online Screen Recorder - Record Your Screen with Audio, Webcam",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

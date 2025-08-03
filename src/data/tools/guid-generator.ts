@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/guid-generator";
 const pageTitle = "GUID Generator Online - Generate Single or Bulk GUIDs";
@@ -62,6 +63,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.UUID_VERSION1_GENERATOR,
     ApplicationIds.UUID_VERSION4_GENERATOR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "guid-generator",
+    pageTitle,
+    mainHeading: "Online GUID Generator - Generate Single or Bulk Globally Unique Identifiers (GUIDs)",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [
