@@ -119,6 +119,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       if (newFiles.length > 0 && !selectedFile) {
         setSelectedFile(newFiles[0]);
         setCurrentRotation(0); // Reset rotation for new file
+        setNumPages(0); // Reset numPages to trigger fresh onDocumentLoadSuccess
         // Store the original file data for the PDF viewer - use original file
         setPdfDocumentData(newFiles[0].file);
         setDocumentKey(`file-${newFiles[0].id}`); // Use file ID for stable key
@@ -243,6 +244,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         // Update the PDF document data for the viewer
         setPdfDocumentData(updatedFile);
         setDocumentKey(`file-${selectedFile.id}-rotated`); // Stable key for rotated version
+        setNumPages(0); // Reset numPages to trigger fresh onDocumentLoadSuccess
 
         // Also update the selectedFile's document to the rotated version
         // so subsequent rotations are applied to the already rotated document
@@ -381,6 +383,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setSelectedFile(file);
         setCurrentPage(1);
         setCurrentRotation(0); // Reset rotation for new file
+        setNumPages(0); // Reset numPages to trigger fresh onDocumentLoadSuccess
         // Load the PDF data for the viewer - use original file
         setPdfDocumentData(file.file);
         setDocumentKey(`file-${file.id}`); // Use file ID for stable key
@@ -392,7 +395,13 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   // PDF Document Load Handler
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
-    setCurrentPage(1);
+    // Only reset to page 1 if we're on a page that doesn't exist in the new document
+    setCurrentPage((prevPage) => (prevPage > numPages ? 1 : prevPage));
+  };
+
+  // Helper function to get the correct page count
+  const getTotalPages = () => {
+    return numPages > 0 ? numPages : selectedFile?.numPages || 0;
   };
 
   // PDF Viewer Component - Memoized to prevent unnecessary re-renders
@@ -428,7 +437,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
           <div className="flex items-center justify-between mb-4">
             <Typography variant="body2">
-              Page {currentPage} of {numPages || selectedFile.numPages}
+              Page {currentPage} of {getTotalPages()}
             </Typography>
             <div className="flex gap-2">
               <Button
@@ -440,15 +449,13 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                 Previous
               </Button>
               <Typography variant="body2" className="flex items-center px-3">
-                {currentPage} / {numPages || selectedFile.numPages}
+                {currentPage} / {getTotalPages()}
               </Typography>
               <Button
                 onClick={() =>
-                  setCurrentPage((prev) =>
-                    Math.min(numPages || selectedFile.numPages, prev + 1)
-                  )
+                  setCurrentPage((prev) => Math.min(getTotalPages(), prev + 1))
                 }
-                disabled={currentPage === (numPages || selectedFile.numPages)}
+                disabled={currentPage === getTotalPages()}
                 size="small"
                 variant="outlined"
               >
