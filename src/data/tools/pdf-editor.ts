@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-editor";
 const pageTitle = "PDF Editor Online - Edit, Merge & Split PDFs Free";
@@ -28,6 +29,8 @@ export const metadata: Metadata = {
     title: pageTitle,
     type: "website",
     url: `${process.env.HOSTNAME}${navigationUrl}`,
+    description: pageDescription,
+    siteName: "WebToolsEasy",
     images: [
       {
         url: imageUrl,
@@ -66,9 +69,13 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.QR_CODE_GENERATOR,
     ApplicationIds.IMAGE_COMPRESSOR,
     ApplicationIds.TEXT_COMPARE,
-    ApplicationIds.MARKDOWN_EDITOR,
-    ApplicationIds.BASE64_ENCODE,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "pdf-editor",
+    pageTitle,
+    mainHeading: "Free Online PDF Editor: Edit, Merge, Split & Annotate PDFs",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

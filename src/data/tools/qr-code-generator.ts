@@ -1,6 +1,7 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/qr-code-generator";
 const pageTitle = "QR Code Generator - Create Custom QR Codes Free";
@@ -57,6 +58,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [],
+  structuredData: createToolStructuredData({
+    pageUrl: "qr-code-generator",
+    pageTitle,
+    mainHeading: "Free QR Code Generator: Generate QR Codes with Free Text",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const pageTitle = "HTML to Markdown Converter - Fast & Accurate Online";
 const pageDescription =
@@ -59,6 +60,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.TEXT_EDITOR,
     ApplicationIds.HTML_TO_MARKDOWN,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "html-to-markdown",
+    pageTitle,
+    mainHeading: "Free Online HTML to Markdown Converter - Fast, Accurate & Privacy-Friendly",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

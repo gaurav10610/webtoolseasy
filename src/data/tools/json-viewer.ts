@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-viewer";
 const pageTitle = "JSON Viewer Online - View JSON Tree Structure";
@@ -62,6 +63,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.HTML_FORMATTER,
     ApplicationIds.CSS_FORMATTER,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "json-viewer",
+    pageTitle,
+    mainHeading: "Free Online JSON Viewer: View Your JSON in a Tree Structure",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

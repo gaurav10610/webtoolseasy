@@ -9,6 +9,12 @@ import fs from "fs";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { H1Heading } from "@/components/baseComponents/headings";
 import { PageMetadata } from "@/components/baseComponents/pageMetadata";
+import {
+  StructuredData,
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  generateOrganizationSchema,
+} from "@/components/structuredData";
 
 export async function generateMetadata(
   props: Readonly<{
@@ -99,21 +105,52 @@ export default async function BlogPage(
 
   const parsedContent = parse(jsonData.html, options);
 
+  // Generate structured data for blog post
+  const articleSchema = generateArticleSchema({
+    headline: jsonData.heading,
+    description: jsonData.pageMetadata.description,
+    url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
+    image: `${process.env.SCREENSHOTS_BASE_URL}/blog/${pageUrl}.png`,
+    datePublished: jsonData.updatedAt,
+    dateModified: jsonData.updatedAt,
+    keywords: jsonData.tags,
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema({
+    items: [
+      { name: "Home", url: process.env.HOSTNAME! },
+      { name: "Blog", url: `${process.env.HOSTNAME}/blog` },
+      {
+        name: jsonData.heading,
+        url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
+      },
+    ],
+  });
+
+  const organizationSchema = generateOrganizationSchema();
+
   return (
-    <div className="w-full flex flex-col gap-3 blog-div">
-      {process.env.NODE_ENV !== "production" && (
-        <AdminControls pageUrl={jsonData.pageUrl} />
-      )}
-      <H1Heading heading={jsonData.heading} />
-      <SocialShareButtons
-        pageUrl={`${process.env.HOSTNAME}${jsonData.pageUrl}`}
-        heading={jsonData.heading}
-      />
-      <PageMetadata
-        updatedBy={jsonData.updatedBy}
-        updatedAt={jsonData.updatedAt}
-      />
-      {parsedContent}
-    </div>
+    <>
+      {/* Structured Data */}
+      <StructuredData data={articleSchema} />
+      <StructuredData data={breadcrumbSchema} />
+      <StructuredData data={organizationSchema} />
+
+      <div className="w-full flex flex-col gap-3 blog-div">
+        {process.env.NODE_ENV !== "production" && (
+          <AdminControls pageUrl={jsonData.pageUrl} />
+        )}
+        <H1Heading heading={jsonData.heading} />
+        <SocialShareButtons
+          pageUrl={`${process.env.HOSTNAME}${jsonData.pageUrl}`}
+          heading={jsonData.heading}
+        />
+        <PageMetadata
+          updatedBy={jsonData.updatedBy}
+          updatedAt={jsonData.updatedAt}
+        />
+        {parsedContent}
+      </div>
+    </>
   );
 }

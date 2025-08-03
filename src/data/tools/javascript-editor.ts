@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-editor";
 const pageTitle = "JavaScript Editor Online - Write & Edit JS Code";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.HTML_EDITOR],
+  structuredData: createToolStructuredData({
+    pageUrl: "javascript-editor",
+    pageTitle,
+    mainHeading: "Online JavaScript Editor: Write and Edit JavaScript Code in Your Browser",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

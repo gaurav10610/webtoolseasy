@@ -1,6 +1,11 @@
 import { join, map } from "lodash-es";
 import blogList from "@/data/blogList.json";
 import BlogList from "@/components/blogList";
+import {
+  StructuredData,
+  generateOrganizationSchema,
+  generateWebsiteSchema,
+} from "@/components/structuredData";
 
 const pageTitle = "WebToolsEasy Blogs";
 const pageDescription =
@@ -100,5 +105,17 @@ export async function generateMetadata() {
 }
 
 export default async function BlogListPage() {
-  return <BlogList blogList={blogList} />;
+  // Generate structured data for blog page
+  const organizationSchema = generateOrganizationSchema();
+  const websiteSchema = generateWebsiteSchema();
+
+  return (
+    <>
+      {/* Structured Data */}
+      <StructuredData data={organizationSchema} />
+      <StructuredData data={websiteSchema} />
+
+      <BlogList blogList={blogList} />
+    </>
+  );
 }

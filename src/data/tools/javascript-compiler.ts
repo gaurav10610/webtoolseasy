@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-compiler";
 const pageTitle = "JavaScript Compiler Online - Run JS Code in Browser";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.HTML_EDITOR, ApplicationIds.MARKDOWN_EDITOR],
+  structuredData: createToolStructuredData({
+    pageUrl: "javascript-compiler",
+    pageTitle,
+    mainHeading: "Online JavaScript Compiler: Compile & Run JavaScript in Browser",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

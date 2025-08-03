@@ -1,6 +1,7 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/cron-expression";
 const pageTitle = "Cron Expression Generator - Create Cron Jobs Online";
@@ -57,6 +58,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [],
+  structuredData: createToolStructuredData({
+    pageUrl: "cron-expression",
+    pageTitle,
+    mainHeading: "Free Online Cron Expression Generator: Create Cron Expressions",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

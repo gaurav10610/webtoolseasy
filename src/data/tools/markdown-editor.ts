@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-editor";
 const pageTitle = "Markdown Editor Online - Live Preview & Export";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.TEXT_COMPARE, ApplicationIds.JWT_DECODER],
+  structuredData: createToolStructuredData({
+    pageUrl: "markdown-editor",
+    pageTitle,
+    mainHeading: "Free Online Markdown Editor: Write, Edit and Preview Markdown in Real Time",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

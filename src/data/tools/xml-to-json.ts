@@ -1,6 +1,7 @@
 import { ApplicationConfig } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/xml-to-json";
 const pageTitle = "XML to JSON Converter - Transform XML Data Online";
@@ -57,6 +58,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [],
+  structuredData: createToolStructuredData({
+    pageUrl: "xml-to-json",
+    pageTitle,
+    mainHeading: "Free Online XML to JSON Converter: Convert XML to JSON",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

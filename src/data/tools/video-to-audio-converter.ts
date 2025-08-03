@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-to-audio-converter";
 const pageTitle = "Video to Audio Converter - Extract MP3 from Video";
@@ -58,6 +59,12 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
   relatedTools: [ApplicationIds.SCREEN_RECORDER],
+  structuredData: createToolStructuredData({
+    pageUrl: "video-to-audio-converter",
+    pageTitle,
+    mainHeading: "Free Video to Audio Converter: Convert Any Video to Audio in Any Format",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

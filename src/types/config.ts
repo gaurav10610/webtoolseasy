@@ -59,6 +59,14 @@ export interface ApplicationConfig {
   tags: string[];
   icons: IconConfig[];
   relatedTools: ApplicationIds[];
+  structuredData?: StructuredDataConfig;
+}
+
+export interface StructuredDataConfig {
+  webApplication?: Record<string, unknown>;
+  breadcrumb?: Record<string, unknown>;
+  organization?: Record<string, unknown>;
+  website?: Record<string, unknown>;
 }
 
 export interface IconConfig {

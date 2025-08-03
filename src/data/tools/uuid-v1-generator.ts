@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v1-generator";
 const pageTitle = "UUID v1 Generator - Generate Time-Based UUIDs";
@@ -62,6 +63,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.GUID_GENERATOR,
     ApplicationIds.JWT_DECODER,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "uuid-v1-generator",
+    pageTitle,
+    mainHeading: "UUID v1 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Based on MAC Address and Time",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [

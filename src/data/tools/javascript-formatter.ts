@@ -1,6 +1,7 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-formatter";
 const pageTitle = "JavaScript Formatter - Beautify & Format JS Code";
@@ -63,6 +64,12 @@ export const componentConfig: ApplicationConfig = {
     ApplicationIds.JSON_FORMATTER,
     ApplicationIds.JSON_VIEWER,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "javascript-formatter",
+    pageTitle,
+    mainHeading: "Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
 export const descriptionData: DescriptionBlock[] = [
