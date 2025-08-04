@@ -58,11 +58,12 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
-  relatedTools: [ApplicationIds.HTML_EDITOR],
+  relatedTools: [ApplicationIds.HTML_EDITOR, ApplicationIds.PYTHON_COMPILER],
   structuredData: createToolStructuredData({
     pageUrl: "javascript-editor",
     pageTitle,
-    mainHeading: "Online JavaScript Editor: Write and Edit JavaScript Code in Your Browser",
+    mainHeading:
+      "Online JavaScript Editor: Write and Edit JavaScript Code in Your Browser",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

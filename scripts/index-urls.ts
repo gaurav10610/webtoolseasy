@@ -76,6 +76,13 @@ const indexUrlsInIndexNow = async () => {
   const host = "webtoolseasy.com";
   const keyLocation = `https://${host}/${indexNowApiKey}.txt`;
 
+  if (!urlsToIndex || urlsToIndex.length === 0) {
+    console.error("No URLs to index");
+    return;
+  }
+
+  console.log("Indexing URLs in IndexNow:", urlsToIndex);
+
   const payload = {
     host,
     key: indexNowApiKey,
@@ -102,5 +109,5 @@ const indexUrlsInIndexNow = async () => {
 };
 
 indexUrlsInIndexNow().then(() => {
-  indexUrlsInGoogle();
+  // indexUrlsInGoogle();
 });

@@ -57,7 +57,7 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
-  relatedTools: [ApplicationIds.JS_EDITOR],
+  relatedTools: [ApplicationIds.JS_EDITOR, ApplicationIds.PYTHON_COMPILER],
   structuredData: createToolStructuredData({
     pageUrl: "html-editor",
     pageTitle,

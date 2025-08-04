@@ -58,11 +58,16 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   icons: [],
-  relatedTools: [ApplicationIds.HTML_EDITOR, ApplicationIds.MARKDOWN_EDITOR],
+  relatedTools: [
+    ApplicationIds.HTML_EDITOR,
+    ApplicationIds.MARKDOWN_EDITOR,
+    ApplicationIds.PYTHON_COMPILER,
+  ],
   structuredData: createToolStructuredData({
     pageUrl: "javascript-compiler",
     pageTitle,
-    mainHeading: "Online JavaScript Compiler: Compile & Run JavaScript in Browser",
+    mainHeading:
+      "Online JavaScript Compiler: Compile & Run JavaScript in Browser",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };
