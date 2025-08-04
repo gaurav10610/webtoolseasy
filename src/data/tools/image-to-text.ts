@@ -5,13 +5,14 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 import { ApplicationIds } from "@/types/config";
 
 const navigationUrl = "/tools/image-to-text";
-const pageTitle = "Image to Text Converter - Free OCR Extract Text";
+const pageTitle = "Free Image to Text Converter | OCR Tool Online";
 const pageDescription =
-  "Extract text from images using free OCR technology. Convert JPG, PNG to editable text instantly. Accurate text recognition for documents and photos.";
+  "Convert images to text instantly with our powerful OCR tool. Extract text from JPG, PNG, JPEG, and other image formats. Free online image to text converter with accurate text recognition. Perfect for digitizing documents, photos, and scanned files.";
+
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-to-text.png`;
 
 const keywords =
-  "image to text,ocr online,extract text from image,photo to text,image text converter,jpg to text,png to text,text recognition";
+  "image to text converter, extract text from image, OCR online free, convert image to text, photo to text converter, picture text extractor, scan to text, JPG to text, PNG to text, image text recognition, document digitization, text extraction tool";
 
 export const metadata: Metadata = {
   alternates: {
@@ -69,7 +70,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "image-to-text",
     pageTitle,
-    mainHeading: "Free Online Image to Text Converter: Extract Text from Images Instantly",
+    mainHeading:
+      "Free Online Image to Text Converter: Extract Text from Images Instantly",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };
