@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import Script from "next/script";
 import CodeIcon from "@mui/icons-material/Code";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
@@ -22,7 +21,6 @@ import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { ButtonWithHandler } from "../lib/buttons";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { CircularProgressWithLabel } from "../lib/progress";
-import { Typography } from "@mui/material";
 import format from "python-format-js";
 
 // Type definitions for Pyodide
@@ -76,36 +74,38 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
   }, [rawCode]);
 
   const [output, setOutput] = useState("");
-  const [pyodideLoading, setPyodideLoading] = useState(true);
+  const [pyodideLoading, setPyodideLoading] = useState(false);
   const [pyodideProgress, setPyodideProgress] = useState(0);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const pyodideRef = useRef<PyodideInterface | null>(null);
 
-  const handleScriptLoad = () => {
-    setScriptLoaded(true);
-  };
-
   const loadPyodide = useCallback(async () => {
-    if (!scriptLoaded || typeof window === "undefined") return;
+    if (pyodideRef.current || pyodideLoading) return;
 
     try {
       setPyodideLoading(true);
+      setPyodideProgress(10);
+      setOutput("Loading Python environment...");
+
+      // Dynamically import pyodide script
+      await new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+
       setPyodideProgress(30);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const pyodide = await (window as any).loadPyodide({
         indexURL: "https://cdn.jsdelivr.net/" + "pyodide/v0.25.0/full/",
-        monitorRunAsync: (msg: string, progress: number | null) => {
-          if (progress != null) {
-            const adjustedProgress = 30 + Math.round(progress * 70);
-            setPyodideProgress(adjustedProgress);
-          }
-        },
       });
 
       pyodideRef.current = pyodide;
       setPyodideLoading(false);
       setPyodideProgress(100);
+      setOutput("Python environment ready! Run your code to see output...");
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
         console.error("Failed to load Pyodide:", error);
@@ -113,58 +113,51 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
       setOutput("Error: Failed to load Python environment");
       setPyodideLoading(false);
     }
-  }, [scriptLoaded]);
-
-  useEffect(() => {
-    loadPyodide();
-  }, [loadPyodide]);
+  }, [pyodideLoading]);
 
   const runCode = useCallback(async () => {
+    // Show loading immediately
+    setOutput("Initializing Python environment...");
+
+    // Load Pyodide on first run
+    if (!pyodideRef.current && !pyodideLoading) {
+      await loadPyodide();
+    }
+
     if (!pyodideRef.current) {
       setOutput("Error: Python environment not ready");
       return;
     }
 
     try {
-      // Clear any previous output
-      setOutput("");
+      setOutput("Running code...");
 
-      // Setup stdout capture and run code in one go to reduce async calls
+      // Simplified Python execution
       const result = await pyodideRef.current.runPythonAsync(`
 import sys
 from io import StringIO
-
-# Redirect stdout to capture print statements
 old_stdout = sys.stdout
-sys.stdout = StringIO()
-
+captured_output = StringIO()
+sys.stdout = captured_output
 try:
-    # Execute user code
-    result = None
-    exec("""${rawCode.replace(/"/g, '\\"').replace(/\n/g, "\\n")}""")
+    exec(${JSON.stringify(rawCode)})
 finally:
-    # Always restore stdout
-    captured = sys.stdout.getvalue()
     sys.stdout = old_stdout
-
-captured
+captured_output.getvalue()
       `);
 
       setOutput(
         String(result).trim() || "Code executed successfully (no output)"
       );
     } catch (error) {
-      // Ensure stdout is restored even on error
       try {
-        await pyodideRef.current.runPythonAsync(
-          "sys.stdout = old_stdout if 'old_stdout' in globals() else sys.stdout"
-        );
+        await pyodideRef.current.runPythonAsync("sys.stdout = sys.__stdout__");
       } catch {
         // Ignore restore errors
       }
       setOutput(`Error: ${error}`);
     }
-  }, [rawCode]);
+  }, [rawCode, pyodideLoading, loadPyodide]);
 
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -223,6 +216,7 @@ captured
     );
   }, [runCode, formatCode, handleTextCopy, handleLinkCopy, isFullScreen]);
 
+  // Simplified editor props
   const editorProps = useMemo(
     () => ({
       language: "python" as const,
@@ -243,11 +237,45 @@ captured
         isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
       }`}
     >
-      <Script
-        src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"
-        strategy="afterInteractive"
-        onLoad={handleScriptLoad}
-      />
+      {/* SEO-friendly hidden content for search engines */}
+      <div className="sr-only" aria-hidden="true">
+        <h1>Online Python Compiler</h1>
+        <p>
+          Free online Python compiler to write and run Python code in your
+          browser. No installation needed.
+        </p>
+        <h2>Example Python Code</h2>
+        <pre>{`print("Hello, World!")
+print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`}</pre>
+        <h2>Example Output</h2>
+        <pre>{`Hello, World!
+This is Online Python Compiler (Interpreter) Offered by WebToolsEasy`}</pre>
+      </div>
+
+      {/* No JavaScript fallback */}
+      <noscript>
+        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
+          <p className="font-bold text-lg">JavaScript Required</p>
+          <p>
+            This Python compiler requires JavaScript to run code in your
+            browser.
+          </p>
+          <p>
+            Please enable JavaScript or use a compatible browser to run Python
+            code interactively.
+          </p>
+          <div className="mt-4">
+            <p className="font-semibold">Example Code:</p>
+            <pre className="bg-gray-100 p-2 rounded">{`print("Hello, World!")
+print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`}</pre>
+            <p className="font-semibold mt-2">Example Output:</p>
+            <pre className="bg-gray-100 p-2 rounded">{`Hello, World!
+This is Online Python Compiler (Interpreter) Offered by WebToolsEasy`}</pre>
+          </div>
+        </div>
+      </noscript>
+
+      {/* Lazy load Pyodide only when needed */}
       <SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
@@ -256,17 +284,13 @@ captured
       />
       {pyodideLoading && (
         <div className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <Typography
-            variant="h6"
-            color="textPrimary"
-            className="font-semibold"
-          >
+          <div className="text-lg font-semibold text-gray-800">
             Loading Python environment...
-          </Typography>
+          </div>
           <CircularProgressWithLabel value={pyodideProgress} />
-          <Typography variant="body2" color="textSecondary">
+          <div className="text-sm text-gray-600">
             Please wait while we initialize the Python runtime
-          </Typography>
+          </div>
         </div>
       )}
       <ControlButtons />
@@ -282,13 +306,7 @@ captured
           className="w-[80%] md:w-[49%]"
         />
         <div className="flex flex-col justify-end h-full gap-2 w-[80%] md:w-[49%]">
-          <Typography
-            variant="body1"
-            color="textSecondary"
-            className="!text-xl !font-semibold"
-          >
-            Output
-          </Typography>
+          <div className="text-xl font-semibold text-gray-700">Output</div>
           <div className="w-full h-full overflow-auto p-3 bg-gray-100 border-2 border-gray-300 rounded font-mono text-sm whitespace-pre-wrap">
             {output || "Run your Python code to see output here..."}
           </div>
