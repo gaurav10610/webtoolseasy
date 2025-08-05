@@ -1,122 +1,150 @@
 "use client";
 
+import { useState, useCallback, useMemo } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import { useState } from "react";
 import rehypeSanitize from "rehype-sanitize";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
 import DownloadIcon from "@mui/icons-material/Download";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
 import { ToolComponentProps } from "@/types/component";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { usePathname } from "next/navigation";
+import { useToolState } from "@/hooks/useToolState";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 export default function MarkdownEditor({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `
-- ***Online Markdown Editor***
-- ***ReadME Editor***
-- ***GitHub ReadME***
-- ***Bitbucket ReadME***  
+  const initialValue = `# Markdown Editor - WebToolsEasy
 
-[WebToolsEasy](https://webtoolseasy.com) - Free web tools to make work super easy
-  `;
+## Features ✨
+- **Real-time preview** of your markdown
+- **Syntax highlighting** for better readability
+- **Export to README.md** file
+- **Shareable links** for collaboration
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+## Getting Started 🚀
 
-  const [rawCode, setRawCode] = useState<string | undefined>(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
+### Basic Syntax
+- ***Bold italic text***
+- **Bold text**
+- *Italic text*
+- \`inline code\`
+- [Links](https://webtoolseasy.com)
+
+### Code Blocks
+\`\`\`javascript
+// JavaScript example
+function hello() {
+    console.log("Hello from WebToolsEasy!");
+}
+\`\`\`
+
+### Lists
+1. Numbered lists
+2. Are easy to create
+   - Nested items
+   - Work perfectly
+
+### Tables
+| Feature | Status |
+|---------|--------|
+| Editor  | ✅ Ready |
+| Preview | ✅ Live  |
+| Export  | ✅ Works |
+
+> **Tip:** This editor supports GitHub-flavored markdown!
+
+---
+
+*Created with [WebToolsEasy](https://webtoolseasy.com) - Free tools to make work super easy* 🛠️`;
+
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
+
+  const [markdownContent, setMarkdownContent] = useState<string | undefined>(
+    toolState.code
   );
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const handleMarkdownChange = useCallback(
+    (value?: string) => {
+      setMarkdownContent(value);
+      toolState.setCode(value || "");
+    },
+    [toolState]
+  );
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+  const copyMarkdown = useCallback(() => {
+    toolState.actions.copyText(
+      markdownContent || "",
+      "Markdown copied to clipboard!"
+    );
+  }, [toolState.actions, markdownContent]);
 
-  const handleTextCopy = () => {
-    copyToClipboard(rawCode!);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
-
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode!).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
-
-  const handleDownloadTextFile = () => {
+  const downloadReadme = useCallback(() => {
     const element = document.createElement("a");
-    const file = new Blob([rawCode!], { type: "plain/text" });
+    const file = new Blob([markdownContent || ""], { type: "text/markdown" });
     element.href = URL.createObjectURL(file);
     element.download = "README.md";
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-  };
+    toolState.actions.showMessage("README.md downloaded successfully!");
+  }, [markdownContent, toolState.actions]);
 
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Copy Markdown"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Download ReadME File"
-          variant="outlined"
-          size="small"
-          startIcon={<DownloadIcon />}
-          onClick={handleDownloadTextFile}
-        />
-      </div>
-    );
-  }
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      ...createCommonButtons({
+        onCopy: copyMarkdown,
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+      {
+        type: "custom" as const,
+        text: "Download README.md",
+        onClick: downloadReadme,
+        icon: <DownloadIcon />,
+        variant: "outlined" as const,
+      },
+    ],
+    [copyMarkdown, downloadReadme, toolState]
+  );
 
   return (
-    <div className="flex flex-col gap-3">
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
+    >
+      <SEOContent
+        title="Markdown Editor"
+        description="Online markdown editor with live preview. Create README files, documentation, and GitHub-flavored markdown with real-time preview."
+        exampleCode={initialValue}
+        exampleOutput="Live markdown preview with GitHub-flavored syntax support"
       />
-      <ControlButtons />
-      <div className="w-full h-[20rem] md:h-[30rem]">
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <div
+        className={`w-full h-[20rem] md:h-[30rem] ${
+          toolState.isFullScreen ? "md:h-full" : ""
+        }`}
+      >
         <MDEditor
-          value={rawCode}
-          onChange={setRawCode}
+          value={markdownContent}
+          onChange={handleMarkdownChange}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],
           }}
-          height={"100%"}
+          height="100%"
+          data-color-mode="light"
         />
       </div>
-    </div>
+    </ToolLayout>
   );
 }

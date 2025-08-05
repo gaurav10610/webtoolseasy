@@ -1,234 +1,323 @@
 "use client";
 
-import { ToolComponentProps } from "@/types/component";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import IFrameWithLabel from "../iFrame";
-import { ButtonWithHandler } from "../lib/buttons";
+import React, { useState, useCallback } from "react";
+import { Typography, Button, Alert } from "@mui/material";
 import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { CodeEditorPropsV2 } from "../lib/editor";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
-import { html_beautify } from "js-beautify";
-import CodeIcon from "@mui/icons-material/Code";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+  Save,
+  ContentCopy,
+  Refresh,
+  Download,
+  Fullscreen,
+} from "@mui/icons-material";
+import { ToolLayout } from "../common/ToolLayout";
+import dynamic from "next/dynamic";
 
-export default function JavascriptEditor({
-  hostname,
-  queryParams,
-}: Readonly<ToolComponentProps>) {
-  const initialValue = `
-<!DOCTYPE html>
-  <html>
-  <head>
-      <title>Page Title</title>
-  </head>
-  <body>
-      <h1>This is an Online HTML Editor</h1>
-      <p style="color:red">
-          WebToolsEasy is awesome. Explore more such free tools.
-      </p>
-      <p id="js-demo"></p>
-      <script>
-          let a = 5;
-          let b = 6;
-          let c = a + b + 10;
-          document
-              .getElementById("js-demo")
-              .innerHTML = "The value of c is: " + c;
-      </script>
-  </body>
-  </html>
-    `;
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+});
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+interface JavaScriptEditorState {
+  code: string;
+  isFullScreen: boolean;
+  error: string;
+}
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+const DEFAULT_JS_CODE = `// JavaScript Editor
+// Write your JavaScript code here
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
+/**
+ * Calculate the factorial of a number
+ * @param {number} n - The number to calculate factorial for
+ * @returns {number} The factorial result
+ */
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+// Example usage
+console.log("Factorial of 5:", factorial(5));
+
+/**
+ * Generate Fibonacci sequence
+ * @param {number} count - Number of Fibonacci numbers to generate
+ * @returns {number[]} Array of Fibonacci numbers
+ */
+function fibonacci(count) {
+  if (count <= 0) return [];
+  if (count === 1) return [0];
+  if (count === 2) return [0, 1];
+  
+  const sequence = [0, 1];
+  for (let i = 2; i < count; i++) {
+    sequence[i] = sequence[i - 1] + sequence[i - 2];
+  }
+  return sequence;
+}
+
+// Example usage
+console.log("First 10 Fibonacci numbers:", fibonacci(10));
+
+/**
+ * Check if a string is a palindrome
+ * @param {string} str - The string to check
+ * @returns {boolean} True if palindrome, false otherwise
+ */
+function isPalindrome(str) {
+  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return cleaned === cleaned.split('').reverse().join('');
+}
+
+// Example usage
+console.log("Is 'racecar' a palindrome?", isPalindrome("racecar"));
+console.log("Is 'hello' a palindrome?", isPalindrome("hello"));
+
+/**
+ * Sort an array of objects by a property
+ * @param {Array} array - Array to sort
+ * @param {string} property - Property to sort by
+ * @param {string} order - Sort order ('asc' or 'desc')
+ * @returns {Array} Sorted array
+ */
+function sortByProperty(array, property, order = 'asc') {
+  return array.sort((a, b) => {
+    const aVal = a[property];
+    const bVal = b[property];
+    
+    if (order === 'asc') {
+      return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+    } else {
+      return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+    }
+  });
+}
+
+// Example usage
+const users = [
+  { name: "Alice", age: 30 },
+  { name: "Bob", age: 25 },
+  { name: "Charlie", age: 35 }
+];
+
+console.log("Users sorted by age:", sortByProperty([...users], 'age'));
+console.log("Users sorted by name:", sortByProperty([...users], 'name'));
+
+/**
+ * Debounce function to limit execution frequency
+ * @param {Function} func - Function to debounce
+ * @param {number} delay - Delay in milliseconds
+ * @returns {Function} Debounced function
+ */
+function debounce(func, delay) {
+  let timeoutId;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
   };
+}
 
-  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorPropsV2>({
-    language: "html",
-    value: rawCode,
-    onChange: onRawCodeChange,
-    editorOptions: {
-      wordWrap: "on",
-    },
-    className: "w-full h-full",
+// Example usage
+const debouncedLog = debounce((message) => {
+  console.log("Debounced:", message);
+}, 1000);
+
+// This will only log once after 1 second
+debouncedLog("Hello");
+debouncedLog("World");
+debouncedLog("!"); // Only this will execute`;
+
+export default function JavaScriptEditor() {
+  const [state, setState] = useState<JavaScriptEditorState>({
+    code: DEFAULT_JS_CODE,
+    isFullScreen: false,
+    error: "",
   });
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [snackBar, setSnackBar] = useState({
+    open: false,
+    message: "",
+  });
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+  const showMessage = useCallback((message: string) => {
+    setSnackBar({ open: true, message });
+  }, []);
 
-  const handleTextCopy = () => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
+  const handleCodeChange = useCallback((value: string | undefined) => {
+    setState((prev) => ({ ...prev, code: value || "", error: "" }));
+  }, []);
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
+  const saveCode = useCallback(() => {
+    localStorage.setItem("javascript-editor-code", state.code);
+    showMessage("Code saved to local storage!");
+  }, [state.code, showMessage]);
+
+  const copyCode = useCallback(() => {
+    navigator.clipboard.writeText(state.code);
+    showMessage("Code copied to clipboard!");
+  }, [state.code, showMessage]);
+
+  const downloadCode = useCallback(() => {
+    const blob = new Blob([state.code], { type: "text/javascript" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "script.js";
+    a.click();
+    URL.revokeObjectURL(url);
+    showMessage("Code downloaded as script.js!");
+  }, [state.code, showMessage]);
+
+  const toggleFullScreen = useCallback(() => {
+    setState((prev) => ({ ...prev, isFullScreen: !prev.isFullScreen }));
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setState({
+      code: DEFAULT_JS_CODE,
+      isFullScreen: false,
+      error: "",
     });
-  };
+  }, []);
 
-  const handleFontSizeChange = (event: SelectChangeEvent<number>) => {
-    setCodeEditorProps({
-      ...codeEditorProps,
-      editorOptions: {
-        ...codeEditorProps.editorOptions,
-        fontSize: event.target.value as number,
-      },
-    });
-  };
+  const validateSyntax = useCallback(() => {
+    try {
+      // Basic syntax validation using Function constructor
+      new Function(state.code);
+      setState((prev) => ({ ...prev, error: "" }));
+      showMessage("✓ JavaScript syntax is valid!");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      setState((prev) => ({ ...prev, error: errorMessage }));
+    }
+  }, [state.code, showMessage]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const CodeEditorOptions = () => {
-    return (
-      <div className="flex flex-row w-full">
-        <FormControl
-          variant="outlined"
-          size="small"
-          classes={{ root: "w-full md:w-1/5" }}
-        >
-          <InputLabel id="font-size-label">Font Size</InputLabel>
-          <Select
-            labelId="font-size-label"
-            id="font-size"
-            value={14}
-            onChange={handleFontSizeChange}
-            label="Font Size"
-            color="primary"
-          >
-            {[10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-  };
+  // Load saved code on mount
+  React.useEffect(() => {
+    const savedCode = localStorage.getItem("javascript-editor-code");
+    if (savedCode) {
+      setState((prev) => ({ ...prev, code: savedCode }));
+    }
+  }, []);
 
-  const formatCode = () => {
-    setRawCode(
-      html_beautify(rawCode, {
-        indent_size: 10,
-        wrap_line_length: 80,
-      })
-    );
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          size="small"
-          startIcon={<CodeIcon />}
-          onClick={formatCode}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Text"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+  const editorHeight = state.isFullScreen ? "calc(100vh - 200px)" : "600px";
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={state.isFullScreen}
+      snackBar={{
+        open: snackBar.open,
+        message: snackBar.message,
+        onClose: () => setSnackBar((prev) => ({ ...prev, open: false })),
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
-      />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={codeEditorProps}
-          themeOption="vs-dark"
-          editorHeading="HTML Code"
-          className="w-[80%] md:w-[49%]"
-        />
+      <div className="space-y-4">
+        <div>
+          <Typography variant="h5" gutterBottom>
+            JavaScript Editor
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Write, edit, and validate JavaScript code with syntax highlighting
+          </Typography>
+        </div>
 
-        <IFrameWithLabel
-          iFrameSourceDoc={rawCode}
-          heading="HTML Preview"
-          className="w-[80%] md:w-[49%]"
-        />
+        {/* Controls */}
+        <div className="flex gap-2 flex-wrap">
+          <Button variant="contained" startIcon={<Save />} onClick={saveCode}>
+            Save
+          </Button>
+          <Button startIcon={<ContentCopy />} onClick={copyCode}>
+            Copy Code
+          </Button>
+          <Button startIcon={<Download />} onClick={downloadCode}>
+            Download
+          </Button>
+          <Button onClick={validateSyntax}>Validate Syntax</Button>
+          <Button startIcon={<Fullscreen />} onClick={toggleFullScreen}>
+            {state.isFullScreen ? "Exit" : "Full Screen"}
+          </Button>
+          <Button startIcon={<Refresh />} onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
+
+        {/* Error Display */}
+        {state.error && (
+          <Alert severity="error">
+            <Typography variant="body2">
+              <strong>Syntax Error:</strong> {state.error}
+            </Typography>
+          </Alert>
+        )}
+
+        {/* Code Editor */}
+        <div className="border rounded-lg overflow-hidden">
+          <MonacoEditor
+            height={editorHeight}
+            defaultLanguage="javascript"
+            value={state.code}
+            onChange={handleCodeChange}
+            options={{
+              fontSize: 14,
+              wordWrap: "on",
+              minimap: { enabled: true },
+              scrollBeyondLastLine: false,
+              formatOnPaste: true,
+              formatOnType: true,
+              automaticLayout: true,
+              suggestOnTriggerCharacters: true,
+              acceptSuggestionOnEnter: "on",
+              tabCompletion: "on",
+              quickSuggestions: true,
+              folding: true,
+              lineNumbers: "on",
+              renderLineHighlight: "line",
+              selectOnLineNumbers: true,
+              roundedSelection: false,
+              readOnly: false,
+              cursorStyle: "line",
+              mouseWheelZoom: true,
+            }}
+          />
+        </div>
+
+        {/* Code Statistics */}
+        <div className="bg-gray-50 p-3 rounded-lg">
+          <Typography variant="subtitle2" gutterBottom>
+            Code Statistics
+          </Typography>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <span className="text-gray-600">Characters:</span>
+              <span className="ml-2 font-mono">
+                {state.code.length.toLocaleString()}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-600">Lines:</span>
+              <span className="ml-2 font-mono">
+                {state.code.split("\n").length}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-600">Words:</span>
+              <span className="ml-2 font-mono">
+                {
+                  state.code.split(/\s+/).filter((word) => word.length > 0)
+                    .length
+                }
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-600">Size:</span>
+              <span className="ml-2 font-mono">
+                {new Blob([state.code]).size} bytes
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </ToolLayout>
   );
 }

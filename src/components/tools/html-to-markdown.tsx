@@ -1,220 +1,281 @@
 "use client";
 
-import React, { useState } from "react";
-import { ButtonWithHandler } from "../lib/buttons";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import {
-  ContentCopy,
-  Link as LinkIcon,
-  OpenInFull as OpenInFullIcon,
-  CloseFullscreen as CloseFullscreenIcon,
-  SwapHoriz as SwapHorizIcon,
-} from "@mui/icons-material";
-import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Typography } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CodeIcon from "@mui/icons-material/Code";
-import { usePathname } from "next/navigation";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import TurndownService from "turndown";
-import { ToolComponentProps } from "@/types/component";
+import React, { useState, useCallback } from "react";
+import { Typography, Button } from "@mui/material";
+import { Transform, ContentCopy, Refresh } from "@mui/icons-material";
+import { ToolLayout } from "../common/ToolLayout";
+import dynamic from "next/dynamic";
 
-const turndownService = new TurndownService();
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+});
 
-function htmlToMarkdown(html: string): string {
-  return turndownService.turndown(html);
+// Lazy load TurndownService for HTML to Markdown conversion
+const loadTurndown = () => import("turndown");
+
+interface HtmlToMarkdownState {
+  htmlInput: string;
+  markdownOutput: string;
+  isConverting: boolean;
+  error: string;
 }
 
-export default function HtmlToMarkdown({
-  hostname,
-  queryParams,
-}: Readonly<ToolComponentProps>) {
-  const initialValue = `<!DOCTYPE html>
+const DEFAULT_HTML = `<!DOCTYPE html>
 <html>
 <head>
-    <title>Page Title</title>
+    <title>Sample Document</title>
 </head>
 <body>
-    <h1>This is an Online HTML Editor</h1>
-    <p style="color:red">
-        WebToolsEasy is Great. Explore more such free tools.
-    </p>
+    <h1>Welcome to HTML to Markdown Converter</h1>
+    
+    <p>This tool converts <strong>HTML</strong> content to <em>Markdown</em> format.</p>
+    
+    <h2>Features</h2>
+    <ul>
+        <li>Converts headings (h1-h6)</li>
+        <li>Handles <strong>bold</strong> and <em>italic</em> text</li>
+        <li>Preserves <a href="https://example.com">links</a></li>
+        <li>Converts lists and tables</li>
+        <li>Maintains code blocks</li>
+    </ul>
+    
+    <h3>Code Example</h3>
+    <pre><code>function hello() {
+    console.log("Hello, World!");
+}</code></pre>
+    
+    <blockquote>
+        <p>This is a blockquote that will be converted to Markdown format.</p>
+    </blockquote>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Header 1</th>
+                <th>Header 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Cell 1</td>
+                <td>Cell 2</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+export default function HtmlToMarkdown() {
+  const [state, setState] = useState<HtmlToMarkdownState>({
+    htmlInput: DEFAULT_HTML,
+    markdownOutput: "",
+    isConverting: false,
+    error: "",
+  });
 
-  const [html, setHtml] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+  const [snackBar, setSnackBar] = useState({
+    open: false,
+    message: "",
+  });
 
-  const [markdown, setMarkdown] = useState("");
-  const [showPreview, setShowPreview] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const showMessage = useCallback((message: string) => {
+    setSnackBar({ open: true, message });
+  }, []);
 
-  const handleConvert = () => {
+  const convertToMarkdown = useCallback(async () => {
+    setState((prev) => ({ ...prev, isConverting: true, error: "" }));
+
     try {
-      const md = htmlToMarkdown(html);
-      setMarkdown(md);
-      setSnackBarMessage("HTML converted to Markdown successfully!");
-      setIsSnackBarOpen(true);
-    } catch (e) {
-      console.error("Conversion error:", e);
-      setSnackBarMessage("Invalid HTML input.");
-      setIsSnackBarOpen(true);
+      const TurndownService = (await loadTurndown()).default;
+      const turndownService = new TurndownService({
+        headingStyle: "atx",
+        codeBlockStyle: "fenced",
+        bulletListMarker: "-",
+      });
+
+      // Custom rules for better conversion
+      turndownService.addRule("strikethrough", {
+        filter: ["del", "s"],
+        replacement: (content) => `~~${content}~~`,
+      });
+
+      turndownService.addRule("highlight", {
+        filter: ["mark"],
+        replacement: (content) => `==${content}==`,
+      });
+
+      const markdown = turndownService.turndown(state.htmlInput);
+
+      setState((prev) => ({
+        ...prev,
+        markdownOutput: markdown,
+        isConverting: false,
+      }));
+
+      showMessage("HTML converted to Markdown successfully!");
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        error: `Conversion failed: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        isConverting: false,
+      }));
     }
-  };
+  }, [state.htmlInput, showMessage]);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(markdown);
-    setSnackBarMessage("Markdown copied!");
-    setIsSnackBarOpen(true);
-  };
+  const copyMarkdown = useCallback(() => {
+    navigator.clipboard.writeText(state.markdownOutput);
+    showMessage("Markdown copied to clipboard!");
+  }, [state.markdownOutput, showMessage]);
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(html).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
+  const handleReset = useCallback(() => {
+    setState({
+      htmlInput: DEFAULT_HTML,
+      markdownOutput: "",
+      isConverting: false,
+      error: "",
     });
-  };
+  }, []);
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        <ButtonWithHandler
-          buttonText="Convert"
-          variant="contained"
-          onClick={handleConvert}
-          size="small"
-          startIcon={<SwapHorizIcon />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Markdown"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopy />}
-          onClick={handleCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        <ButtonWithHandler
-          buttonText={showPreview ? "Markdown Output" : "Preview Markdown"}
-          variant="outlined"
-          size="small"
-          startIcon={showPreview ? <CodeIcon /> : <VisibilityIcon />}
-          onClick={() => setShowPreview((prev) => !prev)}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+  // Auto-convert on mount
+  React.useEffect(() => {
+    convertToMarkdown();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      snackBar={{
+        open: snackBar.open,
+        message: snackBar.message,
+        onClose: () => setSnackBar((prev) => ({ ...prev, open: false })),
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
-      />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "html",
-            value: html,
-            onChange: setHtml,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="HTML Input"
-          className="w-[80%] md:w-[49%]"
-        />
-        {!showPreview ? (
-          <SingleCodeEditorWithHeaderV2
-            codeEditorProps={{
-              language: "markdown",
-              value: markdown,
-              onChange: () => {},
-              editorOptions: {
-                readOnly: true,
-              },
-              className: "w-full h-full",
-            }}
-            themeOption="vs-dark"
-            editorHeading="Markdown Output"
-            className="w-[80%] md:w-[49%]"
-          />
-        ) : (
-          <div className="w-[80%] md:w-[49%] h-full flex flex-col gap-2 justify-end">
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              className="!text-xl !font-semibold flex items-center"
-            >
-              <VisibilityIcon className="mr-2 text-gray-500" fontSize="small" />
-              Markdown Preview
+      <div className="space-y-4">
+        <div>
+          <Typography variant="h5" gutterBottom>
+            HTML to Markdown Converter
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Convert HTML content to clean Markdown format
+          </Typography>
+        </div>
+
+        {/* Controls */}
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            variant="contained"
+            startIcon={<Transform />}
+            onClick={convertToMarkdown}
+            disabled={state.isConverting}
+          >
+            {state.isConverting ? "Converting..." : "Convert to Markdown"}
+          </Button>
+          <Button
+            startIcon={<ContentCopy />}
+            onClick={copyMarkdown}
+            disabled={!state.markdownOutput}
+          >
+            Copy Markdown
+          </Button>
+          <Button startIcon={<Refresh />} onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
+
+        {/* Error Display */}
+        {state.error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <Typography variant="body2" color="error">
+              {state.error}
             </Typography>
-            <div className="flex-1 overflow-auto bg-white border-2 border-gray-300 rounded-md p-4 prose max-w-none">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {markdown}
-              </ReactMarkdown>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* HTML Input */}
+          <div className="space-y-2">
+            <Typography variant="h6">HTML Input</Typography>
+            <div className="border rounded-lg overflow-hidden">
+              <MonacoEditor
+                height="500px"
+                defaultLanguage="html"
+                value={state.htmlInput}
+                onChange={(value: string | undefined) =>
+                  setState((prev) => ({ ...prev, htmlInput: value || "" }))
+                }
+                options={{
+                  fontSize: 14,
+                  wordWrap: "on",
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                  formatOnPaste: true,
+                  formatOnType: true,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Markdown Output */}
+          <div className="space-y-2">
+            <Typography variant="h6">Markdown Output</Typography>
+            <div className="border rounded-lg overflow-hidden">
+              <MonacoEditor
+                height="500px"
+                defaultLanguage="markdown"
+                value={state.markdownOutput}
+                options={{
+                  fontSize: 14,
+                  wordWrap: "on",
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                  readOnly: true,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Statistics */}
+        {state.markdownOutput && (
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <Typography variant="subtitle2" gutterBottom>
+              Conversion Statistics
+            </Typography>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div>
+                <span className="text-gray-600">HTML Size:</span>
+                <span className="ml-2 font-mono">
+                  {state.htmlInput.length} chars
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-600">Markdown Size:</span>
+                <span className="ml-2 font-mono">
+                  {state.markdownOutput.length} chars
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-600">Reduction:</span>
+                <span className="ml-2 font-mono">
+                  {Math.round(
+                    (1 - state.markdownOutput.length / state.htmlInput.length) *
+                      100
+                  )}
+                  %
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-600">Lines:</span>
+                <span className="ml-2 font-mono">
+                  {state.markdownOutput.split("\n").length}
+                </span>
+              </div>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </ToolLayout>
   );
 }

@@ -1,374 +1,235 @@
 "use client";
 
-import { ToolComponentProps } from "@/types/component";
-import {
-  decodeText,
-  copyToClipboard,
-  compressStringToBase64,
-  encodeText,
-} from "@/util/commonUtils";
-import CodeIcon from "@mui/icons-material/Code";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import {
-  SelectChangeEvent,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { js_beautify } from "js-beautify";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import IFrameWithLabel from "../iFrame";
-import { ButtonWithHandler } from "../lib/buttons";
-import { CodeEditorPropsV2 } from "../lib/editor";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import React, { useState, useCallback } from "react";
+import { Typography, Button } from "@mui/material";
+import { PlayArrow, ContentCopy, Refresh } from "@mui/icons-material";
+import { ToolLayout } from "../common/ToolLayout";
+import dynamic from "next/dynamic";
 
-export default function JavascriptCompiler({
-  hostname,
-  queryParams,
-}: Readonly<ToolComponentProps>) {
-  const getHtmlTemplate = (jsCode: string) => {
-    return `
-  <!DOCTYPE html>
-  <html>
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+});
 
-  <head>
-      <title>Page Title</title>
-  </head>
+interface JavaScriptCompilerState {
+  code: string;
+  output: string;
+  isExecuting: boolean;
+}
 
-  <body>
-      <script>
-          window.console.log = function(arg, ...optionalParams) {
-              let par = document.createElement("p");
-              if (optionalParams) {
-                  let newText = '';
-                  if (Array.isArray(optionalParams)) {
-                      for (let i = 0; i < optionalParams.length; i++) {
-                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
-                      }
-                  } else {
-                      newText = JSON.stringify(optionalParams)
-                  }
+const DEFAULT_JS_CODE = `// JavaScript Compiler & Executor
+// Write your JavaScript code here and click "Run Code" to execute
 
-                  arg = arg + " " + newText;
-              }
-              let text = document.createTextNode(arg);
-              par.appendChild(text);
-              document.body.appendChild(par);
-          };
+// Example: Simple calculation
+const numbers = [1, 2, 3, 4, 5];
+const sum = numbers.reduce((acc, num) => acc + num, 0);
+console.log("Sum:", sum);
 
-          window.console.debug = function(arg, ...optionalParams) {
-              let par = document.createElement("p");
-              if (optionalParams) {
-                  let newText = '';
-                  if (Array.isArray(optionalParams)) {
-                      for (let i = 0; i < optionalParams.length; i++) {
-                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
-                      }
-                  } else {
-                      newText = JSON.stringify(optionalParams)
-                  }
-
-                  arg = arg + " " + newText;
-              }
-              let text = document.createTextNode(arg);
-              par.appendChild(text);
-              document.body.appendChild(par);
-          };
-
-          window.console.error = function(arg, ...optionalParams) {
-              let par = document.createElement("p");
-              if (optionalParams) {
-                  let newText = '';
-                  if (Array.isArray(optionalParams)) {
-                      for (let i = 0; i < optionalParams.length; i++) {
-                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
-                      }
-                  } else {
-                      newText = JSON.stringify(optionalParams)
-                  }
-
-                  arg = arg + " " + newText;
-              }
-              let text = document.createTextNode(arg);
-              par.appendChild(text);
-              document.body.appendChild(par);
-          };
-
-          window.console.info = function(arg, ...optionalParams) {
-              let par = document.createElement("p");
-              if (optionalParams) {
-                  let newText = '';
-                  if (Array.isArray(optionalParams)) {
-                      for (let i = 0; i < optionalParams.length; i++) {
-                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
-                      }
-                  } else {
-                      newText = JSON.stringify(optionalParams)
-                  }
-
-                  arg = arg + " " + newText;
-              }
-              let text = document.createTextNode(arg);
-              par.appendChild(text);
-              document.body.appendChild(par);
-          };
-
-          window.console.trace = function(arg, ...optionalParams) {
-              let par = document.createElement("p");
-              if (optionalParams) {
-                  let newText = '';
-                  if (Array.isArray(optionalParams)) {
-                      for (let i = 0; i < optionalParams.length; i++) {
-                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
-                      }
-                  } else {
-                      newText = JSON.stringify(optionalParams)
-                  }
-
-                  arg = arg + " " + newText;
-              }
-              let text = document.createTextNode(arg);
-              par.appendChild(text);
-              document.body.appendChild(par);
-          };
-
-          window.console.warn = function(arg, ...optionalParams) {
-              let par = document.createElement("p");
-              if (optionalParams) {
-                  let newText = '';
-                  if (Array.isArray(optionalParams)) {
-                      for (let i = 0; i < optionalParams.length; i++) {
-                          newText = newText + ' ' + JSON.stringify(optionalParams[i]);
-                      }
-                  } else {
-                      newText = JSON.stringify(optionalParams)
-                  }
-
-                  arg = arg + " " + newText;
-              }
-              let text = document.createTextNode(arg);
-              par.appendChild(text);
-              document.body.appendChild(par);
-          };
-
-          try {
-              ${jsCode}
-          } catch (error) {
-              console.log(error);
-              console.log(error.stack);
-          }
-      </script>
-  </body>
-
-  </html>
-        `;
-  };
-
-  const initialValue = `
-  /**
-   * This is an Online Javascript Compiler offered by WebToolsEasy
-   */
-  const obj = {
-      appName: 'WebToolsEasy'
+// Example: Working with objects
+const person = {
+  name: "John Doe",
+  age: 30,
+  greet() {
+    return \`Hello, I'm \${this.name} and I'm \${this.age} years old.\`;
   }
-  
-  console.log("Welcome to WebToolsEasy!", obj);
-  `;
+};
+console.log(person.greet());
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+// Example: Async function
+async function fetchData() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve("Data fetched successfully!");
+    }, 1000);
+  });
+}
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+// Run the async function
+fetchData().then(result => console.log(result));
+`;
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
-
-  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorPropsV2>({
-    language: "javascript",
-    value: rawCode,
-    onChange: onRawCodeChange,
-    editorOptions: {
-      wordWrap: "on",
-    },
-    className: "w-full h-full",
+export default function JavaScriptCompiler() {
+  const [state, setState] = useState<JavaScriptCompilerState>({
+    code: DEFAULT_JS_CODE,
+    output: "",
+    isExecuting: false,
   });
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [snackBar, setSnackBar] = useState({
+    open: false,
+    message: "",
+  });
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+  const showMessage = useCallback((message: string) => {
+    setSnackBar({ open: true, message });
+  }, []);
 
-  const handleTextCopy = () => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
+  const executeCode = useCallback(async () => {
+    setState((prev) => ({ ...prev, isExecuting: true, output: "" }));
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
+    try {
+      // Create a safe execution environment
+      const originalLog = console.log;
+      const originalError = console.error;
+      const originalWarn = console.warn;
+
+      let output = "";
+
+      // Override console methods to capture output
+      console.log = (...args) => {
+        output +=
+          args
+            .map((arg) =>
+              typeof arg === "object"
+                ? JSON.stringify(arg, null, 2)
+                : String(arg)
+            )
+            .join(" ") + "\n";
+      };
+
+      console.error = (...args) => {
+        output += "Error: " + args.map((arg) => String(arg)).join(" ") + "\n";
+      };
+
+      console.warn = (...args) => {
+        output += "Warning: " + args.map((arg) => String(arg)).join(" ") + "\n";
+      };
+
+      try {
+        // Execute the code with some safety measures
+        const result = await (async () => {
+          return eval(`(async () => {
+            ${state.code}
+          })()`);
+        })();
+
+        if (result !== undefined) {
+          output +=
+            "Return value: " +
+            (typeof result === "object"
+              ? JSON.stringify(result, null, 2)
+              : String(result)) +
+            "\n";
+        }
+      } catch (error) {
+        output += `Runtime Error: ${
+          error instanceof Error ? error.message : String(error)
+        }\n`;
+      }
+
+      // Restore original console methods
+      console.log = originalLog;
+      console.error = originalError;
+      console.warn = originalWarn;
+
+      setState((prev) => ({
+        ...prev,
+        output: output || "Code executed successfully (no output)",
+      }));
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        output: `Execution Error: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      }));
+    } finally {
+      setState((prev) => ({ ...prev, isExecuting: false }));
+    }
+  }, [state.code]);
+
+  const copyOutput = useCallback(() => {
+    navigator.clipboard.writeText(state.output);
+    showMessage("Output copied to clipboard!");
+  }, [state.output, showMessage]);
+
+  const handleReset = useCallback(() => {
+    setState({
+      code: DEFAULT_JS_CODE,
+      output: "",
+      isExecuting: false,
     });
-  };
-
-  const handleFontSizeChange = (event: SelectChangeEvent<number>) => {
-    setCodeEditorProps({
-      ...codeEditorProps,
-      editorOptions: {
-        ...codeEditorProps.editorOptions,
-        fontSize: event.target.value as number,
-      },
-    });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const CodeEditorOptions = () => {
-    return (
-      <div className="flex flex-row w-full">
-        <FormControl
-          variant="outlined"
-          size="small"
-          classes={{ root: "w-full md:w-1/5" }}
-        >
-          <InputLabel id="font-size-label">Font Size</InputLabel>
-          <Select
-            labelId="font-size-label"
-            id="font-size"
-            value={14}
-            onChange={handleFontSizeChange}
-            label="Font Size"
-            color="primary"
-          >
-            {[10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-  };
-
-  const formatCode = () => {
-    setRawCode(
-      js_beautify(rawCode, {
-        indent_size: 10,
-        wrap_line_length: 80,
-      })
-    );
-  };
-
-  const [iFrameSourceCode, setIFrameSourceCode] = useState(
-    getHtmlTemplate(rawCode)
-  );
-
-  const runCode = () => {
-    setIFrameSourceCode(getHtmlTemplate(rawCode));
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Run Code"
-          variant="contained"
-          size="small"
-          startIcon={<PlayArrowIcon />}
-          onClick={runCode}
-        />
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="outlined"
-          size="small"
-          startIcon={<CodeIcon />}
-          onClick={formatCode}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Text"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+  }, []);
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      snackBar={{
+        open: snackBar.open,
+        message: snackBar.message,
+        onClose: () => setSnackBar((prev) => ({ ...prev, open: false })),
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
-      />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={codeEditorProps}
-          themeOption="vs-dark"
-          editorHeading="Javascript Code"
-          className="w-[80%] md:w-[49%]"
-        />
-        <IFrameWithLabel
-          iFrameSourceDoc={iFrameSourceCode}
-          heading="Console Output"
-          className="w-[80%] md:w-[49%]"
-        />
+      <div className="space-y-4">
+        <div>
+          <Typography variant="h5" gutterBottom>
+            JavaScript Compiler
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Write and execute JavaScript code with real-time output
+          </Typography>
+        </div>
+
+        {/* Controls */}
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            variant="contained"
+            startIcon={<PlayArrow />}
+            onClick={executeCode}
+            disabled={state.isExecuting}
+          >
+            {state.isExecuting ? "Running..." : "Run Code"}
+          </Button>
+          <Button
+            startIcon={<ContentCopy />}
+            onClick={copyOutput}
+            disabled={!state.output}
+          >
+            Copy Output
+          </Button>
+          <Button startIcon={<Refresh />} onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Code Editor */}
+          <div className="space-y-2">
+            <Typography variant="h6">JavaScript Code</Typography>
+            <div className="border rounded-lg overflow-hidden">
+              <MonacoEditor
+                height="400px"
+                defaultLanguage="javascript"
+                value={state.code}
+                onChange={(value: string | undefined) =>
+                  setState((prev) => ({ ...prev, code: value || "" }))
+                }
+                options={{
+                  fontSize: 14,
+                  wordWrap: "on",
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Output Panel */}
+          <div className="space-y-2">
+            <Typography variant="h6">Output</Typography>
+            <div className="border rounded-lg p-4 bg-gray-50 min-h-[400px] font-mono text-sm whitespace-pre-wrap overflow-auto">
+              {state.isExecuting ? (
+                <div className="text-blue-600">Executing code...</div>
+              ) : state.output ? (
+                state.output
+              ) : (
+                <div className="text-gray-500">
+                  Click &quot;Run Code&quot; to see output here
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </ToolLayout>
   );
 }

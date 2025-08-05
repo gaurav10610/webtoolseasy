@@ -8,179 +8,267 @@ import {
   SelectChangeEvent,
   TextField,
   Typography,
+  Card,
+  CardContent,
+  Grid,
 } from "@mui/material";
-import { map } from "lodash-es";
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { useToolState } from "@/hooks/useToolState";
 
-export default function CompoundInterestCalculator({}) {
+interface CalculationParams {
+  principal: number;
+  interestRate: number;
+  tenureInMonths: number;
+  compoundedOn: string;
+}
+
+interface CalculationResult {
+  amount: number;
+  interest: number;
+}
+
+export default function CompoundInterestCalculator() {
   const compoundedOnList = ["Yearly", "Quarterly", "Monthly"];
 
   const [principal, setPrincipal] = useState<number>(1000);
   const [interestRate, setInterestRate] = useState<number>(6);
-  const [ternureInMonths, setTenureInMonths] = useState<number>(12);
+  const [tenureInMonths, setTenureInMonths] = useState<number>(12);
   const [compoundedOn, setCompoundedOn] = useState<string>(compoundedOnList[1]);
 
-  const compoundedOnValues = map(compoundedOnList, (item) => {
-    return (
-      <MenuItem key={item} value={item}>
-        {item}
-      </MenuItem>
-    );
+  const toolState = useToolState({
+    hostname: "",
+    queryParams: {},
+    initialValue: "",
   });
 
-  const onPrincipalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrincipal(Number(event.target.value));
-    const { amount, interest } = calculateCompoundInterest({
-      principal: Number(event.target.value),
-      interestRate,
-      ternureInMonths,
-      compoundedOn,
-    });
-    setCompoundedAmount(amount);
-    setCompoundInterest(interest);
-  };
-
-  const onInterestRateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInterestRate(Number(event.target.value));
-    const { amount, interest } = calculateCompoundInterest({
-      principal,
-      interestRate: Number(event.target.value),
-      ternureInMonths,
-      compoundedOn,
-    });
-    setCompoundedAmount(amount);
-    setCompoundInterest(interest);
-  };
-
-  const onTenureInMonthsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTenureInMonths(Number(event.target.value));
-    const { amount, interest } = calculateCompoundInterest({
+  const calculateCompoundInterest = useCallback(
+    ({
       principal,
       interestRate,
-      ternureInMonths: Number(event.target.value),
+      tenureInMonths,
       compoundedOn,
-    });
-    setCompoundedAmount(amount);
-    setCompoundInterest(interest);
-  };
+    }: CalculationParams): CalculationResult => {
+      // Convert tenure to years
+      const tenureInYears: number = tenureInMonths / 12;
 
-  const handleChange = (event: SelectChangeEvent) => {
+      // Determine compounding frequency
+      let n: number = 1; // Default: Yearly
+      if (compoundedOn === "Quarterly") {
+        n = 4;
+      } else if (compoundedOn === "Monthly") {
+        n = 12;
+      }
+
+      // Calculate compound amount: A = P(1 + r/n)^(nt)
+      const amount: number =
+        principal * Math.pow(1 + interestRate / (n * 100), n * tenureInYears);
+      const interest = amount - principal;
+
+      return { amount, interest };
+    },
+    []
+  );
+
+  const { amount, interest } = useMemo(
+    () =>
+      calculateCompoundInterest({
+        principal,
+        interestRate,
+        tenureInMonths,
+        compoundedOn,
+      }),
+    [
+      principal,
+      interestRate,
+      tenureInMonths,
+      compoundedOn,
+      calculateCompoundInterest,
+    ]
+  );
+
+  const handlePrincipalChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPrincipal(Number(event.target.value) || 0);
+    },
+    []
+  );
+
+  const handleInterestRateChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInterestRate(Number(event.target.value) || 0);
+    },
+    []
+  );
+
+  const handleTenureChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setTenureInMonths(Number(event.target.value) || 0);
+    },
+    []
+  );
+
+  const handleCompoundingChange = useCallback((event: SelectChangeEvent) => {
     setCompoundedOn(event.target.value as string);
-    const { amount, interest } = calculateCompoundInterest({
-      principal,
-      interestRate,
-      ternureInMonths,
-      compoundedOn: event.target.value as string,
-    });
-    setCompoundedAmount(amount);
-    setCompoundInterest(interest);
-  };
-
-  const calculateCompoundInterest = ({
-    principal,
-    interestRate,
-    ternureInMonths,
-    compoundedOn,
-  }: {
-    principal: number;
-    interestRate: number;
-    ternureInMonths: number;
-    compoundedOn: string;
-  }) => {
-    /**
-     * convert tenure in years
-     */
-    const tenureInYears: number = Number(ternureInMonths) / 12;
-
-    /**
-     *
-     * n is the number of times that interest is compounded per unit t,
-     * for example if interest is compounded monthly and t is in years then the
-     * value of n would be 12. If interest is compounded quarterly and t is in
-     * years then the value of n would be 4.
-     *
-     */
-    let n: number = 1;
-
-    if (compoundedOn === "Quarterly") {
-      n = 4;
-    } else if (compoundedOn === "Monthly") {
-      n = 12;
-    }
-
-    const amount: number =
-      Number(principal) *
-      Math.pow(1 + Number(interestRate) / (n * 100), n * tenureInYears);
-
-    const interest = amount - Number(principal);
-
-    return { amount, interest };
-  };
-
-  const { amount, interest } = calculateCompoundInterest({
-    principal,
-    interestRate,
-    ternureInMonths,
-    compoundedOn,
-  });
-
-  const [compoundedAmount, setCompoundedAmount] = useState<number>(amount);
-  const [compoundInterest, setCompoundInterest] = useState<number>(interest);
+  }, []);
 
   return (
-    <div className="flex flex-col gap-3 mt-3">
-      <div className="flex flex-col gap-3 w-full md:flex-row md:justify-center">
-        <TextField
-          label="Principal Amount"
-          variant="outlined"
-          required={true}
-          value={principal}
-          onChange={onPrincipalChange}
-        />
-        <TextField
-          label="Interest Rate (%)"
-          variant="outlined"
-          required={true}
-          value={interestRate}
-          onChange={onInterestRateChange}
-        />
-        <TextField
-          label="Tenure (In Months)"
-          variant="outlined"
-          required={true}
-          value={ternureInMonths}
-          onChange={onTenureInMonthsChange}
-        />
-        <div className="w-full md:w-[15rem]">
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel>Compounded On</InputLabel>
-            <Select
-              value={compoundedOn}
-              label="Compounded On"
-              onChange={handleChange}
-            >
-              {compoundedOnValues}
-            </Select>
-          </FormControl>
-        </div>
-      </div>
+    <ToolLayout
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
+    >
+      <SEOContent
+        title="Compound Interest Calculator"
+        description="Calculate compound interest with different compounding frequencies. Free online tool for investment planning and financial calculations."
+        exampleCode="Principal: $1000, Rate: 6%, Tenure: 12 months, Quarterly"
+        exampleOutput={`Final Amount: $${amount.toFixed(
+          2
+        )}, Interest: $${interest.toFixed(2)}`}
+      />
 
-      <div className="flex flex-col gap-3 w-full items-center md:flex-row md:justify-center">
-        <div className="flex flex-row gap-1">
-          <Typography variant="body1" color="primary">
-            Compounded Amount:
-          </Typography>
-          <Typography variant="body1">{compoundedAmount.toFixed(2)}</Typography>
-        </div>
-        <div className="flex flex-row gap-1">
-          <Typography variant="body1" color="primary">
-            Compound Interest:
-          </Typography>
-          <Typography variant="body1">{compoundInterest.toFixed(2)}</Typography>
-        </div>
+      <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
+        {/* Input Section */}
+        <Card className="p-4">
+          <CardContent>
+            <Typography variant="h6" className="mb-4" color="primary">
+              Investment Parameters
+            </Typography>
+
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Principal Amount ($)"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={principal}
+                  onChange={handlePrincipalChange}
+                  inputProps={{ min: 0, step: 0.01 }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Interest Rate (%)"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={interestRate}
+                  onChange={handleInterestRateChange}
+                  inputProps={{ min: 0, max: 100, step: 0.1 }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Tenure (In Months)"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={tenureInMonths}
+                  onChange={handleTenureChange}
+                  inputProps={{ min: 1, step: 1 }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel>Compounding Frequency</InputLabel>
+                  <Select
+                    value={compoundedOn}
+                    label="Compounding Frequency"
+                    onChange={handleCompoundingChange}
+                  >
+                    {compoundedOnList.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+
+        {/* Results Section */}
+        <Card className="p-4">
+          <CardContent>
+            <Typography variant="h6" className="mb-4" color="primary">
+              Calculation Results
+            </Typography>
+
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className="mb-1"
+                  >
+                    Principal Amount
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    color="primary"
+                    className="font-bold"
+                  >
+                    ${principal.toFixed(2)}
+                  </Typography>
+                </div>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className="mb-1"
+                  >
+                    Compound Interest
+                  </Typography>
+                  <Typography variant="h5" className="font-bold text-green-600">
+                    ${interest.toFixed(2)}
+                  </Typography>
+                </div>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    className="mb-1"
+                  >
+                    Final Amount
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    className="font-bold text-purple-600"
+                  >
+                    ${amount.toFixed(2)}
+                  </Typography>
+                </div>
+              </Grid>
+            </Grid>
+
+            {/* Additional Info */}
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <Typography variant="body2" color="textSecondary">
+                <strong>Investment Summary:</strong> Investing $
+                {principal.toFixed(2)} at {interestRate}% annual interest,
+                compounded {compoundedOn.toLowerCase()}, for {tenureInMonths}{" "}
+                months ({(tenureInMonths / 12).toFixed(1)} years) will result in
+                a final amount of ${amount.toFixed(2)}, earning $
+                {interest.toFixed(2)} in compound interest.
+              </Typography>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </ToolLayout>
   );
 }

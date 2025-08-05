@@ -1,23 +1,16 @@
 "use client";
 
-import { ToolComponentProps } from "@/types/component";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { TextField, Typography } from "@mui/material";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { ButtonWithHandler } from "../lib/buttons";
-import LinkIcon from "@mui/icons-material/Link";
+import { useEffect, useRef, useCallback, useMemo } from "react";
+import { TextField, Typography, Card, CardContent } from "@mui/material";
 import { toCanvas, toString, toDataURL, QRCodeToDataURLOptions } from "qrcode";
 import DownloadIcon from "@mui/icons-material/Download";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
-function _base64toBlob(base64Data: string, mimeType: string): Promise<Blob> {
+function base64toBlob(base64Data: string, mimeType: string): Promise<Blob> {
   return new Promise((resolve, reject) => {
     try {
       const byteString = atob(base64Data);
@@ -38,136 +31,185 @@ export default function QrCodeGenerator({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `https://webtoolseasy.com/`;
+  const initialValue = `https://webtoolseasy.com/
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+Try these examples:
+• Website URL
+• Contact information
+• WiFi credentials
+• Social media profile
+• Email address
+• Phone number`;
 
-  const [text, setText] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  };
+  const generateQrCode = useCallback(async () => {
+    const canvas = canvasRef.current;
+    if (canvas && toolState.code) {
+      try {
+        await toCanvas(canvas, toolState.code, {
+          width: 300,
+          margin: 2,
+          color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+          },
+        });
+      } catch (error) {
+        console.error("QR Code generation error:", error);
+        toolState.actions.showMessage("Error generating QR code");
+      }
+    }
+  }, [toolState.code, toolState.actions]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      toCanvas(canvas, text);
+    generateQrCode();
+  }, [generateQrCode]);
+
+  const copySvg = useCallback(async () => {
+    try {
+      const svgString = await toString(toolState.code, { type: "svg" });
+      await navigator.clipboard.writeText(svgString);
+      toolState.actions.showMessage("SVG copied to clipboard!");
+    } catch {
+      toolState.actions.showMessage("Failed to copy SVG");
     }
-  }, [text]);
+  }, [toolState]);
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const downloadImage = useCallback(
+    async (imageType: "jpeg" | "webp" | "png") => {
+      try {
+        const mimeType = `image/${imageType}`;
+        const options: QRCodeToDataURLOptions = {
+          type: mimeType as "image/jpeg" | "image/webp" | "image/png",
+          width: 512,
+          margin: 2,
+        };
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+        const dataUrl = await toDataURL(toolState.code, options);
+        const base64Data = dataUrl.split(",")[1];
+        const blob = await base64toBlob(base64Data, mimeType);
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(text).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
-
-  const handleSvgCopy = () => {
-    toString(text, {
-      type: "svg",
-    }).then(copyToClipboard);
-  };
-
-  const downloadImage = (imageType: "jpeg" | "webp" | "png") => {
-    const mimeType = `image/${imageType}`;
-    const options: QRCodeToDataURLOptions = {
-      type: mimeType as "image/jpeg" | "image/webp" | "image/png",
-    };
-
-    toDataURL(text, options).then((dataUrl) => {
-      const base64Data = dataUrl.split(",")[1];
-      _base64toBlob(base64Data, mimeType).then((blob) => {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `qr-code.${imageType}`;
-        document.body.appendChild(a); // Append the element to the document body
+        a.download = `qr-code-webtoolseasy.${imageType}`;
+        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a); // Remove the element after triggering the download
-      });
-    });
-  };
+        document.body.removeChild(a);
 
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full justify-center md:flex-row">
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy SVG"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleSvgCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Download JPEG"
-          variant="outlined"
-          size="small"
-          startIcon={<DownloadIcon />}
-          onClick={() => downloadImage("jpeg")}
-        />
-        <ButtonWithHandler
-          buttonText="Download PNG"
-          variant="outlined"
-          size="small"
-          startIcon={<DownloadIcon />}
-          onClick={() => downloadImage("png")}
-        />
-        <ButtonWithHandler
-          buttonText="Download WEBP"
-          variant="outlined"
-          size="small"
-          startIcon={<DownloadIcon />}
-          onClick={() => downloadImage("webp")}
-        />
-      </div>
-    );
-  }
+        toolState.actions.showMessage(
+          `QR code downloaded as ${imageType.toUpperCase()}`
+        );
+      } catch {
+        toolState.actions.showMessage(`Failed to download ${imageType} image`);
+      }
+    },
+    [toolState]
+  );
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Copy SVG",
+        onClick: copySvg,
+        icon: <ContentCopyIcon />,
+      },
+      {
+        type: "custom" as const,
+        text: "Download JPEG",
+        onClick: () => downloadImage("jpeg"),
+        icon: <DownloadIcon />,
+        variant: "outlined" as const,
+      },
+      {
+        type: "custom" as const,
+        text: "Download PNG",
+        onClick: () => downloadImage("png"),
+        icon: <DownloadIcon />,
+        variant: "outlined" as const,
+      },
+      {
+        type: "custom" as const,
+        text: "Download WEBP",
+        onClick: () => downloadImage("webp"),
+        icon: <DownloadIcon />,
+        variant: "outlined" as const,
+      },
+      ...createCommonButtons({
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+      }),
+    ],
+    [copySvg, downloadImage, toolState]
+  );
 
   return (
-    <div className="flex flex-col w-full gap-3 items-center">
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+    <ToolLayout
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
+    >
+      <SEOContent
+        title="QR Code Generator"
+        description="Generate QR codes from text, URLs, and data. Free online QR code generator with download options in multiple formats."
+        exampleCode={initialValue}
+        exampleOutput="High-quality QR code with customizable size and format"
       />
-      <Typography
-        variant="body1"
-        color="textSecondary"
-        className="!text-xl !font-semibold !w-full"
-      >
-        QR Code Free Text
-      </Typography>
-      <TextField
-        multiline
-        rows={5}
-        onChange={onTextChange}
-        value={text}
-        className="w-full"
-      />
-      <canvas id="qrCanvas" ref={canvasRef} />
-      <ControlButtons />
-    </div>
+
+      <div className="flex flex-col w-full gap-6 items-center max-w-4xl mx-auto">
+        {/* Input Section */}
+        <Card className="w-full">
+          <CardContent>
+            <Typography variant="h6" className="mb-3" color="primary">
+              Enter Text or URL
+            </Typography>
+            <TextField
+              multiline
+              rows={6}
+              value={toolState.code}
+              onChange={(e) => toolState.setCode(e.target.value)}
+              placeholder="Enter text, URL, or data to generate QR code..."
+              className="w-full"
+              variant="outlined"
+            />
+          </CardContent>
+        </Card>
+
+        {/* QR Code Display */}
+        <Card className="w-full">
+          <CardContent className="flex flex-col items-center gap-4">
+            <Typography variant="h6" color="primary">
+              Generated QR Code
+            </Typography>
+            <div className="p-4 bg-white border-2 border-gray-200 rounded-lg">
+              <canvas
+                ref={canvasRef}
+                className="max-w-full h-auto"
+                style={{ imageRendering: "pixelated" }}
+              />
+            </div>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="text-center"
+            >
+              Scan this QR code with your mobile device to access the content
+            </Typography>
+          </CardContent>
+        </Card>
+
+        {/* Controls */}
+        <ToolControls buttons={buttons} />
+      </div>
+    </ToolLayout>
   );
 }

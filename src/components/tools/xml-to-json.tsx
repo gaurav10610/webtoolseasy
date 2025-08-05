@@ -1,218 +1,158 @@
 "use client";
 
-import React, { useState } from "react";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { ToolComponentProps } from "@/types/component";
-import { Code } from "@mui/icons-material";
+import React, { useState, useCallback, useMemo } from "react";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { Checkbox, Typography } from "@mui/material";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { Code } from "@mui/icons-material";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 export default function XmlToJsonConverter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `
-  <?xml version="1.0"?>
-  <customers>
-     <customer id="101">
-        <name>WebToolsEasy</name>
-        <address>
-           <street>101 Last1</street>
-           <city>Framingham</city>
-           <state>MA</state>
-           <zip>0001</zip>
-        </address>
-        <address>
-           <street>101 Last1</street>
-           <city>Framingham</city>
-           <state>MA</state>
-           <zip>0002</zip>
-        </address>
-        <address>
-           <street>101 Last1</street>
-           <state>MA</state>
-           <zip>0003</zip>
-        </address>
-     </customer>
-  </customers>
-  `;
+  const initialValue = `<?xml version="1.0"?>
+<customers>
+   <customer id="101">
+      <n>WebToolsEasy</n>
+      <address>
+         <street>101 Last1</street>
+         <city>Framingham</city>
+         <state>MA</state>
+         <zip>0001</zip>
+      </address>
+      <address>
+         <street>101 Last1</street>
+         <city>Framingham</city>
+         <state>MA</state>
+         <zip>0002</zip>
+      </address>
+      <address>
+         <street>101 Last1</street>
+         <state>MA</state>
+         <zip>0003</zip>
+      </address>
+   </customer>
+</customers>`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
+  const [convertedJson, setConvertedJson] = useState("");
   const [parserOptions, setParserOptions] = useState<X2jOptions>({
     ignoreAttributes: true,
     ignoreDeclaration: true,
   });
 
-  const handleParserOptionsChange = (
-    propertyName: string,
-    propertyValue: boolean
-  ) => {
-    setParserOptions({
-      ...parserOptions,
-      [propertyName]: propertyValue,
-    });
-  };
-
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
+  const handleParserOptionsChange = useCallback(
+    (propertyName: string, propertyValue: boolean) => {
+      setParserOptions((prev) => ({
+        ...prev,
+        [propertyName]: propertyValue,
+      }));
+    },
+    []
   );
 
-  const [convertedJson, setConvertedJson] = useState(
-    JSON.stringify(
-      new XMLParser(parserOptions).parse(
-        codeQueryParam ? decodeText(codeQueryParam) : initialValue
-      ),
-      null,
-      4
-    )
+  const convertXml = useCallback(() => {
+    try {
+      const parser = new XMLParser(parserOptions);
+      const result = parser.parse(toolState.code);
+      const formattedJson = JSON.stringify(result, null, 2);
+      setConvertedJson(formattedJson);
+      toolState.actions.showMessage("XML converted to JSON successfully!");
+    } catch (error) {
+      toolState.actions.showMessage(`Error: ${error}`);
+      setConvertedJson("Invalid XML");
+    }
+  }, [toolState, parserOptions]);
+
+  const copyFormattedCode = useCallback(() => {
+    toolState.actions.copyText(convertedJson, "JSON copied to clipboard!");
+  }, [toolState.actions, convertedJson]);
+
+  // Editor configurations
+  const inputEditorProps = useEditorConfig({
+    language: "xml",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
+
+  const outputEditorProps = useEditorConfig({
+    language: "json",
+    value: convertedJson,
+    onChange: () => {}, // Read-only
+    readOnly: true,
+  });
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Convert XML to JSON",
+        onClick: convertXml,
+        icon: <Code />,
+      },
+      ...createCommonButtons({
+        onCopy: copyFormattedCode,
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [convertXml, copyFormattedCode, toolState]
   );
-
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
-
-  const convertXml = () => {
-    setConvertedJson(
-      JSON.stringify(new XMLParser(parserOptions).parse(rawCode), null, 4)
-    );
-  };
-
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  const handleFormattedCodeCopy = () => {
-    copyToClipboard(convertedJson);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
-
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        <ButtonWithHandler
-          buttonText="Convert Xml Code"
-          variant="contained"
-          onClick={convertXml}
-          size="small"
-          startIcon={<Code />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Json Code"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleFormattedCodeCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="XML to JSON Converter"
+        description="Convert XML data to JSON format online. Fast and reliable XML to JSON converter with customizable parsing options."
+        exampleCode={initialValue}
+        exampleOutput={JSON.stringify(
+          { customers: { customer: { "@_id": "101", n: "WebToolsEasy" } } },
+          null,
+          2
+        )}
       />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "xml",
-            value: rawCode,
-            onChange: onRawCodeChange,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="XML Code"
-          className="w-[80%] md:w-[49%]"
-        />
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "json",
-            value: convertedJson,
-            editorOptions: {
-              wordWrap: "on",
-              readOnly: true,
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="JSON Code"
-          className="w-[80%] md:w-[49%]"
-        />
-      </div>
-      <div className="flex flex-row gap-2 justify-center w-full">
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={inputEditorProps}
+            themeOption="vs-dark"
+            editorHeading="XML Code"
+            className="w-full h-full"
+          />
+        }
+        rightPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={outputEditorProps}
+            themeOption="vs-dark"
+            editorHeading="JSON Code"
+            className="w-full h-full"
+          />
+        }
+      />
+
+      <div className="flex flex-row gap-4 justify-center w-full mt-4">
         <div className="flex flex-row gap-2 items-center">
           <Checkbox
             defaultChecked
@@ -234,6 +174,6 @@ export default function XmlToJsonConverter({
           <Typography variant="body2">Ignore Declaration</Typography>
         </div>
       </div>
-    </div>
+    </ToolLayout>
   );
 }

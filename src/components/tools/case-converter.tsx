@@ -1,94 +1,196 @@
 "use client";
 
 import { TextField, Typography } from "@mui/material";
+import { useState, useCallback, useMemo } from "react";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "../lib/buttons";
-import { useState } from "react";
 
-export default function CaseConverter() {
+export default function CaseConverter({
+  hostname,
+  queryParams,
+}: Readonly<ToolComponentProps>) {
   const initialValue = "WebToolsEasy is Awesome. Explore Free Web Tools.";
-  const [text, setText] = useState(initialValue);
 
-  const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  };
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
-  const convertToUppercase = () => {
-    setText(text.toUpperCase());
-  };
+  const [outputText, setOutputText] = useState(toolState.code);
 
-  const convertToLowercase = () => {
-    setText(text.toLowerCase());
-  };
+  const convertToUppercase = useCallback(() => {
+    const result = toolState.code.toUpperCase();
+    setOutputText(result);
+    toolState.actions.showMessage("Converted to uppercase!");
+  }, [toolState]);
 
-  const convertToSentenceCase = () => {
-    setText(
-      text
-        .split(". ")
-        .map((sentence) => {
-          return sentence.charAt(0).toUpperCase() + sentence.slice(1);
-        })
-        .join(". ")
-    );
-  };
+  const convertToLowercase = useCallback(() => {
+    const result = toolState.code.toLowerCase();
+    setOutputText(result);
+    toolState.actions.showMessage("Converted to lowercase!");
+  }, [toolState]);
 
-  const convertToTitleCase = () => {
-    setText(
-      text
-        .split(" ")
-        .map((word) => {
-          return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        .join(" ")
-    );
-  };
+  const convertToSentenceCase = useCallback(() => {
+    const result = toolState.code
+      .split(". ")
+      .map((sentence) => {
+        return (
+          sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase()
+        );
+      })
+      .join(". ");
+    setOutputText(result);
+    toolState.actions.showMessage("Converted to sentence case!");
+  }, [toolState]);
 
-  const clearText = () => {
-    setText("");
-  };
+  const convertToTitleCase = useCallback(() => {
+    const result = toolState.code
+      .split(" ")
+      .map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(" ");
+    setOutputText(result);
+    toolState.actions.showMessage("Converted to title case!");
+  }, [toolState]);
+
+  const clearText = useCallback(() => {
+    toolState.setCode("");
+    setOutputText("");
+    toolState.actions.showMessage("Text cleared!");
+  }, [toolState]);
+
+  const copyOutput = useCallback(() => {
+    toolState.actions.copyText(outputText, "Converted text copied!");
+  }, [toolState.actions, outputText]);
+
+  // Custom buttons for case conversions
+  const caseButtons = useMemo(
+    () => [
+      {
+        text: "Uppercase",
+        onClick: convertToUppercase,
+        variant: "outlined" as const,
+        size: "small" as const,
+      },
+      {
+        text: "Lowercase",
+        onClick: convertToLowercase,
+        variant: "outlined" as const,
+        size: "small" as const,
+      },
+      {
+        text: "Sentence Case",
+        onClick: convertToSentenceCase,
+        variant: "outlined" as const,
+        size: "small" as const,
+      },
+      {
+        text: "Title Case",
+        onClick: convertToTitleCase,
+        variant: "outlined" as const,
+        size: "small" as const,
+      },
+      {
+        text: "Clear",
+        onClick: clearText,
+        variant: "contained" as const,
+        size: "small" as const,
+        color: "error" as const,
+      },
+    ],
+    [
+      convertToUppercase,
+      convertToLowercase,
+      convertToSentenceCase,
+      convertToTitleCase,
+      clearText,
+    ]
+  );
+
+  // Standard buttons
+  const buttons = useMemo(
+    () => [
+      ...createCommonButtons({
+        onCopy: copyOutput,
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [copyOutput, toolState]
+  );
 
   return (
-    <div className="flex flex-col gap-2">
-      <Typography
-        variant="body1"
-        color="textSecondary"
-        className="!text-xl !font-semibold !w-full"
-      >
-        Text (Paste Your Text Here)
-      </Typography>
-      <TextField multiline rows={5} onChange={onTextChange} value={text} />
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
+    >
+      <SEOContent
+        title="Case Converter"
+        description="Free online text case converter. Convert text to uppercase, lowercase, sentence case, or title case."
+        exampleCode={initialValue}
+        exampleOutput="WEBTOOLSEASY IS AWESOME. EXPLORE FREE WEB TOOLS."
+      />
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      {/* Custom conversion buttons */}
       <div className="flex flex-col md:flex-row gap-2 justify-center w-full">
-        <ButtonWithHandler
-          buttonText="Convert to Uppercase"
-          variant="outlined"
-          size="small"
-          onClick={convertToUppercase}
-        />
-        <ButtonWithHandler
-          buttonText="Convert to Lowercase"
-          variant="outlined"
-          size="small"
-          onClick={convertToLowercase}
-        />
-        <ButtonWithHandler
-          buttonText="Convert to Sentence Case"
-          variant="outlined"
-          size="small"
-          onClick={convertToSentenceCase}
-        />
-        <ButtonWithHandler
-          buttonText="Convert to Title Case"
-          variant="outlined"
-          size="small"
-          onClick={convertToTitleCase}
-        />
-        <ButtonWithHandler
-          buttonText="Clear Text"
-          variant="contained"
-          size="small"
-          onClick={clearText}
-          color="error"
-        />
+        {caseButtons.map((button, index) => (
+          <ButtonWithHandler
+            key={index}
+            buttonText={button.text}
+            variant={button.variant}
+            size={button.size}
+            onClick={button.onClick}
+            color={button.color}
+          />
+        ))}
       </div>
-    </div>
+
+      <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-2">
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            className="!text-xl !font-semibold !w-full"
+          >
+            Input Text (Paste Your Text Here)
+          </Typography>
+          <TextField
+            multiline
+            rows={5}
+            value={toolState.code}
+            onChange={(e) => toolState.setCode(e.target.value)}
+            placeholder="Enter text to convert..."
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            className="!text-xl !font-semibold !w-full"
+          >
+            Converted Text
+          </Typography>
+          <TextField
+            multiline
+            rows={5}
+            value={outputText}
+            InputProps={{ readOnly: true }}
+            placeholder="Converted text will appear here..."
+          />
+        </div>
+      </div>
+    </ToolLayout>
   );
 }

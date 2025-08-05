@@ -1,61 +1,70 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { DiffEditorsWithHeader } from "../codeEditors";
 import { DiffEditorProps } from "../lib/editor";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-import { useState } from "react";
-import { ButtonWithHandler } from "../lib/buttons";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { useToolState } from "@/hooks/useToolState";
 
 export default function TextCompare() {
-  const originalText = `This was original data!\nwebtoolseasy is awesome`;
-  const modifiedText = `This was modified data!\nwebtoolseasy is super cool`;
+  const originalText = `This was original data!
+webtoolseasy is awesome
+Line 3 of original text
+Another line here`;
+
+  const modifiedText = `This was modified data!
+webtoolseasy is super cool
+Line 3 of original text
+Another line here
+New line added`;
+
+  const toolState = useToolState({
+    hostname: "",
+    queryParams: {},
+    initialValue: "",
+  });
+
+  const [originalValue] = useState(originalText);
+  const [modifiedValue] = useState(modifiedText);
 
   const diffEditorProps: DiffEditorProps = {
-    original: originalText,
-    value: modifiedText,
+    original: originalValue,
+    value: modifiedValue,
     language: "text/plain",
   };
 
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      ...createCommonButtons({
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "fixed inset-0 z-50 bg-white h-full p-4" : "relative"
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <ControlButtons />
+      <SEOContent
+        title="Text Compare"
+        description="Compare two text documents side by side. Visual diff tool to highlight differences between texts."
+        exampleCode={originalText}
+        exampleOutput="Side-by-side text comparison with highlighted differences"
+      />
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
       <div
         className={`w-full h-[20rem] md:h-[30rem] ${
-          isFullScreen ? "md:h-full" : ""
+          toolState.isFullScreen ? "md:h-full" : ""
         }`}
       >
         <DiffEditorsWithHeader
@@ -63,9 +72,9 @@ export default function TextCompare() {
           secondTextHeading="Modified"
           themeOption="light"
           diffEditorProps={diffEditorProps}
-          className="w-[80%] md:w-full"
+          className="w-full h-full"
         />
       </div>
-    </div>
+    </ToolLayout>
   );
 }

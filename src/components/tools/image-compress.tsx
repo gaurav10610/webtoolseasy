@@ -1,391 +1,481 @@
 "use client";
 
-import { find, isEmpty, isNil, map, toUpper } from "lodash-es";
 import { useState } from "react";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
-import { FilePreview } from "../lib/filePreview";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import {
-  FILE_TYPE_PRESETS,
-  FILE_SIZE_PRESETS,
-} from "../../util/fileValidation";
-import { ButtonWithHandler } from "../lib/buttons";
-import AddIcon from "@mui/icons-material/Add";
-import { BaseFileData } from "@/types/file";
-import imageCompression from "browser-image-compression";
-import { formatBytes } from "@/util/commonUtils";
-import SettingsIcon from "@mui/icons-material/Settings";
-import DownloadIcon from "@mui/icons-material/Download";
-import {
+  Typography,
+  Slider,
   FormControl,
   InputLabel,
-  MenuItem,
   Select,
+  MenuItem,
   SelectChangeEvent,
-  Slider,
-  Typography,
+  LinearProgress,
+  Box,
 } from "@mui/material";
+import CompressIcon from "@mui/icons-material/Compress";
+import DownloadIcon from "@mui/icons-material/Download";
+import SettingsIcon from "@mui/icons-material/Settings";
+import imageCompression from "browser-image-compression";
+import { formatBytes } from "@/util/commonUtils";
+import { useCallback, useMemo } from "react";
 
-interface CompressOptions {
-  signal: AbortSignal;
-  maxSizeMB: number;
-  useWebWorker: boolean;
-}
-
-interface ImageFileData extends BaseFileData {
+interface CompressedImage {
+  id: string;
+  originalFile: File;
   compressedFile?: Blob;
-  compressProgress: number;
+  compressionProgress: number;
+  isCompressing: boolean;
   isCompressed: boolean;
-  compressOptions: CompressOptions;
-  inProgress: boolean;
-  error?: unknown;
-  compressionRate: number;
-  maxFileSize: number;
+  error?: string;
+  compressionRatio: number;
 }
 
-export default function ImageCompress() {
-  const [fileList, setFileList] = useState<ImageFileData[]>([]);
-  const [selectedFile, setSelectedFile] = useState<ImageFileData | null>(null);
-  const [error, setError] = useState("");
+const OUTPUT_FORMATS = [
+  { value: "jpeg", label: "JPEG" },
+  { value: "png", label: "PNG" },
+  { value: "webp", label: "WebP" },
+];
 
-  const handleFileSelect = (files: FileList) => {
-    const newFiles = Array.from(files).map((file) => ({
-      id: crypto.randomUUID(),
-      originalFile: file,
-      compressedFile: undefined,
-      compressProgress: 0,
-      isCompressed: false,
-      compressOptions: {
-        signal: new AbortController().signal,
-        maxSizeMB: (0.9 * file.size) / 1024 / 1024,
-        useWebWorker: true,
-      },
-      inProgress: false,
-      error: undefined,
-      compressionRate: 10,
-      maxFileSize: 0.9 * file.size,
-    }));
-
-    setFileList([...fileList, ...newFiles]);
-    if (isNil(selectedFile)) {
-      setSelectedFile(newFiles[0]);
-    }
-  };
-
-  const handleError = (errorMessage: string) => {
-    setError(errorMessage);
-  };
-
-  const compressImage = () => {
-    const compresstionRateSlider = document.getElementById(
-      "compression-rate-slider"
-    ) as HTMLSpanElement;
-
-    const compressionRate = Number(compresstionRateSlider.innerText);
-    const compressionRatio: number = 100 - compressionRate;
-    const maxFileSize =
-      (compressionRatio / 100) * selectedFile!.originalFile.size;
-    const maxSizeMB = maxFileSize / 1024 / 1024;
-
-    const imageFileData: ImageFileData = {
-      ...selectedFile!,
-      compressOptions: {
-        ...selectedFile!.compressOptions,
-        maxSizeMB,
-      },
-      inProgress: true,
-      compressProgress: 0,
-      compressionRate,
-      maxFileSize,
-    };
-
-    setSelectedFile({
-      ...imageFileData,
-    });
-
-    imageCompression(imageFileData.originalFile, {
-      ...imageFileData.compressOptions,
-      onProgress: (progress: number) => {
-        imageFileData.compressProgress = progress;
-        setSelectedFile({ ...imageFileData });
-      },
-    })
-      .then((compressedFile) => {
-        imageFileData.compressedFile = compressedFile;
-        imageFileData.isCompressed = true;
-        imageFileData.inProgress = false;
-        setSelectedFile({
-          ...imageFileData,
-        });
-      })
-      .catch((error) => {
-        imageFileData.error = error;
-        imageFileData.inProgress = false;
-        setSelectedFile({
-          ...imageFileData,
-        });
-      });
-  };
-
-  const selectImageHandler = (id: string) => {
-    setSelectedFile(find(fileList, { id }) || null);
-  };
-
-  const CompressionSettings = ({
-    selectedFile,
-  }: Readonly<{
-    selectedFile: ImageFileData;
-  }>) => {
-    return (
-      <div className="flex flex-col gap-3 w-full items-center p-2 border-solid border-2 border-gray-300 mdp-4 rounded-sm">
-        <Typography variant="h5" color="textSecondary">
-          Compression Options
-        </Typography>
-        <div className="flex flex-col gap-3 w-full items-center">
-          <div className="flex flex-row gap-3 w-full justify-center items-center">
-            <Typography variant="body2" color="primary" className="text-start">
-              Compression Level
-            </Typography>
-            <Slider
-              id="compression-rate-slider"
-              aria-label="Compression slider"
-              defaultValue={selectedFile.compressionRate}
-              color="primary"
-              size="small"
-              draggable
-              valueLabelDisplay="on"
-            />
-          </div>
-          <div className="flex flex-row gap-2 w-full">
-            <Typography variant="body2" color="primary">
-              Original Image Size
-            </Typography>
-            <Typography variant="body2" color="textPrimary">
-              {formatBytes(selectedFile.originalFile.size)}
-            </Typography>
-          </div>
-          <div className="flex flex-row gap-2 w-full">
-            <Typography variant="body2" color="primary">
-              Compressed Image Size
-            </Typography>
-            <Typography variant="body2" color="textPrimary">
-              {formatBytes(selectedFile.maxFileSize)}
-            </Typography>
-          </div>
-        </div>
-        <div>
-          <ButtonWithHandler
-            buttonText="Apply Options & Compress"
-            onClick={compressImage}
-            size="small"
-            startIcon={<SettingsIcon />}
-            variant="outlined"
-          />
-        </div>
-      </div>
-    );
-  };
-
-  const CompressedImagePreview = ({
-    compressedFile,
-  }: Readonly<{
-    compressedFile: Blob;
-  }>) => {
-    return (
-      <>
-        <Typography variant="h5" color="primary">
-          Compress & Preview
-        </Typography>
-        <DownloadImageButtons />
-        <div className="w-full max-h-fit gap-3 border-solid border-2 border-gray-300">
-          <img
-            id="image-cropper-preview"
-            src={URL.createObjectURL(compressedFile)}
-            alt="Compressed image preview"
-            className="h-full w-full object-cover"
-          />
-        </div>
-      </>
-    );
-  };
-
-  const formatList = ["png", "jpeg", "webp", "bmp", "ico"];
-  const [imageFormat, setImageFormat] = useState<string>(formatList[0]);
-
-  const handleImageFormatChange = (event: SelectChangeEvent<string>) => {
-    setImageFormat(event.target.value);
-  };
-
-  const formatOptions = map(formatList, (item) => {
-    return (
-      <MenuItem key={item} value={item}>
-        {toUpper(item)}
-      </MenuItem>
-    );
+export default function ImageCompress({
+  hostname,
+  queryParams,
+}: Readonly<ToolComponentProps>) {
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
   });
 
-  const downloadImage = (blob: Blob) => {
-    if (!blob) {
-      return;
-    }
+  const [images, setImages] = useState<CompressedImage[]>([]);
+  const [selectedImageId, setSelectedImageId] = useState<string>("");
+  const [compressionLevel, setCompressionLevel] = useState(50);
+  const [outputFormat, setOutputFormat] = useState("jpeg");
 
-    const element = document.createElement("a");
-    element.href = URL.createObjectURL(blob);
-    element.download = `cropped-image.${imageFormat}`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
+  const selectedImage = useMemo(
+    () => images.find((img) => img.id === selectedImageId),
+    [images, selectedImageId]
+  );
 
-  const DownloadImageButtons = () => {
-    return (
-      <div className="flex flex-row w-full gap-2 justify-end">
-        <div className="w-[8rem]">
-          <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel size="small">Output Format</InputLabel>
-            <Select
-              value={imageFormat}
-              label="Output Format"
-              onChange={handleImageFormatChange}
-              size="small"
-            >
-              {formatOptions}
-            </Select>
-          </FormControl>
-        </div>
+  const handleFileSelect = useCallback(
+    (files: FileList) => {
+      const newImages: CompressedImage[] = Array.from(files).map((file) => ({
+        id: crypto.randomUUID(),
+        originalFile: file,
+        compressionProgress: 0,
+        isCompressing: false,
+        isCompressed: false,
+        compressionRatio: compressionLevel,
+      }));
 
-        <ButtonWithHandler
-          buttonText="Download Image"
-          startIcon={<DownloadIcon />}
-          onClick={() => {
-            downloadImage(selectedFile!.compressedFile!);
-          }}
-          size="small"
-        />
-      </div>
+      setImages((prev) => [...prev, ...newImages]);
+      if (!selectedImageId && newImages.length > 0) {
+        setSelectedImageId(newImages[0].id);
+      }
+      toolState.actions.showMessage(
+        `${newImages.length} image(s) uploaded successfully!`
+      );
+    },
+    [selectedImageId, compressionLevel, toolState.actions]
+  );
+
+  const compressImage = useCallback(
+    async (imageId: string) => {
+      const imageIndex = images.findIndex((img) => img.id === imageId);
+      if (imageIndex === -1) return;
+
+      const image = images[imageIndex];
+      const newImages = [...images];
+
+      // Set compression state
+      newImages[imageIndex] = {
+        ...image,
+        isCompressing: true,
+        compressionProgress: 0,
+        error: undefined,
+        compressionRatio: compressionLevel,
+      };
+      setImages(newImages);
+
+      try {
+        const options = {
+          maxSizeMB:
+            (image.originalFile.size * (100 - compressionLevel)) /
+            100 /
+            (1024 * 1024),
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          fileType:
+            outputFormat === "jpeg"
+              ? "image/jpeg"
+              : outputFormat === "png"
+              ? "image/png"
+              : "image/webp",
+          onProgress: (progress: number) => {
+            setImages((prev) => {
+              const updated = [...prev];
+              const idx = updated.findIndex((img) => img.id === imageId);
+              if (idx !== -1) {
+                updated[idx] = {
+                  ...updated[idx],
+                  compressionProgress: progress,
+                };
+              }
+              return updated;
+            });
+          },
+        };
+
+        const compressedFile = await imageCompression(
+          image.originalFile,
+          options
+        );
+
+        setImages((prev) => {
+          const updated = [...prev];
+          const idx = updated.findIndex((img) => img.id === imageId);
+          if (idx !== -1) {
+            updated[idx] = {
+              ...updated[idx],
+              compressedFile,
+              isCompressing: false,
+              isCompressed: true,
+              compressionProgress: 100,
+            };
+          }
+          return updated;
+        });
+
+        toolState.actions.showMessage("Image compressed successfully!");
+      } catch (error) {
+        setImages((prev) => {
+          const updated = [...prev];
+          const idx = updated.findIndex((img) => img.id === imageId);
+          if (idx !== -1) {
+            updated[idx] = {
+              ...updated[idx],
+              isCompressing: false,
+              error:
+                error instanceof Error ? error.message : "Compression failed",
+            };
+          }
+          return updated;
+        });
+        toolState.actions.showMessage("Compression failed. Please try again.");
+      }
+    },
+    [images, compressionLevel, outputFormat, toolState.actions]
+  );
+
+  const downloadImage = useCallback(
+    (image: CompressedImage) => {
+      if (!image.compressedFile) return;
+
+      const url = URL.createObjectURL(image.compressedFile);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `compressed-${
+        image.originalFile.name.split(".")[0]
+      }.${outputFormat}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toolState.actions.showMessage("Image downloaded successfully!");
+    },
+    [outputFormat, toolState.actions]
+  );
+
+  const removeImage = useCallback(
+    (imageId: string) => {
+      setImages((prev) => prev.filter((img) => img.id !== imageId));
+      if (selectedImageId === imageId) {
+        const remainingImages = images.filter((img) => img.id !== imageId);
+        setSelectedImageId(
+          remainingImages.length > 0 ? remainingImages[0].id : ""
+        );
+      }
+    },
+    [images, selectedImageId]
+  );
+
+  const compressAllImages = useCallback(() => {
+    const uncompressedImages = images.filter(
+      (img) => !img.isCompressed && !img.isCompressing
     );
-  };
+    uncompressedImages.forEach((img) => compressImage(img.id));
+  }, [images, compressImage]);
 
-  const ProgressLoader = () => {
-    return (
-      <div className="flex flex-col w-full items-center gap-3">
-        <div className="w-full flex flex-row justify-center items-center gap-3">
-          <Typography variant="body1" color="secondary">
-            Compressing...
-          </Typography>
-          <div className="w-full flex flex-row justify-center items-center">
-            <progress
-              value={selectedFile!.compressProgress}
-              max="100"
-            ></progress>
-          </div>
-        </div>
-      </div>
+  const downloadAllCompressed = useCallback(() => {
+    const compressedImages = images.filter(
+      (img) => img.isCompressed && img.compressedFile
     );
-  };
+    compressedImages.forEach((img) => downloadImage(img));
+  }, [images, downloadImage]);
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      ...(selectedImage
+        ? [
+            {
+              type: "custom" as const,
+              text: "Compress Selected",
+              onClick: () => compressImage(selectedImage.id),
+              icon: <CompressIcon />,
+              disabled:
+                selectedImage.isCompressing || selectedImage.isCompressed,
+            },
+          ]
+        : []),
+      ...(images.some((img) => !img.isCompressed && !img.isCompressing)
+        ? [
+            {
+              type: "custom" as const,
+              text: "Compress All",
+              onClick: compressAllImages,
+              icon: <CompressIcon />,
+            },
+          ]
+        : []),
+      ...(images.some((img) => img.isCompressed)
+        ? [
+            {
+              type: "custom" as const,
+              text: "Download All",
+              onClick: downloadAllCompressed,
+              icon: <DownloadIcon />,
+            },
+          ]
+        : []),
+      ...createCommonButtons({
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [
+      selectedImage,
+      images,
+      compressImage,
+      compressAllImages,
+      downloadAllCompressed,
+      toolState,
+    ]
+  );
 
   return (
-    <div className="flex flex-col w-full gap-3">
-      {/* Error message */}
-      {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <Typography variant="body2" className="text-red-800">
-            {error}
-          </Typography>
-        </div>
-      )}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
+    >
+      <SEOContent
+        title="Image Compressor"
+        description="Compress images online with adjustable quality settings. Reduce image file size while maintaining visual quality. Supports JPEG, PNG, and WebP formats."
+        exampleCode="Upload images and adjust compression level to optimize file size"
+        exampleOutput="Compressed images with reduced file size and preserved quality"
+      />
 
-      {/* File Upload */}
-      {isEmpty(fileList) && (
-        <FileUploadWithDragDrop
-          accept="image/*"
-          multiple={true}
-          allowedTypes={FILE_TYPE_PRESETS.IMAGES}
-          maxSize={FILE_SIZE_PRESETS.LARGE}
-          onFileSelect={handleFileSelect}
-          onError={handleError}
-          title="Upload Images to Compress"
-          subtitle="Drag and drop your images here or click to browse"
-          supportText="Supports JPG, PNG, WebP, BMP formats up to 10MB each"
-        />
-      )}
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      {/* Add More Images Button */}
-      {!isEmpty(fileList) && (
-        <div className="w-full flex flex-row justify-end">
-          <ButtonWithHandler
-            buttonText="Add More Images"
-            onClick={() => {
-              const input = document.createElement("input");
-              input.type = "file";
-              input.multiple = true;
-              input.accept = "image/*";
-              input.onchange = (e) => {
-                const files = (e.target as HTMLInputElement).files;
-                if (files) handleFileSelect(files);
-              };
-              input.click();
-            }}
-            size="small"
-            startIcon={<AddIcon />}
-          />
-        </div>
-      )}
-
-      {/* File Preview */}
-      {!isEmpty(fileList) && (
-        <>
-          <Typography variant="h5" color="textSecondary">
-            Selected Images
-          </Typography>
-          <FilePreview
-            files={fileList.map((file) => ({
-              id: file.id,
-              file: file.originalFile,
-              preview: URL.createObjectURL(file.originalFile),
-              isSelected: selectedFile?.id === file.id,
-              showProgress: file.inProgress,
-              progress: file.compressProgress,
-              status: file.inProgress
-                ? "processing"
-                : file.isCompressed
-                ? "completed"
-                : "idle",
-              statusText: file.inProgress
-                ? "Compressing..."
-                : file.isCompressed
-                ? "Compressed"
-                : undefined,
-            }))}
-            onFileSelect={selectImageHandler}
-            onFileRemove={(id) => {
-              const newFileList = fileList.filter((f) => f.id !== id);
-              setFileList(newFileList);
-              if (selectedFile?.id === id) {
-                setSelectedFile(newFileList.length > 0 ? newFileList[0] : null);
-              }
-            }}
-            previewSize="medium"
-            layout="grid"
-          />
-        </>
-      )}
-
-      {/* Compression Settings */}
-      {!isNil(selectedFile) && (
-        <CompressionSettings selectedFile={selectedFile} />
-      )}
-
-      {/* Progress Loader */}
-      {!isNil(selectedFile) && selectedFile.inProgress && <ProgressLoader />}
-
-      {/* Compressed Image Preview */}
-      {!isNil(selectedFile) &&
-        !isNil(selectedFile.compressedFile) &&
-        !selectedFile.inProgress && (
-          <CompressedImagePreview
-            compressedFile={selectedFile.compressedFile}
+      <div className="w-full space-y-6">
+        {/* File Upload */}
+        {images.length === 0 && (
+          <FileUploadWithDragDrop
+            accept="image/*"
+            multiple={true}
+            onFileSelect={handleFileSelect}
+            title="Upload Images to Compress"
+            subtitle="Drag and drop your images here or click to browse"
+            supportText="Supports JPG, PNG, WebP formats up to 10MB each"
           />
         )}
-    </div>
+
+        {/* Add More Images */}
+        {images.length > 0 && (
+          <div className="flex justify-end">
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) =>
+                e.target.files && handleFileSelect(e.target.files)
+              }
+              className="hidden"
+              id="add-more-images"
+            />
+            <label
+              htmlFor="add-more-images"
+              className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+            >
+              Add More Images
+            </label>
+          </div>
+        )}
+
+        {/* Compression Settings */}
+        {images.length > 0 && (
+          <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+            <Typography variant="h6" className="flex items-center gap-2">
+              <SettingsIcon /> Compression Settings
+            </Typography>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Compression Level */}
+              <div>
+                <Typography variant="body2" className="mb-2">
+                  Compression Level: {compressionLevel}%
+                </Typography>
+                <Slider
+                  value={compressionLevel}
+                  onChange={(_, value) => setCompressionLevel(value as number)}
+                  min={10}
+                  max={90}
+                  step={5}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={(value) => `${value}%`}
+                />
+              </div>
+
+              {/* Output Format */}
+              <div>
+                <FormControl fullWidth variant="outlined" size="small">
+                  <InputLabel>Output Format</InputLabel>
+                  <Select
+                    value={outputFormat}
+                    label="Output Format"
+                    onChange={(e: SelectChangeEvent) =>
+                      setOutputFormat(e.target.value)
+                    }
+                  >
+                    {OUTPUT_FORMATS.map((format) => (
+                      <MenuItem key={format.value} value={format.value}>
+                        {format.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Image List */}
+        {images.length > 0 && (
+          <div className="space-y-4">
+            <Typography variant="h6">Images ({images.length})</Typography>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {images.map((image) => (
+                <div
+                  key={image.id}
+                  className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                    selectedImageId === image.id
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200"
+                  }`}
+                  onClick={() => setSelectedImageId(image.id)}
+                >
+                  {/* Image Preview */}
+                  <div className="aspect-square mb-3 rounded overflow-hidden bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={URL.createObjectURL(image.originalFile)}
+                      alt={image.originalFile.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Image Info */}
+                  <div className="space-y-2">
+                    <Typography
+                      variant="body2"
+                      className="font-medium truncate"
+                    >
+                      {image.originalFile.name}
+                    </Typography>
+
+                    <div className="text-xs text-gray-600 space-y-1">
+                      <div>
+                        Original: {formatBytes(image.originalFile.size)}
+                      </div>
+                      {image.compressedFile && (
+                        <div className="text-green-600">
+                          Compressed: {formatBytes(image.compressedFile.size)}(
+                          {Math.round(
+                            (1 -
+                              image.compressedFile.size /
+                                image.originalFile.size) *
+                              100
+                          )}
+                          % reduction)
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Progress Bar */}
+                    {image.isCompressing && (
+                      <Box className="w-full">
+                        <LinearProgress
+                          variant="determinate"
+                          value={image.compressionProgress}
+                          className="mb-1"
+                        />
+                        <Typography variant="caption" className="text-gray-600">
+                          Compressing... {Math.round(image.compressionProgress)}
+                          %
+                        </Typography>
+                      </Box>
+                    )}
+
+                    {/* Status */}
+                    {image.isCompressed && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-green-600">
+                          ✓ Compressed
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            downloadImage(image);
+                          }}
+                          className="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                        >
+                          Download
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Error */}
+                    {image.error && (
+                      <Typography variant="caption" className="text-red-600">
+                        Error: {image.error}
+                      </Typography>
+                    )}
+
+                    {/* Remove Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeImage(image.id);
+                      }}
+                      className="text-xs text-red-500 hover:text-red-700 w-full text-center py-1"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </ToolLayout>
   );
 }

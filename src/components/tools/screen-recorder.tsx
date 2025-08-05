@@ -1,312 +1,611 @@
 "use client";
 
-import { ButtonWithHandler } from "@/components/lib/buttons";
-import { CustomSvgIcon } from "@/components/lib/icons";
-import MonitorIcon from "@/data/icons/monitor.svg";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { useRef, useState } from "react";
-import PauseIcon from "@mui/icons-material/Pause";
-import { CircularProgress, Typography } from "@mui/material";
-import { CheckBoxWithLabel } from "@/components/lib/checkBoxes";
-import { clear, get, set } from "idb-keyval";
-import { SnackBarWithPosition } from "../lib/snackBar";
+import { useState, useRef, useCallback, useMemo } from "react";
 import {
-  getCameraAndMicrophoneStream,
-  getScreenStream,
-  mergeMediaStreams,
-} from "@/util/screenRecorderUtils";
+  Typography,
+  FormControlLabel,
+  Checkbox,
+  Card,
+  CardContent,
+  LinearProgress,
+  Box,
+  Alert,
+} from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from "@mui/icons-material/Stop";
+import PauseIcon from "@mui/icons-material/Pause";
+import DownloadIcon from "@mui/icons-material/Download";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import MicIcon from "@mui/icons-material/Mic";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 enum RecordingState {
-  NOT_RECORDING,
-  RECORDING,
-  PAUSED,
-  PROCESSING_RECORDING,
+  IDLE = "idle",
+  PREPARING = "preparing",
+  RECORDING = "recording",
+  PAUSED = "paused",
+  STOPPING = "stopping",
+  COMPLETED = "completed",
 }
 
-const PreparingRecording = () => {
-  return (
-    <div className="flex flex-row gap-3 items-center">
-      <CircularProgress color="primary" size={40} />
-      <Typography variant="body1" color="secondary">
-        Preparing recording...
-      </Typography>
-    </div>
+interface RecordingConfig {
+  includeScreen: boolean;
+  includeCamera: boolean;
+  includeMicrophone: boolean;
+  includeSystemAudio: boolean;
+}
+
+export default function ScreenRecorder({
+  hostname,
+  queryParams,
+}: Readonly<ToolComponentProps>) {
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+  });
+
+  const [recordingState, setRecordingState] = useState<RecordingState>(
+    RecordingState.IDLE
   );
-};
+  const [recordingConfig, setRecordingConfig] = useState<RecordingConfig>({
+    includeScreen: true,
+    includeCamera: false,
+    includeMicrophone: true,
+    includeSystemAudio: false,
+  });
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [error, setError] = useState<string>("");
 
-export default function ScreenRecorder() {
-  const cameraVideoOptions: Record<string, number> = {
-    width: 300,
-    height: 300,
-  };
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamsRef = useRef<MediaStream[]>([]);
+  const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const mediaRecoderOptionsConfig: Record<string, MediaRecorderOptions> = {
-    webm: {
-      mimeType: "video/webm; codecs=vp9",
-    },
-    mp4: {
-      mimeType: "video/mp4",
-    },
-  };
-
-  const RECORDING_START_DELAY_MS = 5000;
-  const RECORDER_TIME_SLICE_MS = 100;
-
-  // const [isSupported, setIsSupported] = useState(true);
-  const recordedVideoExtension = "webm";
-
-  const [recordingState, setRecordingState] = useState(
-    RecordingState.NOT_RECORDING
-  );
-  const [includeMicrophoneAudio, setIncludeMicrophoneAudio] = useState(false);
-  const [includeSystemAudio, setIncludeSystemAudio] = useState(false);
-  const [includeCameraVideo, setIncludeCameraVideo] = useState(false);
-
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-  const [snackBarColor, setSnackBarColor] = useState<
-    "success" | "info" | "warning" | "error"
-  >("success");
-
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  const streamContextRef = useRef<Record<string, MediaStream>>({});
-  const mediaRecorderContextRef = useRef<Record<string, MediaRecorder>>({});
-  const videoChunksIdsRef = useRef<number[]>([]);
-
-  const startRecording = async () => {
-    // reset videoChunksIds
-    videoChunksIdsRef.current = [];
-
-    await clear();
-
-    console.log("context while starting recording", {
-      streamContext: streamContextRef.current,
-      mediaRecorderContext: mediaRecorderContextRef.current,
+  // Cleanup streams
+  const cleanupStreams = useCallback(() => {
+    streamsRef.current.forEach((stream) => {
+      stream.getTracks().forEach((track) => track.stop());
     });
+    streamsRef.current = [];
+  }, []);
 
-    /**
-     * Reset context before starting recording
-     */
-    streamContextRef.current = {};
-    mediaRecorderContextRef.current = {};
+  // Format recording time
+  const formatTime = useCallback((seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
 
-    console.log("context after reset", {
-      streamContext: streamContextRef.current,
-      mediaRecorderContext: mediaRecorderContextRef.current,
-    });
+    if (hours > 0) {
+      return `${hours.toString().padStart(2, "0")}:${mins
+        .toString()
+        .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  }, []);
 
-    let screenStream: MediaStream | undefined;
+  // Get screen capture stream
+  const getScreenStream = useCallback(async (): Promise<MediaStream> => {
     try {
-      screenStream = await getScreenStream({
-        includeSystemAudio,
+      return await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+          frameRate: { ideal: 30 },
+        },
+        audio: recordingConfig.includeSystemAudio,
       });
-      streamContextRef.current["screenStream"] = screenStream;
+    } catch {
+      throw new Error(
+        "Failed to capture screen. Please ensure you grant permission."
+      );
+    }
+  }, [recordingConfig.includeSystemAudio]);
+
+  // Get camera and microphone stream
+  const getUserMediaStream = useCallback(async (): Promise<MediaStream> => {
+    try {
+      return await navigator.mediaDevices.getUserMedia({
+        video: recordingConfig.includeCamera
+          ? {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              frameRate: { ideal: 30 },
+            }
+          : false,
+        audio: recordingConfig.includeMicrophone,
+      });
+    } catch {
+      throw new Error(
+        "Failed to access camera/microphone. Please ensure you grant permission."
+      );
+    }
+  }, [recordingConfig.includeCamera, recordingConfig.includeMicrophone]);
+
+  // Combine multiple streams
+  const combineStreams = useCallback((streams: MediaStream[]): MediaStream => {
+    const combinedStream = new MediaStream();
+
+    streams.forEach((stream) => {
+      stream.getTracks().forEach((track) => {
+        combinedStream.addTrack(track);
+      });
+    });
+
+    return combinedStream;
+  }, []);
+
+  // Start recording timer
+  const startTimer = useCallback(() => {
+    setRecordingTime(0);
+    timerRef.current = setInterval(() => {
+      setRecordingTime((prev) => prev + 1);
+    }, 1000);
+  }, []);
+
+  // Stop recording timer
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  const startRecording = useCallback(async () => {
+    try {
+      setRecordingState(RecordingState.PREPARING);
+      setError("");
+      chunksRef.current = [];
+
+      // Get required streams
+      const streams: MediaStream[] = [];
+
+      if (recordingConfig.includeScreen) {
+        const screenStream = await getScreenStream();
+        streams.push(screenStream);
+        streamsRef.current.push(screenStream);
+      }
+
+      if (recordingConfig.includeCamera || recordingConfig.includeMicrophone) {
+        const userMediaStream = await getUserMediaStream();
+        streams.push(userMediaStream);
+        streamsRef.current.push(userMediaStream);
+      }
+
+      if (streams.length === 0) {
+        throw new Error("At least one recording source must be selected");
+      }
+
+      // Combine streams
+      const combinedStream = combineStreams(streams);
+
+      // Create media recorder
+      const mediaRecorder = new MediaRecorder(combinedStream, {
+        mimeType: "video/webm;codecs=vp9",
+      });
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: "video/webm" });
+        setRecordedBlob(blob);
+        setRecordingState(RecordingState.COMPLETED);
+        cleanupStreams();
+        stopTimer();
+        toolState.actions.showMessage("Recording completed successfully!");
+      };
+
+      mediaRecorder.onerror = (event) => {
+        console.error("MediaRecorder error:", event);
+        setError("Recording failed. Please try again.");
+        setRecordingState(RecordingState.IDLE);
+        cleanupStreams();
+        stopTimer();
+      };
+
+      mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.start(1000); // Collect data every second
+
+      setRecordingState(RecordingState.RECORDING);
+      startTimer();
+      toolState.actions.showMessage("Recording started!");
     } catch (error) {
-      console.error("Error getting screen stream", error);
-      setSnackBarMessage("Error starting recording");
-      setSnackBarColor("error");
-      setIsSnackBarOpen(true);
-      setRecordingState(RecordingState.NOT_RECORDING);
+      console.error("Failed to start recording:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to start recording"
+      );
+      setRecordingState(RecordingState.IDLE);
+      cleanupStreams();
+    }
+  }, [
+    recordingConfig,
+    getScreenStream,
+    getUserMediaStream,
+    combineStreams,
+    cleanupStreams,
+    startTimer,
+    stopTimer,
+    toolState.actions,
+  ]);
+
+  const pauseRecording = useCallback(() => {
+    if (
+      mediaRecorderRef.current &&
+      recordingState === RecordingState.RECORDING
+    ) {
+      mediaRecorderRef.current.pause();
+      setRecordingState(RecordingState.PAUSED);
+      stopTimer();
+      toolState.actions.showMessage("Recording paused");
+    }
+  }, [recordingState, stopTimer, toolState.actions]);
+
+  const resumeRecording = useCallback(() => {
+    if (mediaRecorderRef.current && recordingState === RecordingState.PAUSED) {
+      mediaRecorderRef.current.resume();
+      setRecordingState(RecordingState.RECORDING);
+      startTimer();
+      toolState.actions.showMessage("Recording resumed");
+    }
+  }, [recordingState, startTimer, toolState.actions]);
+
+  const stopRecording = useCallback(() => {
+    if (
+      mediaRecorderRef.current &&
+      (recordingState === RecordingState.RECORDING ||
+        recordingState === RecordingState.PAUSED)
+    ) {
+      setRecordingState(RecordingState.STOPPING);
+      mediaRecorderRef.current.stop();
+    }
+  }, [recordingState]);
+
+  const downloadRecording = useCallback(() => {
+    if (!recordedBlob) {
+      toolState.actions.showMessage("No recording to download");
       return;
     }
 
-    let webcamStream: MediaStream | undefined;
-    if (includeCameraVideo || includeMicrophoneAudio) {
-      try {
-        webcamStream = await getCameraAndMicrophoneStream({
-          includeCameraVideo,
-          includeMicrophoneAudio,
-        });
-        streamContextRef.current["webcamStream"] = webcamStream;
-      } catch (error) {
-        console.error("Error getting camera or microphone stream", error);
-        setSnackBarMessage("Error starting recording");
-        setSnackBarColor("error");
-        setIsSnackBarOpen(true);
-        setRecordingState(RecordingState.NOT_RECORDING);
-        return;
-      }
+    const url = URL.createObjectURL(recordedBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `screen-recording-${Date.now()}.webm`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toolState.actions.showMessage("Recording downloaded successfully!");
+  }, [recordedBlob, toolState.actions]);
+
+  const resetRecording = useCallback(() => {
+    cleanupStreams();
+    stopTimer();
+    setRecordingState(RecordingState.IDLE);
+    setRecordedBlob(null);
+    setRecordingTime(0);
+    setError("");
+
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current = null;
     }
-    if (screenStream) {
-      configureStreamStopListener(screenStream, true);
-    }
+  }, [cleanupStreams, stopTimer]);
 
-    let mergedMediaStream: MediaStream | null;
-    if (webcamStream) {
-      configureStreamStopListener(webcamStream, false);
+  // Check browser support
+  const isSupported = useMemo(() => {
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+  }, []);
 
-      mergedMediaStream = mergeMediaStreams({
-        screenStream,
-        webcamStream,
-        includeSystemAudio,
-        includeMicrophoneAudio,
-        cameraVideoOptions,
-      });
-    } else {
-      mergedMediaStream = screenStream!;
-    }
-
-    streamContextRef.current["mergedMediaStream"] = mergedMediaStream!;
-
-    const mediaRecorder = new MediaRecorder(
-      mergedMediaStream!,
-      mediaRecoderOptionsConfig[recordedVideoExtension]
-    );
-
-    mediaRecorderContextRef.current["mediaRecorder"] = mediaRecorder;
-
-    if (screenStream && webcamStream && !mergedMediaStream) {
-      stopRecording(false);
-    }
-
-    if (mergedMediaStream) {
-      mediaRecorder.ondataavailable = (event: BlobEvent) => {
-        console.log("media recorder data available event triggered..");
-        const id = Date.now();
-        /**
-         * write data in index db
-         */
-        set(id, event.data);
-        videoChunksIdsRef.current.push(id);
-      };
-    }
-
-    mediaRecorder.start(RECORDER_TIME_SLICE_MS);
-    setRecordingState(RecordingState.RECORDING);
-  };
-
-  const stopRecording = (triggerProcessRecording: boolean) => {
-    console.log("stop recording triggered..");
-    const { screenStream, webcamStream, mergedMediaStream } =
-      streamContextRef.current;
-    const { mediaRecorder } = mediaRecorderContextRef.current;
-    mediaRecorder?.stop();
-    screenStream?.getTracks().forEach((track) => track.stop());
-    webcamStream?.getTracks().forEach((track) => track.stop());
-    mergedMediaStream?.getTracks().forEach((track) => track.stop());
-
-    if (triggerProcessRecording) {
-      setRecordingState(RecordingState.PROCESSING_RECORDING);
-      processRecordingVideo();
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const downloadRecording = (videoFileBuffer: any[]) => {
-    const videoBlob = new Blob(videoFileBuffer, {
-      type: `video/${recordedVideoExtension}`,
+  // Button configuration
+  const buttons = useMemo(() => {
+    const commonButtons = createCommonButtons({
+      onFullScreen: toolState.toggleFullScreen,
     });
 
-    const videoUrl = URL.createObjectURL(videoBlob);
-    const element = document.createElement("a");
-    element.href = videoUrl;
-    element.download = `webtoolseasy_recording.${recordedVideoExtension}`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
+    if (recordingState === RecordingState.IDLE) {
+      return [
+        {
+          type: "custom" as const,
+          text: "Start Recording",
+          onClick: startRecording,
+          icon: <PlayArrowIcon />,
+          disabled: !isSupported,
+        },
+        ...commonButtons,
+      ];
+    }
 
-  const processRecordingVideo = () => {
-    setRecordingState(RecordingState.PROCESSING_RECORDING);
-    setTimeout(async () => {
-      try {
-        const videoFileBuffer = [];
-        videoChunksIdsRef.current.sort(function (a, b) {
-          return a - b;
-        });
+    if (recordingState === RecordingState.RECORDING) {
+      return [
+        {
+          type: "custom" as const,
+          text: "Pause",
+          onClick: pauseRecording,
+          icon: <PauseIcon />,
+        },
+        {
+          type: "custom" as const,
+          text: "Stop",
+          onClick: stopRecording,
+          icon: <StopIcon />,
+        },
+        ...commonButtons,
+      ];
+    }
 
-        const totalChunks = videoChunksIdsRef.current.length;
+    if (recordingState === RecordingState.PAUSED) {
+      return [
+        {
+          type: "custom" as const,
+          text: "Resume",
+          onClick: resumeRecording,
+          icon: <PlayArrowIcon />,
+        },
+        {
+          type: "custom" as const,
+          text: "Stop",
+          onClick: stopRecording,
+          icon: <StopIcon />,
+        },
+        ...commonButtons,
+      ];
+    }
 
-        for (let index = 0; index < totalChunks; index++) {
-          videoFileBuffer.push(await get(videoChunksIdsRef.current[index]));
-        }
+    if (recordingState === RecordingState.COMPLETED) {
+      return [
+        {
+          type: "custom" as const,
+          text: "Download Recording",
+          onClick: downloadRecording,
+          icon: <DownloadIcon />,
+        },
+        {
+          type: "custom" as const,
+          text: "New Recording",
+          onClick: resetRecording,
+          icon: <PlayArrowIcon />,
+        },
+        ...commonButtons,
+      ];
+    }
 
-        downloadRecording(videoFileBuffer);
-        clear();
-
-        setRecordingState(RecordingState.NOT_RECORDING);
-      } catch (error) {
-        console.error("Error processing recording", error);
-        setSnackBarMessage("Error processing recording");
-        setSnackBarColor("error");
-        setIsSnackBarOpen(true);
-        setRecordingState(RecordingState.NOT_RECORDING);
-      }
-    }, RECORDING_START_DELAY_MS);
-  };
-
-  const configureStreamStopListener = (
-    mediaStream: MediaStream,
-    triggerStopRecording: boolean
-  ) => {
-    mediaStream.getTracks().forEach((track) => {
-      track.addEventListener("ended", () => {
-        console.log(`media stream track has ended`);
-        console.log("configureStreamStopListener recordingState: ", {
-          recordingState,
-        });
-
-        if (triggerStopRecording) {
-          stopRecording(triggerStopRecording);
-        }
-      });
-    });
-  };
+    return commonButtons;
+  }, [
+    recordingState,
+    isSupported,
+    startRecording,
+    pauseRecording,
+    resumeRecording,
+    stopRecording,
+    downloadRecording,
+    resetRecording,
+    toolState,
+  ]);
 
   return (
-    <div className="flex flex-col items-center w-full gap-3">
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
-        color={snackBarColor}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
+    >
+      <SEOContent
+        title="Screen Recorder"
+        description="Record your screen, camera, and audio online. Capture presentations, tutorials, or demonstrations with high-quality video recording."
+        exampleCode="Configure recording settings → Start recording → Download video file"
+        exampleOutput="High-quality WebM video files with screen capture and audio"
       />
-      <CustomSvgIcon sx={{ fontSize: "10rem" }}>
-        <MonitorIcon />
-      </CustomSvgIcon>
-      <div className="flex flex-col gap-2 md:flex-row md:justify-center">
-        <CheckBoxWithLabel
-          label="Include Microphone Audio"
-          value={includeMicrophoneAudio}
-          onChange={setIncludeMicrophoneAudio}
-          color="textPrimary"
-        />
-        <CheckBoxWithLabel
-          label="Include System Audio"
-          value={includeSystemAudio}
-          onChange={setIncludeSystemAudio}
-          color="textPrimary"
-        />
-        <CheckBoxWithLabel
-          label="Include Camera Video"
-          value={includeCameraVideo}
-          onChange={setIncludeCameraVideo}
-          color="textPrimary"
-        />
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <div className="w-full space-y-6">
+        {/* Browser Support Check */}
+        {!isSupported && (
+          <Alert severity="error">
+            Your browser doesn&apos;t support screen recording. Please use a
+            modern browser like Chrome, Firefox, or Edge.
+          </Alert>
+        )}
+
+        {/* Error Display */}
+        {error && (
+          <Alert severity="error" onClose={() => setError("")}>
+            {error}
+          </Alert>
+        )}
+
+        {/* Recording Configuration */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="mb-4 flex items-center gap-2">
+              <ScreenShareIcon /> Recording Configuration
+            </Typography>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={recordingConfig.includeScreen}
+                    onChange={(e) =>
+                      setRecordingConfig((prev) => ({
+                        ...prev,
+                        includeScreen: e.target.checked,
+                      }))
+                    }
+                    disabled={recordingState !== RecordingState.IDLE}
+                    icon={<ScreenShareIcon />}
+                    checkedIcon={<ScreenShareIcon />}
+                  />
+                }
+                label="Screen Capture"
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={recordingConfig.includeCamera}
+                    onChange={(e) =>
+                      setRecordingConfig((prev) => ({
+                        ...prev,
+                        includeCamera: e.target.checked,
+                      }))
+                    }
+                    disabled={recordingState !== RecordingState.IDLE}
+                    icon={<VideocamIcon />}
+                    checkedIcon={<VideocamIcon />}
+                  />
+                }
+                label="Camera"
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={recordingConfig.includeMicrophone}
+                    onChange={(e) =>
+                      setRecordingConfig((prev) => ({
+                        ...prev,
+                        includeMicrophone: e.target.checked,
+                      }))
+                    }
+                    disabled={recordingState !== RecordingState.IDLE}
+                    icon={<MicIcon />}
+                    checkedIcon={<MicIcon />}
+                  />
+                }
+                label="Microphone"
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={recordingConfig.includeSystemAudio}
+                    onChange={(e) =>
+                      setRecordingConfig((prev) => ({
+                        ...prev,
+                        includeSystemAudio: e.target.checked,
+                      }))
+                    }
+                    disabled={recordingState !== RecordingState.IDLE}
+                    icon={<VolumeUpIcon />}
+                    checkedIcon={<VolumeUpIcon />}
+                  />
+                }
+                label="System Audio"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recording Status */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="mb-4">
+              Recording Status
+            </Typography>
+
+            <div className="space-y-4">
+              {/* State Display */}
+              <div className="flex items-center justify-between">
+                <Typography variant="body1">
+                  Status:{" "}
+                  <span className="font-semibold capitalize">
+                    {recordingState}
+                  </span>
+                </Typography>
+
+                {(recordingState === RecordingState.RECORDING ||
+                  recordingState === RecordingState.PAUSED) && (
+                  <Typography variant="body1" className="font-mono text-lg">
+                    {formatTime(recordingTime)}
+                  </Typography>
+                )}
+              </div>
+
+              {/* Progress Indicators */}
+              {recordingState === RecordingState.PREPARING && (
+                <Box>
+                  <Typography variant="body2" className="mb-2">
+                    Preparing recording streams...
+                  </Typography>
+                  <LinearProgress />
+                </Box>
+              )}
+
+              {recordingState === RecordingState.STOPPING && (
+                <Box>
+                  <Typography variant="body2" className="mb-2">
+                    Processing recording...
+                  </Typography>
+                  <LinearProgress />
+                </Box>
+              )}
+
+              {recordingState === RecordingState.RECORDING && (
+                <Box>
+                  <Typography variant="body2" className="mb-2 text-red-600">
+                    🔴 Recording in progress...
+                  </Typography>
+                  <LinearProgress color="secondary" />
+                </Box>
+              )}
+
+              {recordingState === RecordingState.PAUSED && (
+                <Typography variant="body2" className="text-orange-600">
+                  ⏸️ Recording paused
+                </Typography>
+              )}
+
+              {recordingState === RecordingState.COMPLETED && recordedBlob && (
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <Typography variant="body2" className="text-green-800">
+                    ✅ Recording completed successfully!
+                  </Typography>
+                  <Typography variant="caption" className="text-green-600">
+                    Size: {(recordedBlob.size / (1024 * 1024)).toFixed(2)} MB |
+                    Duration: {formatTime(recordingTime)}
+                  </Typography>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Instructions */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="mb-2">
+              How to Use
+            </Typography>
+            <Typography variant="body2" className="text-gray-600 space-y-2">
+              <div>1. Configure your recording settings above</div>
+              <div>
+                2. Click &quot;Start Recording&quot; and grant necessary
+                permissions
+              </div>
+              <div>3. Select the screen/window to capture when prompted</div>
+              <div>4. Use pause/resume controls as needed</div>
+              <div>
+                5. Click &quot;Stop&quot; when finished and download your
+                recording
+              </div>
+            </Typography>
+          </CardContent>
+        </Card>
       </div>
-      {recordingState === RecordingState.NOT_RECORDING && (
-        <ButtonWithHandler
-          onClick={startRecording}
-          buttonText="Start Recording"
-          variant="outlined"
-          startIcon={<PlayArrowIcon />}
-        />
-      )}
-      {recordingState === RecordingState.RECORDING && (
-        <ButtonWithHandler
-          onClick={() => stopRecording(true)}
-          buttonText="Stop Recording"
-          startIcon={<PauseIcon />}
-          color="error"
-        />
-      )}
-      {recordingState === RecordingState.PROCESSING_RECORDING && (
-        <PreparingRecording />
-      )}
-    </div>
+    </ToolLayout>
   );
 }

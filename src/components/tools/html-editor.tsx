@@ -1,223 +1,137 @@
 "use client";
 
+import { useState, useCallback, useMemo } from "react";
+import PreviewIcon from "@mui/icons-material/Preview";
 import { ToolComponentProps } from "@/types/component";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { CodeEditorPropsV2 } from "../lib/editor";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import { ButtonWithHandler } from "../lib/buttons";
-import { SnackBarWithPosition } from "../lib/snackBar";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
-import IFrameWithLabel from "../iFrame";
-import { html_beautify } from "js-beautify";
-import CodeIcon from "@mui/icons-material/Code";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 
 export default function HtmlEditor({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
   const initialValue = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; }
+        p { line-height: 1.6; }
+    </style>
 </head>
 <body>
-    <h1>This is an Online HTML Editor</h1>
-    <p style="color:red">
-        WebToolsEasy is Great. Explore more such free tools.
-    </p>
+    <div class="container">
+        <h1>Welcome to HTML Editor</h1>
+        <p>This is a sample HTML document. Edit the code on the left to see the preview on the right.</p>
+        <button onclick="alert('Hello World!')">Click Me</button>
+    </div>
 </body>
 </html>`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
-
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
-
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
-
-  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorPropsV2>({
-    language: "html",
-    value: rawCode,
-    onChange: onRawCodeChange,
-    editorOptions: {
-      wordWrap: "on",
-    },
-    className: "w-full h-full",
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
   });
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [previewHtml, setPreviewHtml] = useState(toolState.code);
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+  const updatePreview = useCallback(() => {
+    setPreviewHtml(toolState.code);
+    toolState.actions.showMessage("Preview updated!");
+  }, [toolState.code, toolState.actions]);
 
-  const handleTextCopy = () => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
+  // Auto-update preview when code changes (debounced)
+  const handleCodeChange = useCallback(
+    (value: string) => {
+      toolState.setCode(value);
+      // Auto-update preview with a small delay
+      setTimeout(() => setPreviewHtml(value), 300);
+    },
+    [toolState]
+  );
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
+  // Editor configuration
+  const editorProps = useEditorConfig({
+    language: "html",
+    value: toolState.code,
+    onChange: handleCodeChange,
+  });
 
-  const handleFontSizeChange = (event: SelectChangeEvent<number>) => {
-    setCodeEditorProps({
-      ...codeEditorProps,
-      editorOptions: {
-        ...codeEditorProps.editorOptions,
-        fontSize: event.target.value as number,
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Update Preview",
+        onClick: updatePreview,
+        icon: <PreviewIcon />,
       },
-    });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const CodeEditorOptions = () => {
-    return (
-      <div className="flex flex-row w-full">
-        <FormControl
-          variant="outlined"
-          size="small"
-          classes={{ root: "w-full md:w-1/5" }}
-        >
-          <InputLabel id="font-size-label">Font Size</InputLabel>
-          <Select
-            labelId="font-size-label"
-            id="font-size"
-            value={14}
-            onChange={handleFontSizeChange}
-            label="Font Size"
-            color="primary"
-          >
-            {[10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-  };
-
-  const formatCode = () => {
-    setRawCode(
-      html_beautify(rawCode, {
-        indent_size: 10,
-        wrap_line_length: 80,
-      })
-    );
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          size="small"
-          startIcon={<CodeIcon />}
-          onClick={formatCode}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Text"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+      ...createCommonButtons({
+        onCopy: () =>
+          toolState.actions.copyText(
+            toolState.code,
+            "HTML code copied to clipboard!"
+          ),
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [updatePreview, toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="HTML Editor"
+        description="Free online HTML editor with live preview. Write, edit and test your HTML code in real-time."
+        exampleCode={initialValue}
+        exampleOutput="Live HTML preview with interactive elements"
       />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={codeEditorProps}
-          themeOption="vs-dark"
-          editorHeading="HTML Code"
-          className="w-[80%] md:w-[49%]"
-        />
 
-        <IFrameWithLabel
-          iFrameSourceDoc={rawCode}
-          heading="HTML Preview"
-          className="w-[80%] md:w-[49%]"
-        />
-      </div>
-    </div>
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={editorProps}
+            themeOption="vs-dark"
+            editorHeading="HTML Code"
+            className="w-full h-full"
+          />
+        }
+        rightPanel={
+          <div className="w-full h-full flex flex-col">
+            <div className="mb-3 flex items-center gap-2">
+              <PreviewIcon />
+              <span className="font-semibold">Live Preview</span>
+            </div>
+            <div className="flex-1 w-full border border-gray-300 rounded bg-white">
+              <iframe
+                srcDoc={previewHtml}
+                className="w-full h-full border-0 rounded"
+                sandbox="allow-scripts allow-same-origin"
+                title="HTML Preview"
+              />
+            </div>
+          </div>
+        }
+      />
+    </ToolLayout>
   );
 }
