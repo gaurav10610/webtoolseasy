@@ -71,9 +71,11 @@ export default function JwtDecoder({
   const downloadDecodedToken = useCallback(() => {
     const decoded = {
       headers: JSON.parse(decodedJwtTokenHeaders || "{}"),
-      payload: JSON.parse(decodedJwtToken || "{}")
+      payload: JSON.parse(decodedJwtToken || "{}"),
     };
-    const blob = new Blob([JSON.stringify(decoded, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(decoded, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

@@ -59,7 +59,9 @@ export default function UuidV4Generator({
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toolState.actions.showMessage(`${uuidList.length} UUIDs downloaded successfully!`);
+    toolState.actions.showMessage(
+      `${uuidList.length} UUIDs downloaded successfully!`
+    );
   }, [uuidList, toolState.actions]);
 
   // Button configuration
