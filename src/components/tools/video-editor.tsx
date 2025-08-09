@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback, memo } from "react";
+import React, { useState, useRef, useCallback, memo, useMemo } from "react";
 import {
   Typography,
   Button,
@@ -149,18 +149,24 @@ const VideoControls = memo(function VideoControls({
   };
 
   return (
-    <PaperWithChildren variant="elevation" className="p-3">
-      <div className="flex flex-col gap-3">
+    <PaperWithChildren variant="elevation" className="p-2 sm:p-3">
+      <div className="flex flex-col gap-2 sm:gap-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <IconButton onClick={onPlayPause} size="large" color="primary">
               {isPlaying ? <Pause /> : <PlayArrow />}
             </IconButton>
-            <Typography variant="body2" className="min-w-[80px]">
-              {formatTime(currentTime)} / {formatTime(selectedClip.duration)}
+            <Typography
+              variant="body2"
+              className="min-w-[60px] sm:min-w-[80px] text-xs sm:text-sm"
+            >
+              <span className="hidden sm:inline">
+                {formatTime(currentTime)} / {formatTime(selectedClip.duration)}
+              </span>
+              <span className="sm:hidden">{Math.round(currentTime)}s</span>
             </Typography>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <IconButton onClick={onMuteToggle} size="small">
               {isMuted ? <VolumeOff /> : <VolumeUp />}
             </IconButton>
@@ -170,7 +176,7 @@ const VideoControls = memo(function VideoControls({
               max={100}
               onChange={(_, value) => onVolumeChange(value as number)}
               size="small"
-              className="w-20"
+              className="w-12 sm:w-20"
             />
           </div>
         </div>
@@ -202,10 +208,14 @@ const VideoEffectsPanel = memo(function VideoEffectsPanel({
       {effects.map((effect) => (
         <div
           key={effect.id}
-          className="p-3 border border-gray-200 rounded-lg bg-gray-50"
+          className="p-2 sm:p-3 border border-gray-200 rounded-lg bg-gray-50"
         >
           <div className="flex items-center justify-between mb-2">
-            <Typography variant="body2" fontWeight="medium">
+            <Typography
+              variant="body2"
+              fontWeight="medium"
+              className="text-xs sm:text-sm"
+            >
               {effect.name}
             </Typography>
             <FormControlLabel
@@ -272,14 +282,23 @@ const TrimControlsPanel = memo(function TrimControlsPanel({
 
   return (
     <div className="space-y-3">
-      <Typography variant="h6" className="flex items-center gap-2">
+      <Typography
+        variant="h6"
+        className="flex items-center gap-2 text-sm sm:text-base"
+      >
         <ContentCut className="text-blue-600" />
-        Trim Video
+        <span className="hidden sm:inline">Trim Video</span>
+        <span className="sm:hidden">Trim</span>
       </Typography>
-      <div className="p-3 border border-gray-200 rounded-lg bg-gray-50">
+      <div className="p-2 sm:p-3 border border-gray-200 rounded-lg bg-gray-50">
         <div className="space-y-3">
-          <Typography variant="body2" fontWeight="medium">
-            Trim Range: {Math.round(selectedClip.trimStart)}s -{" "}
+          <Typography
+            variant="body2"
+            fontWeight="medium"
+            className="text-xs sm:text-sm"
+          >
+            <span className="hidden sm:inline">Trim Range: </span>
+            {Math.round(selectedClip.trimStart)}s -{" "}
             {Math.round(selectedClip.trimEnd)}s
           </Typography>
           <Slider
@@ -291,6 +310,7 @@ const TrimControlsPanel = memo(function TrimControlsPanel({
               onTrimChange(start, end);
             }}
             valueLabelDisplay="auto"
+            size="small"
             marks={[
               { value: 0, label: "0s" },
               {
@@ -601,53 +621,67 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <Typography variant="h6" className="flex items-center gap-2">
+        <Typography
+          variant="h6"
+          className="flex items-center gap-2 text-sm sm:text-base"
+        >
           <TextFields className="text-blue-600" />
-          Text Overlays ({selectedClip.textOverlays.length})
+          <span className="hidden sm:inline">
+            Text Overlays ({selectedClip.textOverlays.length})
+          </span>
+          <span className="sm:hidden">
+            Text ({selectedClip.textOverlays.length})
+          </span>
         </Typography>
         <Button
           variant="outlined"
           size="small"
           startIcon={<Add />}
           onClick={onAddTextOverlay}
+          className="text-xs sm:text-sm"
         >
-          Add Text
+          <span className="hidden sm:inline">Add Text</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </div>
 
-      <div className="space-y-2 max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      <div className="space-y-3 max-h-24 sm:max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {selectedClip.textOverlays.map((overlay) => (
           <Card
             key={overlay.id}
             variant={
               selectedTextOverlayId === overlay.id ? "elevation" : "outlined"
             }
-            className={`p-2 cursor-pointer transition-all ${
+            className={`p-3 cursor-pointer transition-all border-2 ${
               selectedTextOverlayId === overlay.id
                 ? "bg-blue-50 border-blue-500 shadow-md"
-                : "hover:bg-gray-50"
+                : "hover:bg-gray-50 border-gray-200 hover:border-gray-300"
             }`}
             onClick={() => onSelectTextOverlay(overlay.id)}
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 flex-1 min-w-0">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <TextFields
                   color={
                     selectedTextOverlayId === overlay.id ? "primary" : "action"
                   }
                   fontSize="small"
+                  className="flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                   <Typography
                     variant="body2"
                     fontWeight="medium"
-                    className="truncate"
+                    className="truncate text-xs sm:text-sm leading-tight mb-1"
                   >
                     {overlay.text || "Text Overlay"}
                   </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                    {Math.round(overlay.startTime)}s -{" "}
-                    {Math.round(overlay.endTime)}s
+                  <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    className="text-xs leading-tight"
+                  >
+                    {Math.round(overlay.startTime)}s - {Math.round(overlay.endTime)}s
                   </Typography>
                 </div>
               </div>
@@ -657,7 +691,7 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
                   e.stopPropagation();
                   onRemoveTextOverlay(overlay.id);
                 }}
-                className="text-red-500 hover:bg-red-50 flex-shrink-0"
+                className="text-red-500 hover:bg-red-50 flex-shrink-0 ml-2"
               >
                 <Delete fontSize="small" />
               </IconButton>
@@ -667,8 +701,12 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
       </div>
 
       {selectedOverlay && (
-        <div className="space-y-3 p-3 border border-gray-200 rounded-lg bg-gray-50">
-          <Typography variant="body2" fontWeight="medium">
+        <div className="space-y-4 p-3 sm:p-4 border border-gray-200 rounded-lg bg-gray-50">
+          <Typography
+            variant="body2"
+            fontWeight="medium"
+            className="text-sm sm:text-base leading-tight"
+          >
             Edit Text Overlay
           </Typography>
 
@@ -680,9 +718,10 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
             onChange={(e) =>
               onUpdateTextOverlay(selectedOverlay.id, { text: e.target.value })
             }
+            className="mb-1"
           />
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <TextField
               size="small"
               label="Font Size"
@@ -711,7 +750,7 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
             </FormControl>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <TextField
               size="small"
               label="Text Color"
@@ -736,7 +775,7 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <TextField
               size="small"
               label="Width (%)"
@@ -764,7 +803,9 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
           </div>
 
           <div className="space-y-2">
-            <Typography variant="caption">Opacity</Typography>
+            <Typography variant="caption" className="text-xs sm:text-sm">
+              Opacity
+            </Typography>
             <Slider
               value={selectedOverlay.opacity}
               min={0}
@@ -776,12 +817,14 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
                 })
               }
               valueLabelDisplay="auto"
+              size="small"
             />
           </div>
 
           <div className="space-y-2">
-            <Typography variant="caption">
-              Display Time: {Math.round(selectedOverlay.startTime)}s -{" "}
+            <Typography variant="caption" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">Display Time: </span>
+              {Math.round(selectedOverlay.startTime)}s -{" "}
               {Math.round(selectedOverlay.endTime)}s
             </Typography>
             <Slider
@@ -796,6 +839,7 @@ const TextOverlaysPanel = memo(function TextOverlaysPanel({
                 });
               }}
               valueLabelDisplay="auto"
+              size="small"
               marks={[
                 { value: 0, label: "0s" },
                 {
@@ -995,12 +1039,11 @@ export default function VideoEditor({
     }));
   }, []);
 
-  const getVideoStyle = useCallback(() => {
+  // Memoize video style to prevent unnecessary re-renders during effect changes
+  const videoStyle = useMemo(() => {
     if (!selectedClip) return {};
-
-    const activeEffects = selectedClip.effects.filter(
-      (effect) => effect.enabled
-    );
+    
+    const activeEffects = selectedClip.effects.filter(effect => effect.enabled);
     if (activeEffects.length === 0) return {};
 
     const filters = activeEffects
@@ -1284,20 +1327,33 @@ export default function VideoEditor({
       {state.clips.length > 0 && (
         <div className="flex flex-col gap-4 h-full min-h-0">
           {/* Video Clips Section - Top Row */}
-          <PaperWithChildren variant="elevation" className="p-4 flex-shrink-0">
+          <PaperWithChildren
+            variant="elevation"
+            className="p-3 sm:p-4 flex-shrink-0"
+          >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Typography variant="h6" className="flex items-center gap-2">
+                <Typography
+                  variant="h6"
+                  className="flex items-center gap-2 text-sm sm:text-base"
+                >
                   <VideoLibraryIcon className="text-blue-600" />
-                  Video Clips ({state.clips.length})
+                  <span className="hidden sm:inline">
+                    Video Clips ({state.clips.length})
+                  </span>
+                  <span className="sm:hidden">
+                    Clips ({state.clips.length})
+                  </span>
                 </Typography>
                 <Button
                   variant="outlined"
                   size="small"
                   startIcon={<Add />}
                   component="label"
+                  className="text-xs sm:text-sm"
                 >
-                  Add Videos
+                  <span className="hidden sm:inline">Add Videos</span>
+                  <span className="sm:hidden">Add</span>
                   <input
                     type="file"
                     hidden
@@ -1312,7 +1368,7 @@ export default function VideoEditor({
                 </Button>
               </div>
 
-              <div className="space-y-2 max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+              <div className="space-y-3 max-h-32 sm:max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {state.clips.map((clip) => (
                   <Card
                     key={clip.id}
@@ -1321,15 +1377,15 @@ export default function VideoEditor({
                         ? "elevation"
                         : "outlined"
                     }
-                    className={`p-2 cursor-pointer transition-all ${
+                    className={`p-3 cursor-pointer transition-all border-2 ${
                       state.selectedClipId === clip.id
                         ? "bg-blue-50 border-blue-500 shadow-md"
-                        : "hover:bg-gray-50"
+                        : "hover:bg-gray-50 border-gray-200 hover:border-gray-300"
                     }`}
                     onClick={() => handleClipSelect(clip.id)}
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
                         <VideoLibraryIcon
                           color={
                             state.selectedClipId === clip.id
@@ -1337,21 +1393,29 @@ export default function VideoEditor({
                               : "action"
                           }
                           fontSize="small"
+                          className="flex-shrink-0"
                         />
                         <div className="flex-1 min-w-0">
                           <Typography
                             variant="body2"
                             fontWeight="medium"
-                            className="truncate"
+                            className="truncate text-xs sm:text-sm leading-tight mb-1"
                           >
                             {clip.name}
                           </Typography>
-                          <Typography variant="caption" color="textSecondary">
-                            {formatBytes(clip.file.size)} •{" "}
+                          <Typography
+                            variant="caption"
+                            color="textSecondary"
+                            className="text-xs leading-tight"
+                          >
+                            <span className="hidden sm:inline">
+                              {formatBytes(clip.file.size)} •{" "}
+                            </span>
                             {Math.round(clip.duration)}s
                             {isVideoEdited(clip) && (
-                              <span className="ml-2 px-1.5 py-0.5 bg-green-100 text-green-800 text-xs rounded">
-                                Edited
+                              <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full leading-none">
+                                <span className="hidden sm:inline">Edited</span>
+                                <span className="sm:hidden">✓</span>
                               </span>
                             )}
                           </Typography>
@@ -1363,7 +1427,7 @@ export default function VideoEditor({
                           e.stopPropagation();
                           handleRemoveClip(clip.id);
                         }}
-                        className="text-red-500 hover:bg-red-50 flex-shrink-0"
+                        className="text-red-500 hover:bg-red-50 flex-shrink-0 ml-2"
                       >
                         <Delete fontSize="small" />
                       </IconButton>
@@ -1376,18 +1440,22 @@ export default function VideoEditor({
 
           {/* Bottom Row - Video Preview and Editing Controls Side by Side */}
           {selectedClip && (
-            <div className="flex gap-4 flex-1 min-h-0">
+            <div className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
               {/* Left Column - Video Preview */}
               <div className="flex-1 min-w-0">
-                <PaperWithChildren variant="elevation" className="p-4 h-full">
+                <PaperWithChildren
+                  variant="elevation"
+                  className="p-3 sm:p-4 h-full"
+                >
                   <div className="flex flex-col gap-4 h-full min-h-0">
                     <div className="flex items-center justify-between flex-shrink-0">
                       <Typography
                         variant="h6"
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 text-sm sm:text-base"
                       >
                         <PlayArrow className="text-blue-600" />
-                        Video Preview
+                        <span className="hidden sm:inline">Video Preview</span>
+                        <span className="sm:hidden">Preview</span>
                       </Typography>
                       {isVideoEdited(selectedClip) && (
                         <Button
@@ -1396,19 +1464,20 @@ export default function VideoEditor({
                           startIcon={<Download />}
                           onClick={handleExport}
                           disabled={state.isProcessing}
-                          className="bg-green-600 hover:bg-green-700"
+                          className="bg-green-600 hover:bg-green-700 text-xs sm:text-sm"
                         >
-                          Export Video
+                          <span className="hidden sm:inline">Export Video</span>
+                          <span className="sm:hidden">Export</span>
                         </Button>
                       )}
                     </div>
 
                     <div className="flex-1 flex flex-col gap-3 min-h-0">
-                      <div className="relative flex-1 bg-black rounded-lg overflow-hidden min-h-[300px]">
+                      <div className="relative flex-1 bg-black rounded-lg overflow-hidden min-h-[200px] sm:min-h-[300px]">
                         <video
                           ref={videoRef}
                           className="w-full h-full object-contain"
-                          style={getVideoStyle()}
+                          style={videoStyle}
                           onLoadedData={() => {
                             if (videoRef.current && selectedClip) {
                               videoRef.current.currentTime =
@@ -1460,43 +1529,46 @@ export default function VideoEditor({
               </div>
 
               {/* Right Column - Video Editing Controls */}
-              <div className="w-80 flex-shrink-0">
+              <div className="w-full lg:w-80 flex-shrink-0">
                 <div className="flex flex-col gap-4 h-full">
-                  {/* Trim Controls */}
-                  <PaperWithChildren
-                    variant="elevation"
-                    className="p-4 flex-shrink-0"
-                  >
-                    <TrimControlsPanel
-                      selectedClip={selectedClip}
-                      onTrimChange={handleTrimChange}
-                    />
-                  </PaperWithChildren>
+                  {/* Mobile: Stack controls, Desktop: Vertical layout */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                    {/* Trim Controls */}
+                    <PaperWithChildren
+                      variant="elevation"
+                      className="p-3 sm:p-4"
+                    >
+                      <TrimControlsPanel
+                        selectedClip={selectedClip}
+                        onTrimChange={handleTrimChange}
+                      />
+                    </PaperWithChildren>
 
-                  {/* Text Overlays */}
-                  <PaperWithChildren
-                    variant="elevation"
-                    className="p-4 flex-shrink-0"
-                  >
-                    <TextOverlaysPanel
-                      selectedClip={selectedClip}
-                      selectedTextOverlayId={state.selectedTextOverlayId}
-                      onAddTextOverlay={handleAddTextOverlay}
-                      onUpdateTextOverlay={handleUpdateTextOverlay}
-                      onRemoveTextOverlay={handleRemoveTextOverlay}
-                      onSelectTextOverlay={handleSelectTextOverlay}
-                    />
-                  </PaperWithChildren>
+                    {/* Text Overlays */}
+                    <PaperWithChildren
+                      variant="elevation"
+                      className="p-3 sm:p-4"
+                    >
+                      <TextOverlaysPanel
+                        selectedClip={selectedClip}
+                        selectedTextOverlayId={state.selectedTextOverlayId}
+                        onAddTextOverlay={handleAddTextOverlay}
+                        onUpdateTextOverlay={handleUpdateTextOverlay}
+                        onRemoveTextOverlay={handleRemoveTextOverlay}
+                        onSelectTextOverlay={handleSelectTextOverlay}
+                      />
+                    </PaperWithChildren>
+                  </div>
 
-                  {/* Video Effects */}
+                  {/* Video Effects - Full width */}
                   <PaperWithChildren
                     variant="elevation"
-                    className="p-4 flex-1 min-h-0"
+                    className="p-3 sm:p-4 flex-1 min-h-0"
                   >
                     <div className="h-full flex flex-col">
                       <Typography
                         variant="h6"
-                        className="flex items-center gap-2 flex-shrink-0 mb-3"
+                        className="flex items-center gap-2 flex-shrink-0 mb-3 text-sm sm:text-base"
                       >
                         <Tune className="text-blue-600" />
                         Effects
