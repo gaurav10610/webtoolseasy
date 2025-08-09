@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -316,12 +316,33 @@ export default function JsonViewer({
     [validateAndParseJson, toolState]
   );
 
-  // Auto-parse on component mount
-  useMemo(() => {
-    if (toolState.code.trim()) {
-      validateAndParseJson();
+  // Parse initial JSON on mount
+  useEffect(() => {
+    try {
+      if (initialJson.trim()) {
+        const parsed = JSON.parse(initialJson);
+        const tree = parseJsonToTree(parsed, "root", "");
+        setJsonTree(tree);
+        setError("");
+
+        // Auto-expand first level
+        const firstLevelPaths = new Set(
+          tree
+            .filter(
+              (node) =>
+                (!node.path.includes(".") && !node.path.includes("[")) ||
+                (node.path.match(/\./g) || []).length === 0
+            )
+            .map((node) => node.path)
+        );
+        setExpandedNodes(firstLevelPaths);
+      }
+    } catch {
+      // Silently handle initial parse errors
+      setError("");
+      setJsonTree([]);
     }
-  }, [toolState.code, validateAndParseJson]);
+  }, [parseJsonToTree, initialJson]); // Use initialJson instead of toolState.code
 
   return (
     <ToolLayout

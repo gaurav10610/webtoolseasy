@@ -1,17 +1,13 @@
 "use client";
 
-import { TextField, Typography } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
+import { Typography, TextField, Button, Divider } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
-import { ButtonWithHandler } from "../lib/buttons";
-import DownloadIcon from "@mui/icons-material/Download";
-import LoopIcon from "@mui/icons-material/Loop";
-import { isEmpty, map } from "lodash-es";
 import { Guid } from "guid-ts";
-import { getRandomId } from "@/util/commonUtils";
 
 export default function GuidGenerator({
   hostname,
@@ -29,8 +25,8 @@ export default function GuidGenerator({
     initialValue,
   });
 
-  const [bulkGuids, setBulkGuids] = useState<string[]>([]);
-  const [bulkGuidsCount, setBulkGuidsCount] = useState<number>(5);
+  const [guidList, setGuidList] = useState<string[]>([initialValue]);
+  const [bulkCount, setBulkCount] = useState(10);
 
   const generateNewGuid = useCallback(() => {
     const newGuid = generateGUID();
@@ -38,39 +34,67 @@ export default function GuidGenerator({
     toolState.actions.showMessage("New GUID generated!");
   }, [generateGUID, toolState]);
 
-  const copyGuid = useCallback(() => {
-    toolState.actions.copyText(toolState.code, "GUID copied to clipboard!");
-  }, [toolState]);
-
   const generateBulkGuids = useCallback(() => {
-    const uuids = Array.from({ length: bulkGuidsCount }, () => generateGUID());
-    setBulkGuids(uuids);
-    toolState.actions.showMessage(`Generated ${bulkGuidsCount} GUIDs!`);
-  }, [bulkGuidsCount, generateGUID, toolState.actions]);
+    const count = Math.min(Math.max(1, bulkCount), 1000); // Limit between 1-1000
+    const newGuids = Array.from({ length: count }, () => generateGUID());
+    setGuidList(newGuids);
+    toolState.actions.showMessage(`Generated ${count} GUIDs!`);
+  }, [bulkCount, generateGUID, toolState.actions]);
 
-  const downloadGUIDs = useCallback(() => {
-    const element = document.createElement("a");
-    const file = new Blob([bulkGuids.join("\n")], {
-      type: "plain/text",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = "bulk-guids-webtoolseasy.txt";
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-    toolState.actions.showMessage("GUIDs downloaded!");
-  }, [bulkGuids, toolState.actions]);
+  const copyAllGuids = useCallback(() => {
+    const allGuids = guidList.join("\n");
+    toolState.actions.copyText(
+      allGuids,
+      `${guidList.length} GUIDs copied to clipboard!`
+    );
+  }, [guidList, toolState.actions]);
+
+  const downloadGuids = useCallback(() => {
+    const allGuids = guidList.join("\n");
+    const blob = new Blob([allGuids], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "guid-list.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage(
+      `${guidList.length} GUIDs downloaded successfully!`
+    );
+  }, [guidList, toolState.actions]);
 
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Generate New",
+        onClick: generateNewGuid,
+        icon: <RefreshIcon />,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy All GUIDs",
+        onClick: copyAllGuids,
+      },
+      {
+        type: "custom" as const,
+        text: "Download GUIDs",
+        onClick: downloadGuids,
+      },
       ...createCommonButtons({
-        onCopy: copyGuid,
+        onCopy: () =>
+          toolState.actions.copyText(
+            toolState.code,
+            "GUID copied to clipboard!"
+          ),
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyGuid, toolState]
+    [generateNewGuid, copyAllGuids, downloadGuids, toolState]
   );
 
   return (
@@ -84,90 +108,130 @@ export default function GuidGenerator({
     >
       <SEOContent
         title="GUID Generator"
-        description="Free online GUID/UUID generator. Generate single or bulk GUIDs with download option."
-        exampleCode="Generate"
-        exampleOutput="123e4567-e89b-12d3-a456-426614174000"
+        description="Generate random GUID (Globally Unique Identifier) online. Create single or bulk GUIDs for your applications."
+        exampleCode={initialValue}
+        exampleOutput={`Generated GUID: ${initialValue}`}
       />
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <div className="flex flex-col gap-4 w-full">
-        {/* Single GUID Section */}
-        <div className="flex flex-col gap-3 items-center md:border-2 md:rounded-md md:p-4">
-          <div className="flex flex-col gap-2 w-full md:flex-row md:justify-center md:items-center">
-            <Typography
-              color="secondary"
-              className="text-center break-all"
-              variant="h5"
-            >
-              {toolState.code}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left Panel - Single GUID */}
+        <div className="space-y-4">
+          <div>
+            <Typography variant="h6" className="mb-3">
+              🆔 Current GUID
             </Typography>
+            <TextField
+              fullWidth
+              value={toolState.code}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+              className="font-mono"
+            />
+            <Button
+              variant="contained"
+              onClick={generateNewGuid}
+              startIcon={<RefreshIcon />}
+              className="mt-3"
+              fullWidth
+            >
+              Generate New GUID
+            </Button>
           </div>
 
-          <ButtonWithHandler
-            buttonText="Generate New GUID"
-            onClick={generateNewGuid}
-            size="small"
-            variant="outlined"
-            startIcon={<LoopIcon />}
-            className="w-full md:w-fit"
-          />
+          <Divider />
+
+          {/* Bulk Generation */}
+          <div>
+            <Typography variant="h6" className="mb-3">
+              📝 Bulk Generation
+            </Typography>
+            <div className="flex gap-2 mb-3">
+              <TextField
+                type="number"
+                label="Count"
+                value={bulkCount}
+                onChange={(e) =>
+                  setBulkCount(
+                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1))
+                  )
+                }
+                size="small"
+                inputProps={{ min: 1, max: 1000 }}
+              />
+              <Button
+                variant="outlined"
+                onClick={generateBulkGuids}
+                className="whitespace-nowrap"
+              >
+                Generate {bulkCount} GUIDs
+              </Button>
+            </div>
+          </div>
+
+          {/* GUID Info */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+            <Typography variant="subtitle2" className="mb-2">
+              About GUIDs:
+            </Typography>
+            <div className="text-sm space-y-1 text-gray-700">
+              <div>• Globally Unique Identifier</div>
+              <div>• Format: 8-4-4-4-12 hexadecimal digits</div>
+              <div>• Compatible with Microsoft systems</div>
+              <div>• Used in COM, .NET, and Windows applications</div>
+            </div>
+          </div>
         </div>
 
-        {/* Bulk GUID Section */}
-        <div className="flex flex-col gap-3 w-full">
-          <Typography
-            variant="h5"
-            color="textSecondary"
-            className="text-center"
-          >
-            Bulk GUID Generator
-          </Typography>
-          <div className="flex flex-col gap-2 md:flex-row md:gap-4 md:items-center">
-            <TextField
-              label="Enter GUIDs count"
+        {/* Right Panel - GUID List */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Typography variant="h6">
+              📋 Generated GUIDs ({guidList.length})
+            </Typography>
+            <Button
               variant="outlined"
-              required={true}
-              value={bulkGuidsCount}
-              onChange={(event) =>
-                setBulkGuidsCount(Number(event.target.value))
-              }
               size="small"
-              type="number"
-              inputProps={{ min: 1, max: 1000 }}
-            />
-            <ButtonWithHandler
-              buttonText="Generate Bulk GUIDs"
-              onClick={generateBulkGuids}
-              startIcon={<LoopIcon />}
-            />
+              onClick={copyAllGuids}
+              disabled={guidList.length === 0}
+            >
+              Copy All
+            </Button>
           </div>
 
-          {!isEmpty(bulkGuids) && (
-            <div className="flex flex-col gap-2 w-full items-center overflow-y-auto max-h-[20rem] md:border-2 md:rounded-md md:p-4">
-              {map(bulkGuids, (guid) => {
-                return (
-                  <Typography
-                    key={getRandomId()}
-                    variant="caption"
-                    color="textSecondary"
-                    className="break-all"
+          <div className="border border-gray-300 rounded max-h-96 overflow-auto">
+            {guidList.length === 0 ? (
+              <div className="p-4 text-center text-gray-500">
+                No GUIDs generated yet
+              </div>
+            ) : (
+              <div className="divide-y">
+                {guidList.map((guid, index) => (
+                  <div
+                    key={index}
+                    className="p-3 hover:bg-gray-50 font-mono text-sm cursor-pointer"
+                    onClick={() =>
+                      toolState.actions.copyText(
+                        guid,
+                        `GUID ${index + 1} copied!`
+                      )
+                    }
+                    title="Click to copy"
                   >
-                    {guid}
-                  </Typography>
-                );
-              })}
-            </div>
-          )}
-
-          {!isEmpty(bulkGuids) && (
-            <ButtonWithHandler
-              buttonText="Download bulk guids to file"
-              variant="outlined"
-              onClick={downloadGUIDs}
-              startIcon={<DownloadIcon />}
-            />
-          )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-blue-600">{guid}</span>
+                      <span className="text-xs text-gray-400">
+                        #{index + 1}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </ToolLayout>
