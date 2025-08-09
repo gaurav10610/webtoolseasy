@@ -68,6 +68,23 @@ export default function JwtDecoder({
     toolState.actions.copyText(decodedJwtToken, "Copied decoded JWT token!");
   }, [toolState.actions, decodedJwtToken]);
 
+  const downloadDecodedToken = useCallback(() => {
+    const decoded = {
+      headers: JSON.parse(decodedJwtTokenHeaders || "{}"),
+      payload: JSON.parse(decodedJwtToken || "{}")
+    };
+    const blob = new Blob([JSON.stringify(decoded, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "decoded-jwt.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Decoded JWT downloaded successfully!");
+  }, [decodedJwtToken, decodedJwtTokenHeaders, toolState.actions]);
+
   // Editor configurations
   const inputEditorProps = useEditorConfig({
     language: "text",
@@ -94,11 +111,12 @@ export default function JwtDecoder({
     () => [
       ...createCommonButtons({
         onCopy: copyDecodedToken,
+        onDownload: downloadDecodedToken,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyDecodedToken, toolState]
+    [copyDecodedToken, downloadDecodedToken, toolState]
   );
 
   return (

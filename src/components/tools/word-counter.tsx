@@ -29,12 +29,16 @@ export default function WordCounter({
       .split(/\n\s*\n/)
       .filter((para) => para.trim() !== "");
 
+    // Calculate reading time (average 200 words per minute)
+    const readingTimeMinutes = Math.ceil(words.length / 200);
+
     return {
       words: words.length,
       characters: toolState.code.length,
       charactersNoSpaces: toolState.code.replace(/\s/g, "").length,
       sentences: sentences.length,
       paragraphs: paragraphs.length,
+      readingTime: readingTimeMinutes,
     };
   }, [toolState.code]);
 
@@ -87,7 +91,7 @@ export default function WordCounter({
           />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 p-4 bg-gray-50 rounded-lg">
           <div className="flex flex-col items-center">
             <Typography variant="h4" color="primary" fontWeight="bold">
               {stats.words}
@@ -126,6 +130,14 @@ export default function WordCounter({
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Paragraphs
+            </Typography>
+          </div>
+          <div className="flex flex-col items-center">
+            <Typography variant="h4" color="primary" fontWeight="bold">
+              {stats.readingTime}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Min Read
             </Typography>
           </div>
         </div>

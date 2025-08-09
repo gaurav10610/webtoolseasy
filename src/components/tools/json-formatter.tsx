@@ -48,6 +48,19 @@ export default function JsonFormatter({
     );
   }, [formattedCode, toolState.actions]);
 
+  const downloadFormattedCode = useCallback(() => {
+    const blob = new Blob([formattedCode], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatted.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("JSON file downloaded successfully!");
+  }, [formattedCode, toolState.actions]);
+
   const minifyJson = useCallback(() => {
     try {
       const parsed = JSON.parse(toolState.code);
@@ -92,6 +105,11 @@ export default function JsonFormatter({
         text: "Copy Formatted",
         onClick: copyFormattedCode,
       },
+      {
+        type: "custom" as const,
+        text: "Download Formatted",
+        onClick: downloadFormattedCode,
+      },
       ...createCommonButtons({
         onCopy: () =>
           toolState.actions.copyText(
@@ -102,7 +120,13 @@ export default function JsonFormatter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatJson, minifyJson, copyFormattedCode, toolState]
+    [
+      formatJson,
+      minifyJson,
+      copyFormattedCode,
+      downloadFormattedCode,
+      toolState,
+    ]
   );
 
   return (

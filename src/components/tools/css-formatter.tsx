@@ -48,6 +48,17 @@ export default function CssFormatter({
     );
   }, [formattedCode, toolState.actions]);
 
+  const downloadFormattedCode = useCallback(() => {
+    const blob = new Blob([formattedCode], { type: "text/css" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatted-styles.css";
+    a.click();
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Formatted CSS downloaded!");
+  }, [formattedCode, toolState.actions]);
+
   // Editor configurations
   const rawEditorProps = useEditorConfig({
     language: "css",
@@ -75,6 +86,11 @@ export default function CssFormatter({
         text: "Copy Formatted",
         onClick: copyFormattedCode,
       },
+      {
+        type: "custom" as const,
+        text: "Download CSS",
+        onClick: downloadFormattedCode,
+      },
       ...createCommonButtons({
         onCopy: () =>
           toolState.actions.copyText(
@@ -85,7 +101,7 @@ export default function CssFormatter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatCss, copyFormattedCode, toolState]
+    [formatCss, copyFormattedCode, downloadFormattedCode, toolState]
   );
 
   return (

@@ -51,6 +51,17 @@ if (value === 'webtoolseasy') {
     toolState.actions.copyText(formattedCode, "Formatted JavaScript copied!");
   }, [toolState.actions, formattedCode]);
 
+  const downloadFormattedCode = useCallback(() => {
+    const blob = new Blob([formattedCode], { type: "text/javascript" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatted-script.js";
+    a.click();
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Formatted JavaScript downloaded!");
+  }, [formattedCode, toolState.actions]);
+
   // Editor configurations
   const inputEditorProps = useEditorConfig({
     language: "javascript",
@@ -71,11 +82,12 @@ if (value === 'webtoolseasy') {
       ...createCommonButtons({
         onFormat: formatJs,
         onCopy: copyFormattedCode,
+        onDownload: downloadFormattedCode,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatJs, copyFormattedCode, toolState]
+    [formatJs, copyFormattedCode, downloadFormattedCode, toolState]
   );
 
   return (

@@ -140,6 +140,19 @@ captured_output.getvalue()
     }
   }, [toolState]);
 
+  const downloadCode = useCallback(() => {
+    const blob = new Blob([toolState.code], { type: "text/x-python" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "script.py";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Python file downloaded successfully!");
+  }, [toolState.code, toolState.actions]);
+
   // Editor configuration
   const editorProps = useEditorConfig({
     language: "python",
@@ -170,11 +183,12 @@ captured_output.getvalue()
             toolState.code,
             "Python code copied to clipboard!"
           ),
+        onDownload: downloadCode,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [runCode, formatCode, pyodideLoading, toolState]
+    [runCode, formatCode, downloadCode, pyodideLoading, toolState]
   );
 
   return (

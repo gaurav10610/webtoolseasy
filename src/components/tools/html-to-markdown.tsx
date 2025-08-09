@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import { Typography, Button } from "@mui/material";
-import { Transform, ContentCopy, Refresh } from "@mui/icons-material";
+import { Transform, ContentCopy, Refresh, Download } from "@mui/icons-material";
 import { ToolLayout } from "../common/ToolLayout";
 import dynamic from "next/dynamic";
 
@@ -130,6 +130,19 @@ export default function HtmlToMarkdown() {
     showMessage("Markdown copied to clipboard!");
   }, [state.markdownOutput, showMessage]);
 
+  const downloadMarkdown = useCallback(() => {
+    const blob = new Blob([state.markdownOutput], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "converted.md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showMessage("Markdown file downloaded successfully!");
+  }, [state.markdownOutput, showMessage]);
+
   const handleReset = useCallback(() => {
     setState({
       htmlInput: DEFAULT_HTML,
@@ -178,6 +191,13 @@ export default function HtmlToMarkdown() {
             disabled={!state.markdownOutput}
           >
             Copy Markdown
+          </Button>
+          <Button
+            startIcon={<Download />}
+            onClick={downloadMarkdown}
+            disabled={!state.markdownOutput}
+          >
+            Download .md
           </Button>
           <Button startIcon={<Refresh />} onClick={handleReset}>
             Reset

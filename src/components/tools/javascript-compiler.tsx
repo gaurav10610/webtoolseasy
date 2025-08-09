@@ -96,26 +96,34 @@ main().then(result => console.log("Final result:", result));`;
     const originalLog = console.log;
     const originalError = console.error;
     const originalWarn = console.warn;
-    
+
     consoleOutputRef.current = [];
-    
+
     console.log = (...args) => {
-      consoleOutputRef.current.push(`[LOG] ${args.map(arg => 
-        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-      ).join(' ')}`);
+      consoleOutputRef.current.push(
+        `[LOG] ${args
+          .map((arg) =>
+            typeof arg === "object" ? JSON.stringify(arg, null, 2) : String(arg)
+          )
+          .join(" ")}`
+      );
       originalLog.apply(console, args);
     };
-    
+
     console.error = (...args) => {
-      consoleOutputRef.current.push(`[ERROR] ${args.map(arg => String(arg)).join(' ')}`);
+      consoleOutputRef.current.push(
+        `[ERROR] ${args.map((arg) => String(arg)).join(" ")}`
+      );
       originalError.apply(console, args);
     };
-    
+
     console.warn = (...args) => {
-      consoleOutputRef.current.push(`[WARN] ${args.map(arg => String(arg)).join(' ')}`);
+      consoleOutputRef.current.push(
+        `[WARN] ${args.map((arg) => String(arg)).join(" ")}`
+      );
       originalWarn.apply(console, args);
     };
-    
+
     return () => {
       console.log = originalLog;
       console.error = originalError;
@@ -125,13 +133,13 @@ main().then(result => console.log("Final result:", result));`;
 
   const executeCode = useCallback(async () => {
     if (isRunning) return;
-    
+
     setIsRunning(true);
     setError("");
     setOutput("");
-    
+
     const restoreConsole = captureConsole();
-    
+
     try {
       // Create a function wrapper to execute the code with async support
       const wrappedCode = `
@@ -139,23 +147,26 @@ main().then(result => console.log("Final result:", result));`;
           ${toolState.code}
         })();
       `;
-      
+
       // Execute the code
       const result = eval(wrappedCode);
-      
+
       // Wait for async operations to complete
       if (result instanceof Promise) {
         await result;
       }
-      
+
       // Small delay to ensure all console outputs are captured
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      const consoleOutput = consoleOutputRef.current.join('\n');
-      setOutput(consoleOutput || "Code executed successfully (no console output)");
-      
-      toolState.actions.showMessage("JavaScript compiled and executed successfully!");
-      
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const consoleOutput = consoleOutputRef.current.join("\n");
+      setOutput(
+        consoleOutput || "Code executed successfully (no console output)"
+      );
+
+      toolState.actions.showMessage(
+        "JavaScript compiled and executed successfully!"
+      );
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setError(errorMessage);
@@ -182,11 +193,16 @@ main().then(result => console.log("Final result:", result));`;
   }, [toolState.actions]);
 
   const downloadCode = useCallback(() => {
-    toolState.actions.downloadFile(
-      toolState.code,
-      "script.js",
-      "text/javascript"
-    );
+    const blob = new Blob([toolState.code], { type: "text/javascript" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "script.js";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("JavaScript file downloaded!");
   }, [toolState]);
 
   // Editor configuration
@@ -250,10 +266,13 @@ main().then(result => console.log("Final result:", result));`;
 
   // Calculate code statistics
   const codeStats = useMemo(() => {
-    const lines = toolState.code.split('\n').length;
+    const lines = toolState.code.split("\n").length;
     const characters = toolState.code.length;
-    const words = toolState.code.trim().split(/\s+/).filter(word => word.length > 0).length;
-    
+    const words = toolState.code
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0).length;
+
     return { lines, characters, words };
   }, [toolState.code]);
 
@@ -276,21 +295,31 @@ main().then(result => console.log("Final result:", result));`;
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
-        leftPanel={{
-          title: "JavaScript Code Editor",
-          content: (
+        leftPanel={
+          <div className="flex flex-col gap-2">
+            <Typography variant="h6" className="!text-sm !font-semibold">
+              JavaScript Code Editor
+            </Typography>
             <SingleCodeEditorWithHeaderV2
               editorHeading="Write your JavaScript code (ES6+ supported)"
               codeEditorProps={editorProps}
               themeOption="vs-dark"
-              className={toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"}
+              className={
+                toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+              }
             />
-          ),
-        }}
-        rightPanel={{
-          title: "Console Output",
-          content: (
-            <div className={`flex flex-col gap-2 ${toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"}`}>
+          </div>
+        }
+        rightPanel={
+          <div className="flex flex-col gap-2">
+            <Typography variant="h6" className="!text-sm !font-semibold">
+              Console Output
+            </Typography>
+            <div
+              className={`flex flex-col gap-2 ${
+                toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+              }`}
+            >
               {/* Output Display */}
               <div className="flex-1 border border-gray-300 rounded bg-black text-green-400 font-mono text-sm p-3 overflow-auto">
                 {isRunning ? (
@@ -302,7 +331,8 @@ main().then(result => console.log("Final result:", result));`;
                   <pre className="whitespace-pre-wrap">{output}</pre>
                 ) : (
                   <div className="text-gray-500">
-                    Click "Run Code" to execute JavaScript and see output here.
+                    Click &quot;Run Code&quot; to execute JavaScript and see
+                    output here.
                     <br />
                     Supports ES6+, async/await, and modern JavaScript features.
                   </div>
@@ -320,20 +350,29 @@ main().then(result => console.log("Final result:", result));`;
 
               {/* Code Statistics */}
               <Box className="p-3 bg-gray-50 border border-gray-200 rounded">
-                <Typography variant="h6" className="!text-sm !font-semibold mb-2">
+                <Typography
+                  variant="h6"
+                  className="!text-sm !font-semibold mb-2"
+                >
                   📊 Code Statistics
                 </Typography>
                 <div className="grid grid-cols-3 gap-4 text-sm">
                   <div className="text-center">
-                    <div className="font-semibold text-blue-600">{codeStats.lines}</div>
+                    <div className="font-semibold text-blue-600">
+                      {codeStats.lines}
+                    </div>
                     <div className="text-gray-600">Lines</div>
                   </div>
                   <div className="text-center">
-                    <div className="font-semibold text-green-600">{codeStats.characters}</div>
+                    <div className="font-semibold text-green-600">
+                      {codeStats.characters}
+                    </div>
                     <div className="text-gray-600">Characters</div>
                   </div>
                   <div className="text-center">
-                    <div className="font-semibold text-purple-600">{codeStats.words}</div>
+                    <div className="font-semibold text-purple-600">
+                      {codeStats.words}
+                    </div>
                     <div className="text-gray-600">Words</div>
                   </div>
                 </div>
@@ -341,11 +380,17 @@ main().then(result => console.log("Final result:", result));`;
 
               {/* Features Info */}
               <Box className="p-3 bg-blue-50 border border-blue-200 rounded">
-                <Typography variant="h6" className="!text-sm !font-semibold mb-2 text-blue-800">
+                <Typography
+                  variant="h6"
+                  className="!text-sm !font-semibold mb-2 text-blue-800"
+                >
                   🚀 Supported Features
                 </Typography>
                 <div className="text-xs text-blue-700 space-y-1">
-                  <div>• ES6+ syntax (arrow functions, destructuring, spread operator)</div>
+                  <div>
+                    • ES6+ syntax (arrow functions, destructuring, spread
+                    operator)
+                  </div>
                   <div>• Async/await and Promise support</div>
                   <div>• Modern array methods and higher-order functions</div>
                   <div>• Classes and object-oriented programming</div>
@@ -354,8 +399,8 @@ main().then(result => console.log("Final result:", result));`;
                 </div>
               </Box>
             </div>
-          ),
-        }}
+          </div>
+        }
         isFullScreen={toolState.isFullScreen}
       />
     </ToolLayout>

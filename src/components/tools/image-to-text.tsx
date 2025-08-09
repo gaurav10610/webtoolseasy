@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import { Typography, Button, Alert, LinearProgress } from "@mui/material";
-import { Upload, ContentCopy, Delete } from "@mui/icons-material";
+import { Upload, ContentCopy, Delete, Download } from "@mui/icons-material";
 import { ToolLayout } from "../common/ToolLayout";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import {
@@ -104,6 +104,19 @@ export default function ImageToText() {
   const copyText = useCallback(() => {
     navigator.clipboard.writeText(state.extractedText);
     showMessage("Text copied to clipboard!");
+  }, [state.extractedText, showMessage]);
+
+  const downloadText = useCallback(() => {
+    const blob = new Blob([state.extractedText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "extracted-text.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showMessage("Text file downloaded successfully!");
   }, [state.extractedText, showMessage]);
 
   const clearAll = useCallback(() => {
@@ -209,15 +222,25 @@ export default function ImageToText() {
         {/* Extracted Text */}
         {state.extractedText && (
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <Typography variant="h6">Extracted Text</Typography>
-              <Button
-                startIcon={<ContentCopy />}
-                onClick={copyText}
-                size="small"
-              >
-                Copy Text
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  startIcon={<ContentCopy />}
+                  onClick={copyText}
+                  size="small"
+                >
+                  Copy Text
+                </Button>
+                <Button
+                  startIcon={<Download />}
+                  onClick={downloadText}
+                  size="small"
+                  variant="outlined"
+                >
+                  Download
+                </Button>
+              </div>
             </div>
             <div className="border rounded-lg p-4 bg-white min-h-[200px] whitespace-pre-wrap font-mono text-sm">
               {state.extractedText}

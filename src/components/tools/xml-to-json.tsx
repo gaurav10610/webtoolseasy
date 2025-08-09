@@ -78,6 +78,19 @@ export default function XmlToJsonConverter({
     toolState.actions.copyText(convertedJson, "JSON copied to clipboard!");
   }, [toolState.actions, convertedJson]);
 
+  const downloadJson = useCallback(() => {
+    const blob = new Blob([convertedJson], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "converted.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("JSON file downloaded successfully!");
+  }, [convertedJson, toolState.actions]);
+
   // Editor configurations
   const inputEditorProps = useEditorConfig({
     language: "xml",
@@ -103,11 +116,12 @@ export default function XmlToJsonConverter({
       },
       ...createCommonButtons({
         onCopy: copyFormattedCode,
+        onDownload: downloadJson,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [convertXml, copyFormattedCode, toolState]
+    [convertXml, copyFormattedCode, downloadJson, toolState]
   );
 
   return (

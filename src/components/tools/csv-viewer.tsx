@@ -99,6 +99,19 @@ Charlie Wilson,charlie@example.com,32,Berlin,Germany`;
     );
   }, [parsedData.headers.length, parsedData.rows.length, toolState.actions]);
 
+  const downloadCsvData = useCallback(() => {
+    const blob = new Blob([toolState.code], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("CSV file downloaded successfully!");
+  }, [toolState.code, toolState.actions]);
+
   // Button configuration
   const buttons = useMemo(
     () => [
@@ -114,11 +127,12 @@ Charlie Wilson,charlie@example.com,32,Berlin,Germany`;
             toolState.code,
             "CSV data copied to clipboard!"
           ),
+        onDownload: downloadCsvData,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [parseData, toolState]
+    [parseData, downloadCsvData, toolState]
   );
 
   return (

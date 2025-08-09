@@ -48,6 +48,20 @@ export default function UuidV4Generator({
     );
   }, [uuidList, toolState.actions]);
 
+  const downloadUuids = useCallback(() => {
+    const allUuids = uuidList.join("\n");
+    const blob = new Blob([allUuids], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "uuid-v4-list.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage(`${uuidList.length} UUIDs downloaded successfully!`);
+  }, [uuidList, toolState.actions]);
+
   // Button configuration
   const buttons = useMemo(
     () => [
@@ -62,6 +76,11 @@ export default function UuidV4Generator({
         text: "Copy All UUIDs",
         onClick: copyAllUuids,
       },
+      {
+        type: "custom" as const,
+        text: "Download UUIDs",
+        onClick: downloadUuids,
+      },
       ...createCommonButtons({
         onCopy: () =>
           toolState.actions.copyText(
@@ -72,7 +91,7 @@ export default function UuidV4Generator({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [generateNewUuid, copyAllUuids, toolState]
+    [generateNewUuid, copyAllUuids, downloadUuids, toolState]
   );
 
   return (

@@ -64,6 +64,19 @@ Perfect for:
     toolState.actions.showMessage("Text cleared!");
   }, [toolState]);
 
+  const downloadText = useCallback(() => {
+    const blob = new Blob([toolState.code], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "text-document.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Text file downloaded successfully!");
+  }, [toolState.code, toolState.actions]);
+
   // Editor configuration
   const editorProps = useEditorConfig({
     language: "plaintext",
@@ -85,11 +98,12 @@ Perfect for:
             toolState.code,
             "Text copied to clipboard!"
           ),
+        onDownload: downloadText,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [clearText, toolState]
+    [clearText, downloadText, toolState]
   );
 
   return (

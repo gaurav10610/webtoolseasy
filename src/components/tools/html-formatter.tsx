@@ -44,6 +44,17 @@ export default function HtmlFormatter({
     toolState.actions.copyText(formattedCode, "Formatted HTML copied!");
   }, [toolState.actions, formattedCode]);
 
+  const downloadFormattedCode = useCallback(() => {
+    const blob = new Blob([formattedCode], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatted-code.html";
+    a.click();
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Formatted HTML downloaded!");
+  }, [formattedCode, toolState.actions]);
+
   // Editor configurations
   const inputEditorProps = useEditorConfig({
     language: "html",
@@ -64,11 +75,12 @@ export default function HtmlFormatter({
       ...createCommonButtons({
         onFormat: formatHtml,
         onCopy: copyFormattedCode,
+        onDownload: downloadFormattedCode,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatHtml, copyFormattedCode, toolState]
+    [formatHtml, copyFormattedCode, downloadFormattedCode, toolState]
   );
 
   return (

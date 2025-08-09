@@ -68,6 +68,19 @@ export default function CaseConverter({
     toolState.actions.copyText(outputText, "Converted text copied!");
   }, [toolState.actions, outputText]);
 
+  const downloadOutput = useCallback(() => {
+    const blob = new Blob([outputText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "converted-text.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Converted text downloaded successfully!");
+  }, [outputText, toolState.actions]);
+
   // Custom buttons for case conversions
   const caseButtons = useMemo(
     () => [
@@ -117,11 +130,12 @@ export default function CaseConverter({
     () => [
       ...createCommonButtons({
         onCopy: copyOutput,
+        onDownload: downloadOutput,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyOutput, toolState]
+    [copyOutput, downloadOutput, toolState]
   );
 
   return (
