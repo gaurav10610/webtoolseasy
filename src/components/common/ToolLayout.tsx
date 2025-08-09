@@ -53,7 +53,7 @@ export const CodeEditorLayout = memo(function CodeEditorLayout({
 }: CodeEditorLayoutProps) {
   return (
     <div
-      className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
+      className={`flex flex-col w-full h-[65vh] min-h-[320px] items-center md:flex-row gap-2 ${
         isFullScreen ? "md:h-full" : ""
       } ${className}`}
     >

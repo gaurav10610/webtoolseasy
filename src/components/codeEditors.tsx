@@ -21,7 +21,9 @@ export function SingleCodeEditorWithHeaderV2({
   className?: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 h-full ${className}`}>
+    <div
+      className={`flex flex-col gap-2 ${className || "h-[65vh] min-h-[320px]"}`}
+    >
       {editorHeading && (
         <Typography
           variant="body1"
@@ -31,18 +33,20 @@ export function SingleCodeEditorWithHeaderV2({
           {editorHeading}
         </Typography>
       )}
-      <CodeEditorV2
-        language={codeEditorProps.language}
-        value={codeEditorProps.value}
-        onChange={codeEditorProps.onChange}
-        className={codeEditorProps.className}
-        editorOptions={{
-          ...editorOptions,
-          ...(codeEditorProps.editorOptions || {}),
-        }}
-        theme={themeOption}
-        handleEditorDidMount={codeEditorProps.handleEditorDidMount}
-      />
+      <div className="flex-1 min-h-[280px]">
+        <CodeEditorV2
+          language={codeEditorProps.language}
+          value={codeEditorProps.value}
+          onChange={codeEditorProps.onChange}
+          className={codeEditorProps.className}
+          editorOptions={{
+            ...editorOptions,
+            ...(codeEditorProps.editorOptions || {}),
+          }}
+          theme={themeOption}
+          handleEditorDidMount={codeEditorProps.handleEditorDidMount}
+        />
+      </div>
     </div>
   );
 }
@@ -63,7 +67,9 @@ export function DiffEditorsWithHeader({
   themeOption: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 h-full ${className}`}>
+    <div
+      className={`flex flex-col gap-2 ${className || "h-[65vh] min-h-[320px]"}`}
+    >
       <div className="w-full flex flex-row justify-around">
         <Typography
           variant="body1"
@@ -80,17 +86,19 @@ export function DiffEditorsWithHeader({
           {secondTextHeading}
         </Typography>
       </div>
-      <DiffEditor
-        language={diffEditorProps.language}
-        value={diffEditorProps.value}
-        onChange={diffEditorProps.onChange}
-        original={diffEditorProps.original}
-        theme={themeOption}
-        editorOptions={{
-          ...editorOptions,
-          ...(diffEditorProps.editorOptions || {}),
-        }}
-      />
+      <div className="flex-1 min-h-[280px]">
+        <DiffEditor
+          language={diffEditorProps.language}
+          value={diffEditorProps.value}
+          onChange={diffEditorProps.onChange}
+          original={diffEditorProps.original}
+          theme={themeOption}
+          editorOptions={{
+            ...editorOptions,
+            ...(diffEditorProps.editorOptions || {}),
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -117,7 +117,6 @@ Perfect for:
             codeEditorProps={editorProps}
             themeOption="vs-light"
             editorHeading="Text Editor"
-            className="w-full h-full"
           />
         </div>
 

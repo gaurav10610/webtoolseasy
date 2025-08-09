@@ -96,7 +96,6 @@ export default function HtmlFormatter({
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw HTML"
-            className="w-full h-full"
           />
         }
         rightPanel={
@@ -104,7 +103,6 @@ export default function HtmlFormatter({
             codeEditorProps={outputEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted HTML"
-            className="w-full h-full"
           />
         }
       />

@@ -1,235 +1,363 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { Typography, Button } from "@mui/material";
-import { PlayArrow, ContentCopy, Refresh } from "@mui/icons-material";
-import { ToolLayout } from "../common/ToolLayout";
-import dynamic from "next/dynamic";
+import { useState, useCallback, useMemo, useRef } from "react";
+import { Typography, Box, Alert } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DownloadIcon from "@mui/icons-material/Download";
+import ClearIcon from "@mui/icons-material/Clear";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-});
+export default function JavaScriptCompiler({
+  hostname,
+  queryParams,
+}: Readonly<ToolComponentProps>) {
+  const initialCode = `// JavaScript Compiler - ES6+ Support
+// Test modern JavaScript features
 
-interface JavaScriptCompilerState {
-  code: string;
-  output: string;
-  isExecuting: boolean;
-}
-
-const DEFAULT_JS_CODE = `// JavaScript Compiler & Executor
-// Write your JavaScript code here and click "Run Code" to execute
-
-// Example: Simple calculation
-const numbers = [1, 2, 3, 4, 5];
-const sum = numbers.reduce((acc, num) => acc + num, 0);
-console.log("Sum:", sum);
-
-// Example: Working with objects
-const person = {
-  name: "John Doe",
-  age: 30,
-  greet() {
-    return \`Hello, I'm \${this.name} and I'm \${this.age} years old.\`;
-  }
+// 1. Arrow Functions & Template Literals
+const greet = (name) => {
+  return \`Hello, \${name}! Welcome to JavaScript Compiler.\`;
 };
-console.log(person.greet());
 
-// Example: Async function
+// 2. Async/Await Example
 async function fetchData() {
+  console.log("Fetching data...");
   return new Promise(resolve => {
-    setTimeout(() => {
-      resolve("Data fetched successfully!");
-    }, 1000);
+    setTimeout(() => resolve("Data loaded successfully!"), 1000);
   });
 }
 
-// Run the async function
-fetchData().then(result => console.log(result));
-`;
+// 3. Object Destructuring & Spread Operator
+const user = { name: "WebToolsEasy", age: 25, city: "DevWorld" };
+const { name, ...rest } = user;
+console.log("User:", name, "Details:", rest);
 
-export default function JavaScriptCompiler() {
-  const [state, setState] = useState<JavaScriptCompilerState>({
-    code: DEFAULT_JS_CODE,
-    output: "",
-    isExecuting: false,
+// 4. Array Methods & Higher-Order Functions
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+const sum = doubled.reduce((acc, n) => acc + n, 0);
+
+// 5. Class with Modern Syntax
+class Calculator {
+  constructor(value = 0) {
+    this.value = value;
+  }
+  
+  add(n) { this.value += n; return this; }
+  multiply(n) { this.value *= n; return this; }
+  get result() { return this.value; }
+}
+
+// Main execution
+async function main() {
+  console.log("🚀 JavaScript Compiler Demo");
+  console.log(greet("Developer"));
+  
+  console.log("📊 Array operations:");
+  console.log("Numbers:", numbers);
+  console.log("Doubled:", doubled);
+  console.log("Sum:", sum);
+  
+  console.log("🧮 Calculator demo:");
+  const calc = new Calculator(10);
+  const result = calc.add(5).multiply(2).result;
+  console.log("Calculation result:", result);
+  
+  console.log("⏳ Async operation:");
+  const data = await fetchData();
+  console.log(data);
+  
+  console.log("✅ Compilation and execution completed!");
+  return "All tests passed!";
+}
+
+// Run the demo
+main().then(result => console.log("Final result:", result));`;
+
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue: initialCode,
   });
 
-  const [snackBar, setSnackBar] = useState({
-    open: false,
-    message: "",
-  });
+  const [output, setOutput] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
+  const [error, setError] = useState("");
+  const consoleOutputRef = useRef<string[]>([]);
 
-  const showMessage = useCallback((message: string) => {
-    setSnackBar({ open: true, message });
-  }, []);
-
-  const executeCode = useCallback(async () => {
-    setState((prev) => ({ ...prev, isExecuting: true, output: "" }));
-
-    try {
-      // Create a safe execution environment
-      const originalLog = console.log;
-      const originalError = console.error;
-      const originalWarn = console.warn;
-
-      let output = "";
-
-      // Override console methods to capture output
-      console.log = (...args) => {
-        output +=
-          args
-            .map((arg) =>
-              typeof arg === "object"
-                ? JSON.stringify(arg, null, 2)
-                : String(arg)
-            )
-            .join(" ") + "\n";
-      };
-
-      console.error = (...args) => {
-        output += "Error: " + args.map((arg) => String(arg)).join(" ") + "\n";
-      };
-
-      console.warn = (...args) => {
-        output += "Warning: " + args.map((arg) => String(arg)).join(" ") + "\n";
-      };
-
-      try {
-        // Execute the code with some safety measures
-        const result = await (async () => {
-          return eval(`(async () => {
-            ${state.code}
-          })()`);
-        })();
-
-        if (result !== undefined) {
-          output +=
-            "Return value: " +
-            (typeof result === "object"
-              ? JSON.stringify(result, null, 2)
-              : String(result)) +
-            "\n";
-        }
-      } catch (error) {
-        output += `Runtime Error: ${
-          error instanceof Error ? error.message : String(error)
-        }\n`;
-      }
-
-      // Restore original console methods
+  // Capture console output
+  const captureConsole = useCallback(() => {
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    consoleOutputRef.current = [];
+    
+    console.log = (...args) => {
+      consoleOutputRef.current.push(`[LOG] ${args.map(arg => 
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+      ).join(' ')}`);
+      originalLog.apply(console, args);
+    };
+    
+    console.error = (...args) => {
+      consoleOutputRef.current.push(`[ERROR] ${args.map(arg => String(arg)).join(' ')}`);
+      originalError.apply(console, args);
+    };
+    
+    console.warn = (...args) => {
+      consoleOutputRef.current.push(`[WARN] ${args.map(arg => String(arg)).join(' ')}`);
+      originalWarn.apply(console, args);
+    };
+    
+    return () => {
       console.log = originalLog;
       console.error = originalError;
       console.warn = originalWarn;
+    };
+  }, []);
 
-      setState((prev) => ({
-        ...prev,
-        output: output || "Code executed successfully (no output)",
-      }));
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        output: `Execution Error: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      }));
+  const executeCode = useCallback(async () => {
+    if (isRunning) return;
+    
+    setIsRunning(true);
+    setError("");
+    setOutput("");
+    
+    const restoreConsole = captureConsole();
+    
+    try {
+      // Create a function wrapper to execute the code with async support
+      const wrappedCode = `
+        (async function() {
+          ${toolState.code}
+        })();
+      `;
+      
+      // Execute the code
+      const result = eval(wrappedCode);
+      
+      // Wait for async operations to complete
+      if (result instanceof Promise) {
+        await result;
+      }
+      
+      // Small delay to ensure all console outputs are captured
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const consoleOutput = consoleOutputRef.current.join('\n');
+      setOutput(consoleOutput || "Code executed successfully (no console output)");
+      
+      toolState.actions.showMessage("JavaScript compiled and executed successfully!");
+      
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setError(errorMessage);
+      setOutput(`Compilation Error: ${errorMessage}`);
+      toolState.actions.showMessage("Compilation error occurred");
     } finally {
-      setState((prev) => ({ ...prev, isExecuting: false }));
+      restoreConsole();
+      setIsRunning(false);
     }
-  }, [state.code]);
+  }, [toolState.code, toolState.actions, isRunning, captureConsole]);
 
   const copyOutput = useCallback(() => {
-    navigator.clipboard.writeText(state.output);
-    showMessage("Output copied to clipboard!");
-  }, [state.output, showMessage]);
+    if (output) {
+      toolState.actions.copyText(output, "Output copied to clipboard!");
+    } else {
+      toolState.actions.showMessage("No output to copy");
+    }
+  }, [output, toolState.actions]);
 
-  const handleReset = useCallback(() => {
-    setState({
-      code: DEFAULT_JS_CODE,
-      output: "",
-      isExecuting: false,
-    });
-  }, []);
+  const clearOutput = useCallback(() => {
+    setOutput("");
+    setError("");
+    toolState.actions.showMessage("Output cleared!");
+  }, [toolState.actions]);
+
+  const downloadCode = useCallback(() => {
+    toolState.actions.downloadFile(
+      toolState.code,
+      "script.js",
+      "text/javascript"
+    );
+  }, [toolState]);
+
+  // Editor configuration
+  const editorProps = useEditorConfig({
+    language: "javascript",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: isRunning ? "Running..." : "Run Code",
+        onClick: executeCode,
+        icon: <PlayArrowIcon />,
+        disabled: isRunning,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Output",
+        onClick: copyOutput,
+        icon: <ContentCopyIcon />,
+        disabled: !output,
+      },
+      {
+        type: "custom" as const,
+        text: "Clear Output",
+        onClick: clearOutput,
+        icon: <ClearIcon />,
+        disabled: !output && !error,
+      },
+      {
+        type: "custom" as const,
+        text: "Download JS",
+        onClick: downloadCode,
+        icon: <DownloadIcon />,
+      },
+      ...createCommonButtons({
+        onCopy: () =>
+          toolState.actions.copyText(
+            toolState.code,
+            "JavaScript code copied to clipboard!"
+          ),
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [
+      executeCode,
+      copyOutput,
+      clearOutput,
+      downloadCode,
+      isRunning,
+      output,
+      error,
+      toolState,
+    ]
+  );
+
+  // Calculate code statistics
+  const codeStats = useMemo(() => {
+    const lines = toolState.code.split('\n').length;
+    const characters = toolState.code.length;
+    const words = toolState.code.trim().split(/\s+/).filter(word => word.length > 0).length;
+    
+    return { lines, characters, words };
+  }, [toolState.code]);
 
   return (
     <ToolLayout
+      isFullScreen={toolState.isFullScreen}
       snackBar={{
-        open: snackBar.open,
-        message: snackBar.message,
-        onClose: () => setSnackBar((prev) => ({ ...prev, open: false })),
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
       }}
     >
-      <div className="space-y-4">
-        <div>
-          <Typography variant="h5" gutterBottom>
-            JavaScript Compiler
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Write and execute JavaScript code with real-time output
-          </Typography>
-        </div>
+      <SEOContent
+        title="JavaScript Compiler Online"
+        description="Free online JavaScript compiler with ES6+ support. Compile, run and test JavaScript code in browser with real-time execution and console output."
+        exampleCode={initialCode}
+        exampleOutput="🚀 JavaScript Compiler Demo\nHello, Developer! Welcome to JavaScript Compiler.\n📊 Array operations:\nNumbers: [1, 2, 3, 4, 5]\nDoubled: [2, 4, 6, 8, 10]\nSum: 30"
+      />
 
-        {/* Controls */}
-        <div className="flex gap-2 flex-wrap">
-          <Button
-            variant="contained"
-            startIcon={<PlayArrow />}
-            onClick={executeCode}
-            disabled={state.isExecuting}
-          >
-            {state.isExecuting ? "Running..." : "Run Code"}
-          </Button>
-          <Button
-            startIcon={<ContentCopy />}
-            onClick={copyOutput}
-            disabled={!state.output}
-          >
-            Copy Output
-          </Button>
-          <Button startIcon={<Refresh />} onClick={handleReset}>
-            Reset
-          </Button>
-        </div>
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Code Editor */}
-          <div className="space-y-2">
-            <Typography variant="h6">JavaScript Code</Typography>
-            <div className="border rounded-lg overflow-hidden">
-              <MonacoEditor
-                height="400px"
-                defaultLanguage="javascript"
-                value={state.code}
-                onChange={(value: string | undefined) =>
-                  setState((prev) => ({ ...prev, code: value || "" }))
-                }
-                options={{
-                  fontSize: 14,
-                  wordWrap: "on",
-                  minimap: { enabled: false },
-                  scrollBeyondLastLine: false,
-                }}
-              />
-            </div>
-          </div>
+      <CodeEditorLayout
+        leftPanel={{
+          title: "JavaScript Code Editor",
+          content: (
+            <SingleCodeEditorWithHeaderV2
+              editorHeading="Write your JavaScript code (ES6+ supported)"
+              codeEditorProps={editorProps}
+              themeOption="vs-dark"
+              className={toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"}
+            />
+          ),
+        }}
+        rightPanel={{
+          title: "Console Output",
+          content: (
+            <div className={`flex flex-col gap-2 ${toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"}`}>
+              {/* Output Display */}
+              <div className="flex-1 border border-gray-300 rounded bg-black text-green-400 font-mono text-sm p-3 overflow-auto">
+                {isRunning ? (
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-400"></div>
+                    <span>Executing JavaScript code...</span>
+                  </div>
+                ) : output ? (
+                  <pre className="whitespace-pre-wrap">{output}</pre>
+                ) : (
+                  <div className="text-gray-500">
+                    Click "Run Code" to execute JavaScript and see output here.
+                    <br />
+                    Supports ES6+, async/await, and modern JavaScript features.
+                  </div>
+                )}
+              </div>
 
-          {/* Output Panel */}
-          <div className="space-y-2">
-            <Typography variant="h6">Output</Typography>
-            <div className="border rounded-lg p-4 bg-gray-50 min-h-[400px] font-mono text-sm whitespace-pre-wrap overflow-auto">
-              {state.isExecuting ? (
-                <div className="text-blue-600">Executing code...</div>
-              ) : state.output ? (
-                state.output
-              ) : (
-                <div className="text-gray-500">
-                  Click &quot;Run Code&quot; to see output here
-                </div>
+              {/* Error Display */}
+              {error && (
+                <Alert severity="error" className="!mb-2">
+                  <Typography variant="body2">
+                    <strong>Compilation Error:</strong> {error}
+                  </Typography>
+                </Alert>
               )}
+
+              {/* Code Statistics */}
+              <Box className="p-3 bg-gray-50 border border-gray-200 rounded">
+                <Typography variant="h6" className="!text-sm !font-semibold mb-2">
+                  📊 Code Statistics
+                </Typography>
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div className="text-center">
+                    <div className="font-semibold text-blue-600">{codeStats.lines}</div>
+                    <div className="text-gray-600">Lines</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-green-600">{codeStats.characters}</div>
+                    <div className="text-gray-600">Characters</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-purple-600">{codeStats.words}</div>
+                    <div className="text-gray-600">Words</div>
+                  </div>
+                </div>
+              </Box>
+
+              {/* Features Info */}
+              <Box className="p-3 bg-blue-50 border border-blue-200 rounded">
+                <Typography variant="h6" className="!text-sm !font-semibold mb-2 text-blue-800">
+                  🚀 Supported Features
+                </Typography>
+                <div className="text-xs text-blue-700 space-y-1">
+                  <div>• ES6+ syntax (arrow functions, destructuring, spread operator)</div>
+                  <div>• Async/await and Promise support</div>
+                  <div>• Modern array methods and higher-order functions</div>
+                  <div>• Classes and object-oriented programming</div>
+                  <div>• Template literals and dynamic imports</div>
+                  <div>• Real-time console output and error handling</div>
+                </div>
+              </Box>
             </div>
-          </div>
-        </div>
-      </div>
+          ),
+        }}
+        isFullScreen={toolState.isFullScreen}
+      />
     </ToolLayout>
   );
 }

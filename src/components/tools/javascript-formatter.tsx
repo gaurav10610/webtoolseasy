@@ -103,7 +103,6 @@ if (value === 'webtoolseasy') {
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw JavaScript"
-            className="w-full h-full"
           />
         }
         rightPanel={
@@ -111,7 +110,6 @@ if (value === 'webtoolseasy') {
             codeEditorProps={outputEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted JavaScript"
-            className="w-full h-full"
           />
         }
       />

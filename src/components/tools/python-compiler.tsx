@@ -220,7 +220,6 @@ captured_output.getvalue()
             codeEditorProps={editorProps}
             themeOption="vs-dark"
             editorHeading="Python Code"
-            className="w-full h-full"
           />
         }
         rightPanel={

@@ -139,7 +139,6 @@ export default function JwtDecoder({
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="JWT Token"
-            className="w-full h-full"
           />
         }
         rightPanel={

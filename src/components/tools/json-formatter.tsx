@@ -130,7 +130,6 @@ export default function JsonFormatter({
             codeEditorProps={rawEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw JSON"
-            className="w-full h-full"
           />
         }
         rightPanel={
@@ -138,7 +137,6 @@ export default function JsonFormatter({
             codeEditorProps={formattedEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted JSON"
-            className="w-full h-full"
           />
         }
       />

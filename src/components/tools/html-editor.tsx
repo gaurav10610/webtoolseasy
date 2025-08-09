@@ -112,7 +112,6 @@ export default function HtmlEditor({
             codeEditorProps={editorProps}
             themeOption="vs-dark"
             editorHeading="HTML Code"
-            className="w-full h-full"
           />
         }
         rightPanel={

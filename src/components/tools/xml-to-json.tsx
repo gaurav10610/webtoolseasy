@@ -139,7 +139,6 @@ export default function XmlToJsonConverter({
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="XML Code"
-            className="w-full h-full"
           />
         }
         rightPanel={
@@ -147,7 +146,6 @@ export default function XmlToJsonConverter({
             codeEditorProps={outputEditorProps}
             themeOption="vs-dark"
             editorHeading="JSON Code"
-            className="w-full h-full"
           />
         }
       />

@@ -1,29 +1,20 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { Typography, Button, Alert } from "@mui/material";
-import {
-  Save,
-  ContentCopy,
-  Refresh,
-  Download,
-  Fullscreen,
-} from "@mui/icons-material";
-import { ToolLayout } from "../common/ToolLayout";
-import dynamic from "next/dynamic";
+import { useState, useCallback, useMemo } from "react";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import DownloadIcon from "@mui/icons-material/Download";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-});
-
-interface JavaScriptEditorState {
-  code: string;
-  isFullScreen: boolean;
-  error: string;
-}
-
-const DEFAULT_JS_CODE = `// JavaScript Editor
+export default function JavaScriptEditor({
+  hostname,
+  queryParams,
+}: Readonly<ToolComponentProps>) {
+  const initialValue = `// JavaScript Editor
 // Write your JavaScript code here
 
 /**
@@ -127,197 +118,239 @@ debouncedLog("Hello");
 debouncedLog("World");
 debouncedLog("!"); // Only this will execute`;
 
-export default function JavaScriptEditor() {
-  const [state, setState] = useState<JavaScriptEditorState>({
-    code: DEFAULT_JS_CODE,
-    isFullScreen: false,
-    error: "",
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
   });
 
-  const [snackBar, setSnackBar] = useState({
-    open: false,
-    message: "",
-  });
+  const [output, setOutput] = useState("");
+  const [isExecuting, setIsExecuting] = useState(false);
 
-  const showMessage = useCallback((message: string) => {
-    setSnackBar({ open: true, message });
-  }, []);
+  const executeCode = useCallback(async () => {
+    setIsExecuting(true);
+    setOutput("");
 
-  const handleCodeChange = useCallback((value: string | undefined) => {
-    setState((prev) => ({ ...prev, code: value || "", error: "" }));
-  }, []);
+    try {
+      // Create a safe execution environment
+      const originalLog = console.log;
+      const originalError = console.error;
+      const originalWarn = console.warn;
 
-  const saveCode = useCallback(() => {
-    localStorage.setItem("javascript-editor-code", state.code);
-    showMessage("Code saved to local storage!");
-  }, [state.code, showMessage]);
+      let output = "";
 
-  const copyCode = useCallback(() => {
-    navigator.clipboard.writeText(state.code);
-    showMessage("Code copied to clipboard!");
-  }, [state.code, showMessage]);
+      // Override console methods to capture output
+      console.log = (...args) => {
+        output +=
+          args
+            .map((arg) =>
+              typeof arg === "object"
+                ? JSON.stringify(arg, null, 2)
+                : String(arg)
+            )
+            .join(" ") + "\n";
+      };
+
+      console.error = (...args) => {
+        output += "Error: " + args.map((arg) => String(arg)).join(" ") + "\n";
+      };
+
+      console.warn = (...args) => {
+        output += "Warning: " + args.map((arg) => String(arg)).join(" ") + "\n";
+      };
+
+      try {
+        // Execute the code with some safety measures
+        const result = await (async () => {
+          return eval(`(async () => {
+            ${toolState.code}
+          })()`);
+        })();
+
+        if (result !== undefined) {
+          output +=
+            "Return value: " +
+            (typeof result === "object"
+              ? JSON.stringify(result, null, 2)
+              : String(result)) +
+            "\n";
+        }
+      } catch (error) {
+        output += `Runtime Error: ${
+          error instanceof Error ? error.message : String(error)
+        }\n`;
+      }
+
+      // Restore original console methods
+      console.log = originalLog;
+      console.error = originalError;
+      console.warn = originalWarn;
+
+      setOutput(output || "Code executed successfully (no output)");
+      toolState.actions.showMessage("JavaScript code executed successfully!");
+    } catch (error) {
+      setOutput(
+        `Execution Error: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+      toolState.actions.showMessage("JavaScript execution failed");
+    } finally {
+      setIsExecuting(false);
+    }
+  }, [toolState.code, toolState.actions]);
 
   const downloadCode = useCallback(() => {
-    const blob = new Blob([state.code], { type: "text/javascript" });
+    const blob = new Blob([toolState.code], { type: "text/javascript" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "script.js";
     a.click();
     URL.revokeObjectURL(url);
-    showMessage("Code downloaded as script.js!");
-  }, [state.code, showMessage]);
-
-  const toggleFullScreen = useCallback(() => {
-    setState((prev) => ({ ...prev, isFullScreen: !prev.isFullScreen }));
-  }, []);
-
-  const handleReset = useCallback(() => {
-    setState({
-      code: DEFAULT_JS_CODE,
-      isFullScreen: false,
-      error: "",
-    });
-  }, []);
+    toolState.actions.showMessage("Code downloaded as script.js!");
+  }, [toolState.code, toolState.actions]);
 
   const validateSyntax = useCallback(() => {
     try {
       // Basic syntax validation using Function constructor
-      new Function(state.code);
-      setState((prev) => ({ ...prev, error: "" }));
-      showMessage("✓ JavaScript syntax is valid!");
+      new Function(toolState.code);
+      toolState.actions.showMessage("✓ JavaScript syntax is valid!");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      setState((prev) => ({ ...prev, error: errorMessage }));
+      toolState.actions.showMessage(`Syntax Error: ${errorMessage}`);
     }
-  }, [state.code, showMessage]);
+  }, [toolState.code, toolState.actions]);
 
-  // Load saved code on mount
-  React.useEffect(() => {
-    const savedCode = localStorage.getItem("javascript-editor-code");
-    if (savedCode) {
-      setState((prev) => ({ ...prev, code: savedCode }));
-    }
-  }, []);
+  // Editor configuration
+  const editorProps = useEditorConfig({
+    language: "javascript",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
 
-  const editorHeight = state.isFullScreen ? "calc(100vh - 200px)" : "600px";
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Run JavaScript",
+        onClick: executeCode,
+        icon: <PlayArrowIcon />,
+        disabled: isExecuting,
+      },
+      {
+        type: "custom" as const,
+        text: "Validate Syntax",
+        onClick: validateSyntax,
+      },
+      {
+        type: "custom" as const,
+        text: "Download .js",
+        onClick: downloadCode,
+        icon: <DownloadIcon />,
+      },
+      ...createCommonButtons({
+        onCopy: () =>
+          toolState.actions.copyText(
+            toolState.code,
+            "JavaScript code copied to clipboard!"
+          ),
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [executeCode, validateSyntax, downloadCode, isExecuting, toolState]
+  );
+
+  // Calculate code statistics
+  const codeStats = useMemo(() => {
+    const code = toolState.code;
+    return {
+      characters: code.length,
+      lines: code.split("\n").length,
+      words: code.split(/\s+/).filter((word) => word.length > 0).length,
+      size: new Blob([code]).size,
+    };
+  }, [toolState.code]);
 
   return (
     <ToolLayout
-      isFullScreen={state.isFullScreen}
+      isFullScreen={toolState.isFullScreen}
       snackBar={{
-        open: snackBar.open,
-        message: snackBar.message,
-        onClose: () => setSnackBar((prev) => ({ ...prev, open: false })),
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
       }}
     >
-      <div className="space-y-4">
-        <div>
-          <Typography variant="h5" gutterBottom>
-            JavaScript Editor
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Write, edit, and validate JavaScript code with syntax highlighting
-          </Typography>
-        </div>
+      <SEOContent
+        title="JavaScript Editor"
+        description="Free online JavaScript editor with syntax highlighting, code execution, and validation. Write, test and run JavaScript code in your browser."
+        exampleCode={initialValue}
+        exampleOutput="Interactive JavaScript code execution with live output console"
+      />
 
-        {/* Controls */}
-        <div className="flex gap-2 flex-wrap">
-          <Button variant="contained" startIcon={<Save />} onClick={saveCode}>
-            Save
-          </Button>
-          <Button startIcon={<ContentCopy />} onClick={copyCode}>
-            Copy Code
-          </Button>
-          <Button startIcon={<Download />} onClick={downloadCode}>
-            Download
-          </Button>
-          <Button onClick={validateSyntax}>Validate Syntax</Button>
-          <Button startIcon={<Fullscreen />} onClick={toggleFullScreen}>
-            {state.isFullScreen ? "Exit" : "Full Screen"}
-          </Button>
-          <Button startIcon={<Refresh />} onClick={handleReset}>
-            Reset
-          </Button>
-        </div>
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-        {/* Error Display */}
-        {state.error && (
-          <Alert severity="error">
-            <Typography variant="body2">
-              <strong>Syntax Error:</strong> {state.error}
-            </Typography>
-          </Alert>
-        )}
-
-        {/* Code Editor */}
-        <div className="border rounded-lg overflow-hidden">
-          <MonacoEditor
-            height={editorHeight}
-            defaultLanguage="javascript"
-            value={state.code}
-            onChange={handleCodeChange}
-            options={{
-              fontSize: 14,
-              wordWrap: "on",
-              minimap: { enabled: true },
-              scrollBeyondLastLine: false,
-              formatOnPaste: true,
-              formatOnType: true,
-              automaticLayout: true,
-              suggestOnTriggerCharacters: true,
-              acceptSuggestionOnEnter: "on",
-              tabCompletion: "on",
-              quickSuggestions: true,
-              folding: true,
-              lineNumbers: "on",
-              renderLineHighlight: "line",
-              selectOnLineNumbers: true,
-              roundedSelection: false,
-              readOnly: false,
-              cursorStyle: "line",
-              mouseWheelZoom: true,
-            }}
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={editorProps}
+            themeOption="vs-dark"
+            editorHeading="JavaScript Code"
           />
-        </div>
+        }
+        rightPanel={
+          <div className="w-full h-full flex flex-col">
+            <div className="mb-3 flex items-center gap-2">
+              <PlayArrowIcon />
+              <span className="font-semibold">JavaScript Output</span>
+            </div>
+            <div className="flex-1 w-full overflow-auto p-4 bg-gray-900 text-green-400 border-2 border-gray-300 rounded font-mono text-sm whitespace-pre-wrap">
+              {isExecuting ? (
+                <div className="text-blue-400">
+                  Executing JavaScript code...
+                </div>
+              ) : output ? (
+                output
+              ) : (
+                <div className="text-gray-500">
+                  Click &ldquo;Run JavaScript&rdquo; to see output here...
+                </div>
+              )}
+            </div>
 
-        {/* Code Statistics */}
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <Typography variant="subtitle2" gutterBottom>
-            Code Statistics
-          </Typography>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <span className="text-gray-600">Characters:</span>
-              <span className="ml-2 font-mono">
-                {state.code.length.toLocaleString()}
-              </span>
-            </div>
-            <div>
-              <span className="text-gray-600">Lines:</span>
-              <span className="ml-2 font-mono">
-                {state.code.split("\n").length}
-              </span>
-            </div>
-            <div>
-              <span className="text-gray-600">Words:</span>
-              <span className="ml-2 font-mono">
-                {
-                  state.code.split(/\s+/).filter((word) => word.length > 0)
-                    .length
-                }
-              </span>
-            </div>
-            <div>
-              <span className="text-gray-600">Size:</span>
-              <span className="ml-2 font-mono">
-                {new Blob([state.code]).size} bytes
-              </span>
+            {/* Code Statistics */}
+            <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+              <div className="font-semibold mb-2 text-gray-800">
+                📊 Code Statistics
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-600">Characters:</span>
+                  <span className="ml-2 font-mono">
+                    {codeStats.characters.toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Lines:</span>
+                  <span className="ml-2 font-mono">{codeStats.lines}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Words:</span>
+                  <span className="ml-2 font-mono">{codeStats.words}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Size:</span>
+                  <span className="ml-2 font-mono">{codeStats.size} bytes</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        }
+      />
     </ToolLayout>
   );
 }

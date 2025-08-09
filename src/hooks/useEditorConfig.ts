@@ -17,7 +17,7 @@ export function useEditorConfig({
   onChange,
   fontSize = 12,
   wordWrap = "on",
-  className = "w-full h-full",
+  className = "w-full h-[65vh] min-h-[320px]",
   readOnly = false,
 }: UseEditorConfigProps): CodeEditorPropsV2 {
   return useMemo(
@@ -57,6 +57,6 @@ export const getEditorConfig = (
       scrollBeyondLastLine: false,
       automaticLayout: true,
     },
-    className: options?.className || "w-full h-full",
+    className: options?.className || "w-full h-[65vh] min-h-[320px]",
   };
 };

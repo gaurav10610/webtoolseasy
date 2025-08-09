@@ -48,22 +48,28 @@ export async function compressStringToBase64(dataToCompress: string) {
 }
 
 export async function decompressStringFromBase64(base64String: string) {
-  // Convert base64 to ArrayBuffer
-  const binaryString = atob(base64String);
-  const compressedData = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    compressedData[i] = binaryString.charCodeAt(i);
+  try {
+    // Convert base64 to ArrayBuffer
+    const binaryString = atob(base64String);
+    const compressedData = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      compressedData[i] = binaryString.charCodeAt(i);
+    }
+
+    // Decompress using gzip
+    const ds = new DecompressionStream("gzip");
+    const writer = ds.writable.getWriter();
+    writer.write(compressedData);
+    writer.close();
+
+    const decompressedData = await new Response(ds.readable).arrayBuffer();
+    const decoder = new TextDecoder();
+    return decoder.decode(decompressedData);
+  } catch {
+    // If decompression fails, return the original string
+    // This handles cases where the parameter is not compressed data
+    return base64String;
   }
-
-  // Decompress using gzip
-  const ds = new DecompressionStream("gzip");
-  const writer = ds.writable.getWriter();
-  writer.write(compressedData);
-  writer.close();
-
-  const decompressedData = await new Response(ds.readable).arrayBuffer();
-  const decoder = new TextDecoder();
-  return decoder.decode(decompressedData);
 }
 
 /**

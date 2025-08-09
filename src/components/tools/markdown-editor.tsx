@@ -131,7 +131,7 @@ function hello() {
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div
-        className={`w-full h-[20rem] md:h-[30rem] ${
+        className={`w-full h-[65vh] min-h-[320px] ${
           toolState.isFullScreen ? "md:h-full" : ""
         }`}
       >
