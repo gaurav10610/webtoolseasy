@@ -51,17 +51,21 @@ export const CodeEditorLayout = memo(function CodeEditorLayout({
   isFullScreen = false,
   className = "",
 }: CodeEditorLayoutProps) {
+  const containerHeight = isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]";
+
   return (
     <div
-      className={`flex flex-col w-full items-center md:flex-row gap-4 ${
-        isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-      } ${className}`}
+      className={`flex flex-col w-full md:flex-row gap-4 ${containerHeight} ${className}`}
     >
       {leftPanel && (
-        <div className="w-full md:w-1/2 h-full md:h-full">{leftPanel}</div>
+        <div className="w-full md:w-1/2 flex-1 md:h-full flex-shrink-0">
+          {leftPanel}
+        </div>
       )}
       {rightPanel && (
-        <div className="w-full md:w-1/2 h-full md:h-full">{rightPanel}</div>
+        <div className="w-full md:w-1/2 flex-1 md:h-full flex-shrink-0">
+          {rightPanel}
+        </div>
       )}
     </div>
   );

@@ -28,7 +28,7 @@ export function SingleCodeEditorWithHeaderV2({
         <Typography
           variant="body1"
           color="textSecondary"
-          className="!text-xl !font-semibold"
+          className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
         >
           {editorHeading}
         </Typography>

@@ -227,13 +227,13 @@ export default function JavaScriptEditor({
         }
         rightPanel={
           <div className="flex flex-col gap-2 h-full">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <PreviewIcon className="text-blue-600" />
-              <span className="font-semibold text-lg md:text-xl">
+              <span className="font-semibold text-sm md:text-lg lg:text-xl">
                 Live Preview
               </span>
             </div>
-            <div className="flex-1 min-h-[200px] md:min-h-[280px] w-full border-2 border-gray-300 rounded-lg bg-white">
+            <div className="flex-1 w-full border-2 border-gray-300 rounded-lg bg-white overflow-hidden">
               <iframe
                 srcDoc={previewHtml}
                 className="w-full h-full border-0 rounded-lg"
