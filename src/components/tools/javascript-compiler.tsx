@@ -296,22 +296,21 @@ main().then(result => console.log("Final result:", result));`;
 
       <CodeEditorLayout
         leftPanel={
-          <div className="flex flex-col gap-2">
-            <Typography variant="h6" className="!text-sm !font-semibold">
-              JavaScript Code Editor
-            </Typography>
-            <SingleCodeEditorWithHeaderV2
-              editorHeading="Write your JavaScript code (ES6+ supported)"
-              codeEditorProps={editorProps}
-              themeOption="vs-dark"
-              className={
-                toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-              }
-            />
-          </div>
+          <SingleCodeEditorWithHeaderV2
+            editorHeading="JavaScript Code Editor"
+            codeEditorProps={editorProps}
+            themeOption="vs-dark"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
         }
         rightPanel={
-          <div className="flex flex-col gap-2 h-full">
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
             <div className="flex items-center gap-2">
               <PlayArrowIcon className="text-green-600" />
               <span className="font-semibold text-lg md:text-xl">

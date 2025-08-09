@@ -150,18 +150,15 @@ New line added`;
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         {/* Text Compare Editor - takes 3/4 of the width */}
         <div className="lg:col-span-3">
-          <div
+          <DiffEditorsWithHeader
+            firstTextHeading="Original Text"
+            secondTextHeading="Modified Text"
+            themeOption="light"
+            diffEditorProps={diffEditorProps}
             className={`w-full h-[50vh] md:h-[65vh] min-h-[250px] md:min-h-[320px] ${
               toolState.isFullScreen ? "md:h-full" : ""
             }`}
-          >
-            <DiffEditorsWithHeader
-              firstTextHeading="Original Text"
-              secondTextHeading="Modified Text"
-              themeOption="light"
-              diffEditorProps={diffEditorProps}
-            />
-          </div>
+          />
         </div>
 
         {/* Statistics Panel - takes 1/4 of the width */}

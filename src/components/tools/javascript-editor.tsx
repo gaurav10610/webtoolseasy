@@ -9,6 +9,7 @@ import { useEditorConfig } from "@/hooks/useEditorConfig";
 import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+import { Typography } from "@mui/material";
 
 export default function JavaScriptEditor({
   hostname,
@@ -226,13 +227,19 @@ export default function JavaScriptEditor({
           />
         }
         rightPanel={
-          <div className="flex flex-col gap-2 h-full">
-            <div className="flex items-center gap-2 flex-shrink-0">
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
+            <Typography
+              variant="body1"
+              color="textSecondary"
+              className="!text-sm md:!text-lg lg:!text-xl !font-semibold flex items-center gap-2"
+            >
               <PreviewIcon className="text-blue-600" />
-              <span className="font-semibold text-sm md:text-lg lg:text-xl">
-                Live Preview
-              </span>
-            </div>
+              Live Preview
+            </Typography>
             <div className="flex-1 w-full border-2 border-gray-300 rounded-lg bg-white overflow-hidden">
               <iframe
                 srcDoc={previewHtml}

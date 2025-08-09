@@ -33,20 +33,18 @@ export function SingleCodeEditorWithHeaderV2({
           {editorHeading}
         </Typography>
       )}
-      <div className="flex-1 min-h-[280px] h-full">
-        <CodeEditorV2
-          language={codeEditorProps.language}
-          value={codeEditorProps.value}
-          onChange={codeEditorProps.onChange}
-          className={codeEditorProps.className}
-          editorOptions={{
-            ...editorOptions,
-            ...(codeEditorProps.editorOptions || {}),
-          }}
-          theme={themeOption}
-          handleEditorDidMount={codeEditorProps.handleEditorDidMount}
-        />
-      </div>
+      <CodeEditorV2
+        language={codeEditorProps.language}
+        value={codeEditorProps.value}
+        onChange={codeEditorProps.onChange}
+        className={codeEditorProps.className}
+        editorOptions={{
+          ...editorOptions,
+          ...(codeEditorProps.editorOptions || {}),
+        }}
+        theme={themeOption}
+        handleEditorDidMount={codeEditorProps.handleEditorDidMount}
+      />
     </div>
   );
 }
@@ -67,9 +65,7 @@ export function DiffEditorsWithHeader({
   themeOption: string;
 }>) {
   return (
-    <div
-      className={`flex flex-col gap-2 ${className || "h-[65vh] min-h-[320px]"}`}
-    >
+    <div className={`flex flex-col gap-2 ${className}`}>
       <div className="w-full flex flex-row justify-around">
         <Typography
           variant="body1"

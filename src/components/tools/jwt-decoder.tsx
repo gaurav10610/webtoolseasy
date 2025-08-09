@@ -159,10 +159,17 @@ export default function JwtDecoder({
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="JWT Token"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
-          <div className="flex flex-col gap-2 w-full h-full">
+          <div
+            className={`flex flex-col gap-2 w-full ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
             <SingleCodeEditorWithHeaderV2
               codeEditorProps={headersEditorProps}
               themeOption="vs-dark"

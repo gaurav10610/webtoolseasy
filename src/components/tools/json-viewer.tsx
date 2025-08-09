@@ -364,30 +364,25 @@ export default function JsonViewer({
 
       <CodeEditorLayout
         leftPanel={
-          <div className="flex flex-col gap-2">
-            <Typography variant="h6" className="!text-sm !font-semibold">
-              JSON Input
-            </Typography>
-            <SingleCodeEditorWithHeaderV2
-              editorHeading="Paste your JSON data here"
-              codeEditorProps={editorProps}
-              themeOption="vs-dark"
-              className={
-                toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-              }
-            />
-          </div>
+          <SingleCodeEditorWithHeaderV2
+            editorHeading="JSON Input"
+            codeEditorProps={editorProps}
+            themeOption="vs-dark"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
         }
         rightPanel={
-          <div className="flex flex-col gap-2">
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
             <Typography variant="h6" className="!text-sm !font-semibold">
               JSON Tree View
             </Typography>
-            <div
-              className={`flex flex-col gap-2 ${
-                toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-              }`}
-            >
+            <div className="flex flex-col gap-2 flex-1">
               {/* Search Box */}
               <TextField
                 size="small"

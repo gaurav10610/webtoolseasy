@@ -27,7 +27,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   onChange,
   editorOptions = {},
   handleEditorDidMount,
-  className = "w-full h-full min-h-[320px]",
+  className = "w-full h-full",
 }) => {
   const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,

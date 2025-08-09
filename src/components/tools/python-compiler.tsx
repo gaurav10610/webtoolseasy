@@ -240,7 +240,11 @@ captured_output.getvalue()
           />
         }
         rightPanel={
-          <div className="flex flex-col gap-2 h-full">
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
             <div className="flex items-center gap-2">
               <span className="text-xl md:text-2xl">📟</span>
               <span className="font-semibold text-lg md:text-xl">

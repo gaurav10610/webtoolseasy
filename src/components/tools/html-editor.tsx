@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import PreviewIcon from "@mui/icons-material/Preview";
+import { Typography } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -118,13 +119,19 @@ export default function HtmlEditor({
           />
         }
         rightPanel={
-          <div className="flex flex-col gap-2 h-full">
-            <div className="flex items-center gap-2">
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
+            <Typography
+              variant="body1"
+              color="textSecondary"
+              className="!text-sm md:!text-lg lg:!text-xl !font-semibold flex items-center gap-2"
+            >
               <PreviewIcon className="text-blue-600" />
-              <span className="font-semibold text-lg md:text-xl">
-                Live Preview
-              </span>
-            </div>
+              Live Preview
+            </Typography>
             <div className="flex-1 min-h-[200px] md:min-h-[280px] w-full border-2 border-gray-300 rounded-lg bg-white">
               <iframe
                 srcDoc={previewHtml}
