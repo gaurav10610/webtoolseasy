@@ -53,15 +53,12 @@ export default function PasswordGenerator({
     });
   }, []);
 
-  const initialValue = useMemo(
-    () => generateRandomPassword(options),
-    [generateRandomPassword, options]
-  );
+  const generateInitialPassword = () => generateRandomPassword(options);
 
   const toolState = useToolState({
     hostname: hostname || "",
     queryParams,
-    initialValue,
+    initialValue: generateInitialPassword(),
   });
 
   const encryptPassword = useCallback((password: string) => {
@@ -75,7 +72,8 @@ export default function PasswordGenerator({
   useEffect(() => {
     const newPassword = generateRandomPassword(options);
     toolState.setCode(newPassword);
-  }, [options, generateRandomPassword, toolState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options]); // toolState.setCode is stable, generateRandomPassword is recreated but with same logic
 
   const generateNewPassword = useCallback(() => {
     const newPassword = generateRandomPassword(options);
