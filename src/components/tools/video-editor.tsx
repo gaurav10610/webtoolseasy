@@ -1,21 +1,18 @@
 "use client";
 
-import React, { useState, useRef, useCallback, memo, useMemo } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   Typography,
+  Card,
+  CardContent,
   Button,
   Slider,
+  TextField,
   IconButton,
   Alert,
   LinearProgress,
-  Switch,
-  FormControlLabel,
-  Card,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
+  Box,
+  Stack,
 } from "@mui/material";
 import {
   PlayArrow,
@@ -23,42 +20,25 @@ import {
   VolumeUp,
   VolumeOff,
   Download,
-  ContentCut,
   Delete,
-  Add,
-  Tune,
   TextFields,
-  DragIndicator,
 } from "@mui/icons-material";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { PaperWithChildren } from "../lib/papers";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { SnackBarWithPosition } from "../lib/snackBar";
 import {
   FILE_TYPE_PRESETS,
   FILE_SIZE_PRESETS,
 } from "../../util/fileValidation";
-import { formatBytes } from "@/util/commonUtils";
-import { useToolState } from "@/hooks/useToolState";
-import { ToolComponentProps } from "@/types/component";
-
-interface TextOverlay {
-  id: string;
-  text: string;
-  x: number; // Position as percentage (0-100)
-  y: number; // Position as percentage (0-100)
-  width: number; // Width as percentage (5-50)
-  height: number; // Height as percentage (2-20)
-  fontSize: number;
-  color: string;
-  fontFamily: string;
-  fontWeight: string;
-  backgroundColor: string;
-  opacity: number;
-  startTime: number; // When overlay appears
-  endTime: number; // When overlay disappears
-}
+import { formatBytes, getRandomId } from "@/util/commonUtils";
+import {
+  createFFmpegInstance,
+  executeFFmpegCommand,
+  writeFFmpegFile,
+  getFFmpegFile,
+} from "@/service/ffmpegService";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
 
 interface VideoClip {
   id: string;
@@ -70,1524 +50,1518 @@ interface VideoClip {
   trimStart: number;
   trimEnd: number;
   videoElement?: HTMLVideoElement;
-  effects: VideoEffect[];
-  textOverlays: TextOverlay[];
-  url: string;
 }
 
-interface VideoEffect {
+interface TextOverlay {
   id: string;
-  type: "brightness" | "contrast" | "blur" | "grayscale" | "sepia" | "saturate";
-  name: string;
+  text: string;
+  x: number;
+  y: number;
+  startTime: number;
+  endTime: number;
+  fontSize: number;
+  color: string;
+  fontFamily: string;
+}
+
+interface VideoFilter {
+  id: string;
+  type: "brightness" | "contrast" | "saturation" | "blur";
   value: number;
-  enabled: boolean;
 }
 
-interface VideoEditorState {
-  clips: VideoClip[];
-  selectedClipId: string | null;
-  isPlaying: boolean;
-  currentTime: number;
-  isMuted: boolean;
-  volume: number;
-  isProcessing: boolean;
-  error: string;
-  selectedTextOverlayId: string | null;
-}
-
-const DEFAULT_EFFECTS: Omit<VideoEffect, "id">[] = [
-  { type: "brightness", name: "Brightness", value: 100, enabled: false },
-  { type: "contrast", name: "Contrast", value: 100, enabled: false },
-  { type: "blur", name: "Blur", value: 0, enabled: false },
-  { type: "grayscale", name: "Grayscale", value: 0, enabled: false },
-  { type: "sepia", name: "Sepia", value: 0, enabled: false },
-  { type: "saturate", name: "Saturation", value: 100, enabled: false },
-];
-
-// Helper function to check if a video has been edited
-const isVideoEdited = (clip: VideoClip): boolean => {
-  // Check if any effects are enabled
-  const hasEffects = clip.effects.some((effect) => effect.enabled);
-
-  // Check if video has been trimmed
-  const hasTrimming = clip.trimStart > 0 || clip.trimEnd < clip.duration;
-
-  // Check if video has text overlays
-  const hasTextOverlays = clip.textOverlays.length > 0;
-
-  return hasEffects || hasTrimming || hasTextOverlays;
-};
-
-// Memoized Video Controls Component
-const VideoControls = memo(function VideoControls({
-  selectedClip,
-  isPlaying,
-  currentTime,
-  isMuted,
-  volume,
-  onPlayPause,
-  onTimeChange,
-  onMuteToggle,
-  onVolumeChange,
-}: {
-  selectedClip: VideoClip | null;
-  isPlaying: boolean;
-  currentTime: number;
-  isMuted: boolean;
-  volume: number;
-  onPlayPause: () => void;
-  onTimeChange: (time: number) => void;
-  onMuteToggle: () => void;
-  onVolumeChange: (volume: number) => void;
-}) {
-  if (!selectedClip) return null;
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  return (
-    <PaperWithChildren variant="elevation" className="p-2 sm:p-3">
-      <div className="flex flex-col gap-2 sm:gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 sm:gap-2">
-            <IconButton onClick={onPlayPause} size="large" color="primary">
-              {isPlaying ? <Pause /> : <PlayArrow />}
-            </IconButton>
-            <Typography
-              variant="body2"
-              className="min-w-[60px] sm:min-w-[80px] text-xs sm:text-sm"
-            >
-              <span className="hidden sm:inline">
-                {formatTime(currentTime)} / {formatTime(selectedClip.duration)}
-              </span>
-              <span className="sm:hidden">{Math.round(currentTime)}s</span>
-            </Typography>
-          </div>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <IconButton onClick={onMuteToggle} size="small">
-              {isMuted ? <VolumeOff /> : <VolumeUp />}
-            </IconButton>
-            <Slider
-              value={isMuted ? 0 : volume}
-              min={0}
-              max={100}
-              onChange={(_, value) => onVolumeChange(value as number)}
-              size="small"
-              className="w-12 sm:w-20"
-            />
-          </div>
-        </div>
-        <Slider
-          value={currentTime}
-          min={selectedClip.trimStart}
-          max={selectedClip.trimEnd}
-          onChange={(_, value) => onTimeChange(value as number)}
-          size="small"
-          className="w-full"
-        />
-      </div>
-    </PaperWithChildren>
+export default function VideoEditor() {
+  const [clips, setClips] = useState<VideoClip[]>([]);
+  const [currentClip, setCurrentClip] = useState<VideoClip | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [textOverlays, setTextOverlays] = useState<TextOverlay[]>([]);
+  const [filters, setFilters] = useState<VideoFilter[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [snackBarColor, setSnackBarColor] = useState<
+    "success" | "info" | "warning" | "error"
+  >("success");
+  const [error, setError] = useState("");
+  const [realTimePreview, setRealTimePreview] = useState(true);
+  const [selectedOverlayId, setSelectedOverlayId] = useState<string | null>(
+    null
   );
-});
-
-// Video Effects Panel
-const VideoEffectsPanel = memo(function VideoEffectsPanel({
-  effects,
-  onEffectToggle,
-  onEffectValueChange,
-}: {
-  effects: VideoEffect[];
-  onEffectToggle: (effectId: string) => void;
-  onEffectValueChange: (effectId: string, value: number) => void;
-}) {
-  return (
-    <div className="space-y-3">
-      {effects.map((effect) => (
-        <div
-          key={effect.id}
-          className="p-2 sm:p-3 border border-gray-200 rounded-lg bg-gray-50"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <Typography
-              variant="body2"
-              fontWeight="medium"
-              className="text-xs sm:text-sm"
-            >
-              {effect.name}
-            </Typography>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={effect.enabled}
-                  onChange={() => onEffectToggle(effect.id)}
-                  size="small"
-                />
-              }
-              label=""
-            />
-          </div>
-          {effect.enabled && (
-            <Slider
-              value={effect.value}
-              min={
-                effect.type === "blur"
-                  ? 0
-                  : effect.type === "grayscale" || effect.type === "sepia"
-                  ? 0
-                  : 50
-              }
-              max={
-                effect.type === "blur"
-                  ? 10
-                  : effect.type === "grayscale" || effect.type === "sepia"
-                  ? 100
-                  : 200
-              }
-              onChange={(_, value) =>
-                onEffectValueChange(effect.id, value as number)
-              }
-              size="small"
-              valueLabelDisplay="auto"
-              marks={[
-                {
-                  value:
-                    effect.type === "blur"
-                      ? 0
-                      : effect.type === "grayscale" || effect.type === "sepia"
-                      ? 0
-                      : 100,
-                  label: "Normal",
-                },
-              ]}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-});
-
-// Trim Controls Panel
-const TrimControlsPanel = memo(function TrimControlsPanel({
-  selectedClip,
-  onTrimChange,
-}: {
-  selectedClip: VideoClip | null;
-  onTrimChange: (trimStart: number, trimEnd: number) => void;
-}) {
-  if (!selectedClip) return null;
-
-  return (
-    <div className="space-y-3">
-      <Typography
-        variant="h6"
-        className="flex items-center gap-2 text-sm sm:text-base"
-      >
-        <ContentCut className="text-blue-600" />
-        <span className="hidden sm:inline">Trim Video</span>
-        <span className="sm:hidden">Trim</span>
-      </Typography>
-      <div className="p-2 sm:p-3 border border-gray-200 rounded-lg bg-gray-50">
-        <div className="space-y-3">
-          <Typography
-            variant="body2"
-            fontWeight="medium"
-            className="text-xs sm:text-sm"
-          >
-            <span className="hidden sm:inline">Trim Range: </span>
-            {Math.round(selectedClip.trimStart)}s -{" "}
-            {Math.round(selectedClip.trimEnd)}s
-          </Typography>
-          <Slider
-            value={[selectedClip.trimStart, selectedClip.trimEnd]}
-            min={0}
-            max={selectedClip.duration}
-            onChange={(_, value) => {
-              const [start, end] = value as number[];
-              onTrimChange(start, end);
-            }}
-            valueLabelDisplay="auto"
-            size="small"
-            marks={[
-              { value: 0, label: "0s" },
-              {
-                value: selectedClip.duration,
-                label: `${Math.round(selectedClip.duration)}s`,
-              },
-            ]}
-          />
-        </div>
-      </div>
-    </div>
-  );
-});
-
-// Draggable Text Overlay Component
-const DraggableTextOverlay = memo(
-  function DraggableTextOverlay({
-    overlay,
-    isSelected,
-    currentTime,
-    onUpdate,
-    onSelect,
-    videoContainerRect,
-  }: {
-    overlay: TextOverlay;
-    isSelected: boolean;
-    currentTime: number;
-    onUpdate: (updates: Partial<TextOverlay>) => void;
-    onSelect: () => void;
-    videoContainerRect: DOMRect | null;
-  }) {
-    const [isDragging, setIsDragging] = useState(false);
-    const [isResizing, setIsResizing] = useState(false);
-    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-    const [resizeType, setResizeType] = useState<
-      "se" | "sw" | "ne" | "nw" | null
-    >(null);
-
-    // Local state for position and size during drag/resize to prevent video re-renders
-    const [localPosition, setLocalPosition] = useState({
-      x: overlay.x,
-      y: overlay.y,
-    });
-    const [localSize, setLocalSize] = useState({
-      width: overlay.width,
-      height: overlay.height,
-    });
-
-    // Update local state when overlay prop changes (but not during drag/resize)
-    React.useEffect(() => {
-      if (!isDragging && !isResizing) {
-        setLocalPosition({ x: overlay.x, y: overlay.y });
-        setLocalSize({ width: overlay.width, height: overlay.height });
-      }
-    }, [
-      overlay.x,
-      overlay.y,
-      overlay.width,
-      overlay.height,
-      isDragging,
-      isResizing,
-    ]);
-
-    const handleMouseMove = useCallback(
-      (e: MouseEvent) => {
-        if (!videoContainerRect) return;
-
-        if (isDragging) {
-          const newX =
-            ((e.clientX - videoContainerRect.left - dragOffset.x) /
-              videoContainerRect.width) *
-            100;
-          const newY =
-            ((e.clientY - videoContainerRect.top - dragOffset.y) /
-              videoContainerRect.height) *
-            100;
-
-          setLocalPosition({
-            x: Math.max(0, Math.min(100, newX)),
-            y: Math.max(0, Math.min(100, newY)),
-          });
-        } else if (isResizing && resizeType) {
-          const rect = videoContainerRect;
-          const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
-          const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
-
-          let newWidth = localSize.width;
-          let newHeight = localSize.height;
-          let newX = localPosition.x;
-          let newY = localPosition.y;
-
-          // Handle different resize directions
-          if (resizeType.includes("e")) {
-            newWidth = Math.max(
-              5,
-              Math.min(50, mouseX - localPosition.x + localSize.width / 2)
-            );
-          }
-          if (resizeType.includes("w")) {
-            const rightEdge = localPosition.x + localSize.width / 2;
-            newX = Math.max(0, Math.min(rightEdge - 5, mouseX));
-            newWidth = Math.max(5, rightEdge - newX);
-          }
-          if (resizeType.includes("s")) {
-            newHeight = Math.max(
-              2,
-              Math.min(20, mouseY - localPosition.y + localSize.height / 2)
-            );
-          }
-          if (resizeType.includes("n")) {
-            const bottomEdge = localPosition.y + localSize.height / 2;
-            newY = Math.max(0, Math.min(bottomEdge - 2, mouseY));
-            newHeight = Math.max(2, bottomEdge - newY);
-          }
-
-          setLocalPosition({ x: newX, y: newY });
-          setLocalSize({ width: newWidth, height: newHeight });
-        }
-      },
-      [
-        isDragging,
-        isResizing,
-        dragOffset,
-        videoContainerRect,
-        resizeType,
-        localPosition,
-        localSize,
-      ]
-    );
-
-    const handleMouseUp = useCallback(() => {
-      if (isDragging || isResizing) {
-        // Only update the actual overlay when drag/resize is complete
-        onUpdate({
-          x: localPosition.x,
-          y: localPosition.y,
-          width: localSize.width,
-          height: localSize.height,
-        });
-      }
-      setIsDragging(false);
-      setIsResizing(false);
-      setResizeType(null);
-    }, [isDragging, isResizing, onUpdate, localPosition, localSize]);
-
-    React.useEffect(() => {
-      if (isDragging || isResizing) {
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
-      }
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-    }, [isDragging, isResizing, handleMouseMove, handleMouseUp]);
-
-    // Only show overlay if current time is within its time range
-    const isVisible =
-      currentTime >= overlay.startTime && currentTime <= overlay.endTime;
-
-    if (!isVisible || !videoContainerRect) return null;
-
-    const handleMouseDown = (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragging(true);
-      onSelect();
-
-      // Update video container rect to ensure we have current dimensions
-      if (videoContainerRect) {
-        // Calculate offset from the center of the element since we use translate(-50%, -50%)
-        const elementCenterX =
-          (localPosition.x / 100) * videoContainerRect.width;
-        const elementCenterY =
-          (localPosition.y / 100) * videoContainerRect.height;
-
-        setDragOffset({
-          x: e.clientX - videoContainerRect.left - elementCenterX,
-          y: e.clientY - videoContainerRect.top - elementCenterY,
-        });
-      }
-    };
-
-    const handleResizeMouseDown = (
-      e: React.MouseEvent,
-      type: "se" | "sw" | "ne" | "nw"
-    ) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsResizing(true);
-      setResizeType(type);
-      onSelect();
-    };
-
-    return (
-      <div
-        className={`absolute select-none ${
-          isDragging ? "cursor-grabbing" : "cursor-grab"
-        } ${isSelected ? "ring-2 ring-blue-500" : ""}`}
-        style={{
-          left: `${localPosition.x}%`,
-          top: `${localPosition.y}%`,
-          width: `${localSize.width}%`,
-          height: `${localSize.height}%`,
-          fontSize: `${overlay.fontSize}px`,
-          color: overlay.color,
-          fontFamily: overlay.fontFamily,
-          fontWeight: overlay.fontWeight,
-          backgroundColor: overlay.backgroundColor,
-          opacity: overlay.opacity,
-          padding: "4px 8px",
-          borderRadius: "4px",
-          transform: "translate(-50%, -50%)",
-          zIndex: isSelected ? 10 : 5,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          wordWrap: "break-word",
-          overflow: "hidden",
-        }}
-        onMouseDown={handleMouseDown}
-      >
-        {overlay.text || "Text Overlay"}
-
-        {isSelected && (
-          <>
-            {/* Move indicator */}
-            <DragIndicator
-              className="absolute -top-2 -left-2 text-blue-500 bg-white rounded"
-              fontSize="small"
-            />
-
-            {/* Resize handles */}
-            <div
-              className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full cursor-nw-resize"
-              onMouseDown={(e) => handleResizeMouseDown(e, "ne")}
-            />
-            <div
-              className="absolute -top-1 -left-1 w-3 h-3 bg-blue-500 rounded-full cursor-ne-resize"
-              onMouseDown={(e) => handleResizeMouseDown(e, "nw")}
-            />
-            <div
-              className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 rounded-full cursor-nw-resize"
-              onMouseDown={(e) => handleResizeMouseDown(e, "se")}
-            />
-            <div
-              className="absolute -bottom-1 -left-1 w-3 h-3 bg-blue-500 rounded-full cursor-ne-resize"
-              onMouseDown={(e) => handleResizeMouseDown(e, "sw")}
-            />
-          </>
-        )}
-      </div>
-    );
-  },
-  (prevProps, nextProps) => {
-    // Custom comparison to prevent unnecessary re-renders
-    return (
-      prevProps.overlay.id === nextProps.overlay.id &&
-      prevProps.overlay.text === nextProps.overlay.text &&
-      prevProps.overlay.x === nextProps.overlay.x &&
-      prevProps.overlay.y === nextProps.overlay.y &&
-      prevProps.overlay.width === nextProps.overlay.width &&
-      prevProps.overlay.height === nextProps.overlay.height &&
-      prevProps.overlay.fontSize === nextProps.overlay.fontSize &&
-      prevProps.overlay.color === nextProps.overlay.color &&
-      prevProps.overlay.fontFamily === nextProps.overlay.fontFamily &&
-      prevProps.overlay.fontWeight === nextProps.overlay.fontWeight &&
-      prevProps.overlay.backgroundColor === nextProps.overlay.backgroundColor &&
-      prevProps.overlay.opacity === nextProps.overlay.opacity &&
-      prevProps.overlay.startTime === nextProps.overlay.startTime &&
-      prevProps.overlay.endTime === nextProps.overlay.endTime &&
-      prevProps.isSelected === nextProps.isSelected &&
-      prevProps.currentTime === nextProps.currentTime &&
-      prevProps.videoContainerRect?.width ===
-        nextProps.videoContainerRect?.width &&
-      prevProps.videoContainerRect?.height ===
-        nextProps.videoContainerRect?.height
-    );
-  }
-);
-
-// Text Overlays Panel Component
-const TextOverlaysPanel = memo(function TextOverlaysPanel({
-  selectedClip,
-  selectedTextOverlayId,
-  onAddTextOverlay,
-  onUpdateTextOverlay,
-  onRemoveTextOverlay,
-  onSelectTextOverlay,
-}: {
-  selectedClip: VideoClip | null;
-  selectedTextOverlayId: string | null;
-  onAddTextOverlay: () => void;
-  onUpdateTextOverlay: (
-    overlayId: string,
-    updates: Partial<TextOverlay>
-  ) => void;
-  onRemoveTextOverlay: (overlayId: string) => void;
-  onSelectTextOverlay: (overlayId: string | null) => void;
-}) {
-  if (!selectedClip) return null;
-
-  const selectedOverlay = selectedClip.textOverlays.find(
-    (overlay) => overlay.id === selectedTextOverlayId
-  );
-
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <Typography
-          variant="h6"
-          className="flex items-center gap-2 text-sm sm:text-base"
-        >
-          <TextFields className="text-blue-600" />
-          <span className="hidden sm:inline">
-            Text Overlays ({selectedClip.textOverlays.length})
-          </span>
-          <span className="sm:hidden">
-            Text ({selectedClip.textOverlays.length})
-          </span>
-        </Typography>
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<Add />}
-          onClick={onAddTextOverlay}
-          className="text-xs sm:text-sm"
-        >
-          <span className="hidden sm:inline">Add Text</span>
-          <span className="sm:hidden">Add</span>
-        </Button>
-      </div>
-
-      <div className="space-y-3 max-h-24 sm:max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-        {selectedClip.textOverlays.map((overlay) => (
-          <Card
-            key={overlay.id}
-            variant={
-              selectedTextOverlayId === overlay.id ? "elevation" : "outlined"
-            }
-            className={`p-3 cursor-pointer transition-all border-2 ${
-              selectedTextOverlayId === overlay.id
-                ? "bg-blue-50 border-blue-500 shadow-md"
-                : "hover:bg-gray-50 border-gray-200 hover:border-gray-300"
-            }`}
-            onClick={() => onSelectTextOverlay(overlay.id)}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <TextFields
-                  color={
-                    selectedTextOverlayId === overlay.id ? "primary" : "action"
-                  }
-                  fontSize="small"
-                  className="flex-shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <Typography
-                    variant="body2"
-                    fontWeight="medium"
-                    className="truncate text-xs sm:text-sm leading-tight mb-1"
-                  >
-                    {overlay.text || "Text Overlay"}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    className="text-xs leading-tight"
-                  >
-                    {Math.round(overlay.startTime)}s - {Math.round(overlay.endTime)}s
-                  </Typography>
-                </div>
-              </div>
-              <IconButton
-                size="small"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemoveTextOverlay(overlay.id);
-                }}
-                className="text-red-500 hover:bg-red-50 flex-shrink-0 ml-2"
-              >
-                <Delete fontSize="small" />
-              </IconButton>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {selectedOverlay && (
-        <div className="space-y-4 p-3 sm:p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <Typography
-            variant="body2"
-            fontWeight="medium"
-            className="text-sm sm:text-base leading-tight"
-          >
-            Edit Text Overlay
-          </Typography>
-
-          <TextField
-            fullWidth
-            size="small"
-            label="Text"
-            value={selectedOverlay.text}
-            onChange={(e) =>
-              onUpdateTextOverlay(selectedOverlay.id, { text: e.target.value })
-            }
-            className="mb-1"
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <TextField
-              size="small"
-              label="Font Size"
-              type="number"
-              value={selectedOverlay.fontSize}
-              onChange={(e) =>
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  fontSize: Number(e.target.value),
-                })
-              }
-            />
-            <FormControl size="small">
-              <InputLabel>Font Weight</InputLabel>
-              <Select
-                value={selectedOverlay.fontWeight}
-                onChange={(e) =>
-                  onUpdateTextOverlay(selectedOverlay.id, {
-                    fontWeight: e.target.value,
-                  })
-                }
-              >
-                <MenuItem value="normal">Normal</MenuItem>
-                <MenuItem value="bold">Bold</MenuItem>
-                <MenuItem value="lighter">Light</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <TextField
-              size="small"
-              label="Text Color"
-              type="color"
-              value={selectedOverlay.color}
-              onChange={(e) =>
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  color: e.target.value,
-                })
-              }
-            />
-            <TextField
-              size="small"
-              label="Background"
-              type="color"
-              value={selectedOverlay.backgroundColor}
-              onChange={(e) =>
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  backgroundColor: e.target.value,
-                })
-              }
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <TextField
-              size="small"
-              label="Width (%)"
-              type="number"
-              value={selectedOverlay.width}
-              onChange={(e) =>
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  width: Math.max(5, Math.min(50, Number(e.target.value))),
-                })
-              }
-              inputProps={{ min: 5, max: 50, step: 1 }}
-            />
-            <TextField
-              size="small"
-              label="Height (%)"
-              type="number"
-              value={selectedOverlay.height}
-              onChange={(e) =>
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  height: Math.max(2, Math.min(20, Number(e.target.value))),
-                })
-              }
-              inputProps={{ min: 2, max: 20, step: 1 }}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Typography variant="caption" className="text-xs sm:text-sm">
-              Opacity
-            </Typography>
-            <Slider
-              value={selectedOverlay.opacity}
-              min={0}
-              max={1}
-              step={0.1}
-              onChange={(_, value) =>
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  opacity: value as number,
-                })
-              }
-              valueLabelDisplay="auto"
-              size="small"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Typography variant="caption" className="text-xs sm:text-sm">
-              <span className="hidden sm:inline">Display Time: </span>
-              {Math.round(selectedOverlay.startTime)}s -{" "}
-              {Math.round(selectedOverlay.endTime)}s
-            </Typography>
-            <Slider
-              value={[selectedOverlay.startTime, selectedOverlay.endTime]}
-              min={0}
-              max={selectedClip.duration}
-              onChange={(_, value) => {
-                const [start, end] = value as number[];
-                onUpdateTextOverlay(selectedOverlay.id, {
-                  startTime: start,
-                  endTime: end,
-                });
-              }}
-              valueLabelDisplay="auto"
-              size="small"
-              marks={[
-                { value: 0, label: "0s" },
-                {
-                  value: selectedClip.duration,
-                  label: `${Math.round(selectedClip.duration)}s`,
-                },
-              ]}
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-});
-
-export default function VideoEditor({
-  hostname,
-  queryParams,
-}: Readonly<ToolComponentProps>) {
-  const toolState = useToolState({
-    hostname: hostname || "",
-    queryParams,
-  });
-
-  const [state, setState] = useState<VideoEditorState>({
-    clips: [],
-    selectedClipId: null,
-    isPlaying: false,
-    currentTime: 0,
-    isMuted: false,
-    volume: 100,
-    isProcessing: false,
-    error: "",
-    selectedTextOverlayId: null,
-  });
+  const [draggedOverlayId, setDraggedOverlayId] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const selectedClip =
-    state.clips.find((clip) => clip.id === state.selectedClipId) || null;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
+  const overlayContainerRef = useRef<HTMLDivElement>(null);
 
-  const showMessage = useCallback(
-    (message: string) => {
-      toolState.actions.showMessage(message);
-    },
-    [toolState.actions]
-  );
+  const animationFrameRef = useRef<number | null>(null);
 
-  const handleFileSelect = useCallback(
-    async (files: FileList) => {
-      setState((prev) => ({ ...prev, isProcessing: true, error: "" }));
-
+  // Initialize FFmpeg
+  useEffect(() => {
+    const initFFmpeg = async () => {
       try {
-        const newClips: VideoClip[] = [];
+        const ffmpegInstance = await createFFmpegInstance();
+        setFFmpeg(ffmpegInstance);
+      } catch (error) {
+        console.error("Failed to initialize FFmpeg:", error);
+        setError(
+          "Failed to initialize video processor. Please refresh the page."
+        );
+      }
+    };
 
-        for (const file of Array.from(files)) {
-          const videoElement = document.createElement("video");
-          const url = URL.createObjectURL(file);
-          videoElement.src = url;
+    initFFmpeg();
+  }, []);
 
-          await new Promise<void>((resolve, reject) => {
-            videoElement.onloadedmetadata = () => {
-              const clip: VideoClip = {
-                id: crypto.randomUUID(),
-                file,
-                name: file.name,
-                duration: videoElement.duration,
-                startTime: 0,
-                endTime: videoElement.duration,
-                trimStart: 0,
-                trimEnd: videoElement.duration,
-                videoElement,
-                url,
-                effects: DEFAULT_EFFECTS.map((effect) => ({
-                  ...effect,
-                  id: crypto.randomUUID(),
-                })),
-                textOverlays: [],
-              };
-              newClips.push(clip);
-              resolve();
-            };
-            videoElement.onerror = reject;
-          });
+  // Handle video loading when currentClip changes
+  useEffect(() => {
+    if (currentClip && videoRef.current && currentClip.videoElement) {
+      const video = videoRef.current;
+      video.src = currentClip.videoElement.src;
+      video.load();
+      setIsPlaying(false);
+      // Don't set currentTime here - let onLoadedMetadata handle it
+    }
+  }, [currentClip]);
+
+  // Real-time preview rendering
+  const renderPreview = useCallback(() => {
+    if (!videoRef.current || !canvasRef.current || !currentClip) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx || video.readyState < 2) return;
+
+    // Get the display dimensions of the video element
+    const displayWidth = video.offsetWidth || 640;
+    const displayHeight = video.offsetHeight || 360;
+
+    // Only update canvas size if dimensions have changed significantly
+    const tolerance = 2; // Allow small differences
+    if (
+      Math.abs(canvas.width - displayWidth) > tolerance ||
+      Math.abs(canvas.height - displayHeight) > tolerance
+    ) {
+      canvas.width = displayWidth;
+      canvas.height = displayHeight;
+    }
+
+    // Clear canvas with black background
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate aspect ratios
+    const videoAspectRatio = video.videoWidth / video.videoHeight;
+    const canvasAspectRatio = canvas.width / canvas.height;
+
+    let drawWidth, drawHeight, drawX, drawY;
+
+    // Calculate dimensions to maintain aspect ratio (letterbox/pillarbox as needed)
+    if (videoAspectRatio > canvasAspectRatio) {
+      // Video is wider than canvas - fit width, letterbox height
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / videoAspectRatio;
+      drawX = 0;
+      drawY = (canvas.height - drawHeight) / 2;
+    } else {
+      // Video is taller than canvas - fit height, pillarbox width
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * videoAspectRatio;
+      drawX = (canvas.width - drawWidth) / 2;
+      drawY = 0;
+    }
+
+    // Apply video filters using canvas context
+    ctx.save();
+
+    // Apply video effects
+    if (filters.length > 0) {
+      const filterStrings: string[] = [];
+      filters.forEach((filter) => {
+        switch (filter.type) {
+          case "brightness":
+            const brightness = 1 + (filter.value - 100) / 100;
+            filterStrings.push(`brightness(${brightness})`);
+            break;
+          case "contrast":
+            const contrast = filter.value / 100;
+            filterStrings.push(`contrast(${contrast})`);
+            break;
+          case "saturation":
+            const saturation = filter.value / 100;
+            filterStrings.push(`saturate(${saturation})`);
+            break;
+          case "blur":
+            filterStrings.push(`blur(${filter.value}px)`);
+            break;
+        }
+      });
+
+      if (filterStrings.length > 0) {
+        ctx.filter = filterStrings.join(" ");
+      }
+    }
+
+    // Draw the video frame with proper aspect ratio
+    ctx.drawImage(video, drawX, drawY, drawWidth, drawHeight);
+
+    ctx.restore();
+
+    // Apply text overlays (skip the one being dragged)
+    textOverlays.forEach((overlay) => {
+      const currentTime = video.currentTime;
+      if (
+        currentTime >= overlay.startTime &&
+        currentTime <= overlay.endTime &&
+        overlay.id !== draggedOverlayId
+      ) {
+        ctx.save();
+
+        // Calculate the actual video drawing area (same calculations as above)
+        const videoAspectRatio = video.videoWidth / video.videoHeight;
+        const canvasAspectRatio = canvas.width / canvas.height;
+
+        let drawWidth, drawHeight, drawX, drawY;
+
+        if (videoAspectRatio > canvasAspectRatio) {
+          drawWidth = canvas.width;
+          drawHeight = canvas.width / videoAspectRatio;
+          drawX = 0;
+          drawY = (canvas.height - drawHeight) / 2;
+        } else {
+          drawHeight = canvas.height;
+          drawWidth = canvas.height * videoAspectRatio;
+          drawX = (canvas.width - drawWidth) / 2;
+          drawY = 0;
         }
 
-        setState((prev) => ({
-          ...prev,
-          clips: [...prev.clips, ...newClips],
-          selectedClipId: prev.selectedClipId || newClips[0]?.id || null,
-          isProcessing: false,
-        }));
+        // Scale font size based on the actual video drawing area
+        const scaleFactor = Math.min(drawWidth / 640, drawHeight / 360);
+        const scaledFontSize = Math.max(12, overlay.fontSize * scaleFactor);
 
-        showMessage(`Successfully uploaded ${newClips.length} video(s)`);
-      } catch {
-        setState((prev) => ({
-          ...prev,
-          error: "Failed to load video files. Please try again.",
-          isProcessing: false,
-        }));
+        ctx.font = `${scaledFontSize}px ${overlay.fontFamily}`;
+        ctx.fillStyle = overlay.color;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+
+        // Calculate position as percentage of the actual video drawing area
+        const x = drawX + (overlay.x / 100) * drawWidth;
+        const y = drawY + (overlay.y / 100) * drawHeight;
+
+        // Add text stroke for better visibility
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = Math.max(1, scaledFontSize / 12);
+        ctx.strokeText(overlay.text, x, y);
+        ctx.fillText(overlay.text, x, y);
+
+        ctx.restore();
       }
+    });
+
+    // Continue animation frame
+    if (isPlaying) {
+      animationFrameRef.current = requestAnimationFrame(renderPreview);
+    }
+  }, [currentClip, filters, textOverlays, isPlaying, draggedOverlayId]);
+
+  // Start/stop real-time rendering based on playback state
+  useEffect(() => {
+    if (realTimePreview && isPlaying && currentClip) {
+      renderPreview();
+    } else if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+      // Render a single frame when paused
+      if (realTimePreview) {
+        renderPreview();
+      }
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+  }, [isPlaying, currentClip, realTimePreview, renderPreview]);
+
+  // Re-render when effects or overlays change
+  useEffect(() => {
+    if (realTimePreview && !isPlaying && currentClip) {
+      renderPreview();
+    }
+  }, [
+    filters,
+    textOverlays,
+    currentClip,
+    isPlaying,
+    realTimePreview,
+    renderPreview,
+  ]);
+
+  // Update preview when currentTime changes (including trim adjustments)
+  useEffect(() => {
+    if (realTimePreview && !isPlaying && currentClip && videoRef.current) {
+      // Small delay to ensure video has updated its currentTime
+      const timeoutId = setTimeout(() => {
+        renderPreview();
+      }, 10);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [currentTime, realTimePreview, isPlaying, currentClip, renderPreview]);
+
+  // Handle video element resize for responsive canvas
+  useEffect(() => {
+    if (!videoRef.current || !realTimePreview) return;
+
+    const video = videoRef.current;
+    let resizeTimeout: NodeJS.Timeout;
+
+    const resizeObserver = new ResizeObserver(() => {
+      // Debounce resize events to avoid excessive re-renders
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (currentClip && !isPlaying) {
+          renderPreview();
+        }
+      }, 100);
+    });
+
+    resizeObserver.observe(video);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(resizeTimeout);
+    };
+  }, [realTimePreview, currentClip, isPlaying, renderPreview]);
+
+  const handleFileSelect = useCallback(
+    (files: FileList) => {
+      const newClips: VideoClip[] = Array.from(files).map((file) => {
+        const videoElement = document.createElement("video");
+        videoElement.src = URL.createObjectURL(file);
+
+        return {
+          id: getRandomId(),
+          file,
+          name: file.name,
+          duration: 0,
+          startTime: 0,
+          endTime: 0,
+          trimStart: 0,
+          trimEnd: 0,
+          videoElement,
+        };
+      });
+
+      // Track metadata loading for auto-selection
+      let firstClipLoaded = false;
+
+      // Load video metadata
+      newClips.forEach((clip, index) => {
+        if (clip.videoElement) {
+          clip.videoElement.addEventListener("loadedmetadata", () => {
+            clip.duration = clip.videoElement!.duration;
+            clip.endTime = clip.duration;
+            clip.trimEnd = clip.duration;
+
+            setClips((prev) => {
+              const updatedClips = [
+                ...prev.filter((c) => c.id !== clip.id),
+                clip,
+              ];
+
+              // Auto-select the first clip if no clip is currently selected and this is the first uploaded clip
+              if (!firstClipLoaded && index === 0 && !currentClip) {
+                firstClipLoaded = true;
+                setTimeout(() => {
+                  setCurrentClip(clip);
+                }, 100); // Small delay to ensure UI is ready
+              }
+
+              return updatedClips;
+            });
+          });
+        }
+      });
+
+      setClips((prev) => [...prev, ...newClips]);
+      setError("");
     },
-    [showMessage]
+    [currentClip]
   );
 
   const handleError = useCallback((errorMessage: string) => {
-    setState((prev) => ({ ...prev, error: errorMessage }));
+    setError(errorMessage);
   }, []);
 
-  const handleClipSelect = useCallback(
-    (clipId: string) => {
-      setState((prev) => ({
-        ...prev,
-        selectedClipId: clipId,
-        isPlaying: false,
-        currentTime: 0,
-      }));
+  const selectClip = (clip: VideoClip) => {
+    setCurrentClip(clip);
+    setIsPlaying(false); // Reset play state when switching clips
+  };
 
-      if (videoRef.current && selectedClip) {
-        videoRef.current.currentTime = selectedClip.trimStart;
-      }
-    },
-    [selectedClip]
-  );
-
-  const handlePlayPause = useCallback(() => {
-    if (!videoRef.current) return;
-
-    if (state.isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
+  const handlePlayPause = async () => {
+    if (!videoRef.current || !currentClip) {
+      console.log("No video ref or current clip");
+      return;
     }
-    setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
-  }, [state.isPlaying]);
 
-  const handleTimeChange = useCallback((time: number) => {
-    if (!videoRef.current) return;
-    videoRef.current.currentTime = time;
-    setState((prev) => ({ ...prev, currentTime: time }));
-  }, []);
+    const video = videoRef.current;
 
-  const handleMuteToggle = useCallback(() => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !state.isMuted;
-    setState((prev) => ({ ...prev, isMuted: !prev.isMuted }));
-  }, [state.isMuted]);
+    try {
+      if (isPlaying) {
+        video.pause();
+        setIsPlaying(false);
+      } else {
+        // Ensure video is ready for playback
+        if (video.readyState < 2) {
+          console.log("Video not ready, readyState:", video.readyState);
+          // Show a loading message instead of reloading
+          setSnackBarMessage("Video is still loading, please wait...");
+          setSnackBarColor("info");
+          setIsSnackBarOpen(true);
+          return;
+        }
 
-  const handleVolumeChange = useCallback((volume: number) => {
-    if (!videoRef.current) return;
-    videoRef.current.volume = volume / 100;
-    setState((prev) => ({ ...prev, volume, isMuted: volume === 0 }));
-  }, []);
+        // Ensure we're at the correct start position before playing
+        if (Math.abs(video.currentTime - currentClip.trimStart) > 0.1) {
+          video.currentTime = currentClip.trimStart;
+          // Wait a moment for the seek to complete
+          await new Promise((resolve) => setTimeout(resolve, 50));
+        }
 
-  const handleEffectToggle = useCallback((effectId: string) => {
-    setState((prev) => ({
-      ...prev,
-      clips: prev.clips.map((clip) =>
-        clip.id === prev.selectedClipId
-          ? {
-              ...clip,
-              effects: clip.effects.map((effect) =>
-                effect.id === effectId
-                  ? { ...effect, enabled: !effect.enabled }
-                  : effect
-              ),
-            }
-          : clip
-      ),
-    }));
-  }, []);
+        await video.play();
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("Error playing/pausing video:", error);
+      setIsPlaying(false);
 
-  const handleEffectValueChange = useCallback(
-    (effectId: string, value: number) => {
-      setState((prev) => ({
-        ...prev,
-        clips: prev.clips.map((clip) =>
-          clip.id === prev.selectedClipId
-            ? {
-                ...clip,
-                effects: clip.effects.map((effect) =>
-                  effect.id === effectId ? { ...effect, value } : effect
-                ),
-              }
-            : clip
-        ),
-      }));
+      // Show user-friendly error
+      setSnackBarMessage(
+        "Unable to play video. Please try selecting the video again."
+      );
+      setSnackBarColor("warning");
+      setIsSnackBarOpen(true);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (!videoRef.current || !currentClip) return;
+
+    const time = videoRef.current.currentTime;
+    setCurrentTime(time);
+
+    // Auto-pause at trim end (with small buffer to avoid edge cases)
+    if (time >= currentClip.trimEnd - 0.1) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+      // Reset to trim start for next playback
+      setTimeout(() => {
+        if (videoRef.current && currentClip) {
+          videoRef.current.currentTime = currentClip.trimStart;
+          setCurrentTime(currentClip.trimStart);
+        }
+      }, 100);
+    }
+  };
+
+  const handleSeek = (value: number) => {
+    if (!videoRef.current || !currentClip) return;
+
+    const newTime =
+      currentClip.trimStart +
+      (value / 100) * (currentClip.trimEnd - currentClip.trimStart);
+
+    const video = videoRef.current;
+    const wasPlaying = !video.paused;
+
+    // Pause if playing to avoid conflicts during seek
+    if (wasPlaying) {
+      video.pause();
+    }
+
+    video.currentTime = newTime;
+    setCurrentTime(newTime);
+
+    // Resume playing if it was playing before
+    if (wasPlaying) {
+      setTimeout(() => {
+        video
+          .play()
+          .catch((err) => console.error("Error resuming playback:", err));
+      }, 100);
+    }
+  };
+
+  const updateClipTrim = (
+    clipId: string,
+    trimStart: number,
+    trimEnd: number
+  ) => {
+    setClips((prev) =>
+      prev.map((clip) =>
+        clip.id === clipId ? { ...clip, trimStart, trimEnd } : clip
+      )
+    );
+
+    if (currentClip?.id === clipId) {
+      setCurrentClip((prev) => (prev ? { ...prev, trimStart, trimEnd } : null));
+
+      // Update video position if current time is outside the new trim range
+      if (videoRef.current) {
+        const currentVideoTime = videoRef.current.currentTime;
+
+        // If current time is before trim start, move to trim start
+        if (currentVideoTime < trimStart) {
+          videoRef.current.currentTime = trimStart;
+          setCurrentTime(trimStart);
+        }
+        // If current time is after trim end, move to trim end
+        else if (currentVideoTime > trimEnd) {
+          videoRef.current.currentTime = trimEnd;
+          setCurrentTime(trimEnd);
+        }
+      }
+
+      // Trigger preview update to reflect the new position
+      if (realTimePreview) {
+        setTimeout(() => {
+          renderPreview();
+        }, 10);
+      }
+    }
+  };
+
+  const addTextOverlay = () => {
+    if (!currentClip) return;
+
+    const newOverlay: TextOverlay = {
+      id: getRandomId(),
+      text: "Sample Text",
+      x: 50,
+      y: 50,
+      startTime: currentTime,
+      endTime: currentTime + 5,
+      fontSize: 24,
+      color: "#ffffff",
+      fontFamily: "Arial",
+    };
+
+    setTextOverlays((prev) => [...prev, newOverlay]);
+  };
+
+  const updateTextOverlay = useCallback(
+    (id: string, updates: Partial<TextOverlay>) => {
+      setTextOverlays((prev) =>
+        prev.map((overlay) =>
+          overlay.id === id ? { ...overlay, ...updates } : overlay
+        )
+      );
     },
     []
   );
 
-  const handleTrimChange = useCallback((trimStart: number, trimEnd: number) => {
-    setState((prev) => ({
-      ...prev,
-      clips: prev.clips.map((clip) =>
-        clip.id === prev.selectedClipId ? { ...clip, trimStart, trimEnd } : clip
-      ),
-    }));
-  }, []);
-
-  // Memoize video style to prevent unnecessary re-renders during effect changes
-  const videoStyle = useMemo(() => {
-    if (!selectedClip) return {};
-    
-    const activeEffects = selectedClip.effects.filter(effect => effect.enabled);
-    if (activeEffects.length === 0) return {};
-
-    const filters = activeEffects
-      .map((effect) => {
-        switch (effect.type) {
-          case "brightness":
-            return `brightness(${effect.value}%)`;
-          case "contrast":
-            return `contrast(${effect.value}%)`;
-          case "blur":
-            return `blur(${effect.value}px)`;
-          case "grayscale":
-            return `grayscale(${effect.value}%)`;
-          case "sepia":
-            return `sepia(${effect.value}%)`;
-          case "saturate":
-            return `saturate(${effect.value}%)`;
-          default:
-            return "";
-        }
-      })
-      .filter(Boolean)
-      .join(" ");
-
-    return { filter: filters };
-  }, [selectedClip]);
-
-  const handleExport = useCallback(async () => {
-    if (!selectedClip) {
-      showMessage("Please select a video clip to export");
-      return;
+  const removeTextOverlay = (id: string) => {
+    setTextOverlays((prev) => prev.filter((overlay) => overlay.id !== id));
+    if (selectedOverlayId === id) {
+      setSelectedOverlayId(null);
     }
+  };
 
-    setState((prev) => ({ ...prev, isProcessing: true }));
+  // Handle drag start for text overlays
+  const handleOverlayMouseDown = useCallback(
+    (e: React.MouseEvent, overlayId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const container = overlayContainerRef.current;
+      if (!container) return;
+
+      const overlay = textOverlays.find((o) => o.id === overlayId);
+      if (!overlay) return;
+
+      setSelectedOverlayId(overlayId);
+      setDraggedOverlayId(overlayId);
+
+      const dragState = {
+        isDragging: true,
+        draggedOverlayId: overlayId,
+        startX: e.clientX,
+        startY: e.clientY,
+        initialX: overlay.x,
+        initialY: overlay.y,
+      };
+
+      // Add global mouse events
+      const handleMouseMove = (event: MouseEvent) => {
+        if (!overlayContainerRef.current) return;
+
+        const container = overlayContainerRef.current;
+        const rect = container.getBoundingClientRect();
+
+        const deltaX = event.clientX - dragState.startX;
+        const deltaY = event.clientY - dragState.startY;
+
+        // Convert pixel movement to percentage
+        const deltaXPercent = (deltaX / rect.width) * 100;
+        const deltaYPercent = (deltaY / rect.height) * 100;
+
+        const newX = Math.max(
+          0,
+          Math.min(100, dragState.initialX + deltaXPercent)
+        );
+        const newY = Math.max(
+          0,
+          Math.min(100, dragState.initialY + deltaYPercent)
+        );
+
+        updateTextOverlay(overlayId, { x: newX, y: newY });
+      };
+
+      const handleMouseUp = () => {
+        // Remove global mouse events
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+
+        // Reset dragging state
+        setDraggedOverlayId(null);
+      };
+
+      // Add global mouse events
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    },
+    [textOverlays, updateTextOverlay]
+  );
+
+  // Handle overlay container click (deselect when clicking empty area)
+  const handleOverlayContainerClick = (e: React.MouseEvent) => {
+    if (e.target === overlayContainerRef.current) {
+      setSelectedOverlayId(null);
+    }
+  };
+
+  const addFilter = (type: VideoFilter["type"]) => {
+    const newFilter: VideoFilter = {
+      id: getRandomId(),
+      type,
+      value:
+        type === "brightness" || type === "contrast" || type === "saturation"
+          ? 100
+          : 0,
+    };
+
+    setFilters((prev) => [...prev.filter((f) => f.type !== type), newFilter]);
+  };
+
+  const updateFilter = (id: string, value: number) => {
+    setFilters((prev) =>
+      prev.map((filter) => (filter.id === id ? { ...filter, value } : filter))
+    );
+  };
+
+  const removeFilter = (id: string) => {
+    setFilters((prev) => prev.filter((filter) => filter.id !== id));
+  };
+
+  const exportVideo = async () => {
+    if (!ffmpeg || !currentClip || clips.length === 0) return;
+
+    setIsProcessing(true);
 
     try {
+      // Write input file to FFmpeg
+      const inputFileName = `input_${currentClip.id}.mp4`;
+      const outputFileName = `output_${Date.now()}.mp4`;
+
+      const arrayBuffer = await currentClip.file.arrayBuffer();
+      await writeFFmpegFile({
+        ffmpeg,
+        fileData: new Uint8Array(arrayBuffer),
+        fileName: inputFileName,
+      });
+
+      // Build FFmpeg command for trimming
+      const command = [
+        "-i",
+        inputFileName,
+        "-ss",
+        currentClip.trimStart.toString(),
+        "-t",
+        (currentClip.trimEnd - currentClip.trimStart).toString(),
+      ];
+
+      // Add filters
+      const filterComplex = [];
+
+      // Video filters
+      if (filters.length > 0) {
+        const videoFilters = filters
+          .map((filter) => {
+            switch (filter.type) {
+              case "brightness":
+                return `eq=brightness=${(filter.value - 100) / 100}`;
+              case "contrast":
+                return `eq=contrast=${filter.value / 100}`;
+              case "saturation":
+                return `eq=saturation=${filter.value / 100}`;
+              case "blur":
+                return `boxblur=${filter.value}`;
+              default:
+                return "";
+            }
+          })
+          .filter(Boolean);
+
+        if (videoFilters.length > 0) {
+          filterComplex.push(`[0:v]${videoFilters.join(",")}[v]`);
+        }
+      }
+
+      // Text overlays
+      if (textOverlays.length > 0) {
+        textOverlays.forEach((overlay, index) => {
+          const inputTag =
+            index === 0
+              ? filterComplex.length > 0
+                ? "[v]"
+                : "[0:v]"
+              : `[v${index}]`;
+          const outputTag =
+            index === textOverlays.length - 1 ? "[vout]" : `[v${index + 1}]`;
+
+          filterComplex.push(
+            `${inputTag}drawtext=text='${overlay.text}':fontfile=/System/Library/Fonts/Arial.ttf:fontsize=${overlay.fontSize}:fontcolor=${overlay.color}:x=${overlay.x}:y=${overlay.y}:enable='between(t,${overlay.startTime},${overlay.endTime})'${outputTag}`
+          );
+        });
+      }
+
+      if (filterComplex.length > 0) {
+        command.push("-filter_complex", filterComplex.join(";"));
+        if (textOverlays.length > 0) {
+          command.push("-map", "[vout]");
+        } else if (filters.length > 0) {
+          command.push("-map", "[v]");
+        }
+        command.push("-map", "0:a?");
+      }
+
+      command.push("-c:a", "copy", outputFileName);
+
+      // Execute FFmpeg command
+      await executeFFmpegCommand({ ffmpeg, command });
+
+      // Read output file
+      const outputData = await getFFmpegFile({
+        ffmpeg,
+        fileName: outputFileName,
+      });
+
+      // Download the processed video
+      const blob = new Blob([outputData as unknown as ArrayBuffer], {
+        type: "video/mp4",
+      });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = selectedClip.url;
-      a.download = `edited_${selectedClip.name}`;
+      a.href = url;
+      a.download = `edited_${currentClip.name}`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-      showMessage("Video exported successfully!");
-    } catch {
-      showMessage("Export failed. Please try again.");
+      setSnackBarMessage("Video exported successfully!");
+      setSnackBarColor("success");
+      setIsSnackBarOpen(true);
+    } catch (error) {
+      console.error("Export failed:", error);
+      setSnackBarMessage("Failed to export video. Please try again.");
+      setSnackBarColor("error");
+      setIsSnackBarOpen(true);
     } finally {
-      setState((prev) => ({ ...prev, isProcessing: false }));
+      setIsProcessing(false);
     }
-  }, [selectedClip, showMessage]);
+  };
 
-  const handleRemoveClip = useCallback((clipId: string) => {
-    setState((prev) => {
-      const newClips = prev.clips.filter((clip) => clip.id !== clipId);
-      const newSelectedClipId =
-        prev.selectedClipId === clipId
-          ? newClips[0]?.id || null
-          : prev.selectedClipId;
-
-      const removedClip = prev.clips.find((clip) => clip.id === clipId);
-      if (removedClip) {
-        URL.revokeObjectURL(removedClip.url);
-      }
-
-      return {
-        ...prev,
-        clips: newClips,
-        selectedClipId: newSelectedClipId,
-      };
-    });
-  }, []);
-
-  // Text Overlay Handlers
-  const handleAddTextOverlay = useCallback(() => {
-    if (!selectedClip) return;
-
-    const newOverlay: TextOverlay = {
-      id: crypto.randomUUID(),
-      text: "New Text",
-      x: 50, // Center horizontally
-      y: 50, // Center vertically
-      width: 20, // Default width as percentage
-      height: 8, // Default height as percentage
-      fontSize: 24,
-      color: "#ffffff",
-      fontFamily: "Arial, sans-serif",
-      fontWeight: "normal",
-      backgroundColor: "#000000",
-      opacity: 0.8,
-      startTime: state.currentTime,
-      endTime: Math.min(state.currentTime + 5, selectedClip.duration), // 5 seconds or end of video
-    };
-
-    setState((prev) => ({
-      ...prev,
-      clips: prev.clips.map((clip) =>
-        clip.id === selectedClip.id
-          ? { ...clip, textOverlays: [...clip.textOverlays, newOverlay] }
-          : clip
-      ),
-      selectedTextOverlayId: newOverlay.id,
-    }));
-  }, [selectedClip, state.currentTime]);
-
-  const handleUpdateTextOverlay = useCallback(
-    (overlayId: string, updates: Partial<TextOverlay>) => {
-      if (!selectedClip) return;
-
-      setState((prev) => ({
-        ...prev,
-        clips: prev.clips.map((clip) =>
-          clip.id === selectedClip.id
-            ? {
-                ...clip,
-                textOverlays: clip.textOverlays.map((overlay) =>
-                  overlay.id === overlayId
-                    ? { ...overlay, ...updates }
-                    : overlay
-                ),
-              }
-            : clip
-        ),
-      }));
-    },
-    [selectedClip]
-  );
-
-  const handleRemoveTextOverlay = useCallback(
-    (overlayId: string) => {
-      if (!selectedClip) return;
-
-      setState((prev) => ({
-        ...prev,
-        clips: prev.clips.map((clip) =>
-          clip.id === selectedClip.id
-            ? {
-                ...clip,
-                textOverlays: clip.textOverlays.filter(
-                  (overlay) => overlay.id !== overlayId
-                ),
-              }
-            : clip
-        ),
-        selectedTextOverlayId:
-          prev.selectedTextOverlayId === overlayId
-            ? null
-            : prev.selectedTextOverlayId,
-      }));
-    },
-    [selectedClip]
-  );
-
-  const handleSelectTextOverlay = useCallback((overlayId: string | null) => {
-    setState((prev) => ({
-      ...prev,
-      selectedTextOverlayId: overlayId,
-    }));
-  }, []);
-
-  const [videoContainerRect, setVideoContainerRect] = useState<DOMRect | null>(
-    null
-  );
-
-  // Update video container rect for drag positioning
-  React.useEffect(() => {
-    const updateVideoRect = () => {
-      if (videoRef.current) {
-        setVideoContainerRect(videoRef.current.getBoundingClientRect());
-      }
-    };
-
-    // Debounced update to prevent excessive calls
-    const timeoutId = setTimeout(updateVideoRect, 100);
-    window.addEventListener("resize", updateVideoRect);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("resize", updateVideoRect);
-    };
-  }, [selectedClip?.id]); // Only update when clip changes, not on every selectedClip change
-
-  // Update video source when selected clip changes
-  React.useEffect(() => {
-    if (videoRef.current && selectedClip) {
-      videoRef.current.src = selectedClip.url;
-      videoRef.current.currentTime = selectedClip.trimStart;
+  const formatTime = (seconds: number) => {
+    if (isNaN(seconds) || seconds < 0) {
+      return "0:00";
     }
-  }, [selectedClip]);
-
-  // Handle video time updates
-  React.useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const handleTimeUpdate = () => {
-      setState((prev) => ({ ...prev, currentTime: video.currentTime }));
-
-      if (selectedClip && video.currentTime >= selectedClip.trimEnd) {
-        video.pause();
-        setState((prev) => ({ ...prev, isPlaying: false }));
-      }
-    };
-
-    const handleEnded = () => {
-      setState((prev) => ({ ...prev, isPlaying: false }));
-    };
-
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("ended", handleEnded);
-
-    return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("ended", handleEnded);
-    };
-  }, [selectedClip]);
-
-  const buttons = React.useMemo(
-    () => [
-      {
-        type: "custom" as const,
-        text: "Export Video",
-        onClick: handleExport,
-        icon: <Download />,
-        disabled:
-          !selectedClip ||
-          state.isProcessing ||
-          (selectedClip ? !isVideoEdited(selectedClip) : true),
-      },
-      ...createCommonButtons({
-        onFullScreen: toolState.toggleFullScreen,
-      }),
-    ],
-    [handleExport, selectedClip, state.isProcessing, toolState.toggleFullScreen]
-  );
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
 
   return (
-    <ToolLayout
-      isFullScreen={toolState.isFullScreen}
-      snackBar={{
-        open: toolState.snackBar.open,
-        message: toolState.snackBar.message,
-        onClose: toolState.snackBar.close,
-      }}
-    >
-      <SEOContent
-        title="Video Editor"
-        description="Free online video editor with real-time preview. Trim videos, apply effects, add text overlays and more."
-        exampleCode="Upload video files to start editing"
-        exampleOutput="Edited video with effects and trimming applied"
+    <div className="flex flex-col gap-4 w-full">
+      {/* File Upload */}
+      <FileUploadWithDragDrop
+        accept="video/*"
+        multiple={true}
+        maxSize={FILE_SIZE_PRESETS.HUGE}
+        allowedTypes={FILE_TYPE_PRESETS.VIDEOS}
+        onFileSelect={handleFileSelect}
+        onError={handleError}
+        title="Upload or drop video files here"
+        subtitle="Supports MP4, WebM, AVI, MOV formats"
+        dragText="Drop videos to start editing"
+        supportText="Maximum file size: 100MB per file"
       />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
-
-      {state.error && (
-        <Alert severity="error" className="mb-4">
-          {state.error}
+      {error && (
+        <Alert severity="error" className="mt-2">
+          {error}
         </Alert>
       )}
 
-      {state.isProcessing && (
-        <div className="mb-4">
-          <Typography variant="body2" className="mb-2">
-            Processing video...
-          </Typography>
-          <LinearProgress />
-        </div>
-      )}
-
-      {state.clips.length === 0 && (
-        <FileUploadWithDragDrop
-          accept="video/*"
-          multiple={true}
-          allowedTypes={FILE_TYPE_PRESETS.VIDEOS}
-          maxSize={FILE_SIZE_PRESETS.HUGE}
-          onFileSelect={handleFileSelect}
-          onError={handleError}
-          title="Upload Videos to Edit"
-          subtitle="Drag and drop your video files here or click to browse"
-          supportText="Supports MP4, WebM, AVI, MOV formats up to 100MB each"
-        />
-      )}
-
-      {state.clips.length > 0 && (
-        <div className="flex flex-col gap-4 h-full min-h-0">
-          {/* Video Clips Section - Top Row */}
-          <PaperWithChildren
-            variant="elevation"
-            className="p-3 sm:p-4 flex-shrink-0"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Typography
-                  variant="h6"
-                  className="flex items-center gap-2 text-sm sm:text-base"
+      {clips.length > 0 && (
+        <>
+          {/* Video Timeline */}
+          <PaperWithChildren className="p-4" variant="elevation">
+            <Typography variant="h6" className="mb-3">
+              Video Clips
+            </Typography>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {clips.map((clip) => (
+                <Card
+                  key={clip.id}
+                  className={`cursor-pointer transition-all duration-300 ${
+                    currentClip?.id === clip.id
+                      ? "ring-4 ring-blue-500 ring-opacity-100 shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-400 transform scale-105"
+                      : "hover:shadow-lg hover:ring-2 hover:ring-blue-200 hover:scale-102 transform"
+                  }`}
+                  style={{
+                    boxShadow:
+                      currentClip?.id === clip.id
+                        ? "0 25px 50px -12px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)"
+                        : undefined,
+                  }}
+                  onClick={() => selectClip(clip)}
                 >
-                  <VideoLibraryIcon className="text-blue-600" />
-                  <span className="hidden sm:inline">
-                    Video Clips ({state.clips.length})
-                  </span>
-                  <span className="sm:hidden">
-                    Clips ({state.clips.length})
-                  </span>
-                </Typography>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<Add />}
-                  component="label"
-                  className="text-xs sm:text-sm"
-                >
-                  <span className="hidden sm:inline">Add Videos</span>
-                  <span className="sm:hidden">Add</span>
-                  <input
-                    type="file"
-                    hidden
-                    multiple
-                    accept="video/*"
-                    onChange={(e) => {
-                      if (e.target.files) {
-                        handleFileSelect(e.target.files);
-                      }
-                    }}
-                  />
-                </Button>
-              </div>
+                  <CardContent className="p-3 relative">
+                    {/* Selected Video Gradient Overlay */}
+                    {currentClip?.id === clip.id && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-blue-400/10 rounded-lg pointer-events-none" />
+                    )}
 
-              <div className="space-y-3 max-h-32 sm:max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                {state.clips.map((clip) => (
-                  <Card
-                    key={clip.id}
-                    variant={
-                      state.selectedClipId === clip.id
-                        ? "elevation"
-                        : "outlined"
-                    }
-                    className={`p-3 cursor-pointer transition-all border-2 ${
-                      state.selectedClipId === clip.id
-                        ? "bg-blue-50 border-blue-500 shadow-md"
-                        : "hover:bg-gray-50 border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => handleClipSelect(clip.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2 relative z-10">
+                      <div
+                        className={`p-1 rounded-full transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"
+                            : "bg-gray-100"
+                        }`}
+                      >
                         <VideoLibraryIcon
-                          color={
-                            state.selectedClipId === clip.id
-                              ? "primary"
-                              : "action"
-                          }
+                          className={`transition-all duration-300 ${
+                            currentClip?.id === clip.id
+                              ? "text-white drop-shadow-md"
+                              : "text-gray-600"
+                          }`}
                           fontSize="small"
-                          className="flex-shrink-0"
                         />
-                        <div className="flex-1 min-w-0">
-                          <Typography
-                            variant="body2"
-                            fontWeight="medium"
-                            className="truncate text-xs sm:text-sm leading-tight mb-1"
-                          >
-                            {clip.name}
-                          </Typography>
+                      </div>
+                      <Typography
+                        variant="body2"
+                        className={`font-medium truncate transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "text-blue-900 font-semibold drop-shadow-sm"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {clip.name}
+                      </Typography>
+                      {currentClip?.id === clip.id && (
+                        <div className="ml-auto flex items-center gap-1">
+                          <div className="relative">
+                            <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse shadow-lg"></div>
+                            <div className="absolute inset-0 w-3 h-3 bg-blue-400 rounded-full animate-ping opacity-60"></div>
+                          </div>
                           <Typography
                             variant="caption"
-                            color="textSecondary"
-                            className="text-xs leading-tight"
+                            className="text-blue-700 font-medium bg-blue-100 px-2 py-0.5 rounded-full text-xs"
                           >
-                            <span className="hidden sm:inline">
-                              {formatBytes(clip.file.size)} •{" "}
-                            </span>
-                            {Math.round(clip.duration)}s
-                            {isVideoEdited(clip) && (
-                              <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full leading-none">
-                                <span className="hidden sm:inline">Edited</span>
-                                <span className="sm:hidden">✓</span>
-                              </span>
-                            )}
+                            ACTIVE
                           </Typography>
                         </div>
-                      </div>
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveClip(clip.id);
-                        }}
-                        className="text-red-500 hover:bg-red-50 flex-shrink-0 ml-2"
-                      >
-                        <Delete fontSize="small" />
-                      </IconButton>
+                      )}
                     </div>
-                  </Card>
-                ))}
-              </div>
+                    <div className="space-y-1 relative z-10">
+                      <Typography
+                        variant="caption"
+                        className={`block transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "text-blue-700 font-medium"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        <span
+                          className={
+                            currentClip?.id === clip.id
+                              ? "text-blue-600 font-semibold"
+                              : ""
+                          }
+                        >
+                          Duration:
+                        </span>{" "}
+                        {formatTime(clip.duration)}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        className={`block transition-all duration-300 ${
+                          currentClip?.id === clip.id
+                            ? "text-blue-700 font-medium"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        <span
+                          className={
+                            currentClip?.id === clip.id
+                              ? "text-blue-600 font-semibold"
+                              : ""
+                          }
+                        >
+                          Size:
+                        </span>{" "}
+                        {formatBytes(clip.file.size)}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </PaperWithChildren>
 
-          {/* Bottom Row - Video Preview and Editing Controls Side by Side */}
-          {selectedClip && (
-            <div className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
-              {/* Left Column - Video Preview */}
-              <div className="flex-1 min-w-0">
-                <PaperWithChildren
-                  variant="elevation"
-                  className="p-3 sm:p-4 h-full"
-                >
-                  <div className="flex flex-col gap-4 h-full min-h-0">
-                    <div className="flex items-center justify-between flex-shrink-0">
-                      <Typography
-                        variant="h6"
-                        className="flex items-center gap-2 text-sm sm:text-base"
-                      >
-                        <PlayArrow className="text-blue-600" />
-                        <span className="hidden sm:inline">Video Preview</span>
-                        <span className="sm:hidden">Preview</span>
-                      </Typography>
-                      {isVideoEdited(selectedClip) && (
-                        <Button
-                          variant="contained"
-                          size="small"
-                          startIcon={<Download />}
-                          onClick={handleExport}
-                          disabled={state.isProcessing}
-                          className="bg-green-600 hover:bg-green-700 text-xs sm:text-sm"
-                        >
-                          <span className="hidden sm:inline">Export Video</span>
-                          <span className="sm:hidden">Export</span>
-                        </Button>
-                      )}
-                    </div>
-
-                    <div className="flex-1 flex flex-col gap-3 min-h-0">
-                      <div className="relative flex-1 bg-black rounded-lg overflow-hidden min-h-[200px] sm:min-h-[300px]">
-                        <video
-                          ref={videoRef}
-                          className="w-full h-full object-contain"
-                          style={videoStyle}
-                          onLoadedData={() => {
-                            if (videoRef.current && selectedClip) {
-                              videoRef.current.currentTime =
-                                selectedClip.trimStart;
-                              // Only update rect if not set yet
-                              if (!videoContainerRect) {
-                                setVideoContainerRect(
-                                  videoRef.current.getBoundingClientRect()
-                                );
-                              }
-                            }
-                          }}
-                        />
-
-                        {/* Text Overlays */}
-                        {selectedClip?.textOverlays.map((overlay) => (
-                          <DraggableTextOverlay
-                            key={overlay.id}
-                            overlay={overlay}
-                            isSelected={
-                              state.selectedTextOverlayId === overlay.id
-                            }
-                            currentTime={state.currentTime}
-                            onUpdate={(updates) =>
-                              handleUpdateTextOverlay(overlay.id, updates)
-                            }
-                            onSelect={() => handleSelectTextOverlay(overlay.id)}
-                            videoContainerRect={videoContainerRect}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="flex-shrink-0">
-                        <VideoControls
-                          selectedClip={selectedClip}
-                          isPlaying={state.isPlaying}
-                          currentTime={state.currentTime}
-                          isMuted={state.isMuted}
-                          volume={state.volume}
-                          onPlayPause={handlePlayPause}
-                          onTimeChange={handleTimeChange}
-                          onMuteToggle={handleMuteToggle}
-                          onVolumeChange={handleVolumeChange}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </PaperWithChildren>
-              </div>
-
-              {/* Right Column - Video Editing Controls */}
-              <div className="w-full lg:w-80 flex-shrink-0">
-                <div className="flex flex-col gap-4 h-full">
-                  {/* Mobile: Stack controls, Desktop: Vertical layout */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                    {/* Trim Controls */}
-                    <PaperWithChildren
-                      variant="elevation"
-                      className="p-3 sm:p-4"
+          {currentClip && (
+            <>
+              {/* Video Player */}
+              <PaperWithChildren className="p-4" variant="elevation">
+                <div className="flex justify-between items-center mb-3">
+                  <Typography variant="h6">Video Preview</Typography>
+                  <div className="flex items-center gap-2">
+                    <Typography variant="caption" color="text.secondary">
+                      {realTimePreview
+                        ? "Effects applied in real-time"
+                        : "Effects shown on export only"}
+                    </Typography>
+                    <Button
+                      onClick={() => setRealTimePreview(!realTimePreview)}
+                      variant={realTimePreview ? "contained" : "outlined"}
+                      size="small"
+                      color={realTimePreview ? "primary" : "secondary"}
                     >
-                      <TrimControlsPanel
-                        selectedClip={selectedClip}
-                        onTrimChange={handleTrimChange}
-                      />
-                    </PaperWithChildren>
-
-                    {/* Text Overlays */}
-                    <PaperWithChildren
-                      variant="elevation"
-                      className="p-3 sm:p-4"
-                    >
-                      <TextOverlaysPanel
-                        selectedClip={selectedClip}
-                        selectedTextOverlayId={state.selectedTextOverlayId}
-                        onAddTextOverlay={handleAddTextOverlay}
-                        onUpdateTextOverlay={handleUpdateTextOverlay}
-                        onRemoveTextOverlay={handleRemoveTextOverlay}
-                        onSelectTextOverlay={handleSelectTextOverlay}
-                      />
-                    </PaperWithChildren>
+                      {realTimePreview ? "Real-time ON" : "Real-time OFF"}
+                    </Button>
                   </div>
-
-                  {/* Video Effects - Full width */}
-                  <PaperWithChildren
-                    variant="elevation"
-                    className="p-3 sm:p-4 flex-1 min-h-0"
-                  >
-                    <div className="h-full flex flex-col">
-                      <Typography
-                        variant="h6"
-                        className="flex items-center gap-2 flex-shrink-0 mb-3 text-sm sm:text-base"
-                      >
-                        <Tune className="text-blue-600" />
-                        Effects
-                      </Typography>
-                      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                        <VideoEffectsPanel
-                          effects={selectedClip.effects}
-                          onEffectToggle={handleEffectToggle}
-                          onEffectValueChange={handleEffectValueChange}
-                        />
-                      </div>
-                    </div>
-                  </PaperWithChildren>
                 </div>
-              </div>
-            </div>
+                <div className="relative bg-black rounded-lg overflow-hidden mb-4">
+                  <video
+                    ref={videoRef}
+                    className="w-full h-auto max-h-96"
+                    onTimeUpdate={handleTimeUpdate}
+                    onLoadedMetadata={() => {
+                      if (videoRef.current && currentClip) {
+                        // Ensure the video is ready before setting time
+                        const video = videoRef.current;
+                        if (video.readyState >= 1) {
+                          video.currentTime = currentClip.trimStart;
+                          setCurrentTime(currentClip.trimStart);
+                        }
+                        setIsPlaying(false); // Reset playing state when new video loads
+                      }
+                    }}
+                    onCanPlay={() => {
+                      // Only set currentTime if it's not already at the correct position
+                      if (videoRef.current && currentClip) {
+                        const video = videoRef.current;
+                        if (
+                          Math.abs(video.currentTime - currentClip.trimStart) >
+                          0.1
+                        ) {
+                          video.currentTime = currentClip.trimStart;
+                          setCurrentTime(currentClip.trimStart);
+                        }
+                      }
+                    }}
+                    onPlay={() => {
+                      setIsPlaying(true);
+                      console.log("Video started playing");
+                    }}
+                    onPause={() => {
+                      setIsPlaying(false);
+                      console.log("Video paused");
+                    }}
+                    onSeeking={() => {
+                      console.log("Video seeking...");
+                    }}
+                    onSeeked={() => {
+                      console.log("Video seek completed");
+                    }}
+                    controls={false}
+                    style={{
+                      display:
+                        realTimePreview &&
+                        (filters.length > 0 || textOverlays.length > 0)
+                          ? "none"
+                          : "block",
+                    }}
+                  />
+
+                  {/* Canvas overlay for real-time effects preview */}
+                  <canvas
+                    ref={canvasRef}
+                    className="w-full h-auto max-h-96"
+                    style={{
+                      display:
+                        realTimePreview &&
+                        (filters.length > 0 || textOverlays.length > 0)
+                          ? "block"
+                          : "none",
+                      backgroundColor: "black",
+                      objectFit: "contain",
+                    }}
+                  />
+
+                  {/* Draggable Text Overlay Container */}
+                  <div
+                    ref={overlayContainerRef}
+                    className="absolute inset-0 pointer-events-none"
+                    onClick={handleOverlayContainerClick}
+                    style={{
+                      display: textOverlays.length > 0 ? "block" : "none",
+                      zIndex: 10,
+                    }}
+                  >
+                    {textOverlays.map((overlay) => {
+                      const currentVideoTime =
+                        videoRef.current?.currentTime || 0;
+                      const isVisible =
+                        currentVideoTime >= overlay.startTime &&
+                        currentVideoTime <= overlay.endTime;
+
+                      if (!isVisible) return null;
+
+                      return (
+                        <div
+                          key={overlay.id}
+                          className={`absolute cursor-move select-none transition-all duration-200 pointer-events-auto ${
+                            selectedOverlayId === overlay.id
+                              ? "ring-2 ring-blue-400 ring-opacity-60 bg-blue-100 bg-opacity-20"
+                              : "hover:ring-1 hover:ring-white hover:ring-opacity-40"
+                          }`}
+                          style={{
+                            left: `${overlay.x}%`,
+                            top: `${overlay.y}%`,
+                            transform: "translate(-50%, -50%)",
+                            fontSize: `${overlay.fontSize}px`,
+                            color: overlay.color,
+                            fontFamily: overlay.fontFamily,
+                            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                            padding: "4px 8px",
+                            borderRadius: "4px",
+                            minWidth: "20px",
+                            minHeight: "20px",
+                            zIndex: selectedOverlayId === overlay.id ? 20 : 15,
+                            userSelect: "none",
+                            WebkitUserSelect: "none",
+                            // Make transparent when canvas is showing and not being dragged, but keep interactive
+                            opacity:
+                              realTimePreview &&
+                              (filters.length > 0 || textOverlays.length > 0) &&
+                              overlay.id !== draggedOverlayId
+                                ? 0
+                                : 1,
+                            // Always keep pointer events enabled for dragging
+                            pointerEvents: "auto",
+                          }}
+                          onMouseDown={(e) =>
+                            handleOverlayMouseDown(e, overlay.id)
+                          }
+                          title="Drag to reposition text"
+                        >
+                          {overlay.text}
+                          {selectedOverlayId === overlay.id && (
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full"></div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Hidden preview video for processing */}
+                  <video
+                    ref={previewVideoRef}
+                    className="hidden"
+                    crossOrigin="anonymous"
+                  />
+                </div>
+
+                {/* Player Controls */}
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  className="mb-4"
+                >
+                  <IconButton onClick={handlePlayPause} color="primary">
+                    {isPlaying ? <Pause /> : <PlayArrow />}
+                  </IconButton>
+
+                  <Box className="flex-1 mx-4">
+                    <Slider
+                      value={
+                        currentClip &&
+                        !isNaN(currentTime) &&
+                        !isNaN(currentClip.trimStart) &&
+                        !isNaN(currentClip.trimEnd) &&
+                        currentClip.trimEnd > currentClip.trimStart
+                          ? ((currentTime - currentClip.trimStart) /
+                              (currentClip.trimEnd - currentClip.trimStart)) *
+                            100
+                          : 0
+                      }
+                      onChange={(_, value) => handleSeek(value as number)}
+                      sx={{ color: "primary.main" }}
+                    />
+                  </Box>
+
+                  <Typography variant="caption" className="min-w-20">
+                    {formatTime(currentTime)} /{" "}
+                    {formatTime(currentClip.duration)}
+                  </Typography>
+
+                  <IconButton
+                    onClick={() => setIsMuted(!isMuted)}
+                    onMouseDown={() => {
+                      if (videoRef.current) {
+                        videoRef.current.muted = !isMuted;
+                      }
+                    }}
+                  >
+                    {isMuted ? <VolumeOff /> : <VolumeUp />}
+                  </IconButton>
+                </Stack>
+              </PaperWithChildren>
+
+              {/* Video Editing Controls */}
+              <PaperWithChildren className="p-4" variant="elevation">
+                <Typography variant="h6" className="mb-4">
+                  Video Editing Controls
+                </Typography>
+
+                {/* Trim Controls Section */}
+                <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
+                  <Typography
+                    variant="subtitle1"
+                    className="mb-3 font-medium text-blue-700"
+                  >
+                    📹 Trim Video
+                  </Typography>
+                  <Stack spacing={2} className="mb-2">
+                    <div className="flex items-center gap-2">
+                      <Typography variant="caption" className="min-w-16">
+                        Range:
+                      </Typography>
+                      <Slider
+                        value={[
+                          currentClip?.trimStart || 0,
+                          currentClip?.trimEnd || 0,
+                        ]}
+                        max={currentClip?.duration || 100}
+                        step={0.1}
+                        onChange={(_, value) => {
+                          const [start, end] = value as number[];
+                          updateClipTrim(currentClip.id, start, end);
+                        }}
+                        onChangeCommitted={(_, value) => {
+                          // Ensure video position is within trim bounds after final change
+                          const [start, end] = value as number[];
+                          if (videoRef.current) {
+                            const currentVideoTime =
+                              videoRef.current.currentTime;
+                            if (currentVideoTime < start) {
+                              videoRef.current.currentTime = start;
+                              setCurrentTime(start);
+                            } else if (currentVideoTime > end) {
+                              videoRef.current.currentTime = end;
+                              setCurrentTime(end);
+                            }
+
+                            // Trigger preview update after position change
+                            if (realTimePreview) {
+                              setTimeout(() => {
+                                renderPreview();
+                              }, 10);
+                            }
+                          }
+                        }}
+                        valueLabelDisplay="auto"
+                        valueLabelFormat={(value) => formatTime(value)}
+                        sx={{
+                          flex: 1,
+                          "& .MuiSlider-thumb": {
+                            "&:nth-of-type(1)": {
+                              backgroundColor: "#2196f3",
+                            },
+                            "&:nth-of-type(2)": {
+                              backgroundColor: "#f44336",
+                            },
+                          },
+                          "& .MuiSlider-track": {
+                            backgroundColor: "#4caf50",
+                            height: 6,
+                          },
+                          "& .MuiSlider-rail": {
+                            backgroundColor: "#e0e0e0",
+                            height: 6,
+                          },
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-600">
+                      <span>
+                        Start: {formatTime(currentClip?.trimStart || 0)}
+                      </span>
+                      <span>End: {formatTime(currentClip?.trimEnd || 0)}</span>
+                    </div>
+                  </Stack>
+                  <Typography variant="caption" color="text.secondary">
+                    Trimmed duration:{" "}
+                    {formatTime(
+                      (currentClip?.trimEnd || 0) -
+                        (currentClip?.trimStart || 0)
+                    )}
+                  </Typography>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-gray-200 my-6"></div>
+
+                {/* Text Overlays Section */}
+                <div className="mb-6 p-4 bg-blue-50 rounded-lg border">
+                  <div className="flex justify-between items-center mb-3">
+                    <Typography
+                      variant="subtitle1"
+                      className="font-medium text-blue-700"
+                    >
+                      📝 Text Overlays
+                    </Typography>
+                    <Button
+                      onClick={addTextOverlay}
+                      startIcon={<TextFields />}
+                      variant="outlined"
+                      size="small"
+                    >
+                      Add Text
+                    </Button>
+                  </div>
+
+                  {textOverlays.map((overlay) => (
+                    <Card
+                      key={overlay.id}
+                      className={`mb-2 border shadow-sm transition-all ${
+                        selectedOverlayId === overlay.id
+                          ? "border-blue-400 bg-blue-50"
+                          : "border-blue-200"
+                      }`}
+                      onClick={() => setSelectedOverlayId(overlay.id)}
+                    >
+                      <CardContent className="p-3">
+                        <Stack
+                          direction="row"
+                          spacing={2}
+                          alignItems="center"
+                          className="mb-2"
+                        >
+                          <TextField
+                            label="Text"
+                            value={overlay.text}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                text: e.target.value,
+                              })
+                            }
+                            size="small"
+                            className="flex-1"
+                          />
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeTextOverlay(overlay.id);
+                            }}
+                            color="error"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Stack>
+
+                        <Stack direction="row" spacing={2} className="mb-2">
+                          <TextField
+                            label="Start Time"
+                            type="number"
+                            value={overlay.startTime || 0}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                startTime: parseFloat(e.target.value) || 0,
+                              })
+                            }
+                            size="small"
+                            inputProps={{
+                              step: 0.1,
+                              min: 0,
+                              max: currentClip?.duration || 100,
+                            }}
+                          />
+                          <TextField
+                            label="End Time"
+                            type="number"
+                            value={overlay.endTime || 5}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                endTime: parseFloat(e.target.value) || 5,
+                              })
+                            }
+                            size="small"
+                            inputProps={{
+                              step: 0.1,
+                              min: 0,
+                              max: currentClip?.duration || 100,
+                            }}
+                          />
+                        </Stack>
+
+                        <Stack direction="row" spacing={2}>
+                          <TextField
+                            label="Font Size"
+                            type="number"
+                            value={overlay.fontSize || 24}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                fontSize: parseInt(e.target.value) || 24,
+                              })
+                            }
+                            size="small"
+                            inputProps={{ min: 8, max: 72 }}
+                          />
+                          <TextField
+                            label="Color"
+                            type="color"
+                            value={overlay.color || "#ffffff"}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                color: e.target.value,
+                              })
+                            }
+                            size="small"
+                          />
+                        </Stack>
+
+                        <Stack direction="row" spacing={2} className="mt-2">
+                          <TextField
+                            label="X Position (%)"
+                            type="number"
+                            value={Math.round((overlay.x || 50) * 100) / 100}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                x: parseFloat(e.target.value) || 50,
+                              })
+                            }
+                            size="small"
+                            inputProps={{ min: 0, max: 100, step: 0.1 }}
+                          />
+                          <TextField
+                            label="Y Position (%)"
+                            type="number"
+                            value={Math.round((overlay.y || 50) * 100) / 100}
+                            onChange={(e) =>
+                              updateTextOverlay(overlay.id, {
+                                y: parseFloat(e.target.value) || 50,
+                              })
+                            }
+                            size="small"
+                            inputProps={{ min: 0, max: 100, step: 0.1 }}
+                          />
+                        </Stack>
+
+                        {selectedOverlayId === overlay.id && (
+                          <Typography
+                            variant="caption"
+                            color="primary"
+                            className="mt-2 block"
+                          >
+                            💡 Tip: Drag the text directly on the video to
+                            reposition it
+                          </Typography>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  {textOverlays.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4 bg-white rounded border border-dashed border-blue-300"
+                    >
+                      No text overlays added yet. Click &quot;Add Text&quot; to
+                      add draggable text to your video.
+                    </Typography>
+                  )}
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-gray-200 my-6"></div>
+
+                {/* Video Effects Section */}
+                <div className="p-4 bg-purple-50 rounded-lg border">
+                  <div className="flex justify-between items-center mb-3">
+                    <Typography
+                      variant="subtitle1"
+                      className="font-medium text-purple-700"
+                    >
+                      ✨ Video Effects
+                    </Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap">
+                      <Button
+                        onClick={() => addFilter("brightness")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Brightness
+                      </Button>
+                      <Button
+                        onClick={() => addFilter("contrast")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Contrast
+                      </Button>
+                      <Button
+                        onClick={() => addFilter("saturation")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Saturation
+                      </Button>
+                      <Button
+                        onClick={() => addFilter("blur")}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Blur
+                      </Button>
+                    </Stack>
+                  </div>
+
+                  {filters.map((filter) => (
+                    <Card
+                      key={filter.id}
+                      className="mb-2 border border-purple-200 shadow-sm"
+                    >
+                      <CardContent className="p-3">
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Typography
+                            variant="body2"
+                            className="capitalize min-w-20"
+                          >
+                            {filter.type}
+                          </Typography>
+                          <Slider
+                            value={filter.value || 0}
+                            onChange={(_, value) =>
+                              updateFilter(filter.id, value as number)
+                            }
+                            min={filter.type === "blur" ? 0 : 0}
+                            max={filter.type === "blur" ? 10 : 200}
+                            step={filter.type === "blur" ? 0.1 : 1}
+                            className="flex-1"
+                          />
+                          <Typography variant="caption" className="min-w-12">
+                            {filter.value || 0}
+                            {filter.type === "blur" ? "px" : "%"}
+                          </Typography>
+                          <IconButton
+                            onClick={() => removeFilter(filter.id)}
+                            color="error"
+                            size="small"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  {filters.length === 0 && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="text-center py-4 bg-white rounded border border-dashed border-purple-300"
+                    >
+                      No effects applied. Use the buttons above to add effects.
+                    </Typography>
+                  )}
+                </div>
+              </PaperWithChildren>
+
+              {/* Export */}
+              <PaperWithChildren className="p-4" variant="elevation">
+                <Typography variant="h6" className="mb-3">
+                  Export Video
+                </Typography>
+
+                {isProcessing && (
+                  <Box className="mb-4">
+                    <LinearProgress variant="indeterminate" />
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="mt-1"
+                    >
+                      Processing video... This may take a few minutes.
+                    </Typography>
+                  </Box>
+                )}
+
+                <Button
+                  onClick={exportVideo}
+                  disabled={!ffmpeg || isProcessing}
+                  startIcon={<Download />}
+                  variant="contained"
+                  color="primary"
+                >
+                  {isProcessing ? "Processing..." : "Export Video"}
+                </Button>
+
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="mt-2"
+                >
+                  Export will include all applied trims, text overlays, and
+                  effects.
+                </Typography>
+              </PaperWithChildren>
+            </>
           )}
-        </div>
+        </>
       )}
-    </ToolLayout>
+
+      <SnackBarWithPosition
+        open={isSnackBarOpen}
+        autoHideDuration={6000}
+        handleClose={() => setIsSnackBarOpen(false)}
+        message={snackBarMessage}
+        color={snackBarColor}
+        vertical="bottom"
+        horizontal="center"
+      />
+    </div>
   );
 }
