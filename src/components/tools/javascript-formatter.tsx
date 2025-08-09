@@ -115,6 +115,9 @@ if (value === 'webtoolseasy') {
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw JavaScript"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
@@ -122,6 +125,9 @@ if (value === 'webtoolseasy') {
             codeEditorProps={outputEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted JavaScript"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
       />

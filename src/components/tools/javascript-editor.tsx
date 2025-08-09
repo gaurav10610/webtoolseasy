@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import PreviewIcon from "@mui/icons-material/Preview";
 import DownloadIcon from "@mui/icons-material/Download";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -14,109 +14,111 @@ export default function JavaScriptEditor({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `// JavaScript Editor
-// Write your JavaScript code here
+  const initialValue = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Editor with Live Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .reset-button {
+            background-color: #6c757d;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .math-example {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+        }
+        .math-title {
+            margin: 0 0 10px 0;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Live Preview</h1>
+        <p>This HTML with JavaScript is executing in real-time! Try modifying the code on the left.</p>
+        
+        <button id="clickBtn" class="button">Click Me!</button>
+        <button id="resetBtn" class="button reset-button">Reset</button>
+        
+        <div id="result" class="result">Click the button above to see the magic!</div>
+        
+        <div class="math-example">
+            <h3 class="math-title">Math Example:</h3>
+            <p id="mathResult"></p>
+        </div>
+    </div>
 
-/**
- * Calculate the factorial of a number
- * @param {number} n - The number to calculate factorial for
- * @returns {number} The factorial result
- */
-function factorial(n) {
-  if (n <= 1) return 1;
-  return n * factorial(n - 1);
-}
+    <script>
+        let clickCount = 0;
+        const resultDiv = document.getElementById('result');
+        const clickBtn = document.getElementById('clickBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const mathResult = document.getElementById('mathResult');
 
-// Example usage
-console.log("Factorial of 5:", factorial(5));
+        clickBtn.onclick = function() {
+            clickCount++;
+            resultDiv.textContent = \`Button clicked \${clickCount} time(s)!\`;
+            if (clickCount % 3 === 0) {
+                resultDiv.style.color = 'red';
+            } else if (clickCount % 2 === 0) {
+                resultDiv.style.color = 'blue';
+            } else {
+                resultDiv.style.color = 'green';
+            }
+        };
 
-/**
- * Generate Fibonacci sequence
- * @param {number} count - Number of Fibonacci numbers to generate
- * @returns {number[]} Array of Fibonacci numbers
- */
-function fibonacci(count) {
-  if (count <= 0) return [];
-  if (count === 1) return [0];
-  if (count === 2) return [0, 1];
-  
-  const sequence = [0, 1];
-  for (let i = 2; i < count; i++) {
-    sequence[i] = sequence[i - 1] + sequence[i - 2];
-  }
-  return sequence;
-}
+        resetBtn.onclick = function() {
+            clickCount = 0;
+            resultDiv.textContent = 'Click the button above to see the magic!';
+            resultDiv.style.color = '#333';
+        };
 
-// Example usage
-console.log("First 10 Fibonacci numbers:", fibonacci(10));
+        // Math calculations
+        const num1 = 15;
+        const num2 = 27;
+        mathResult.innerHTML = \`\${num1} + \${num2} = <strong>\${num1 + num2}</strong><br>Square root of 144 = <strong>\${Math.sqrt(144)}</strong><br>Random number: <strong>\${Math.floor(Math.random() * 100)}</strong>\`;
 
-/**
- * Check if a string is a palindrome
- * @param {string} str - The string to check
- * @returns {boolean} True if palindrome, false otherwise
- */
-function isPalindrome(str) {
-  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return cleaned === cleaned.split('').reverse().join('');
-}
-
-// Example usage
-console.log("Is 'racecar' a palindrome?", isPalindrome("racecar"));
-console.log("Is 'hello' a palindrome?", isPalindrome("hello"));
-
-/**
- * Sort an array of objects by a property
- * @param {Array} array - Array to sort
- * @param {string} property - Property to sort by
- * @param {string} order - Sort order ('asc' or 'desc')
- * @returns {Array} Sorted array
- */
-function sortByProperty(array, property, order = 'asc') {
-  return array.sort((a, b) => {
-    const aVal = a[property];
-    const bVal = b[property];
-    
-    if (order === 'asc') {
-      return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
-    } else {
-      return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
-    }
-  });
-}
-
-// Example usage
-const users = [
-  { name: "Alice", age: 30 },
-  { name: "Bob", age: 25 },
-  { name: "Charlie", age: 35 }
-];
-
-console.log("Users sorted by age:", sortByProperty([...users], 'age'));
-console.log("Users sorted by name:", sortByProperty([...users], 'name'));
-
-/**
- * Debounce function to limit execution frequency
- * @param {Function} func - Function to debounce
- * @param {number} delay - Delay in milliseconds
- * @returns {Function} Debounced function
- */
-function debounce(func, delay) {
-  let timeoutId;
-  return function(...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
-// Example usage
-const debouncedLog = debounce((message) => {
-  console.log("Debounced:", message);
-}, 1000);
-
-// This will only log once after 1 second
-debouncedLog("Hello");
-debouncedLog("World");
-debouncedLog("!"); // Only this will execute`;
+        console.log('JavaScript editor with live preview loaded!');
+    </script>
+</body>
+</html>`;
 
   const toolState = useToolState({
     hostname: hostname || "",
@@ -124,110 +126,45 @@ debouncedLog("!"); // Only this will execute`;
     initialValue,
   });
 
-  const [output, setOutput] = useState("");
-  const [isExecuting, setIsExecuting] = useState(false);
+  const [previewHtml, setPreviewHtml] = useState("");
 
-  const executeCode = useCallback(async () => {
-    setIsExecuting(true);
-    setOutput("");
+  // Initialize preview on component mount
+  useEffect(() => {
+    setPreviewHtml(initialValue);
+  }, [initialValue]);
 
-    try {
-      // Create a safe execution environment
-      const originalLog = console.log;
-      const originalError = console.error;
-      const originalWarn = console.warn;
-
-      let output = "";
-
-      // Override console methods to capture output
-      console.log = (...args) => {
-        output +=
-          args
-            .map((arg) =>
-              typeof arg === "object"
-                ? JSON.stringify(arg, null, 2)
-                : String(arg)
-            )
-            .join(" ") + "\n";
-      };
-
-      console.error = (...args) => {
-        output += "Error: " + args.map((arg) => String(arg)).join(" ") + "\n";
-      };
-
-      console.warn = (...args) => {
-        output += "Warning: " + args.map((arg) => String(arg)).join(" ") + "\n";
-      };
-
-      try {
-        // Execute the code with some safety measures
-        const result = await (async () => {
-          return eval(`(async () => {
-            ${toolState.code}
-          })()`);
-        })();
-
-        if (result !== undefined) {
-          output +=
-            "Return value: " +
-            (typeof result === "object"
-              ? JSON.stringify(result, null, 2)
-              : String(result)) +
-            "\n";
-        }
-      } catch (error) {
-        output += `Runtime Error: ${
-          error instanceof Error ? error.message : String(error)
-        }\n`;
-      }
-
-      // Restore original console methods
-      console.log = originalLog;
-      console.error = originalError;
-      console.warn = originalWarn;
-
-      setOutput(output || "Code executed successfully (no output)");
-      toolState.actions.showMessage("JavaScript code executed successfully!");
-    } catch (error) {
-      setOutput(
-        `Execution Error: ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      );
-      toolState.actions.showMessage("JavaScript execution failed");
-    } finally {
-      setIsExecuting(false);
-    }
+  const updatePreview = useCallback(() => {
+    setPreviewHtml(toolState.code);
+    toolState.actions.showMessage("Preview updated!");
   }, [toolState.code, toolState.actions]);
 
+  // Auto-update preview when code changes (debounced)
+  const handleCodeChange = useCallback(
+    (value: string) => {
+      toolState.setCode(value);
+      // Auto-update preview with a small delay
+      setTimeout(() => {
+        setPreviewHtml(value);
+      }, 300);
+    },
+    [toolState]
+  );
   const downloadCode = useCallback(() => {
-    const blob = new Blob([toolState.code], { type: "text/javascript" });
+    const blob = new Blob([toolState.code], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "script.js";
+    a.download = "index.html";
     a.click();
     URL.revokeObjectURL(url);
-    toolState.actions.showMessage("Code downloaded as script.js!");
-  }, [toolState.code, toolState.actions]);
-
-  const validateSyntax = useCallback(() => {
-    try {
-      // Basic syntax validation using Function constructor
-      new Function(toolState.code);
-      toolState.actions.showMessage("✓ JavaScript syntax is valid!");
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
-      toolState.actions.showMessage(`Syntax Error: ${errorMessage}`);
-    }
+    toolState.actions.showMessage("Code downloaded as index.html!");
   }, [toolState.code, toolState.actions]);
 
   // Editor configuration
   const editorProps = useEditorConfig({
-    language: "javascript",
+    language: "html",
     value: toolState.code,
-    onChange: toolState.setCode,
+    onChange: handleCodeChange,
   });
 
   // Button configuration
@@ -235,19 +172,13 @@ debouncedLog("!"); // Only this will execute`;
     () => [
       {
         type: "custom" as const,
-        text: "Run JavaScript",
-        onClick: executeCode,
-        icon: <PlayArrowIcon />,
-        disabled: isExecuting,
+        text: "Update Preview",
+        onClick: updatePreview,
+        icon: <PreviewIcon />,
       },
       {
         type: "custom" as const,
-        text: "Validate Syntax",
-        onClick: validateSyntax,
-      },
-      {
-        type: "custom" as const,
-        text: "Download .js",
+        text: "Download HTML",
         onClick: downloadCode,
         icon: <DownloadIcon />,
       },
@@ -261,19 +192,8 @@ debouncedLog("!"); // Only this will execute`;
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [executeCode, validateSyntax, downloadCode, isExecuting, toolState]
+    [updatePreview, downloadCode, toolState]
   );
-
-  // Calculate code statistics
-  const codeStats = useMemo(() => {
-    const code = toolState.code;
-    return {
-      characters: code.length,
-      lines: code.split("\n").length,
-      words: code.split(/\s+/).filter((word) => word.length > 0).length,
-      size: new Blob([code]).size,
-    };
-  }, [toolState.code]);
 
   return (
     <ToolLayout
@@ -286,9 +206,9 @@ debouncedLog("!"); // Only this will execute`;
     >
       <SEOContent
         title="JavaScript Editor"
-        description="Free online JavaScript editor with syntax highlighting, code execution, and validation. Write, test and run JavaScript code in your browser."
+        description="Free online JavaScript editor with live preview. Write, edit and test your HTML with JavaScript code in real-time."
         exampleCode={initialValue}
-        exampleOutput="Interactive JavaScript code execution with live output console"
+        exampleOutput="Live HTML preview with interactive JavaScript elements"
       />
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
@@ -299,54 +219,27 @@ debouncedLog("!"); // Only this will execute`;
           <SingleCodeEditorWithHeaderV2
             codeEditorProps={editorProps}
             themeOption="vs-dark"
-            editorHeading="JavaScript Code"
+            editorHeading="HTML Code with JavaScript"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
-          <div className="w-full h-full flex flex-col">
-            <div className="mb-3 flex items-center gap-2">
-              <PlayArrowIcon />
-              <span className="font-semibold">JavaScript Output</span>
+          <div className="flex flex-col gap-2 h-full">
+            <div className="flex items-center gap-2">
+              <PreviewIcon className="text-blue-600" />
+              <span className="font-semibold text-lg md:text-xl">
+                Live Preview
+              </span>
             </div>
-            <div className="flex-1 w-full overflow-auto p-4 bg-gray-900 text-green-400 border-2 border-gray-300 rounded font-mono text-sm whitespace-pre-wrap">
-              {isExecuting ? (
-                <div className="text-blue-400">
-                  Executing JavaScript code...
-                </div>
-              ) : output ? (
-                output
-              ) : (
-                <div className="text-gray-500">
-                  Click &ldquo;Run JavaScript&rdquo; to see output here...
-                </div>
-              )}
-            </div>
-
-            {/* Code Statistics */}
-            <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-              <div className="font-semibold mb-2 text-gray-800">
-                📊 Code Statistics
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-600">Characters:</span>
-                  <span className="ml-2 font-mono">
-                    {codeStats.characters.toLocaleString()}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-600">Lines:</span>
-                  <span className="ml-2 font-mono">{codeStats.lines}</span>
-                </div>
-                <div>
-                  <span className="text-gray-600">Words:</span>
-                  <span className="ml-2 font-mono">{codeStats.words}</span>
-                </div>
-                <div>
-                  <span className="text-gray-600">Size:</span>
-                  <span className="ml-2 font-mono">{codeStats.size} bytes</span>
-                </div>
-              </div>
+            <div className="flex-1 min-h-[200px] md:min-h-[280px] w-full border-2 border-gray-300 rounded-lg bg-white">
+              <iframe
+                srcDoc={previewHtml}
+                className="w-full h-full border-0 rounded-lg"
+                sandbox="allow-scripts allow-same-origin"
+                title="JavaScript Preview"
+              />
             </div>
           </div>
         }

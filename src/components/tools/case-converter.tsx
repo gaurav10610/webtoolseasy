@@ -157,7 +157,7 @@ export default function CaseConverter({
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Custom conversion buttons */}
-      <div className="flex flex-col md:flex-row gap-2 justify-center w-full">
+      <div className="flex flex-wrap gap-2 justify-center w-full">
         {caseButtons.map((button, index) => (
           <ButtonWithHandler
             key={index}
@@ -166,42 +166,47 @@ export default function CaseConverter({
             size={button.size}
             onClick={button.onClick}
             color={button.color}
+            className="min-w-0 flex-1 sm:flex-none"
           />
         ))}
       </div>
 
-      <div className="flex flex-col gap-3 w-full">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col lg:flex-row gap-6 w-full">
+        <div className="flex flex-col gap-3 w-full lg:w-1/2">
           <Typography
             variant="body1"
             color="textSecondary"
-            className="!text-xl !font-semibold !w-full"
+            className="!text-lg !font-semibold"
           >
-            Input Text (Paste Your Text Here)
+            📝 Input Text
           </Typography>
           <TextField
             multiline
-            rows={5}
+            rows={8}
             value={toolState.code}
             onChange={(e) => toolState.setCode(e.target.value)}
             placeholder="Enter text to convert..."
+            className="w-full"
+            variant="outlined"
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3 w-full lg:w-1/2">
           <Typography
             variant="body1"
             color="textSecondary"
-            className="!text-xl !font-semibold !w-full"
+            className="!text-lg !font-semibold"
           >
-            Converted Text
+            ✨ Converted Text
           </Typography>
           <TextField
             multiline
-            rows={5}
+            rows={8}
             value={outputText}
             InputProps={{ readOnly: true }}
             placeholder="Converted text will appear here..."
+            className="w-full"
+            variant="outlined"
           />
         </div>
       </div>

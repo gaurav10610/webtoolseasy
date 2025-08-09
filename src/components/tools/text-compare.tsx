@@ -18,7 +18,7 @@ const DiffEditorsWithHeader = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-[65vh] min-h-[320px] bg-gray-100 animate-pulse flex items-center justify-center">
+      <div className="w-full h-[50vh] md:h-[65vh] min-h-[250px] md:min-h-[320px] bg-gray-100 animate-pulse flex items-center justify-center">
         <div className="text-gray-500">Loading diff editor...</div>
       </div>
     ),
@@ -151,7 +151,7 @@ New line added`;
         {/* Text Compare Editor - takes 3/4 of the width */}
         <div className="lg:col-span-3">
           <div
-            className={`w-full h-[65vh] min-h-[320px] ${
+            className={`w-full h-[50vh] md:h-[65vh] min-h-[250px] md:min-h-[320px] ${
               toolState.isFullScreen ? "md:h-full" : ""
             }`}
           >

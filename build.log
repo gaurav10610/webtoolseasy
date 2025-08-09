@@ -1,0 +1,46 @@
+
+> webtoolseasy@0.1.0 build
+> next build
+
+   ▲ Next.js 15.1.6
+   - Environments: .env.production
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/46) ...
+   Generating static pages (11/46) 
+   Generating static pages (22/46) 
+   Generating static pages (34/46) 
+ ✓ Generating static pages (46/46)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                   Size     First Load JS
+┌ ƒ /                                         2.94 kB         255 kB
+├ ○ /_not-found                               990 B           109 kB
+├ ƒ /api/file-data                            158 B           108 kB
+├ ƒ /api/file-data/[folder]                   158 B           108 kB
+├ ƒ /api/file-data/[folder]/[fileName]        158 B           108 kB
+├ ƒ /api/media                                158 B           108 kB
+├ ○ /blog                                     1.92 kB         200 kB
+├ ● /blog/[pageUrl]                           1.92 kB         197 kB
+├   └ /blog/decoding-jwt-comprehensive-guide
+├ ƒ /blog/[pageUrl]/edit                      676 kB          847 kB
+├ ○ /blog/add                                 10.4 kB         182 kB
+└ ● /tools/[pageUrl]                          3.95 kB         138 kB
+    ├ /tools/base64-decode
+    ├ /tools/base64-encode
+    ├ /tools/case-converter
+    └ [+34 more paths]
++ First Load JS shared by all                 108 kB
+  ├ chunks/1517-362774a8d4de89a4.js           50.7 kB
+  ├ chunks/4bd1b696-0ca2dba2ba88936f.js       53 kB
+  └ other shared chunks (total)               3.94 kB
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useMemo } from "react";
-import { TextField, Typography, Card, CardContent } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { toCanvas, toString, toDataURL, QRCodeToDataURLOptions } from "qrcode";
 import DownloadIcon from "@mui/icons-material/Download";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -165,32 +165,56 @@ Try these examples:
         exampleOutput="High-quality QR code with customizable size and format"
       />
 
-      <div className="flex flex-col w-full gap-6 items-center max-w-4xl mx-auto">
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
         {/* Input Section */}
-        <Card className="w-full">
-          <CardContent>
-            <Typography variant="h6" className="mb-3" color="primary">
-              Enter Text or URL
+        <div className="flex flex-col gap-4">
+          <Typography
+            variant="h6"
+            className="flex items-center gap-2 text-lg font-semibold"
+          >
+            <span>📝</span>
+            <span>Enter Text or URL</span>
+          </Typography>
+          <TextField
+            multiline
+            rows={12}
+            value={toolState.code}
+            onChange={(e) => toolState.setCode(e.target.value)}
+            placeholder="Enter text, URL, or data to generate QR code..."
+            className="w-full"
+            variant="outlined"
+          />
+
+          {/* Examples */}
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <Typography
+              variant="body2"
+              className="text-blue-800 font-medium mb-2"
+            >
+              💡 Examples to try:
             </Typography>
-            <TextField
-              multiline
-              rows={6}
-              value={toolState.code}
-              onChange={(e) => toolState.setCode(e.target.value)}
-              placeholder="Enter text, URL, or data to generate QR code..."
-              className="w-full"
-              variant="outlined"
-            />
-          </CardContent>
-        </Card>
+            <div className="text-sm text-blue-700 space-y-1">
+              <div>• https://webtoolseasy.com</div>
+              <div>• Email: contact@example.com</div>
+              <div>• Phone: +1-234-567-8900</div>
+              <div>• WiFi: WIFI:T:WPA;S:NetworkName;P:Password;;</div>
+            </div>
+          </div>
+        </div>
 
         {/* QR Code Display */}
-        <Card className="w-full">
-          <CardContent className="flex flex-col items-center gap-4">
-            <Typography variant="h6" color="primary">
-              Generated QR Code
-            </Typography>
-            <div className="p-4 bg-white border-2 border-gray-200 rounded-lg">
+        <div className="flex flex-col gap-4">
+          <Typography
+            variant="h6"
+            className="flex items-center gap-2 text-lg font-semibold"
+          >
+            <span>📱</span>
+            <span>Generated QR Code</span>
+          </Typography>
+          <div className="flex flex-col items-center gap-4 p-6 bg-gray-50 border-2 border-gray-200 rounded-lg min-h-[400px] justify-center">
+            <div className="p-4 bg-white border-2 border-gray-300 rounded-lg shadow-sm">
               <canvas
                 ref={canvasRef}
                 className="max-w-full h-auto"
@@ -200,15 +224,12 @@ Try these examples:
             <Typography
               variant="body2"
               color="textSecondary"
-              className="text-center"
+              className="text-center max-w-sm"
             >
               Scan this QR code with your mobile device to access the content
             </Typography>
-          </CardContent>
-        </Card>
-
-        {/* Controls */}
-        <ToolControls buttons={buttons} />
+          </div>
+        </div>
       </div>
     </ToolLayout>
   );

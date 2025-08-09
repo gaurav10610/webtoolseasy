@@ -73,70 +73,97 @@ export default function WordCounter({
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <div className="flex flex-col gap-3 w-full">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-6 w-full">
+        <div className="flex flex-col gap-3">
           <Typography
             variant="body1"
             color="textSecondary"
-            className="!text-xl !font-semibold !w-full"
+            className="!text-lg !font-semibold flex items-center gap-2"
           >
-            Text (Paste Your Text Here)
+            <span>📝</span>
+            <span>Text Analysis</span>
           </Typography>
           <TextField
             multiline
-            rows={5}
+            rows={8}
             value={toolState.code}
             onChange={(e) => toolState.setCode(e.target.value)}
             placeholder="Enter text to analyze..."
+            variant="outlined"
+            className="w-full"
           />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 p-4 bg-gray-50 rounded-lg">
-          <div className="flex flex-col items-center">
-            <Typography variant="h4" color="primary" fontWeight="bold">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-blue-600">
               {stats.words}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
               Words
             </Typography>
           </div>
-          <div className="flex flex-col items-center">
-            <Typography variant="h4" color="primary" fontWeight="bold">
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-green-600">
               {stats.characters}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
               Characters
             </Typography>
           </div>
-          <div className="flex flex-col items-center">
-            <Typography variant="h4" color="primary" fontWeight="bold">
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-purple-600">
               {stats.charactersNoSpaces}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
               No Spaces
             </Typography>
           </div>
-          <div className="flex flex-col items-center">
-            <Typography variant="h4" color="primary" fontWeight="bold">
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-orange-600">
               {stats.sentences}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
               Sentences
             </Typography>
           </div>
-          <div className="flex flex-col items-center">
-            <Typography variant="h4" color="primary" fontWeight="bold">
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-red-600">
               {stats.paragraphs}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
               Paragraphs
             </Typography>
           </div>
-          <div className="flex flex-col items-center">
-            <Typography variant="h4" color="primary" fontWeight="bold">
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-indigo-600">
               {stats.readingTime}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
               Min Read
             </Typography>
           </div>

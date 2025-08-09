@@ -33,7 +33,7 @@ export function SingleCodeEditorWithHeaderV2({
           {editorHeading}
         </Typography>
       )}
-      <div className="flex-1 min-h-[280px]">
+      <div className="flex-1 min-h-[280px] h-full">
         <CodeEditorV2
           language={codeEditorProps.language}
           value={codeEditorProps.value}

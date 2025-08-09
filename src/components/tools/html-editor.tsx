@@ -112,18 +112,23 @@ export default function HtmlEditor({
             codeEditorProps={editorProps}
             themeOption="vs-dark"
             editorHeading="HTML Code"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
-          <div className="w-full h-full flex flex-col">
-            <div className="mb-3 flex items-center gap-2">
-              <PreviewIcon />
-              <span className="font-semibold">Live Preview</span>
+          <div className="flex flex-col gap-2 h-full">
+            <div className="flex items-center gap-2">
+              <PreviewIcon className="text-blue-600" />
+              <span className="font-semibold text-lg md:text-xl">
+                Live Preview
+              </span>
             </div>
-            <div className="flex-1 w-full border border-gray-300 rounded bg-white">
+            <div className="flex-1 min-h-[200px] md:min-h-[280px] w-full border-2 border-gray-300 rounded-lg bg-white">
               <iframe
                 srcDoc={previewHtml}
-                className="w-full h-full border-0 rounded"
+                className="w-full h-full border-0 rounded-lg"
                 sandbox="allow-scripts allow-same-origin"
                 title="HTML Preview"
               />

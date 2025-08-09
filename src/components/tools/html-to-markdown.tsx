@@ -219,7 +219,8 @@ export default function HtmlToMarkdown() {
             <Typography variant="h6">HTML Input</Typography>
             <div className="border rounded-lg overflow-hidden">
               <MonacoEditor
-                height="500px"
+                height="400px"
+                className="md:!h-[500px]"
                 defaultLanguage="html"
                 value={state.htmlInput}
                 onChange={(value: string | undefined) =>
@@ -242,7 +243,8 @@ export default function HtmlToMarkdown() {
             <Typography variant="h6">Markdown Output</Typography>
             <div className="border rounded-lg overflow-hidden">
               <MonacoEditor
-                height="500px"
+                height="400px"
+                className="md:!h-[500px]"
                 defaultLanguage="markdown"
                 value={state.markdownOutput}
                 options={{

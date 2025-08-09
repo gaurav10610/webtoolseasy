@@ -129,6 +129,9 @@ export default function CssFormatter({
             codeEditorProps={rawEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw CSS"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
@@ -136,6 +139,9 @@ export default function CssFormatter({
             codeEditorProps={formattedEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted CSS"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
       />

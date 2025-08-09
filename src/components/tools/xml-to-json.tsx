@@ -153,6 +153,9 @@ export default function XmlToJsonConverter({
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="XML Code"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
@@ -160,6 +163,9 @@ export default function XmlToJsonConverter({
             codeEditorProps={outputEditorProps}
             themeOption="vs-dark"
             editorHeading="JSON Code"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
       />

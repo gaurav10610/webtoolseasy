@@ -311,94 +311,90 @@ main().then(result => console.log("Final result:", result));`;
           </div>
         }
         rightPanel={
-          <div className="flex flex-col gap-2">
-            <Typography variant="h6" className="!text-sm !font-semibold">
-              Console Output
-            </Typography>
-            <div
-              className={`flex flex-col gap-2 ${
-                toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-              }`}
-            >
-              {/* Output Display */}
-              <div className="flex-1 border border-gray-300 rounded bg-black text-green-400 font-mono text-sm p-3 overflow-auto">
-                {isRunning ? (
-                  <div className="flex items-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-400"></div>
-                    <span>Executing JavaScript code...</span>
-                  </div>
-                ) : output ? (
-                  <pre className="whitespace-pre-wrap">{output}</pre>
-                ) : (
-                  <div className="text-gray-500">
-                    Click &quot;Run Code&quot; to execute JavaScript and see
-                    output here.
-                    <br />
-                    Supports ES6+, async/await, and modern JavaScript features.
-                  </div>
-                )}
-              </div>
-
-              {/* Error Display */}
-              {error && (
-                <Alert severity="error" className="!mb-2">
-                  <Typography variant="body2">
-                    <strong>Compilation Error:</strong> {error}
-                  </Typography>
-                </Alert>
-              )}
-
-              {/* Code Statistics */}
-              <Box className="p-3 bg-gray-50 border border-gray-200 rounded">
-                <Typography
-                  variant="h6"
-                  className="!text-sm !font-semibold mb-2"
-                >
-                  📊 Code Statistics
-                </Typography>
-                <div className="grid grid-cols-3 gap-4 text-sm">
-                  <div className="text-center">
-                    <div className="font-semibold text-blue-600">
-                      {codeStats.lines}
-                    </div>
-                    <div className="text-gray-600">Lines</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-green-600">
-                      {codeStats.characters}
-                    </div>
-                    <div className="text-gray-600">Characters</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="font-semibold text-purple-600">
-                      {codeStats.words}
-                    </div>
-                    <div className="text-gray-600">Words</div>
-                  </div>
-                </div>
-              </Box>
-
-              {/* Features Info */}
-              <Box className="p-3 bg-blue-50 border border-blue-200 rounded">
-                <Typography
-                  variant="h6"
-                  className="!text-sm !font-semibold mb-2 text-blue-800"
-                >
-                  🚀 Supported Features
-                </Typography>
-                <div className="text-xs text-blue-700 space-y-1">
-                  <div>
-                    • ES6+ syntax (arrow functions, destructuring, spread
-                    operator)
-                  </div>
-                  <div>• Async/await and Promise support</div>
-                  <div>• Modern array methods and higher-order functions</div>
-                  <div>• Classes and object-oriented programming</div>
-                  <div>• Template literals and dynamic imports</div>
-                  <div>• Real-time console output and error handling</div>
-                </div>
-              </Box>
+          <div className="flex flex-col gap-2 h-full">
+            <div className="flex items-center gap-2">
+              <PlayArrowIcon className="text-green-600" />
+              <span className="font-semibold text-lg md:text-xl">
+                Console Output
+              </span>
             </div>
+            <div className="flex-1 min-h-[200px] md:min-h-[280px] border border-gray-300 rounded bg-black text-green-400 font-mono text-xs md:text-sm p-2 md:p-3 overflow-auto">
+              {isRunning ? (
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-400"></div>
+                  <span>Executing JavaScript code...</span>
+                </div>
+              ) : output ? (
+                <pre className="whitespace-pre-wrap">{output}</pre>
+              ) : (
+                <div className="text-gray-500">
+                  Click &quot;Run Code&quot; to execute JavaScript and see
+                  output here.
+                  <br />
+                  Supports ES6+, async/await, and modern JavaScript features.
+                </div>
+              )}
+            </div>
+
+            {/* Error Display */}
+            {error && (
+              <Alert severity="error" className="!mb-2">
+                <Typography variant="body2">
+                  <strong>Compilation Error:</strong> {error}
+                </Typography>
+              </Alert>
+            )}
+
+            {/* Code Statistics */}
+            <Box className="p-2 md:p-3 bg-gray-50 border border-gray-200 rounded">
+              <Typography
+                variant="h6"
+                className="!text-xs md:!text-sm !font-semibold mb-2"
+              >
+                📊 Code Statistics
+              </Typography>
+              <div className="grid grid-cols-3 gap-2 md:gap-4 text-xs md:text-sm">
+                <div className="text-center">
+                  <div className="font-semibold text-blue-600 text-sm md:text-base">
+                    {codeStats.lines}
+                  </div>
+                  <div className="text-gray-600 text-xs">Lines</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-semibold text-green-600 text-sm md:text-base">
+                    {codeStats.characters}
+                  </div>
+                  <div className="text-gray-600 text-xs">Characters</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-semibold text-purple-600 text-sm md:text-base">
+                    {codeStats.words}
+                  </div>
+                  <div className="text-gray-600 text-xs">Words</div>
+                </div>
+              </div>
+            </Box>
+
+            {/* Features Info */}
+            <Box className="p-2 md:p-3 bg-blue-50 border border-blue-200 rounded">
+              <Typography
+                variant="h6"
+                className="!text-xs md:!text-sm !font-semibold mb-2 text-blue-800"
+              >
+                🚀 Supported Features
+              </Typography>
+              <div className="text-xs text-blue-700 space-y-1 leading-relaxed">
+                <div>
+                  • ES6+ syntax (arrow functions, destructuring, spread
+                  operator)
+                </div>
+                <div>• Async/await and Promise support</div>
+                <div>• Modern array methods and higher-order functions</div>
+                <div>• Classes and object-oriented programming</div>
+                <div>• Template literals and dynamic imports</div>
+                <div>• Real-time console output and error handling</div>
+              </div>
+            </Box>
           </div>
         }
         isFullScreen={toolState.isFullScreen}

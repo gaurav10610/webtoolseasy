@@ -234,14 +234,20 @@ captured_output.getvalue()
             codeEditorProps={editorProps}
             themeOption="vs-dark"
             editorHeading="Python Code"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
-          <div className="w-full h-full flex flex-col">
-            <Typography variant="h6" className="mb-3 flex items-center gap-2">
-              📟 Python Output
-            </Typography>
-            <div className="flex-1 w-full overflow-auto p-4 bg-gray-900 text-green-400 border-2 border-gray-300 rounded font-mono text-sm whitespace-pre-wrap">
+          <div className="flex flex-col gap-2 h-full">
+            <div className="flex items-center gap-2">
+              <span className="text-xl md:text-2xl">📟</span>
+              <span className="font-semibold text-lg md:text-xl">
+                Python Output
+              </span>
+            </div>
+            <div className="flex-1 min-h-[200px] md:min-h-[280px] w-full overflow-auto p-3 md:p-4 bg-gray-900 text-green-400 border-2 border-gray-300 rounded-lg font-mono text-xs md:text-sm whitespace-pre-wrap">
               {output || "Run your Python code to see output here..."}
             </div>
           </div>

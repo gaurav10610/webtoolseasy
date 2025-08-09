@@ -154,6 +154,9 @@ export default function JsonFormatter({
             codeEditorProps={rawEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw JSON"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
@@ -161,6 +164,9 @@ export default function JsonFormatter({
             codeEditorProps={formattedEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted JSON"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
       />

@@ -53,12 +53,16 @@ export const CodeEditorLayout = memo(function CodeEditorLayout({
 }: CodeEditorLayoutProps) {
   return (
     <div
-      className={`flex flex-col w-full h-[65vh] min-h-[320px] items-center md:flex-row gap-2 ${
-        isFullScreen ? "md:h-full" : ""
+      className={`flex flex-col w-full items-center md:flex-row gap-4 ${
+        isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
       } ${className}`}
     >
-      {leftPanel && <div className="w-[80%] md:w-[49%]">{leftPanel}</div>}
-      {rightPanel && <div className="w-[80%] md:w-[49%]">{rightPanel}</div>}
+      {leftPanel && (
+        <div className="w-full md:w-1/2 h-full md:h-full">{leftPanel}</div>
+      )}
+      {rightPanel && (
+        <div className="w-full md:w-1/2 h-full md:h-full">{rightPanel}</div>
+      )}
     </div>
   );
 });

@@ -108,6 +108,9 @@ export default function HtmlFormatter({
             codeEditorProps={inputEditorProps}
             themeOption="vs-dark"
             editorHeading="Raw HTML"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
         rightPanel={
@@ -115,6 +118,9 @@ export default function HtmlFormatter({
             codeEditorProps={outputEditorProps}
             themeOption="vs-dark"
             editorHeading="Formatted HTML"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         }
       />

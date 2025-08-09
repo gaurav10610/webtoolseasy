@@ -131,6 +131,9 @@ Perfect for:
             codeEditorProps={editorProps}
             themeOption="vs-light"
             editorHeading="Text Editor"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
           />
         </div>
 

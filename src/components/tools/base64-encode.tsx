@@ -83,12 +83,12 @@ export default function Base64Encode({
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <div className="flex flex-col w-full gap-3">
+      <div className="flex flex-col w-full gap-6">
         {/* Error message */}
         {error && (
-          <div className="w-full p-3 bg-red-50 border border-red-200 rounded-lg">
-            <Typography variant="body2" className="text-red-800">
-              {error}
+          <div className="w-full p-4 bg-red-50 border border-red-200 rounded-lg">
+            <Typography variant="body2" className="text-red-800 font-medium">
+              ⚠️ {error}
             </Typography>
           </div>
         )}
@@ -105,23 +105,29 @@ export default function Base64Encode({
           supportText="Supports any file type up to 10MB"
         />
 
-        <div className="flex flex-col w-full gap-1">
-          <Typography
-            color="textSecondary"
-            variant="caption"
-            sx={{ overflowWrap: "anywhere" }}
-          >
-            Base64 data example:
+        {/* Example */}
+        <div className="w-full p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <Typography variant="body2" className="text-blue-800 break-all">
+            💡 <strong>Example output:</strong>{" "}
             data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACzElEQVR4nGNgGAWjYBSMwFgYwB...
           </Typography>
         </div>
 
-        <div className="flex flex-col w-full">
-          <Typography variant="h3" sx={{ fontSize: "inherit" }} color="primary">
-            Base64 Encoded Data
+        {/* Output */}
+        <div className="flex flex-col w-full gap-3">
+          <Typography
+            variant="body1"
+            className="!text-lg !font-semibold flex items-center gap-2"
+          >
+            <span>📄</span>
+            <span>Base64 Encoded Data</span>
           </Typography>
-          <div className="w-full border-solid border-2 border-lightgrey rounded-sm p-4 min-h-[100px]">
-            <Typography variant="body2" sx={{ overflowWrap: "anywhere" }}>
+          <div className="w-full border-2 border-gray-300 rounded-lg p-4 min-h-[120px] bg-gray-50">
+            <Typography
+              variant="body2"
+              className="break-all font-mono text-sm"
+              style={{ wordBreak: "break-all" }}
+            >
               {base64Data ||
                 "Upload a file to see the Base64 encoded data here..."}
             </Typography>
