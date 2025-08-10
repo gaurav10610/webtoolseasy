@@ -309,9 +309,7 @@ export default function ScreenRecorder({
 
   // Button configuration
   const buttons = useMemo(() => {
-    const commonButtons = createCommonButtons({
-      onFullScreen: toolState.toggleFullScreen,
-    });
+    const commonButtons = createCommonButtons({});
 
     if (recordingState === RecordingState.IDLE) {
       return [
@@ -390,12 +388,10 @@ export default function ScreenRecorder({
     stopRecording,
     downloadRecording,
     resetRecording,
-    toolState,
   ]);
 
   return (
     <ToolLayout
-      isFullScreen={toolState.isFullScreen}
       snackBar={{
         open: toolState.snackBar.open,
         message: toolState.snackBar.message,
@@ -409,7 +405,7 @@ export default function ScreenRecorder({
         exampleOutput="High-quality WebM video files with screen capture and audio"
       />
 
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      <ToolControls buttons={buttons} />
 
       <div className="w-full space-y-6">
         {/* Browser Support Check */}
@@ -431,7 +427,7 @@ export default function ScreenRecorder({
         <Card>
           <CardContent>
             <Typography variant="h6" className="mb-4 flex items-center gap-2">
-              <ScreenShareIcon /> Recording Configuration
+              Recording Configuration
             </Typography>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -571,10 +567,18 @@ export default function ScreenRecorder({
 
               {recordingState === RecordingState.COMPLETED && recordedBlob && (
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <Typography variant="body2" className="text-green-800">
+                  <Typography
+                    variant="body2"
+                    component="div"
+                    className="text-green-800"
+                  >
                     ✅ Recording completed successfully!
                   </Typography>
-                  <Typography variant="caption" className="text-green-600">
+                  <Typography
+                    variant="caption"
+                    component="div"
+                    className="text-green-600"
+                  >
                     Size: {(recordedBlob.size / (1024 * 1024)).toFixed(2)} MB |
                     Duration: {formatTime(recordingTime)}
                   </Typography>
@@ -590,19 +594,25 @@ export default function ScreenRecorder({
             <Typography variant="h6" className="mb-2">
               How to Use
             </Typography>
-            <Typography variant="body2" className="text-gray-600 space-y-2">
-              <div>1. Configure your recording settings above</div>
-              <div>
+            <div className="text-gray-600 space-y-2">
+              <Typography variant="body2" component="div">
+                1. Configure your recording settings above
+              </Typography>
+              <Typography variant="body2" component="div">
                 2. Click &quot;Start Recording&quot; and grant necessary
                 permissions
-              </div>
-              <div>3. Select the screen/window to capture when prompted</div>
-              <div>4. Use pause/resume controls as needed</div>
-              <div>
+              </Typography>
+              <Typography variant="body2" component="div">
+                3. Select the screen/window to capture when prompted
+              </Typography>
+              <Typography variant="body2" component="div">
+                4. Use pause/resume controls as needed
+              </Typography>
+              <Typography variant="body2" component="div">
                 5. Click &quot;Stop&quot; when finished and download your
                 recording
-              </div>
-            </Typography>
+              </Typography>
+            </div>
           </CardContent>
         </Card>
       </div>
