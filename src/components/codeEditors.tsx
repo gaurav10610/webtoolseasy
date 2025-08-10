@@ -21,12 +21,16 @@ export function SingleCodeEditorWithHeaderV2({
   className?: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 h-full ${className}`}>
+    <div
+      className={`flex flex-col gap-2 ${
+        className ? className : "h-[65vh] min-h-[320px]"
+      }`}
+    >
       {editorHeading && (
         <Typography
           variant="body1"
           color="textSecondary"
-          className="!text-xl !font-semibold"
+          className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
         >
           {editorHeading}
         </Typography>
@@ -63,7 +67,7 @@ export function DiffEditorsWithHeader({
   themeOption: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 h-full ${className}`}>
+    <div className={`flex flex-col gap-2 ${className}`}>
       <div className="w-full flex flex-row justify-around">
         <Typography
           variant="body1"
@@ -80,17 +84,19 @@ export function DiffEditorsWithHeader({
           {secondTextHeading}
         </Typography>
       </div>
-      <DiffEditor
-        language={diffEditorProps.language}
-        value={diffEditorProps.value}
-        onChange={diffEditorProps.onChange}
-        original={diffEditorProps.original}
-        theme={themeOption}
-        editorOptions={{
-          ...editorOptions,
-          ...(diffEditorProps.editorOptions || {}),
-        }}
-      />
+      <div className="flex-1 min-h-[280px]">
+        <DiffEditor
+          language={diffEditorProps.language}
+          value={diffEditorProps.value}
+          onChange={diffEditorProps.onChange}
+          original={diffEditorProps.original}
+          theme={themeOption}
+          editorOptions={{
+            ...editorOptions,
+            ...(diffEditorProps.editorOptions || {}),
+          }}
+        />
+      </div>
     </div>
   );
 }

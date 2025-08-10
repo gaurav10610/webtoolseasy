@@ -1,171 +1,146 @@
 "use client";
 
-import React, { useState } from "react";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
+import { useState, useCallback, useMemo } from "react";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { SnackBarWithPosition } from "../lib/snackBar";
 import { ToolComponentProps } from "@/types/component";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 export default function JsonFormatter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `{"role":"admin","issuer":"sample issuer","username":"username@webtoolseasy.com","exp":1668942423,"iat":1668942423,"colors":{"primary":"indigo","warn":"red","accent":"pink"}}`;
+  const initialValue = `{"name":"John Doe","age":30,"city":"New York","skills":["JavaScript","React","Node.js"],"isActive":true}`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+  const [formattedCode, setFormattedCode] = useState(() => {
+    try {
+      return JSON.stringify(JSON.parse(toolState.code), null, 2);
+    } catch {
+      return "";
+    }
+  });
 
-  const [formattedCode, setFormattedCode] = useState(
-    JSON.stringify(
-      JSON.parse(codeQueryParam ? decodeText(codeQueryParam) : initialValue),
-      null,
-      4
-    )
-  );
+  const formatJson = useCallback(() => {
+    try {
+      const parsed = JSON.parse(toolState.code);
+      const formatted = JSON.stringify(parsed, null, 2);
+      setFormattedCode(formatted);
+      toolState.actions.showMessage("JSON formatted successfully!");
+    } catch {
+      toolState.actions.showMessage("Invalid JSON format");
+      setFormattedCode("Invalid JSON");
+    }
+  }, [toolState]);
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
-
-  const formatJs = () => {
-    setFormattedCode(JSON.stringify(JSON.parse(rawCode), null, 4));
-  };
-
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  const handleFormattedCodeCopy = () => {
-    copyToClipboard(formattedCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
-
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          onClick={formatJs}
-          size="small"
-          startIcon={<FormatAlignCenterIcon />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Formatted Code"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleFormattedCodeCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
+  const copyFormattedCode = useCallback(() => {
+    toolState.actions.copyText(
+      formattedCode,
+      "Formatted JSON copied to clipboard!"
     );
-  }
+  }, [formattedCode, toolState.actions]);
+
+  const minifyJson = useCallback(() => {
+    try {
+      const parsed = JSON.parse(toolState.code);
+      const minified = JSON.stringify(parsed);
+      setFormattedCode(minified);
+      toolState.actions.showMessage("JSON minified successfully!");
+    } catch {
+      toolState.actions.showMessage("Invalid JSON format");
+      setFormattedCode("Invalid JSON");
+    }
+  }, [toolState]);
+
+  // Editor configurations
+  const rawEditorProps = useEditorConfig({
+    language: "json",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
+
+  const formattedEditorProps = useEditorConfig({
+    language: "json",
+    value: formattedCode,
+    onChange: () => {}, // Read-only
+  });
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Format JSON",
+        onClick: formatJson,
+        icon: <FormatAlignCenterIcon />,
+      },
+      {
+        type: "custom" as const,
+        text: "Minify JSON",
+        onClick: minifyJson,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Formatted",
+        onClick: copyFormattedCode,
+      },
+      ...createCommonButtons({
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [formatJson, minifyJson, copyFormattedCode, toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="JSON Formatter"
+        description="Free online JSON formatter, validator and beautifier. Format, validate and beautify your JSON data with proper indentation."
+        exampleCode={initialValue}
+        exampleOutput={JSON.stringify(JSON.parse(initialValue), null, 2)}
       />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "json",
-            value: rawCode,
-            onChange: onRawCodeChange,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="JSON Code"
-          className="w-[80%] md:w-[49%]"
-        />
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "json",
-            value: formattedCode,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="Formatted Code"
-          className="w-[80%] md:w-[49%]"
-        />
-      </div>
-    </div>
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={rawEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Raw JSON"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+        rightPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={formattedEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Formatted JSON"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+      />
+    </ToolLayout>
   );
 }

@@ -1,234 +1,228 @@
 "use client";
 
+import { useState, useCallback, useMemo, useEffect } from "react";
+import PreviewIcon from "@mui/icons-material/Preview";
 import { ToolComponentProps } from "@/types/component";
-import { SnackBarWithPosition } from "../lib/snackBar";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import IFrameWithLabel from "../iFrame";
-import { ButtonWithHandler } from "../lib/buttons";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { CodeEditorPropsV2 } from "../lib/editor";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
-import { html_beautify } from "js-beautify";
-import CodeIcon from "@mui/icons-material/Code";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { Typography } from "@mui/material";
 
-export default function JavascriptEditor({
+export default function JavaScriptEditor({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `
-<!DOCTYPE html>
-  <html>
-  <head>
-      <title>Page Title</title>
-  </head>
-  <body>
-      <h1>This is an Online HTML Editor</h1>
-      <p style="color:red">
-          WebToolsEasy is awesome. Explore more such free tools.
-      </p>
-      <p id="js-demo"></p>
-      <script>
-          let a = 5;
-          let b = 6;
-          let c = a + b + 10;
-          document
-              .getElementById("js-demo")
-              .innerHTML = "The value of c is: " + c;
-      </script>
-  </body>
-  </html>
-    `;
+  const initialValue = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Editor with Live Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .reset-button {
+            background-color: #6c757d;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .math-example {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+        }
+        .math-title {
+            margin: 0 0 10px 0;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Live Preview</h1>
+        <p>This HTML with JavaScript is executing in real-time! Try modifying the code on the left.</p>
+        
+        <button id="clickBtn" class="button">Click Me!</button>
+        <button id="resetBtn" class="button reset-button">Reset</button>
+        
+        <div id="result" class="result">Click the button above to see the magic!</div>
+        
+        <div class="math-example">
+            <h3 class="math-title">Math Example:</h3>
+            <p id="mathResult"></p>
+        </div>
+    </div>
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+    <script>
+        let clickCount = 0;
+        const resultDiv = document.getElementById('result');
+        const clickBtn = document.getElementById('clickBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const mathResult = document.getElementById('mathResult');
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+        clickBtn.onclick = function() {
+            clickCount++;
+            resultDiv.textContent = \`Button clicked \${clickCount} time(s)!\`;
+            if (clickCount % 3 === 0) {
+                resultDiv.style.color = 'red';
+            } else if (clickCount % 2 === 0) {
+                resultDiv.style.color = 'blue';
+            } else {
+                resultDiv.style.color = 'green';
+            }
+        };
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
+        resetBtn.onclick = function() {
+            clickCount = 0;
+            resultDiv.textContent = 'Click the button above to see the magic!';
+            resultDiv.style.color = '#333';
+        };
 
-  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorPropsV2>({
-    language: "html",
-    value: rawCode,
-    onChange: onRawCodeChange,
-    editorOptions: {
-      wordWrap: "on",
-    },
-    className: "w-full h-full",
+        // Math calculations
+        const num1 = 15;
+        const num2 = 27;
+        mathResult.innerHTML = \`\${num1} + \${num2} = <strong>\${num1 + num2}</strong><br>Square root of 144 = <strong>\${Math.sqrt(144)}</strong><br>Random number: <strong>\${Math.floor(Math.random() * 100)}</strong>\`;
+
+        console.log('JavaScript editor with live preview loaded!');
+    </script>
+</body>
+</html>`;
+
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
   });
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [previewHtml, setPreviewHtml] = useState("");
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+  // Initialize preview on component mount
+  useEffect(() => {
+    setPreviewHtml(initialValue);
+  }, [initialValue]);
 
-  const handleTextCopy = () => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
+  // Auto-update preview when code changes (debounced)
+  const handleCodeChange = useCallback(
+    (value: string) => {
+      toolState.setCode(value);
+      // Auto-update preview with a small delay
+      setTimeout(() => {
+        setPreviewHtml(value);
+      }, 300);
+    },
+    [toolState]
+  );
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
+  // Editor configuration
+  const editorProps = useEditorConfig({
+    language: "html",
+    value: toolState.code,
+    onChange: handleCodeChange,
+  });
 
-  const handleFontSizeChange = (event: SelectChangeEvent<number>) => {
-    setCodeEditorProps({
-      ...codeEditorProps,
-      editorOptions: {
-        ...codeEditorProps.editorOptions,
-        fontSize: event.target.value as number,
-      },
-    });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const CodeEditorOptions = () => {
-    return (
-      <div className="flex flex-row w-full">
-        <FormControl
-          variant="outlined"
-          size="small"
-          classes={{ root: "w-full md:w-1/5" }}
-        >
-          <InputLabel id="font-size-label">Font Size</InputLabel>
-          <Select
-            labelId="font-size-label"
-            id="font-size"
-            value={14}
-            onChange={handleFontSizeChange}
-            label="Font Size"
-            color="primary"
-          >
-            {[10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-  };
-
-  const formatCode = () => {
-    setRawCode(
-      html_beautify(rawCode, {
-        indent_size: 10,
-        wrap_line_length: 80,
-      })
-    );
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          size="small"
-          startIcon={<CodeIcon />}
-          onClick={formatCode}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Text"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      ...createCommonButtons({
+        onCopy: () =>
+          toolState.actions.copyText(
+            toolState.code,
+            "JavaScript code copied to clipboard!"
+          ),
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="JavaScript Editor"
+        description="Free online JavaScript editor with live preview. Write, edit and test your HTML with JavaScript code in real-time."
+        exampleCode={initialValue}
+        exampleOutput="Live HTML preview with interactive JavaScript elements"
       />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={codeEditorProps}
-          themeOption="vs-dark"
-          editorHeading="HTML Code"
-          className="w-[80%] md:w-[49%]"
-        />
 
-        <IFrameWithLabel
-          iFrameSourceDoc={rawCode}
-          heading="HTML Preview"
-          className="w-[80%] md:w-[49%]"
-        />
-      </div>
-    </div>
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={editorProps}
+            themeOption="vs-dark"
+            editorHeading="HTML Code with JavaScript"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+        rightPanel={
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
+            <Typography
+              variant="body1"
+              color="textSecondary"
+              className="!text-sm md:!text-lg lg:!text-xl !font-semibold flex items-center gap-2"
+            >
+              <PreviewIcon className="text-blue-600" />
+              Live Preview
+            </Typography>
+            <div className="flex-1 w-full border-2 border-gray-300 rounded-lg bg-white overflow-hidden">
+              <iframe
+                srcDoc={previewHtml}
+                className="w-full h-full border-0 rounded-lg"
+                sandbox="allow-scripts allow-same-origin"
+                title="JavaScript Preview"
+              />
+            </div>
+          </div>
+        }
+      />
+    </ToolLayout>
   );
 }

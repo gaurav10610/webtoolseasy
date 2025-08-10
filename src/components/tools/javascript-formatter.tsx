@@ -1,178 +1,137 @@
 "use client";
 
-import React, { useState } from "react";
+import { useCallback, useMemo } from "react";
 import { js_beautify } from "js-beautify";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
+import { ContentCopy } from "@mui/icons-material";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { SnackBarWithPosition } from "../lib/snackBar";
 import { ToolComponentProps } from "@/types/component";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 export default function JavaScriptFormatter({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue = `
-  /**
-   * 
-   * Paste your javascript code here
-   * 
-   * */
-  if (value === 'webtoolseasy'
-  ) {
+  const initialValue = `/**
+ * Paste your javascript code here
+ */
+if (value === 'webtoolseasy') {
     formatJS();
-} else {console.log('this is awesome');}
-  `;
+} else {
+    console.log('this is awesome');
+}`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
+  const formattedCode = useMemo(() => {
+    if (!toolState.code.trim()) return "";
+    try {
+      return js_beautify(toolState.code);
+    } catch {
+      return "";
+    }
+  }, [toolState.code]);
+
+  const formatCode = useCallback(() => {
+    try {
+      js_beautify(toolState.code); // Validate the JavaScript
+      toolState.actions.showMessage("JavaScript formatted successfully!");
+    } catch (error) {
+      toolState.actions.showMessage(`Error: ${error}`);
+    }
+  }, [toolState]);
+
+  const copyFormattedCode = useCallback(() => {
+    toolState.actions.copyText(formattedCode, "Formatted JavaScript copied!");
+  }, [toolState.actions, formattedCode]);
+
+  // Editor configurations
+  const inputEditorProps = useEditorConfig({
+    language: "javascript",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
+
+  const outputEditorProps = useEditorConfig({
+    language: "javascript",
+    value: formattedCode,
+    onChange: () => {}, // Read-only
+    readOnly: true,
+  });
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Format Code",
+        onClick: formatCode,
+        icon: <FormatAlignCenterIcon />,
+        variant: "contained" as const,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Formatted",
+        onClick: copyFormattedCode,
+        disabled: !formattedCode,
+        icon: <ContentCopy />,
+      },
+      ...createCommonButtons({
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [formatCode, copyFormattedCode, formattedCode, toolState]
   );
-
-  const [formattedCode, setFormattedCode] = useState(
-    js_beautify(codeQueryParam ? decodeText(codeQueryParam) : initialValue)
-  );
-
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
-
-  const formatJs = () => {
-    setFormattedCode(js_beautify(rawCode));
-  };
-
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  const handleFormattedCodeCopy = () => {
-    copyToClipboard(formattedCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
-
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          onClick={formatJs}
-          size="small"
-          startIcon={<FormatAlignCenterIcon />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Formatted Code"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleFormattedCodeCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="JavaScript Formatter"
+        description="Free online JavaScript formatter and beautifier. Format and prettify JavaScript code with proper indentation."
+        exampleCode={initialValue}
+        exampleOutput={js_beautify(initialValue)}
       />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "javascript",
-            value: rawCode,
-            onChange: onRawCodeChange,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="Javascript Code"
-          className="w-[80%] md:w-[49%]"
-        />
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "javascript",
-            value: formattedCode,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="Formatted Code"
-          className="w-[80%] md:w-[49%]"
-        />
-      </div>
-    </div>
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={inputEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Raw JavaScript"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+        rightPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={outputEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Formatted JavaScript"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+      />
+    </ToolLayout>
   );
 }

@@ -33,6 +33,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CropIcon from "@mui/icons-material/Crop";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import { BaseFileData } from "@/types/file";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 
 export default function CropImageOptimized() {
   const [fileList, setFileList] = useState<BaseFileData[]>([]);
@@ -660,86 +661,95 @@ export default function CropImageOptimized() {
   );
 
   return (
-    <div className="flex flex-col w-full gap-3">
-      {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <Typography variant="body2" className="text-red-800">
-            {error}
-          </Typography>
-        </div>
-      )}
+    <ToolLayout>
+      <SEOContent
+        title="Image Crop Tool"
+        description="Free online image cropping tool. Crop images with precise control, aspect ratio options, and multiple output formats."
+        exampleCode="image.jpg"
+        exampleOutput="cropped-image.png"
+      />
 
-      {isEmpty(fileList) && (
-        <FileUploadWithDragDrop
-          accept="image/*"
-          multiple={true}
-          allowedTypes={FILE_TYPE_PRESETS.IMAGES}
-          maxSize={FILE_SIZE_PRESETS.LARGE}
-          onFileSelect={handleFileSelect}
-          onError={handleError}
-          title="Upload Images to Crop"
-          subtitle="Drag and drop your images here or click to browse"
-          supportText="Supports JPG, PNG, WebP, GIF formats up to 10MB each"
-        />
-      )}
+      <div className="flex flex-col w-full gap-3">
+        {error && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <Typography variant="body2" className="text-red-800">
+              {error}
+            </Typography>
+          </div>
+        )}
 
-      {!isEmpty(fileList) && (
-        <div className="w-full flex flex-row justify-end">
-          <ButtonWithHandler
-            buttonText="Add More Images"
-            onClick={handleAddMoreImages}
-            size="small"
-            startIcon={<AddIcon />}
+        {isEmpty(fileList) && (
+          <FileUploadWithDragDrop
+            accept="image/*"
+            multiple={true}
+            allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+            maxSize={FILE_SIZE_PRESETS.LARGE}
+            onFileSelect={handleFileSelect}
+            onError={handleError}
+            title="Upload Images to Crop"
+            subtitle="Drag and drop your images here or click to browse"
+            supportText="Supports JPG, PNG, WebP, GIF formats up to 10MB each"
           />
-        </div>
-      )}
+        )}
 
-      {!isEmpty(fileList) && (
-        <>
+        {!isEmpty(fileList) && (
+          <div className="w-full flex flex-row justify-end">
+            <ButtonWithHandler
+              buttonText="Add More Images"
+              onClick={handleAddMoreImages}
+              size="small"
+              startIcon={<AddIcon />}
+            />
+          </div>
+        )}
+
+        {!isEmpty(fileList) && (
+          <>
+            <Typography variant="h5" color="textSecondary">
+              Selected Images
+            </Typography>
+            <FilePreview
+              files={fileList.map((file) => ({
+                id: file.id,
+                file: file.originalFile,
+                preview: URL.createObjectURL(file.originalFile),
+                isSelected: selectedFile?.id === file.id,
+              }))}
+              onFileSelect={selectImageHandler}
+              onFileRemove={handleFileRemove}
+              previewSize="medium"
+              layout="grid"
+            />
+          </>
+        )}
+
+        {!isNil(selectedFile) && (
           <Typography variant="h5" color="textSecondary">
-            Selected Images
+            Crop & Preview
           </Typography>
-          <FilePreview
-            files={fileList.map((file) => ({
-              id: file.id,
-              file: file.originalFile,
-              preview: URL.createObjectURL(file.originalFile),
-              isSelected: selectedFile?.id === file.id,
-            }))}
-            onFileSelect={selectImageHandler}
-            onFileRemove={handleFileRemove}
-            previewSize="medium"
-            layout="grid"
-          />
-        </>
-      )}
+        )}
 
-      {!isNil(selectedFile) && (
-        <Typography variant="h5" color="textSecondary">
-          Crop & Preview
-        </Typography>
-      )}
-
-      {!isNil(selectedFile) && CropControls}
-      {!isNil(selectedFile) && <DownloadImageButtons />}
-      {!isNil(selectedFile) && (
-        <ReactCrop
-          crop={crop}
-          onChange={handleCropChange}
-          onComplete={handleCropComplete}
-          aspect={aspectRatio}
-          className="w-full max-h-fit border-solid border-2 border-gray-300"
-        >
-          <img
-            ref={imgRef}
-            id="image-cropper-preview"
-            src={selectedFileUrl || ""}
-            alt={selectedFile?.originalFile.name || ""}
-            className="h-full w-full object-cover"
-            onLoad={handleImageLoad}
-          />
-        </ReactCrop>
-      )}
-    </div>
+        {!isNil(selectedFile) && CropControls}
+        {!isNil(selectedFile) && <DownloadImageButtons />}
+        {!isNil(selectedFile) && (
+          <ReactCrop
+            crop={crop}
+            onChange={handleCropChange}
+            onComplete={handleCropComplete}
+            aspect={aspectRatio}
+            className="w-full max-h-fit border-solid border-2 border-gray-300"
+          >
+            <img
+              ref={imgRef}
+              id="image-cropper-preview"
+              src={selectedFileUrl || ""}
+              alt={selectedFile?.originalFile.name || ""}
+              className="h-full w-full object-cover"
+              onLoad={handleImageLoad}
+            />
+          </ReactCrop>
+        )}
+      </div>
+    </ToolLayout>
   );
 }

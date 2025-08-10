@@ -35,6 +35,7 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -382,382 +383,393 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
   };
 
   return (
-    <div className="flex flex-col w-full gap-4">
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={3000}
-        handleClose={handleSnackBarClose}
+    <ToolLayout>
+      <SEOContent
+        title="Speech to Text Converter"
+        description="Free online speech to text converter. Convert voice recordings to text with real-time transcription and multiple language support."
+        exampleCode="audio-recording.wav"
+        exampleOutput="Transcribed text content"
       />
 
-      {error && (
-        <Alert severity="error" onClose={() => setError("")}>
-          {error}
-        </Alert>
-      )}
+      <div className="flex flex-col w-full gap-4">
+        <SnackBarWithPosition
+          message={snackBarMessage}
+          open={isSnackBarOpen}
+          autoHideDuration={3000}
+          handleClose={handleSnackBarClose}
+        />
 
-      {!isSupported && (
-        <Alert severity="warning">
-          <strong>Browser Not Supported:</strong> Speech recognition requires
-          Chrome, Edge, or Safari with microphone permissions.
-        </Alert>
-      )}
+        {error && (
+          <Alert severity="error" onClose={() => setError("")}>
+            {error}
+          </Alert>
+        )}
 
-      {/* Main Controls */}
-      <Card>
-        <CardContent>
-          <div className="flex items-center justify-between mb-4">
-            <Typography variant="h6" className="flex items-center gap-2">
-              <RecordVoiceOverIcon color="primary" />
-              Speech Recognition Controls
-            </Typography>
-            {isRecording && (
-              <Chip
-                icon={<VolumeUpIcon />}
-                label={`Recording: ${formatTime(recordingTime)}`}
-                color="error"
-                variant="filled"
-              />
-            )}
-          </div>
+        {!isSupported && (
+          <Alert severity="warning">
+            <strong>Browser Not Supported:</strong> Speech recognition requires
+            Chrome, Edge, or Safari with microphone permissions.
+          </Alert>
+        )}
 
-          <div className="flex flex-wrap gap-2 mb-4">
-            <Button
-              startIcon={isRecording ? <MicOffIcon /> : <MicIcon />}
-              onClick={isRecording ? stopRecording : startRecording}
-              disabled={!isSupported}
-              variant="contained"
-              color={isRecording ? "error" : "primary"}
-              size="large"
-            >
-              {isRecording ? "Stop Recording" : "Start Recording"}
-            </Button>
+        {/* Main Controls */}
+        <Card>
+          <CardContent>
+            <div className="flex items-center justify-between mb-4">
+              <Typography variant="h6" className="flex items-center gap-2">
+                <RecordVoiceOverIcon color="primary" />
+                Speech Recognition Controls
+              </Typography>
+              {isRecording && (
+                <Chip
+                  icon={<VolumeUpIcon />}
+                  label={`Recording: ${formatTime(recordingTime)}`}
+                  color="error"
+                  variant="filled"
+                />
+              )}
+            </div>
 
-            {isRecording && (
+            <div className="flex flex-wrap gap-2 mb-4">
               <Button
-                startIcon={isPaused ? <PlayArrowIcon /> : <PauseIcon />}
-                onClick={togglePause}
-                variant="outlined"
-                color="secondary"
+                startIcon={isRecording ? <MicOffIcon /> : <MicIcon />}
+                onClick={isRecording ? stopRecording : startRecording}
+                disabled={!isSupported}
+                variant="contained"
+                color={isRecording ? "error" : "primary"}
                 size="large"
               >
-                {isPaused ? "Resume" : "Pause"}
+                {isRecording ? "Stop Recording" : "Start Recording"}
               </Button>
-            )}
 
-            <Button
-              startIcon={<ClearIcon />}
-              onClick={clearTranscript}
-              disabled={
-                !transcript && !interimTranscript && !editableTranscript
-              }
-              variant="outlined"
-              color="warning"
-            >
-              Clear
-            </Button>
-
-            {!isEditMode && (
-              <Button
-                startIcon={<EditIcon />}
-                onClick={toggleEditMode}
-                disabled={!transcript.trim() || isRecording}
-                variant="outlined"
-                color="info"
-              >
-                Edit
-              </Button>
-            )}
-
-            {isEditMode && (
-              <>
+              {isRecording && (
                 <Button
-                  startIcon={<SaveIcon />}
-                  onClick={saveEditedTranscript}
-                  variant="contained"
-                  color="success"
-                >
-                  Save
-                </Button>
-                <Button
-                  startIcon={<CancelIcon />}
-                  onClick={toggleEditMode}
+                  startIcon={isPaused ? <PlayArrowIcon /> : <PauseIcon />}
+                  onClick={togglePause}
                   variant="outlined"
-                  color="error"
+                  color="secondary"
+                  size="large"
                 >
-                  Cancel
+                  {isPaused ? "Resume" : "Pause"}
                 </Button>
-              </>
-            )}
+              )}
 
-            <Button
-              startIcon={<CopyIcon />}
-              onClick={copyToClipboard}
-              disabled={
-                !transcript && !interimTranscript && !editableTranscript
-              }
-              variant="outlined"
-            >
-              Copy
-            </Button>
-
-            <Button
-              startIcon={<DownloadIcon />}
-              onClick={downloadTranscript}
-              disabled={
-                !transcript && !interimTranscript && !editableTranscript
-              }
-              variant="outlined"
-              color="success"
-            >
-              Download
-            </Button>
-          </div>
-
-          {isRecording && (
-            <Box className="mb-4">
-              <Typography variant="body2" color="textSecondary" gutterBottom>
-                Listening for speech...
-              </Typography>
-              <LinearProgress color="error" />
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Settings */}
-      <Card>
-        <CardContent>
-          <Typography variant="h6" className="flex items-center gap-2 mb-4">
-            <SettingsIcon color="primary" />
-            Recognition Settings
-          </Typography>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <FormControl fullWidth size="small">
-              <InputLabel>Language</InputLabel>
-              <Select
-                value={language}
-                label="Language"
-                onChange={(e) => setLanguage(e.target.value)}
-                disabled={isRecording}
+              <Button
+                startIcon={<ClearIcon />}
+                onClick={clearTranscript}
+                disabled={
+                  !transcript && !interimTranscript && !editableTranscript
+                }
+                variant="outlined"
+                color="warning"
               >
-                {SUPPORTED_LANGUAGES.map((lang) => (
-                  <MenuItem key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                Clear
+              </Button>
 
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={continuous}
-                  onChange={(e) => setContinuous(e.target.checked)}
-                  disabled={isRecording}
-                />
-              }
-              label="Continuous Recording"
-            />
+              {!isEditMode && (
+                <Button
+                  startIcon={<EditIcon />}
+                  onClick={toggleEditMode}
+                  disabled={!transcript.trim() || isRecording}
+                  variant="outlined"
+                  color="info"
+                >
+                  Edit
+                </Button>
+              )}
 
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={interimResults}
-                  onChange={(e) => setInterimResults(e.target.checked)}
-                  disabled={isRecording}
-                />
-              }
-              label="Show Interim Results"
-            />
-          </div>
+              {isEditMode && (
+                <>
+                  <Button
+                    startIcon={<SaveIcon />}
+                    onClick={saveEditedTranscript}
+                    variant="contained"
+                    color="success"
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    startIcon={<CancelIcon />}
+                    onClick={toggleEditMode}
+                    variant="outlined"
+                    color="error"
+                  >
+                    Cancel
+                  </Button>
+                </>
+              )}
 
-          {confidence !== null && (
-            <div className="mt-4">
-              <Typography variant="body2" gutterBottom>
-                Recognition Confidence: {Math.round(confidence * 100)}%
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={confidence * 100}
-                color={
-                  confidence > 0.8
-                    ? "success"
-                    : confidence > 0.6
-                    ? "warning"
-                    : "error"
+              <Button
+                startIcon={<CopyIcon />}
+                onClick={copyToClipboard}
+                disabled={
+                  !transcript && !interimTranscript && !editableTranscript
                 }
-              />
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                variant="outlined"
+              >
+                Copy
+              </Button>
 
-      {/* Transcript Display */}
-      <Card>
-        <CardContent>
-          <div className="flex items-center justify-between mb-4">
-            <Typography variant="h6">
-              {isEditMode ? "Edit Transcript" : "Live Transcript"}
-            </Typography>
-            {isEditMode && (
-              <Chip
-                label="Edit Mode"
-                color="info"
-                variant="filled"
-                size="small"
-              />
+              <Button
+                startIcon={<DownloadIcon />}
+                onClick={downloadTranscript}
+                disabled={
+                  !transcript && !interimTranscript && !editableTranscript
+                }
+                variant="outlined"
+                color="success"
+              >
+                Download
+              </Button>
+            </div>
+
+            {isRecording && (
+              <Box className="mb-4">
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  Listening for speech...
+                </Typography>
+                <LinearProgress color="error" />
+              </Box>
             )}
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="border rounded-lg p-4 min-h-48 bg-gray-50">
-            <TextareaAutosize
-              value={
-                isEditMode ? editableTranscript : transcript + interimTranscript
-              }
-              onChange={isEditMode ? handleTranscriptEdit : undefined}
-              placeholder={
-                isEditMode
-                  ? "Edit your transcript here..."
-                  : "Your speech will appear here as you speak..."
-              }
-              className="w-full border-none resize-none bg-transparent outline-none"
-              minRows={6}
-              style={{
-                fontSize: "16px",
-                lineHeight: 1.5,
-                backgroundColor: isEditMode ? "#fff" : "transparent",
-                border: isEditMode ? "1px solid #ddd" : "none",
-                borderRadius: isEditMode ? "4px" : "0",
-                paddingTop: isEditMode ? "8px" : "0",
-                paddingRight: isEditMode ? "8px" : "0",
-                paddingBottom: isEditMode ? "8px" : "0",
-                paddingLeft: isEditMode ? "8px" : "0",
-              }}
-              readOnly={!isEditMode}
-              disabled={isRecording && !isEditMode}
-            />
-          </div>
+        {/* Settings */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="flex items-center gap-2 mb-4">
+              <SettingsIcon color="primary" />
+              Recognition Settings
+            </Typography>
 
-          {(transcript || interimTranscript || editableTranscript) && (
-            <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
-              <span>
-                Words:{" "}
-                {
-                  (isEditMode
-                    ? editableTranscript
-                    : transcript + interimTranscript
-                  )
-                    .split(/\s+/)
-                    .filter((word) => word.length > 0).length
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <FormControl fullWidth size="small">
+                <InputLabel>Language</InputLabel>
+                <Select
+                  value={language}
+                  label="Language"
+                  onChange={(e) => setLanguage(e.target.value)}
+                  disabled={isRecording}
+                >
+                  {SUPPORTED_LANGUAGES.map((lang) => (
+                    <MenuItem key={lang.code} value={lang.code}>
+                      {lang.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={continuous}
+                    onChange={(e) => setContinuous(e.target.checked)}
+                    disabled={isRecording}
+                  />
                 }
-              </span>
-              <span>
-                Characters:{" "}
-                {
-                  (isEditMode
-                    ? editableTranscript
-                    : transcript + interimTranscript
-                  ).length
+                label="Continuous Recording"
+              />
+
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={interimResults}
+                    onChange={(e) => setInterimResults(e.target.checked)}
+                    disabled={isRecording}
+                  />
                 }
-              </span>
+                label="Show Interim Results"
+              />
             </div>
-          )}
 
-          {isEditMode && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <Typography variant="body2" color="primary">
-                <strong>Edit Mode:</strong> You can now edit the transcript
-                directly. Click &quot;Save&quot; to apply changes or
-                &quot;Cancel&quot; to discard them.
+            {confidence !== null && (
+              <div className="mt-4">
+                <Typography variant="body2" gutterBottom>
+                  Recognition Confidence: {Math.round(confidence * 100)}%
+                </Typography>
+                <LinearProgress
+                  variant="determinate"
+                  value={confidence * 100}
+                  color={
+                    confidence > 0.8
+                      ? "success"
+                      : confidence > 0.6
+                      ? "warning"
+                      : "error"
+                  }
+                />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Transcript Display */}
+        <Card>
+          <CardContent>
+            <div className="flex items-center justify-between mb-4">
+              <Typography variant="h6">
+                {isEditMode ? "Edit Transcript" : "Live Transcript"}
               </Typography>
+              {isEditMode && (
+                <Chip
+                  label="Edit Mode"
+                  color="info"
+                  variant="filled"
+                  size="small"
+                />
+              )}
             </div>
-          )}
-        </CardContent>
-      </Card>
 
-      {/* Results History */}
-      {results.length > 0 && (
+            <div className="border rounded-lg p-4 min-h-48 bg-gray-50">
+              <TextareaAutosize
+                value={
+                  isEditMode
+                    ? editableTranscript
+                    : transcript + interimTranscript
+                }
+                onChange={isEditMode ? handleTranscriptEdit : undefined}
+                placeholder={
+                  isEditMode
+                    ? "Edit your transcript here..."
+                    : "Your speech will appear here as you speak..."
+                }
+                className="w-full border-none resize-none bg-transparent outline-none"
+                minRows={6}
+                style={{
+                  fontSize: "16px",
+                  lineHeight: 1.5,
+                  backgroundColor: isEditMode ? "#fff" : "transparent",
+                  border: isEditMode ? "1px solid #ddd" : "none",
+                  borderRadius: isEditMode ? "4px" : "0",
+                  paddingTop: isEditMode ? "8px" : "0",
+                  paddingRight: isEditMode ? "8px" : "0",
+                  paddingBottom: isEditMode ? "8px" : "0",
+                  paddingLeft: isEditMode ? "8px" : "0",
+                }}
+                readOnly={!isEditMode}
+                disabled={isRecording && !isEditMode}
+              />
+            </div>
+
+            {(transcript || interimTranscript || editableTranscript) && (
+              <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+                <span>
+                  Words:{" "}
+                  {
+                    (isEditMode
+                      ? editableTranscript
+                      : transcript + interimTranscript
+                    )
+                      .split(/\s+/)
+                      .filter((word) => word.length > 0).length
+                  }
+                </span>
+                <span>
+                  Characters:{" "}
+                  {
+                    (isEditMode
+                      ? editableTranscript
+                      : transcript + interimTranscript
+                    ).length
+                  }
+                </span>
+              </div>
+            )}
+
+            {isEditMode && (
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <Typography variant="body2" color="primary">
+                  <strong>Edit Mode:</strong> You can now edit the transcript
+                  directly. Click &quot;Save&quot; to apply changes or
+                  &quot;Cancel&quot; to discard them.
+                </Typography>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Results History */}
+        {results.length > 0 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" className="mb-4">
+                Recognition History
+              </Typography>
+
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {results.map((result, index) => (
+                  <div key={index} className="p-3 bg-gray-50 rounded border">
+                    <div className="flex justify-between items-start mb-2">
+                      <Typography variant="body2" color="textSecondary">
+                        {new Date(result.timestamp).toLocaleTimeString()}
+                      </Typography>
+                      <Chip
+                        label={`${Math.round(result.confidence * 100)}%`}
+                        size="small"
+                        color={
+                          result.confidence > 0.8
+                            ? "success"
+                            : result.confidence > 0.6
+                            ? "warning"
+                            : "error"
+                        }
+                      />
+                    </div>
+                    <Typography variant="body1">{result.transcript}</Typography>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Tips and Information */}
         <Card>
           <CardContent>
             <Typography variant="h6" className="mb-4">
-              Recognition History
+              Tips for Better Recognition
             </Typography>
 
-            <div className="space-y-2 max-h-64 overflow-y-auto">
-              {results.map((result, index) => (
-                <div key={index} className="p-3 bg-gray-50 rounded border">
-                  <div className="flex justify-between items-start mb-2">
-                    <Typography variant="body2" color="textSecondary">
-                      {new Date(result.timestamp).toLocaleTimeString()}
-                    </Typography>
-                    <Chip
-                      label={`${Math.round(result.confidence * 100)}%`}
-                      size="small"
-                      color={
-                        result.confidence > 0.8
-                          ? "success"
-                          : result.confidence > 0.6
-                          ? "warning"
-                          : "error"
-                      }
-                    />
-                  </div>
-                  <Typography variant="body1">{result.transcript}</Typography>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Typography variant="subtitle2" color="primary" gutterBottom>
+                  Audio Quality
+                </Typography>
+                <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                  <li>• Use a quiet environment</li>
+                  <li>• Speak clearly and at normal pace</li>
+                  <li>• Keep microphone close but not too close</li>
+                  <li>• Avoid background noise</li>
+                </ul>
+              </div>
+
+              <div>
+                <Typography variant="subtitle2" color="primary" gutterBottom>
+                  Browser Tips
+                </Typography>
+                <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                  <li>• Allow microphone permissions</li>
+                  <li>• Use Chrome, Edge, or Safari</li>
+                  <li>• Ensure stable internet connection</li>
+                  <li>• Keep browser tab active</li>
+                </ul>
+              </div>
+
+              <div>
+                <Typography variant="subtitle2" color="primary" gutterBottom>
+                  Editing Features
+                </Typography>
+                <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                  <li>• Click &quot;Edit&quot; to modify transcript</li>
+                  <li>• Make corrections or additions</li>
+                  <li>• Save changes or cancel editing</li>
+                  <li>• Export edited version</li>
+                </ul>
+              </div>
             </div>
           </CardContent>
         </Card>
-      )}
-
-      {/* Tips and Information */}
-      <Card>
-        <CardContent>
-          <Typography variant="h6" className="mb-4">
-            Tips for Better Recognition
-          </Typography>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Typography variant="subtitle2" color="primary" gutterBottom>
-                Audio Quality
-              </Typography>
-              <ul className="text-sm text-gray-600 space-y-1 ml-4">
-                <li>• Use a quiet environment</li>
-                <li>• Speak clearly and at normal pace</li>
-                <li>• Keep microphone close but not too close</li>
-                <li>• Avoid background noise</li>
-              </ul>
-            </div>
-
-            <div>
-              <Typography variant="subtitle2" color="primary" gutterBottom>
-                Browser Tips
-              </Typography>
-              <ul className="text-sm text-gray-600 space-y-1 ml-4">
-                <li>• Allow microphone permissions</li>
-                <li>• Use Chrome, Edge, or Safari</li>
-                <li>• Ensure stable internet connection</li>
-                <li>• Keep browser tab active</li>
-              </ul>
-            </div>
-
-            <div>
-              <Typography variant="subtitle2" color="primary" gutterBottom>
-                Editing Features
-              </Typography>
-              <ul className="text-sm text-gray-600 space-y-1 ml-4">
-                <li>• Click &quot;Edit&quot; to modify transcript</li>
-                <li>• Make corrections or additions</li>
-                <li>• Save changes or cancel editing</li>
-                <li>• Export edited version</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+      </div>
+    </ToolLayout>
   );
 }

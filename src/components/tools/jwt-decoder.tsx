@@ -1,25 +1,17 @@
 "use client";
 
+import { useState, useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { SnackBarWithPosition } from "../lib/snackBar";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { isNil } from "lodash-es";
 import { decodeJwt, decodeProtectedHeader } from "jose";
 import { Typography } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export default function JwtDecoder({
   hostname,
@@ -27,14 +19,13 @@ export default function JwtDecoder({
 }: Readonly<ToolComponentProps>) {
   const initialValue = `eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJTYW1wbGUgSXNzdWVyIiwiVXNlcm5hbWUiOiJ1c2VybmFtZUB3ZWJ0b29sc2Vhc3kuY29tIiwiZXhwIjoxNjY4OTQyNDIzLCJpYXQiOjE2Njg5NDI0MjN9.WuKjPKbgXqh_DkGd0aEBQr305Rn8EkMLvd0W7LRE-JM`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
-
-  const decodeJwtToken = (token: string) => {
+  const decodeJwtToken = useCallback((token: string) => {
     try {
       return {
         decodedToken: JSON.stringify(decodeJwt(token), null, 2),
@@ -45,13 +36,14 @@ export default function JwtDecoder({
         ),
       };
     } catch (error) {
-      return {
-        error,
-      };
+      return { error };
     }
-  };
+  }, []);
 
-  const { decodedToken, decodedTokenHeaders, error } = decodeJwtToken(rawCode);
+  const { decodedToken, decodedTokenHeaders, error } = useMemo(
+    () => decodeJwtToken(toolState.code),
+    [decodeJwtToken, toolState.code]
+  );
 
   const [decodedJwtToken, setDecodedToken] = useState<string>(
     isNil(error) ? decodedToken! : ""
@@ -60,118 +52,89 @@ export default function JwtDecoder({
     isNil(error) ? decodedTokenHeaders! : ""
   );
 
-  const [tokenError, setTokenError] = useState(isNil(error) ? false : true);
+  const tokenError = !isNil(error);
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-    const { decodedToken, decodedTokenHeaders, error } = decodeJwtToken(value);
-    setDecodedToken(isNil(error) ? decodedToken! : "");
-    setDecodedTokenHeaders(isNil(error) ? decodedTokenHeaders! : "");
-    setTokenError(isNil(error) ? false : true);
-  };
+  const onRawCodeChange = useCallback(
+    (value: string) => {
+      toolState.setCode(value);
+      const { decodedToken, decodedTokenHeaders, error } =
+        decodeJwtToken(value);
+      setDecodedToken(isNil(error) ? decodedToken! : "");
+      setDecodedTokenHeaders(isNil(error) ? decodedTokenHeaders! : "");
+    },
+    [toolState, decodeJwtToken]
+  );
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-  const [snackbarColor, setSnackbarColor] = useState<
-    "success" | "info" | "warning" | "error"
-  >("success");
+  const copyDecodedToken = useCallback(() => {
+    toolState.actions.copyText(decodedJwtToken, "Copied decoded JWT token!");
+  }, [toolState.actions, decodedJwtToken]);
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+  // Editor configurations
+  const inputEditorProps = useEditorConfig({
+    language: "text",
+    value: toolState.code,
+    onChange: onRawCodeChange,
+    className: "w-full h-full", // Override default height
+  });
 
-  const handleJwtTokenCopy = () => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Jwt Token to Clipboard!");
-    setIsSnackBarOpen(true);
-    setSnackbarColor("success");
-  };
+  const headersEditorProps = useEditorConfig({
+    language: "json",
+    value: decodedJwtTokenHeaders,
+    onChange: () => {}, // Read-only
+    readOnly: true,
+    className: "w-full h-full", // Override default height
+  });
 
-  const handleDecodedTokenCopy = () => {
-    copyToClipboard(decodedJwtToken);
-    setSnackBarMessage("Copied Decoded Jwt Token to Clipboard!");
-    setIsSnackBarOpen(true);
-    setSnackbarColor("success");
-  };
+  const tokenEditorProps = useEditorConfig({
+    language: "json",
+    value: decodedJwtToken,
+    onChange: () => {}, // Read-only
+    readOnly: true,
+    className: "w-full h-full", // Override default height
+  });
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-      setSnackbarColor("success");
-    });
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        <ButtonWithHandler
-          buttonText="Copy JWT Token"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleJwtTokenCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Decoded Token Data"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleDecodedTokenCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Copy Decoded Token",
+        onClick: copyDecodedToken,
+        icon: <ContentCopyIcon />,
+        variant: "outlined" as const,
+      },
+      ...createCommonButtons({
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [copyDecodedToken, toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
-        color={snackbarColor}
+      <SEOContent
+        title="JWT Decoder"
+        description="Free online JWT token decoder. Decode and verify JSON Web Tokens with headers and payload visualization."
+        exampleCode={initialValue}
+        exampleOutput={JSON.stringify(
+          { Role: "Admin", Issuer: "Sample Issuer" },
+          null,
+          2
+        )}
       />
-      <ControlButtons />
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {tokenError && (
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
           <ErrorIcon color="error" />
           <Typography variant="h6" color="error">
             Token is invalid!
@@ -179,57 +142,41 @@ export default function JwtDecoder({
         </div>
       )}
 
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
+      {/* Row 1: JWT Token Editor */}
+      <div className="mb-8 w-full">
         <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "text",
-            value: rawCode,
-            onChange: onRawCodeChange,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
+          codeEditorProps={inputEditorProps}
           themeOption="vs-dark"
           editorHeading="JWT Token"
-          className="w-[80%] md:w-[49%]"
+          className={
+            toolState.isFullScreen ? "h-[40vh]" : "h-[35vh] min-h-[280px]"
+          }
         />
-        <div className="flex flex-col gap-2 items-center w-[80%] md:w-[49%] h-full">
-          <SingleCodeEditorWithHeaderV2
-            codeEditorProps={{
-              language: "json",
-              value: decodedJwtTokenHeaders,
-              editorOptions: {
-                wordWrap: "on",
-                readOnly: true,
-              },
-              className: "w-full h-full",
-            }}
-            themeOption="vs-dark"
-            editorHeading="Headers ( Algorithm & Token Type)"
-            className="w-full h-full"
-          />
+      </div>
 
+      {/* Row 2: Headers and Token Data Editors */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        <div className="w-full">
           <SingleCodeEditorWithHeaderV2
-            codeEditorProps={{
-              language: "json",
-              value: decodedJwtToken,
-              editorOptions: {
-                wordWrap: "on",
-                readOnly: true,
-              },
-              className: "w-full h-full",
-            }}
+            codeEditorProps={headersEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Headers (Algorithm & Token Type)"
+            className={
+              toolState.isFullScreen ? "h-[45vh]" : "h-[30vh] min-h-[200px]"
+            }
+          />
+        </div>
+        <div className="w-full">
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={tokenEditorProps}
             themeOption="vs-dark"
             editorHeading="Token Data"
-            className="w-full h-full"
+            className={
+              toolState.isFullScreen ? "h-[45vh]" : "h-[30vh] min-h-[200px]"
+            }
           />
         </div>
       </div>
-    </div>
+    </ToolLayout>
   );
 }
