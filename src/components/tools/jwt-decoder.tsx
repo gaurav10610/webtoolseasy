@@ -4,13 +4,14 @@ import { useState, useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { isNil } from "lodash-es";
 import { decodeJwt, decodeProtectedHeader } from "jose";
 import { Typography } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export default function JwtDecoder({
   hostname,
@@ -68,30 +69,12 @@ export default function JwtDecoder({
     toolState.actions.copyText(decodedJwtToken, "Copied decoded JWT token!");
   }, [toolState.actions, decodedJwtToken]);
 
-  const downloadDecodedToken = useCallback(() => {
-    const decoded = {
-      headers: JSON.parse(decodedJwtTokenHeaders || "{}"),
-      payload: JSON.parse(decodedJwtToken || "{}"),
-    };
-    const blob = new Blob([JSON.stringify(decoded, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "decoded-jwt.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("Decoded JWT downloaded successfully!");
-  }, [decodedJwtToken, decodedJwtTokenHeaders, toolState.actions]);
-
   // Editor configurations
   const inputEditorProps = useEditorConfig({
     language: "text",
     value: toolState.code,
     onChange: onRawCodeChange,
+    className: "w-full h-full", // Override default height
   });
 
   const headersEditorProps = useEditorConfig({
@@ -99,6 +82,7 @@ export default function JwtDecoder({
     value: decodedJwtTokenHeaders,
     onChange: () => {}, // Read-only
     readOnly: true,
+    className: "w-full h-full", // Override default height
   });
 
   const tokenEditorProps = useEditorConfig({
@@ -106,19 +90,25 @@ export default function JwtDecoder({
     value: decodedJwtToken,
     onChange: () => {}, // Read-only
     readOnly: true,
+    className: "w-full h-full", // Override default height
   });
 
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Copy Decoded Token",
+        onClick: copyDecodedToken,
+        icon: <ContentCopyIcon />,
+        variant: "outlined" as const,
+      },
       ...createCommonButtons({
-        onCopy: copyDecodedToken,
-        onDownload: downloadDecodedToken,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyDecodedToken, downloadDecodedToken, toolState]
+    [copyDecodedToken, toolState]
   );
 
   return (
@@ -144,7 +134,7 @@ export default function JwtDecoder({
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {tokenError && (
-        <div className="flex flex-row gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+        <div className="flex flex-row gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
           <ErrorIcon color="error" />
           <Typography variant="h6" color="error">
             Token is invalid!
@@ -152,39 +142,41 @@ export default function JwtDecoder({
         </div>
       )}
 
-      <CodeEditorLayout
-        isFullScreen={toolState.isFullScreen}
-        leftPanel={
+      {/* Row 1: JWT Token Editor */}
+      <div className="mb-8 w-full">
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={inputEditorProps}
+          themeOption="vs-dark"
+          editorHeading="JWT Token"
+          className={
+            toolState.isFullScreen ? "h-[40vh]" : "h-[35vh] min-h-[280px]"
+          }
+        />
+      </div>
+
+      {/* Row 2: Headers and Token Data Editors */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        <div className="w-full">
           <SingleCodeEditorWithHeaderV2
-            codeEditorProps={inputEditorProps}
+            codeEditorProps={headersEditorProps}
             themeOption="vs-dark"
-            editorHeading="JWT Token"
+            editorHeading="Headers (Algorithm & Token Type)"
             className={
-              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+              toolState.isFullScreen ? "h-[45vh]" : "h-[30vh] min-h-[200px]"
             }
           />
-        }
-        rightPanel={
-          <div
-            className={`flex flex-col gap-2 w-full ${
-              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-            }`}
-          >
-            <SingleCodeEditorWithHeaderV2
-              codeEditorProps={headersEditorProps}
-              themeOption="vs-dark"
-              editorHeading="Headers (Algorithm & Token Type)"
-              className="w-full h-1/2"
-            />
-            <SingleCodeEditorWithHeaderV2
-              codeEditorProps={tokenEditorProps}
-              themeOption="vs-dark"
-              editorHeading="Token Data"
-              className="w-full h-1/2"
-            />
-          </div>
-        }
-      />
+        </div>
+        <div className="w-full">
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={tokenEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Token Data"
+            className={
+              toolState.isFullScreen ? "h-[45vh]" : "h-[30vh] min-h-[200px]"
+            }
+          />
+        </div>
+      </div>
     </ToolLayout>
   );
 }
