@@ -34,12 +34,42 @@ export function getOutputFileName({
 }
 
 export function getFileFormatId(fileExtension: string): number {
-  return (
-    find(
-      Array.from(FFMPEG_FORMATS.entries()),
-      ([, format]) => format.targetFormat === fileExtension
-    )?.[0] ?? 6
+  // Normalize the extension to lowercase
+  const ext = fileExtension.toLowerCase();
+
+  // Find the format that matches the extension
+  const found = find(
+    Array.from(FFMPEG_FORMATS.entries()),
+    ([, format]) => format.targetFormat === ext
   );
+
+  if (found) {
+    return found[0];
+  }
+
+  // If not found, default based on common video extensions
+  switch (ext) {
+    case "mp4":
+      return 5; // MP4 x264 format
+    case "webm":
+      return 7; // WEBM format
+    case "avi":
+      return 10; // AVI format
+    case "mkv":
+      return 9; // MKV format
+    case "mov":
+      return 12; // MOV format
+    case "m4v":
+      return 13; // M4V format
+    case "flv":
+      return 14; // FLV format
+    case "wmv":
+      return 15; // WMV format
+    case "3gp":
+      return 16; // 3GP format
+    default:
+      return 5; // Default to MP4 x264
+  }
 }
 
 export function getEligibleFormatIds(

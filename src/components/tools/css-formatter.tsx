@@ -1,22 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { usePathname } from "next/navigation";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { ToolComponentProps } from "@/types/component";
+import { useState, useCallback, useMemo } from "react";
 import { css_beautify } from "js-beautify";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
+import { ToolComponentProps } from "@/types/component";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 export default function CssFormatter({
@@ -25,144 +16,114 @@ export default function CssFormatter({
 }: Readonly<ToolComponentProps>) {
   const initialValue = `@media screen and (min-width:735px){.encoded-token-field{margin-right:30px}}@media screen and (max-width:735px){.token-area-container{flex-direction:column}.encoded-token-field{margin-bottom:20px}}.token-parent-div{width:40%;height:30em}`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+  const [formattedCode, setFormattedCode] = useState(() => {
+    try {
+      return css_beautify(toolState.code);
+    } catch {
+      return "";
+    }
+  });
 
-  const [formattedCode, setFormattedCode] = useState(
-    css_beautify(codeQueryParam ? decodeText(codeQueryParam) : initialValue)
-  );
+  const formatCss = useCallback(() => {
+    try {
+      const formatted = css_beautify(toolState.code);
+      setFormattedCode(formatted);
+      toolState.actions.showMessage("CSS formatted successfully!");
+    } catch (error) {
+      toolState.actions.showMessage(`Error: ${error}`);
+      setFormattedCode("Invalid CSS");
+    }
+  }, [toolState]);
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
-
-  const formatJs = () => {
-    setFormattedCode(css_beautify(rawCode));
-  };
-
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  const handleFormattedCodeCopy = () => {
-    copyToClipboard(formattedCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
-
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
-
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col md:flex-row gap-2 w-full">
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="contained"
-          onClick={formatJs}
-          size="small"
-          startIcon={<FormatAlignCenterIcon />}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Formatted Code"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleFormattedCodeCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
+  const copyFormattedCode = useCallback(() => {
+    toolState.actions.copyText(
+      formattedCode,
+      "Formatted CSS copied to clipboard!"
     );
-  }
+  }, [formattedCode, toolState.actions]);
+
+  // Editor configurations
+  const rawEditorProps = useEditorConfig({
+    language: "css",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
+
+  const formattedEditorProps = useEditorConfig({
+    language: "css",
+    value: formattedCode,
+    onChange: () => {}, // Read-only, no changes allowed
+  });
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Format CSS",
+        onClick: formatCss,
+        icon: <FormatAlignCenterIcon />,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Formatted",
+        onClick: copyFormattedCode,
+      },
+      ...createCommonButtons({
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [formatCss, copyFormattedCode, toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="CSS Formatter"
+        description="Free online CSS formatter and beautifier. Format, beautify and clean up your CSS code with proper indentation."
+        exampleCode={initialValue}
+        exampleOutput={css_beautify(initialValue)}
       />
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "css",
-            value: rawCode,
-            onChange: onRawCodeChange,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="CSS Code"
-          className="w-[80%] md:w-[49%]"
-        />
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={{
-            language: "css",
-            value: formattedCode,
-            editorOptions: {
-              wordWrap: "on",
-            },
-            className: "w-full h-full",
-          }}
-          themeOption="vs-dark"
-          editorHeading="Formatted Code"
-          className="w-[80%] md:w-[49%]"
-        />
-      </div>
-    </div>
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={rawEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Raw CSS"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+        rightPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={formattedEditorProps}
+            themeOption="vs-dark"
+            editorHeading="Formatted CSS"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+      />
+    </ToolLayout>
   );
 }

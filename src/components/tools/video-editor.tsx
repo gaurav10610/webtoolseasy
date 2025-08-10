@@ -39,6 +39,7 @@ import {
   getFFmpegFile,
 } from "@/service/ffmpegService";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 
 interface VideoClip {
   id: string;
@@ -304,6 +305,18 @@ export default function VideoEditor() {
     renderPreview,
   ]);
 
+  // Update preview when currentTime changes (including trim adjustments)
+  useEffect(() => {
+    if (realTimePreview && !isPlaying && currentClip && videoRef.current) {
+      // Small delay to ensure video has updated its currentTime
+      const timeoutId = setTimeout(() => {
+        renderPreview();
+      }, 10);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [currentTime, realTimePreview, isPlaying, currentClip, renderPreview]);
+
   // Handle video element resize for responsive canvas
   useEffect(() => {
     if (!videoRef.current || !realTimePreview) return;
@@ -501,6 +514,29 @@ export default function VideoEditor() {
 
     if (currentClip?.id === clipId) {
       setCurrentClip((prev) => (prev ? { ...prev, trimStart, trimEnd } : null));
+
+      // Update video position if current time is outside the new trim range
+      if (videoRef.current) {
+        const currentVideoTime = videoRef.current.currentTime;
+
+        // If current time is before trim start, move to trim start
+        if (currentVideoTime < trimStart) {
+          videoRef.current.currentTime = trimStart;
+          setCurrentTime(trimStart);
+        }
+        // If current time is after trim end, move to trim end
+        else if (currentVideoTime > trimEnd) {
+          videoRef.current.currentTime = trimEnd;
+          setCurrentTime(trimEnd);
+        }
+      }
+
+      // Trigger preview update to reflect the new position
+      if (realTimePreview) {
+        setTimeout(() => {
+          renderPreview();
+        }, 10);
+      }
     }
   };
 
@@ -765,736 +801,787 @@ export default function VideoEditor() {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      {/* File Upload */}
-      <FileUploadWithDragDrop
-        accept="video/*"
-        multiple={true}
-        maxSize={FILE_SIZE_PRESETS.HUGE}
-        allowedTypes={FILE_TYPE_PRESETS.VIDEOS}
-        onFileSelect={handleFileSelect}
-        onError={handleError}
-        title="Upload or drop video files here"
-        subtitle="Supports MP4, WebM, AVI, MOV formats"
-        dragText="Drop videos to start editing"
-        supportText="Maximum file size: 100MB per file"
+    <ToolLayout>
+      <SEOContent
+        title="Video Editor Online"
+        description="Free online video editor with cutting, trimming, merging, and text overlay features. Edit videos in your browser without downloads."
+        exampleCode="video.mp4"
+        exampleOutput="edited-video.mp4"
       />
-      {error && (
-        <Alert severity="error" className="mt-2">
-          {error}
-        </Alert>
-      )}
 
-      {clips.length > 0 && (
-        <>
-          {/* Video Timeline */}
-          <PaperWithChildren className="p-4" variant="elevation">
-            <Typography variant="h6" className="mb-3">
-              Video Clips
-            </Typography>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {clips.map((clip) => (
-                <Card
-                  key={clip.id}
-                  className={`cursor-pointer transition-all duration-300 ${
-                    currentClip?.id === clip.id
-                      ? "ring-4 ring-blue-500 ring-opacity-100 shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-400 transform scale-105"
-                      : "hover:shadow-lg hover:ring-2 hover:ring-blue-200 hover:scale-102 transform"
-                  }`}
-                  style={{
-                    boxShadow:
+      <div className="flex flex-col gap-4 w-full">
+        {/* File Upload */}
+        <FileUploadWithDragDrop
+          accept="video/*"
+          multiple={true}
+          maxSize={FILE_SIZE_PRESETS.HUGE}
+          allowedTypes={FILE_TYPE_PRESETS.VIDEOS}
+          onFileSelect={handleFileSelect}
+          onError={handleError}
+          title="Upload or drop video files here"
+          subtitle="Supports MP4, WebM, AVI, MOV formats"
+          dragText="Drop videos to start editing"
+          supportText="Maximum file size: 100MB per file"
+        />
+        {error && (
+          <Alert severity="error" className="mt-2">
+            {error}
+          </Alert>
+        )}
+
+        {clips.length > 0 && (
+          <>
+            {/* Video Timeline */}
+            <PaperWithChildren className="p-4" variant="elevation">
+              <Typography variant="h6" className="mb-3">
+                Video Clips
+              </Typography>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {clips.map((clip) => (
+                  <Card
+                    key={clip.id}
+                    className={`cursor-pointer transition-all duration-300 ${
                       currentClip?.id === clip.id
-                        ? "0 25px 50px -12px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)"
-                        : undefined,
-                  }}
-                  onClick={() => selectClip(clip)}
-                >
-                  <CardContent className="p-3 relative">
-                    {/* Selected Video Gradient Overlay */}
-                    {currentClip?.id === clip.id && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-blue-400/10 rounded-lg pointer-events-none" />
-                    )}
-
-                    <div className="flex items-center gap-2 mb-2 relative z-10">
-                      <div
-                        className={`p-1 rounded-full transition-all duration-300 ${
-                          currentClip?.id === clip.id
-                            ? "bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"
-                            : "bg-gray-100"
-                        }`}
-                      >
-                        <VideoLibraryIcon
-                          className={`transition-all duration-300 ${
-                            currentClip?.id === clip.id
-                              ? "text-white drop-shadow-md"
-                              : "text-gray-600"
-                          }`}
-                          fontSize="small"
-                        />
-                      </div>
-                      <Typography
-                        variant="body2"
-                        className={`font-medium truncate transition-all duration-300 ${
-                          currentClip?.id === clip.id
-                            ? "text-blue-900 font-semibold drop-shadow-sm"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {clip.name}
-                      </Typography>
+                        ? "ring-4 ring-blue-500 ring-opacity-100 shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-400 transform scale-105"
+                        : "hover:shadow-lg hover:ring-2 hover:ring-blue-200 hover:scale-102 transform"
+                    }`}
+                    style={{
+                      boxShadow:
+                        currentClip?.id === clip.id
+                          ? "0 25px 50px -12px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)"
+                          : undefined,
+                    }}
+                    onClick={() => selectClip(clip)}
+                  >
+                    <CardContent className="p-3 relative">
+                      {/* Selected Video Gradient Overlay */}
                       {currentClip?.id === clip.id && (
-                        <div className="ml-auto flex items-center gap-1">
-                          <div className="relative">
-                            <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse shadow-lg"></div>
-                            <div className="absolute inset-0 w-3 h-3 bg-blue-400 rounded-full animate-ping opacity-60"></div>
-                          </div>
-                          <Typography
-                            variant="caption"
-                            className="text-blue-700 font-medium bg-blue-100 px-2 py-0.5 rounded-full text-xs"
-                          >
-                            ACTIVE
-                          </Typography>
-                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-blue-400/10 rounded-lg pointer-events-none" />
                       )}
-                    </div>
-                    <div className="space-y-1 relative z-10">
-                      <Typography
-                        variant="caption"
-                        className={`block transition-all duration-300 ${
-                          currentClip?.id === clip.id
-                            ? "text-blue-700 font-medium"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        <span
-                          className={
-                            currentClip?.id === clip.id
-                              ? "text-blue-600 font-semibold"
-                              : ""
-                          }
-                        >
-                          Duration:
-                        </span>{" "}
-                        {formatTime(clip.duration)}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        className={`block transition-all duration-300 ${
-                          currentClip?.id === clip.id
-                            ? "text-blue-700 font-medium"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        <span
-                          className={
-                            currentClip?.id === clip.id
-                              ? "text-blue-600 font-semibold"
-                              : ""
-                          }
-                        >
-                          Size:
-                        </span>{" "}
-                        {formatBytes(clip.file.size)}
-                      </Typography>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </PaperWithChildren>
 
-          {currentClip && (
-            <>
-              {/* Video Player */}
-              <PaperWithChildren className="p-4" variant="elevation">
-                <div className="flex justify-between items-center mb-3">
-                  <Typography variant="h6">Video Preview</Typography>
-                  <div className="flex items-center gap-2">
-                    <Typography variant="caption" color="text.secondary">
-                      {realTimePreview
-                        ? "Effects applied in real-time"
-                        : "Effects shown on export only"}
-                    </Typography>
-                    <Button
-                      onClick={() => setRealTimePreview(!realTimePreview)}
-                      variant={realTimePreview ? "contained" : "outlined"}
-                      size="small"
-                      color={realTimePreview ? "primary" : "secondary"}
-                    >
-                      {realTimePreview ? "Real-time ON" : "Real-time OFF"}
-                    </Button>
-                  </div>
-                </div>
-                <div className="relative bg-black rounded-lg overflow-hidden mb-4">
-                  <video
-                    ref={videoRef}
-                    className="w-full h-auto max-h-96"
-                    onTimeUpdate={handleTimeUpdate}
-                    onLoadedMetadata={() => {
-                      if (videoRef.current && currentClip) {
-                        // Ensure the video is ready before setting time
-                        const video = videoRef.current;
-                        if (video.readyState >= 1) {
-                          video.currentTime = currentClip.trimStart;
-                          setCurrentTime(currentClip.trimStart);
-                        }
-                        setIsPlaying(false); // Reset playing state when new video loads
-                      }
-                    }}
-                    onCanPlay={() => {
-                      // Only set currentTime if it's not already at the correct position
-                      if (videoRef.current && currentClip) {
-                        const video = videoRef.current;
-                        if (
-                          Math.abs(video.currentTime - currentClip.trimStart) >
-                          0.1
-                        ) {
-                          video.currentTime = currentClip.trimStart;
-                          setCurrentTime(currentClip.trimStart);
-                        }
-                      }
-                    }}
-                    onPlay={() => {
-                      setIsPlaying(true);
-                      console.log("Video started playing");
-                    }}
-                    onPause={() => {
-                      setIsPlaying(false);
-                      console.log("Video paused");
-                    }}
-                    onSeeking={() => {
-                      console.log("Video seeking...");
-                    }}
-                    onSeeked={() => {
-                      console.log("Video seek completed");
-                    }}
-                    controls={false}
-                    style={{
-                      display:
-                        realTimePreview &&
-                        (filters.length > 0 || textOverlays.length > 0)
-                          ? "none"
-                          : "block",
-                    }}
-                  />
-
-                  {/* Canvas overlay for real-time effects preview */}
-                  <canvas
-                    ref={canvasRef}
-                    className="w-full h-auto max-h-96"
-                    style={{
-                      display:
-                        realTimePreview &&
-                        (filters.length > 0 || textOverlays.length > 0)
-                          ? "block"
-                          : "none",
-                      backgroundColor: "black",
-                      objectFit: "contain",
-                    }}
-                  />
-
-                  {/* Draggable Text Overlay Container */}
-                  <div
-                    ref={overlayContainerRef}
-                    className="absolute inset-0 pointer-events-none"
-                    onClick={handleOverlayContainerClick}
-                    style={{
-                      display: textOverlays.length > 0 ? "block" : "none",
-                      zIndex: 10,
-                    }}
-                  >
-                    {textOverlays.map((overlay) => {
-                      const currentVideoTime =
-                        videoRef.current?.currentTime || 0;
-                      const isVisible =
-                        currentVideoTime >= overlay.startTime &&
-                        currentVideoTime <= overlay.endTime;
-
-                      if (!isVisible) return null;
-
-                      return (
+                      <div className="flex items-center gap-2 mb-2 relative z-10">
                         <div
-                          key={overlay.id}
-                          className={`absolute cursor-move select-none transition-all duration-200 pointer-events-auto ${
-                            selectedOverlayId === overlay.id
-                              ? "ring-2 ring-blue-400 ring-opacity-60 bg-blue-100 bg-opacity-20"
-                              : "hover:ring-1 hover:ring-white hover:ring-opacity-40"
+                          className={`p-1 rounded-full transition-all duration-300 ${
+                            currentClip?.id === clip.id
+                              ? "bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"
+                              : "bg-gray-100"
                           }`}
-                          style={{
-                            left: `${overlay.x}%`,
-                            top: `${overlay.y}%`,
-                            transform: "translate(-50%, -50%)",
-                            fontSize: `${overlay.fontSize}px`,
-                            color: overlay.color,
-                            fontFamily: overlay.fontFamily,
-                            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            minWidth: "20px",
-                            minHeight: "20px",
-                            zIndex: selectedOverlayId === overlay.id ? 20 : 15,
-                            userSelect: "none",
-                            WebkitUserSelect: "none",
-                            // Make transparent when canvas is showing and not being dragged, but keep interactive
-                            opacity:
-                              realTimePreview &&
-                              (filters.length > 0 || textOverlays.length > 0) &&
-                              overlay.id !== draggedOverlayId
-                                ? 0
-                                : 1,
-                            // Always keep pointer events enabled for dragging
-                            pointerEvents: "auto",
-                          }}
-                          onMouseDown={(e) =>
-                            handleOverlayMouseDown(e, overlay.id)
-                          }
-                          title="Drag to reposition text"
                         >
-                          {overlay.text}
-                          {selectedOverlayId === overlay.id && (
-                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full"></div>
-                          )}
+                          <VideoLibraryIcon
+                            className={`transition-all duration-300 ${
+                              currentClip?.id === clip.id
+                                ? "text-white drop-shadow-md"
+                                : "text-gray-600"
+                            }`}
+                            fontSize="small"
+                          />
                         </div>
-                      );
-                    })}
+                        <Typography
+                          variant="body2"
+                          className={`font-medium truncate transition-all duration-300 ${
+                            currentClip?.id === clip.id
+                              ? "text-blue-900 font-semibold drop-shadow-sm"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          {clip.name}
+                        </Typography>
+                        {currentClip?.id === clip.id && (
+                          <div className="ml-auto flex items-center gap-1">
+                            <div className="relative">
+                              <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse shadow-lg"></div>
+                              <div className="absolute inset-0 w-3 h-3 bg-blue-400 rounded-full animate-ping opacity-60"></div>
+                            </div>
+                            <Typography
+                              variant="caption"
+                              className="text-blue-700 font-medium bg-blue-100 px-2 py-0.5 rounded-full text-xs"
+                            >
+                              ACTIVE
+                            </Typography>
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-1 relative z-10">
+                        <Typography
+                          variant="caption"
+                          className={`block transition-all duration-300 ${
+                            currentClip?.id === clip.id
+                              ? "text-blue-700 font-medium"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          <span
+                            className={
+                              currentClip?.id === clip.id
+                                ? "text-blue-600 font-semibold"
+                                : ""
+                            }
+                          >
+                            Duration:
+                          </span>{" "}
+                          {formatTime(clip.duration)}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          className={`block transition-all duration-300 ${
+                            currentClip?.id === clip.id
+                              ? "text-blue-700 font-medium"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          <span
+                            className={
+                              currentClip?.id === clip.id
+                                ? "text-blue-600 font-semibold"
+                                : ""
+                            }
+                          >
+                            Size:
+                          </span>{" "}
+                          {formatBytes(clip.file.size)}
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </PaperWithChildren>
+
+            {currentClip && (
+              <>
+                {/* Video Player */}
+                <PaperWithChildren className="p-4" variant="elevation">
+                  <div className="flex justify-between items-center mb-3">
+                    <Typography variant="h6">Video Preview</Typography>
+                    <div className="flex items-center gap-2">
+                      <Typography variant="caption" color="text.secondary">
+                        {realTimePreview
+                          ? "Effects applied in real-time"
+                          : "Effects shown on export only"}
+                      </Typography>
+                      <Button
+                        onClick={() => setRealTimePreview(!realTimePreview)}
+                        variant={realTimePreview ? "contained" : "outlined"}
+                        size="small"
+                        color={realTimePreview ? "primary" : "secondary"}
+                      >
+                        {realTimePreview ? "Real-time ON" : "Real-time OFF"}
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="relative bg-black rounded-lg overflow-hidden mb-4">
+                    <video
+                      ref={videoRef}
+                      className="w-full h-auto max-h-96"
+                      onTimeUpdate={handleTimeUpdate}
+                      onLoadedMetadata={() => {
+                        if (videoRef.current && currentClip) {
+                          // Ensure the video is ready before setting time
+                          const video = videoRef.current;
+                          if (video.readyState >= 1) {
+                            video.currentTime = currentClip.trimStart;
+                            setCurrentTime(currentClip.trimStart);
+                          }
+                          setIsPlaying(false); // Reset playing state when new video loads
+                        }
+                      }}
+                      onCanPlay={() => {
+                        // Only set currentTime if it's not already at the correct position
+                        if (videoRef.current && currentClip) {
+                          const video = videoRef.current;
+                          if (
+                            Math.abs(
+                              video.currentTime - currentClip.trimStart
+                            ) > 0.1
+                          ) {
+                            video.currentTime = currentClip.trimStart;
+                            setCurrentTime(currentClip.trimStart);
+                          }
+                        }
+                      }}
+                      onPlay={() => {
+                        setIsPlaying(true);
+                        console.log("Video started playing");
+                      }}
+                      onPause={() => {
+                        setIsPlaying(false);
+                        console.log("Video paused");
+                      }}
+                      onSeeking={() => {
+                        console.log("Video seeking...");
+                      }}
+                      onSeeked={() => {
+                        console.log("Video seek completed");
+                      }}
+                      controls={false}
+                      style={{
+                        display:
+                          realTimePreview &&
+                          (filters.length > 0 || textOverlays.length > 0)
+                            ? "none"
+                            : "block",
+                      }}
+                    />
+
+                    {/* Canvas overlay for real-time effects preview */}
+                    <canvas
+                      ref={canvasRef}
+                      className="w-full h-auto max-h-96"
+                      style={{
+                        display:
+                          realTimePreview &&
+                          (filters.length > 0 || textOverlays.length > 0)
+                            ? "block"
+                            : "none",
+                        backgroundColor: "black",
+                        objectFit: "contain",
+                      }}
+                    />
+
+                    {/* Draggable Text Overlay Container */}
+                    <div
+                      ref={overlayContainerRef}
+                      className="absolute inset-0 pointer-events-none"
+                      onClick={handleOverlayContainerClick}
+                      style={{
+                        display: textOverlays.length > 0 ? "block" : "none",
+                        zIndex: 10,
+                      }}
+                    >
+                      {textOverlays.map((overlay) => {
+                        const currentVideoTime =
+                          videoRef.current?.currentTime || 0;
+                        const isVisible =
+                          currentVideoTime >= overlay.startTime &&
+                          currentVideoTime <= overlay.endTime;
+
+                        if (!isVisible) return null;
+
+                        return (
+                          <div
+                            key={overlay.id}
+                            className={`absolute cursor-move select-none transition-all duration-200 pointer-events-auto ${
+                              selectedOverlayId === overlay.id
+                                ? "ring-2 ring-blue-400 ring-opacity-60 bg-blue-100 bg-opacity-20"
+                                : "hover:ring-1 hover:ring-white hover:ring-opacity-40"
+                            }`}
+                            style={{
+                              left: `${overlay.x}%`,
+                              top: `${overlay.y}%`,
+                              transform: "translate(-50%, -50%)",
+                              fontSize: `${overlay.fontSize}px`,
+                              color: overlay.color,
+                              fontFamily: overlay.fontFamily,
+                              textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                              padding: "4px 8px",
+                              borderRadius: "4px",
+                              minWidth: "20px",
+                              minHeight: "20px",
+                              zIndex:
+                                selectedOverlayId === overlay.id ? 20 : 15,
+                              userSelect: "none",
+                              WebkitUserSelect: "none",
+                              // Make transparent when canvas is showing and not being dragged, but keep interactive
+                              opacity:
+                                realTimePreview &&
+                                (filters.length > 0 ||
+                                  textOverlays.length > 0) &&
+                                overlay.id !== draggedOverlayId
+                                  ? 0
+                                  : 1,
+                              // Always keep pointer events enabled for dragging
+                              pointerEvents: "auto",
+                            }}
+                            onMouseDown={(e) =>
+                              handleOverlayMouseDown(e, overlay.id)
+                            }
+                            title="Drag to reposition text"
+                          >
+                            {overlay.text}
+                            {selectedOverlayId === overlay.id && (
+                              <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full"></div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Hidden preview video for processing */}
+                    <video
+                      ref={previewVideoRef}
+                      className="hidden"
+                      crossOrigin="anonymous"
+                    />
                   </div>
 
-                  {/* Hidden preview video for processing */}
-                  <video
-                    ref={previewVideoRef}
-                    className="hidden"
-                    crossOrigin="anonymous"
-                  />
-                </div>
-
-                {/* Player Controls */}
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  className="mb-4"
-                >
-                  <IconButton onClick={handlePlayPause} color="primary">
-                    {isPlaying ? <Pause /> : <PlayArrow />}
-                  </IconButton>
-
-                  <Box className="flex-1 mx-4">
-                    <Slider
-                      value={
-                        currentClip &&
-                        !isNaN(currentTime) &&
-                        !isNaN(currentClip.trimStart) &&
-                        !isNaN(currentClip.trimEnd) &&
-                        currentClip.trimEnd > currentClip.trimStart
-                          ? ((currentTime - currentClip.trimStart) /
-                              (currentClip.trimEnd - currentClip.trimStart)) *
-                            100
-                          : 0
-                      }
-                      onChange={(_, value) => handleSeek(value as number)}
-                      sx={{ color: "primary.main" }}
-                    />
-                  </Box>
-
-                  <Typography variant="caption" className="min-w-20">
-                    {formatTime(currentTime)} /{" "}
-                    {formatTime(currentClip.duration)}
-                  </Typography>
-
-                  <IconButton
-                    onClick={() => setIsMuted(!isMuted)}
-                    onMouseDown={() => {
-                      if (videoRef.current) {
-                        videoRef.current.muted = !isMuted;
-                      }
-                    }}
-                  >
-                    {isMuted ? <VolumeOff /> : <VolumeUp />}
-                  </IconButton>
-                </Stack>
-              </PaperWithChildren>
-
-              {/* Video Editing Controls */}
-              <PaperWithChildren className="p-4" variant="elevation">
-                <Typography variant="h6" className="mb-4">
-                  Video Editing Controls
-                </Typography>
-
-                {/* Trim Controls Section */}
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
-                  <Typography
-                    variant="subtitle1"
-                    className="mb-3 font-medium text-blue-700"
-                  >
-                    📹 Trim Video
-                  </Typography>
+                  {/* Player Controls */}
                   <Stack
                     direction="row"
-                    spacing={2}
+                    spacing={1}
                     alignItems="center"
-                    className="mb-2"
+                    className="mb-4"
                   >
-                    <Typography variant="caption" className="min-w-12">
-                      Start:
+                    <IconButton onClick={handlePlayPause} color="primary">
+                      {isPlaying ? <Pause /> : <PlayArrow />}
+                    </IconButton>
+
+                    <Box className="flex-1 mx-4">
+                      <Slider
+                        value={
+                          currentClip &&
+                          !isNaN(currentTime) &&
+                          !isNaN(currentClip.trimStart) &&
+                          !isNaN(currentClip.trimEnd) &&
+                          currentClip.trimEnd > currentClip.trimStart
+                            ? ((currentTime - currentClip.trimStart) /
+                                (currentClip.trimEnd - currentClip.trimStart)) *
+                              100
+                            : 0
+                        }
+                        onChange={(_, value) => handleSeek(value as number)}
+                        sx={{ color: "primary.main" }}
+                      />
+                    </Box>
+
+                    <Typography variant="caption" className="min-w-20">
+                      {formatTime(currentTime)} /{" "}
+                      {formatTime(currentClip.duration)}
                     </Typography>
-                    <Slider
-                      value={currentClip?.trimStart || 0}
-                      max={currentClip?.duration || 100}
-                      step={0.1}
-                      onChange={(_, value) =>
-                        updateClipTrim(
-                          currentClip.id,
-                          value as number,
-                          currentClip.trimEnd
-                        )
-                      }
-                      sx={{ flex: 1 }}
-                    />
-                    <Typography variant="caption" className="min-w-12">
-                      End:
-                    </Typography>
-                    <Slider
-                      value={currentClip?.trimEnd || 0}
-                      max={currentClip?.duration || 100}
-                      step={0.1}
-                      onChange={(_, value) =>
-                        updateClipTrim(
-                          currentClip.id,
-                          currentClip.trimStart,
-                          value as number
-                        )
-                      }
-                      sx={{ flex: 1 }}
-                    />
+
+                    <IconButton
+                      onClick={() => setIsMuted(!isMuted)}
+                      onMouseDown={() => {
+                        if (videoRef.current) {
+                          videoRef.current.muted = !isMuted;
+                        }
+                      }}
+                    >
+                      {isMuted ? <VolumeOff /> : <VolumeUp />}
+                    </IconButton>
                   </Stack>
-                  <Typography variant="caption" color="text.secondary">
-                    Trimmed duration:{" "}
-                    {formatTime(currentClip.trimEnd - currentClip.trimStart)}
+                </PaperWithChildren>
+
+                {/* Video Editing Controls */}
+                <PaperWithChildren className="p-4" variant="elevation">
+                  <Typography variant="h6" className="mb-4">
+                    Video Editing Controls
                   </Typography>
-                </div>
 
-                {/* Divider */}
-                <div className="border-t border-gray-200 my-6"></div>
-
-                {/* Text Overlays Section */}
-                <div className="mb-6 p-4 bg-blue-50 rounded-lg border">
-                  <div className="flex justify-between items-center mb-3">
+                  {/* Trim Controls Section */}
+                  <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
                     <Typography
                       variant="subtitle1"
-                      className="font-medium text-blue-700"
+                      className="mb-3 font-medium text-blue-700"
                     >
-                      📝 Text Overlays
+                      📹 Trim Video
                     </Typography>
-                    <Button
-                      onClick={addTextOverlay}
-                      startIcon={<TextFields />}
-                      variant="outlined"
-                      size="small"
-                    >
-                      Add Text
-                    </Button>
-                  </div>
+                    <Stack spacing={2} className="mb-2">
+                      <div className="flex items-center gap-2">
+                        <Typography variant="caption" className="min-w-16">
+                          Range:
+                        </Typography>
+                        <Slider
+                          value={[
+                            currentClip?.trimStart || 0,
+                            currentClip?.trimEnd || 0,
+                          ]}
+                          max={currentClip?.duration || 100}
+                          step={0.1}
+                          onChange={(_, value) => {
+                            const [start, end] = value as number[];
+                            updateClipTrim(currentClip.id, start, end);
+                          }}
+                          onChangeCommitted={(_, value) => {
+                            // Ensure video position is within trim bounds after final change
+                            const [start, end] = value as number[];
+                            if (videoRef.current) {
+                              const currentVideoTime =
+                                videoRef.current.currentTime;
+                              if (currentVideoTime < start) {
+                                videoRef.current.currentTime = start;
+                                setCurrentTime(start);
+                              } else if (currentVideoTime > end) {
+                                videoRef.current.currentTime = end;
+                                setCurrentTime(end);
+                              }
 
-                  {textOverlays.map((overlay) => (
-                    <Card
-                      key={overlay.id}
-                      className={`mb-2 border shadow-sm transition-all ${
-                        selectedOverlayId === overlay.id
-                          ? "border-blue-400 bg-blue-50"
-                          : "border-blue-200"
-                      }`}
-                      onClick={() => setSelectedOverlayId(overlay.id)}
-                    >
-                      <CardContent className="p-3">
-                        <Stack
-                          direction="row"
-                          spacing={2}
-                          alignItems="center"
-                          className="mb-2"
-                        >
-                          <TextField
-                            label="Text"
-                            value={overlay.text}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                text: e.target.value,
-                              })
+                              // Trigger preview update after position change
+                              if (realTimePreview) {
+                                setTimeout(() => {
+                                  renderPreview();
+                                }, 10);
+                              }
                             }
-                            size="small"
-                            className="flex-1"
-                          />
-                          <IconButton
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeTextOverlay(overlay.id);
-                            }}
-                            color="error"
-                          >
-                            <Delete />
-                          </IconButton>
-                        </Stack>
-
-                        <Stack direction="row" spacing={2} className="mb-2">
-                          <TextField
-                            label="Start Time"
-                            type="number"
-                            value={overlay.startTime || 0}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                startTime: parseFloat(e.target.value) || 0,
-                              })
-                            }
-                            size="small"
-                            inputProps={{
-                              step: 0.1,
-                              min: 0,
-                              max: currentClip?.duration || 100,
-                            }}
-                          />
-                          <TextField
-                            label="End Time"
-                            type="number"
-                            value={overlay.endTime || 5}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                endTime: parseFloat(e.target.value) || 5,
-                              })
-                            }
-                            size="small"
-                            inputProps={{
-                              step: 0.1,
-                              min: 0,
-                              max: currentClip?.duration || 100,
-                            }}
-                          />
-                        </Stack>
-
-                        <Stack direction="row" spacing={2}>
-                          <TextField
-                            label="Font Size"
-                            type="number"
-                            value={overlay.fontSize || 24}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                fontSize: parseInt(e.target.value) || 24,
-                              })
-                            }
-                            size="small"
-                            inputProps={{ min: 8, max: 72 }}
-                          />
-                          <TextField
-                            label="Color"
-                            type="color"
-                            value={overlay.color || "#ffffff"}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                color: e.target.value,
-                              })
-                            }
-                            size="small"
-                          />
-                        </Stack>
-
-                        <Stack direction="row" spacing={2} className="mt-2">
-                          <TextField
-                            label="X Position (%)"
-                            type="number"
-                            value={Math.round((overlay.x || 50) * 100) / 100}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                x: parseFloat(e.target.value) || 50,
-                              })
-                            }
-                            size="small"
-                            inputProps={{ min: 0, max: 100, step: 0.1 }}
-                          />
-                          <TextField
-                            label="Y Position (%)"
-                            type="number"
-                            value={Math.round((overlay.y || 50) * 100) / 100}
-                            onChange={(e) =>
-                              updateTextOverlay(overlay.id, {
-                                y: parseFloat(e.target.value) || 50,
-                              })
-                            }
-                            size="small"
-                            inputProps={{ min: 0, max: 100, step: 0.1 }}
-                          />
-                        </Stack>
-
-                        {selectedOverlayId === overlay.id && (
-                          <Typography
-                            variant="caption"
-                            color="primary"
-                            className="mt-2 block"
-                          >
-                            💡 Tip: Drag the text directly on the video to
-                            reposition it
-                          </Typography>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-
-                  {textOverlays.length === 0 && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      className="text-center py-4 bg-white rounded border border-dashed border-blue-300"
-                    >
-                      No text overlays added yet. Click &quot;Add Text&quot; to
-                      add draggable text to your video.
-                    </Typography>
-                  )}
-                </div>
-
-                {/* Divider */}
-                <div className="border-t border-gray-200 my-6"></div>
-
-                {/* Video Effects Section */}
-                <div className="p-4 bg-purple-50 rounded-lg border">
-                  <div className="flex justify-between items-center mb-3">
-                    <Typography
-                      variant="subtitle1"
-                      className="font-medium text-purple-700"
-                    >
-                      ✨ Video Effects
-                    </Typography>
-                    <Stack direction="row" spacing={1} flexWrap="wrap">
-                      <Button
-                        onClick={() => addFilter("brightness")}
-                        size="small"
-                        variant="outlined"
-                      >
-                        Brightness
-                      </Button>
-                      <Button
-                        onClick={() => addFilter("contrast")}
-                        size="small"
-                        variant="outlined"
-                      >
-                        Contrast
-                      </Button>
-                      <Button
-                        onClick={() => addFilter("saturation")}
-                        size="small"
-                        variant="outlined"
-                      >
-                        Saturation
-                      </Button>
-                      <Button
-                        onClick={() => addFilter("blur")}
-                        size="small"
-                        variant="outlined"
-                      >
-                        Blur
-                      </Button>
+                          }}
+                          valueLabelDisplay="auto"
+                          valueLabelFormat={(value) => formatTime(value)}
+                          sx={{
+                            flex: 1,
+                            "& .MuiSlider-thumb": {
+                              "&:nth-of-type(1)": {
+                                backgroundColor: "#2196f3",
+                              },
+                              "&:nth-of-type(2)": {
+                                backgroundColor: "#f44336",
+                              },
+                            },
+                            "& .MuiSlider-track": {
+                              backgroundColor: "#4caf50",
+                              height: 6,
+                            },
+                            "& .MuiSlider-rail": {
+                              backgroundColor: "#e0e0e0",
+                              height: 6,
+                            },
+                          }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-600">
+                        <span>
+                          Start: {formatTime(currentClip?.trimStart || 0)}
+                        </span>
+                        <span>
+                          End: {formatTime(currentClip?.trimEnd || 0)}
+                        </span>
+                      </div>
                     </Stack>
+                    <Typography variant="caption" color="text.secondary">
+                      Trimmed duration:{" "}
+                      {formatTime(
+                        (currentClip?.trimEnd || 0) -
+                          (currentClip?.trimStart || 0)
+                      )}
+                    </Typography>
                   </div>
 
-                  {filters.map((filter) => (
-                    <Card
-                      key={filter.id}
-                      className="mb-2 border border-purple-200 shadow-sm"
-                    >
-                      <CardContent className="p-3">
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <Typography
-                            variant="body2"
-                            className="capitalize min-w-20"
-                          >
-                            {filter.type}
-                          </Typography>
-                          <Slider
-                            value={filter.value || 0}
-                            onChange={(_, value) =>
-                              updateFilter(filter.id, value as number)
-                            }
-                            min={filter.type === "blur" ? 0 : 0}
-                            max={filter.type === "blur" ? 10 : 200}
-                            step={filter.type === "blur" ? 0.1 : 1}
-                            className="flex-1"
-                          />
-                          <Typography variant="caption" className="min-w-12">
-                            {filter.value || 0}
-                            {filter.type === "blur" ? "px" : "%"}
-                          </Typography>
-                          <IconButton
-                            onClick={() => removeFilter(filter.id)}
-                            color="error"
-                            size="small"
-                          >
-                            <Delete />
-                          </IconButton>
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  ))}
+                  {/* Divider */}
+                  <div className="border-t border-gray-200 my-6"></div>
 
-                  {filters.length === 0 && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      className="text-center py-4 bg-white rounded border border-dashed border-purple-300"
-                    >
-                      No effects applied. Use the buttons above to add effects.
-                    </Typography>
+                  {/* Text Overlays Section */}
+                  <div className="mb-6 p-4 bg-blue-50 rounded-lg border">
+                    <div className="flex justify-between items-center mb-3">
+                      <Typography
+                        variant="subtitle1"
+                        className="font-medium text-blue-700"
+                      >
+                        📝 Text Overlays
+                      </Typography>
+                      <Button
+                        onClick={addTextOverlay}
+                        startIcon={<TextFields />}
+                        variant="outlined"
+                        size="small"
+                      >
+                        Add Text
+                      </Button>
+                    </div>
+
+                    {textOverlays.map((overlay) => (
+                      <Card
+                        key={overlay.id}
+                        className={`mb-2 border shadow-sm transition-all ${
+                          selectedOverlayId === overlay.id
+                            ? "border-blue-400 bg-blue-50"
+                            : "border-blue-200"
+                        }`}
+                        onClick={() => setSelectedOverlayId(overlay.id)}
+                      >
+                        <CardContent className="p-3">
+                          <Stack
+                            direction="row"
+                            spacing={2}
+                            alignItems="center"
+                            className="mb-2"
+                          >
+                            <TextField
+                              label="Text"
+                              value={overlay.text}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  text: e.target.value,
+                                })
+                              }
+                              size="small"
+                              className="flex-1"
+                            />
+                            <IconButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeTextOverlay(overlay.id);
+                              }}
+                              color="error"
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Stack>
+
+                          <Stack direction="row" spacing={2} className="mb-2">
+                            <TextField
+                              label="Start Time"
+                              type="number"
+                              value={overlay.startTime || 0}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  startTime: parseFloat(e.target.value) || 0,
+                                })
+                              }
+                              size="small"
+                              inputProps={{
+                                step: 0.1,
+                                min: 0,
+                                max: currentClip?.duration || 100,
+                              }}
+                            />
+                            <TextField
+                              label="End Time"
+                              type="number"
+                              value={overlay.endTime || 5}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  endTime: parseFloat(e.target.value) || 5,
+                                })
+                              }
+                              size="small"
+                              inputProps={{
+                                step: 0.1,
+                                min: 0,
+                                max: currentClip?.duration || 100,
+                              }}
+                            />
+                          </Stack>
+
+                          <Stack direction="row" spacing={2}>
+                            <TextField
+                              label="Font Size"
+                              type="number"
+                              value={overlay.fontSize || 24}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  fontSize: parseInt(e.target.value) || 24,
+                                })
+                              }
+                              size="small"
+                              inputProps={{ min: 8, max: 72 }}
+                            />
+                            <TextField
+                              label="Color"
+                              type="color"
+                              value={overlay.color || "#ffffff"}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  color: e.target.value,
+                                })
+                              }
+                              size="small"
+                            />
+                          </Stack>
+
+                          <Stack direction="row" spacing={2} className="mt-2">
+                            <TextField
+                              label="X Position (%)"
+                              type="number"
+                              value={Math.round((overlay.x || 50) * 100) / 100}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  x: parseFloat(e.target.value) || 50,
+                                })
+                              }
+                              size="small"
+                              inputProps={{ min: 0, max: 100, step: 0.1 }}
+                            />
+                            <TextField
+                              label="Y Position (%)"
+                              type="number"
+                              value={Math.round((overlay.y || 50) * 100) / 100}
+                              onChange={(e) =>
+                                updateTextOverlay(overlay.id, {
+                                  y: parseFloat(e.target.value) || 50,
+                                })
+                              }
+                              size="small"
+                              inputProps={{ min: 0, max: 100, step: 0.1 }}
+                            />
+                          </Stack>
+
+                          {selectedOverlayId === overlay.id && (
+                            <Typography
+                              variant="caption"
+                              color="primary"
+                              className="mt-2 block"
+                            >
+                              💡 Tip: Drag the text directly on the video to
+                              reposition it
+                            </Typography>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+
+                    {textOverlays.length === 0 && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        className="text-center py-4 bg-white rounded border border-dashed border-blue-300"
+                      >
+                        No text overlays added yet. Click &quot;Add Text&quot;
+                        to add draggable text to your video.
+                      </Typography>
+                    )}
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-gray-200 my-6"></div>
+
+                  {/* Video Effects Section */}
+                  <div className="p-4 bg-purple-50 rounded-lg border">
+                    <div className="flex justify-between items-center mb-3">
+                      <Typography
+                        variant="subtitle1"
+                        className="font-medium text-purple-700"
+                      >
+                        ✨ Video Effects
+                      </Typography>
+                      <Stack direction="row" spacing={1} flexWrap="wrap">
+                        <Button
+                          onClick={() => addFilter("brightness")}
+                          size="small"
+                          variant="outlined"
+                        >
+                          Brightness
+                        </Button>
+                        <Button
+                          onClick={() => addFilter("contrast")}
+                          size="small"
+                          variant="outlined"
+                        >
+                          Contrast
+                        </Button>
+                        <Button
+                          onClick={() => addFilter("saturation")}
+                          size="small"
+                          variant="outlined"
+                        >
+                          Saturation
+                        </Button>
+                        <Button
+                          onClick={() => addFilter("blur")}
+                          size="small"
+                          variant="outlined"
+                        >
+                          Blur
+                        </Button>
+                      </Stack>
+                    </div>
+
+                    {filters.map((filter) => (
+                      <Card
+                        key={filter.id}
+                        className="mb-2 border border-purple-200 shadow-sm"
+                      >
+                        <CardContent className="p-3">
+                          <Stack
+                            direction="row"
+                            spacing={2}
+                            alignItems="center"
+                          >
+                            <Typography
+                              variant="body2"
+                              className="capitalize min-w-20"
+                            >
+                              {filter.type}
+                            </Typography>
+                            <Slider
+                              value={filter.value || 0}
+                              onChange={(_, value) =>
+                                updateFilter(filter.id, value as number)
+                              }
+                              min={filter.type === "blur" ? 0 : 0}
+                              max={filter.type === "blur" ? 10 : 200}
+                              step={filter.type === "blur" ? 0.1 : 1}
+                              className="flex-1"
+                            />
+                            <Typography variant="caption" className="min-w-12">
+                              {filter.value || 0}
+                              {filter.type === "blur" ? "px" : "%"}
+                            </Typography>
+                            <IconButton
+                              onClick={() => removeFilter(filter.id)}
+                              color="error"
+                              size="small"
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Stack>
+                        </CardContent>
+                      </Card>
+                    ))}
+
+                    {filters.length === 0 && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        className="text-center py-4 bg-white rounded border border-dashed border-purple-300"
+                      >
+                        No effects applied. Use the buttons above to add
+                        effects.
+                      </Typography>
+                    )}
+                  </div>
+                </PaperWithChildren>
+
+                {/* Export */}
+                <PaperWithChildren className="p-4" variant="elevation">
+                  <Typography variant="h6" className="mb-3">
+                    Export Video
+                  </Typography>
+
+                  {isProcessing && (
+                    <Box className="mb-4">
+                      <LinearProgress variant="indeterminate" />
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        className="mt-1"
+                      >
+                        Processing video... This may take a few minutes.
+                      </Typography>
+                    </Box>
                   )}
-                </div>
-              </PaperWithChildren>
 
-              {/* Export */}
-              <PaperWithChildren className="p-4" variant="elevation">
-                <Typography variant="h6" className="mb-3">
-                  Export Video
-                </Typography>
+                  <Button
+                    onClick={exportVideo}
+                    disabled={!ffmpeg || isProcessing}
+                    startIcon={<Download />}
+                    variant="contained"
+                    color="primary"
+                  >
+                    {isProcessing ? "Processing..." : "Export Video"}
+                  </Button>
 
-                {isProcessing && (
-                  <Box className="mb-4">
-                    <LinearProgress variant="indeterminate" />
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      className="mt-1"
-                    >
-                      Processing video... This may take a few minutes.
-                    </Typography>
-                  </Box>
-                )}
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    className="mt-2"
+                  >
+                    Export will include all applied trims, text overlays, and
+                    effects.
+                  </Typography>
+                </PaperWithChildren>
+              </>
+            )}
+          </>
+        )}
 
-                <Button
-                  onClick={exportVideo}
-                  disabled={!ffmpeg || isProcessing}
-                  startIcon={<Download />}
-                  variant="contained"
-                  color="primary"
-                >
-                  {isProcessing ? "Processing..." : "Export Video"}
-                </Button>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  className="mt-2"
-                >
-                  Export will include all applied trims, text overlays, and
-                  effects.
-                </Typography>
-              </PaperWithChildren>
-            </>
-          )}
-        </>
-      )}
-
-      <SnackBarWithPosition
-        open={isSnackBarOpen}
-        autoHideDuration={6000}
-        handleClose={() => setIsSnackBarOpen(false)}
-        message={snackBarMessage}
-        color={snackBarColor}
-        vertical="bottom"
-        horizontal="center"
-      />
-    </div>
+        <SnackBarWithPosition
+          open={isSnackBarOpen}
+          autoHideDuration={6000}
+          handleClose={() => setIsSnackBarOpen(false)}
+          message={snackBarMessage}
+          color={snackBarColor}
+          vertical="bottom"
+          horizontal="center"
+        />
+      </div>
+    </ToolLayout>
   );
 }

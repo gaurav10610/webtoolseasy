@@ -20,6 +20,15 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { CsvDataTable, AlertMessage } from "../lib/tables";
 import { CoreFileStreamer } from "@/lib/CoreFileStreamer";
+import { SEOContent } from "../common/ToolLayout";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 
 interface CsvData {
   headers: string[];
@@ -51,84 +60,109 @@ Sarah Wilson,28,Toronto,Canada`;
   const [isParsing, setIsParsing] = useState(false);
   const [parseProgress, setParseProgress] = useState(0);
   const [parseTimeout, setParseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [separator, setSeparator] = useState<string>(",");
+  const [hasHeader, setHasHeader] = useState<boolean>(true);
   const initialParsingDone = useRef(false);
 
-  const parseCsvString = useCallback(async (csvString: string) => {
-    try {
-      setIsParsing(true);
-      setParseProgress(0);
+  const parseCsvString = useCallback(
+    async (
+      csvString: string,
+      customSeparator?: string,
+      customHasHeader?: boolean
+    ) => {
+      try {
+        setIsParsing(true);
+        setParseProgress(0);
 
-      const lines = csvString.trim().split("\n");
-      if (lines.length === 0) {
-        setError("CSV content is empty");
-        setCsvData(null);
-        return;
-      }
-
-      // Helper function to parse CSV line properly handling quotes
-      const parseCSVLine = (line: string): string[] => {
-        const result: string[] = [];
-        let current = "";
-        let inQuotes = false;
-
-        for (let i = 0; i < line.length; i++) {
-          const char = line[i];
-
-          if (char === '"') {
-            if (inQuotes && line[i + 1] === '"') {
-              // Handle escaped quotes
-              current += '"';
-              i++; // Skip next quote
-            } else {
-              // Toggle quote state
-              inQuotes = !inQuotes;
-            }
-          } else if (char === "," && !inQuotes) {
-            // Found field separator
-            result.push(current.trim());
-            current = "";
-          } else {
-            current += char;
-          }
+        const lines = csvString.trim().split("\n");
+        if (lines.length === 0) {
+          setError("CSV content is empty");
+          setCsvData(null);
+          return;
         }
 
-        // Add the last field
-        result.push(current.trim());
-        return result;
-      };
+        const currentSeparator = customSeparator || separator;
+        const currentHasHeader =
+          customHasHeader !== undefined ? customHasHeader : hasHeader;
 
-      // Always parse in chunks to prevent UI blocking, regardless of file size
-      const headers = parseCSVLine(lines[0]);
-      const rows: string[][] = [];
-      const chunkSize = 50; // Smaller chunks for better responsiveness
-      const totalRows = lines.length - 1;
+        // Helper function to parse CSV line properly handling quotes
+        const parseCSVLine = (line: string): string[] => {
+          const result: string[] = [];
+          let current = "";
+          let inQuotes = false;
 
-      for (let i = 1; i < lines.length; i += chunkSize) {
-        const chunk = lines.slice(i, i + chunkSize);
-        const parsedChunk = chunk.map((line) => parseCSVLine(line));
-        rows.push(...parsedChunk);
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
 
-        // Update progress
-        const progress = Math.round(((i - 1) / totalRows) * 100);
-        setParseProgress(Math.min(progress, 100));
+            if (char === '"') {
+              if (inQuotes && line[i + 1] === '"') {
+                // Handle escaped quotes
+                current += '"';
+                i++; // Skip next quote
+              } else {
+                // Toggle quote state
+                inQuotes = !inQuotes;
+              }
+            } else if (char === currentSeparator && !inQuotes) {
+              // Found field separator
+              result.push(current.trim());
+              current = "";
+            } else {
+              current += char;
+            }
+          }
 
-        // Yield control back to the browser to prevent freezing
-        await new Promise((resolve) => setTimeout(resolve, 2));
+          // Add the last field
+          result.push(current.trim());
+          return result;
+        };
+
+        // Always parse in chunks to prevent UI blocking, regardless of file size
+        let headers: string[];
+        let dataStartIndex: number;
+
+        if (currentHasHeader) {
+          headers = parseCSVLine(lines[0]);
+          dataStartIndex = 1;
+        } else {
+          // Generate generic column names if no header
+          const firstRowData = parseCSVLine(lines[0]);
+          headers = firstRowData.map((_, index) => `Column ${index + 1}`);
+          dataStartIndex = 0;
+        }
+
+        const rows: string[][] = [];
+        const chunkSize = 50; // Smaller chunks for better responsiveness
+        const totalRows = lines.length - dataStartIndex;
+
+        for (let i = dataStartIndex; i < lines.length; i += chunkSize) {
+          const chunk = lines.slice(i, i + chunkSize);
+          const parsedChunk = chunk.map((line) => parseCSVLine(line));
+          rows.push(...parsedChunk);
+
+          // Update progress
+          const progress = Math.round(((i - dataStartIndex) / totalRows) * 100);
+          setParseProgress(Math.min(progress, 100));
+
+          // Yield control back to the browser to prevent freezing
+          await new Promise((resolve) => setTimeout(resolve, 2));
+        }
+
+        setCsvData({ headers, rows });
+        setError("");
+      } catch (err) {
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error parsing CSV:", err);
+        }
+        setError("Error parsing CSV data");
+        setCsvData(null);
+      } finally {
+        setIsParsing(false);
+        setParseProgress(0);
       }
-
-      setCsvData({ headers, rows });
-      setError("");
-    } catch (err) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error parsing CSV:", err);
-      }
-      setError("Error parsing CSV data");
-      setCsvData(null);
-    } finally {
-      setIsParsing(false);
-      setParseProgress(0);
-    }
-  }, []);
+    },
+    [separator, hasHeader]
+  );
 
   const onRawCodeChange = async (value: string) => {
     setRawCode(value);
@@ -241,6 +275,22 @@ Sarah Wilson,28,Toronto,Canada`;
     setIsFullScreen(!isFullScreen);
   };
 
+  const handleSeparatorChange = (newSeparator: string) => {
+    setSeparator(newSeparator);
+    // Re-parse CSV with new separator
+    if (rawCode) {
+      parseCsvString(rawCode, newSeparator);
+    }
+  };
+
+  const handleHeaderChange = (newHasHeader: boolean) => {
+    setHasHeader(newHasHeader);
+    // Re-parse CSV with new header setting
+    if (rawCode) {
+      parseCsvString(rawCode, undefined, newHasHeader);
+    }
+  };
+
   // Parse initial CSV data only once
   useEffect(() => {
     const parseInitialData = async () => {
@@ -267,6 +317,13 @@ Sarah Wilson,28,Toronto,Canada`;
         isFullScreen ? "fixed inset-0 z-50 bg-white h-full p-4" : "relative"
       }`}
     >
+      <SEOContent
+        title="CSV Viewer and Parser"
+        description="Free online CSV viewer and parser. Upload CSV files, view data in table format, and parse CSV content with different separators. Supports large files with streaming technology."
+        exampleCode={initialValue}
+        exampleOutput="Parsed CSV table with Name, Age, City, Country columns showing formatted data"
+      />
+
       <div className="flex justify-between items-center flex-wrap gap-2 min-w-0">
         <Typography variant="h4" component="h1" className="truncate">
           CSV Viewer
@@ -296,6 +353,62 @@ Sarah Wilson,28,Toronto,Canada`;
             size="small"
             className="!hidden md:!flex"
           />
+        </div>
+      </div>
+
+      {/* CSV Settings Section */}
+      <div className="mb-4 min-w-0">
+        <Typography variant="h6" className="mb-3">
+          CSV Settings
+        </Typography>
+        <div className="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+          {/* Separator Selector */}
+          <div className="flex flex-col gap-2">
+            <Typography variant="subtitle2" className="font-medium">
+              Separator
+            </Typography>
+            <FormControl size="small" className="min-w-[180px] max-w-[250px]">
+              <InputLabel>Choose separator</InputLabel>
+              <Select
+                value={separator}
+                label="Choose separator"
+                onChange={(e) => handleSeparatorChange(e.target.value)}
+              >
+                <MenuItem value=",">Comma (,)</MenuItem>
+                <MenuItem value=";">Semicolon (;)</MenuItem>
+                <MenuItem value="|">Pipe (|)</MenuItem>
+                <MenuItem value="	">Tab</MenuItem>
+                <MenuItem value=" ">Space</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+
+          {/* Header Checkbox */}
+          <div className="flex flex-col gap-2">
+            <Typography variant="subtitle2" className="font-medium">
+              Data Structure
+            </Typography>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={hasHeader}
+                  onChange={(e) => handleHeaderChange(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="First row contains column headers"
+              className="text-sm"
+            />
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              className="ml-8"
+            >
+              {hasHeader
+                ? "First row will be used as column headers"
+                : "Generic column names (Column 1, Column 2, etc.) will be generated"}
+            </Typography>
+          </div>
         </div>
       </div>
 

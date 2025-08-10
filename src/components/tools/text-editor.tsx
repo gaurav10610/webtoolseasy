@@ -1,205 +1,209 @@
 "use client";
 
-import { useState } from "react";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { usePathname } from "next/navigation";
+import { useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
-import {
-  compressStringToBase64,
-  copyToClipboard,
-  decodeText,
-  encodeText,
-} from "@/util/commonUtils";
-import { ButtonWithHandler } from "../lib/buttons";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import DownloadIcon from "@mui/icons-material/Download";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import { CodeEditorPropsV2 } from "../lib/editor";
 
 export default function TextEditor({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const initialValue =
-    "This is an online text editor offered by WebToolsEasy. Write your text here....";
+  const initialValue = `Welcome to the Online Text Editor!
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
+This is a simple yet powerful text editor where you can:
+• Write and edit plain text
+• Count words and characters
+• Copy text to clipboard
+• Share your text via link
 
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
+Start typing your content here...
 
-  const onRawCodeChange = (value: string) => {
-    setRawCode(value);
-  };
+Features:
+- Real-time word and character counting
+- Syntax highlighting for plain text
+- Full-screen editing mode
+- Copy and share functionality
 
-  const [codeEditorProps, setCodeEditorProps] = useState<CodeEditorPropsV2>({
-    language: "text/plain",
-    value: rawCode,
-    onChange: onRawCodeChange,
-    editorOptions: {
-      wordWrap: "on",
-    },
-    className: "w-full h-full",
+Perfect for:
+✓ Quick note-taking
+✓ Text drafting
+✓ Content writing
+✓ Code documentation
+✓ Meeting notes`;
+
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
   });
 
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
+  // Calculate text statistics
+  const textStats = useMemo(() => {
+    const text = toolState.code;
+    const characters = text.length;
+    const charactersNoSpaces = text.replace(/\s/g, "").length;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const lines = text.split("\n").length;
+    const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim()).length;
 
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
+    return {
+      characters,
+      charactersNoSpaces,
+      words,
+      lines,
+      paragraphs,
+    };
+  }, [toolState.code]);
 
-  const handleTextCopy = () => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  };
+  const clearText = useCallback(() => {
+    toolState.setCode("");
+    toolState.actions.showMessage("Text cleared!");
+  }, [toolState]);
 
-  const handleLinkCopy = () => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  };
+  const downloadText = useCallback(() => {
+    const blob = new Blob([toolState.code], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "text-document.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toolState.actions.showMessage("Text file downloaded successfully!");
+  }, [toolState.code, toolState.actions]);
 
-  const handleDownloadTextFile = () => {
-    const element = document.createElement("a");
-    const file = new Blob([rawCode], { type: "plain/text" });
-    element.href = URL.createObjectURL(file);
-    element.download = "text-editor.txt";
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
-    document.body.removeChild(element); // Remove the element after download
-  };
+  // Editor configuration
+  const editorProps = useEditorConfig({
+    language: "plaintext",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
 
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function ControlButtons() {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Copy Text"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Download Text File"
-          variant="outlined"
-          size="small"
-          startIcon={<DownloadIcon />}
-          onClick={handleDownloadTextFile}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }
-
-  const handleFontSizeChange = (event: SelectChangeEvent<number>) => {
-    setCodeEditorProps({
-      ...codeEditorProps,
-      editorOptions: {
-        ...codeEditorProps.editorOptions,
-        fontSize: event.target.value as number,
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Clear Text",
+        onClick: clearText,
+        color: "error" as const,
       },
-    });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const CodeEditorOptions = () => {
-    return (
-      <div className="flex flex-row w-full">
-        <FormControl
-          variant="outlined"
-          size="small"
-          classes={{ root: "w-full md:w-1/5" }}
-        >
-          <InputLabel id="font-size-label">Font Size</InputLabel>
-          <Select
-            labelId="font-size-label"
-            id="font-size"
-            value={14}
-            onChange={handleFontSizeChange}
-            label="Font Size"
-            color="primary"
-          >
-            {[10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-  };
+      ...createCommonButtons({
+        onCopy: () =>
+          toolState.actions.copyText(
+            toolState.code,
+            "Text copied to clipboard!"
+          ),
+        onDownload: downloadText,
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [clearText, downloadText, toolState]
+  );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="Online Text Editor"
+        description="Free online text editor with word count, character count, and text statistics. Write, edit and format your text online."
+        exampleCode={initialValue}
+        exampleOutput={`Text Statistics: ${textStats.words} words, ${textStats.characters} characters`}
       />
-      <ControlButtons />
-      <div
-        className={`w-full h-[20rem] md:h-[30rem] ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      {/* Editor */}
+      <div className="mb-6">
         <SingleCodeEditorWithHeaderV2
-          codeEditorProps={codeEditorProps}
+          codeEditorProps={editorProps}
           themeOption="vs-dark"
-          className="w-[80%] md:w-full"
+          editorHeading="Text Editor"
+          className={`${
+            toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+          }`}
         />
       </div>
-    </div>
+
+      {/* Statistics, Tips, and Use Cases - Below Editor */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Statistics Panel */}
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded">
+          <h3 className="font-semibold mb-3 text-gray-800">
+            📊 Text Statistics
+          </h3>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Characters:</span>
+              <span className="font-medium">
+                {textStats.characters.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Characters (no spaces):</span>
+              <span className="font-medium">
+                {textStats.charactersNoSpaces.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Words:</span>
+              <span className="font-medium">
+                {textStats.words.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Lines:</span>
+              <span className="font-medium">
+                {textStats.lines.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Paragraphs:</span>
+              <span className="font-medium">
+                {textStats.paragraphs.toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+          <h3 className="font-semibold mb-2 text-blue-800">💡 Tips</h3>
+          <div className="text-sm text-blue-700 space-y-1">
+            <div>• Use Ctrl+A to select all text</div>
+            <div>• Use Ctrl+Z to undo changes</div>
+            <div>• Use F11 for fullscreen mode</div>
+            <div>• Text is auto-saved as you type</div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-green-50 border border-green-200 rounded">
+          <h3 className="font-semibold mb-2 text-green-800">🎯 Use Cases</h3>
+          <div className="text-sm text-green-700 space-y-1">
+            <div>• Note taking</div>
+            <div>• Content writing</div>
+            <div>• Text drafting</div>
+            <div>• Documentation</div>
+            <div>• Meeting notes</div>
+          </div>
+        </div>
+      </div>
+    </ToolLayout>
   );
 }

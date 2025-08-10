@@ -1,32 +1,46 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useCallback, useRef, useState, useMemo } from "react";
+import { Typography, LinearProgress, Box } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CodeIcon from "@mui/icons-material/Code";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import LinkIcon from "@mui/icons-material/Link";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-
 import { ToolComponentProps } from "@/types/component";
-import {
-  decodeText,
-  copyToClipboard,
-  compressStringToBase64,
-  encodeText,
-} from "@/util/commonUtils";
-
+import { useToolState } from "@/hooks/useToolState";
+import { useEditorConfig } from "@/hooks/useEditorConfig";
+import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import { ButtonWithHandler } from "../lib/buttons";
-import { SnackBarWithPosition } from "../lib/snackBar";
-import { CircularProgressWithLabel } from "../lib/progress";
-import format from "python-format-js";
 
 // Type definitions for Pyodide
 interface PyodideInterface {
   runPythonAsync(code: string): Promise<unknown>;
 }
+
+interface PyodideWindow extends Window {
+  loadPyodide?: (config: { indexURL: string }) => Promise<PyodideInterface>;
+}
+
+// Lazy load python formatter and Pyodide
+const loadPythonFormatter = () => import("python-format-js");
+const loadPyodide = async () => {
+  // Dynamically load Pyodide script
+  const windowWithPyodide = window as PyodideWindow;
+
+  if (!windowWithPyodide.loadPyodide) {
+    await new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js";
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  return windowWithPyodide.loadPyodide!({
+    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/",
+  });
+};
 
 export default function PythonCompiler({
   hostname,
@@ -35,50 +49,18 @@ export default function PythonCompiler({
   const initialValue = `print("Hello, World!")
 print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
 
-  const codeQueryParam = queryParams.content;
-  const currentPath = usePathname();
-
-  const [rawCode, setRawCode] = useState(
-    codeQueryParam ? decodeText(codeQueryParam) : initialValue
-  );
-
-  const onRawCodeChange = useCallback((value: string) => {
-    setRawCode(value);
-  }, []);
-
-  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
-  const [snackBarMessage, setSnackBarMessage] = useState("");
-
-  const handleSnackBarClose = () => {
-    setIsSnackBarOpen(false);
-  };
-
-  const handleTextCopy = useCallback(() => {
-    copyToClipboard(rawCode);
-    setSnackBarMessage("Copied Formatted Code to Clipboard!");
-    setIsSnackBarOpen(true);
-  }, [rawCode]);
-
-  const handleLinkCopy = useCallback(() => {
-    compressStringToBase64(rawCode).then((compressedData) => {
-      copyToClipboard(
-        `${hostname}${currentPath}?content=${encodeText(compressedData)}`
-      );
-      setSnackBarMessage("Copied Link to Clipboard!");
-      setIsSnackBarOpen(true);
-    });
-  }, [rawCode, hostname, currentPath]);
-
-  const formatCode = useCallback(() => {
-    setRawCode(format(rawCode));
-  }, [rawCode]);
+  const toolState = useToolState({
+    hostname: hostname || "",
+    queryParams,
+    initialValue,
+  });
 
   const [output, setOutput] = useState("");
   const [pyodideLoading, setPyodideLoading] = useState(false);
   const [pyodideProgress, setPyodideProgress] = useState(0);
   const pyodideRef = useRef<PyodideInterface | null>(null);
 
-  const loadPyodide = useCallback(async () => {
+  const initializePyodide = useCallback(async () => {
     if (pyodideRef.current || pyodideLoading) return;
 
     try {
@@ -86,34 +68,20 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
       setPyodideProgress(10);
       setOutput("Loading Python environment...");
 
-      // Dynamically import pyodide script
-      await new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js";
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
-      });
-
-      setPyodideProgress(30);
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const pyodide = await (window as any).loadPyodide({
-        indexURL: "https://cdn.jsdelivr.net/" + "pyodide/v0.25.0/full/",
-      });
+      const pyodide = await loadPyodide();
 
       pyodideRef.current = pyodide;
       setPyodideLoading(false);
       setPyodideProgress(100);
       setOutput("Python environment ready! Run your code to see output...");
+      toolState.actions.showMessage("Python environment loaded successfully!");
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Failed to load Pyodide:", error);
-      }
+      console.error("Failed to load Pyodide:", error);
       setOutput("Error: Failed to load Python environment");
       setPyodideLoading(false);
+      toolState.actions.showMessage("Failed to load Python environment");
     }
-  }, [pyodideLoading]);
+  }, [pyodideLoading, toolState.actions]);
 
   const runCode = useCallback(async () => {
     // Show loading immediately
@@ -121,7 +89,7 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
 
     // Load Pyodide on first run
     if (!pyodideRef.current && !pyodideLoading) {
-      await loadPyodide();
+      await initializePyodide();
     }
 
     if (!pyodideRef.current) {
@@ -132,7 +100,7 @@ print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`;
     try {
       setOutput("Running code...");
 
-      // Simplified Python execution
+      // Simplified Python execution with output capture
       const result = await pyodideRef.current.runPythonAsync(`
 import sys
 from io import StringIO
@@ -140,178 +108,153 @@ old_stdout = sys.stdout
 captured_output = StringIO()
 sys.stdout = captured_output
 try:
-    exec(${JSON.stringify(rawCode)})
+    exec(${JSON.stringify(toolState.code)})
 finally:
     sys.stdout = old_stdout
 captured_output.getvalue()
       `);
 
-      setOutput(
-        String(result).trim() || "Code executed successfully (no output)"
-      );
+      const outputText = String(result).trim();
+      setOutput(outputText || "Code executed successfully (no output)");
+      toolState.actions.showMessage("Python code executed successfully!");
     } catch (error) {
       try {
         await pyodideRef.current.runPythonAsync("sys.stdout = sys.__stdout__");
       } catch {
         // Ignore restore errors
       }
-      setOutput(`Error: ${error}`);
+      const errorMessage = `Error: ${error}`;
+      setOutput(errorMessage);
+      toolState.actions.showMessage("Python execution failed");
     }
-  }, [rawCode, pyodideLoading, loadPyodide]);
+  }, [toolState.code, pyodideLoading, initializePyodide, toolState.actions]);
 
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const formatCode = useCallback(async () => {
+    try {
+      const { default: format } = await loadPythonFormatter();
+      const formatted = format(toolState.code);
+      toolState.setCode(formatted);
+      toolState.actions.showMessage("Python code formatted successfully!");
+    } catch (error) {
+      console.error("Format error:", error);
+      toolState.actions.showMessage("Failed to format Python code");
+    }
+  }, [toolState]);
 
-  const ControlButtons = useCallback(() => {
-    return (
-      <div className="flex flex-col gap-2 w-full md:flex-row">
-        <ButtonWithHandler
-          buttonText="Run Code"
-          variant="contained"
-          size="small"
-          startIcon={<PlayArrowIcon />}
-          onClick={runCode}
-        />
-        <ButtonWithHandler
-          buttonText="Format Code"
-          variant="outlined"
-          size="small"
-          startIcon={<CodeIcon />}
-          onClick={formatCode}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Text"
-          variant="outlined"
-          size="small"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleTextCopy}
-        />
-        <ButtonWithHandler
-          buttonText="Copy Shareable Link"
-          variant="outlined"
-          size="small"
-          startIcon={<LinkIcon />}
-          onClick={handleLinkCopy}
-        />
-        {!isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Enter Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<OpenInFullIcon />}
-            onClick={() => setIsFullScreen(true)}
-            className="!hidden md:!flex"
-          />
-        )}
-        {isFullScreen && (
-          <ButtonWithHandler
-            buttonText="Close Full Screen"
-            variant="outlined"
-            size="small"
-            startIcon={<CloseFullscreenIcon />}
-            onClick={() => setIsFullScreen(false)}
-            className="!hidden md:!flex"
-          />
-        )}
-      </div>
-    );
-  }, [runCode, formatCode, handleTextCopy, handleLinkCopy, isFullScreen]);
+  const copyOutput = useCallback(() => {
+    if (!output) {
+      toolState.actions.showMessage("No output to copy!");
+      return;
+    }
+    toolState.actions.copyText(output, "Python output copied to clipboard!");
+  }, [output, toolState.actions]);
 
-  // Simplified editor props
-  const editorProps = useMemo(
-    () => ({
-      language: "python" as const,
-      value: rawCode,
-      onChange: onRawCodeChange,
-      editorOptions: {
-        wordWrap: "on" as const,
-        fontSize: 12,
+  // Editor configuration
+  const editorProps = useEditorConfig({
+    language: "python",
+    value: toolState.code,
+    onChange: toolState.setCode,
+  });
+
+  // Button configuration
+  const buttons = useMemo(
+    () => [
+      {
+        type: "custom" as const,
+        text: "Run Python",
+        onClick: runCode,
+        icon: <PlayArrowIcon />,
+        disabled: pyodideLoading,
+        variant: "contained" as const,
       },
-      className: "w-full h-full",
-    }),
-    [rawCode, onRawCodeChange]
+      {
+        type: "custom" as const,
+        text: "Format Code",
+        onClick: formatCode,
+        icon: <CodeIcon />,
+        disabled: pyodideLoading,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Output",
+        onClick: copyOutput,
+        icon: <ContentCopyIcon />,
+        disabled: !output,
+      },
+      ...createCommonButtons({
+        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
+        onFullScreen: toolState.toggleFullScreen,
+      }),
+    ],
+    [runCode, formatCode, copyOutput, output, pyodideLoading, toolState]
   );
 
   return (
-    <div
-      className={`flex flex-col gap-3 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
-      }`}
+    <ToolLayout
+      isFullScreen={toolState.isFullScreen}
+      snackBar={{
+        open: toolState.snackBar.open,
+        message: toolState.snackBar.message,
+        onClose: toolState.snackBar.close,
+      }}
     >
-      {/* SEO-friendly hidden content for search engines */}
-      <div className="sr-only" aria-hidden="true">
-        <h1>Online Python Compiler</h1>
-        <p>
-          Free online Python compiler to write and run Python code in your
-          browser. No installation needed.
-        </p>
-        <h2>Example Python Code</h2>
-        <pre>{`print("Hello, World!")
-print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`}</pre>
-        <h2>Example Output</h2>
-        <pre>{`Hello, World!
-This is Online Python Compiler (Interpreter) Offered by WebToolsEasy`}</pre>
-      </div>
-
-      {/* No JavaScript fallback */}
-      <noscript>
-        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
-          <p className="font-bold text-lg">JavaScript Required</p>
-          <p>
-            This Python compiler requires JavaScript to run code in your
-            browser.
-          </p>
-          <p>
-            Please enable JavaScript or use a compatible browser to run Python
-            code interactively.
-          </p>
-          <div className="mt-4">
-            <p className="font-semibold">Example Code:</p>
-            <pre className="bg-gray-100 p-2 rounded">{`print("Hello, World!")
-print("This is Online Python Compiler (Interpreter) Offered by WebToolsEasy")`}</pre>
-            <p className="font-semibold mt-2">Example Output:</p>
-            <pre className="bg-gray-100 p-2 rounded">{`Hello, World!
-This is Online Python Compiler (Interpreter) Offered by WebToolsEasy`}</pre>
-          </div>
-        </div>
-      </noscript>
-
-      {/* Lazy load Pyodide only when needed */}
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={2000}
-        handleClose={handleSnackBarClose}
+      <SEOContent
+        title="Online Python Compiler"
+        description="Free online Python compiler to write and run Python code in your browser. No installation needed."
+        exampleCode={initialValue}
+        exampleOutput="Hello, World!\nThis is Online Python Compiler (Interpreter) Offered by WebToolsEasy"
       />
+
       {pyodideLoading && (
-        <div className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="text-lg font-semibold text-gray-800">
+        <Box className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <Typography variant="h6" className="text-gray-800">
             Loading Python environment...
-          </div>
-          <CircularProgressWithLabel value={pyodideProgress} />
-          <div className="text-sm text-gray-600">
-            Please wait while we initialize the Python runtime
-          </div>
-        </div>
+          </Typography>
+          <Box className="w-full max-w-md">
+            <LinearProgress
+              variant="determinate"
+              value={pyodideProgress}
+              className="mb-2"
+            />
+            <Typography variant="body2" className="text-center text-gray-600">
+              {pyodideProgress}% - Please wait while we initialize Pyodide
+            </Typography>
+          </Box>
+        </Box>
       )}
-      <ControlButtons />
-      <div
-        className={`flex flex-col w-full h-[20rem] md:h-[30rem] items-center md:flex-row gap-2 ${
-          isFullScreen ? "md:h-full" : ""
-        }`}
-      >
-        <SingleCodeEditorWithHeaderV2
-          codeEditorProps={editorProps}
-          themeOption="vs-dark"
-          editorHeading="Python Code"
-          className="w-[80%] md:w-[49%]"
-        />
-        <div className="flex flex-col justify-end h-full gap-2 w-[80%] md:w-[49%]">
-          <div className="text-xl font-semibold text-gray-700">Output</div>
-          <div className="w-full h-full overflow-auto p-3 bg-gray-100 border-2 border-gray-300 rounded font-mono text-sm whitespace-pre-wrap">
-            {output || "Run your Python code to see output here..."}
+
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <CodeEditorLayout
+        isFullScreen={toolState.isFullScreen}
+        leftPanel={
+          <SingleCodeEditorWithHeaderV2
+            codeEditorProps={editorProps}
+            themeOption="vs-dark"
+            editorHeading="Python Code"
+            className={
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }
+          />
+        }
+        rightPanel={
+          <div
+            className={`flex flex-col gap-2 ${
+              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-xl md:text-2xl">📟</span>
+              <span className="font-semibold text-lg md:text-xl">
+                Python Output
+              </span>
+            </div>
+            <div className="flex-1 min-h-[200px] md:min-h-[280px] w-full overflow-auto p-3 md:p-4 bg-gray-900 text-green-400 border-2 border-gray-300 rounded-lg font-mono text-xs md:text-sm whitespace-pre-wrap">
+              {output || "Run your Python code to see output here..."}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        }
+      />
+    </ToolLayout>
   );
 }

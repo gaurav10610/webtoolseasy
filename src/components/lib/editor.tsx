@@ -27,6 +27,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   onChange,
   editorOptions = {},
   handleEditorDidMount,
+  className = "w-full h-full",
 }) => {
   const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,
@@ -37,7 +38,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   };
 
   return (
-    <div className="h-full w-full">
+    <div className={className}>
       <Editor
         width="100%"
         height="100%"
@@ -78,7 +79,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
     };
 
   return (
-    <div className="h-full w-full border-2 border-gray-300">
+    <div className="w-full h-full min-h-[320px] border-2 border-gray-300">
       <MonacoDiffEditor
         width="100%"
         height="100%"
