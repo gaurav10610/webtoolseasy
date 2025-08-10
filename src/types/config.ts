@@ -4,6 +4,7 @@ export enum ApplicationIds {
   TEXT_COMPARE = "textcompare",
   JWT_DECODER = "jwtdecoder",
   IMAGE_COMPRESSOR = "imagecompressor",
+  IMAGE_FORMAT_CONVERTER = "imageformatconverter",
   JS_FORMATTER = "jsformatter",
   JSON_FORMATTER = "jsonformatter",
   HTML_FORMATTER = "htmlformatter",
