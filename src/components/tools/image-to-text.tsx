@@ -24,6 +24,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import DownloadIcon from "@mui/icons-material/Download";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 
 interface OCRProgress {
   status: string;
@@ -230,135 +231,144 @@ export default function ImageToTextConverter({
   );
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full">
-      {/* Header Section */}
-      <div className="flex justify-between items-center flex-wrap gap-2">
-        <Typography variant="h4" component="h1" className="truncate">
-          Free Image to Text Converter
-        </Typography>
-      </div>
-
-      {/* Snackbar */}
-      <SnackBarWithPosition
-        message={snackBarMessage}
-        open={isSnackBarOpen}
-        autoHideDuration={3000}
-        handleClose={handleSnackBarClose}
-        vertical="bottom"
-        horizontal="center"
+    <ToolLayout>
+      <SEOContent
+        title="Image to Text Converter (OCR)"
+        description="Free online OCR tool to extract text from images. Convert JPG, PNG, WebP images to editable text using advanced optical character recognition."
+        exampleCode="image.jpg"
+        exampleOutput="Extracted text content"
       />
 
-      {/* Control Buttons */}
-      <ControlButtons />
-
-      {/* Error Alert */}
-      {error && <Alert severity="error">{error}</Alert>}
-
-      {/* File Upload Section */}
-      <FileUploadWithDragDrop
-        onFileSelect={handleFileSelect}
-        onError={handleError}
-        accept="image/*"
-        multiple={false}
-        allowedTypes={FILE_TYPE_PRESETS.IMAGES}
-        maxSize={FILE_SIZE_PRESETS.LARGE}
-        title="Upload Image"
-        subtitle="Select or drag and drop your image here"
-        supportText="Supports JPG, PNG, GIF, BMP, WebP formats up to 10MB"
-        disabled={isProcessing}
-      />
-
-      {/* Processing Progress */}
-      {isProcessing && (
-        <Card>
-          <CardContent>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-blue-800 font-medium">
-                {ocrProgress.status}
-              </span>
-              <span className="text-blue-600">{ocrProgress.progress}%</span>
-            </div>
-            <div className="w-full bg-blue-200 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${ocrProgress.progress}%` }}
-              ></div>
-            </div>
-            <p className="text-sm text-blue-700 mt-2">
-              Extracting text from image using OCR technology...
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      <div className="flex flex-col w-full gap-4 flex-grow min-w-0 md:flex-row md:h-[500px]">
-        {/* Image Preview Section */}
-        <div className="w-full md:w-1/2 flex flex-col min-h-0">
-          <Typography variant="h6" className="mb-3 flex items-center gap-2">
-            <ImageIcon />
-            Image Preview
+      <div className="flex flex-col gap-4 w-full h-full">
+        {/* Header Section */}
+        <div className="flex justify-between items-center flex-wrap gap-2">
+          <Typography variant="h4" component="h1" className="truncate">
+            Free Image to Text Converter
           </Typography>
-          <div className="flex-1 border border-gray-200 rounded-lg bg-white flex items-center justify-center overflow-hidden">
-            {imagePreview ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="max-w-full max-h-full object-contain"
-              />
-            ) : (
-              <div className="text-center text-gray-500 p-8">
-                <ImageIcon className="text-6xl mb-4" />
-                <Typography variant="body1">
-                  Upload an image to see preview
-                </Typography>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* Extracted Text Section */}
-        <div className="w-full md:w-1/2 flex flex-col min-h-0">
-          <Typography variant="h6" className="mb-3 flex items-center gap-2">
-            <TextFieldsIcon />
-            Extracted Text
-          </Typography>
-          <div className="flex-1 border border-gray-200 rounded-lg bg-white overflow-hidden">
-            {extractedText || selectedImage ? (
-              <SingleCodeEditorWithHeaderV2
-                codeEditorProps={{
-                  language: "plaintext",
-                  value:
-                    extractedText ||
-                    "Click 'Extract Text' to get text from your image...",
-                  onChange: setExtractedText,
-                  className: "h-full",
-                  editorOptions: {
-                    wordWrap: "on",
-                    lineNumbers: "off",
-                    minimap: { enabled: false },
-                    scrollBeyondLastLine: false,
-                    fontSize: 14,
-                    padding: { top: 16, bottom: 16 },
-                    readOnly: !extractedText,
-                  },
-                }}
-                themeOption="vs-light"
-                className="w-full h-full border-0 rounded-lg"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full text-center text-gray-500 p-8">
-                <div>
-                  <TextFieldsIcon className="text-6xl mb-4" />
+        {/* Snackbar */}
+        <SnackBarWithPosition
+          message={snackBarMessage}
+          open={isSnackBarOpen}
+          autoHideDuration={3000}
+          handleClose={handleSnackBarClose}
+          vertical="bottom"
+          horizontal="center"
+        />
+
+        {/* Control Buttons */}
+        <ControlButtons />
+
+        {/* Error Alert */}
+        {error && <Alert severity="error">{error}</Alert>}
+
+        {/* File Upload Section */}
+        <FileUploadWithDragDrop
+          onFileSelect={handleFileSelect}
+          onError={handleError}
+          accept="image/*"
+          multiple={false}
+          allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+          maxSize={FILE_SIZE_PRESETS.LARGE}
+          title="Upload Image"
+          subtitle="Select or drag and drop your image here"
+          supportText="Supports JPG, PNG, GIF, BMP, WebP formats up to 10MB"
+          disabled={isProcessing}
+        />
+
+        {/* Processing Progress */}
+        {isProcessing && (
+          <Card>
+            <CardContent>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-blue-800 font-medium">
+                  {ocrProgress.status}
+                </span>
+                <span className="text-blue-600">{ocrProgress.progress}%</span>
+              </div>
+              <div className="w-full bg-blue-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${ocrProgress.progress}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-blue-700 mt-2">
+                Extracting text from image using OCR technology...
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        <div className="flex flex-col w-full gap-4 flex-grow min-w-0 md:flex-row md:h-[500px]">
+          {/* Image Preview Section */}
+          <div className="w-full md:w-1/2 flex flex-col min-h-0">
+            <Typography variant="h6" className="mb-3 flex items-center gap-2">
+              <ImageIcon />
+              Image Preview
+            </Typography>
+            <div className="flex-1 border border-gray-200 rounded-lg bg-white flex items-center justify-center overflow-hidden">
+              {imagePreview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="max-w-full max-h-full object-contain"
+                />
+              ) : (
+                <div className="text-center text-gray-500 p-8">
+                  <ImageIcon className="text-6xl mb-4" />
                   <Typography variant="body1">
-                    Upload an image to extract text
+                    Upload an image to see preview
                   </Typography>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+          </div>
+
+          {/* Extracted Text Section */}
+          <div className="w-full md:w-1/2 flex flex-col min-h-0">
+            <Typography variant="h6" className="mb-3 flex items-center gap-2">
+              <TextFieldsIcon />
+              Extracted Text
+            </Typography>
+            <div className="flex-1 border border-gray-200 rounded-lg bg-white overflow-hidden">
+              {extractedText || selectedImage ? (
+                <SingleCodeEditorWithHeaderV2
+                  codeEditorProps={{
+                    language: "plaintext",
+                    value:
+                      extractedText ||
+                      "Click 'Extract Text' to get text from your image...",
+                    onChange: setExtractedText,
+                    className: "h-full",
+                    editorOptions: {
+                      wordWrap: "on",
+                      lineNumbers: "off",
+                      minimap: { enabled: false },
+                      scrollBeyondLastLine: false,
+                      fontSize: 14,
+                      padding: { top: 16, bottom: 16 },
+                      readOnly: !extractedText,
+                    },
+                  }}
+                  themeOption="vs-light"
+                  className="w-full h-full border-0 rounded-lg"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-center text-gray-500 p-8">
+                  <div>
+                    <TextFieldsIcon className="text-6xl mb-4" />
+                    <Typography variant="body1">
+                      Upload an image to extract text
+                    </Typography>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ToolLayout>
   );
 }

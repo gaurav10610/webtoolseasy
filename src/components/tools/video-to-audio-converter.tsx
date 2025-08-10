@@ -11,7 +11,7 @@ import { CircularProgressWithLabel } from "@/components/lib/progress";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { PaperWithChildren } from "@/components/lib/papers";
 import { SelectWithLabel } from "@/components/lib/select";
-import { ToolLayout } from "@/components/common/ToolLayout";
+import { ToolLayout, SEOContent } from "@/components/common/ToolLayout";
 import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
 import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
 import { FFmpegFormat } from "@/types/ffmpeg";
@@ -426,6 +426,13 @@ export default function VideoToAudioConverter() {
         onClose: handleSnackBarClose,
       }}
     >
+      <SEOContent
+        title="Video to Audio Converter"
+        description="Free online video to audio converter. Extract audio from video files and convert to MP3, WAV, AAC, and other formats."
+        exampleCode="video.mp4"
+        exampleOutput="audio.mp3"
+      />
+
       {/* Error message */}
       {state.error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
