@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { js_beautify } from "js-beautify";
+import { ContentCopy } from "@mui/icons-material";
+import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -28,39 +30,27 @@ if (value === 'webtoolseasy') {
     initialValue,
   });
 
-  const [formattedCode, setFormattedCode] = useState(() => {
+  const formattedCode = useMemo(() => {
+    if (!toolState.code.trim()) return "";
     try {
       return js_beautify(toolState.code);
     } catch {
       return "";
     }
-  });
+  }, [toolState.code]);
 
-  const formatJs = useCallback(() => {
+  const formatCode = useCallback(() => {
     try {
-      const formatted = js_beautify(toolState.code);
-      setFormattedCode(formatted);
+      js_beautify(toolState.code); // Validate the JavaScript
       toolState.actions.showMessage("JavaScript formatted successfully!");
     } catch (error) {
       toolState.actions.showMessage(`Error: ${error}`);
-      setFormattedCode("Invalid JavaScript");
     }
   }, [toolState]);
 
   const copyFormattedCode = useCallback(() => {
     toolState.actions.copyText(formattedCode, "Formatted JavaScript copied!");
   }, [toolState.actions, formattedCode]);
-
-  const downloadFormattedCode = useCallback(() => {
-    const blob = new Blob([formattedCode], { type: "text/javascript" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "formatted-script.js";
-    a.click();
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("Formatted JavaScript downloaded!");
-  }, [formattedCode, toolState.actions]);
 
   // Editor configurations
   const inputEditorProps = useEditorConfig({
@@ -79,15 +69,26 @@ if (value === 'webtoolseasy') {
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Format Code",
+        onClick: formatCode,
+        icon: <FormatAlignCenterIcon />,
+        variant: "contained" as const,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Formatted",
+        onClick: copyFormattedCode,
+        disabled: !formattedCode,
+        icon: <ContentCopy />,
+      },
       ...createCommonButtons({
-        onFormat: formatJs,
-        onCopy: copyFormattedCode,
-        onDownload: downloadFormattedCode,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatJs, copyFormattedCode, downloadFormattedCode, toolState]
+    [formatCode, copyFormattedCode, formattedCode, toolState]
   );
 
   return (

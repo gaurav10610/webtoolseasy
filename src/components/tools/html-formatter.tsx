@@ -5,7 +5,7 @@ import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
 import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
-import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { ToolControls } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { html_beautify } from "js-beautify";
 
@@ -44,17 +44,6 @@ export default function HtmlFormatter({
     toolState.actions.copyText(formattedCode, "Formatted HTML copied!");
   }, [toolState.actions, formattedCode]);
 
-  const downloadFormattedCode = useCallback(() => {
-    const blob = new Blob([formattedCode], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "formatted-code.html";
-    a.click();
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("Formatted HTML downloaded!");
-  }, [formattedCode, toolState.actions]);
-
   // Editor configurations
   const inputEditorProps = useEditorConfig({
     language: "html",
@@ -72,15 +61,25 @@ export default function HtmlFormatter({
   // Button configuration
   const buttons = useMemo(
     () => [
-      ...createCommonButtons({
-        onFormat: formatHtml,
-        onCopy: copyFormattedCode,
-        onDownload: downloadFormattedCode,
-        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
-        onFullScreen: toolState.toggleFullScreen,
-      }),
+      {
+        type: "format" as const,
+        onClick: formatHtml,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy Formatted",
+        onClick: copyFormattedCode,
+      },
+      {
+        type: "shareLink" as const,
+        onClick: () => toolState.actions.copyShareableLink(toolState.code),
+      },
+      {
+        type: "fullscreen" as const,
+        onClick: toolState.toggleFullScreen,
+      },
     ],
-    [formatHtml, copyFormattedCode, downloadFormattedCode, toolState]
+    [formatHtml, copyFormattedCode, toolState]
   );
 
   return (
