@@ -5,18 +5,8 @@ import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { ToolControls, createCommonButtons } from "../common/ToolControls";
-import {
-  Typography,
-  Slider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-  LinearProgress,
-  Box,
-} from "@mui/material";
+import { ToolControls } from "../common/ToolControls";
+import { Typography, Slider, LinearProgress, Box, Button } from "@mui/material";
 import CompressIcon from "@mui/icons-material/Compress";
 import DownloadIcon from "@mui/icons-material/Download";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -39,6 +29,8 @@ const OUTPUT_FORMATS = [
   { value: "jpeg", label: "JPEG" },
   { value: "png", label: "PNG" },
   { value: "webp", label: "WebP" },
+  { value: "bmp", label: "BMP" },
+  { value: "ico", label: "ICO" },
 ];
 
 export default function ImageCompress({
@@ -53,7 +45,6 @@ export default function ImageCompress({
   const [images, setImages] = useState<CompressedImage[]>([]);
   const [selectedImageId, setSelectedImageId] = useState<string>("");
   const [compressionLevel, setCompressionLevel] = useState(50);
-  const [outputFormat, setOutputFormat] = useState("jpeg");
 
   const selectedImage = useMemo(
     () => images.find((img) => img.id === selectedImageId),
@@ -108,12 +99,7 @@ export default function ImageCompress({
             (1024 * 1024),
           maxWidthOrHeight: 1920,
           useWebWorker: true,
-          fileType:
-            outputFormat === "jpeg"
-              ? "image/jpeg"
-              : outputFormat === "png"
-              ? "image/png"
-              : "image/webp",
+          fileType: "image/jpeg", // Default to JPEG for compression
           onProgress: (progress: number) => {
             setImages((prev) => {
               const updated = [...prev];
@@ -167,11 +153,11 @@ export default function ImageCompress({
         toolState.actions.showMessage("Compression failed. Please try again.");
       }
     },
-    [images, compressionLevel, outputFormat, toolState.actions]
+    [images, compressionLevel, toolState.actions]
   );
 
   const downloadImage = useCallback(
-    (image: CompressedImage) => {
+    (image: CompressedImage, format: string) => {
       if (!image.compressedFile) return;
 
       const url = URL.createObjectURL(image.compressedFile);
@@ -179,7 +165,7 @@ export default function ImageCompress({
       link.href = url;
       link.download = `compressed-${
         image.originalFile.name.split(".")[0]
-      }.${outputFormat}`;
+      }.${format}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -187,7 +173,7 @@ export default function ImageCompress({
 
       toolState.actions.showMessage("Image downloaded successfully!");
     },
-    [outputFormat, toolState.actions]
+    [toolState.actions]
   );
 
   const removeImage = useCallback(
@@ -203,45 +189,40 @@ export default function ImageCompress({
     [images, selectedImageId]
   );
 
-  const compressAllImages = useCallback(() => {
-    const uncompressedImages = images.filter(
-      (img) => !img.isCompressed && !img.isCompressing
+  const applySettingsAndCompress = useCallback(() => {
+    // Reset all images to uncompressed state with new settings
+    setImages((prev) =>
+      prev.map((img) => ({
+        ...img,
+        isCompressed: false,
+        compressedFile: undefined,
+        compressionProgress: 0,
+        error: undefined,
+        compressionRatio: compressionLevel,
+      }))
     );
-    uncompressedImages.forEach((img) => compressImage(img.id));
-  }, [images, compressImage]);
+
+    // Start compressing all images
+    setTimeout(() => {
+      const imagesToCompress = images.filter((img) => !img.isCompressing);
+      imagesToCompress.forEach((img) => compressImage(img.id));
+    }, 100);
+
+    toolState.actions.showMessage(
+      "Applying settings and starting compression..."
+    );
+  }, [images, compressionLevel, compressImage, toolState.actions]);
 
   const downloadAllCompressed = useCallback(() => {
     const compressedImages = images.filter(
       (img) => img.isCompressed && img.compressedFile
     );
-    compressedImages.forEach((img) => downloadImage(img));
+    compressedImages.forEach((img) => downloadImage(img, "jpeg"));
   }, [images, downloadImage]);
 
   // Button configuration
   const buttons = useMemo(
     () => [
-      ...(selectedImage
-        ? [
-            {
-              type: "custom" as const,
-              text: "Compress Selected",
-              onClick: () => compressImage(selectedImage.id),
-              icon: <CompressIcon />,
-              disabled:
-                selectedImage.isCompressing || selectedImage.isCompressed,
-            },
-          ]
-        : []),
-      ...(images.some((img) => !img.isCompressed && !img.isCompressing)
-        ? [
-            {
-              type: "custom" as const,
-              text: "Compress All",
-              onClick: compressAllImages,
-              icon: <CompressIcon />,
-            },
-          ]
-        : []),
       ...(images.some((img) => img.isCompressed)
         ? [
             {
@@ -252,23 +233,12 @@ export default function ImageCompress({
             },
           ]
         : []),
-      ...createCommonButtons({
-        onFullScreen: toolState.toggleFullScreen,
-      }),
     ],
-    [
-      selectedImage,
-      images,
-      compressImage,
-      compressAllImages,
-      downloadAllCompressed,
-      toolState,
-    ]
+    [images, downloadAllCompressed]
   );
 
   return (
     <ToolLayout
-      isFullScreen={toolState.isFullScreen}
       snackBar={{
         open: toolState.snackBar.open,
         message: toolState.snackBar.message,
@@ -282,7 +252,7 @@ export default function ImageCompress({
         exampleOutput="Compressed images with reduced file size and preserved quality"
       />
 
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      <ToolControls buttons={buttons} />
 
       <div className="w-full space-y-6">
         {/* File Upload */}
@@ -326,7 +296,7 @@ export default function ImageCompress({
               <SettingsIcon /> Compression Settings
             </Typography>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {/* Compression Level */}
               <div>
                 <Typography variant="body2" className="mb-2">
@@ -334,7 +304,9 @@ export default function ImageCompress({
                 </Typography>
                 <Slider
                   value={compressionLevel}
-                  onChange={(_, value) => setCompressionLevel(value as number)}
+                  onChange={(_, value) => {
+                    setCompressionLevel(value as number);
+                  }}
                   min={10}
                   max={90}
                   step={5}
@@ -342,26 +314,35 @@ export default function ImageCompress({
                   valueLabelFormat={(value) => `${value}%`}
                 />
               </div>
+            </div>
 
-              {/* Output Format */}
-              <div>
-                <FormControl fullWidth variant="outlined" size="small">
-                  <InputLabel>Output Format</InputLabel>
-                  <Select
-                    value={outputFormat}
-                    label="Output Format"
-                    onChange={(e: SelectChangeEvent) =>
-                      setOutputFormat(e.target.value)
-                    }
-                  >
-                    {OUTPUT_FORMATS.map((format) => (
-                      <MenuItem key={format.value} value={format.value}>
-                        {format.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
+            {/* Compression Action Buttons */}
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200">
+              <Button
+                variant="contained"
+                startIcon={<CompressIcon />}
+                onClick={applySettingsAndCompress}
+                disabled={images.some((img) => img.isCompressing)}
+                sx={{
+                  backgroundColor: "#2563eb",
+                  "&:hover": { backgroundColor: "#1d4ed8" },
+                }}
+              >
+                Apply Settings & Compress All
+              </Button>
+
+              {selectedImage && (
+                <Button
+                  variant="outlined"
+                  startIcon={<CompressIcon />}
+                  onClick={() => compressImage(selectedImage.id)}
+                  disabled={
+                    selectedImage.isCompressing || selectedImage.isCompressed
+                  }
+                >
+                  Compress Selected
+                </Button>
+              )}
             </div>
           </div>
         )}
@@ -401,20 +382,33 @@ export default function ImageCompress({
                       {image.originalFile.name}
                     </Typography>
 
-                    <div className="text-xs text-gray-600 space-y-1">
-                      <div>
-                        Original: {formatBytes(image.originalFile.size)}
+                    <div className="text-sm space-y-2">
+                      <div className="flex justify-between items-center p-2 bg-gray-100 rounded">
+                        <span className="font-medium">Original:</span>
+                        <span className="text-blue-600 font-mono">
+                          {formatBytes(image.originalFile.size)}
+                        </span>
                       </div>
                       {image.compressedFile && (
-                        <div className="text-green-600">
-                          Compressed: {formatBytes(image.compressedFile.size)}(
-                          {Math.round(
-                            (1 -
-                              image.compressedFile.size /
-                                image.originalFile.size) *
-                              100
-                          )}
-                          % reduction)
+                        <div className="flex justify-between items-center p-2 bg-green-50 rounded">
+                          <span className="font-medium">Compressed:</span>
+                          <span className="text-green-600 font-mono">
+                            {formatBytes(image.compressedFile.size)}
+                          </span>
+                        </div>
+                      )}
+                      {image.compressedFile && (
+                        <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Reduction:</span>
+                          <span className="text-blue-600 font-bold">
+                            {Math.round(
+                              (1 -
+                                image.compressedFile.size /
+                                  image.originalFile.size) *
+                                100
+                            )}
+                            %
+                          </span>
                         </div>
                       )}
                     </div>
@@ -434,21 +428,43 @@ export default function ImageCompress({
                       </Box>
                     )}
 
-                    {/* Status */}
+                    {/* Status and Download */}
                     {image.isCompressed && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-green-600">
-                          ✓ Compressed
-                        </span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            downloadImage(image);
-                          }}
-                          className="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
-                        >
-                          Download
-                        </button>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-green-600 font-medium">
+                            ✓ Compressed
+                          </span>
+                        </div>
+                        <div className="space-y-1">
+                          <Typography
+                            variant="caption"
+                            className="text-gray-600"
+                          >
+                            Download as:
+                          </Typography>
+                          <div className="flex flex-wrap gap-1">
+                            {OUTPUT_FORMATS.map((format) => (
+                              <Button
+                                key={format.value}
+                                size="small"
+                                variant="outlined"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  downloadImage(image, format.value);
+                                }}
+                                sx={{
+                                  minWidth: "auto",
+                                  px: 1,
+                                  py: 0.5,
+                                  fontSize: "0.7rem",
+                                }}
+                              >
+                                {format.label}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     )}
 
