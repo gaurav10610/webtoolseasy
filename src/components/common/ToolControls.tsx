@@ -21,6 +21,7 @@ export interface ToolButtonConfig {
   onClick?: () => void;
   icon?: React.ReactElement;
   variant?: "text" | "outlined" | "contained";
+  color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
   className?: string;
   disabled?: boolean;
 }
@@ -104,6 +105,7 @@ export const ToolControls = memo(function ToolControls({
               onClick={button.onClick}
               className={`!hidden md:!flex ${button.className || ""}`}
               {...(button.disabled && { disabled: button.disabled })}
+              {...(button.color && { color: button.color })}
             />
           );
         }
@@ -118,6 +120,7 @@ export const ToolControls = memo(function ToolControls({
             onClick={button.onClick}
             className={button.className || ""}
             {...(button.disabled && { disabled: button.disabled })}
+            {...(button.color && { color: button.color })}
           />
         );
       })}

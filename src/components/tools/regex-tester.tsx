@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { TextField, Typography, Chip, Box } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
@@ -102,6 +103,16 @@ Invalid emails: notanemail, @missing.com, test@`;
     [testRegex]
   );
 
+  const clearAll = useCallback(() => {
+    toolState.setCode("");
+    setTestText("");
+    setFlags("g");
+    setMatches([]);
+    setIsValidRegex(true);
+    setErrorMessage("");
+    toolState.actions.showMessage("All fields cleared!");
+  }, [toolState]);
+
   // Button configuration
   const buttons = useMemo(
     () => [
@@ -109,7 +120,14 @@ Invalid emails: notanemail, @missing.com, test@`;
         type: "custom" as const,
         text: "Test Regex",
         onClick: testRegex,
-        icon: <SearchIcon />,
+        icon: <PlayArrowIcon />,
+      },
+      {
+        type: "custom" as const,
+        text: "Clear All",
+        onClick: clearAll,
+        icon: <ClearIcon />,
+        color: "error" as const,
       },
       ...createCommonButtons({
         onCopy: () =>
@@ -121,7 +139,7 @@ Invalid emails: notanemail, @missing.com, test@`;
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [testRegex, toolState]
+    [testRegex, clearAll, toolState]
   );
 
   return (
@@ -142,9 +160,9 @@ Invalid emails: notanemail, @missing.com, test@`;
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Left Panel - Regex Input */}
-        <div className="space-y-4">
+      <div className="space-y-4">
+        {/* Top Section - Regex and Test Text Side by Side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <Typography variant="h6" className="mb-2">
               Regular Expression
@@ -155,7 +173,7 @@ Invalid emails: notanemail, @missing.com, test@`;
               onChange={(e) => handleRegexChange(e.target.value)}
               placeholder="Enter your regex pattern"
               multiline
-              rows={3}
+              rows={6}
               error={!isValidRegex}
               helperText={
                 !isValidRegex ? errorMessage : "Enter a valid regex pattern"
@@ -163,6 +181,23 @@ Invalid emails: notanemail, @missing.com, test@`;
             />
           </div>
 
+          <div>
+            <Typography variant="h6" className="mb-2">
+              Test Text
+            </Typography>
+            <TextField
+              fullWidth
+              value={testText}
+              onChange={(e) => handleTextChange(e.target.value)}
+              placeholder="Enter text to test against your regex"
+              multiline
+              rows={6}
+            />
+          </div>
+        </div>
+
+        {/* Bottom Section - Flags and Results */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <Typography variant="h6" className="mb-2">
               Flags
@@ -177,23 +212,6 @@ Invalid emails: notanemail, @missing.com, test@`;
             />
           </div>
 
-          <div>
-            <Typography variant="h6" className="mb-2">
-              Test Text
-            </Typography>
-            <TextField
-              fullWidth
-              value={testText}
-              onChange={(e) => handleTextChange(e.target.value)}
-              placeholder="Enter text to test against your regex"
-              multiline
-              rows={8}
-            />
-          </div>
-        </div>
-
-        {/* Right Panel - Results */}
-        <div className="space-y-4">
           <div>
             <Typography variant="h6" className="mb-2">
               Matches ({matches.length})
@@ -247,35 +265,38 @@ Invalid emails: notanemail, @missing.com, test@`;
               </div>
             )}
           </div>
+        </div>
 
-          {/* Regex Help */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded">
-            <Typography variant="subtitle2" className="mb-2">
-              Quick Reference:
-            </Typography>
-            <div className="text-sm space-y-1 text-gray-700">
-              <div>
-                <code className="bg-white px-1 rounded">.</code> - Any character
-              </div>
-              <div>
-                <code className="bg-white px-1 rounded">*</code> - 0 or more
-              </div>
-              <div>
-                <code className="bg-white px-1 rounded">+</code> - 1 or more
-              </div>
-              <div>
-                <code className="bg-white px-1 rounded">?</code> - 0 or 1
-              </div>
-              <div>
-                <code className="bg-white px-1 rounded">\d</code> - Digit
-              </div>
-              <div>
-                <code className="bg-white px-1 rounded">\w</code> - Word
-                character
-              </div>
-              <div>
-                <code className="bg-white px-1 rounded">\s</code> - Whitespace
-              </div>
+        {/* Regex Help Section - Full Width */}
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+          <Typography variant="subtitle2" className="mb-2">
+            Quick Reference:
+          </Typography>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-gray-700">
+            <div>
+              <code className="bg-white px-1 rounded">.</code> - Any character
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">*</code> - 0 or more
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">+</code> - 1 or more
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">?</code> - 0 or 1
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">\d</code> - Digit
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">\w</code> - Word character
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">\s</code> - Whitespace
+            </div>
+            <div>
+              <code className="bg-white px-1 rounded">[a-z]</code> - Character
+              class
             </div>
           </div>
         </div>
