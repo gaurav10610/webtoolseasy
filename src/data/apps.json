@@ -119,6 +119,14 @@
     "iconRelativeUrl": "image-icon.svg",
     "category": "Media"
   },
+  "imageformatconverter": {
+    "applicationId": "imageformatconverter",
+    "displayText": "Image Format Converter",
+    "iconName": "image-icon",
+    "navigateUrl": "tools/image-format-converter",
+    "iconRelativeUrl": "image-icon.svg",
+    "category": "Media"
+  },
   "imagecropper": {
     "applicationId": "imagecropper",
     "displayText": "Image Cropper Tool",
@@ -286,5 +294,13 @@
     "navigateUrl": "tools/video-editor",
     "iconRelativeUrl": "video-convert.svg",
     "category": "Media"
+  },
+  "urlencoderdecoder": {
+    "applicationId": "urlencoderdecoder",
+    "displayText": "URL Encoder Decoder",
+    "iconName": "url-encoder-decoder",
+    "navigateUrl": "tools/url-encoder-decoder",
+    "iconRelativeUrl": "url-icon.svg",
+    "category": "Programming"
   }
 }
