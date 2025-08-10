@@ -1,56 +1,74 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useCallback,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
-  Box,
   Typography,
+  Card,
+  CardContent,
   Button,
-  Paper,
   Alert,
-  TextField,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   Chip,
+  Switch,
+  FormControlLabel,
   LinearProgress,
-  SelectChangeEvent,
+  Box,
+  TextareaAutosize,
 } from "@mui/material";
-import {
-  Mic,
-  MicOff,
-  Download,
-  CloudUpload,
-  Clear,
-  VolumeUp,
-} from "@mui/icons-material";
+import { SnackBarWithPosition } from "../lib/snackBar";
 import { ToolComponentProps } from "@/types/component";
-import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
-// TypeScript interface for Web Speech API
+// Icons
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import DownloadIcon from "@mui/icons-material/Download";
+import CopyIcon from "@mui/icons-material/ContentCopy";
+import ClearIcon from "@mui/icons-material/Clear";
+import SettingsIcon from "@mui/icons-material/Settings";
+import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+
+interface SpeechRecognitionResult {
+  transcript: string;
+  confidence: number;
+  isFinal: boolean;
+  timestamp: number;
+}
+
+interface SpeechRecognitionEvent {
+  resultIndex: number;
+  results: {
+    [key: number]: {
+      [key: number]: {
+        transcript: string;
+        confidence: number;
+      };
+      isFinal: boolean;
+      length: number;
+    };
+    length: number;
+  };
+}
+
+// Extend Window interface for Web Speech API
 declare global {
   interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
   }
 }
 
-interface SpeechRecognitionEvent extends Event {
-  results: SpeechRecognitionResultList;
-  resultIndex: number;
-}
-
-interface SpeechRecognitionErrorEvent extends Event {
+interface SpeechRecognitionErrorEvent {
   error: string;
-  message: string;
+  message?: string;
 }
 
 interface SpeechRecognition extends EventTarget {
@@ -59,436 +77,687 @@ interface SpeechRecognition extends EventTarget {
   lang: string;
   maxAlternatives: number;
   serviceURI: string;
-  grammars: SpeechGrammarList;
   start(): void;
   stop(): void;
   abort(): void;
-  onstart: ((event: Event) => void) | null;
-  onend: ((event: Event) => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
-  onresult: ((event: SpeechRecognitionEvent) => void) | null;
-  onnomatch: ((event: Event) => void) | null;
-  onsoundstart: ((event: Event) => void) | null;
-  onsoundend: ((event: Event) => void) | null;
-  onspeechstart: ((event: Event) => void) | null;
-  onspeechend: ((event: Event) => void) | null;
-  onaudiostart: ((event: Event) => void) | null;
-  onaudioend: ((event: Event) => void) | null;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
+  onstart: () => void;
+  onend: () => void;
+  onspeechstart: () => void;
+  onspeechend: () => void;
+  onaudiostart: () => void;
+  onaudioend: () => void;
+  onsoundstart: () => void;
+  onsoundend: () => void;
+  onnomatch: () => void;
 }
 
-interface SpeechRecognitionResult {
-  isFinal: boolean;
-  readonly length: number;
-  item(index: number): SpeechRecognitionAlternative;
-  [index: number]: SpeechRecognitionAlternative;
-}
+const SUPPORTED_LANGUAGES = [
+  { code: "en-US", label: "English (United States)" },
+  { code: "en-GB", label: "English (United Kingdom)" },
+  { code: "en-AU", label: "English (Australia)" },
+  { code: "en-CA", label: "English (Canada)" },
+  { code: "es-ES", label: "Spanish (Spain)" },
+  { code: "es-MX", label: "Spanish (Mexico)" },
+  { code: "fr-FR", label: "French (France)" },
+  { code: "fr-CA", label: "French (Canada)" },
+  { code: "de-DE", label: "German (Germany)" },
+  { code: "it-IT", label: "Italian (Italy)" },
+  { code: "pt-BR", label: "Portuguese (Brazil)" },
+  { code: "pt-PT", label: "Portuguese (Portugal)" },
+  { code: "ru-RU", label: "Russian (Russia)" },
+  { code: "zh-CN", label: "Chinese (Mandarin, China)" },
+  { code: "zh-TW", label: "Chinese (Taiwan)" },
+  { code: "ja-JP", label: "Japanese (Japan)" },
+  { code: "ko-KR", label: "Korean (South Korea)" },
+  { code: "hi-IN", label: "Hindi (India)" },
+  { code: "ar-SA", label: "Arabic (Saudi Arabia)" },
+  { code: "nl-NL", label: "Dutch (Netherlands)" },
+];
 
-interface SpeechRecognitionResultList {
-  readonly length: number;
-  item(index: number): SpeechRecognitionResult;
-  [index: number]: SpeechRecognitionResult;
-}
+export default function SpeechToText({}: Readonly<ToolComponentProps>) {
+  // State management
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [interimTranscript, setInterimTranscript] = useState("");
+  const [editableTranscript, setEditableTranscript] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [language, setLanguage] = useState("en-US");
+  const [continuous, setContinuous] = useState(true);
+  const [interimResults, setInterimResults] = useState(true);
+  const [confidence, setConfidence] = useState<number | null>(null);
+  const [error, setError] = useState("");
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+  const [isSupported, setIsSupported] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [results, setResults] = useState<SpeechRecognitionResult[]>([]);
 
-interface SpeechRecognitionAlternative {
-  transcript: string;
-  confidence: number;
-}
-
-interface SpeechGrammarList {
-  readonly length: number;
-  item(index: number): SpeechGrammar;
-  [index: number]: SpeechGrammar;
-  addFromURI(src: string, weight?: number): void;
-  addFromString(string: string, weight?: number): void;
-}
-
-interface SpeechGrammar {
-  src: string;
-  weight: number;
-}
-
-declare const SpeechRecognition: {
-  prototype: SpeechRecognition;
-  new (): SpeechRecognition;
-};
-
-export default function SpeechToText({
-  hostname,
-  queryParams,
-}: Readonly<ToolComponentProps>) {
-  const toolState = useToolState({
-    hostname: hostname || "",
-    queryParams,
-  });
-
-  const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [transcript, setTranscript] = useState<string>("");
-  const [interimTranscript, setInterimTranscript] = useState<string>("");
-  const [language, setLanguage] = useState<string>("en-US");
-  const [error, setError] = useState<string>("");
-  const [isSupported, setIsSupported] = useState<boolean>(false);
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false);
-
+  // Refs
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const languages = [
-    { code: "en-US", name: "English (US)" },
-    { code: "en-GB", name: "English (UK)" },
-    { code: "es-ES", name: "Spanish (Spain)" },
-    { code: "es-MX", name: "Spanish (Mexico)" },
-    { code: "fr-FR", name: "French" },
-    { code: "de-DE", name: "German" },
-    { code: "it-IT", name: "Italian" },
-    { code: "pt-BR", name: "Portuguese (Brazil)" },
-    { code: "ja-JP", name: "Japanese" },
-    { code: "ko-KR", name: "Korean" },
-    { code: "zh-CN", name: "Chinese (Simplified)" },
-    { code: "zh-TW", name: "Chinese (Traditional)" },
-    { code: "ar-SA", name: "Arabic" },
-    { code: "hi-IN", name: "Hindi" },
-    { code: "ru-RU", name: "Russian" },
-  ];
+  // Snackbar handler
+  const handleSnackBarClose = () => setIsSnackBarOpen(false);
 
+  const showMessage = (message: string) => {
+    setSnackBarMessage(message);
+    setIsSnackBarOpen(true);
+  };
+
+  // Check browser support
   useEffect(() => {
-    // Check if speech recognition is supported
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
-    setIsSupported(!!SpeechRecognition);
-
     if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = language;
-      recognition.maxAlternatives = 1;
+      setIsSupported(true);
+    } else {
+      setError(
+        "Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari."
+      );
+    }
+  }, []);
 
-      recognition.onstart = () => {
-        setIsRecording(true);
-        setError("");
-      };
-
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-
-      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-        setError(`Speech recognition error: ${event.error}`);
-        setIsRecording(false);
-      };
-
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
-        let interim = "";
-        let final = "";
-
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const result = event.results[i];
-          if (result.isFinal) {
-            final += result[0].transcript;
-          } else {
-            interim += result[0].transcript;
-          }
-        }
-
-        if (final) {
-          setTranscript((prev) => prev + final + " ");
-        }
-        setInterimTranscript(interim);
-      };
-
-      recognitionRef.current = recognition;
+  // Timer for recording duration
+  useEffect(() => {
+    if (isRecording && !isPaused) {
+      timerRef.current = setInterval(() => {
+        setRecordingTime((prev) => prev + 1);
+      }, 1000);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     }
 
     return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isRecording, isPaused]);
+
+  // Initialize speech recognition
+  const initializeRecognition = useCallback(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      setError("Speech recognition not supported");
+      return null;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = continuous;
+    recognition.interimResults = interimResults;
+    recognition.lang = language;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+      setError("");
+      showMessage("Speech recognition started");
+    };
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      let interimTranscriptText = "";
+      let finalTranscriptText = "";
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        const transcriptPart = result[0].transcript;
+        const confidenceScore = result[0].confidence;
+
+        if (result.isFinal) {
+          finalTranscriptText += transcriptPart + " ";
+
+          // Add to results history
+          const newResult: SpeechRecognitionResult = {
+            transcript: transcriptPart,
+            confidence: confidenceScore || 0,
+            isFinal: true,
+            timestamp: Date.now(),
+          };
+
+          setResults((prev) => [...prev, newResult]);
+          setConfidence(confidenceScore || null);
+        } else {
+          interimTranscriptText += transcriptPart;
+        }
+      }
+
+      if (finalTranscriptText) {
+        setTranscript((prev) => prev + finalTranscriptText);
+      }
+      setInterimTranscript(interimTranscriptText);
+    };
+
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      setError(`Speech recognition error: ${event.error}`);
+      setIsRecording(false);
+      setIsPaused(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+      setIsPaused(false);
+      setInterimTranscript("");
+      showMessage("Speech recognition stopped");
+    };
+
+    return recognition;
+  }, [language, continuous, interimResults]);
+
+  // Start recording
+  const startRecording = useCallback(() => {
+    if (!isSupported) {
+      setError("Speech recognition not supported");
+      return;
+    }
+
+    const recognition = initializeRecognition();
+    if (recognition) {
+      recognitionRef.current = recognition;
+      recognition.start();
+      setRecordingTime(0);
+    }
+  }, [isSupported, initializeRecognition]);
+
+  // Stop recording
+  const stopRecording = useCallback(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+  }, []);
+
+  // Pause/Resume recording
+  const togglePause = useCallback(() => {
+    if (isPaused) {
+      // Resume recording
+      if (recognitionRef.current) {
+        recognitionRef.current.start();
+      }
+      setIsPaused(false);
+    } else {
+      // Pause recording
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-    };
-  }, [language]);
-
-  const startRecording = useCallback(() => {
-    if (recognitionRef.current && !isRecording) {
-      setError("");
-      setInterimTranscript("");
-      recognitionRef.current.start();
+      setIsPaused(true);
     }
-  }, [isRecording]);
+  }, [isPaused]);
 
-  const stopRecording = useCallback(() => {
-    if (recognitionRef.current && isRecording) {
-      recognitionRef.current.stop();
-    }
-  }, [isRecording]);
-
+  // Clear transcript
   const clearTranscript = useCallback(() => {
     setTranscript("");
     setInterimTranscript("");
+    setEditableTranscript("");
+    setResults([]);
+    setConfidence(null);
+    setIsEditMode(false);
+    showMessage("Transcript cleared");
   }, []);
 
-  const downloadTranscript = useCallback(() => {
-    if (!transcript.trim()) return;
-
-    const element = document.createElement("a");
-    const file = new Blob([transcript], { type: "text/plain" });
-    element.href = URL.createObjectURL(file);
-    element.download = "transcript.txt";
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  }, [transcript]);
-
-  const handleLanguageChange = useCallback((event: SelectChangeEvent) => {
-    setLanguage(event.target.value);
-    if (recognitionRef.current) {
-      recognitionRef.current.lang = event.target.value;
+  // Toggle edit mode
+  const toggleEditMode = useCallback(() => {
+    if (isRecording) {
+      showMessage("Cannot edit while recording. Stop recording first.");
+      return;
     }
-  }, []);
 
-  const handleFileSelect = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        if (!file.type.startsWith("audio/")) {
-          setError("Please select a valid audio file");
-          return;
-        }
-        setAudioFile(file);
-        setError("");
+    if (!isEditMode) {
+      // Enter edit mode
+      setEditableTranscript(transcript);
+      setIsEditMode(true);
+      showMessage("Edit mode enabled");
+    } else {
+      // Cancel edit mode
+      setIsEditMode(false);
+      showMessage("Edit mode cancelled");
+    }
+  }, [isEditMode, transcript, isRecording]);
 
-        // Note: For actual file processing, you would need a service like Google Cloud Speech-to-Text
-        // This is a placeholder for demonstration
-        setIsProcessingFile(true);
-        setTimeout(() => {
-          setIsProcessingFile(false);
-          setError(
-            "Audio file processing requires a backend service. Currently only live speech recognition is supported."
-          );
-        }, 2000);
-      }
+  // Save edited transcript
+  const saveEditedTranscript = useCallback(() => {
+    setTranscript(editableTranscript);
+    setIsEditMode(false);
+    showMessage("Transcript saved");
+  }, [editableTranscript]);
+
+  // Handle transcript edit
+  const handleTranscriptEdit = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setEditableTranscript(event.target.value);
     },
     []
   );
 
-  const buttons = useMemo(
-    () => [
-      ...(isSupported
-        ? [
-            {
-              type: "custom" as const,
-              text: isRecording ? "Stop Recording" : "Start Recording",
-              onClick: isRecording ? stopRecording : startRecording,
-              icon: isRecording ? <MicOff /> : <Mic />,
-              disabled: isProcessingFile,
-            },
-          ]
-        : []),
-      ...(transcript.trim()
-        ? [
-            {
-              type: "custom" as const,
-              text: "Download",
-              onClick: downloadTranscript,
-              icon: <Download />,
-            },
-            {
-              type: "custom" as const,
-              text: "Clear",
-              onClick: clearTranscript,
-              icon: <Clear />,
-            },
-          ]
-        : []),
-      ...createCommonButtons({
-        onFullScreen: toolState.toggleFullScreen,
-      }),
-    ],
-    [
-      isSupported,
-      isRecording,
-      transcript,
-      isProcessingFile,
-      toolState,
-      startRecording,
-      stopRecording,
-      downloadTranscript,
-      clearTranscript,
-    ]
-  );
+  // Copy to clipboard
+  const copyToClipboard = useCallback(async () => {
+    const textToCopy = isEditMode
+      ? editableTranscript
+      : transcript + interimTranscript;
+    if (!textToCopy.trim()) {
+      showMessage("No text to copy");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      showMessage("Text copied to clipboard");
+    } catch {
+      setError("Failed to copy text to clipboard");
+    }
+  }, [transcript, interimTranscript, isEditMode, editableTranscript]);
+
+  // Download as text file
+  const downloadTranscript = useCallback(() => {
+    const textToDownload = isEditMode
+      ? editableTranscript
+      : transcript + interimTranscript;
+    if (!textToDownload.trim()) {
+      showMessage("No text to download");
+      return;
+    }
+
+    const blob = new Blob([textToDownload], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `speech-transcript-${
+      new Date().toISOString().split("T")[0]
+    }.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showMessage("Transcript downloaded");
+  }, [transcript, interimTranscript, isEditMode, editableTranscript]);
+
+  // Format recording time
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
 
   return (
-    <ToolLayout
-      isFullScreen={toolState.isFullScreen}
-      snackBar={{
-        open: toolState.snackBar.open,
-        message: toolState.snackBar.message,
-        onClose: toolState.snackBar.close,
-      }}
-    >
-      <SEOContent
-        title="Speech to Text Converter"
-        description="Convert speech to text using your microphone. Real-time speech recognition with multiple language support."
-        exampleCode="Click Start Recording and speak into your microphone"
-        exampleOutput="Live transcription of spoken words converted to text"
+    <div className="flex flex-col w-full gap-4">
+      <SnackBarWithPosition
+        message={snackBarMessage}
+        open={isSnackBarOpen}
+        autoHideDuration={3000}
+        handleClose={handleSnackBarClose}
       />
 
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      {error && (
+        <Alert severity="error" onClose={() => setError("")}>
+          {error}
+        </Alert>
+      )}
 
-      <div className="w-full space-y-6">
-        {/* Browser Support Check */}
-        {!isSupported && (
-          <Alert severity="error">
-            Speech recognition is not supported in your browser. Please use
-            Chrome, Edge, or Safari.
-          </Alert>
-        )}
+      {!isSupported && (
+        <Alert severity="warning">
+          <strong>Browser Not Supported:</strong> Speech recognition requires
+          Chrome, Edge, or Safari with microphone permissions.
+        </Alert>
+      )}
 
-        {/* Language Selection */}
-        {isSupported && (
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Settings
+      {/* Main Controls */}
+      <Card>
+        <CardContent>
+          <div className="flex items-center justify-between mb-4">
+            <Typography variant="h6" className="flex items-center gap-2">
+              <RecordVoiceOverIcon color="primary" />
+              Speech Recognition Controls
             </Typography>
-            <FormControl fullWidth sx={{ mb: 2 }}>
+            {isRecording && (
+              <Chip
+                icon={<VolumeUpIcon />}
+                label={`Recording: ${formatTime(recordingTime)}`}
+                color="error"
+                variant="filled"
+              />
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            <Button
+              startIcon={isRecording ? <MicOffIcon /> : <MicIcon />}
+              onClick={isRecording ? stopRecording : startRecording}
+              disabled={!isSupported}
+              variant="contained"
+              color={isRecording ? "error" : "primary"}
+              size="large"
+            >
+              {isRecording ? "Stop Recording" : "Start Recording"}
+            </Button>
+
+            {isRecording && (
+              <Button
+                startIcon={isPaused ? <PlayArrowIcon /> : <PauseIcon />}
+                onClick={togglePause}
+                variant="outlined"
+                color="secondary"
+                size="large"
+              >
+                {isPaused ? "Resume" : "Pause"}
+              </Button>
+            )}
+
+            <Button
+              startIcon={<ClearIcon />}
+              onClick={clearTranscript}
+              disabled={
+                !transcript && !interimTranscript && !editableTranscript
+              }
+              variant="outlined"
+              color="warning"
+            >
+              Clear
+            </Button>
+
+            {!isEditMode && (
+              <Button
+                startIcon={<EditIcon />}
+                onClick={toggleEditMode}
+                disabled={!transcript.trim() || isRecording}
+                variant="outlined"
+                color="info"
+              >
+                Edit
+              </Button>
+            )}
+
+            {isEditMode && (
+              <>
+                <Button
+                  startIcon={<SaveIcon />}
+                  onClick={saveEditedTranscript}
+                  variant="contained"
+                  color="success"
+                >
+                  Save
+                </Button>
+                <Button
+                  startIcon={<CancelIcon />}
+                  onClick={toggleEditMode}
+                  variant="outlined"
+                  color="error"
+                >
+                  Cancel
+                </Button>
+              </>
+            )}
+
+            <Button
+              startIcon={<CopyIcon />}
+              onClick={copyToClipboard}
+              disabled={
+                !transcript && !interimTranscript && !editableTranscript
+              }
+              variant="outlined"
+            >
+              Copy
+            </Button>
+
+            <Button
+              startIcon={<DownloadIcon />}
+              onClick={downloadTranscript}
+              disabled={
+                !transcript && !interimTranscript && !editableTranscript
+              }
+              variant="outlined"
+              color="success"
+            >
+              Download
+            </Button>
+          </div>
+
+          {isRecording && (
+            <Box className="mb-4">
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                Listening for speech...
+              </Typography>
+              <LinearProgress color="error" />
+            </Box>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Settings */}
+      <Card>
+        <CardContent>
+          <Typography variant="h6" className="flex items-center gap-2 mb-4">
+            <SettingsIcon color="primary" />
+            Recognition Settings
+          </Typography>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <FormControl fullWidth size="small">
               <InputLabel>Language</InputLabel>
               <Select
                 value={language}
                 label="Language"
-                onChange={handleLanguageChange}
+                onChange={(e) => setLanguage(e.target.value)}
                 disabled={isRecording}
               >
-                {languages.map((lang) => (
+                {SUPPORTED_LANGUAGES.map((lang) => (
                   <MenuItem key={lang.code} value={lang.code}>
-                    {lang.name}
+                    {lang.label}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-          </Paper>
-        )}
 
-        {/* Audio File Upload */}
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Upload Audio File
-          </Typography>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileSelect}
-            accept="audio/*"
-            style={{ display: "none" }}
-          />
-          <Button
-            variant="outlined"
-            startIcon={<CloudUpload />}
-            onClick={() => fileInputRef.current?.click()}
-            fullWidth
-            sx={{ mb: 2 }}
-            disabled={isRecording || isProcessingFile}
-          >
-            Choose Audio File
-          </Button>
-          {audioFile && (
-            <Alert severity="info">Selected: {audioFile.name}</Alert>
-          )}
-          <Typography variant="body2" color="text.secondary">
-            Note: Audio file transcription requires backend processing.
-            Currently only live speech recognition is fully supported.
-          </Typography>
-        </Paper>
-
-        {/* Processing Indicator */}
-        {isProcessingFile && (
-          <Paper sx={{ p: 3 }}>
-            <Typography gutterBottom>Processing audio file...</Typography>
-            <LinearProgress />
-          </Paper>
-        )}
-
-        {/* Recording Status */}
-        {isSupported && (
-          <Paper sx={{ p: 3 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-              <VolumeUp />
-              <Typography variant="h6">Live Speech Recognition</Typography>
-              {isRecording && (
-                <Chip
-                  label="Recording..."
-                  color="error"
-                  variant="outlined"
-                  icon={<Mic />}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={continuous}
+                  onChange={(e) => setContinuous(e.target.checked)}
+                  disabled={isRecording}
                 />
-              )}
-            </Box>
-            <Typography variant="body2" color="text.secondary">
-              {isRecording
-                ? "Speak now... Your speech will be converted to text in real-time."
-                : 'Click "Start Recording" to begin speech recognition.'}
-            </Typography>
-          </Paper>
-        )}
-
-        {/* Error Display */}
-        {error && <Alert severity="error">{error}</Alert>}
-
-        {/* Transcript Display */}
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" gutterBottom>
-            Transcript
-          </Typography>
-          <TextField
-            fullWidth
-            multiline
-            rows={10}
-            value={transcript + interimTranscript}
-            onChange={(e) => setTranscript(e.target.value)}
-            placeholder={
-              isSupported
-                ? "Start recording to see your speech converted to text here..."
-                : "Speech recognition is not supported in your browser."
-            }
-            variant="outlined"
-            sx={{
-              "& .MuiInputBase-input": {
-                fontSize: "1.1rem",
-                lineHeight: 1.6,
-              },
-            }}
-          />
-          {interimTranscript && (
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mt: 1, display: "block" }}
-            >
-              Interim results are shown in gray and will be finalized
-              automatically.
-            </Typography>
-          )}
-          <Box
-            sx={{
-              mt: 2,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Characters: {transcript.length}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Words:{" "}
-              {
-                transcript
-                  .trim()
-                  .split(/\s+/)
-                  .filter((word) => word.length > 0).length
               }
+              label="Continuous Recording"
+            />
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={interimResults}
+                  onChange={(e) => setInterimResults(e.target.checked)}
+                  disabled={isRecording}
+                />
+              }
+              label="Show Interim Results"
+            />
+          </div>
+
+          {confidence !== null && (
+            <div className="mt-4">
+              <Typography variant="body2" gutterBottom>
+                Recognition Confidence: {Math.round(confidence * 100)}%
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={confidence * 100}
+                color={
+                  confidence > 0.8
+                    ? "success"
+                    : confidence > 0.6
+                    ? "warning"
+                    : "error"
+                }
+              />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Transcript Display */}
+      <Card>
+        <CardContent>
+          <div className="flex items-center justify-between mb-4">
+            <Typography variant="h6">
+              {isEditMode ? "Edit Transcript" : "Live Transcript"}
             </Typography>
-          </Box>
-        </Paper>
-      </div>
-    </ToolLayout>
+            {isEditMode && (
+              <Chip
+                label="Edit Mode"
+                color="info"
+                variant="filled"
+                size="small"
+              />
+            )}
+          </div>
+
+          <div className="border rounded-lg p-4 min-h-48 bg-gray-50">
+            <TextareaAutosize
+              value={
+                isEditMode ? editableTranscript : transcript + interimTranscript
+              }
+              onChange={isEditMode ? handleTranscriptEdit : undefined}
+              placeholder={
+                isEditMode
+                  ? "Edit your transcript here..."
+                  : "Your speech will appear here as you speak..."
+              }
+              className="w-full border-none resize-none bg-transparent outline-none"
+              minRows={6}
+              style={{
+                fontSize: "16px",
+                lineHeight: 1.5,
+                backgroundColor: isEditMode ? "#fff" : "transparent",
+                border: isEditMode ? "1px solid #ddd" : "none",
+                borderRadius: isEditMode ? "4px" : "0",
+                paddingTop: isEditMode ? "8px" : "0",
+                paddingRight: isEditMode ? "8px" : "0",
+                paddingBottom: isEditMode ? "8px" : "0",
+                paddingLeft: isEditMode ? "8px" : "0",
+              }}
+              readOnly={!isEditMode}
+              disabled={isRecording && !isEditMode}
+            />
+          </div>
+
+          {(transcript || interimTranscript || editableTranscript) && (
+            <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+              <span>
+                Words:{" "}
+                {
+                  (isEditMode
+                    ? editableTranscript
+                    : transcript + interimTranscript
+                  )
+                    .split(/\s+/)
+                    .filter((word) => word.length > 0).length
+                }
+              </span>
+              <span>
+                Characters:{" "}
+                {
+                  (isEditMode
+                    ? editableTranscript
+                    : transcript + interimTranscript
+                  ).length
+                }
+              </span>
+            </div>
+          )}
+
+          {isEditMode && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <Typography variant="body2" color="primary">
+                <strong>Edit Mode:</strong> You can now edit the transcript
+                directly. Click &quot;Save&quot; to apply changes or
+                &quot;Cancel&quot; to discard them.
+              </Typography>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Results History */}
+      {results.length > 0 && (
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="mb-4">
+              Recognition History
+            </Typography>
+
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {results.map((result, index) => (
+                <div key={index} className="p-3 bg-gray-50 rounded border">
+                  <div className="flex justify-between items-start mb-2">
+                    <Typography variant="body2" color="textSecondary">
+                      {new Date(result.timestamp).toLocaleTimeString()}
+                    </Typography>
+                    <Chip
+                      label={`${Math.round(result.confidence * 100)}%`}
+                      size="small"
+                      color={
+                        result.confidence > 0.8
+                          ? "success"
+                          : result.confidence > 0.6
+                          ? "warning"
+                          : "error"
+                      }
+                    />
+                  </div>
+                  <Typography variant="body1">{result.transcript}</Typography>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Tips and Information */}
+      <Card>
+        <CardContent>
+          <Typography variant="h6" className="mb-4">
+            Tips for Better Recognition
+          </Typography>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Typography variant="subtitle2" color="primary" gutterBottom>
+                Audio Quality
+              </Typography>
+              <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                <li>• Use a quiet environment</li>
+                <li>• Speak clearly and at normal pace</li>
+                <li>• Keep microphone close but not too close</li>
+                <li>• Avoid background noise</li>
+              </ul>
+            </div>
+
+            <div>
+              <Typography variant="subtitle2" color="primary" gutterBottom>
+                Browser Tips
+              </Typography>
+              <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                <li>• Allow microphone permissions</li>
+                <li>• Use Chrome, Edge, or Safari</li>
+                <li>• Ensure stable internet connection</li>
+                <li>• Keep browser tab active</li>
+              </ul>
+            </div>
+
+            <div>
+              <Typography variant="subtitle2" color="primary" gutterBottom>
+                Editing Features
+              </Typography>
+              <ul className="text-sm text-gray-600 space-y-1 ml-4">
+                <li>• Click &quot;Edit&quot; to modify transcript</li>
+                <li>• Make corrections or additions</li>
+                <li>• Save changes or cancel editing</li>
+                <li>• Export edited version</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
