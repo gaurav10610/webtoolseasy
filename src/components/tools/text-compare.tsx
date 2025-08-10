@@ -147,101 +147,99 @@ New line added`;
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Text Compare Editor - takes 3/4 of the width */}
-        <div className="lg:col-span-3">
-          <DiffEditorsWithHeader
-            firstTextHeading="Original Text"
-            secondTextHeading="Modified Text"
-            themeOption="light"
-            diffEditorProps={diffEditorProps}
-            className={`w-full h-[50vh] md:h-[65vh] min-h-[250px] md:min-h-[320px] ${
-              toolState.isFullScreen ? "md:h-full" : ""
-            }`}
-          />
+      {/* Text Compare Editor - full width */}
+      <div className="w-full mb-6">
+        <DiffEditorsWithHeader
+          firstTextHeading="Original Text"
+          secondTextHeading="Modified Text"
+          themeOption="light"
+          diffEditorProps={diffEditorProps}
+          className={`w-full h-[50vh] md:h-[65vh] min-h-[250px] md:min-h-[320px] ${
+            toolState.isFullScreen ? "md:h-full" : ""
+          }`}
+        />
+      </div>
+
+      {/* Statistics Panel - below editor, responsive grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded">
+          <h3 className="font-semibold mb-3 text-gray-800">
+            📊 Comparison Stats
+          </h3>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Original chars:</span>
+              <span className="font-medium">
+                {diffStats.originalChars.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Modified chars:</span>
+              <span className="font-medium">
+                {diffStats.modifiedChars.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Char difference:</span>
+              <span
+                className={`font-medium ${
+                  diffStats.charDifference >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {diffStats.charDifference >= 0 ? "+" : ""}
+                {diffStats.charDifference}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Original lines:</span>
+              <span className="font-medium">{diffStats.originalLines}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Modified lines:</span>
+              <span className="font-medium">{diffStats.modifiedLines}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Line difference:</span>
+              <span
+                className={`font-medium ${
+                  diffStats.lineDifference >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {diffStats.lineDifference >= 0 ? "+" : ""}
+                {diffStats.lineDifference}
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Statistics Panel - takes 1/4 of the width */}
-        <div className="lg:col-span-1 space-y-4">
-          <div className="p-4 bg-gray-50 border border-gray-200 rounded">
-            <h3 className="font-semibold mb-3 text-gray-800">
-              📊 Comparison Stats
-            </h3>
-
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Original chars:</span>
-                <span className="font-medium">
-                  {diffStats.originalChars.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Modified chars:</span>
-                <span className="font-medium">
-                  {diffStats.modifiedChars.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Char difference:</span>
-                <span
-                  className={`font-medium ${
-                    diffStats.charDifference >= 0
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {diffStats.charDifference >= 0 ? "+" : ""}
-                  {diffStats.charDifference}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Original lines:</span>
-                <span className="font-medium">{diffStats.originalLines}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Modified lines:</span>
-                <span className="font-medium">{diffStats.modifiedLines}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Line difference:</span>
-                <span
-                  className={`font-medium ${
-                    diffStats.lineDifference >= 0
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {diffStats.lineDifference >= 0 ? "+" : ""}
-                  {diffStats.lineDifference}
-                </span>
-              </div>
-            </div>
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+          <h3 className="font-semibold mb-2 text-blue-800">💡 Tips</h3>
+          <div className="text-sm text-blue-700 space-y-1">
+            <div>• Paste text directly into either panel</div>
+            <div>• Differences are highlighted automatically</div>
+            <div>• Use Swap to reverse comparison</div>
+            <div>• Copy individual text versions</div>
           </div>
+        </div>
 
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded">
-            <h3 className="font-semibold mb-2 text-blue-800">💡 Tips</h3>
-            <div className="text-sm text-blue-700 space-y-1">
-              <div>• Paste text directly into either panel</div>
-              <div>• Differences are highlighted automatically</div>
-              <div>• Use Swap to reverse comparison</div>
-              <div>• Copy individual text versions</div>
-            </div>
-          </div>
-
-          <div className="p-4 bg-green-50 border border-green-200 rounded">
-            <h3 className="font-semibold mb-2 text-green-800">🎯 Use Cases</h3>
-            <div className="text-sm text-green-700 space-y-1">
-              <div>• Code comparison</div>
-              <div>• Document review</div>
-              <div>• Content editing</div>
-              <div>• Data analysis</div>
-              <div>• Version control</div>
-            </div>
+        <div className="p-4 bg-green-50 border border-green-200 rounded">
+          <h3 className="font-semibold mb-2 text-green-800">🎯 Use Cases</h3>
+          <div className="text-sm text-green-700 space-y-1">
+            <div>• Code comparison</div>
+            <div>• Document review</div>
+            <div>• Content editing</div>
+            <div>• Data analysis</div>
+            <div>• Version control</div>
           </div>
         </div>
       </div>
