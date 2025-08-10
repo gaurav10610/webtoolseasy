@@ -21,7 +21,7 @@ export const ToolLayout = memo(function ToolLayout({
 }: ToolLayoutProps) {
   return (
     <div
-      className={`flex flex-col gap-3 w-full ${
+      className={`flex flex-col gap-4 w-full ${
         isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
       } ${className}`}
     >
@@ -60,14 +60,10 @@ export const CodeEditorLayout = memo(function CodeEditorLayout({
       className={`flex flex-col w-full md:flex-row gap-4 ${containerHeight} ${className}`}
     >
       {leftPanel && (
-        <div className="w-full md:w-1/2 md:flex-1 md:h-full">
-          {leftPanel}
-        </div>
+        <div className="w-full md:w-1/2 md:flex-1 md:h-full">{leftPanel}</div>
       )}
       {rightPanel && (
-        <div className="w-full md:w-1/2 md:flex-1 md:h-full">
-          {rightPanel}
-        </div>
+        <div className="w-full md:w-1/2 md:flex-1 md:h-full">{rightPanel}</div>
       )}
     </div>
   );

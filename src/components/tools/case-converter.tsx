@@ -156,21 +156,6 @@ export default function CaseConverter({
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      {/* Custom conversion buttons */}
-      <div className="flex flex-wrap gap-2 justify-center w-full">
-        {caseButtons.map((button, index) => (
-          <ButtonWithHandler
-            key={index}
-            buttonText={button.text}
-            variant={button.variant}
-            size={button.size}
-            onClick={button.onClick}
-            color={button.color}
-            className="min-w-0 flex-1 sm:flex-none"
-          />
-        ))}
-      </div>
-
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         <div className="flex flex-col gap-3 w-full lg:w-1/2">
           <Typography
@@ -209,6 +194,21 @@ export default function CaseConverter({
             variant="outlined"
           />
         </div>
+      </div>
+
+      {/* Custom conversion buttons */}
+      <div className="flex flex-wrap gap-2 w-full">
+        {caseButtons.map((button, index) => (
+          <ButtonWithHandler
+            key={index}
+            buttonText={button.text}
+            variant={button.variant}
+            size={button.size}
+            onClick={button.onClick}
+            color={button.color}
+            className="min-w-0 flex-1 sm:flex-none"
+          />
+        ))}
       </div>
     </ToolLayout>
   );
