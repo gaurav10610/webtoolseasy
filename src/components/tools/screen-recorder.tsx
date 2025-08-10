@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useRef, useCallback, useMemo } from "react";
+import {
+  set as idbSet,
+  get as idbGet,
+  del as idbDel,
+  keys as idbKeys,
+} from "idb-keyval";
+
+import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import {
   Typography,
   FormControlLabel,
@@ -10,6 +17,7 @@ import {
   LinearProgress,
   Box,
   Alert,
+  Button,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
@@ -55,11 +63,53 @@ export default function ScreenRecorder({
   const [recordingConfig, setRecordingConfig] = useState<RecordingConfig>({
     includeScreen: true,
     includeCamera: false,
-    includeMicrophone: true,
+    includeMicrophone: false,
     includeSystemAudio: false,
   });
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [savedRecordings, setSavedRecordings] = useState<
+    { key: string; blob: Blob }[]
+  >([]);
+  // Download a saved recording
+  const downloadSavedRecording = useCallback(
+    (key: string, blob: Blob) => {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${key}.webm`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toolState.actions.showMessage("Recording downloaded successfully!");
+    },
+    [toolState.actions]
+  );
+
+  // Delete a saved recording
+  const deleteSavedRecording = useCallback(
+    async (key: string) => {
+      await idbDel(key);
+      setSavedRecordings((prev) => prev.filter((rec) => rec.key !== key));
+      toolState.actions.showMessage("Recording deleted.");
+    },
+    [toolState.actions]
+  );
+  // Load saved recordings from IndexedDB on mount
+  useEffect(() => {
+    (async () => {
+      const allKeys = await idbKeys();
+      const recordings: { key: string; blob: Blob }[] = [];
+      for (const key of allKeys) {
+        const blob = await idbGet(key);
+        if (blob instanceof Blob) {
+          recordings.push({ key: String(key), blob });
+        }
+      }
+      setSavedRecordings(recordings);
+    })();
+  }, []);
   const [error, setError] = useState<string>("");
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -197,13 +247,17 @@ export default function ScreenRecorder({
         }
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: "video/webm" });
         setRecordedBlob(blob);
         setRecordingState(RecordingState.COMPLETED);
         cleanupStreams();
         stopTimer();
-        toolState.actions.showMessage("Recording completed successfully!");
+        // Save to IndexedDB
+        const key = `recording-${Date.now()}`;
+        await idbSet(key, blob);
+        setSavedRecordings((prev) => [...prev, { key, blob }]);
+        toolState.actions.showMessage("Recording completed and saved!");
       };
 
       mediaRecorder.onerror = (event) => {
@@ -296,7 +350,6 @@ export default function ScreenRecorder({
     setRecordedBlob(null);
     setRecordingTime(0);
     setError("");
-
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current = null;
     }
@@ -408,6 +461,41 @@ export default function ScreenRecorder({
       <ToolControls buttons={buttons} />
 
       <div className="w-full space-y-6">
+        {/* Saved Recordings List */}
+        {savedRecordings.length > 0 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" className="mb-2">
+                Saved Recordings
+              </Typography>
+              <div className="space-y-2">
+                {savedRecordings.map((rec) => (
+                  <div
+                    key={rec.key}
+                    className="flex items-center gap-2 p-2 bg-gray-50 rounded"
+                  >
+                    <span className="flex-1 truncate">{rec.key}</span>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => downloadSavedRecording(rec.key, rec.blob)}
+                    >
+                      <DownloadIcon fontSize="small" /> Download
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="error"
+                      onClick={() => deleteSavedRecording(rec.key)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
         {/* Browser Support Check */}
         {!isSupported && (
           <Alert severity="error">
