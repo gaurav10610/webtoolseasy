@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { Typography, TextField, Button, Divider } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { Guid } from "guid-ts";
 
 export default function GuidGenerator({
@@ -31,23 +31,30 @@ export default function GuidGenerator({
   const generateNewGuid = useCallback(() => {
     const newGuid = generateGUID();
     toolState.setCode(newGuid);
+    // Update the list to include the new GUID
+    setGuidList((prevList) => {
+      const newList = [newGuid, ...prevList.slice(0, -1)];
+      return newList;
+    });
     toolState.actions.showMessage("New GUID generated!");
   }, [generateGUID, toolState]);
 
-  const generateBulkGuids = useCallback(() => {
-    const count = Math.min(Math.max(1, bulkCount), 1000); // Limit between 1-1000
-    const newGuids = Array.from({ length: count }, () => generateGUID());
-    setGuidList(newGuids);
-    toolState.actions.showMessage(`Generated ${count} GUIDs!`);
-  }, [bulkCount, generateGUID, toolState.actions]);
-
-  const copyAllGuids = useCallback(() => {
+  const copyCurrentGuid = useCallback(() => {
     const allGuids = guidList.join("\n");
     toolState.actions.copyText(
       allGuids,
       `${guidList.length} GUIDs copied to clipboard!`
     );
-  }, [guidList, toolState.actions]);
+  }, [guidList, toolState]);
+
+  const generateBulkGuids = useCallback(() => {
+    const count = Math.min(Math.max(1, bulkCount), 1000); // Limit between 1-1000
+    const newGuids = Array.from({ length: count }, () => generateGUID());
+    setGuidList(newGuids);
+    // Update the current displayed GUID to the first one from the bulk
+    toolState.setCode(newGuids[0]);
+    toolState.actions.showMessage(`Generated ${count} GUIDs!`);
+  }, [bulkCount, generateGUID, toolState]);
 
   const downloadGuids = useCallback(() => {
     const allGuids = guidList.join("\n");
@@ -65,41 +72,8 @@ export default function GuidGenerator({
     );
   }, [guidList, toolState.actions]);
 
-  // Button configuration
-  const buttons = useMemo(
-    () => [
-      {
-        type: "custom" as const,
-        text: "Generate New",
-        onClick: generateNewGuid,
-        icon: <RefreshIcon />,
-      },
-      {
-        type: "custom" as const,
-        text: "Copy All GUIDs",
-        onClick: copyAllGuids,
-      },
-      {
-        type: "custom" as const,
-        text: "Download GUIDs",
-        onClick: downloadGuids,
-      },
-      ...createCommonButtons({
-        onCopy: () =>
-          toolState.actions.copyText(
-            toolState.code,
-            "GUID copied to clipboard!"
-          ),
-        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
-        onFullScreen: toolState.toggleFullScreen,
-      }),
-    ],
-    [generateNewGuid, copyAllGuids, downloadGuids, toolState]
-  );
-
   return (
     <ToolLayout
-      isFullScreen={toolState.isFullScreen}
       snackBar={{
         open: toolState.snackBar.open,
         message: toolState.snackBar.message,
@@ -112,8 +86,6 @@ export default function GuidGenerator({
         exampleCode={initialValue}
         exampleOutput={`Generated GUID: ${initialValue}`}
       />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single GUID */}
@@ -170,6 +142,14 @@ export default function GuidGenerator({
                 Generate {bulkCount} GUIDs
               </Button>
             </div>
+            <Button
+              variant="outlined"
+              onClick={downloadGuids}
+              fullWidth
+              disabled={guidList.length === 0}
+            >
+              Download GUIDs
+            </Button>
           </div>
 
           {/* GUID Info */}
@@ -188,19 +168,18 @@ export default function GuidGenerator({
 
         {/* Right Panel - GUID List */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Typography variant="h6">
-              📋 Generated GUIDs ({guidList.length})
-            </Typography>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={copyAllGuids}
-              disabled={guidList.length === 0}
-            >
-              Copy All
-            </Button>
-          </div>
+          <Typography variant="h6">
+            📋 Generated GUIDs ({guidList.length})
+          </Typography>
+
+          <Button
+            variant="outlined"
+            onClick={copyCurrentGuid}
+            startIcon={<ContentCopyIcon />}
+            fullWidth
+          >
+            Copy All GUIDs
+          </Button>
 
           <div className="border border-gray-300 rounded max-h-96 overflow-auto">
             {guidList.length === 0 ? (
@@ -210,17 +189,7 @@ export default function GuidGenerator({
             ) : (
               <div className="divide-y">
                 {guidList.map((guid, index) => (
-                  <div
-                    key={index}
-                    className="p-3 hover:bg-gray-50 font-mono text-sm cursor-pointer"
-                    onClick={() =>
-                      toolState.actions.copyText(
-                        guid,
-                        `GUID ${index + 1} copied!`
-                      )
-                    }
-                    title="Click to copy"
-                  >
+                  <div key={index} className="p-3 font-mono text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-blue-600">{guid}</span>
                       <span className="text-xs text-gray-400">

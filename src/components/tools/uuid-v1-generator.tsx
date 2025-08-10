@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { Typography, TextField, Button, Divider } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { v1 as generateUUID } from "uuid";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 export default function UUIDV1Generator({
   hostname,
@@ -31,23 +31,30 @@ export default function UUIDV1Generator({
   const generateNewUuid = useCallback(() => {
     const newUuid = generateUUIDv1();
     toolState.setCode(newUuid);
+    // Update the list to include the new UUID
+    setUuidList((prevList) => {
+      const newList = [newUuid, ...prevList.slice(0, -1)];
+      return newList;
+    });
     toolState.actions.showMessage("New UUID v1 generated!");
   }, [generateUUIDv1, toolState]);
 
-  const generateBulkUuids = useCallback(() => {
-    const count = Math.min(Math.max(1, bulkCount), 1000); // Limit between 1-1000
-    const newUuids = Array.from({ length: count }, () => generateUUIDv1());
-    setUuidList(newUuids);
-    toolState.actions.showMessage(`Generated ${count} UUIDs!`);
-  }, [bulkCount, generateUUIDv1, toolState.actions]);
-
-  const copyAllUuids = useCallback(() => {
+  const copyCurrentUuid = useCallback(() => {
     const allUuids = uuidList.join("\n");
     toolState.actions.copyText(
       allUuids,
       `${uuidList.length} UUIDs copied to clipboard!`
     );
-  }, [uuidList, toolState.actions]);
+  }, [uuidList, toolState]);
+
+  const generateBulkUuids = useCallback(() => {
+    const count = Math.min(Math.max(1, bulkCount), 1000); // Limit between 1-1000
+    const newUuids = Array.from({ length: count }, () => generateUUIDv1());
+    setUuidList(newUuids);
+    // Update the current displayed UUID to the first one from the bulk
+    toolState.setCode(newUuids[0]);
+    toolState.actions.showMessage(`Generated ${count} UUIDs!`);
+  }, [bulkCount, generateUUIDv1, toolState]);
 
   const downloadUuids = useCallback(() => {
     const allUuids = uuidList.join("\n");
@@ -65,41 +72,8 @@ export default function UUIDV1Generator({
     );
   }, [uuidList, toolState.actions]);
 
-  // Button configuration
-  const buttons = useMemo(
-    () => [
-      {
-        type: "custom" as const,
-        text: "Generate New",
-        onClick: generateNewUuid,
-        icon: <RefreshIcon />,
-      },
-      {
-        type: "custom" as const,
-        text: "Copy All UUIDs",
-        onClick: copyAllUuids,
-      },
-      {
-        type: "custom" as const,
-        text: "Download UUIDs",
-        onClick: downloadUuids,
-      },
-      ...createCommonButtons({
-        onCopy: () =>
-          toolState.actions.copyText(
-            toolState.code,
-            "UUID v1 copied to clipboard!"
-          ),
-        onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
-        onFullScreen: toolState.toggleFullScreen,
-      }),
-    ],
-    [generateNewUuid, copyAllUuids, downloadUuids, toolState]
-  );
-
   return (
     <ToolLayout
-      isFullScreen={toolState.isFullScreen}
       snackBar={{
         open: toolState.snackBar.open,
         message: toolState.snackBar.message,
@@ -112,8 +86,6 @@ export default function UUIDV1Generator({
         exampleCode={initialValue}
         exampleOutput={`Generated UUID v1: ${initialValue}`}
       />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single UUID */}
@@ -170,6 +142,14 @@ export default function UUIDV1Generator({
                 Generate {bulkCount} UUIDs
               </Button>
             </div>
+            <Button
+              variant="outlined"
+              onClick={downloadUuids}
+              fullWidth
+              disabled={uuidList.length === 0}
+            >
+              Download UUIDs
+            </Button>
           </div>
 
           {/* UUID v1 Info */}
@@ -188,19 +168,18 @@ export default function UUIDV1Generator({
 
         {/* Right Panel - UUID List */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Typography variant="h6">
-              📋 Generated UUIDs ({uuidList.length})
-            </Typography>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={copyAllUuids}
-              disabled={uuidList.length === 0}
-            >
-              Copy All
-            </Button>
-          </div>
+          <Typography variant="h6">
+            📋 Generated UUIDs ({uuidList.length})
+          </Typography>
+
+          <Button
+            variant="outlined"
+            onClick={copyCurrentUuid}
+            startIcon={<ContentCopyIcon />}
+            fullWidth
+          >
+            Copy All UUIDs
+          </Button>
 
           <div className="border border-gray-300 rounded max-h-96 overflow-auto">
             {uuidList.length === 0 ? (
@@ -210,17 +189,7 @@ export default function UUIDV1Generator({
             ) : (
               <div className="divide-y">
                 {uuidList.map((uuid, index) => (
-                  <div
-                    key={index}
-                    className="p-3 hover:bg-gray-50 font-mono text-sm cursor-pointer"
-                    onClick={() =>
-                      toolState.actions.copyText(
-                        uuid,
-                        `UUID ${index + 1} copied!`
-                      )
-                    }
-                    title="Click to copy"
-                  >
+                  <div key={index} className="p-3 font-mono text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-blue-600">{uuid}</span>
                       <span className="text-xs text-gray-400">
