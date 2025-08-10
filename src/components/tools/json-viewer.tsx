@@ -18,7 +18,7 @@ import DataObjectIcon from "@mui/icons-material/DataObject";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -292,6 +292,7 @@ export default function JsonViewer({
     language: "json",
     value: toolState.code,
     onChange: toolState.setCode,
+    className: "w-full h-full", // Override default height
   });
 
   // Button configuration
@@ -362,98 +363,73 @@ export default function JsonViewer({
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <CodeEditorLayout
-        leftPanel={
-          <SingleCodeEditorWithHeaderV2
-            editorHeading="JSON Input"
-            codeEditorProps={editorProps}
-            themeOption="vs-dark"
-            className={
-              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-            }
+      {/* Row 1: JSON Input Editor */}
+      <div className="mb-6">
+        <SingleCodeEditorWithHeaderV2
+          editorHeading="JSON Input"
+          codeEditorProps={editorProps}
+          themeOption="vs-dark"
+          className={
+            toolState.isFullScreen ? "h-[40vh]" : "h-[35vh] min-h-[280px]"
+          }
+        />
+      </div>
+
+      {/* Row 2: Tree View, Analysis, and Tips */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Tree View */}
+        <div className="lg:col-span-2">
+          <Typography variant="h6" className="!text-sm !font-semibold mb-3">
+            JSON Tree View
+          </Typography>
+
+          {/* Search Box */}
+          <TextField
+            size="small"
+            placeholder="Search in JSON..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: <SearchIcon className="mr-2 text-gray-400" />,
+            }}
+            className="mb-3 w-full"
           />
-        }
-        rightPanel={
+
+          {/* Error Display */}
+          {error && (
+            <Alert severity="error" className="!mb-3">
+              <Typography variant="body2">
+                <strong>JSON Error:</strong> {error}
+              </Typography>
+            </Alert>
+          )}
+
+          {/* Tree View */}
           <div
-            className={`flex flex-col gap-2 ${
-              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+            className={`border border-gray-300 rounded p-2 overflow-auto bg-white ${
+              toolState.isFullScreen ? "h-[45vh]" : "h-[40vh] min-h-[300px]"
             }`}
           >
-            <Typography variant="h6" className="!text-sm !font-semibold">
-              JSON Tree View
-            </Typography>
-            <div className="flex flex-col gap-2 flex-1">
-              {/* Search Box */}
-              <TextField
-                size="small"
-                placeholder="Search in JSON..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                InputProps={{
-                  startAdornment: <SearchIcon className="mr-2 text-gray-400" />,
-                }}
-                className="mb-2"
-              />
-
-              {/* Error Display */}
-              {error && (
-                <Alert severity="error" className="!mb-2">
-                  <Typography variant="body2">
-                    <strong>JSON Error:</strong> {error}
-                  </Typography>
-                </Alert>
-              )}
-
-              {/* Tree View */}
-              <div className="flex-1 border border-gray-300 rounded p-2 overflow-auto bg-white">
-                {jsonTree.length > 0 ? (
-                  <div className="space-y-1">
-                    {Object.entries(groupedNodes).map(([groupKey, nodes]) => (
-                      <div key={groupKey}>
-                        {groupKey !== "root" && (
-                          <Accordion
-                            expanded={expandedNodes.has(groupKey)}
-                            onChange={() => toggleNodeExpansion(groupKey)}
-                          >
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              <Typography variant="body2" className="font-mono">
-                                <DataObjectIcon
-                                  className="mr-1"
-                                  fontSize="small"
-                                />
-                                {groupKey}
-                              </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                              {nodes.map((node, idx) => (
-                                <div
-                                  key={idx}
-                                  className="ml-4 mb-1 flex items-center gap-2"
-                                >
-                                  <Typography
-                                    variant="body2"
-                                    className="font-mono text-blue-600"
-                                  >
-                                    {node.key}:
-                                  </Typography>
-                                  {renderJsonValue(node)}
-                                  <Typography
-                                    variant="caption"
-                                    className="text-gray-500"
-                                  >
-                                    ({node.type})
-                                  </Typography>
-                                </div>
-                              ))}
-                            </AccordionDetails>
-                          </Accordion>
-                        )}
-
-                        {groupKey === "root" &&
-                          nodes.map((node, idx) => (
+            {jsonTree.length > 0 ? (
+              <div className="space-y-1">
+                {Object.entries(groupedNodes).map(([groupKey, nodes]) => (
+                  <div key={groupKey}>
+                    {groupKey !== "root" && (
+                      <Accordion
+                        expanded={expandedNodes.has(groupKey)}
+                        onChange={() => toggleNodeExpansion(groupKey)}
+                      >
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <Typography variant="body2" className="font-mono">
+                            <DataObjectIcon className="mr-1" fontSize="small" />
+                            {groupKey}
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          {nodes.map((node, idx) => (
                             <div
                               key={idx}
-                              className="mb-1 flex items-center gap-2"
+                              className="ml-4 mb-1 flex items-center gap-2"
                             >
                               <Typography
                                 variant="body2"
@@ -470,85 +446,100 @@ export default function JsonViewer({
                               </Typography>
                             </div>
                           ))}
-                      </div>
-                    ))}
+                        </AccordionDetails>
+                      </Accordion>
+                    )}
+
+                    {groupKey === "root" &&
+                      nodes.map((node, idx) => (
+                        <div key={idx} className="mb-1 flex items-center gap-2">
+                          <Typography
+                            variant="body2"
+                            className="font-mono text-blue-600"
+                          >
+                            {node.key}:
+                          </Typography>
+                          {renderJsonValue(node)}
+                          <Typography
+                            variant="caption"
+                            className="text-gray-500"
+                          >
+                            ({node.type})
+                          </Typography>
+                        </div>
+                      ))}
                   </div>
-                ) : (
-                  <div className="text-gray-500 text-center py-8">
-                    Enter valid JSON data and click &quot;View JSON&quot; to see
-                    the tree structure.
-                  </div>
-                )}
+                ))}
               </div>
-
-              {/* JSON Statistics */}
-              <Box className="p-3 bg-gray-50 border border-gray-200 rounded">
-                <Typography
-                  variant="h6"
-                  className="!text-sm !font-semibold mb-2"
-                >
-                  📊 JSON Analysis
-                </Typography>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Objects:</span>
-                    <span className="font-medium">{jsonStats.objects}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Arrays:</span>
-                    <span className="font-medium">{jsonStats.arrays}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Keys:</span>
-                    <span className="font-medium">{jsonStats.totalKeys}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Levels:</span>
-                    <span className="font-medium">{jsonStats.levels}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Size:</span>
-                    <span className="font-medium">
-                      {(jsonStats.size / 1024).toFixed(2)} KB
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Status:</span>
-                    <span
-                      className={`font-medium ${
-                        jsonStats.isValid ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {jsonStats.isValid ? "Valid" : "Invalid"}
-                    </span>
-                  </div>
-                </div>
-              </Box>
-
-              {/* Tips */}
-              <Box className="p-3 bg-blue-50 border border-blue-200 rounded">
-                <Typography
-                  variant="h6"
-                  className="!text-sm !font-semibold mb-2 text-blue-800"
-                >
-                  💡 JSON Viewer Tips
-                </Typography>
-                <div className="text-xs text-blue-700 space-y-1">
-                  <div>
-                    • Use the search box to find specific keys or values
-                  </div>
-                  <div>
-                    • Expand/collapse nodes to explore the JSON structure
-                  </div>
-                  <div>• Check the analysis panel for JSON statistics</div>
-                  <div>• Copy the formatted JSON to your clipboard</div>
-                </div>
-              </Box>
-            </div>
+            ) : (
+              <div className="text-gray-500 text-center py-8">
+                Enter valid JSON data and click &quot;View JSON&quot; to see the
+                tree structure.
+              </div>
+            )}
           </div>
-        }
-        isFullScreen={toolState.isFullScreen}
-      />
+        </div>
+
+        {/* Analysis and Tips Column */}
+        <div className="flex flex-col gap-4">
+          {/* JSON Statistics */}
+          <Box className="p-3 bg-gray-50 border border-gray-200 rounded">
+            <Typography variant="h6" className="!text-sm !font-semibold mb-3">
+              📊 JSON Analysis
+            </Typography>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Objects:</span>
+                <span className="font-medium">{jsonStats.objects}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Arrays:</span>
+                <span className="font-medium">{jsonStats.arrays}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Keys:</span>
+                <span className="font-medium">{jsonStats.totalKeys}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Levels:</span>
+                <span className="font-medium">{jsonStats.levels}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Size:</span>
+                <span className="font-medium">
+                  {(jsonStats.size / 1024).toFixed(2)} KB
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Status:</span>
+                <span
+                  className={`font-medium ${
+                    jsonStats.isValid ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {jsonStats.isValid ? "Valid" : "Invalid"}
+                </span>
+              </div>
+            </div>
+          </Box>
+
+          {/* Tips */}
+          <Box className="p-3 bg-blue-50 border border-blue-200 rounded">
+            <Typography
+              variant="h6"
+              className="!text-sm !font-semibold mb-3 text-blue-800"
+            >
+              💡 JSON Viewer Tips
+            </Typography>
+            <div className="text-xs text-blue-700 space-y-1">
+              <div>• Use the search box to find specific keys or values</div>
+              <div>• Expand/collapse nodes to explore the JSON structure</div>
+              <div>• Check the analysis panel for JSON statistics</div>
+              <div>• Copy the formatted JSON to your clipboard</div>
+            </div>
+          </Box>
+        </div>
+      </div>
     </ToolLayout>
   );
 }
