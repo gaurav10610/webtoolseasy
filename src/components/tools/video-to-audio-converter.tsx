@@ -311,6 +311,16 @@ export default function VideoToAudioConverter() {
       const videoFileData = find(state.fileList, (file) => file.id === fileId);
       if (isEmpty(videoFileData)) return;
 
+      // Debug logging for WebM files
+      if (videoFileData!.originalFile.name.toLowerCase().includes("webm")) {
+        console.log("🔍 WebM Debug Info:", {
+          fileName: videoFileData!.originalFile.name,
+          fileFormatId: videoFileData!.formatId,
+          targetFormatId: videoFileData!.selectedTargetFormatId,
+          formatName: videoFileData!.formatName,
+        });
+      }
+
       try {
         // Dynamically import FFmpeg service when needed for lazy loading
         const { transcodeVideo } = await import("@/service/ffmpegService");

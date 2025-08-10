@@ -1,5 +1,4 @@
 import { FFMPEG_COMMANDS } from "@/data/config/ffmpeg-config";
-import { CoreFileStreamer } from "@/lib/CoreFileStreamer";
 import { ConversionState, VideoFileData } from "@/types/file";
 import { updateFileState } from "@/util/videoConverterUtils";
 import { FFmpeg, FileData } from "@ffmpeg/ffmpeg";
@@ -15,6 +14,14 @@ export const createFFmpegInstance = async () => {
     coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
     wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, "application/wasm"),
   });
+
+  // Log initialization
+  ffmpeg.on("log", ({ type, message }) => {
+    if (type === "error") {
+      console.error("FFmpeg error:", message);
+    }
+  });
+
   return ffmpeg;
 };
 
@@ -78,21 +85,41 @@ export const buildFFMpegCommand = ({
    *
    * if not then use default command
    */
-  if (FFMPEG_COMMANDS.get(targetFormat)!.has(fileFormat)) {
-    command = FFMPEG_COMMANDS.get(targetFormat)!.get(fileFormat)!;
-  } else {
-    command = FFMPEG_COMMANDS.get(targetFormat)!.get(0)!;
+  const targetCommands = FFMPEG_COMMANDS.get(targetFormat);
+  if (!targetCommands) {
+    console.error(`No commands found for target format ${targetFormat}`);
+    throw new Error(`Unsupported target format: ${targetFormat}`);
   }
+
+  if (targetCommands.has(fileFormat)) {
+    command = targetCommands.get(fileFormat)!;
+  } else {
+    command = targetCommands.get(0)!;
+  }
+
+  if (!command) {
+    console.error(
+      `No command found for fileFormat ${fileFormat} -> targetFormat ${targetFormat}`
+    );
+    throw new Error(`Unsupported conversion: ${fileFormat} -> ${targetFormat}`);
+  }
+
+  console.log(`Building FFmpeg command: ${command} with args:`, args);
 
   for (let i = 0; i < args.length; i++) {
     command = command.split(`{${i}}`).join(args[i]);
   }
-  return command.split(" ");
+
+  const finalCommand = command.split(" ");
+  console.log(`Final FFmpeg command:`, finalCommand);
+
+  return finalCommand;
 };
 
 export const validateFileSize = (file: File) => {
-  const fileSizeInGB = file.size / (1024 * 1024 * 1024);
-  return fileSizeInGB <= 1;
+  const fileSizeInMB = file.size / (1024 * 1024);
+  // Reduce max file size to 100MB to prevent memory issues
+  return fileSizeInMB <= 100;
 };
 
 export async function transcodeVideo({
@@ -114,7 +141,7 @@ export async function transcodeVideo({
 
   if (!fileSizeValid) {
     setSnackBarMessage(
-      `File size should be less than 1GB. File: ${videoFileData.originalFile.name}`
+      `File size should be less than 100MB. File: ${videoFileData.originalFile.name}`
     );
     setSnackBarColor("error");
     setIsSnackBarOpen(true);
@@ -141,6 +168,18 @@ export async function transcodeVideo({
     args: [formattedFileName, outputFileName],
   });
 
+  // Enhanced debugging for WebM files
+  if (videoFileData.originalFile.name.toLowerCase().includes("webm")) {
+    console.log("🔍 WebM FFmpeg Command Debug:", {
+      fileName: videoFileData.originalFile.name,
+      inputFormatId: videoFileData.formatId,
+      targetFormatId: videoFileData.selectedTargetFormatId,
+      formattedFileName,
+      outputFileName,
+      generatedCommand: ffmpegCommand,
+    });
+  }
+
   const ffmpeg = await createFFmpegInstance();
 
   videoFileData.convertedData[targetFormatId]!.conversionState =
@@ -151,35 +190,45 @@ export async function transcodeVideo({
     setFileList,
   });
 
-  const fileStreamer = new CoreFileStreamer(videoFileData.originalFile);
-  const fileDataFromDisk: Array<Uint8Array> = [];
+  try {
+    // Read file directly as ArrayBuffer to avoid memory fragmentation
+    console.log(
+      `Reading file: ${videoFileData.originalFile.name}, size: ${(
+        videoFileData.originalFile.size /
+        (1024 * 1024)
+      ).toFixed(2)}MB`
+    );
 
-  while (!fileStreamer.isEndOfFile()) {
-    const arrayBufferChunk = await fileStreamer.readBlockAsArrayBuffer();
-    fileDataFromDisk.push(new Uint8Array(arrayBufferChunk));
+    const fileArrayBuffer = await videoFileData.originalFile.arrayBuffer();
+    const fileData = new Uint8Array(fileArrayBuffer);
+
+    console.log(`File loaded into memory, writing to FFmpeg...`);
+
+    /**
+     * Write the file to ffmpeg
+     */
+    await writeFFmpegFile({
+      ffmpeg,
+      fileData: fileData,
+      fileName: formattedFileName,
+    });
+
+    console.log(`File written to FFmpeg successfully`);
+  } catch (error) {
+    console.error("Failed to read file:", error);
+    videoFileData.convertedData[targetFormatId]!.conversionState =
+      ConversionState.FAILED;
+    setSnackBarMessage(
+      `Failed to read file: ${videoFileData.originalFile.name}. Error: ${error}`
+    );
+    setSnackBarColor("error");
+    setIsSnackBarOpen(true);
+    updateFileState({
+      updatedVideoFileData: videoFileData,
+      setFileList,
+    });
+    return;
   }
-
-  // Aggregate array buffer chunks into a single Uint8Array
-  const totalSize = fileDataFromDisk.reduce(
-    (acc, chunk) => acc + chunk.byteLength,
-    0
-  );
-  const aggregatedArrayBuffer = new Uint8Array(totalSize);
-
-  let offset = 0;
-  for (const chunk of fileDataFromDisk) {
-    aggregatedArrayBuffer.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-
-  /**
-   * Write the file to ffmpeg
-   */
-  await writeFFmpegFile({
-    ffmpeg,
-    fileData: aggregatedArrayBuffer,
-    fileName: formattedFileName,
-  });
 
   videoFileData.convertedData[targetFormatId]!.conversionState =
     ConversionState.IN_PROGRESS;
@@ -207,26 +256,68 @@ export async function transcodeVideo({
       getFFmpegFile({
         ffmpeg,
         fileName: outputFileName,
-      }).then(async (fileData) => {
-        videoFileData.convertedData[targetFormatId]!.conversionState =
-          ConversionState.CONVERTED;
-        videoFileData.convertedData[targetFormatId]!.isConverted = true;
-        videoFileData.convertedData[targetFormatId]!.conversionProgress = 100;
-        videoFileData.convertedData[targetFormatId]!.data = <Uint8Array>(
-          fileData
-        );
+      })
+        .then(async (fileData) => {
+          videoFileData.convertedData[targetFormatId]!.conversionState =
+            ConversionState.CONVERTED;
+          videoFileData.convertedData[targetFormatId]!.isConverted = true;
+          videoFileData.convertedData[targetFormatId]!.conversionProgress = 100;
+          videoFileData.convertedData[targetFormatId]!.data = <Uint8Array>(
+            fileData
+          );
 
-        await deleteFFmpegFile({ ffmpeg, fileName: formattedFileName });
+          // Clean up files from FFmpeg memory
+          try {
+            await deleteFFmpegFile({ ffmpeg, fileName: formattedFileName });
+            await deleteFFmpegFile({ ffmpeg, fileName: outputFileName });
+          } catch (cleanupError) {
+            console.warn("File cleanup warning:", cleanupError);
+          }
 
-        setSnackBarMessage(`${videoFileData.originalFile.name} converted!`);
-        setSnackBarColor("success");
-        setIsSnackBarOpen(true);
+          // Terminate FFmpeg instance to free memory
+          try {
+            ffmpeg.terminate();
+          } catch (terminateError) {
+            console.warn("FFmpeg termination warning:", terminateError);
+          }
 
-        updateFileState({
-          updatedVideoFileData: videoFileData,
-          setFileList,
+          setSnackBarMessage(`${videoFileData.originalFile.name} converted!`);
+          setSnackBarColor("success");
+          setIsSnackBarOpen(true);
+
+          updateFileState({
+            updatedVideoFileData: videoFileData,
+            setFileList,
+          });
+        })
+        .catch((error) => {
+          console.error("Failed to read output file:", error);
+          videoFileData.convertedData[targetFormatId]!.conversionState =
+            ConversionState.FAILED;
+          setSnackBarMessage(
+            `Failed to read converted file: ${videoFileData.originalFile.name}`
+          );
+          setSnackBarColor("error");
+          setIsSnackBarOpen(true);
+
+          // Clean up on error
+          try {
+            deleteFFmpegFile({ ffmpeg, fileName: formattedFileName }).catch(
+              console.warn
+            );
+            deleteFFmpegFile({ ffmpeg, fileName: outputFileName }).catch(
+              console.warn
+            );
+            ffmpeg.terminate();
+          } catch (cleanupError) {
+            console.warn("Error cleanup warning:", cleanupError);
+          }
+
+          updateFileState({
+            updatedVideoFileData: videoFileData,
+            setFileList,
+          });
         });
-      });
     } else {
       videoFileData.convertedData[targetFormatId]!.conversionProgress =
         translatedProgress;
@@ -240,5 +331,34 @@ export async function transcodeVideo({
   /**
    * Execute the ffmpeg command
    */
-  await executeFFmpegCommand({ ffmpeg, command: ffmpegCommand });
+  try {
+    await executeFFmpegCommand({ ffmpeg, command: ffmpegCommand });
+  } catch (error) {
+    console.error("FFmpeg execution failed:", error);
+    videoFileData.convertedData[targetFormatId]!.conversionState =
+      ConversionState.FAILED;
+    setSnackBarMessage(
+      `Conversion failed for ${videoFileData.originalFile.name}: ${error}`
+    );
+    setSnackBarColor("error");
+    setIsSnackBarOpen(true);
+
+    // Clean up on FFmpeg execution error
+    try {
+      deleteFFmpegFile({ ffmpeg, fileName: formattedFileName }).catch(
+        console.warn
+      );
+      deleteFFmpegFile({ ffmpeg, fileName: outputFileName }).catch(
+        console.warn
+      );
+      ffmpeg.terminate();
+    } catch (cleanupError) {
+      console.warn("FFmpeg error cleanup warning:", cleanupError);
+    }
+
+    updateFileState({
+      updatedVideoFileData: videoFileData,
+      setFileList,
+    });
+  }
 }
