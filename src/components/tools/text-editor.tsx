@@ -91,6 +91,7 @@ Perfect for:
         type: "custom" as const,
         text: "Clear Text",
         onClick: clearText,
+        color: "error" as const,
       },
       ...createCommonButtons({
         onCopy: () =>
@@ -124,83 +125,82 @@ Perfect for:
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Editor - takes 3/4 of the width */}
-        <div className="lg:col-span-3">
-          <SingleCodeEditorWithHeaderV2
-            codeEditorProps={editorProps}
-            themeOption="vs-light"
-            editorHeading="Text Editor"
-            className={
-              toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
-            }
-          />
+      {/* Editor */}
+      <div className="mb-6">
+        <SingleCodeEditorWithHeaderV2
+          codeEditorProps={editorProps}
+          themeOption="vs-dark"
+          editorHeading="Text Editor"
+          className={`${
+            toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
+          }`}
+        />
+      </div>
+
+      {/* Statistics, Tips, and Use Cases - Below Editor */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Statistics Panel */}
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded">
+          <h3 className="font-semibold mb-3 text-gray-800">
+            📊 Text Statistics
+          </h3>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Characters:</span>
+              <span className="font-medium">
+                {textStats.characters.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Characters (no spaces):</span>
+              <span className="font-medium">
+                {textStats.charactersNoSpaces.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Words:</span>
+              <span className="font-medium">
+                {textStats.words.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Lines:</span>
+              <span className="font-medium">
+                {textStats.lines.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-600">Paragraphs:</span>
+              <span className="font-medium">
+                {textStats.paragraphs.toLocaleString()}
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Statistics Panel - takes 1/4 of the width */}
-        <div className="lg:col-span-1 space-y-4">
-          <div className="p-4 bg-gray-50 border border-gray-200 rounded">
-            <h3 className="font-semibold mb-3 text-gray-800">
-              📊 Text Statistics
-            </h3>
-
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Characters:</span>
-                <span className="font-medium">
-                  {textStats.characters.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Characters (no spaces):</span>
-                <span className="font-medium">
-                  {textStats.charactersNoSpaces.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Words:</span>
-                <span className="font-medium">
-                  {textStats.words.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Lines:</span>
-                <span className="font-medium">
-                  {textStats.lines.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex justify-between">
-                <span className="text-gray-600">Paragraphs:</span>
-                <span className="font-medium">
-                  {textStats.paragraphs.toLocaleString()}
-                </span>
-              </div>
-            </div>
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+          <h3 className="font-semibold mb-2 text-blue-800">💡 Tips</h3>
+          <div className="text-sm text-blue-700 space-y-1">
+            <div>• Use Ctrl+A to select all text</div>
+            <div>• Use Ctrl+Z to undo changes</div>
+            <div>• Use F11 for fullscreen mode</div>
+            <div>• Text is auto-saved as you type</div>
           </div>
+        </div>
 
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded">
-            <h3 className="font-semibold mb-2 text-blue-800">💡 Tips</h3>
-            <div className="text-sm text-blue-700 space-y-1">
-              <div>• Use Ctrl+A to select all text</div>
-              <div>• Use Ctrl+Z to undo changes</div>
-              <div>• Use F11 for fullscreen mode</div>
-              <div>• Text is auto-saved as you type</div>
-            </div>
-          </div>
-
-          <div className="p-4 bg-green-50 border border-green-200 rounded">
-            <h3 className="font-semibold mb-2 text-green-800">🎯 Use Cases</h3>
-            <div className="text-sm text-green-700 space-y-1">
-              <div>• Note taking</div>
-              <div>• Content writing</div>
-              <div>• Text drafting</div>
-              <div>• Documentation</div>
-              <div>• Meeting notes</div>
-            </div>
+        <div className="p-4 bg-green-50 border border-green-200 rounded">
+          <h3 className="font-semibold mb-2 text-green-800">🎯 Use Cases</h3>
+          <div className="text-sm text-green-700 space-y-1">
+            <div>• Note taking</div>
+            <div>• Content writing</div>
+            <div>• Text drafting</div>
+            <div>• Documentation</div>
+            <div>• Meeting notes</div>
           </div>
         </div>
       </div>
