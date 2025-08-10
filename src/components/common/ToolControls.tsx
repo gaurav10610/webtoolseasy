@@ -30,6 +30,8 @@ interface ToolControlsProps {
   buttons: ToolButtonConfig[];
   isFullScreen?: boolean;
   className?: string;
+  color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
+  size?: "small" | "medium" | "large";
 }
 
 const getButtonConfig = (
@@ -87,6 +89,8 @@ export const ToolControls = memo(function ToolControls({
   buttons,
   isFullScreen = false,
   className = "",
+  color,
+  size = "small",
 }: ToolControlsProps) {
   return (
     <div className={`flex flex-col gap-2 w-full md:flex-row ${className}`}>
@@ -100,12 +104,12 @@ export const ToolControls = memo(function ToolControls({
               key={index}
               buttonText={config.text}
               variant={config.variant}
-              size="small"
+              size={size}
               startIcon={config.icon}
               onClick={button.onClick}
               className={`!hidden md:!flex ${button.className || ""}`}
               {...(button.disabled && { disabled: button.disabled })}
-              {...(button.color && { color: button.color })}
+              {...((button.color || color) && { color: button.color || color })}
             />
           );
         }
@@ -115,12 +119,12 @@ export const ToolControls = memo(function ToolControls({
             key={index}
             buttonText={config.text}
             variant={config.variant}
-            size="small"
+            size={size}
             startIcon={config.icon}
             onClick={button.onClick}
             className={button.className || ""}
             {...(button.disabled && { disabled: button.disabled })}
-            {...(button.color && { color: button.color })}
+            {...((button.color || color) && { color: button.color || color })}
           />
         );
       })}
