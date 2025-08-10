@@ -35,6 +35,7 @@ export enum ApplicationIds {
   REGEX_TESTER = "regex-tester",
   HTML_TO_MARKDOWN = "html-to-markdown",
   VIDEO_EDITOR = "video-editor",
+  URL_ENCODER_DECODER = "urlencoderdecoder",
 }
 
 export interface BaseAppConfig {

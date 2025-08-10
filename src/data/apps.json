@@ -286,5 +286,13 @@
     "navigateUrl": "tools/video-editor",
     "iconRelativeUrl": "video-convert.svg",
     "category": "Media"
+  },
+  "urlencoderdecoder": {
+    "applicationId": "urlencoderdecoder",
+    "displayText": "URL Encoder Decoder",
+    "iconName": "url-encoder-decoder",
+    "navigateUrl": "tools/url-encoder-decoder",
+    "iconRelativeUrl": "url-icon.svg",
+    "category": "Programming"
   }
 }
