@@ -236,33 +236,35 @@ export default function PasswordGenerator({
               onChange={(e) => setBulkPasswordsCount(Number(e.target.value))}
               inputProps={{ min: 1, max: 100 }}
             />
-            <ButtonWithHandler
-              buttonText="Generate Bulk"
-              onClick={generateBulkPasswords}
-              startIcon={<LoopIcon />}
-            />
+            <div className="flex gap-2">
+              <ButtonWithHandler
+                buttonText="Generate Bulk"
+                onClick={generateBulkPasswords}
+                startIcon={<LoopIcon />}
+              />
+              {!isEmpty(bulkPasswords) && (
+                <ButtonWithHandler
+                  buttonText="Download Passwords"
+                  variant="outlined"
+                  onClick={downloadPasswords}
+                  startIcon={<DownloadIcon />}
+                />
+              )}
+            </div>
           </div>
 
           {!isEmpty(bulkPasswords) && (
-            <>
-              <div className="max-h-60 overflow-y-auto p-2 border rounded bg-gray-50">
-                {map(bulkPasswords, (password, index) => (
-                  <Typography
-                    key={index}
-                    variant="caption"
-                    className="block break-all"
-                  >
-                    {password}
-                  </Typography>
-                ))}
-              </div>
-              <ButtonWithHandler
-                buttonText="Download Passwords"
-                variant="outlined"
-                onClick={downloadPasswords}
-                startIcon={<DownloadIcon />}
-              />
-            </>
+            <div className="max-h-60 overflow-y-auto p-2 border rounded bg-gray-50">
+              {map(bulkPasswords, (password, index) => (
+                <Typography
+                  key={index}
+                  variant="caption"
+                  className="block break-all"
+                >
+                  {password}
+                </Typography>
+              ))}
+            </div>
           )}
         </div>
       </div>
