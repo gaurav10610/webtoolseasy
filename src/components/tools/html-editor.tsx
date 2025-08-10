@@ -44,11 +44,6 @@ export default function HtmlEditor({
 
   const [previewHtml, setPreviewHtml] = useState(toolState.code);
 
-  const updatePreview = useCallback(() => {
-    setPreviewHtml(toolState.code);
-    toolState.actions.showMessage("Preview updated!");
-  }, [toolState.code, toolState.actions]);
-
   // Auto-update preview when code changes (debounced)
   const handleCodeChange = useCallback(
     (value: string) => {
@@ -69,12 +64,6 @@ export default function HtmlEditor({
   // Button configuration
   const buttons = useMemo(
     () => [
-      {
-        type: "custom" as const,
-        text: "Update Preview",
-        onClick: updatePreview,
-        icon: <PreviewIcon />,
-      },
       ...createCommonButtons({
         onCopy: () =>
           toolState.actions.copyText(
@@ -85,7 +74,7 @@ export default function HtmlEditor({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [updatePreview, toolState]
+    [toolState]
   );
 
   return (

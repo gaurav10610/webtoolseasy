@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, useMemo } from "react";
 import { Typography, LinearProgress, Box } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CodeIcon from "@mui/icons-material/Code";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -140,18 +141,13 @@ captured_output.getvalue()
     }
   }, [toolState]);
 
-  const downloadCode = useCallback(() => {
-    const blob = new Blob([toolState.code], { type: "text/x-python" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "script.py";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("Python file downloaded successfully!");
-  }, [toolState.code, toolState.actions]);
+  const copyOutput = useCallback(() => {
+    if (!output) {
+      toolState.actions.showMessage("No output to copy!");
+      return;
+    }
+    toolState.actions.copyText(output, "Python output copied to clipboard!");
+  }, [output, toolState.actions]);
 
   // Editor configuration
   const editorProps = useEditorConfig({
@@ -169,6 +165,7 @@ captured_output.getvalue()
         onClick: runCode,
         icon: <PlayArrowIcon />,
         disabled: pyodideLoading,
+        variant: "contained" as const,
       },
       {
         type: "custom" as const,
@@ -177,18 +174,19 @@ captured_output.getvalue()
         icon: <CodeIcon />,
         disabled: pyodideLoading,
       },
+      {
+        type: "custom" as const,
+        text: "Copy Output",
+        onClick: copyOutput,
+        icon: <ContentCopyIcon />,
+        disabled: !output,
+      },
       ...createCommonButtons({
-        onCopy: () =>
-          toolState.actions.copyText(
-            toolState.code,
-            "Python code copied to clipboard!"
-          ),
-        onDownload: downloadCode,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [runCode, formatCode, downloadCode, pyodideLoading, toolState]
+    [runCode, formatCode, copyOutput, output, pyodideLoading, toolState]
   );
 
   return (

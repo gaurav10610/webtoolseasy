@@ -4,7 +4,6 @@ import { useState, useCallback, useMemo, useRef } from "react";
 import { Typography, Box, Alert } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DownloadIcon from "@mui/icons-material/Download";
 import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -192,19 +191,6 @@ main().then(result => console.log("Final result:", result));`;
     toolState.actions.showMessage("Output cleared!");
   }, [toolState.actions]);
 
-  const downloadCode = useCallback(() => {
-    const blob = new Blob([toolState.code], { type: "text/javascript" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "script.js";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("JavaScript file downloaded!");
-  }, [toolState]);
-
   // Editor configuration
   const editorProps = useEditorConfig({
     language: "javascript",
@@ -235,33 +221,14 @@ main().then(result => console.log("Final result:", result));`;
         onClick: clearOutput,
         icon: <ClearIcon />,
         disabled: !output && !error,
-      },
-      {
-        type: "custom" as const,
-        text: "Download JS",
-        onClick: downloadCode,
-        icon: <DownloadIcon />,
+        color: "error" as const,
       },
       ...createCommonButtons({
-        onCopy: () =>
-          toolState.actions.copyText(
-            toolState.code,
-            "JavaScript code copied to clipboard!"
-          ),
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [
-      executeCode,
-      copyOutput,
-      clearOutput,
-      downloadCode,
-      isRunning,
-      output,
-      error,
-      toolState,
-    ]
+    [executeCode, copyOutput, clearOutput, isRunning, output, error, toolState]
   );
 
   // Calculate code statistics
@@ -343,61 +310,63 @@ main().then(result => console.log("Final result:", result));`;
                 </Typography>
               </Alert>
             )}
-
-            {/* Code Statistics */}
-            <Box className="p-2 md:p-3 bg-gray-50 border border-gray-200 rounded">
-              <Typography
-                variant="h6"
-                className="!text-xs md:!text-sm !font-semibold mb-2"
-              >
-                📊 Code Statistics
-              </Typography>
-              <div className="grid grid-cols-3 gap-2 md:gap-4 text-xs md:text-sm">
-                <div className="text-center">
-                  <div className="font-semibold text-blue-600 text-sm md:text-base">
-                    {codeStats.lines}
-                  </div>
-                  <div className="text-gray-600 text-xs">Lines</div>
-                </div>
-                <div className="text-center">
-                  <div className="font-semibold text-green-600 text-sm md:text-base">
-                    {codeStats.characters}
-                  </div>
-                  <div className="text-gray-600 text-xs">Characters</div>
-                </div>
-                <div className="text-center">
-                  <div className="font-semibold text-purple-600 text-sm md:text-base">
-                    {codeStats.words}
-                  </div>
-                  <div className="text-gray-600 text-xs">Words</div>
-                </div>
-              </div>
-            </Box>
-
-            {/* Features Info */}
-            <Box className="p-2 md:p-3 bg-blue-50 border border-blue-200 rounded">
-              <Typography
-                variant="h6"
-                className="!text-xs md:!text-sm !font-semibold mb-2 text-blue-800"
-              >
-                🚀 Supported Features
-              </Typography>
-              <div className="text-xs text-blue-700 space-y-1 leading-relaxed">
-                <div>
-                  • ES6+ syntax (arrow functions, destructuring, spread
-                  operator)
-                </div>
-                <div>• Async/await and Promise support</div>
-                <div>• Modern array methods and higher-order functions</div>
-                <div>• Classes and object-oriented programming</div>
-                <div>• Template literals and dynamic imports</div>
-                <div>• Real-time console output and error handling</div>
-              </div>
-            </Box>
           </div>
         }
         isFullScreen={toolState.isFullScreen}
       />
+
+      {/* Code Statistics and Features Info - Below the Editor Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+        {/* Code Statistics */}
+        <Box className="p-2 md:p-3 bg-gray-50 border border-gray-200 rounded">
+          <Typography
+            variant="h6"
+            className="!text-xs md:!text-sm !font-semibold mb-2"
+          >
+            📊 Code Statistics
+          </Typography>
+          <div className="grid grid-cols-3 gap-2 md:gap-4 text-xs md:text-sm">
+            <div className="text-center">
+              <div className="font-semibold text-blue-600 text-sm md:text-base">
+                {codeStats.lines}
+              </div>
+              <div className="text-gray-600 text-xs">Lines</div>
+            </div>
+            <div className="text-center">
+              <div className="font-semibold text-green-600 text-sm md:text-base">
+                {codeStats.characters}
+              </div>
+              <div className="text-gray-600 text-xs">Characters</div>
+            </div>
+            <div className="text-center">
+              <div className="font-semibold text-purple-600 text-sm md:text-base">
+                {codeStats.words}
+              </div>
+              <div className="text-gray-600 text-xs">Words</div>
+            </div>
+          </div>
+        </Box>
+
+        {/* Features Info */}
+        <Box className="p-2 md:p-3 bg-blue-50 border border-blue-200 rounded">
+          <Typography
+            variant="h6"
+            className="!text-xs md:!text-sm !font-semibold mb-2 text-blue-800"
+          >
+            🚀 Supported Features
+          </Typography>
+          <div className="text-xs text-blue-700 space-y-1 leading-relaxed">
+            <div>
+              • ES6+ syntax (arrow functions, destructuring, spread operator)
+            </div>
+            <div>• Async/await and Promise support</div>
+            <div>• Modern array methods and higher-order functions</div>
+            <div>• Classes and object-oriented programming</div>
+            <div>• Template literals and dynamic imports</div>
+            <div>• Real-time console output and error handling</div>
+          </div>
+        </Box>
+      </div>
     </ToolLayout>
   );
 }
