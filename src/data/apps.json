@@ -294,5 +294,21 @@
     "navigateUrl": "tools/url-encoder-decoder",
     "iconRelativeUrl": "url-icon.svg",
     "category": "Programming"
+  },
+  "pdfunlock": {
+    "applicationId": "pdfunlock",
+    "displayText": "PDF Unlock Tool",
+    "iconName": "pdf-unlock",
+    "navigateUrl": "tools/pdf-unlock",
+    "iconRelativeUrl": "pdf-icon.svg",
+    "category": "Online Editors"
+  },
+  "pdfprotect": {
+    "applicationId": "pdfprotect",
+    "displayText": "PDF Protect Tool",
+    "iconName": "pdf-protect",
+    "navigateUrl": "tools/pdf-protect",
+    "iconRelativeUrl": "pdf-icon.svg",
+    "category": "Online Editors"
   }
 }
