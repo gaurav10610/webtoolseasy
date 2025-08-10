@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 import PreviewIcon from "@mui/icons-material/Preview";
-import DownloadIcon from "@mui/icons-material/Download";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -134,11 +133,6 @@ export default function JavaScriptEditor({
     setPreviewHtml(initialValue);
   }, [initialValue]);
 
-  const updatePreview = useCallback(() => {
-    setPreviewHtml(toolState.code);
-    toolState.actions.showMessage("Preview updated!");
-  }, [toolState.code, toolState.actions]);
-
   // Auto-update preview when code changes (debounced)
   const handleCodeChange = useCallback(
     (value: string) => {
@@ -150,16 +144,6 @@ export default function JavaScriptEditor({
     },
     [toolState]
   );
-  const downloadCode = useCallback(() => {
-    const blob = new Blob([toolState.code], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "index.html";
-    a.click();
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("Code downloaded as index.html!");
-  }, [toolState.code, toolState.actions]);
 
   // Editor configuration
   const editorProps = useEditorConfig({
@@ -171,18 +155,6 @@ export default function JavaScriptEditor({
   // Button configuration
   const buttons = useMemo(
     () => [
-      {
-        type: "custom" as const,
-        text: "Update Preview",
-        onClick: updatePreview,
-        icon: <PreviewIcon />,
-      },
-      {
-        type: "custom" as const,
-        text: "Download HTML",
-        onClick: downloadCode,
-        icon: <DownloadIcon />,
-      },
       ...createCommonButtons({
         onCopy: () =>
           toolState.actions.copyText(
@@ -193,7 +165,7 @@ export default function JavaScriptEditor({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [updatePreview, downloadCode, toolState]
+    [toolState]
   );
 
   return (
