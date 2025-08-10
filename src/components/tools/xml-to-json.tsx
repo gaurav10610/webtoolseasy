@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { Checkbox, Typography } from "@mui/material";
-import { Code } from "@mui/icons-material";
+import { Code, ContentCopy } from "@mui/icons-material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -74,22 +74,9 @@ export default function XmlToJsonConverter({
     }
   }, [toolState, parserOptions]);
 
-  const copyFormattedCode = useCallback(() => {
-    toolState.actions.copyText(convertedJson, "JSON copied to clipboard!");
+  const copyJsonData = useCallback(() => {
+    toolState.actions.copyText(convertedJson, "JSON data copied to clipboard!");
   }, [toolState.actions, convertedJson]);
-
-  const downloadJson = useCallback(() => {
-    const blob = new Blob([convertedJson], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "converted.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toolState.actions.showMessage("JSON file downloaded successfully!");
-  }, [convertedJson, toolState.actions]);
 
   // Editor configurations
   const inputEditorProps = useEditorConfig({
@@ -113,15 +100,20 @@ export default function XmlToJsonConverter({
         text: "Convert XML to JSON",
         onClick: convertXml,
         icon: <Code />,
+        variant: "contained" as const,
+      },
+      {
+        type: "custom" as const,
+        text: "Copy JSON Data",
+        onClick: copyJsonData,
+        icon: <ContentCopy />,
       },
       ...createCommonButtons({
-        onCopy: copyFormattedCode,
-        onDownload: downloadJson,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [convertXml, copyFormattedCode, downloadJson, toolState]
+    [convertXml, copyJsonData, toolState]
   );
 
   return (
