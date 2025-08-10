@@ -221,21 +221,7 @@ export default function ImageCompress({
   }, [images, downloadImage]);
 
   // Button configuration
-  const buttons = useMemo(
-    () => [
-      ...(images.some((img) => img.isCompressed)
-        ? [
-            {
-              type: "custom" as const,
-              text: "Download All",
-              onClick: downloadAllCompressed,
-              icon: <DownloadIcon />,
-            },
-          ]
-        : []),
-    ],
-    [images, downloadAllCompressed]
-  );
+  const buttons = useMemo(() => [], []);
 
   return (
     <ToolLayout
@@ -341,6 +327,20 @@ export default function ImageCompress({
                   }
                 >
                   Compress Selected
+                </Button>
+              )}
+
+              {images.some((img) => img.isCompressed) && (
+                <Button
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  onClick={downloadAllCompressed}
+                  sx={{
+                    backgroundColor: "#16a34a",
+                    "&:hover": { backgroundColor: "#15803d" },
+                  }}
+                >
+                  Download All
                 </Button>
               )}
             </div>
