@@ -72,6 +72,12 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   const [textInput, setTextInput] = useState("");
   const [fontSize, setFontSize] = useState(12);
   const [textColor, setTextColor] = useState("#000000");
+  const [selectedAnnotationId, setSelectedAnnotationId] = useState<
+    string | null
+  >(null);
+  const [draggedAnnotationId, setDraggedAnnotationId] = useState<string | null>(
+    null
+  );
   const [error, setError] = useState("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");
@@ -305,6 +311,78 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
     [textInput, fontSize, textColor, currentPage]
   );
 
+  const updateTextAnnotation = useCallback(
+    (id: string, updates: Partial<TextAnnotation>) => {
+      setTextAnnotations((prev) =>
+        prev.map((annotation) =>
+          annotation.id === id ? { ...annotation, ...updates } : annotation
+        )
+      );
+    },
+    []
+  );
+
+  // Handle drag start for text annotations
+  const handleAnnotationMouseDown = useCallback(
+    (e: React.MouseEvent, annotationId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const annotation = textAnnotations.find((a) => a.id === annotationId);
+      if (!annotation) return;
+
+      setSelectedAnnotationId(annotationId);
+      setDraggedAnnotationId(annotationId);
+
+      const pdfContainer = e.currentTarget.parentElement;
+      if (!pdfContainer) return;
+
+      const rect = pdfContainer.getBoundingClientRect();
+
+      const dragState = {
+        isDragging: true,
+        draggedAnnotationId: annotationId,
+        startX: e.clientX,
+        startY: e.clientY,
+        initialX: annotation.x,
+        initialY: annotation.y,
+        containerRect: rect,
+      };
+
+      // Add global mouse events
+      const handleMouseMove = (event: MouseEvent) => {
+        const deltaX = event.clientX - dragState.startX;
+        const deltaY = event.clientY - dragState.startY;
+
+        // Convert pixel movement to actual coordinates
+        const newX = Math.max(
+          0,
+          Math.min(rect.width, dragState.initialX + deltaX)
+        );
+        const newY = Math.max(
+          0,
+          Math.min(rect.height, dragState.initialY + deltaY)
+        );
+
+        updateTextAnnotation(annotationId, { x: newX, y: newY });
+      };
+
+      const handleMouseUp = () => {
+        // Remove global mouse events
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+
+        // Reset dragging state
+        setDraggedAnnotationId(null);
+      };
+
+      // Add global mouse events
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    },
+    [textAnnotations, updateTextAnnotation]
+  );
+
   const removeAnnotation = useCallback((annotationId: string) => {
     setTextAnnotations((prev) => prev.filter((ann) => ann.id !== annotationId));
     showMessage("Annotation removed");
@@ -489,10 +567,26 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                   scale={zoom}
                   onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                     if (isAnnotationMode) {
-                      const rect = event.currentTarget.getBoundingClientRect();
-                      const x = event.clientX - rect.left;
-                      const y = event.clientY - rect.top;
-                      addTextAnnotation(x, y);
+                      // Check if clicking on empty area (not on an annotation)
+                      const target = event.target as HTMLElement;
+                      const isClickingOnAnnotation = target.closest(
+                        "[data-annotation-id]"
+                      );
+
+                      if (!isClickingOnAnnotation && !draggedAnnotationId) {
+                        // Deselect any selected annotation first
+                        if (selectedAnnotationId) {
+                          setSelectedAnnotationId(null);
+                          return;
+                        }
+
+                        // Add new annotation
+                        const rect =
+                          event.currentTarget.getBoundingClientRect();
+                        const x = event.clientX - rect.left;
+                        const y = event.clientY - rect.top;
+                        addTextAnnotation(x, y);
+                      }
                     }
                   }}
                   className={`cursor-pointer shadow-lg ${
@@ -511,6 +605,14 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                 .map((annotation) => (
                   <div
                     key={annotation.id}
+                    data-annotation-id={annotation.id}
+                    className={`absolute cursor-move select-none transition-all duration-200 ${
+                      selectedAnnotationId === annotation.id
+                        ? "ring-2 ring-blue-400 ring-opacity-60 bg-blue-100 bg-opacity-20 rounded"
+                        : isAnnotationMode
+                        ? "hover:ring-1 hover:ring-white hover:ring-opacity-40 rounded"
+                        : ""
+                    }`}
                     style={{
                       position: "absolute",
                       left: annotation.x,
@@ -519,29 +621,55 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                       color: annotation.color,
                       fontFamily: "Helvetica, Arial, sans-serif",
                       pointerEvents: isAnnotationMode ? "auto" : "none",
-                      cursor: isAnnotationMode ? "pointer" : "default",
-                      backgroundColor: isAnnotationMode
-                        ? "rgba(255, 255, 0, 0.3)"
-                        : "transparent",
-                      padding: isAnnotationMode ? "2px 4px" : "0",
-                      borderRadius: isAnnotationMode ? "3px" : "0",
+                      cursor: isAnnotationMode ? "move" : "default",
+                      backgroundColor:
+                        isAnnotationMode &&
+                        selectedAnnotationId !== annotation.id
+                          ? "rgba(255, 255, 0, 0.3)"
+                          : selectedAnnotationId === annotation.id
+                          ? "rgba(59, 130, 246, 0.1)"
+                          : "transparent",
+                      padding: isAnnotationMode ? "4px 8px" : "0",
+                      borderRadius: isAnnotationMode ? "4px" : "0",
                       maxWidth: "200px",
                       wordWrap: "break-word",
                       userSelect: "none",
+                      WebkitUserSelect: "none",
+                      zIndex: selectedAnnotationId === annotation.id ? 20 : 15,
+                      textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
+                      minWidth: isAnnotationMode ? "20px" : "auto",
+                      minHeight: isAnnotationMode ? "20px" : "auto",
+                    }}
+                    onMouseDown={(e) => {
+                      if (isAnnotationMode) {
+                        handleAnnotationMouseDown(e, annotation.id);
+                      }
                     }}
                     onClick={(e) => {
-                      if (isAnnotationMode) {
+                      if (isAnnotationMode && !draggedAnnotationId) {
                         e.stopPropagation();
-                        removeAnnotation(annotation.id);
+                        if (selectedAnnotationId === annotation.id) {
+                          // Double click to remove
+                          removeAnnotation(annotation.id);
+                        } else {
+                          // Single click to select
+                          setSelectedAnnotationId(annotation.id);
+                        }
                       }
                     }}
                     title={
                       isAnnotationMode
-                        ? "Click to remove this annotation"
+                        ? selectedAnnotationId === annotation.id
+                          ? "Drag to move, click again to remove this annotation"
+                          : "Click to select, drag to move this annotation"
                         : annotation.text
                     }
                   >
                     {annotation.text}
+                    {selectedAnnotationId === annotation.id &&
+                      isAnnotationMode && (
+                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full"></div>
+                      )}
                   </div>
                 ))}
             </div>
@@ -550,8 +678,10 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
           {isAnnotationMode && (
             <Alert severity="info" className="mt-4">
               <strong>Annotation Mode Active:</strong> Click anywhere on the PDF
-              to add text annotations. Click on existing annotations to remove
-              them. Make sure to enter text in the annotation tools above first.
+              to add text annotations. Click on existing annotations to select
+              them, then drag to move or click again to remove them. Click on
+              empty space to deselect. Make sure to enter text in the annotation
+              tools above first.
             </Alert>
           )}
         </CardContent>
