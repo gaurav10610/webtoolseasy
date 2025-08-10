@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { Typography, Button } from "@mui/material";
 import { Transform, ContentCopy, Refresh, Download } from "@mui/icons-material";
-import { ToolLayout } from "../common/ToolLayout";
+import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import dynamic from "next/dynamic";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
@@ -165,7 +165,15 @@ export default function HtmlToMarkdown() {
         onClose: () => setSnackBar((prev) => ({ ...prev, open: false })),
       }}
     >
+      <SEOContent
+        title="HTML to Markdown Converter"
+        description="Free online HTML to Markdown converter. Convert HTML documents, web pages, and content to clean Markdown format with proper formatting preservation."
+        exampleCode={DEFAULT_HTML}
+        exampleOutput="# Welcome to HTML to Markdown Converter\n\nThis tool converts **HTML** content to *Markdown* format.\n\n## Features\n- Converts headings (h1-h6)\n- Handles **bold** and *italic* text\n- Preserves [links](https://example.com)\n- Converts lists and tables\n- Maintains code blocks"
+      />
+
       <div className="space-y-4">
+        {/* ... rest of content */}
         <div>
           <Typography variant="h5" gutterBottom>
             HTML to Markdown Converter
@@ -189,6 +197,7 @@ export default function HtmlToMarkdown() {
             startIcon={<ContentCopy />}
             onClick={copyMarkdown}
             disabled={!state.markdownOutput}
+            variant="outlined"
           >
             Copy Markdown
           </Button>
@@ -196,10 +205,11 @@ export default function HtmlToMarkdown() {
             startIcon={<Download />}
             onClick={downloadMarkdown}
             disabled={!state.markdownOutput}
+            variant="outlined"
           >
             Download .md
           </Button>
-          <Button startIcon={<Refresh />} onClick={handleReset}>
+          <Button startIcon={<Refresh />} onClick={handleReset} color="error">
             Reset
           </Button>
         </div>
