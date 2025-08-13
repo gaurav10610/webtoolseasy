@@ -86,17 +86,17 @@ export const SEOContent = memo(function SEOContent({
     <>
       {/* SEO-friendly hidden content for search engines */}
       <div className="sr-only" aria-hidden="true">
-        <h1>{title}</h1>
+        <h2>{title}</h2>
         <p>{description}</p>
         {exampleCode && (
           <>
-            <h2>Example Code</h2>
+            <h3>Example Code</h3>
             <pre>{exampleCode}</pre>
           </>
         )}
         {exampleOutput && (
           <>
-            <h2>Example Output</h2>
+            <h3>Example Output</h3>
             <pre>{exampleOutput}</pre>
           </>
         )}
