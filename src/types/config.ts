@@ -37,6 +37,7 @@ export enum ApplicationIds {
   HTML_TO_MARKDOWN = "html-to-markdown",
   VIDEO_EDITOR = "video-editor",
   URL_ENCODER_DECODER = "urlencoderdecoder",
+  SQL_PRACTICE_EDITOR = "sql-practice-editor",
 }
 
 export interface BaseAppConfig {

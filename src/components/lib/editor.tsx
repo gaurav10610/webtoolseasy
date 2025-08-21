@@ -54,7 +54,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
             onChange(value ? (value as string) : "");
           },
         })}
-        {...(handleEditorDidMount && { editorDidMount: handleEditorDidMount })}
+        {...(handleEditorDidMount && { onMount: handleEditorDidMount })}
       />
     </div>
   );

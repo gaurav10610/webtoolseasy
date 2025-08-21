@@ -1,4 +1,4 @@
-import { AppListConfig, AppNavigationConfig } from "@/types/config";
+import { AppNavigationConfig } from "@/types/config";
 import { getRandomId } from "@/util/commonUtils";
 import { Typography } from "@mui/material";
 import { groupBy, keysIn, map, values } from "lodash-es";
@@ -48,7 +48,7 @@ export default function SidePanel({
   pageUrl,
 }: Readonly<{
   className?: string;
-  appConfigJson: AppListConfig;
+  appConfigJson: Record<string, AppNavigationConfig>;
   pageUrl: string;
 }>) {
   const categoryWiseAppList = groupBy(values(appConfigJson), "category");
