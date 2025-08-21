@@ -492,7 +492,7 @@ export default function SqlPracticeEditor({
             <Grid item xs={12} md={6} key={index}>
               <Card
                 variant="outlined"
-                sx={{ cursor: "pointer", "&:hover": { boxShadow: 2 } }}
+                className="cursor-pointer hover:shadow-lg transition-shadow duration-200"
                 onClick={() => loadExample(example)}
               >
                 <CardContent>
@@ -512,14 +512,7 @@ export default function SqlPracticeEditor({
                   </Typography>
                   <Box
                     component="pre"
-                    sx={{
-                      backgroundColor: "grey.100",
-                      p: 1,
-                      borderRadius: 1,
-                      fontSize: "0.8rem",
-                      overflow: "auto",
-                      fontFamily: "monospace",
-                    }}
+                    className="bg-gray-100 p-2 rounded text-xs overflow-auto font-mono"
                   >
                     {example.query}
                   </Box>
@@ -540,12 +533,10 @@ export default function SqlPracticeEditor({
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          sx={{ py: 4 }}
+          className="py-8"
         >
-          <LinearProgress
-            sx={{ width: "80%", mb: 3, height: 6, borderRadius: 3 }}
-          />
-          <Typography variant="body1" color="primary" sx={{ fontWeight: 500 }}>
+          <LinearProgress className="w-4/5 mb-6 h-1.5 rounded-lg" />
+          <Typography variant="body1" color="primary" className="font-medium">
             🔄 Executing SQL query...
           </Typography>
         </Box>
@@ -556,13 +547,7 @@ export default function SqlPracticeEditor({
       return (
         <Alert
           severity="error"
-          sx={{
-            mt: 2,
-            borderRadius: 2,
-            "& .MuiAlert-icon": {
-              fontSize: "1.5rem",
-            },
-          }}
+          className="mt-4 rounded-lg [&_.MuiAlert-icon]:text-2xl"
         >
           <Typography variant="body2">
             <strong>❌ Error:</strong> {error}
@@ -578,24 +563,16 @@ export default function SqlPracticeEditor({
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          sx={{
-            py: 6,
-            color: "text.secondary",
-            textAlign: "center",
-            background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-            borderRadius: 2,
-            border: "2px dashed",
-            borderColor: "divider",
-          }}
+          className="py-12 text-gray-500 text-center bg-gradient-to-br from-slate-50 to-blue-100 rounded-lg border-2 border-dashed border-gray-300"
         >
-          <Typography variant="h5" sx={{ mb: 2, opacity: 0.8 }}>
+          <Typography variant="h5" className="mb-4 opacity-80">
             📝 Ready to execute queries
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2, maxWidth: 400 }}>
+          <Typography variant="body1" className="mb-4 max-w-md">
             Write your SQL query above and click &quot;Execute Selected&quot; or
             &quot;Execute All&quot;
           </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.6 }}>
+          <Typography variant="body2" className="opacity-60">
             💡 Try one of the example queries below to get started
           </Typography>
         </Box>
@@ -605,23 +582,11 @@ export default function SqlPracticeEditor({
     return (
       <Box>
         {executionTime && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-              p: 2,
-              backgroundColor: "success.light",
-              borderRadius: 2,
-              border: "1px solid",
-              borderColor: "success.main",
-            }}
-          >
+          <Box className="flex justify-between items-center mb-6 p-4 bg-green-100 rounded-lg border border-green-400">
             <Box display="flex" alignItems="center" gap={1}>
               <Typography
                 variant="body2"
-                sx={{ fontWeight: 600, color: "success.dark" }}
+                className="font-semibold text-green-800"
               >
                 ⚡ Query executed in {executionTime.toFixed(2)}ms
               </Typography>
@@ -629,7 +594,7 @@ export default function SqlPracticeEditor({
             <Box display="flex" alignItems="center" gap={1}>
               <Typography
                 variant="body2"
-                sx={{ fontWeight: 600, color: "success.dark" }}
+                className="font-semibold text-green-800"
               >
                 📊{" "}
                 {queryResult.reduce(
@@ -643,18 +608,11 @@ export default function SqlPracticeEditor({
         )}
 
         {queryResult.map((result, index) => (
-          <Box key={index} sx={{ mb: 3 }}>
+          <Box key={index} className="mb-6">
             {queryResult.length > 1 && (
               <Typography
                 variant="subtitle1"
-                sx={{
-                  mb: 2,
-                  fontWeight: 600,
-                  color: "primary.main",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
+                className="mb-4 font-semibold text-blue-600 flex items-center gap-2"
               >
                 🔢 Result Set {index + 1}
               </Typography>
@@ -662,12 +620,7 @@ export default function SqlPracticeEditor({
             {result.columns.length > 4 && (
               <Typography
                 variant="caption"
-                sx={{
-                  display: "block",
-                  mb: 1,
-                  color: "text.secondary",
-                  fontStyle: "italic",
-                }}
+                className="block mb-2 text-gray-600 italic"
               >
                 💡 Scroll horizontally to view all {result.columns.length}{" "}
                 columns
@@ -675,55 +628,21 @@ export default function SqlPracticeEditor({
             )}
             <TableContainer
               component={Paper}
-              sx={{
-                mb: 2,
-                maxHeight: 400,
-                borderRadius: 2,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                border: "1px solid",
-                borderColor: "divider",
-                overflowY: "auto",
-                overflowX: "auto",
-                "&::-webkit-scrollbar": {
-                  height: 8,
-                  width: 8,
-                },
-                "&::-webkit-scrollbar-track": {
-                  backgroundColor: "rgba(0,0,0,0.1)",
-                  borderRadius: 4,
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "rgba(0,0,0,0.3)",
-                  borderRadius: 4,
-                  "&:hover": {
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                  },
-                },
-              }}
+              className="mb-4 max-h-96 rounded-lg shadow-lg border border-gray-300 overflow-y-auto overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-black/10 [&::-webkit-scrollbar-track]:rounded [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded hover:[&::-webkit-scrollbar-thumb]:bg-black/50"
             >
               <Table
                 stickyHeader
                 size="small"
-                sx={{
-                  minWidth: result.columns.length > 4 ? 800 : "auto",
-                  tableLayout: "auto",
-                }}
+                className={`${
+                  result.columns.length > 4 ? "min-w-[800px]" : ""
+                } table-auto`}
               >
                 <TableHead>
                   <TableRow>
                     {result.columns.map((column, colIndex) => (
                       <TableCell
                         key={colIndex}
-                        sx={{
-                          backgroundColor: "primary.main",
-                          color: "primary.contrastText",
-                          fontWeight: 700,
-                          fontSize: "0.9rem",
-                          borderBottom: "2px solid",
-                          borderColor: "primary.dark",
-                          whiteSpace: "nowrap",
-                          minWidth: 120,
-                        }}
+                        className="bg-blue-600 text-white font-bold text-sm border-b-2 border-blue-800 whitespace-nowrap min-w-[120px]"
                       >
                         <Box display="flex" alignItems="center" gap={1}>
                           <strong>{column}</strong>
@@ -731,12 +650,7 @@ export default function SqlPracticeEditor({
                             <IconButton
                               size="small"
                               onClick={() => copyToClipboard(column)}
-                              sx={{
-                                color: "primary.contrastText",
-                                "&:hover": {
-                                  backgroundColor: "primary.dark",
-                                },
-                              }}
+                              className="text-white hover:bg-blue-800"
                             >
                               <ContentCopyIcon fontSize="inherit" />
                             </IconButton>
@@ -751,30 +665,12 @@ export default function SqlPracticeEditor({
                     <TableRow
                       key={rowIndex}
                       hover
-                      sx={{
-                        "&:nth-of-type(odd)": {
-                          backgroundColor: "action.hover",
-                        },
-                        "&:hover": {
-                          backgroundColor: "action.selected",
-                        },
-                        transition: "background-color 0.2s ease",
-                      }}
+                      className="odd:bg-gray-50 hover:bg-blue-50 transition-colors duration-200"
                     >
                       {row.map((cell, cellIndex) => (
                         <TableCell
                           key={cellIndex}
-                          sx={{
-                            borderBottom: "1px solid",
-                            borderColor: "divider",
-                            fontFamily: "monospace",
-                            fontSize: "0.85rem",
-                            whiteSpace: "nowrap",
-                            minWidth: 120,
-                            maxWidth: 300,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
+                          className="border-b border-gray-300 font-mono text-sm whitespace-nowrap min-w-[120px] max-w-[300px] overflow-hidden text-ellipsis"
                         >
                           {cell === null ? (
                             <Chip
@@ -782,15 +678,10 @@ export default function SqlPracticeEditor({
                               size="small"
                               variant="outlined"
                               color="warning"
-                              sx={{
-                                fontWeight: 600,
-                                borderRadius: 1,
-                              }}
+                              className="font-semibold rounded"
                             />
                           ) : (
-                            <Box
-                              sx={{ color: "text.primary", fontWeight: 500 }}
-                            >
+                            <Box className="text-gray-900 font-medium">
                               {String(cell)}
                             </Box>
                           )}
@@ -827,7 +718,7 @@ export default function SqlPracticeEditor({
           justifyContent="center"
           minHeight="400px"
         >
-          <LinearProgress sx={{ width: "50%", mb: 2 }} />
+          <LinearProgress className="w-1/2 mb-4" />
           <Typography>Loading SQL Practice Editor...</Typography>
         </Box>
       </ToolLayout>
@@ -890,21 +781,12 @@ export default function SqlPracticeEditor({
             alignItems="center"
             gap={2}
             mb={2}
-            sx={{
-              pb: 1,
-              borderBottom: "2px solid",
-              borderColor: "primary.main",
-            }}
+            className="pb-2 border-b-2 border-blue-600"
           >
             <Typography
               variant="body1"
               color="primary"
-              className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-              }}
+              className="!text-sm md:!text-lg lg:!text-xl !font-semibold flex items-center gap-2"
             >
               📊 Query Results
             </Typography>
@@ -916,22 +798,12 @@ export default function SqlPracticeEditor({
                 size="small"
                 color="primary"
                 variant="outlined"
-                sx={{ fontWeight: 600 }}
+                className="font-semibold"
               />
             )}
           </Box>
 
-          <Box
-            sx={{
-              minHeight: 400,
-              border: 1,
-              borderColor: "divider",
-              borderRadius: 2,
-              p: 3,
-              backgroundColor: "background.paper",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-            }}
-          >
+          <Box className="min-h-[400px] border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
             {renderQueryResults()}
           </Box>
         </Box>
