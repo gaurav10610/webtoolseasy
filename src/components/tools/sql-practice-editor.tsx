@@ -194,6 +194,7 @@ export default function SqlPracticeEditor({
     onChange: (value) => {
       setSqlCode(value || "");
     },
+    className: "h-full",
   });
 
   const { isFullScreen, toggleFullScreen, snackBar, actions } = useToolState({
@@ -742,25 +743,21 @@ export default function SqlPracticeEditor({
         description="Learn and practice SQL with our interactive online editor featuring sample databases"
       />
 
-      {/* Button Controls on Top */}
-      <Box mb={3}>
-        <Box mb={2}>
-          <Typography variant="body2" color="text.secondary">
-            💡 <strong>Tip:</strong> To execute only selected text, highlight
-            the specific SQL query in the editor and click &quot;Execute
-            Selected&quot;. If no text is selected, it will run the entire
-            editor content. Click &quot;Execute All&quot; to run all queries
-            separated by semicolons. Previous results are automatically cleared
-            when running new queries.
-          </Typography>
-        </Box>
-        <ToolControls buttons={controls} />
+      <Box mb={2}>
+        <Typography variant="body2" color="text.secondary">
+          💡 <strong>Tip:</strong> To execute only selected text, highlight the
+          specific SQL query in the editor and click &quot;Execute
+          Selected&quot;. If no text is selected, it will run the entire editor
+          content. Click &quot;Execute All&quot; to run all queries separated by
+          semicolons. Previous results are automatically cleared when running
+          new queries.
+        </Typography>
       </Box>
 
       {/* SQL Query Editor and Query Results in Single Column Layout */}
-      <Box mb={4}>
+      <div className="flex flex-col gap-4 flex-grow min-w-0">
         {/* SQL Query Editor */}
-        <Box mb={3}>
+        <div className="min-h-[200px] min-w-0">
           <SingleCodeEditorWithHeaderV2
             editorHeading="SQL Query Editor"
             codeEditorProps={editorConfig}
@@ -771,8 +768,12 @@ export default function SqlPracticeEditor({
               wordWrap: "on",
               scrollBeyondLastLine: false,
             }}
+            className="!h-[20rem] md:h-[30rem]"
           />
-        </Box>
+        </div>
+
+        {/* Button Controls on Top */}
+        <ToolControls buttons={controls} />
 
         {/* Query Results */}
         <Box>
@@ -807,7 +808,7 @@ export default function SqlPracticeEditor({
             {renderQueryResults()}
           </Box>
         </Box>
-      </Box>
+      </div>
 
       {/* Database Schema and Examples Below */}
       <Box mb={3}>{renderTableSchema()}</Box>
