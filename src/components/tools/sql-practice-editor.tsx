@@ -24,7 +24,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import ClearIcon from "@mui/icons-material/Clear";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import StorageIcon from "@mui/icons-material/Storage";
 import TableViewIcon from "@mui/icons-material/TableView";
@@ -366,19 +365,13 @@ export default function SqlPracticeEditor({
     }
   }, [database, sqlCode]);
 
-  const clearResults = useCallback(() => {
+  const loadExample = useCallback((example: (typeof sqlExamples)[0]) => {
+    setSqlCode(example.query);
+    // Auto-clear previous results when loading a new example
     setQueryResult([]);
     setError(null);
     setExecutionTime(null);
   }, []);
-
-  const loadExample = useCallback(
-    (example: (typeof sqlExamples)[0]) => {
-      setSqlCode(example.query);
-      clearResults();
-    },
-    [clearResults]
-  );
 
   const copyToClipboard = useCallback(
     async (text: string) => {
@@ -419,24 +412,13 @@ export default function SqlPracticeEditor({
         color: "success" as const,
         disabled: !sqlLoaded || isLoading,
       },
-      {
-        type: "custom" as const,
-        text: "Clear Results",
-        icon: <ClearIcon />,
-        onClick: clearResults,
-        variant: "outlined" as const,
-        disabled: queryResult.length === 0 && !error,
-      },
       ...commonButtons,
     ],
     [
       executeSelectedQuery,
       executeAllQueries,
-      clearResults,
       sqlLoaded,
       isLoading,
-      queryResult.length,
-      error,
       commonButtons,
     ]
   );
@@ -553,97 +535,273 @@ export default function SqlPracticeEditor({
   const renderQueryResults = () => {
     if (isLoading) {
       return (
-        <Box>
-          <LinearProgress sx={{ mb: 2 }} />
-          <Typography>Executing SQL query...</Typography>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ py: 4 }}
+        >
+          <LinearProgress
+            sx={{ width: "80%", mb: 3, height: 6, borderRadius: 3 }}
+          />
+          <Typography variant="body1" color="primary" sx={{ fontWeight: 500 }}>
+            🔄 Executing SQL query...
+          </Typography>
         </Box>
       );
     }
 
     if (error) {
       return (
-        <Alert severity="error" sx={{ mt: 2 }}>
+        <Alert
+          severity="error"
+          sx={{
+            mt: 2,
+            borderRadius: 2,
+            "& .MuiAlert-icon": {
+              fontSize: "1.5rem",
+            },
+          }}
+        >
           <Typography variant="body2">
-            <strong>Error:</strong> {error}
+            <strong>❌ Error:</strong> {error}
           </Typography>
         </Alert>
       );
     }
 
     if (queryResult.length === 0) {
-      return null;
+      return (
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            py: 6,
+            color: "text.secondary",
+            textAlign: "center",
+            background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+            borderRadius: 2,
+            border: "2px dashed",
+            borderColor: "divider",
+          }}
+        >
+          <Typography variant="h5" sx={{ mb: 2, opacity: 0.8 }}>
+            📝 Ready to execute queries
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 2, maxWidth: 400 }}>
+            Write your SQL query above and click &quot;Execute Selected&quot; or
+            &quot;Execute All&quot;
+          </Typography>
+          <Typography variant="body2" sx={{ opacity: 0.6 }}>
+            💡 Try one of the example queries below to get started
+          </Typography>
+        </Box>
+      );
     }
 
     return (
       <Box>
         {executionTime && (
           <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 3,
+              p: 2,
+              backgroundColor: "success.light",
+              borderRadius: 2,
+              border: "1px solid",
+              borderColor: "success.main",
+            }}
           >
-            <Typography variant="body2" color="text.secondary">
-              Query executed in {executionTime.toFixed(2)}ms
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {queryResult.reduce(
-                (total, result) => total + result.values.length,
-                0
-              )}{" "}
-              rows returned
-            </Typography>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 600, color: "success.dark" }}
+              >
+                ⚡ Query executed in {executionTime.toFixed(2)}ms
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 600, color: "success.dark" }}
+              >
+                📊{" "}
+                {queryResult.reduce(
+                  (total, result) => total + result.values.length,
+                  0
+                )}{" "}
+                rows returned
+              </Typography>
+            </Box>
           </Box>
         )}
 
         {queryResult.map((result, index) => (
-          <TableContainer
-            key={index}
-            component={Paper}
-            sx={{ mb: 2, maxHeight: 400 }}
-          >
-            <Table stickyHeader size="small">
-              <TableHead>
-                <TableRow>
-                  {result.columns.map((column, colIndex) => (
-                    <TableCell key={colIndex}>
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <strong>{column}</strong>
-                        <Tooltip title="Copy column name">
-                          <IconButton
-                            size="small"
-                            onClick={() => copyToClipboard(column)}
-                          >
-                            <ContentCopyIcon fontSize="inherit" />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {result.values.map((row, rowIndex) => (
-                  <TableRow key={rowIndex} hover>
-                    {row.map((cell, cellIndex) => (
-                      <TableCell key={cellIndex}>
-                        {cell === null ? (
-                          <Chip
-                            label="NULL"
-                            size="small"
-                            variant="outlined"
-                            color="warning"
-                          />
-                        ) : (
-                          String(cell)
-                        )}
+          <Box key={index} sx={{ mb: 3 }}>
+            {queryResult.length > 1 && (
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  mb: 2,
+                  fontWeight: 600,
+                  color: "primary.main",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                🔢 Result Set {index + 1}
+              </Typography>
+            )}
+            {result.columns.length > 4 && (
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "block",
+                  mb: 1,
+                  color: "text.secondary",
+                  fontStyle: "italic",
+                }}
+              >
+                💡 Scroll horizontally to view all {result.columns.length}{" "}
+                columns
+              </Typography>
+            )}
+            <TableContainer
+              component={Paper}
+              sx={{
+                mb: 2,
+                maxHeight: 400,
+                borderRadius: 2,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                border: "1px solid",
+                borderColor: "divider",
+                overflowY: "auto",
+                overflowX: "auto",
+                "&::-webkit-scrollbar": {
+                  height: 8,
+                  width: 8,
+                },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "rgba(0,0,0,0.1)",
+                  borderRadius: 4,
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "rgba(0,0,0,0.3)",
+                  borderRadius: 4,
+                  "&:hover": {
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                  },
+                },
+              }}
+            >
+              <Table
+                stickyHeader
+                size="small"
+                sx={{
+                  minWidth: result.columns.length > 4 ? 800 : "auto",
+                  tableLayout: "auto",
+                }}
+              >
+                <TableHead>
+                  <TableRow>
+                    {result.columns.map((column, colIndex) => (
+                      <TableCell
+                        key={colIndex}
+                        sx={{
+                          backgroundColor: "primary.main",
+                          color: "primary.contrastText",
+                          fontWeight: 700,
+                          fontSize: "0.9rem",
+                          borderBottom: "2px solid",
+                          borderColor: "primary.dark",
+                          whiteSpace: "nowrap",
+                          minWidth: 120,
+                        }}
+                      >
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <strong>{column}</strong>
+                          <Tooltip title="Copy column name" placement="top">
+                            <IconButton
+                              size="small"
+                              onClick={() => copyToClipboard(column)}
+                              sx={{
+                                color: "primary.contrastText",
+                                "&:hover": {
+                                  backgroundColor: "primary.dark",
+                                },
+                              }}
+                            >
+                              <ContentCopyIcon fontSize="inherit" />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
                       </TableCell>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {result.values.map((row, rowIndex) => (
+                    <TableRow
+                      key={rowIndex}
+                      hover
+                      sx={{
+                        "&:nth-of-type(odd)": {
+                          backgroundColor: "action.hover",
+                        },
+                        "&:hover": {
+                          backgroundColor: "action.selected",
+                        },
+                        transition: "background-color 0.2s ease",
+                      }}
+                    >
+                      {row.map((cell, cellIndex) => (
+                        <TableCell
+                          key={cellIndex}
+                          sx={{
+                            borderBottom: "1px solid",
+                            borderColor: "divider",
+                            fontFamily: "monospace",
+                            fontSize: "0.85rem",
+                            whiteSpace: "nowrap",
+                            minWidth: 120,
+                            maxWidth: 300,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {cell === null ? (
+                            <Chip
+                              label="NULL"
+                              size="small"
+                              variant="outlined"
+                              color="warning"
+                              sx={{
+                                fontWeight: 600,
+                                borderRadius: 1,
+                              }}
+                            />
+                          ) : (
+                            <Box
+                              sx={{ color: "text.primary", fontWeight: 500 }}
+                            >
+                              {String(cell)}
+                            </Box>
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
         ))}
       </Box>
     );
@@ -701,7 +859,8 @@ export default function SqlPracticeEditor({
             the specific SQL query in the editor and click &quot;Execute
             Selected&quot;. If no text is selected, it will run the entire
             editor content. Click &quot;Execute All&quot; to run all queries
-            separated by semicolons.
+            separated by semicolons. Previous results are automatically cleared
+            when running new queries.
           </Typography>
         </Box>
         <ToolControls buttons={controls} />
@@ -726,23 +885,51 @@ export default function SqlPracticeEditor({
 
         {/* Query Results */}
         <Box>
-          <Typography
-            variant="body1"
-            color="textSecondary"
-            className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
-            gutterBottom
+          <Box
+            display="flex"
+            alignItems="center"
+            gap={2}
+            mb={2}
+            sx={{
+              pb: 1,
+              borderBottom: "2px solid",
+              borderColor: "primary.main",
+            }}
           >
-            Query Results
-          </Typography>
+            <Typography
+              variant="body1"
+              color="primary"
+              className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              📊 Query Results
+            </Typography>
+            {queryResult.length > 0 && (
+              <Chip
+                label={`${queryResult.length} result set${
+                  queryResult.length > 1 ? "s" : ""
+                }`}
+                size="small"
+                color="primary"
+                variant="outlined"
+                sx={{ fontWeight: 600 }}
+              />
+            )}
+          </Box>
 
           <Box
             sx={{
               minHeight: 400,
               border: 1,
               borderColor: "divider",
-              borderRadius: 1,
-              p: 2,
+              borderRadius: 2,
+              p: 3,
               backgroundColor: "background.paper",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
             }}
           >
             {renderQueryResults()}
