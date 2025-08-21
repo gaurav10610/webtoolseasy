@@ -30,6 +30,7 @@ import StorageIcon from "@mui/icons-material/Storage";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SchemaIcon from "@mui/icons-material/Schema";
+import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -262,7 +263,52 @@ export default function SqlPracticeEditor({
     loadSqlJs();
   }, []);
 
-  const executeQuery = useCallback(async () => {
+  const executeSelectedQuery = useCallback(async () => {
+    if (!database) {
+      setError("Database not loaded yet.");
+      return;
+    }
+
+    // Try to get selected text using browser selection API
+    let queryToExecute = "";
+    const selection = window.getSelection();
+
+    if (selection && selection.toString().trim()) {
+      queryToExecute = selection.toString().trim();
+    } else {
+      // If no selection, use the entire content
+      queryToExecute = sqlCode.trim();
+    }
+
+    if (!queryToExecute) {
+      setError("No query selected or editor is empty.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setQueryResult([]);
+
+    const startTime = performance.now();
+
+    try {
+      const result = database.exec(queryToExecute);
+      const endTime = performance.now();
+
+      setQueryResult(result);
+      setExecutionTime(endTime - startTime);
+
+      if (result.length === 0) {
+        setError("Query executed successfully but returned no results.");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [database, sqlCode]);
+
+  const executeAllQueries = useCallback(async () => {
     if (!database || !sqlCode.trim()) return;
 
     setIsLoading(true);
@@ -272,14 +318,46 @@ export default function SqlPracticeEditor({
     const startTime = performance.now();
 
     try {
-      const result = database.exec(sqlCode);
-      const endTime = performance.now();
+      // Split queries by semicolon and filter out empty ones
+      const queries = sqlCode
+        .split(";")
+        .map((q) => q.trim())
+        .filter((q) => q.length > 0);
 
-      setQueryResult(result);
-      setExecutionTime(endTime - startTime);
+      if (queries.length === 0) {
+        setError("No valid queries found.");
+        return;
+      }
 
-      if (result.length === 0) {
-        setError("Query executed successfully but returned no results.");
+      const allResults: ExecResult[] = [];
+      let hasErrors = false;
+
+      // Execute each query sequentially
+      for (let i = 0; i < queries.length; i++) {
+        try {
+          const result = database.exec(queries[i]);
+          allResults.push(...result);
+        } catch (err) {
+          setError(
+            `Error in query ${i + 1}: ${
+              err instanceof Error ? err.message : "Unknown error"
+            }`
+          );
+          hasErrors = true;
+          break;
+        }
+      }
+
+      if (!hasErrors) {
+        const endTime = performance.now();
+        setQueryResult(allResults);
+        setExecutionTime(endTime - startTime);
+
+        if (allResults.length === 0) {
+          setError(
+            "All queries executed successfully but returned no results."
+          );
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error occurred");
@@ -325,9 +403,18 @@ export default function SqlPracticeEditor({
     () => [
       {
         type: "custom" as const,
-        text: "Execute Query",
+        text: "Execute Selected",
         icon: <PlayArrowIcon />,
-        onClick: executeQuery,
+        onClick: executeSelectedQuery,
+        variant: "contained" as const,
+        color: "primary" as const,
+        disabled: !sqlLoaded || isLoading,
+      },
+      {
+        type: "custom" as const,
+        text: "Execute All",
+        icon: <PlaylistPlayIcon />,
+        onClick: executeAllQueries,
         variant: "contained" as const,
         color: "success" as const,
         disabled: !sqlLoaded || isLoading,
@@ -343,7 +430,8 @@ export default function SqlPracticeEditor({
       ...commonButtons,
     ],
     [
-      executeQuery,
+      executeSelectedQuery,
+      executeAllQueries,
       clearResults,
       sqlLoaded,
       isLoading,
@@ -607,6 +695,15 @@ export default function SqlPracticeEditor({
 
       {/* Button Controls on Top */}
       <Box mb={3}>
+        <Box mb={2}>
+          <Typography variant="body2" color="text.secondary">
+            💡 <strong>Tip:</strong> To execute only selected text, highlight
+            the specific SQL query in the editor and click &quot;Execute
+            Selected&quot;. If no text is selected, it will run the entire
+            editor content. Click &quot;Execute All&quot; to run all queries
+            separated by semicolons.
+          </Typography>
+        </Box>
         <ToolControls buttons={controls} />
       </Box>
 
