@@ -1,7 +1,6 @@
 import {
   ApplicationConfig,
   ApplicationIds,
-  AppListConfig,
   AppNavigationConfig,
 } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
@@ -10,7 +9,7 @@ import {
   RelatedTools,
   ToolDescription,
 } from "@/components/commonComponents";
-import * as appConfigJson from "@/data/apps.json";
+import { apps } from "@/data/apps";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import SidePanel from "@/components/sidePanel";
@@ -184,10 +183,9 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   const toolConfigData = componentConfig as ApplicationConfig;
 
   // Optimize related tools filtering and mapping
-  const appListConfig = appConfigJson as AppListConfig;
   const relatedToolsConfigs: AppNavigationConfig[] = toolConfigData.relatedTools
-    .filter((toolId: ApplicationIds) => toolId in appListConfig)
-    .map((toolId: ApplicationIds) => appListConfig[toolId])
+    .filter((toolId: ApplicationIds) => toolId in apps)
+    .map((toolId: ApplicationIds) => apps[toolId])
     .filter(Boolean); // Remove any undefined entries
 
   // Memoize the hostname URL
@@ -219,7 +217,7 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
           <div className="w-[20%] pr-2">
             <SidePanel
               className="w-full"
-              appConfigJson={appListConfig}
+              appConfigJson={apps}
               pageUrl={params.pageUrl}
             />
           </div>

@@ -42,16 +42,12 @@ export enum ApplicationIds {
 export interface BaseAppConfig {
   displayText: string;
   navigateUrl: string;
-  category: string;
+  category: AppCategory;
 }
 export interface AppNavigationConfig extends BaseAppConfig {
   applicationId: string;
   iconName: string;
   iconRelativeUrl: string;
-}
-
-export interface AppListConfig {
-  [key: string]: AppNavigationConfig;
 }
 
 export interface ApplicationConfig {
