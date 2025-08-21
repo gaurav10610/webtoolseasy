@@ -314,7 +314,7 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     displayText: "SQL Practice Editor",
     iconName: "sql-icon",
     navigateUrl: "tools/sql-practice-editor",
-    iconRelativeUrl: "csv-icon.svg",
+    iconRelativeUrl: "sql-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
 };
