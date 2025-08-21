@@ -40,7 +40,7 @@ function SocialFollowButtons() {
 function CopyRight() {
   return (
     <Typography variant="caption" color="textSecondary">
-      © 2024-2025. All rights reserved.{" "}
+      © 2025-2026. All rights reserved.{" "}
     </Typography>
   );
 }

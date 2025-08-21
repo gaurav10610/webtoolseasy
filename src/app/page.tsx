@@ -1,7 +1,7 @@
 import { AppHeading } from "@/components/commonComponents";
 import { getRandomId } from "@/util/commonUtils";
-import * as appConfigJson from "@/data/apps.json";
-import { AppListConfig, AppNavigationConfig } from "@/types/config";
+import { apps } from "@/data/apps";
+import { AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import {
   Typography,
@@ -371,8 +371,7 @@ export default async function Home({
     typeof params.category === "string" ? params.category : null;
   const searchQuery = typeof params.search === "string" ? params.search : null;
 
-  const appListConfig = appConfigJson as AppListConfig;
-  const allApps = values(appListConfig);
+  const allApps = values(apps);
 
   // Filter apps based on query params
   let filteredApps = allApps;

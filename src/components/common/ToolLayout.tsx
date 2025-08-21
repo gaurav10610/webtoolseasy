@@ -22,7 +22,9 @@ export const ToolLayout = memo(function ToolLayout({
   return (
     <div
       className={`flex flex-col gap-4 w-full ${
-        isFullScreen ? "p-3 fixed inset-0 z-50 bg-white h-full" : ""
+        isFullScreen
+          ? "p-3 fixed inset-0 z-50 bg-white h-full overflow-auto"
+          : ""
       } ${className}`}
     >
       {snackBar && (
