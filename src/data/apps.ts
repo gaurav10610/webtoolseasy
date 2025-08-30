@@ -278,11 +278,32 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "palette.svg",
     category: AppCategory.MISCELLANEOUS,
   },
+  yamlformatter: {
+    applicationId: "yamlformatter",
+    displayText: "YAML Formatter & Validator",
+    navigateUrl: "tools/yaml-formatter",
+    iconRelativeUrl: "yaml.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  stringescape: {
+    applicationId: "stringescape",
+    displayText: "String Escape & Unescape",
+    navigateUrl: "tools/string-escape",
+    iconRelativeUrl: "json-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  hashgenerator: {
+    applicationId: "hashgenerator",
+    displayText: "Hash Generator",
+    navigateUrl: "tools/hash-generator",
+    iconRelativeUrl: "hash.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   "sql-practice-editor": {
     applicationId: "sql-practice-editor",
     displayText: "SQL Practice Editor",
     navigateUrl: "tools/sql-practice-editor",
     iconRelativeUrl: "sql-icon.svg",
-    category: AppCategory.PROGRAMMING,
+    category: AppCategory.ONLINE_EDITORS,
   },
 };

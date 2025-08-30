@@ -9,6 +9,7 @@ interface ToolLayoutProps {
     message: string;
     onClose: () => void;
     autoHideDuration?: number;
+    color?: "success" | "info" | "warning" | "error";
   };
   className?: string;
 }
@@ -33,6 +34,7 @@ export const ToolLayout = memo(function ToolLayout({
           open={snackBar.open}
           autoHideDuration={snackBar.autoHideDuration || 2000}
           handleClose={snackBar.onClose}
+          color={snackBar.color || "success"}
         />
       )}
       {children}

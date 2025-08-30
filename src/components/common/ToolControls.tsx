@@ -93,7 +93,9 @@ export const ToolControls = memo(function ToolControls({
   size = "small",
 }: ToolControlsProps) {
   return (
-    <div className={`flex flex-col gap-2 w-full md:flex-row ${className}`}>
+    <div
+      className={`flex flex-col gap-2 w-full md:flex-row md:flex-wrap ${className}`}
+    >
       {buttons.map((button, index) => {
         const config = getButtonConfig(button, isFullScreen);
 
