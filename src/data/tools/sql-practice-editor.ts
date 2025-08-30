@@ -64,7 +64,6 @@ export const componentConfig: ApplicationConfig = {
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  icons: [],
   relatedTools: [
     ApplicationIds.CSV_VIEWER,
     ApplicationIds.JSON_VIEWER,

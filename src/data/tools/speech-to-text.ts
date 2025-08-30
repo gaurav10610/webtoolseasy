@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   },
 };
 
-const speechToTextConfig: ApplicationConfig = {
+export const componentConfig: ApplicationConfig = {
   navigationUrl: "tools/speech-to-text",
   pageTitle:
     "Free Speech to Text Converter | Voice Recognition Tool - WebToolsEasy",
@@ -131,12 +131,6 @@ const speechToTextConfig: ApplicationConfig = {
     "natural language processing",
     "AI speech recognition",
     "machine learning transcription",
-  ],
-  icons: [
-    {
-      iconName: "speech-icon",
-      iconRelativeUrl: "speech-to-text-icon.svg",
-    },
   ],
   relatedTools: [
     ApplicationIds.TEXT_EDITOR,
@@ -276,5 +270,3 @@ export const descriptionData: DescriptionBlock[] = [
     ],
   },
 ];
-
-export const componentConfig = speechToTextConfig;
