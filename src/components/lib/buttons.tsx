@@ -38,7 +38,7 @@ export function ButtonWithHandler({
       {...(onClick && { onClick })}
       {...(startIcon && { startIcon })}
       {...(endIcon && { endIcon })}
-      className={className}
+      className={`whitespace-nowrap flex-shrink-0 ${className}`}
     >
       {buttonText}
     </Button>
@@ -75,7 +75,7 @@ export function ButtonWithLink({
         size={size}
         variant={variant}
         color={color}
-        className={`w-full ${className}`}
+        className={`w-full whitespace-nowrap flex-shrink-0 ${className}`}
       >
         {buttonText}
       </Button>

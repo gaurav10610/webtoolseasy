@@ -22,6 +22,7 @@ export enum ApplicationIds {
   WORD_COUNTER = "wordcounter",
   QR_CODE_GENERATOR = "qrcodegenerator",
   COLOR_PALETTE_GENERATOR = "colorpalettegenerator",
+  YAML_FORMATTER = "yamlformatter",
   HTML_EDITOR = "htmleditor",
   JS_EDITOR = "jseditor",
   XML_TO_JSON = "xmltojson",

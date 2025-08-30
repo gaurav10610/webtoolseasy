@@ -278,11 +278,18 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "palette.svg",
     category: AppCategory.MISCELLANEOUS,
   },
+  yamlformatter: {
+    applicationId: "yamlformatter",
+    displayText: "YAML Formatter & Validator",
+    navigateUrl: "tools/yaml-formatter",
+    iconRelativeUrl: "yaml.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   "sql-practice-editor": {
     applicationId: "sql-practice-editor",
     displayText: "SQL Practice Editor",
     navigateUrl: "tools/sql-practice-editor",
     iconRelativeUrl: "sql-icon.svg",
-    category: AppCategory.PROGRAMMING,
+    category: AppCategory.ONLINE_EDITORS,
   },
 };
