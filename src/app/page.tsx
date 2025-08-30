@@ -1,7 +1,7 @@
 import { AppHeading } from "@/components/commonComponents";
 import { getRandomId } from "@/util/commonUtils";
 import { apps } from "@/data/apps";
-import { AppNavigationConfig } from "@/types/config";
+import { AppNavigationConfig, AppCategory } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
 import {
   Typography,
@@ -601,4 +601,23 @@ export default async function Home({
       </div>
     </>
   );
+}
+
+export async function generateStaticParams(): Promise<{ category: string }[]> {
+  const allApps = values(apps) as AppNavigationConfig[];
+  const enumValues = new Set(Object.values(AppCategory));
+
+  const categories = Array.from(
+    new Set(
+      allApps
+        .map((a) => a.category)
+        .filter(
+          (c): c is AppCategory => !!c && enumValues.has(c as AppCategory)
+        )
+    )
+  ).sort((a: AppCategory, b: AppCategory) =>
+    String(a).localeCompare(String(b))
+  );
+
+  return categories.map((category) => ({ category: String(category) }));
 }
