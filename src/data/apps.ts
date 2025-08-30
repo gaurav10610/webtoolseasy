@@ -285,6 +285,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "yaml.svg",
     category: AppCategory.PROGRAMMING,
   },
+  stringescape: {
+    applicationId: "stringescape",
+    displayText: "String Escape & Unescape",
+    navigateUrl: "tools/string-escape",
+    iconRelativeUrl: "json-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   hashgenerator: {
     applicationId: "hashgenerator",
     displayText: "Hash Generator",

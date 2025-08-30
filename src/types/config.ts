@@ -24,6 +24,7 @@ export enum ApplicationIds {
   COLOR_PALETTE_GENERATOR = "colorpalettegenerator",
   YAML_FORMATTER = "yamlformatter",
   HASH_GENERATOR = "hashgenerator",
+  STRING_ESCAPE = "stringescape",
   HTML_EDITOR = "htmleditor",
   JS_EDITOR = "jseditor",
   XML_TO_JSON = "xmltojson",
