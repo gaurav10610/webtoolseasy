@@ -285,6 +285,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "yaml.svg",
     category: AppCategory.PROGRAMMING,
   },
+  hashgenerator: {
+    applicationId: "hashgenerator",
+    displayText: "Hash Generator",
+    navigateUrl: "tools/hash-generator",
+    iconRelativeUrl: "hash.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   "sql-practice-editor": {
     applicationId: "sql-practice-editor",
     displayText: "SQL Practice Editor",
