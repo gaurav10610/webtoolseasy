@@ -3,6 +3,8 @@
 import {
   FacebookIcon,
   FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
   TelegramIcon,
   TelegramShareButton,
   TwitterIcon,
@@ -61,6 +63,9 @@ export const SocialShareButtons = ({
       <TwitterShareButton key={getRandomId()} url={pageUrl} title={heading}>
         <TwitterIcon size={32} round />
       </TwitterShareButton>
+      <LinkedinShareButton key={getRandomId()} url={pageUrl} title={heading}>
+        <LinkedinIcon size={32} round />
+      </LinkedinShareButton>
       <TelegramShareButton key={getRandomId()} url={pageUrl} title={heading}>
         <TelegramIcon size={32} round />
       </TelegramShareButton>
