@@ -64,12 +64,6 @@ export const componentConfig: ApplicationConfig = {
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  icons: [
-    {
-      iconName: "video-editor",
-      iconRelativeUrl: "video-convert.svg",
-    },
-  ],
   relatedTools: [
     ApplicationIds.VIDEO_CONVERTER,
     ApplicationIds.SCREEN_RECORDER,

@@ -62,7 +62,6 @@ export const componentConfig: ApplicationConfig = {
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  icons: [],
   relatedTools: [ApplicationIds.JWT_DECODER],
   structuredData: createToolStructuredData({
     pageUrl: "password-generator",

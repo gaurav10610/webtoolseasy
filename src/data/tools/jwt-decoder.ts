@@ -63,7 +63,6 @@ export const componentConfig: ApplicationConfig = {
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  icons: [],
   relatedTools: [
     ApplicationIds.MARKDOWN_EDITOR,
     ApplicationIds.UUID_VERSION1_GENERATOR,

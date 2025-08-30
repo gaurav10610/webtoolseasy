@@ -63,12 +63,6 @@ export const componentConfig: ApplicationConfig = {
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  icons: [
-    {
-      iconName: "pdf-editor",
-      iconRelativeUrl: "markdown.svg",
-    },
-  ],
   relatedTools: [
     ApplicationIds.IMAGE_TO_TEXT,
     ApplicationIds.QR_CODE_GENERATOR,

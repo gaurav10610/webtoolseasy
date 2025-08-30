@@ -21,6 +21,7 @@ export enum ApplicationIds {
   MARKDOWN_EDITOR = "markdowneditor",
   WORD_COUNTER = "wordcounter",
   QR_CODE_GENERATOR = "qrcodegenerator",
+  COLOR_PALETTE_GENERATOR = "colorpalettegenerator",
   HTML_EDITOR = "htmleditor",
   JS_EDITOR = "jseditor",
   XML_TO_JSON = "xmltojson",
@@ -47,7 +48,6 @@ export interface BaseAppConfig {
 }
 export interface AppNavigationConfig extends BaseAppConfig {
   applicationId: string;
-  iconName: string;
   iconRelativeUrl: string;
 }
 
@@ -56,7 +56,6 @@ export interface ApplicationConfig {
   navigationUrl: string;
   pageTitle: string;
   tags: string[];
-  icons: IconConfig[];
   relatedTools: ApplicationIds[];
   structuredData?: StructuredDataConfig;
 }
@@ -66,11 +65,6 @@ export interface StructuredDataConfig {
   breadcrumb?: Record<string, unknown>;
   organization?: Record<string, unknown>;
   website?: Record<string, unknown>;
-}
-
-export interface IconConfig {
-  iconName: string;
-  iconRelativeUrl: string;
 }
 
 export enum AppCategory {

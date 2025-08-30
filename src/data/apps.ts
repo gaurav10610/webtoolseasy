@@ -8,7 +8,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   jseditor: {
     applicationId: "jseditor",
     displayText: "JavaScript Editor Online",
-    iconName: "js-icon",
     navigateUrl: "tools/javascript-editor",
     iconRelativeUrl: "js-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -16,7 +15,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   htmleditor: {
     applicationId: "htmleditor",
     displayText: "HTML Editor Online",
-    iconName: "html-icon",
     navigateUrl: "tools/html-editor",
     iconRelativeUrl: "html.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -24,7 +22,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   pythoncompiler: {
     applicationId: "pythoncompiler",
     displayText: "Python Compiler Online",
-    iconName: "js-icon",
     navigateUrl: "tools/python-compiler",
     iconRelativeUrl: "python-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -32,7 +29,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   compoundinterestcalculator: {
     applicationId: "compoundinterestcalculator",
     displayText: "Interest Calculator Tool",
-    iconName: "interest-icon",
     navigateUrl: "tools/compound-interest-calculator",
     iconRelativeUrl: "interest.svg",
     category: AppCategory.FINANCE,
@@ -40,7 +36,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   xmltojson: {
     applicationId: "xmltojson",
     displayText: "XML JSON Converter",
-    iconName: "xml-icon",
     navigateUrl: "tools/xml-to-json",
     iconRelativeUrl: "xml.svg",
     category: AppCategory.PROGRAMMING,
@@ -48,7 +43,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   csvviewer: {
     applicationId: "csvviewer",
     displayText: "CSV Viewer Online",
-    iconName: "csv-icon",
     navigateUrl: "tools/csv-viewer",
     iconRelativeUrl: "csv-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -56,7 +50,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   qrcodegenerator: {
     applicationId: "qrcodegenerator",
     displayText: "QR Code Generator Free",
-    iconName: "qr-code",
     navigateUrl: "tools/qr-code-generator",
     iconRelativeUrl: "qr-code.svg",
     category: AppCategory.MISCELLANEOUS,
@@ -64,7 +57,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   caseconverter: {
     applicationId: "caseconverter",
     displayText: "Text Case Converter",
-    iconName: "case-converter-icon",
     navigateUrl: "tools/case-converter",
     iconRelativeUrl: "case-convert.svg",
     category: AppCategory.TEXT,
@@ -72,7 +64,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   wordcounter: {
     applicationId: "wordcounter",
     displayText: "Word Counter Tool",
-    iconName: "word-icon",
     navigateUrl: "tools/word-counter",
     iconRelativeUrl: "word.svg",
     category: AppCategory.TEXT,
@@ -80,7 +71,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   textcompare: {
     applicationId: "textcompare",
     displayText: "Text Compare Tool",
-    iconName: "comparison-icon",
     navigateUrl: "tools/text-compare",
     iconRelativeUrl: "comparison.svg",
     category: AppCategory.TEXT,
@@ -88,7 +78,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   markdowneditor: {
     applicationId: "markdowneditor",
     displayText: "Markdown Editor Online",
-    iconName: "markdown-icon",
     navigateUrl: "tools/markdown-editor",
     iconRelativeUrl: "markdown.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -96,7 +85,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   passwordgenerator: {
     applicationId: "passwordgenerator",
     displayText: "Password Generator Tool",
-    iconName: "password-icon",
     navigateUrl: "tools/password-generator",
     iconRelativeUrl: "password.svg",
     category: AppCategory.MISCELLANEOUS,
@@ -104,7 +92,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   videoconverter: {
     applicationId: "videoconverter",
     displayText: "Video Audio Converter",
-    iconName: "video-convert-icon",
     navigateUrl: "tools/video-to-audio-converter",
     iconRelativeUrl: "video-convert.svg",
     category: AppCategory.MEDIA,
@@ -112,7 +99,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   screenrecorder: {
     applicationId: "screenrecorder",
     displayText: "Screen Recorder Online",
-    iconName: "screen-icon",
     navigateUrl: "tools/screen-recorder",
     iconRelativeUrl: "screen.svg",
     category: AppCategory.MEDIA,
@@ -120,7 +106,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   imagecompressor: {
     applicationId: "imagecompressor",
     displayText: "Image Compressor Tool",
-    iconName: "image-icon",
     navigateUrl: "tools/image-compress",
     iconRelativeUrl: "image-icon.svg",
     category: AppCategory.MEDIA,
@@ -128,7 +113,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   imageformatconverter: {
     applicationId: "imageformatconverter",
     displayText: "Image Format Converter",
-    iconName: "image-icon",
     navigateUrl: "tools/image-format-converter",
     iconRelativeUrl: "image-icon.svg",
     category: AppCategory.MEDIA,
@@ -136,7 +120,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   imagecropper: {
     applicationId: "imagecropper",
     displayText: "Image Cropper Tool",
-    iconName: "image-icon",
     navigateUrl: "tools/crop-image",
     iconRelativeUrl: "image-icon.svg",
     category: AppCategory.MEDIA,
@@ -144,7 +127,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   imagetotext: {
     applicationId: "imagetotext",
     displayText: "Image to Text OCR",
-    iconName: "ocr-icon",
     navigateUrl: "tools/image-to-text",
     iconRelativeUrl: "ocr-icon.svg",
     category: AppCategory.MEDIA,
@@ -152,7 +134,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   jwtdecoder: {
     applicationId: "jwtdecoder",
     displayText: "JWT Decoder Tool",
-    iconName: "jwt-icon",
     navigateUrl: "tools/jwt-decoder",
     iconRelativeUrl: "jwt-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -160,7 +141,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   jsformatter: {
     applicationId: "jsformatter",
     displayText: "JavaScript Formatter",
-    iconName: "js-icon",
     navigateUrl: "tools/javascript-formatter",
     iconRelativeUrl: "js-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -168,7 +148,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   jsonformatter: {
     applicationId: "jsonformatter",
     displayText: "JSON Formatter Online",
-    iconName: "json-icon",
     navigateUrl: "tools/json-formatter",
     iconRelativeUrl: "json-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -176,7 +155,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   jsonviewer: {
     applicationId: "jsonviewer",
     displayText: "JSON Viewer Online",
-    iconName: "json-icon",
     navigateUrl: "tools/json-viewer",
     iconRelativeUrl: "json-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -184,7 +162,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   htmlformatter: {
     applicationId: "htmlformatter",
     displayText: "HTML Formatter Online",
-    iconName: "html-icon",
     navigateUrl: "tools/html-formatter",
     iconRelativeUrl: "html.svg",
     category: AppCategory.PROGRAMMING,
@@ -192,7 +169,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   cssformatter: {
     applicationId: "cssformatter",
     displayText: "CSS Formatter Online",
-    iconName: "css-icon",
     navigateUrl: "tools/css-formatter",
     iconRelativeUrl: "css.svg",
     category: AppCategory.PROGRAMMING,
@@ -200,7 +176,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   base64encoder: {
     applicationId: "base64encoder",
     displayText: "Base64 Encoder Tool",
-    iconName: "file-encode-icon",
     navigateUrl: "tools/base64-encode",
     iconRelativeUrl: "file-encode.svg",
     category: AppCategory.PROGRAMMING,
@@ -208,7 +183,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   base64decoder: {
     applicationId: "base64decoder",
     displayText: "Base64 Decoder Tool",
-    iconName: "file-decode-icon",
     navigateUrl: "tools/base64-decode",
     iconRelativeUrl: "file-decode.svg",
     category: AppCategory.PROGRAMMING,
@@ -216,7 +190,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   crongenerator: {
     applicationId: "crongenerator",
     displayText: "Cron Generator Tool",
-    iconName: "cron-icon",
     navigateUrl: "tools/cron-expression",
     iconRelativeUrl: "cron.svg",
     category: AppCategory.PROGRAMMING,
@@ -224,7 +197,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   uuidv4generator: {
     applicationId: "uuidv4generator",
     displayText: "UUID Generator Tool",
-    iconName: "uuid-icon",
     navigateUrl: "tools/uuid-v4-generator",
     iconRelativeUrl: "uuid-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -232,7 +204,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   uuidv1generator: {
     applicationId: "uuidv1generator",
     displayText: "UUID V1 Generator",
-    iconName: "uuid-icon",
     navigateUrl: "tools/uuid-v1-generator",
     iconRelativeUrl: "uuid-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -240,7 +211,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   guidgenerator: {
     applicationId: "guidgenerator",
     displayText: "GUID Generator Tool",
-    iconName: "uuid-icon",
     navigateUrl: "tools/guid-generator",
     iconRelativeUrl: "uuid-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -248,7 +218,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   jscompiler: {
     applicationId: "jscompiler",
     displayText: "JavaScript Compiler Online",
-    iconName: "js-icon",
     navigateUrl: "tools/javascript-compiler",
     iconRelativeUrl: "js-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -256,7 +225,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   texteditor: {
     applicationId: "texteditor",
     displayText: "Text Editor Online",
-    iconName: "text-editor-icon",
     navigateUrl: "tools/text-editor",
     iconRelativeUrl: "text-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -264,7 +232,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   "pdf-editor": {
     applicationId: "pdf-editor",
     displayText: "PDF Editor Online",
-    iconName: "pdf-icon",
     navigateUrl: "tools/pdf-editor",
     iconRelativeUrl: "pdf-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
@@ -272,7 +239,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   "speech-to-text": {
     applicationId: "speech-to-text",
     displayText: "Speech to Text Online",
-    iconName: "speech-icon",
     navigateUrl: "tools/speech-to-text",
     iconRelativeUrl: "speech-to-text-icon.svg",
     category: AppCategory.TEXT,
@@ -280,7 +246,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   "regex-tester": {
     applicationId: "regex-tester",
     displayText: "Regex Tester Online",
-    iconName: "regex-icon",
     navigateUrl: "tools/regex-tester",
     iconRelativeUrl: "regex-icon.svg",
     category: AppCategory.PROGRAMMING,
@@ -288,7 +253,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   "html-to-markdown": {
     applicationId: "html-to-markdown",
     displayText: "HTML to Markdown Converter",
-    iconName: "markdown",
     navigateUrl: "tools/html-to-markdown",
     iconRelativeUrl: "markdown.svg",
     category: AppCategory.PROGRAMMING,
@@ -296,7 +260,6 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   "video-editor": {
     applicationId: "video-editor",
     displayText: "Video Editor Online",
-    iconName: "video-editor",
     navigateUrl: "tools/video-editor",
     iconRelativeUrl: "video-convert.svg",
     category: AppCategory.MEDIA,
@@ -304,15 +267,20 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
   urlencoderdecoder: {
     applicationId: "urlencoderdecoder",
     displayText: "URL Encoder Decoder",
-    iconName: "url-encoder-decoder",
     navigateUrl: "tools/url-encoder-decoder",
     iconRelativeUrl: "url-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
+  colorpalettegenerator: {
+    applicationId: "colorpalettegenerator",
+    displayText: "Color Palette Generator",
+    navigateUrl: "tools/color-palette-generator",
+    iconRelativeUrl: "palette.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
   "sql-practice-editor": {
     applicationId: "sql-practice-editor",
     displayText: "SQL Practice Editor",
-    iconName: "sql-icon",
     navigateUrl: "tools/sql-practice-editor",
     iconRelativeUrl: "sql-icon.svg",
     category: AppCategory.PROGRAMMING,

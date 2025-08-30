@@ -60,7 +60,6 @@ export const componentConfig: ApplicationConfig = {
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  icons: [],
   relatedTools: [ApplicationIds.WORD_COUNTER],
   structuredData: createToolStructuredData({
     pageUrl: "text-compare",
