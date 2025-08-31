@@ -292,6 +292,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "json-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
+  timezoneconverter: {
+    applicationId: "timezoneconverter",
+    displayText: "Timezone Converter",
+    navigateUrl: "tools/timezone-converter",
+    iconRelativeUrl: "json-icon.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
   hashgenerator: {
     applicationId: "hashgenerator",
     displayText: "Hash Generator",

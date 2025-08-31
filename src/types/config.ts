@@ -23,6 +23,7 @@ export enum ApplicationIds {
   QR_CODE_GENERATOR = "qrcodegenerator",
   COLOR_PALETTE_GENERATOR = "colorpalettegenerator",
   YAML_FORMATTER = "yamlformatter",
+  TIMEZONE_CONVERTER = "timezoneconverter",
   HASH_GENERATOR = "hashgenerator",
   STRING_ESCAPE = "stringescape",
   HTML_EDITOR = "htmleditor",
