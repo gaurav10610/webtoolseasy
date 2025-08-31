@@ -28,6 +28,10 @@ import {
   Cancel,
   HelpOutline,
   RadioButtonChecked,
+  Speed,
+  ScreenShare,
+  DeveloperBoard,
+  TouchApp,
 } from "@mui/icons-material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -89,6 +93,7 @@ export default function TestHardware({
   const [cameraStatus, setCameraStatus] = useState<Status>("default");
   const [micStatus, setMicStatus] = useState<Status>("default");
   const [speakerStatus, setSpeakerStatus] = useState<Status>("default");
+  const [networkStatus, setNetworkStatus] = useState<Status>("default");
 
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedCameraId, setSelectedCameraId] = useState<string>("");
@@ -99,6 +104,12 @@ export default function TestHardware({
   } | null>(null);
   const [audioLevel, setAudioLevel] = useState(0);
   const [gpuInfo, setGpuInfo] = useState<string | null>(null);
+  const [networkSpeed, setNetworkSpeed] = useState<number | null>(null);
+  const [connectionType, setConnectionType] = useState<string | null>(null);
+  const [screenResolution, setScreenResolution] = useState<string | null>(null);
+  const [colorDepth, setColorDepth] = useState<number | null>(null);
+  const [cpuCores, setCpuCores] = useState<number | null>(null);
+  const [touchSupport, setTouchSupport] = useState<boolean | null>(null);
 
   const stopMic = useCallback(() => {
     if (mediaStreamRef.current) {
@@ -196,6 +207,24 @@ export default function TestHardware({
     }
   }, [toolState]);
 
+  const runNetworkTest = useCallback(async () => {
+    setNetworkStatus("running");
+    try {
+      const startTime = Date.now();
+      const response = await fetch(
+        "https://webtoolseasy.com/screenshots/home.png"
+      );
+      const endTime = Date.now();
+      const duration = (endTime - startTime) / 1000;
+      const size = Number(response.headers.get("content-length"));
+      const speed = (size / duration / 1024 / 1024) * 8;
+      setNetworkSpeed(speed);
+      setNetworkStatus("success");
+    } catch {
+      setNetworkStatus("error");
+    }
+  }, []);
+
   useEffect(() => {
     const getDevices = async () => {
       try {
@@ -251,6 +280,38 @@ export default function TestHardware({
       }
     };
     getGpuInfo();
+  }, []);
+
+  useEffect(() => {
+    const getScreenInfo = () => {
+      setScreenResolution(`${window.screen.width}x${window.screen.height}`);
+      setColorDepth(window.screen.colorDepth);
+    };
+    getScreenInfo();
+  }, []);
+
+  useEffect(() => {
+    const getCpuInfo = () => {
+      setCpuCores(navigator.hardwareConcurrency);
+    };
+    getCpuInfo();
+  }, []);
+
+  useEffect(() => {
+    const getTouchInfo = () => {
+      setTouchSupport("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    };
+    getTouchInfo();
+  }, []);
+
+  useEffect(() => {
+    const getNetworkInfo = () => {
+      if ("connection" in navigator) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setConnectionType((navigator as any).connection.effectiveType);
+      }
+    };
+    getNetworkInfo();
   }, []);
 
   useEffect(() => {
@@ -383,6 +444,35 @@ export default function TestHardware({
           </Button>
         </TestCard>
 
+        <TestCard title="Network Test" status={networkStatus}>
+          <div className="flex flex-col gap-2 text-sm">
+            <Button
+              variant="contained"
+              onClick={runNetworkTest}
+              startIcon={<Speed />}
+            >
+              Run Speed Test
+            </Button>
+            {networkSpeed !== null && (
+              <div>Download Speed: {networkSpeed.toFixed(2)} Mbps</div>
+            )}
+            {connectionType && <div>Connection Type: {connectionType}</div>}
+          </div>
+        </TestCard>
+
+        <TestCard title="Screen Test" status="success">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <ScreenShare />
+              <span>Resolution: {screenResolution}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <DeveloperBoard />
+              <span>Color Depth: {colorDepth}-bit</span>
+            </div>
+          </div>
+        </TestCard>
+
         <TestCard
           title="System Info"
           status={batteryInfo || gpuInfo ? "success" : "default"}
@@ -401,6 +491,20 @@ export default function TestHardware({
               <div className="flex items-center gap-2">
                 <Memory />
                 <span>GPU: {gpuInfo}</span>
+              </div>
+            )}
+            {cpuCores && (
+              <div className="flex items-center gap-2">
+                <DeveloperBoard />
+                <span>CPU Cores: {cpuCores}</span>
+              </div>
+            )}
+            {touchSupport !== null && (
+              <div className="flex items-center gap-2">
+                <TouchApp />
+                <span>
+                  Touch Support: {touchSupport ? "Supported" : "Not Supported"}
+                </span>
               </div>
             )}
           </div>

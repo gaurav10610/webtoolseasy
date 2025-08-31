@@ -338,7 +338,7 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     applicationId: "testhardware",
     displayText: "Device Hardware Tester",
     navigateUrl: "tools/test-hardware",
-    iconRelativeUrl: "js-icon.svg",
+    iconRelativeUrl: "hardware.svg",
     category: AppCategory.MISCELLANEOUS,
   },
 };

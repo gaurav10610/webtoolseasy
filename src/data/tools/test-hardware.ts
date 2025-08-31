@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: "Online Hardware & Device Tester",
+  mainHeading: "Online Hardware Test | Test Camera, Mic, & Speakers",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((w) => w.trim()),
