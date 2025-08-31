@@ -46,6 +46,7 @@ export enum ApplicationIds {
   SQL_PRACTICE_EDITOR = "sql-practice-editor",
   SQL_FORMATTER = "sqlformatter",
   CODE_MINIFIER = "codeminifier",
+  TEST_HARDWARE = "testhardware",
 }
 
 export interface BaseAppConfig {

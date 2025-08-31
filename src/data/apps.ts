@@ -334,4 +334,11 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "sql-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
   },
+  testhardware: {
+    applicationId: "testhardware",
+    displayText: "Device Hardware Tester",
+    navigateUrl: "tools/test-hardware",
+    iconRelativeUrl: "js-icon.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
 };
