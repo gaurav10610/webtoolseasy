@@ -215,6 +215,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "uuid-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
+  sqlformatter: {
+    applicationId: "sqlformatter",
+    displayText: "SQL Formatter",
+    navigateUrl: "tools/sql-formatter",
+    iconRelativeUrl: "sql-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   jscompiler: {
     applicationId: "jscompiler",
     displayText: "JavaScript Compiler Online",
