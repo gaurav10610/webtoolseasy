@@ -45,6 +45,7 @@ export enum ApplicationIds {
   URL_ENCODER_DECODER = "urlencoderdecoder",
   SQL_PRACTICE_EDITOR = "sql-practice-editor",
   SQL_FORMATTER = "sqlformatter",
+  CODE_MINIFIER = "codeminifier",
 }
 
 export interface BaseAppConfig {

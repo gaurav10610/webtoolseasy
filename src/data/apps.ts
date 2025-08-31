@@ -173,6 +173,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "css.svg",
     category: AppCategory.PROGRAMMING,
   },
+  codeminifier: {
+    applicationId: "codeminifier",
+    displayText: "Code Minifier",
+    navigateUrl: "tools/code-minifier",
+    iconRelativeUrl: "js-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   base64encoder: {
     applicationId: "base64encoder",
     displayText: "Base64 Encoder Tool",
