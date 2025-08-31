@@ -1,0 +1,10 @@
+{
+  "SHARE_BASE_URL": "https://your-site.com",
+  "X_BEARER_TOKEN": "",
+  "FB_PAGE_ACCESS_TOKEN": "",
+  "FB_PAGE_ID": "",
+  "LINKEDIN_ACCESS_TOKEN": "",
+  "LINKEDIN_OWNER_URN": "",
+  "TELEGRAM_BOT_TOKEN": "",
+  "TELEGRAM_CHAT_ID": ""
+}

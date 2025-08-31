@@ -31,7 +31,7 @@ export function SelectWithLabel({
   return (
     <div className={className}>
       <FormControl variant="outlined" size="small" fullWidth>
-        <InputLabel size="small">Output Format</InputLabel>
+        <InputLabel size="small">{selectLabel}</InputLabel>
         <Select
           label={selectLabel}
           onChange={onChange}

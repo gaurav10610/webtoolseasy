@@ -18,11 +18,13 @@ export enum ApplicationIds {
   UUID_VERSION1_GENERATOR = "uuidv1generator",
   UUID_VERSION4_GENERATOR = "uuidv4generator",
   GUID_GENERATOR = "guidgenerator",
+  ULID_GENERATOR = "ulidgenerator",
   MARKDOWN_EDITOR = "markdowneditor",
   WORD_COUNTER = "wordcounter",
   QR_CODE_GENERATOR = "qrcodegenerator",
   COLOR_PALETTE_GENERATOR = "colorpalettegenerator",
   YAML_FORMATTER = "yamlformatter",
+  TIMEZONE_CONVERTER = "timezoneconverter",
   HASH_GENERATOR = "hashgenerator",
   STRING_ESCAPE = "stringescape",
   HTML_EDITOR = "htmleditor",
@@ -42,6 +44,9 @@ export enum ApplicationIds {
   VIDEO_EDITOR = "video-editor",
   URL_ENCODER_DECODER = "urlencoderdecoder",
   SQL_PRACTICE_EDITOR = "sql-practice-editor",
+  SQL_FORMATTER = "sqlformatter",
+  CODE_MINIFIER = "codeminifier",
+  TEST_HARDWARE = "testhardware",
 }
 
 export interface BaseAppConfig {

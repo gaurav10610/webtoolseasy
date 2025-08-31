@@ -11,7 +11,8 @@
     "index:urls": "tsx scripts/index-urls.ts",
     "index:urls:all": "INDEX_ALL_URLS=true tsx scripts/index-urls.ts",
     "update:sitemap": "tsx scripts/update-sitemap.ts",
-    "bot": "npm run update:sitemap && tsx scripts/screenshot-generator-bot.ts"
+    "bot": "npm run update:sitemap && tsx scripts/screenshot-generator-bot.ts",
+    "share:tools": "tsx scripts/share-tools.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",

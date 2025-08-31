@@ -173,6 +173,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "css.svg",
     category: AppCategory.PROGRAMMING,
   },
+  codeminifier: {
+    applicationId: "codeminifier",
+    displayText: "Code Minifier",
+    navigateUrl: "tools/code-minifier",
+    iconRelativeUrl: "js-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   base64encoder: {
     applicationId: "base64encoder",
     displayText: "Base64 Encoder Tool",
@@ -213,6 +220,20 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     displayText: "GUID Generator Tool",
     navigateUrl: "tools/guid-generator",
     iconRelativeUrl: "uuid-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  ulidgenerator: {
+    applicationId: "ulidgenerator",
+    displayText: "ULID Generator",
+    navigateUrl: "tools/ulid-generator",
+    iconRelativeUrl: "uuid-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  sqlformatter: {
+    applicationId: "sqlformatter",
+    displayText: "SQL Formatter",
+    navigateUrl: "tools/sql-formatter",
+    iconRelativeUrl: "sql-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
   jscompiler: {
@@ -292,6 +313,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "json-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
+  timezoneconverter: {
+    applicationId: "timezoneconverter",
+    displayText: "Timezone Converter",
+    navigateUrl: "tools/timezone-converter",
+    iconRelativeUrl: "clock.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
   hashgenerator: {
     applicationId: "hashgenerator",
     displayText: "Hash Generator",
@@ -305,5 +333,12 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     navigateUrl: "tools/sql-practice-editor",
     iconRelativeUrl: "sql-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
+  },
+  testhardware: {
+    applicationId: "testhardware",
+    displayText: "Device Hardware Tester",
+    navigateUrl: "tools/test-hardware",
+    iconRelativeUrl: "hardware.svg",
+    category: AppCategory.MISCELLANEOUS,
   },
 };
