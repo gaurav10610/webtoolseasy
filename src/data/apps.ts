@@ -215,6 +215,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "uuid-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
+  ulidgenerator: {
+    applicationId: "ulidgenerator",
+    displayText: "ULID Generator",
+    navigateUrl: "tools/ulid-generator",
+    iconRelativeUrl: "uuid-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
   sqlformatter: {
     applicationId: "sqlformatter",
     displayText: "SQL Formatter",
@@ -303,7 +310,7 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     applicationId: "timezoneconverter",
     displayText: "Timezone Converter",
     navigateUrl: "tools/timezone-converter",
-    iconRelativeUrl: "json-icon.svg",
+    iconRelativeUrl: "clock.svg",
     category: AppCategory.MISCELLANEOUS,
   },
   hashgenerator: {

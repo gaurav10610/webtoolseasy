@@ -18,6 +18,7 @@ export enum ApplicationIds {
   UUID_VERSION1_GENERATOR = "uuidv1generator",
   UUID_VERSION4_GENERATOR = "uuidv4generator",
   GUID_GENERATOR = "guidgenerator",
+  ULID_GENERATOR = "ulidgenerator",
   MARKDOWN_EDITOR = "markdowneditor",
   WORD_COUNTER = "wordcounter",
   QR_CODE_GENERATOR = "qrcodegenerator",
