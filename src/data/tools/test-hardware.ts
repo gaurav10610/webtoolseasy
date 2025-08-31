@@ -4,13 +4,25 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/test-hardware";
-const pageTitle = "Device Hardware Tester";
+const pageTitle = "Online Hardware Test | Test Camera, Mic, & Speakers";
 const pageDescription =
-  "Test your camera, microphone, speakers and media devices in browser. Quick hardware checks for common issues.";
+  "Easily test your camera, microphone, speakers, and other hardware with our free online tool. Get instant results for your webcam, mic, battery, and more.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/test-hardware.png`;
 
-const keywords =
-  "hardware tester,device tester,web camera test,mic test,speaker test,battery status,media devices test";
+const keywords = [
+  "hardware test",
+  "online hardware test",
+  "webcam test",
+  "mic test",
+  "speaker test",
+  "microphone test",
+  "camera test",
+  "test my hardware",
+  "device tester",
+  "battery test",
+  "gpu test",
+  "system information",
+].join(", ");
 
 export const metadata: Metadata = {
   alternates: { canonical: `${process.env.HOSTNAME}${navigationUrl}` },
@@ -54,7 +66,7 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: "Test My Hardware Devices - Camera, Mic, Speakers",
+  mainHeading: "Online Hardware & Device Tester",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((w) => w.trim()),
@@ -69,24 +81,33 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "Quick Hardware Checks",
+    heading: "Comprehensive Online Hardware Test",
     blockData: [
-      "Use this browser-based tester to verify your camera, microphone, speakers, and connected media devices. Permissions are required for some checks and results may vary across browsers.",
+      "Our free online hardware test tool helps you quickly check the functionality of your essential devices. Whether you're preparing for a video call, troubleshooting issues, or just curious about your system's capabilities, our tool provides instant and accurate results. Test your camera, microphone, speakers, and more, all from the comfort of your browser.",
     ],
   },
   {
-    heading: "How to Use",
+    heading: "Why Use Our Hardware Tester?",
     listData: [
-      "Grant camera and microphone permission when prompted",
-      "Start camera to preview video and take snapshots",
-      "Start microphone to view audio levels and test playback",
-      "Enumerate devices to see connected inputs/outputs",
+      "Accurate & Instant Results: Get real-time feedback on your hardware's performance.",
+      "Privacy-Focused: All tests run directly in your browser. No data is ever uploaded or stored.",
+      "Easy to Use: A simple, intuitive interface makes hardware testing a breeze for everyone.",
+      "Completely Free: No hidden costs or subscriptions. Test your hardware as often as you need.",
     ],
   },
   {
-    heading: "Privacy",
+    heading: "Available Hardware Tests",
+    listData: [
+      "Camera Test: Check if your webcam is working correctly. Our tool will display the video feed from your camera, confirming it's operational. You can also select from multiple connected cameras.",
+      "Microphone Test: Ensure your microphone is capturing audio clearly. Speak into your mic and see the visual feedback in real-time. This is perfect for checking your setup before a meeting or recording.",
+      "Speaker Test: Verify your speakers or headphones are producing sound. A simple test tone will play, allowing you to confirm your audio output is working as expected.",
+      "System Information: Get a quick overview of your system's key hardware, including battery status (level and charging state) and GPU (Graphics Processing Unit) information.",
+    ],
+  },
+  {
+    heading: "How It Works",
     blockData: [
-      "This tool runs entirely in your browser and does not upload media streams or recordings to any server. Grant permissions only when comfortable.",
+      "Our hardware tester uses your browser's built-in capabilities to access and test your devices. When you start a test, your browser will ask for permission to access the necessary hardware (like your camera or microphone). Once you grant permission, the tool will perform the test and display the results instantly. All processing is done on your device, ensuring your privacy and security.",
     ],
   },
 ];
