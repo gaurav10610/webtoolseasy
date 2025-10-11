@@ -291,12 +291,21 @@ If you find this project useful, please consider giving it a star! ⭐
 
 ---
 
+## 👨‍💻 Author & Developer
+
+**Gaurav Kumar Yadav**
+
+- **LinkedIn**: [View LinkedIn Profile](https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/)
+- **GitHub**: [View GitHub Profile](https://github.com/gaurav10610)
+
+---
+
 ## 🙏 Acknowledgments
 
 - Built with ❤️ using open source technologies
 - Inspired by the need for privacy-respecting web tools
-- Thanks to all contributors and users
+- Thanks to all users
 
 ---
 
-**Made with ♥ for developers, by developers**
+**Made with ♥ for developers, by a developer**
