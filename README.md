@@ -1,4 +1,6 @@
-# 🛠️ WebToolsEasy
+# WebToolsEasy
+
+<img src="https://raw.githubusercontent.com/gaurav10610/webtoolseasy/main/public/favion_512.png" alt="WebToolsEasy Logo" width="64" height="64" style="vertical-align: middle; margin-right: 16px;">
 
 **Privacy-First Web Tools That Run Entirely in Your Browser**
 
