@@ -1,57 +1,98 @@
-# WebToolsEasy
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A collection of small web utilities and developer tools built with Next.js and TypeScript.
+## Getting Started
 
-This repository powers the webapps at https://webtoolseasy.com and includes a set of tools (editors, converters, formatters) plus scripts to generate screenshots, index pages, and share links to social platforms.
+First, run the development server:
 
-## Highlights
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- Next.js (app router) + TypeScript
-- Multiple small tools in `src/tools/`
-- Scripts for indexing, sitemap updates, and social sharing in `scripts/`
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Quickstart (development)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-1. Install dependencies
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-   npm install
+## Learn More
 
-2. Create environment files
+To learn more about Next.js, take a look at the following resources:
 
-   Copy `.env.development` or create your own `.env.local` with keys listed below. Do NOT commit real secrets.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-3. Start dev server
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-   npm run dev
+## Deploy on Vercel
 
-## Environment variables
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- PRODUCTION - true/false
-- HOSTNAME - base site URL
-- FFMPEG_BASE_URL - static URL for ffmpeg core
-- ADSENSE_PUBLISHER_ID - if using Adsense
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## Secrets and credentials
+## Scripts: Share tools to social platforms
 
-This repository previously contained a Google service account JSON. Do NOT commit service account JSONs or private keys. Instead:
+The repository includes a helper script that generates share URLs for every tool and can optionally post to social platforms when API credentials are provided via environment variables.
 
-- Use platform-specific secret storage (GitHub Actions secrets, Vercel Environment Variables).
-- Keep a local `.env.local` or use OS-level secret managers.
+File: `scripts/share-tools.ts`
 
-If you accidentally commit secrets
+Usage:
 
-1. Remove the secret file and add patterns to `.gitignore`.
-2. Purge sensitive data from git history using one of:
-   - git filter-repo (recommended)
-   - BFG Repo-Cleaner
+1. Create a `.env` file in the project root (this file should be gitignored).
 
-Example reference:
-- Remove file and rewrite history: `git filter-repo --path path/to/secrets.json --invert-paths`
+Example `.env`:
 
-## How to contribute
+```
+# Base URL used when building share links (defaults to http://localhost:3000)
+SHARE_BASE_URL=https://your-site.com
 
-See `CONTRIBUTING.md` for contribution guidelines.
+# Optional: X/Twitter (v2) Bearer token for posting tweets
+X_BEARER_TOKEN=YOUR_TWITTER_BEARER_TOKEN
 
-## License
+# Optional: Facebook Page credentials (page access token + page id)
+FB_PAGE_ACCESS_TOKEN=YOUR_FB_PAGE_ACCESS_TOKEN
+FB_PAGE_ID=YOUR_FB_PAGE_ID
 
-This project is available under the MIT License - see `LICENSE`.
+# Optional: LinkedIn credentials
+LINKEDIN_ACCESS_TOKEN=YOUR_LINKEDIN_ACCESS_TOKEN
+LINKEDIN_OWNER_URN=urn:li:person:XXXXXXXX
+
+# Optional: Telegram bot credentials
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+TELEGRAM_CHAT_ID=@yourchannel_or_chatid
+```
+
+2. Run the script (no credentials required to only print share links):
+
+```bash
+node ./scripts/share-tools.ts
+```
+
+Sample console output (truncated):
+
+```
+Share tools script starting...
+
+Tool: JavaScript Editor Online
+ URL: https://your-site.com/tools/javascript-editor
+ Share URLs:
+	- facebook: https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fyour-site.com%2Ftools%2Fjavascript-editor
+	- whatsapp: https://api.whatsapp.com/send?text=JavaScript%20Editor%20Online%20%E2%80%94%20https%3A%2F%2Fyour-site.com%2Ftools%2Fjavascript-editor
+	- x: https://twitter.com/intent/tweet?text=JavaScript%20Editor%20Online&url=https%3A%2F%2Fyour-site.com%2Ftools%2Fjavascript-editor
+	- linkedin: https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fyour-site.com%2Ftools%2Fjavascript-editor
+	- telegram: https://t.me/share/url?url=https%3A%2F%2Fyour-site.com%2Ftools%2Fjavascript-editor&text=JavaScript%20Editor%20Online
+
+... (other tools)
+
+Done. Summary:
+{}
+```
+
+Notes:
+- The script only attempts to post via platform APIs when the corresponding credentials are present in env variables. It logs API responses for inspection.
+- Use caution when posting programmatically — ensure tokens have appropriate scopes and follow platform rate limits and policies.
