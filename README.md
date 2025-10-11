@@ -28,6 +28,7 @@ WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web to
 ## 🎯 Available Tools
 
 ### 📝 Online Editors & IDEs
+
 - [JavaScript Editor Online](https://webtoolseasy.com/tools/javascript-editor) - Feature-rich JavaScript code editor with syntax highlighting
 - [HTML Editor Online](https://webtoolseasy.com/tools/html-editor) - Live HTML preview with instant rendering
 - [Python Compiler Online](https://webtoolseasy.com/tools/python-compiler) - Execute Python code directly in browser
@@ -38,6 +39,7 @@ WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web to
 - [SQL Practice Editor](https://webtoolseasy.com/tools/sql-practice-editor) - Interactive SQL learning environment
 
 ### 💻 Programming & Development Tools
+
 - [JSON Formatter Online](https://webtoolseasy.com/tools/json-formatter) - Format and beautify JSON data
 - [JSON Viewer Online](https://webtoolseasy.com/tools/json-viewer) - Visualize and explore JSON structures
 - [JavaScript Formatter](https://webtoolseasy.com/tools/javascript-formatter) - Auto-format JavaScript code
@@ -63,12 +65,14 @@ WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web to
 - [CSV Viewer Online](https://webtoolseasy.com/tools/csv-viewer) - View and analyze CSV files
 
 ### 📝 Text Processing Tools
+
 - [Text Case Converter](https://webtoolseasy.com/tools/case-converter) - Convert text case (upper, lower, title, camel)
 - [Word Counter Tool](https://webtoolseasy.com/tools/word-counter) - Count words, characters, and lines
 - [Text Compare Tool](https://webtoolseasy.com/tools/text-compare) - Diff and compare text side-by-side
 - [Speech to Text Online](https://webtoolseasy.com/tools/speech-to-text) - Convert speech to text using your microphone
 
 ### 🎨 Media Processing Tools
+
 - [Image Compressor Tool](https://webtoolseasy.com/tools/image-compress) - Reduce image file size without quality loss
 - [Image Format Converter](https://webtoolseasy.com/tools/image-format-converter) - Convert between image formats
 - [Image Cropper Tool](https://webtoolseasy.com/tools/crop-image) - Crop and resize images
@@ -78,6 +82,7 @@ WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web to
 - [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen
 
 ### 🔧 Utility Tools
+
 - [QR Code Generator Free](https://webtoolseasy.com/tools/qr-code-generator) - Create QR codes instantly
 - [Password Generator Tool](https://webtoolseasy.com/tools/password-generator) - Generate secure passwords
 - [Color Palette Generator](https://webtoolseasy.com/tools/color-palette-generator) - Create color schemes
@@ -85,6 +90,7 @@ WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web to
 - [Device Hardware Tester](https://webtoolseasy.com/tools/test-hardware) - Test camera, microphone, and screen
 
 ### 💰 Finance Tools
+
 - [Interest Calculator Tool](https://webtoolseasy.com/tools/compound-interest-calculator) - Calculate compound interest
 
 ---
@@ -179,6 +185,7 @@ webtoolseasy/
 ### How It Works
 
 Tools leverage modern browser APIs:
+
 - **FFmpeg.wasm** for video/audio processing
 - **Canvas API** for image manipulation
 - **Web Workers** for heavy computations
@@ -193,17 +200,10 @@ Create a `.env.local` file for local development with the following variables:
 
 ```env
 # Required
-PRODUCTION=false
 HOSTNAME=http://localhost:3000
+SCREENSHOTS_BASE_URL=/screenshots
 
-# Optional: FFmpeg configuration
-FFMPEG_BASE_URL=https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm
-
-# Optional: External libraries
-IMAGE_COMPRESSION_LIB_URL=https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js
-HAMMER_JS_PATH_URL=https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js
-
-# Optional: Analytics
+# Optional: Analytics (required for production builds)
 GA_CODE=your-google-analytics-code
 ADSENSE_PUBLISHER_ID=your-adsense-id
 
@@ -211,6 +211,16 @@ ADSENSE_PUBLISHER_ID=your-adsense-id
 GOOGLE_SERVICE_ACCOUNT_PATH=/path/to/service-account.json
 # OR
 GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account",...}
+
+# Optional: Social media sharing (for share-tools.ts script)
+SHARE_BASE_URL=https://your-site.com
+X_BEARER_TOKEN=your-twitter-bearer-token
+FB_PAGE_ACCESS_TOKEN=your-facebook-token
+FB_PAGE_ID=your-facebook-page-id
+LINKEDIN_ACCESS_TOKEN=your-linkedin-token
+LINKEDIN_OWNER_URN=urn:li:person:xxxx
+TELEGRAM_BOT_TOKEN=your-telegram-bot-token
+TELEGRAM_CHAT_ID=your-telegram-chat-id
 ```
 
 **Important**: Never commit real API keys or secrets. Use `.env.local` for sensitive values (already gitignored).
@@ -262,6 +272,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 If you need to use scripts that require credentials (like Google Indexing API):
 
 ### For Local Development
+
 1. Create `.env.local` (already gitignored)
 2. Add your credentials:
    ```env
@@ -269,7 +280,9 @@ If you need to use scripts that require credentials (like Google Indexing API):
    ```
 
 ### For Production/CI
+
 Use platform secret management:
+
 - **GitHub Actions**: Repository Secrets
 - **Vercel**: Environment Variables
 - **Docker**: Build secrets or volume mounts
