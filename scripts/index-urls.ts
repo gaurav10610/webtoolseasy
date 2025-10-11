@@ -1,11 +1,49 @@
 import request from "request";
 import { google } from "googleapis";
-import key from "../webtoolseasy-452118-670a03d83db4.json";
+import fs from "fs";
+import path from "path";
 import { getAllUrlsFromSitemap } from "./indexing-utils";
+
+// Load Google service account credentials from environment
+// Prefer setting GOOGLE_SERVICE_ACCOUNT_PATH to a local file path (gitignored)
+// or GOOGLE_SERVICE_ACCOUNT_JSON to a JSON string (base64 encoded if you prefer).
+interface GoogleServiceAccount {
+  client_email: string;
+  private_key: string;
+  [k: string]: unknown;
+}
+
+let key: GoogleServiceAccount | undefined = undefined;
+if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+  try {
+    key = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+  } catch (e) {
+    console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT_JSON:", e);
+  }
+} else if (process.env.GOOGLE_SERVICE_ACCOUNT_PATH) {
+  try {
+    const p = path.resolve(process.env.GOOGLE_SERVICE_ACCOUNT_PATH);
+    const raw = fs.readFileSync(p, "utf8");
+    key = JSON.parse(raw);
+  } catch (e) {
+    console.error("Failed to read GOOGLE_SERVICE_ACCOUNT_PATH:", e);
+  }
+} else {
+  console.warn(
+    "No Google service account provided. Set GOOGLE_SERVICE_ACCOUNT_PATH or GOOGLE_SERVICE_ACCOUNT_JSON to enable Google Indexing API."
+  );
+}
 
 const updatedUrls: string[] = [];
 
-const indexUrlsInGoogle = () => {
+export const indexUrlsInGoogle = () => {
+  if (!key) {
+    console.error(
+      "Google service account key not available; skipping Google indexing."
+    );
+    return;
+  }
+
   const jwtClient = new google.auth.JWT(
     key.client_email,
     undefined,
