@@ -211,16 +211,6 @@ ADSENSE_PUBLISHER_ID=your-adsense-id
 GOOGLE_SERVICE_ACCOUNT_PATH=/path/to/service-account.json
 # OR
 GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account",...}
-
-# Optional: Social media sharing (for share-tools.ts script)
-SHARE_BASE_URL=https://your-site.com
-X_BEARER_TOKEN=your-twitter-bearer-token
-FB_PAGE_ACCESS_TOKEN=your-facebook-token
-FB_PAGE_ID=your-facebook-page-id
-LINKEDIN_ACCESS_TOKEN=your-linkedin-token
-LINKEDIN_OWNER_URN=urn:li:person:xxxx
-TELEGRAM_BOT_TOKEN=your-telegram-bot-token
-TELEGRAM_CHAT_ID=your-telegram-chat-id
 ```
 
 **Important**: Never commit real API keys or secrets. Use `.env.local` for sensitive values (already gitignored).
@@ -265,48 +255,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-## 🔑 Secrets Management
-
-**This repository does NOT contain any committed secrets.**
-
-If you need to use scripts that require credentials (like Google Indexing API):
-
-### For Local Development
-
-1. Create `.env.local` (already gitignored)
-2. Add your credentials:
-   ```env
-   GOOGLE_SERVICE_ACCOUNT_PATH=/Users/you/secrets/service-account.json
-   ```
-
-### For Production/CI
-
-Use platform secret management:
-
-- **GitHub Actions**: Repository Secrets
-- **Vercel**: Environment Variables
-- **Docker**: Build secrets or volume mounts
-
-### Removing Secrets from Git History
-
-If you accidentally committed secrets, remove them immediately:
-
-```bash
-# Install git-filter-repo
-brew install git-filter-repo
-
-# Remove the file from history
-git filter-repo --path path/to/secret-file.json --invert-paths
-
-# Force push (coordinate with team first!)
-git push origin --force --all
-```
-
-Then rotate/revoke the exposed credentials.
-
----
-
-## 📦 Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
