@@ -1,10 +1,8 @@
-# WebToolsEasy
-
-<img src="https://raw.githubusercontent.com/gaurav10610/webtoolseasy/main/public/favion_512.png" alt="WebToolsEasy Logo" width="64" height="64" style="vertical-align: middle; margin-right: 16px;">
+# <img src="./public/favion_512.png" alt="WebToolsEasy Logo" width="64" height="64" style="vertical-align: middle; margin-right: 16px;"> WebToolsEasy
 
 **Privacy-First Web Tools That Run Entirely in Your Browser**
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
