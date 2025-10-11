@@ -1,4 +1,7 @@
-# <img src="./public/favion_512.png" alt="WebToolsEasy Logo" width="64" height="64" style="vertical-align: middle; margin-right: 16px;"> WebToolsEasy
+<h1 align="center">
+  <img src="./public/favion_512.png" alt="WebToolsEasy Logo" width="64" height="64" style="vertical-align: middle; margin-right: 16px;">
+  <span style="vertical-align: middle;">WebToolsEasy</span>
+</h1>
 
 **Privacy-First Web Tools That Run Entirely in Your Browser**
 
