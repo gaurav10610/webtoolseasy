@@ -17,13 +17,13 @@ import {
   LinearProgress,
 } from "@mui/material";
 import {
-  CloudUpload as CloudUploadIcon,
   Download as DownloadIcon,
   Compress as CompressIcon,
-  PictureAsPdf as PdfIcon,
 } from "@mui/icons-material";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { PDFDocument } from "pdf-lib";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
 
 type CompressionLevel = "low" | "medium" | "high";
 
@@ -54,8 +54,8 @@ export default function PDFCompress({
   }, []);
 
   const handleFileSelect = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
+    (files: FileList) => {
+      const file = files[0];
       if (file) {
         if (file.type !== "application/pdf") {
           toolState.actions.showMessage("Please select a valid PDF file");
@@ -71,6 +71,13 @@ export default function PDFCompress({
       }
     },
     [toolState.actions, formatFileSize]
+  );
+
+  const handleError = useCallback(
+    (error: string) => {
+      toolState.actions.showMessage(error);
+    },
+    [toolState.actions]
   );
 
   const compressPDF = useCallback(async () => {
@@ -202,37 +209,26 @@ export default function PDFCompress({
       />
 
       <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
-        {/* Upload Section */}
-        <Card className="border border-gray-200">
-          <CardContent>
-            <div className="flex items-center gap-2 mb-4">
-              <PdfIcon color="primary" fontSize="large" />
-              <Typography variant="h6" color="primary">
-                Select PDF to Compress
-              </Typography>
-            </div>
+        {/* File Upload */}
+        {!pdfFile && (
+          <FileUploadWithDragDrop
+            accept="application/pdf"
+            multiple={false}
+            allowedTypes={["application/pdf"]}
+            maxSize={FILE_SIZE_PRESETS.HUGE}
+            onFileSelect={handleFileSelect}
+            onError={handleError}
+            title="Upload PDF File to Compress"
+            subtitle="Drag and drop your PDF file here or click to browse"
+            supportText="Supports PDF files up to 100MB"
+          />
+        )}
 
-            <input
-              accept="application/pdf"
-              style={{ display: "none" }}
-              id="pdf-file-input"
-              type="file"
-              onChange={handleFileSelect}
-            />
-            <label htmlFor="pdf-file-input">
-              <Button
-                variant="contained"
-                component="span"
-                startIcon={<CloudUploadIcon />}
-                size="large"
-                fullWidth
-              >
-                Select PDF File
-              </Button>
-            </label>
-
-            {pdfFile && (
-              <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+        {/* File Info */}
+        {pdfFile && (
+          <Card className="border border-gray-200">
+            <CardContent>
+              <div className="p-3 bg-blue-50 rounded border border-blue-200">
                 <div className="flex justify-between items-center">
                   <div>
                     <Typography variant="body2" className="font-medium">
@@ -245,9 +241,9 @@ export default function PDFCompress({
                   <CompressIcon color="primary" />
                 </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Compression Settings */}
         {pdfFile && (

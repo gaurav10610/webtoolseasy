@@ -22,14 +22,18 @@ import {
   CardContent,
 } from "@mui/material";
 import {
-  CloudUpload as CloudUploadIcon,
   Download as DownloadIcon,
   Delete as DeleteIcon,
   PictureAsPdf as PdfIcon,
   DragIndicator as DragIndicatorIcon,
 } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { PDFDocument } from "pdf-lib";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
+import { ButtonWithHandler } from "@/components/lib/buttons";
+import { isEmpty } from "lodash-es";
 
 interface ImageFileInfo {
   id: string;
@@ -69,10 +73,7 @@ export default function ImagesToPDF({
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const handleFileSelect = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files) return;
-
+    async (files: FileList) => {
       const newImages: ImageFileInfo[] = [];
 
       for (let i = 0; i < files.length; i++) {
@@ -94,11 +95,20 @@ export default function ImagesToPDF({
       } else {
         toolState.actions.showMessage("Please select valid image files");
       }
-
-      event.target.value = "";
     },
     [toolState.actions]
   );
+
+  const handleError = useCallback(
+    (error: string) => {
+      toolState.actions.showMessage(error);
+    },
+    [toolState.actions]
+  );
+
+  const handleAddMoreImages = useCallback(() => {
+    document.getElementById("image-file-input-hidden")?.click();
+  }, []);
 
   const handleRemoveImage = useCallback((id: string) => {
     setImages((prev) => {
@@ -268,44 +278,52 @@ export default function ImagesToPDF({
       />
 
       <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
-        {/* Upload Section */}
-        <Card className="border border-gray-200">
-          <CardContent>
-            <div className="flex items-center gap-2 mb-4">
-              <PdfIcon color="primary" fontSize="large" />
-              <Typography variant="h6" color="primary">
-                Add Images
-              </Typography>
-            </div>
+        {/* File Upload */}
+        {isEmpty(images) && (
+          <FileUploadWithDragDrop
+            accept="image/*"
+            multiple={true}
+            allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+            maxSize={FILE_SIZE_PRESETS.HUGE}
+            onFileSelect={handleFileSelect}
+            onError={handleError}
+            title="Upload Images to Convert to PDF"
+            subtitle="Drag and drop your image files here or click to browse"
+            supportText="Supports JPG, PNG, GIF, WEBP, BMP formats up to 100MB each"
+          />
+        )}
 
-            <input
-              accept="image/*"
-              style={{ display: "none" }}
-              id="images-file-input"
-              type="file"
-              multiple
-              onChange={handleFileSelect}
+        {/* Add More Images Button */}
+        {!isEmpty(images) && (
+          <div className="w-full flex flex-row justify-between items-center">
+            <Typography variant="body2" className="text-gray-600 px-3">
+              {images.length} image{images.length > 1 ? "s" : ""} added. Drag to
+              reorder.
+            </Typography>
+            <ButtonWithHandler
+              buttonText="Add More Images"
+              onClick={handleAddMoreImages}
+              size="small"
+              startIcon={<AddIcon />}
             />
-            <label htmlFor="images-file-input">
-              <Button
-                variant="contained"
-                component="span"
-                startIcon={<CloudUploadIcon />}
-                size="large"
-                fullWidth
-              >
-                Select Images
-              </Button>
-            </label>
+          </div>
+        )}
 
-            {images.length > 0 && (
-              <Typography variant="body2" className="mt-4 text-gray-600">
-                {images.length} image{images.length > 1 ? "s" : ""} added. Drag
-                to reorder.
-              </Typography>
-            )}
-          </CardContent>
-        </Card>
+        {/* Hidden input for adding more images */}
+        <input
+          accept="image/*"
+          style={{ display: "none" }}
+          id="image-file-input-hidden"
+          type="file"
+          multiple
+          onChange={async (e) => {
+            const files = e.target.files;
+            if (files) {
+              await handleFileSelect(files);
+              e.target.value = "";
+            }
+          }}
+        />
 
         {/* Image List */}
         {images.length > 0 && (

@@ -16,10 +16,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MergeIcon from "@mui/icons-material/Merge";
 import DownloadIcon from "@mui/icons-material/Download";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import AddIcon from "@mui/icons-material/Add";
 import { PDFDocument } from "pdf-lib";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
+import { ButtonWithHandler } from "@/components/lib/buttons";
+import { isEmpty } from "lodash-es";
 
 interface PDFFileInfo {
   id: string;
@@ -44,10 +49,7 @@ export default function PDFMerge({
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const handleFileSelect = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files) return;
-
+    async (files: FileList) => {
       const newPdfFiles: PDFFileInfo[] = [];
 
       for (let i = 0; i < files.length; i++) {
@@ -71,10 +73,25 @@ export default function PDFMerge({
       }
 
       setPdfFiles((prev) => [...prev, ...newPdfFiles]);
-      event.target.value = "";
+      if (newPdfFiles.length > 0) {
+        toolState.actions.showMessage(
+          `Added ${newPdfFiles.length} PDF file(s)`
+        );
+      }
     },
     [toolState.actions]
   );
+
+  const handleError = useCallback(
+    (error: string) => {
+      toolState.actions.showMessage(error);
+    },
+    [toolState.actions]
+  );
+
+  const handleAddMoreFiles = useCallback(() => {
+    document.getElementById("pdf-file-input-hidden")?.click();
+  }, []);
 
   const handleRemoveFile = useCallback((id: string) => {
     setPdfFiles((prev) => prev.filter((pdf) => pdf.id !== id));
@@ -170,46 +187,54 @@ export default function PDFMerge({
       />
 
       <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
-        {/* Upload Section */}
-        <Card className="border border-gray-200">
-          <CardContent>
-            <div className="flex items-center gap-2 mb-4">
-              <PictureAsPdfIcon color="primary" fontSize="large" />
-              <Typography variant="h6" color="primary">
-                Select PDF Files to Merge
+        {/* File Upload */}
+        {isEmpty(pdfFiles) && (
+          <FileUploadWithDragDrop
+            accept="application/pdf"
+            multiple={true}
+            allowedTypes={["application/pdf"]}
+            maxSize={FILE_SIZE_PRESETS.HUGE}
+            onFileSelect={handleFileSelect}
+            onError={handleError}
+            title="Upload PDF Files to Merge"
+            subtitle="Drag and drop your PDF files here or click to browse"
+            supportText="Supports PDF files up to 100MB each"
+          />
+        )}
+
+        {/* Add More Files Button */}
+        {!isEmpty(pdfFiles) && (
+          <div className="w-full flex flex-row justify-between items-center">
+            <div className="p-3 bg-blue-50 rounded-lg flex-grow mr-3">
+              <Typography variant="body2" className="text-gray-700">
+                <strong>{pdfFiles.length}</strong> PDF file(s) added •{" "}
+                <strong>{totalPages}</strong> total pages
               </Typography>
             </div>
-
-            <input
-              accept="application/pdf"
-              style={{ display: "none" }}
-              id="pdf-upload"
-              type="file"
-              multiple
-              onChange={handleFileSelect}
+            <ButtonWithHandler
+              buttonText="Add More Files"
+              onClick={handleAddMoreFiles}
+              size="small"
+              startIcon={<AddIcon />}
             />
-            <label htmlFor="pdf-upload">
-              <Button
-                variant="contained"
-                component="span"
-                size="large"
-                fullWidth
-                startIcon={<PictureAsPdfIcon />}
-              >
-                Select PDF Files
-              </Button>
-            </label>
+          </div>
+        )}
 
-            {pdfFiles.length > 0 && (
-              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                <Typography variant="body2" className="text-gray-700">
-                  <strong>{pdfFiles.length}</strong> PDF file(s) added •{" "}
-                  <strong>{totalPages}</strong> total pages
-                </Typography>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Hidden input for adding more files */}
+        <input
+          accept="application/pdf"
+          style={{ display: "none" }}
+          id="pdf-file-input-hidden"
+          type="file"
+          multiple
+          onChange={async (e) => {
+            const files = e.target.files;
+            if (files) {
+              await handleFileSelect(files);
+              e.target.value = "";
+            }
+          }}
+        />
 
         {/* PDF List */}
         {pdfFiles.length > 0 && (

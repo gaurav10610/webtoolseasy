@@ -13,12 +13,13 @@ import {
   Alert,
 } from "@mui/material";
 import { useState, useCallback } from "react";
-import ImageIcon from "@mui/icons-material/Image";
 import DownloadIcon from "@mui/icons-material/Download";
 import imageCompression from "browser-image-compression";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
 
 interface ImageInfo {
   file: File;
@@ -71,13 +72,21 @@ export default function ImageResizer({
     });
   }, []);
 
+  const handleError = useCallback(
+    (errorMessage: string) => {
+      setError(errorMessage);
+      toolState.actions.showMessage(errorMessage);
+    },
+    [toolState.actions]
+  );
+
   const handleFileSelect = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
+    async (files: FileList) => {
+      const file = files[0];
       if (!file) return;
 
       if (!file.type.startsWith("image/")) {
-        setError("Please select a valid image file");
+        handleError("Please select a valid image file");
         return;
       }
 
@@ -88,11 +97,12 @@ export default function ImageResizer({
         setTargetWidth(imageInfo.width);
         setTargetHeight(imageInfo.height);
         setResizedImage(null);
+        toolState.actions.showMessage("Image loaded successfully");
       } catch {
-        setError("Failed to load image. Please try another file.");
+        handleError("Failed to load image. Please try another file.");
       }
     },
-    [loadImageInfo]
+    [loadImageInfo, toolState.actions, handleError]
   );
 
   const handleWidthChange = useCallback(
@@ -237,34 +247,23 @@ export default function ImageResizer({
         )}
 
         {/* Upload Section */}
-        <Card className="border border-gray-200">
-          <CardContent>
-            <div className="flex items-center gap-2 mb-4">
-              <ImageIcon color="primary" fontSize="large" />
-              <Typography variant="h6" color="primary">
-                Select Image
-              </Typography>
-            </div>
+        {!originalImage && (
+          <FileUploadWithDragDrop
+            accept="image/*"
+            multiple={false}
+            allowedTypes={FILE_TYPE_PRESETS.IMAGES}
+            maxSize={FILE_SIZE_PRESETS.LARGE}
+            onFileSelect={handleFileSelect}
+            onError={handleError}
+            title="Upload Image"
+            subtitle="Select an image file to resize"
+            supportText="Supports JPG, PNG, GIF, WebP and other image formats"
+          />
+        )}
 
-            <input
-              accept="image/*"
-              style={{ display: "none" }}
-              id="image-upload"
-              type="file"
-              onChange={handleFileSelect}
-            />
-            <label htmlFor="image-upload">
-              <Button
-                variant="contained"
-                component="span"
-                size="large"
-                fullWidth
-              >
-                Choose Image File
-              </Button>
-            </label>
-
-            {originalImage && (
+        {originalImage && (
+          <Card className="border border-gray-200">
+            <CardContent>
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                 <Typography variant="body2" className="text-gray-700">
                   <strong>File:</strong> {originalImage.file.name}
@@ -278,9 +277,9 @@ export default function ImageResizer({
                   {formatFileSize(originalImage.size)}
                 </Typography>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {originalImage && (
           <>

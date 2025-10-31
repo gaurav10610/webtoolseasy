@@ -62,6 +62,9 @@ interface TextAnnotation {
 }
 
 export default function PDFEditor({}: Readonly<ToolComponentProps>) {
+  // Refs
+  const addMoreInputRef = React.useRef<HTMLInputElement>(null);
+
   // State management
   const [pdfFiles, setPdfFiles] = useState<PDFFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<PDFFile | null>(null);
@@ -139,6 +142,22 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   const handleError = useCallback((errorMessage: string) => {
     setError(errorMessage);
   }, []);
+
+  const handleAddMoreFiles = useCallback(() => {
+    addMoreInputRef.current?.click();
+  }, []);
+
+  const handleAdditionalFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files) {
+        handleFileSelect(files);
+        // Reset input so same files can be added again
+        e.target.value = "";
+      }
+    },
+    [handleFileSelect]
+  );
 
   // PDF Operations
   const mergePDFs = useCallback(async () => {
@@ -743,21 +762,19 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
             {/* File Management */}
             <Card>
               <CardContent>
+                <input
+                  ref={addMoreInputRef}
+                  type="file"
+                  accept="application/pdf"
+                  multiple
+                  style={{ display: "none" }}
+                  onChange={handleAdditionalFileSelect}
+                />
                 <div className="flex justify-between items-center mb-4">
                   <Typography variant="h6">PDFs ({pdfFiles.length})</Typography>
                   <Button
                     startIcon={<AddIcon />}
-                    onClick={() => {
-                      const input = document.createElement("input");
-                      input.type = "file";
-                      input.multiple = true;
-                      input.accept = "application/pdf";
-                      input.onchange = (e) => {
-                        const files = (e.target as HTMLInputElement).files;
-                        if (files) handleFileSelect(files);
-                      };
-                      input.click();
-                    }}
+                    onClick={handleAddMoreFiles}
                     size="small"
                     variant="outlined"
                   >

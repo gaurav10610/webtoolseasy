@@ -18,12 +18,13 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  CloudUpload as CloudUploadIcon,
   Download as DownloadIcon,
   Image as ImageIcon,
 } from "@mui/icons-material";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { Document, pdfjs } from "react-pdf";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -57,8 +58,8 @@ export default function PdfToImages({
   const [convertedImages, setConvertedImages] = useState<ConvertedImage[]>([]);
 
   const handleFileSelect = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
+    (files: FileList) => {
+      const file = files[0];
       if (file) {
         if (file.type !== "application/pdf") {
           toolState.actions.showMessage("Please select a valid PDF file");
@@ -67,6 +68,13 @@ export default function PdfToImages({
         setPdfFile(file);
         setConvertedImages([]);
       }
+    },
+    [toolState.actions]
+  );
+
+  const handleError = useCallback(
+    (error: string) => {
+      toolState.actions.showMessage(error);
     },
     [toolState.actions]
   );
@@ -238,37 +246,32 @@ export default function PdfToImages({
       />
 
       <div className="flex flex-col gap-6">
-        {/* File Upload Section */}
-        <Card className="p-6">
-          <div className="flex flex-col gap-4">
-            <input
-              accept="application/pdf"
-              style={{ display: "none" }}
-              id="pdf-file-input"
-              type="file"
-              onChange={handleFileSelect}
-            />
-            <label htmlFor="pdf-file-input">
-              <Button
-                variant="contained"
-                component="span"
-                startIcon={<CloudUploadIcon />}
-                size="large"
-              >
-                Select PDF File
-              </Button>
-            </label>
+        {/* File Upload */}
+        {!pdfFile && (
+          <FileUploadWithDragDrop
+            accept="application/pdf"
+            multiple={false}
+            allowedTypes={["application/pdf"]}
+            maxSize={FILE_SIZE_PRESETS.HUGE}
+            onFileSelect={handleFileSelect}
+            onError={handleError}
+            title="Upload PDF File to Convert to Images"
+            subtitle="Drag and drop your PDF file here or click to browse"
+            supportText="Supports PDF files up to 100MB"
+          />
+        )}
 
-            {pdfFile && (
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <ImageIcon fontSize="small" />
-                <span>
-                  {pdfFile.name} ({numPages} pages)
-                </span>
-              </div>
-            )}
-          </div>
-        </Card>
+        {/* File Info */}
+        {pdfFile && (
+          <Card className="p-6">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <ImageIcon fontSize="small" />
+              <span>
+                {pdfFile.name} ({numPages} pages)
+              </span>
+            </div>
+          </Card>
+        )}
 
         {/* Conversion Settings */}
         {pdfFile && numPages > 0 && (
