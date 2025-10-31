@@ -246,7 +246,7 @@ export default function TestHardware({
       }
     };
     getDevices();
-  }, []);
+  }, [selectedCameraId, selectedMicId]);
 
   useEffect(() => {
     const getBattery = async () => {

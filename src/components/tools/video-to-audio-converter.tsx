@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo } from "react";
+import React, { useState, useCallback, useMemo, memo, useRef } from "react";
 import { ConversionState, VideoFileData } from "@/types/file";
 import AddIcon from "@mui/icons-material/Add";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -194,6 +194,8 @@ const VideoFilesList = memo(function VideoFilesList({
 });
 
 export default function VideoToAudioConverter() {
+  const addMoreInputRef = useRef<HTMLInputElement>(null);
+
   const [state, setState] = useState<VideoToAudioConverterState>({
     fileList: [],
     error: "",
@@ -407,16 +409,20 @@ export default function VideoToAudioConverter() {
   );
 
   const handleAddMoreVideos = useCallback(() => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.multiple = true;
-    input.accept = "video/*";
-    input.onchange = (e) => {
-      const files = (e.target as HTMLInputElement).files;
-      if (files) handleFileSelect(files);
-    };
-    input.click();
-  }, [handleFileSelect]);
+    addMoreInputRef.current?.click();
+  }, []);
+
+  const handleAdditionalFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files) {
+        handleFileSelect(files);
+        // Reset input so same files can be added again
+        e.target.value = "";
+      }
+    },
+    [handleFileSelect]
+  );
 
   return (
     <ToolLayout
@@ -459,14 +465,24 @@ export default function VideoToAudioConverter() {
 
       {/* Add More Videos Button */}
       {!isEmpty(state.fileList) && (
-        <div className="w-full flex flex-row justify-end mb-3">
-          <ButtonWithHandler
-            buttonText="Add More Videos"
-            onClick={handleAddMoreVideos}
-            size="small"
-            startIcon={<AddIcon />}
+        <>
+          <input
+            ref={addMoreInputRef}
+            type="file"
+            accept="video/*"
+            multiple
+            style={{ display: "none" }}
+            onChange={handleAdditionalFileSelect}
           />
-        </div>
+          <div className="w-full flex flex-row justify-end mb-3">
+            <ButtonWithHandler
+              buttonText="Add More Videos"
+              onClick={handleAddMoreVideos}
+              size="small"
+              startIcon={<AddIcon />}
+            />
+          </div>
+        </>
       )}
 
       {/* Video Files List */}

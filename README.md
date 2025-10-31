@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **65+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -73,28 +73,44 @@ WebToolsEasy is a comprehensive collection of **50+ free, privacy-focused web to
 - [Word Counter Tool](https://webtoolseasy.com/tools/word-counter) - Count words, characters, and lines
 - [Text Compare Tool](https://webtoolseasy.com/tools/text-compare) - Diff and compare text side-by-side
 - [Speech to Text Online](https://webtoolseasy.com/tools/speech-to-text) - Convert speech to text using your microphone
+- [Lorem Ipsum Generator](https://webtoolseasy.com/tools/lorem-ipsum-generator) - Generate placeholder Lorem Ipsum text
+- [HTML Entities Encoder Decoder](https://webtoolseasy.com/tools/html-entities-encoder-decoder) - Encode/decode HTML special characters
+- [Markdown to HTML Converter](https://webtoolseasy.com/tools/markdown-to-html-converter) - Convert Markdown syntax to HTML
 
 ### 🎨 Media Processing Tools
 
 - [Image Compressor Tool](https://webtoolseasy.com/tools/image-compress) - Reduce image file size without quality loss
 - [Image Format Converter](https://webtoolseasy.com/tools/image-format-converter) - Convert between image formats
 - [Image Cropper Tool](https://webtoolseasy.com/tools/crop-image) - Crop and resize images
+- [Image Resizer](https://webtoolseasy.com/tools/image-resizer) - Resize and optimize images with quality control
 - [Image to Text OCR](https://webtoolseasy.com/tools/image-to-text) - Extract text from images
 - [Video Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter) - Convert video to audio
 - [Video Editor Online](https://webtoolseasy.com/tools/video-editor) - Edit videos in browser
 - [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen
+- [PDF Merge Tool](https://webtoolseasy.com/tools/pdf-merge) - Combine multiple PDF files into one document
+- [PDF Split Tool](https://webtoolseasy.com/tools/pdf-split) - Extract specific pages or ranges from PDF files
+- [PDF Compress Tool](https://webtoolseasy.com/tools/pdf-compress) - Reduce PDF file size with quality control
+- [PDF to Images Converter](https://webtoolseasy.com/tools/pdf-to-images) - Convert PDF pages to PNG or JPG images
+- [Images to PDF Converter](https://webtoolseasy.com/tools/images-to-pdf) - Combine multiple images into a single PDF
 
 ### 🔧 Utility Tools
 
 - [QR Code Generator Free](https://webtoolseasy.com/tools/qr-code-generator) - Create QR codes instantly
 - [Password Generator Tool](https://webtoolseasy.com/tools/password-generator) - Generate secure passwords
 - [Color Palette Generator](https://webtoolseasy.com/tools/color-palette-generator) - Create color schemes
+- [Color Converter](https://webtoolseasy.com/tools/color-converter) - Convert between HEX, RGB, HSL, CMYK color formats
 - [Timezone Converter](https://webtoolseasy.com/tools/timezone-converter) - Convert between timezones
+- [UNIX Timestamp Converter](https://webtoolseasy.com/tools/unix-timestamp-converter) - Convert UNIX timestamps to dates
+- [Age Calculator](https://webtoolseasy.com/tools/age-calculator) - Calculate exact age from birthdate
+- [IP Address Lookup](https://webtoolseasy.com/tools/ip-address-lookup) - Find your IP address and location
 - [Device Hardware Tester](https://webtoolseasy.com/tools/test-hardware) - Test camera, microphone, and screen
 
 ### 💰 Finance Tools
 
 - [Interest Calculator Tool](https://webtoolseasy.com/tools/compound-interest-calculator) - Calculate compound interest
+- [Percentage Calculator](https://webtoolseasy.com/tools/percentage-calculator) - Calculate percentages, increases, decreases
+- [Loan EMI Calculator](https://webtoolseasy.com/tools/loan-emi-calculator) - Calculate monthly loan payments with amortization
+- [Currency Converter](https://webtoolseasy.com/tools/currency-converter) - Convert currencies with live exchange rates
 
 ---
 

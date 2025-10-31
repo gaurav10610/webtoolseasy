@@ -58,6 +58,7 @@ export default function CropImageOptimized() {
   const [error, setError] = useState("");
 
   const imgRef = useRef<HTMLImageElement>(null);
+  const addMoreInputRef = useRef<HTMLInputElement>(null);
 
   // Memoized constants
   const aspectRatioPresets = useMemo(
@@ -636,16 +637,20 @@ export default function CropImageOptimized() {
   }, []);
 
   const handleAddMoreImages = useCallback(() => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.multiple = true;
-    input.accept = "image/*";
-    input.onchange = (e) => {
-      const files = (e.target as HTMLInputElement).files;
-      if (files) handleFileSelect(files);
-    };
-    input.click();
-  }, [handleFileSelect]);
+    addMoreInputRef.current?.click();
+  }, []);
+
+  const handleAdditionalFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files) {
+        handleFileSelect(files);
+        // Reset input so same files can be added again
+        e.target.value = "";
+      }
+    },
+    [handleFileSelect]
+  );
 
   const handleFileRemove = useCallback(
     (id: string) => {
@@ -693,14 +698,24 @@ export default function CropImageOptimized() {
         )}
 
         {!isEmpty(fileList) && (
-          <div className="w-full flex flex-row justify-end">
-            <ButtonWithHandler
-              buttonText="Add More Images"
-              onClick={handleAddMoreImages}
-              size="small"
-              startIcon={<AddIcon />}
+          <>
+            <input
+              ref={addMoreInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleAdditionalFileSelect}
             />
-          </div>
+            <div className="w-full flex flex-row justify-end">
+              <ButtonWithHandler
+                buttonText="Add More Images"
+                onClick={handleAddMoreImages}
+                size="small"
+                startIcon={<AddIcon />}
+              />
+            </div>
+          </>
         )}
 
         {!isEmpty(fileList) && (

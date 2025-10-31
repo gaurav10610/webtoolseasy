@@ -47,6 +47,22 @@ export enum ApplicationIds {
   SQL_FORMATTER = "sqlformatter",
   CODE_MINIFIER = "codeminifier",
   TEST_HARDWARE = "testhardware",
+  LOREM_IPSUM_GENERATOR = "loremipsumgenerator",
+  IP_ADDRESS_LOOKUP = "ipaddresslookup",
+  HTML_ENTITIES_ENCODER_DECODER = "htmlentitiesencoderdecoder",
+  MARKDOWN_TO_HTML_CONVERTER = "markdowntohtmlconverter",
+  COLOR_CONVERTER = "colorconverter",
+  UNIX_TIMESTAMP_CONVERTER = "unixtimestampconverter",
+  PERCENTAGE_CALCULATOR = "percentagecalculator",
+  LOAN_EMI_CALCULATOR = "loanemicalculator",
+  CURRENCY_CONVERTER = "currencyconverter",
+  AGE_CALCULATOR = "agecalculator",
+  IMAGE_RESIZER = "imageresizer",
+  PDF_MERGE = "pdfmerge",
+  PDF_SPLIT = "pdfsplit",
+  PDF_COMPRESS = "pdfcompress",
+  PDF_TO_IMAGES = "pdftoimages",
+  IMAGES_TO_PDF = "imagestopdf",
 }
 
 export interface BaseAppConfig {

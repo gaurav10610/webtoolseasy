@@ -16,7 +16,6 @@ import LinkIcon from "@mui/icons-material/Link";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { CsvDataTable, AlertMessage } from "../lib/tables";
 import { CoreFileStreamer } from "@/lib/CoreFileStreamer";
@@ -29,6 +28,8 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
 
 interface CsvData {
   headers: string[];
@@ -180,14 +181,16 @@ Sarah Wilson,28,Toronto,Canada`;
     setParseTimeout(timeoutId);
   };
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
+  const handleError = useCallback((errorMessage: string) => {
+    setError(errorMessage);
+  }, []);
+
+  const handleFileUpload = async (files: FileList) => {
+    const file = files[0];
     if (!file) return;
 
     if (file.type !== "text/csv" && !file.name.endsWith(".csv")) {
-      setError("Please select a valid CSV file");
+      handleError("Please select a valid CSV file");
       return;
     }
 
@@ -414,50 +417,31 @@ Sarah Wilson,28,Toronto,Canada`;
 
       {/* File Upload Section */}
       <div className="mb-4 min-w-0">
-        <Typography variant="h6" className="mb-3">
-          Upload CSV File (Large files supported with streaming)
-        </Typography>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50 hover:bg-gray-100 transition-colors min-w-0">
-          <input
-            type="file"
-            accept=".csv,text/csv"
-            onChange={handleFileUpload}
-            className="hidden"
-            id="csv-file-input"
-            disabled={isUploading}
-          />
-          <label
-            htmlFor="csv-file-input"
-            className={`flex flex-col items-center justify-center cursor-pointer text-gray-600 hover:text-gray-800 ${
-              isUploading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            <UploadFileIcon className="mb-2 text-4xl" />
-            <span className="text-lg font-medium break-words">
-              {isUploading
-                ? `Processing... ${uploadProgress}%`
-                : "Select or drag and drop your CSV file here"}
-            </span>
-            <span className="text-sm text-gray-500 mt-1 break-words text-center">
-              Supports large .csv files (up to several GB) with streaming
-              technology
-            </span>
-          </label>
-
-          {isUploading && (
-            <div className="mt-4">
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
-              </div>
-              <p className="text-sm text-gray-600 mt-2 text-center break-words">
-                Loading file in chunks for optimal performance...
-              </p>
+        <FileUploadWithDragDrop
+          accept=".csv,text/csv"
+          multiple={false}
+          allowedTypes={["text/csv", "application/csv"]}
+          maxSize={FILE_SIZE_PRESETS.GIGANTIC}
+          onFileSelect={handleFileUpload}
+          onError={handleError}
+          title="Upload CSV File"
+          subtitle="Large files supported with streaming"
+          supportText="Supports .csv files (up to several GB) with streaming technology"
+        />
+        {isUploading && (
+          <div className="mt-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
             </div>
-          )}
-        </div>
+            <p className="text-sm text-gray-600 mt-2 text-center break-words">
+              Loading file in chunks for optimal performance... {uploadProgress}
+              %
+            </p>
+          </div>
+        )}
       </div>
 
       {error && <AlertMessage severity="error" message={error} />}
