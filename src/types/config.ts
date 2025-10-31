@@ -66,6 +66,9 @@ export enum ApplicationIds {
   JSON_TO_CSV = "jsontocsv",
   SIGNATURE_GENERATOR = "signaturegenerator",
   TEXT_SUMMARIZER = "textsummarizer",
+  INVOICE_GENERATOR = "invoicegenerator",
+  PARAPHRASING_TOOL = "paraphrasingtool",
+  CSV_TO_JSON = "csvtojson",
 }
 
 export interface BaseAppConfig {

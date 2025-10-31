@@ -75,6 +75,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "word.svg",
     category: AppCategory.TEXT,
   },
+  paraphrasingtool: {
+    applicationId: "paraphrasingtool",
+    displayText: "Paraphrasing Tool Free",
+    navigateUrl: "tools/paraphrasing-tool",
+    iconRelativeUrl: "word.svg",
+    category: AppCategory.TEXT,
+  },
   textcompare: {
     applicationId: "textcompare",
     displayText: "Text Compare Tool",
@@ -101,6 +108,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     displayText: "Signature Generator Free",
     navigateUrl: "tools/signature-generator",
     iconRelativeUrl: "password.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
+  invoicegenerator: {
+    applicationId: "invoicegenerator",
+    displayText: "Invoice Generator Free",
+    navigateUrl: "tools/invoice-generator",
+    iconRelativeUrl: "pdf-icon.svg",
     category: AppCategory.MISCELLANEOUS,
   },
   videoconverter: {
@@ -177,6 +191,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     applicationId: "jsontocsv",
     displayText: "JSON to CSV Converter",
     navigateUrl: "tools/json-to-csv",
+    iconRelativeUrl: "json-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  csvtojson: {
+    applicationId: "csvtojson",
+    displayText: "CSV to JSON Converter",
+    navigateUrl: "tools/csv-to-json",
     iconRelativeUrl: "json-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
