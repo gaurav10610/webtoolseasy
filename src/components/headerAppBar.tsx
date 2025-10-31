@@ -46,7 +46,7 @@ export default function HeaderAppBar({
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <Typography className="!text-sm text-gray-700 font-medium">
-                  45+ Tools Available
+                  60+ Tools Available
                 </Typography>
               </div>
             </Box>

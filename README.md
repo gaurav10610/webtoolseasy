@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **60+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **65+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -87,6 +87,11 @@ WebToolsEasy is a comprehensive collection of **60+ free, privacy-focused web to
 - [Video Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter) - Convert video to audio
 - [Video Editor Online](https://webtoolseasy.com/tools/video-editor) - Edit videos in browser
 - [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen
+- [PDF Merge Tool](https://webtoolseasy.com/tools/pdf-merge) - Combine multiple PDF files into one document
+- [PDF Split Tool](https://webtoolseasy.com/tools/pdf-split) - Extract specific pages or ranges from PDF files
+- [PDF Compress Tool](https://webtoolseasy.com/tools/pdf-compress) - Reduce PDF file size with quality control
+- [PDF to Images Converter](https://webtoolseasy.com/tools/pdf-to-images) - Convert PDF pages to PNG or JPG images
+- [Images to PDF Converter](https://webtoolseasy.com/tools/images-to-pdf) - Combine multiple images into a single PDF
 
 ### 🔧 Utility Tools
 

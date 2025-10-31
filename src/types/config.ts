@@ -58,6 +58,11 @@ export enum ApplicationIds {
   CURRENCY_CONVERTER = "currencyconverter",
   AGE_CALCULATOR = "agecalculator",
   IMAGE_RESIZER = "imageresizer",
+  PDF_MERGE = "pdfmerge",
+  PDF_SPLIT = "pdfsplit",
+  PDF_COMPRESS = "pdfcompress",
+  PDF_TO_IMAGES = "pdftoimages",
+  IMAGES_TO_PDF = "imagestopdf",
 }
 
 export interface BaseAppConfig {
