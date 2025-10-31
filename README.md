@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **65+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **68+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -51,6 +51,7 @@ WebToolsEasy is a comprehensive collection of **65+ free, privacy-focused web to
 - [SQL Formatter](https://webtoolseasy.com/tools/sql-formatter) - Format SQL queries
 - [YAML Formatter & Validator](https://webtoolseasy.com/tools/yaml-formatter) - Format and validate YAML
 - [XML JSON Converter](https://webtoolseasy.com/tools/xml-to-json) - Convert between XML and JSON
+- [JSON to CSV Converter](https://webtoolseasy.com/tools/json-to-csv) - Convert JSON data to CSV format instantly
 - [HTML to Markdown Converter](https://webtoolseasy.com/tools/html-to-markdown) - Convert HTML to Markdown
 - [Code Minifier](https://webtoolseasy.com/tools/code-minifier) - Minify JavaScript, CSS, and HTML
 - [Base64 Encoder Tool](https://webtoolseasy.com/tools/base64-encode) - Encode text and files to Base64
@@ -71,6 +72,7 @@ WebToolsEasy is a comprehensive collection of **65+ free, privacy-focused web to
 
 - [Text Case Converter](https://webtoolseasy.com/tools/case-converter) - Convert text case (upper, lower, title, camel)
 - [Word Counter Tool](https://webtoolseasy.com/tools/word-counter) - Count words, characters, and lines
+- [Text Summarizer Free](https://webtoolseasy.com/tools/text-summarizer) - AI-powered text summarization with adjustable length
 - [Text Compare Tool](https://webtoolseasy.com/tools/text-compare) - Diff and compare text side-by-side
 - [Speech to Text Online](https://webtoolseasy.com/tools/speech-to-text) - Convert speech to text using your microphone
 - [Lorem Ipsum Generator](https://webtoolseasy.com/tools/lorem-ipsum-generator) - Generate placeholder Lorem Ipsum text
@@ -97,6 +99,7 @@ WebToolsEasy is a comprehensive collection of **65+ free, privacy-focused web to
 
 - [QR Code Generator Free](https://webtoolseasy.com/tools/qr-code-generator) - Create QR codes instantly
 - [Password Generator Tool](https://webtoolseasy.com/tools/password-generator) - Generate secure passwords
+- [Signature Generator Free](https://webtoolseasy.com/tools/signature-generator) - Create digital signatures online - draw, type, or upload
 - [Color Palette Generator](https://webtoolseasy.com/tools/color-palette-generator) - Create color schemes
 - [Color Converter](https://webtoolseasy.com/tools/color-converter) - Convert between HEX, RGB, HSL, CMYK color formats
 - [Timezone Converter](https://webtoolseasy.com/tools/timezone-converter) - Convert between timezones

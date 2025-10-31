@@ -63,6 +63,9 @@ export enum ApplicationIds {
   PDF_COMPRESS = "pdfcompress",
   PDF_TO_IMAGES = "pdftoimages",
   IMAGES_TO_PDF = "imagestopdf",
+  JSON_TO_CSV = "jsontocsv",
+  SIGNATURE_GENERATOR = "signaturegenerator",
+  TEXT_SUMMARIZER = "textsummarizer",
 }
 
 export interface BaseAppConfig {
