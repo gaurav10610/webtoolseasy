@@ -86,7 +86,12 @@ const synonyms: Record<string, string[]> = {
   sometimes: ["occasionally", "periodically", "intermittently", "sporadically"],
 };
 
-export default function ParaphrasingTool({}: Readonly<ToolComponentProps>) {
+export default function ParaphrasingTool({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hostname,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  queryParams,
+}: Readonly<ToolComponentProps>) {
   const [inputText, setInputText] = useState("");
   const [paraphrasedText, setParaphrasedText] = useState("");
   const [mode, setMode] = useState<ParaphraseMode>("standard");
