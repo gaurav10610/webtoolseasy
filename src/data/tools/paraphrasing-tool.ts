@@ -1,11 +1,82 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/paraphrasing-tool";
 const pageTitle = "Free Paraphrasing Tool - Rewrite Text Online";
+const pageDescription =
+  "Paraphrase and rewrite text instantly with our free online tool. Choose from standard, formal, creative, and fluency modes. Perfect for students, writers, and content creators.";
+const imageUrl = `${
+  process.env.SCREENSHOTS_BASE_URL || "https://webtoolseasy.com/screenshots"
+}/tools/paraphrasing-tool.png`;
 const keywords =
   "paraphrasing tool, paraphrase generator, rewrite text, text rewriter, rephrase tool, sentence rephraser, article rewriter, paraphrase online";
+
+export const metadata: Metadata | undefined =
+  typeof window === "undefined"
+    ? {
+        alternates: {
+          canonical: `${
+            process.env.HOSTNAME || "https://webtoolseasy.com"
+          }${navigationUrl}`,
+        },
+        title: pageTitle,
+        description: pageDescription,
+        keywords,
+        metadataBase: process.env.HOSTNAME
+          ? new URL(process.env.HOSTNAME)
+          : undefined,
+        icons: {
+          icon: [
+            { url: "/favicon.ico" },
+            { url: "/favicon.svg", type: "image/svg+xml" },
+            { url: "/favicon_48.png", sizes: "48x48" },
+            { url: "/favion_512.png", sizes: "512x512" },
+          ],
+          shortcut: "/favicon.ico",
+          apple: "/favicon.png",
+        },
+        openGraph: {
+          title: pageTitle,
+          description: pageDescription,
+          url: `${
+            process.env.HOSTNAME || "https://webtoolseasy.com"
+          }${navigationUrl}`,
+          siteName: "WebToolsEasy",
+          images: [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: pageTitle,
+            },
+          ],
+          locale: "en_US",
+          type: "website",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: pageTitle,
+          description: pageDescription,
+          images: [imageUrl],
+          creator: "@webtoolseasy",
+        },
+        robots: {
+          index: true,
+          follow: true,
+          nocache: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            noimageindex: false,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
+      }
+    : undefined;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: "Paraphrasing Tool - Rewrite Text Instantly",

@@ -54,7 +54,12 @@ interface InvoiceData {
   paymentTerms: string;
 }
 
-export default function InvoiceGenerator({}: Readonly<ToolComponentProps>) {
+export default function InvoiceGenerator({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hostname,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  queryParams,
+}: Readonly<ToolComponentProps>) {
   const today = new Date().toISOString().split("T")[0];
   const nextMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     .toISOString()

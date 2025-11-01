@@ -1,11 +1,64 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/invoice-generator";
 const pageTitle = "Free Invoice Generator - Create Professional Invoices";
+const pageDescription =
+  "Create professional invoices in seconds with our free invoice generator. Add your company logo, customize fields, calculate taxes automatically, and export to PDF.";
+const imageUrl = `${
+  process.env.SCREENSHOTS_BASE_URL || "https://webtoolseasy.com/screenshots"
+}/tools/invoice-generator.png`;
 const keywords =
   "invoice generator, create invoice, free invoice maker, invoice template, pdf invoice, business invoice, invoice creator, generate invoice online";
+
+export const metadata: Metadata | undefined =
+  typeof window === "undefined"
+    ? {
+        alternates: {
+          canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+        },
+        title: pageTitle,
+        description: pageDescription,
+        keywords,
+        metadataBase: new URL(process.env.HOSTNAME!),
+        icons: {
+          icon: [
+            { url: "/favicon.ico" },
+            { url: "/favicon.svg", type: "image/svg+xml" },
+            { url: "/favicon_48.png", sizes: "48x48" },
+            { url: "/favion_512.png", sizes: "512x512" },
+          ],
+          shortcut: "/favicon.ico",
+          apple: "/favicon.png",
+        },
+        openGraph: {
+          title: pageTitle,
+          type: "website",
+          url: `${process.env.HOSTNAME}${navigationUrl}`,
+          images: [
+            {
+              url: imageUrl,
+              secureUrl: imageUrl,
+              alt: pageTitle,
+            },
+          ],
+          description: pageDescription,
+        },
+        twitter: {
+          card: "summary_large_image",
+          site: "@webtoolseasy",
+          title: pageTitle,
+          description: pageDescription,
+          images: [imageUrl],
+        },
+        authors: {
+          name: "Gaurav Kumar Yadav",
+        },
+        robots: "index, follow",
+      }
+    : undefined;
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: "Invoice Generator - Create Professional Invoices",
