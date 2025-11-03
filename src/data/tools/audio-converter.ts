@@ -35,6 +35,10 @@ export const metadata: Metadata = {
     description: pageDescription,
     images: [imageUrl],
   },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
 };
 
 export const componentConfig: ApplicationConfig = {
