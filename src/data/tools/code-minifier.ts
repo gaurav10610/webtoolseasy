@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
   keywords,
-  metadataBase: new URL(process.env.HOSTNAME!),
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
   openGraph: {
     title: pageTitle,
     type: "website",

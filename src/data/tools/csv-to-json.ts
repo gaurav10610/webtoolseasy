@@ -1,11 +1,64 @@
 import { ApplicationConfig, ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-to-json";
 const pageTitle = "CSV to JSON Converter - Free Online CSV JSON Tool";
+const pageDescription =
+  "Convert CSV to JSON instantly. Free online tool with customizable delimiters and headers. Supports nested objects, arrays, large files. No upload needed.";
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-to-json.png`;
+
 const keywords =
   "csv to json, csv json converter, convert csv to json, csv to json online, csv json tool, csv file converter, csv parser, json generator";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
+  title: pageTitle,
+  description: pageDescription,
+  keywords,
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: pageTitle,
+    type: "website",
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
+    images: [
+      {
+        url: imageUrl,
+        secureUrl: imageUrl,
+        alt: pageTitle,
+      },
+    ],
+    description: pageDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    title: pageTitle,
+    description: pageDescription,
+    images: [imageUrl],
+  },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
+};
 
 export const componentConfig: ApplicationConfig = {
   mainHeading: "CSV to JSON Converter - Free Online Tool",

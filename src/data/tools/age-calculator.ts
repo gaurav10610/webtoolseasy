@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
   keywords: keywords,
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
   openGraph: {
     title: pageTitle,
     description: pageDescription,
@@ -35,6 +40,10 @@ export const metadata: Metadata = {
     description: pageDescription,
     images: [imageUrl],
   },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
 };
 
 export const componentConfig: ApplicationConfig = {
