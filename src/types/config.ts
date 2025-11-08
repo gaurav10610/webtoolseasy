@@ -17,6 +17,9 @@ export enum ApplicationIds {
   IMAGE_CROPPER = "imagecropper",
   UUID_VERSION1_GENERATOR = "uuidv1generator",
   UUID_VERSION4_GENERATOR = "uuidv4generator",
+  UUID_VERSION5_GENERATOR = "uuidv5generator",
+  UUID_VERSION3_GENERATOR = "uuidv3generator",
+  UUID_VERSION7_GENERATOR = "uuidv7generator",
   GUID_GENERATOR = "guidgenerator",
   ULID_GENERATOR = "ulidgenerator",
   MARKDOWN_EDITOR = "markdowneditor",
@@ -80,6 +83,10 @@ export enum ApplicationIds {
   DISCOUNT_CALCULATOR = "discountcalculator",
   TIP_CALCULATOR = "tipcalculator",
   GPA_CALCULATOR = "gpacalculator",
+  CALORIE_CALCULATOR = "caloriecalculator",
+  SALARY_CALCULATOR = "salarycalculator",
+  TIME_DURATION_CALCULATOR = "timedurationcalculator",
+  FRACTION_CALCULATOR = "fractioncalculator",
 }
 
 export interface BaseAppConfig {
