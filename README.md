@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **92+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **89 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -91,6 +91,7 @@ WebToolsEasy is a comprehensive collection of **92+ free, privacy-focused web to
 - [Image Cropper Tool](https://webtoolseasy.com/tools/crop-image) - Crop and resize images
 - [Image Resizer](https://webtoolseasy.com/tools/image-resizer) - Resize and optimize images with quality control
 - [Image to Text OCR](https://webtoolseasy.com/tools/image-to-text) - Extract text from images
+- [Audio Converter Tool](https://webtoolseasy.com/tools/audio-converter) - Convert between MP3, WAV, OGG, M4A, AAC, FLAC formats
 - [Video Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter) - Convert video to audio
 - [Video Editor Online](https://webtoolseasy.com/tools/video-editor) - Edit videos in browser
 - [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen
