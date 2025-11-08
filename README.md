@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **71+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **89 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -65,6 +65,9 @@ WebToolsEasy is a comprehensive collection of **71+ free, privacy-focused web to
 - [Cron Generator Tool](https://webtoolseasy.com/tools/cron-expression) - Generate cron expressions visually
 - [UUID Generator Tool](https://webtoolseasy.com/tools/uuid-v4-generator) - Generate UUID v4
 - [UUID V1 Generator](https://webtoolseasy.com/tools/uuid-v1-generator) - Generate UUID v1
+- [UUID v5 Generator](https://webtoolseasy.com/tools/uuid-v5-generator) - Generate name-based UUID v5 with SHA-1
+- [UUID v3 Generator](https://webtoolseasy.com/tools/uuid-v3-generator) - Generate name-based UUID v3 with MD5
+- [UUID v7 Generator](https://webtoolseasy.com/tools/uuid-v7-generator) - Generate time-ordered UUID v7 for databases
 - [GUID Generator Tool](https://webtoolseasy.com/tools/guid-generator) - Generate GUIDs
 - [ULID Generator](https://webtoolseasy.com/tools/ulid-generator) - Generate ULIDs
 - [CSV Viewer Online](https://webtoolseasy.com/tools/csv-viewer) - View and analyze CSV files
@@ -88,6 +91,7 @@ WebToolsEasy is a comprehensive collection of **71+ free, privacy-focused web to
 - [Image Cropper Tool](https://webtoolseasy.com/tools/crop-image) - Crop and resize images
 - [Image Resizer](https://webtoolseasy.com/tools/image-resizer) - Resize and optimize images with quality control
 - [Image to Text OCR](https://webtoolseasy.com/tools/image-to-text) - Extract text from images
+- [Audio Converter Tool](https://webtoolseasy.com/tools/audio-converter) - Convert between MP3, WAV, OGG, M4A, AAC, FLAC formats
 - [Video Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter) - Convert video to audio
 - [Video Editor Online](https://webtoolseasy.com/tools/video-editor) - Edit videos in browser
 - [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen
@@ -110,13 +114,28 @@ WebToolsEasy is a comprehensive collection of **71+ free, privacy-focused web to
 - [Age Calculator](https://webtoolseasy.com/tools/age-calculator) - Calculate exact age from birthdate
 - [IP Address Lookup](https://webtoolseasy.com/tools/ip-address-lookup) - Find your IP address and location
 - [Device Hardware Tester](https://webtoolseasy.com/tools/test-hardware) - Test camera, microphone, and screen
+- [BMI Calculator](https://webtoolseasy.com/tools/bmi-calculator) - Calculate Body Mass Index with health category assessment
+- [Unit Converter](https://webtoolseasy.com/tools/unit-converter) - Convert between length, weight, temperature, area, volume, speed
+- [Random Number Generator](https://webtoolseasy.com/tools/random-number-generator) - Generate random numbers for lottery, gaming, and more
+- [Date Calculator](https://webtoolseasy.com/tools/date-calculator) - Calculate date differences, add/subtract days, count working days
+- [Discount Calculator](https://webtoolseasy.com/tools/discount-calculator) - Calculate sale prices, discounts, and savings
+- [Tip Calculator](https://webtoolseasy.com/tools/tip-calculator) - Calculate tips and split bills for dining
+- [GPA Calculator](https://webtoolseasy.com/tools/gpa-calculator) - Calculate Grade Point Average for academic planning
+- [Calorie Calculator](https://webtoolseasy.com/tools/calorie-calculator) - Calculate daily calorie needs, BMR, and TDEE
+- [Time Duration Calculator](https://webtoolseasy.com/tools/time-duration-calculator) - Calculate time between hours, add/subtract time
+- [Fraction Calculator](https://webtoolseasy.com/tools/fraction-calculator) - Add, subtract, multiply, divide fractions with simplification
 
 ### 💰 Finance Tools
 
+- [SIP Calculator](https://webtoolseasy.com/tools/sip-calculator) - Calculate mutual fund SIP returns and investment growth
+- [Retirement Calculator](https://webtoolseasy.com/tools/retirement-calculator) - Plan retirement savings and estimate corpus needed
+- [Mortgage Calculator](https://webtoolseasy.com/tools/mortgage-calculator) - Calculate home loan EMI with payment breakdown
+- [ROI Calculator](https://webtoolseasy.com/tools/roi-calculator) - Measure return on investment and profitability
 - [Interest Calculator Tool](https://webtoolseasy.com/tools/compound-interest-calculator) - Calculate compound interest
 - [Percentage Calculator](https://webtoolseasy.com/tools/percentage-calculator) - Calculate percentages, increases, decreases
 - [Loan EMI Calculator](https://webtoolseasy.com/tools/loan-emi-calculator) - Calculate monthly loan payments with amortization
 - [Currency Converter](https://webtoolseasy.com/tools/currency-converter) - Convert currencies with live exchange rates
+- [Salary Calculator](https://webtoolseasy.com/tools/salary-calculator) - Convert between hourly, monthly, and annual salary
 
 ---
 

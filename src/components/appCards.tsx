@@ -14,7 +14,12 @@ export async function AppHomeCard({
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
   return (
     <PaperWithChildren variant="elevation" elevation={3} className={className}>
-      <Link href={config.navigateUrl} className="!no-underline">
+      <Link
+        href={config.navigateUrl}
+        className="!no-underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <div className="flex flex-col gap-2 w-full items-center">
           <CustomSvgIcon size="large">
             {React.createElement(svgIcon.default)}

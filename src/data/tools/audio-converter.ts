@@ -12,6 +12,9 @@ const keywords =
   "audio converter,convert audio,MP3 converter,WAV converter,audio format converter,convert to MP3,audio file converter,online audio converter,free audio converter";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords: keywords,
@@ -31,8 +34,18 @@ export const metadata: Metadata = {
         alt: "Audio Converter Tool",
       },
     ],
-    url: navigationUrl,
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
     type: "website",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
   },
   twitter: {
     card: "summary_large_image",

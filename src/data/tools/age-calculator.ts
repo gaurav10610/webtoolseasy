@@ -12,6 +12,9 @@ const keywords =
   "age calculator,calculate age,how old am I,age from birthdate,birthday calculator,age in days,age in months,exact age calculator,date of birth calculator";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords: keywords,
@@ -31,8 +34,18 @@ export const metadata: Metadata = {
         alt: "Age Calculator Tool",
       },
     ],
-    url: navigationUrl,
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
     type: "website",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
   },
   twitter: {
     card: "summary_large_image",

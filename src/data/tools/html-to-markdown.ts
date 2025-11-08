@@ -12,6 +12,9 @@ const navigationUrl = "/tools/html-to-markdown";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/html-to-markdown.png`;
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,
@@ -71,7 +74,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "html-to-markdown",
     pageTitle,
-    mainHeading: "Free Online HTML to Markdown Converter - Fast, Accurate & Privacy-Friendly",
+    mainHeading:
+      "Free Online HTML to Markdown Converter - Fast, Accurate & Privacy-Friendly",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

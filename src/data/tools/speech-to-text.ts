@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     apple: "/favicon.png",
   },
   alternates: {
-    canonical: navigationUrl,
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
   },
   openGraph: {
     url: `${process.env.HOSTNAME}${navigationUrl}`,
@@ -83,9 +83,8 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  navigationUrl: "tools/speech-to-text",
-  pageTitle:
-    "Free Speech to Text Converter | Voice Recognition Tool - WebToolsEasy",
+  navigationUrl,
+  pageTitle,
   mainHeading:
     "Free Online Speech to Text Converter: Voice Recognition Made Easy",
   tags: [

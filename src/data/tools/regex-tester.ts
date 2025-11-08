@@ -12,6 +12,9 @@ const navigationUrl = "/tools/regex-tester";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/regex-tester.png`;
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
   title: pageTitle,
   description: pageDescription,
   keywords,
@@ -71,7 +74,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "regex-tester",
     pageTitle,
-    mainHeading: "Free Online Regex Tester - Test Regular Expressions & Validate Patterns",
+    mainHeading:
+      "Free Online Regex Tester - Test Regular Expressions & Validate Patterns",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };
