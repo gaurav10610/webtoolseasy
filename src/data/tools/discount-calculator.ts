@@ -1,30 +1,84 @@
 import { ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-export const discountCalculatorMetadata = {
-  pageTitle: "Discount Calculator - Calculate Sale Price & Savings",
+const navigationUrl = "/tools/discount-calculator";
+const pageTitle = "Discount Calculator - Calculate Sale Price & Savings";
+const pageDescription =
+  "Calculate final price after discount, amount saved, and discount percentage. Essential for shoppers comparing deals and retailers planning promotions.";
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/discount-calculator.png`;
+
+const keywords =
+  "discount calculator,sale price calculator,percentage off calculator,savings calculator,price reduction,discount percentage,final price calculator,shopping calculator,sale calculator,markdown calculator,clearance calculator";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
+  title: pageTitle,
+  description: pageDescription,
+  keywords,
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: pageTitle,
+    type: "website",
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
+    images: [
+      {
+        url: imageUrl,
+        secureUrl: imageUrl,
+        alt: pageTitle,
+      },
+    ],
+    description: pageDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    title: pageTitle,
+    description: pageDescription,
+    images: [imageUrl],
+  },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
+};
+
+export const componentConfig = {
   mainHeading: "Discount Calculator",
-  tags: [
-    "discount calculator",
-    "sale price calculator",
-    "percentage off calculator",
-    "savings calculator",
-    "price reduction",
-    "discount percentage",
-    "final price calculator",
-    "shopping calculator",
-    "sale calculator",
-    "markdown calculator",
-    "clearance calculator",
-  ],
+  navigationUrl,
+  pageTitle,
+  tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
     ApplicationIds.PERCENTAGE_CALCULATOR,
     ApplicationIds.CURRENCY_CONVERTER,
     ApplicationIds.TIP_CALCULATOR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "discount-calculator",
+    pageTitle,
+    mainHeading: "Discount Calculator",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
-export const discountCalculatorDescriptionData: DescriptionBlock[] = [
+export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is a Discount Calculator?",
     blockData: [

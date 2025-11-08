@@ -1,29 +1,84 @@
 import { ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-export const tipCalculatorMetadata = {
-  pageTitle: "Tip Calculator - Calculate Tips & Split Bills",
-  mainHeading: "Tip Calculator",
-  tags: [
-    "tip calculator",
-    "gratuity calculator",
-    "bill split calculator",
-    "restaurant tip",
-    "service tip calculator",
-    "tip percentage",
-    "split bill",
-    "dining calculator",
-    "tip per person",
-    "group dining calculator",
-  ],
-  relatedTools: [
-    ApplicationIds.PERCENTAGE_CALCULATOR,
-    ApplicationIds.CURRENCY_CONVERTER,
-    ApplicationIds.DISCOUNT_CALCULATOR,
-  ],
+const navigationUrl = "/tools/tip-calculator";
+const pageTitle = "Tip Calculator - Calculate Tips and Split Bills";
+const pageDescription =
+  "Calculate tips and split bills easily. Determine tip amounts by percentage, divide costs among people, and see total amounts per person instantly.";
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/tip-calculator.png`;
+
+const keywords =
+  "tip calculator,gratuity calculator,bill splitter,split bill calculator,restaurant tip calculator,tip percentage calculator,dining calculator,service charge calculator,calculate tip,tip calculator with split,group dining calculator";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
+  title: pageTitle,
+  description: pageDescription,
+  keywords,
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: pageTitle,
+    type: "website",
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
+    images: [
+      {
+        url: imageUrl,
+        secureUrl: imageUrl,
+        alt: pageTitle,
+      },
+    ],
+    description: pageDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    title: pageTitle,
+    description: pageDescription,
+    images: [imageUrl],
+  },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
 };
 
-export const tipCalculatorDescriptionData: DescriptionBlock[] = [
+export const componentConfig = {
+  mainHeading: "Tip Calculator",
+  navigationUrl,
+  pageTitle,
+  tags: keywords.split(",").map((word) => word.trim()),
+  relatedTools: [
+    ApplicationIds.PERCENTAGE_CALCULATOR,
+    ApplicationIds.DISCOUNT_CALCULATOR,
+    ApplicationIds.DATE_CALCULATOR,
+  ],
+  structuredData: createToolStructuredData({
+    pageUrl: "tip-calculator",
+    pageTitle,
+    mainHeading: "Tip Calculator",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
+};
+
+export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is a Tip Calculator?",
     blockData: [

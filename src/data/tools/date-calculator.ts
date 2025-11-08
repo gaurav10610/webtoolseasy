@@ -1,32 +1,85 @@
 import { ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-export const dateCalculatorMetadata = {
-  pageTitle: "Date Calculator - Calculate Date Differences",
+const navigationUrl = "/tools/date-calculator";
+const pageTitle = "Date Calculator - Calculate Date Differences";
+const pageDescription =
+  "Calculate date differences, add or subtract days, and find dates for past or future events. Essential for project planning and deadline tracking.";
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/date-calculator.png`;
+
+const keywords =
+  "date calculator,date difference calculator,days between dates,add days to date,subtract days from date,working days calculator,business days calculator,age in days calculator,date arithmetic,day counter,date tools,calendar calculator";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
+  title: pageTitle,
+  description: pageDescription,
+  keywords,
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: pageTitle,
+    type: "website",
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
+    images: [
+      {
+        url: imageUrl,
+        secureUrl: imageUrl,
+        alt: pageTitle,
+      },
+    ],
+    description: pageDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    title: pageTitle,
+    description: pageDescription,
+    images: [imageUrl],
+  },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
+};
+
+export const componentConfig = {
   mainHeading: "Date Calculator",
-  tags: [
-    "date calculator",
-    "date difference calculator",
-    "days between dates",
-    "add days to date",
-    "subtract days from date",
-    "working days calculator",
-    "business days calculator",
-    "age in days calculator",
-    "date arithmetic",
-    "day counter",
-    "date tools",
-    "calendar calculator",
-  ],
+  navigationUrl,
+  pageTitle,
+  tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
     ApplicationIds.AGE_CALCULATOR,
     ApplicationIds.UNIX_TIMESTAMP_CONVERTER,
     ApplicationIds.TIMEZONE_CONVERTER,
     ApplicationIds.GPA_CALCULATOR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "date-calculator",
+    pageTitle,
+    mainHeading: "Date Calculator",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
-export const dateCalculatorDescriptionData: DescriptionBlock[] = [
+export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is a Date Calculator?",
     blockData: [

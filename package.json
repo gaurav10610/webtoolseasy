@@ -7,6 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:e2e": "tsx scripts/test-with-server.ts",
+    "test:e2e:headed": "HEADLESS=false tsx scripts/test-with-server.ts",
+    "test:e2e:debug": "HEADLESS=false npx playwright test --debug",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:report": "npx playwright show-report",
     "generate:screenshots": "tsx scripts/generate-screenshots.ts",
     "index:urls": "tsx scripts/index-urls.ts",
     "index:urls:all": "INDEX_ALL_URLS=true tsx scripts/index-urls.ts",
@@ -83,6 +91,7 @@
     "xml-formatter": "^3.6.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@svgr/webpack": "^8.1.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20",
@@ -91,6 +100,7 @@
     "@types/react-dom": "19.0.3",
     "@types/request": "^2.48.12",
     "@types/sql.js": "^1.4.9",
+    "@vitest/ui": "^4.0.8",
     "eslint": "^8",
     "eslint-config-next": "15.1.6",
     "googleapis": "^144.0.0",
@@ -98,7 +108,8 @@
     "puppeteer": "^24.1.1",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.19.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.8"
   },
   "engines": {
     "node": "20.x"

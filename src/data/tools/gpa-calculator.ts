@@ -1,30 +1,84 @@
 import { ApplicationIds } from "@/types/config";
 import { DescriptionBlock } from "@/types/description";
+import { Metadata } from "next";
+import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-export const gpaCalculatorMetadata = {
-  pageTitle: "GPA Calculator - Calculate Grade Point Average",
+const navigationUrl = "/tools/gpa-calculator";
+const pageTitle = "GPA Calculator - Calculate Grade Point Average";
+const pageDescription =
+  "Calculate your GPA based on course grades and credit hours. Track semester and cumulative GPA for academic planning and scholarship eligibility.";
+const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/gpa-calculator.png`;
+
+const keywords =
+  "gpa calculator,grade point average calculator,cumulative gpa calculator,semester gpa,college gpa calculator,high school gpa,weighted gpa calculator,unweighted gpa,academic calculator,grade calculator,student gpa tool";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
+  },
+  title: pageTitle,
+  description: pageDescription,
+  keywords,
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com"
+  ),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon_48.png", sizes: "48x48" },
+      { url: "/favion_512.png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: pageTitle,
+    type: "website",
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
+    images: [
+      {
+        url: imageUrl,
+        secureUrl: imageUrl,
+        alt: pageTitle,
+      },
+    ],
+    description: pageDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    title: pageTitle,
+    description: pageDescription,
+    images: [imageUrl],
+  },
+  authors: {
+    name: "Gaurav Kumar Yadav",
+  },
+  robots: "index, follow",
+};
+
+export const componentConfig = {
   mainHeading: "GPA Calculator",
-  tags: [
-    "gpa calculator",
-    "grade point average calculator",
-    "cumulative gpa calculator",
-    "semester gpa",
-    "college gpa calculator",
-    "high school gpa",
-    "weighted gpa calculator",
-    "unweighted gpa",
-    "academic calculator",
-    "grade calculator",
-    "student gpa tool",
-  ],
+  navigationUrl,
+  pageTitle,
+  tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
     ApplicationIds.PERCENTAGE_CALCULATOR,
     ApplicationIds.AGE_CALCULATOR,
     ApplicationIds.DATE_CALCULATOR,
   ],
+  structuredData: createToolStructuredData({
+    pageUrl: "gpa-calculator",
+    pageTitle,
+    mainHeading: "GPA Calculator",
+    keywords: keywords.split(",").map((word) => word.trim()),
+  }),
 };
 
-export const gpaCalculatorDescriptionData: DescriptionBlock[] = [
+export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is a GPA Calculator?",
     blockData: [
