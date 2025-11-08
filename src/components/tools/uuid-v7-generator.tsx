@@ -99,261 +99,140 @@ export default function UuidV7Generator({
         }\nTimestamp: ${extractTimestamp(toolState.code)}`}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50">
-        <div className="max-w-7xl mx-auto p-6">
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <Typography
-              variant="h3"
-              component="h1"
-              gutterBottom
-              className="font-bold text-teal-900"
-            >
-              UUID v7 Generator
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left Panel - Single UUID */}
+        <div className="space-y-4">
+          <div>
+            <Typography variant="h6" className="mb-3">
+              🆔 Current UUID v7
             </Typography>
-            <Typography variant="h6" className="text-teal-700">
-              Generate time-ordered UUIDs for databases and distributed systems
-            </Typography>
-          </div>
+            <TextField
+              fullWidth
+              value={toolState.code}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+              className="font-mono"
+            />
 
-          {/* Main Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* Left Column - Generator */}
-            <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-teal-200">
+            {/* Timestamp Display */}
+            <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
               <Typography
-                variant="h5"
-                className="mb-4 text-teal-800 font-semibold"
+                variant="body2"
+                className="text-blue-800 font-semibold mb-1"
               >
-                Current UUID v7
+                Embedded Timestamp:
               </Typography>
-
-              <TextField
-                fullWidth
-                value={toolState.code}
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                    style: {
-                      fontFamily: "monospace",
-                      fontSize: "1.1rem",
-                      color: "#0f766e",
-                    },
-                  },
-                }}
-                className="mb-4 bg-teal-50"
-              />
-
-              {/* Timestamp Display */}
-              <div className="mb-4 p-4 bg-cyan-50 rounded border border-cyan-200">
-                <Typography
-                  variant="body2"
-                  className="text-cyan-800 font-semibold mb-1"
-                >
-                  Embedded Timestamp:
-                </Typography>
-                <Typography variant="body1" className="font-mono text-cyan-900">
-                  {extractTimestamp(toolState.code)}
-                </Typography>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="contained"
-                  onClick={generateNewUuid}
-                  startIcon={<RefreshIcon />}
-                  className="bg-teal-600 hover:bg-teal-700"
-                >
-                  Generate New
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    toolState.actions.copyText(
-                      toolState.code,
-                      "UUID copied to clipboard!"
-                    )
-                  }
-                  startIcon={<ContentCopyIcon />}
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50"
-                >
-                  Copy UUID
-                </Button>
-              </div>
-
-              <Divider className="my-6 bg-teal-200" />
-
-              {/* Info Panel */}
-              <div className="bg-gradient-to-r from-cyan-50 to-teal-50 p-4 rounded border border-teal-200">
-                <Typography
-                  variant="subtitle2"
-                  className="font-semibold text-teal-800 mb-2"
-                >
-                  ✨ UUID v7 Features
-                </Typography>
-                <Typography variant="body2" className="text-teal-700 mb-2">
-                  • <strong>Time-Ordered:</strong> Sorts chronologically by
-                  creation time
-                </Typography>
-                <Typography variant="body2" className="text-teal-700 mb-2">
-                  • <strong>Database-Friendly:</strong> Reduces index
-                  fragmentation
-                </Typography>
-                <Typography variant="body2" className="text-teal-700 mb-2">
-                  • <strong>Millisecond Precision:</strong> Embedded timestamp
-                  for ordering
-                </Typography>
-                <Typography variant="body2" className="text-teal-700">
-                  • <strong>RFC 9562 Compliant:</strong> Latest UUID standard
-                  (2024)
-                </Typography>
-              </div>
+              <Typography variant="body2" className="font-mono text-blue-900">
+                {extractTimestamp(toolState.code)}
+              </Typography>
             </div>
 
-            {/* Right Column - Bulk Generation */}
-            <div className="bg-white rounded-lg shadow-lg p-6 border-2 border-teal-200">
-              <Typography
-                variant="h5"
-                className="mb-4 text-teal-800 font-semibold"
-              >
-                Bulk Generation
-              </Typography>
+            <Button
+              variant="contained"
+              onClick={generateNewUuid}
+              startIcon={<RefreshIcon />}
+              className="mt-3"
+              fullWidth
+            >
+              Generate New UUID
+            </Button>
+          </div>
 
+          <Divider />
+
+          {/* Bulk Generation */}
+          <div>
+            <Typography variant="h6" className="mb-3">
+              📝 Bulk Generation
+            </Typography>
+            <div className="flex gap-2 mb-3">
               <TextField
-                fullWidth
                 type="number"
-                label="Number of UUIDs"
+                label="Count"
                 value={bulkCount}
                 onChange={(e) =>
                   setBulkCount(
-                    Math.min(Math.max(1, parseInt(e.target.value) || 1), 1000)
+                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1))
                   )
                 }
-                slotProps={{
-                  htmlInput: {
-                    min: 1,
-                    max: 1000,
-                  },
-                }}
-                className="mb-4"
-                helperText="Generate 1-1000 UUIDs at once"
+                size="small"
+                inputProps={{ min: 1, max: 1000 }}
               />
+              <Button
+                variant="outlined"
+                onClick={generateBulkUuids}
+                className="whitespace-nowrap"
+              >
+                Generate {bulkCount} UUIDs
+              </Button>
+            </div>
+            <Button
+              variant="outlined"
+              onClick={downloadUuids}
+              fullWidth
+              disabled={uuidList.length === 0}
+            >
+              Download UUIDs
+            </Button>
+          </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                <Button
-                  variant="contained"
-                  onClick={generateBulkUuids}
-                  className="bg-teal-600 hover:bg-teal-700"
-                >
-                  Generate Bulk
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={copyCurrentUuid}
-                  startIcon={<ContentCopyIcon />}
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50"
-                >
-                  Copy All
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={downloadUuids}
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50"
-                >
-                  Download
-                </Button>
+          {/* UUID Info */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded">
+            <Typography variant="subtitle2" className="mb-2">
+              About UUID v7:
+            </Typography>
+            <div className="text-sm space-y-1 text-gray-700">
+              <div>• Time-ordered with 48-bit timestamp</div>
+              <div>• Format: 8-4-4-4-12 hexadecimal digits</div>
+              <div>• Perfect for database primary keys</div>
+              <div>• Reduces index fragmentation</div>
+              <div>• RFC 9562 (2024) standard</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Panel - UUID List */}
+        <div className="space-y-4">
+          <Typography variant="h6">
+            📋 Generated UUIDs ({uuidList.length})
+          </Typography>
+
+          <Button
+            variant="outlined"
+            onClick={copyCurrentUuid}
+            startIcon={<ContentCopyIcon />}
+            fullWidth
+          >
+            Copy All UUIDs
+          </Button>
+
+          <div className="border border-gray-300 rounded max-h-96 overflow-auto">
+            {uuidList.length === 0 ? (
+              <div className="p-4 text-center text-gray-500">
+                No UUIDs generated yet
               </div>
-
-              <Divider className="mb-4 bg-teal-200" />
-
-              {/* UUID List */}
-              <div className="bg-teal-50 rounded p-4 max-h-96 overflow-y-auto border border-teal-200">
-                <Typography
-                  variant="subtitle2"
-                  className="font-semibold text-teal-800 mb-2"
-                >
-                  Generated UUIDs ({uuidList.length})
-                </Typography>
+            ) : (
+              <div className="divide-y">
                 {uuidList.map((uuid, index) => (
-                  <div key={index} className="mb-2">
-                    <Typography
-                      variant="body2"
-                      className="font-mono text-teal-900 break-all"
-                    >
-                      {uuid}
-                    </Typography>
-                    <Typography variant="caption" className="text-teal-600">
+                  <div key={index} className="p-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-sm text-blue-600">
+                        {uuid}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        #{index + 1}
+                      </span>
+                    </div>
+                    <Typography variant="caption" className="text-gray-500">
                       {extractTimestamp(uuid)}
                     </Typography>
                   </div>
                 ))}
               </div>
-            </div>
+            )}
           </div>
-
-          {/* Performance Benefits Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border-2 border-teal-200">
-            <Typography
-              variant="h5"
-              className="mb-4 text-teal-800 font-semibold"
-            >
-              🚀 Database Performance Benefits
-            </Typography>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-cyan-50 p-4 rounded border border-cyan-200">
-                <Typography
-                  variant="subtitle1"
-                  className="font-semibold text-cyan-900 mb-2"
-                >
-                  Sequential Inserts
-                </Typography>
-                <Typography variant="body2" className="text-cyan-800">
-                  UUID v7&apos;s time-ordered nature means new records append
-                  near the end of B-tree indexes, reducing page splits and
-                  improving write performance by up to 50%.
-                </Typography>
-              </div>
-              <div className="bg-teal-50 p-4 rounded border border-teal-200">
-                <Typography
-                  variant="subtitle1"
-                  className="font-semibold text-teal-900 mb-2"
-                >
-                  Better Cache Locality
-                </Typography>
-                <Typography variant="body2" className="text-teal-800">
-                  Sequential UUIDs improve cache hit rates during reads, as
-                  related records created around the same time are stored
-                  physically close together.
-                </Typography>
-              </div>
-              <div className="bg-cyan-50 p-4 rounded border border-cyan-200">
-                <Typography
-                  variant="subtitle1"
-                  className="font-semibold text-cyan-900 mb-2"
-                >
-                  Natural Ordering
-                </Typography>
-                <Typography variant="body2" className="text-cyan-800">
-                  No need for separate &apos;created_at&apos; columns - the UUID
-                  itself contains timestamp information, enabling efficient
-                  range queries on the primary key.
-                </Typography>
-              </div>
-              <div className="bg-teal-50 p-4 rounded border border-teal-200">
-                <Typography
-                  variant="subtitle1"
-                  className="font-semibold text-teal-900 mb-2"
-                >
-                  Index Efficiency
-                </Typography>
-                <Typography variant="body2" className="text-teal-800">
-                  Reduces index fragmentation compared to random v4 UUIDs,
-                  leading to smaller index sizes and faster query execution.
-                </Typography>
-              </div>
-            </div>
-          </div>
-
-          {/* SEO Content */}
         </div>
       </div>
     </ToolLayout>
