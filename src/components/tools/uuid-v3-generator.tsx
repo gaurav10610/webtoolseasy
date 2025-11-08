@@ -215,6 +215,7 @@ export default function UuidV3Generator({
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter name for UUID generation"
               helperText="Same namespace + name always produces the same UUID"
+              className="mb-0"
             />
           </div>
 
@@ -264,6 +265,7 @@ export default function UuidV3Generator({
                 }
                 size="small"
                 inputProps={{ min: 1, max: 1000 }}
+                className="flex-1"
               />
               <TextField
                 label="Name Prefix"
@@ -272,12 +274,13 @@ export default function UuidV3Generator({
                 size="small"
                 placeholder="item-"
                 helperText="Will generate: prefix1, prefix2, ..."
+                className="flex-1"
               />
             </div>
             <Button
               variant="outlined"
               onClick={generateBulkUuids}
-              className="whitespace-nowrap"
+              className="whitespace-nowrap mt-2"
               fullWidth
               disabled={
                 !bulkNamePrefix || (namespace === "CUSTOM" && !customNamespace)
@@ -303,11 +306,11 @@ export default function UuidV3Generator({
 
         {/* Right Panel - UUID List */}
         <div className="space-y-4">
-          <Typography variant="h6">
+          <Typography variant="h6" className="mb-3">
             📋 Generated UUIDs ({uuidList.length})
           </Typography>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-4">
             <Button
               variant="outlined"
               onClick={copyCurrentUuid}
