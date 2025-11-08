@@ -1,7 +1,10 @@
 #!/usr/bin/env tsx
 
-import { spawn, ChildProcess } from "child_process";
+import { spawn, ChildProcess, exec } from "child_process";
 import chalk from "chalk";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
 
 // Get parallelism from environment variable, default to 4
 const PARALLELISM = process.env.PARALLELISM || "4";
@@ -12,6 +15,25 @@ function runCombinedServer(): ChildProcess {
     env: process.env,
     stdio: ["pipe", "pipe", "pipe"],
   });
+}
+
+// Function to kill process tree
+async function killProcessTree(pid: number): Promise<void> {
+  try {
+    // Try using pkill to kill all child processes
+    await execAsync(`pkill -P ${pid}`);
+    console.log(chalk.yellow(`🔪 Killed child processes of PID ${pid}`));
+  } catch {
+    // pkill might fail if no children exist, that's okay
+  }
+
+  // Then kill the main process
+  try {
+    process.kill(pid, "SIGTERM");
+    console.log(chalk.yellow(`📡 Sent SIGTERM to PID ${pid}`));
+  } catch {
+    // Process might already be dead
+  }
 }
 
 function waitForServerReady(
@@ -94,18 +116,29 @@ async function generatePageScreenshots(): Promise<void> {
   } finally {
     console.log(chalk.yellow("🧹 Stopping server..."));
 
-    // Try graceful shutdown first
-    serverProcess.kill("SIGTERM");
+    // Kill the entire process tree
+    if (serverProcess.pid) {
+      await killProcessTree(serverProcess.pid);
 
-    // Force kill after 3 seconds if still running
-    setTimeout(() => {
-      if (!serverProcess.killed) {
-        console.log(chalk.yellow("🔨 Force killing server..."));
-        serverProcess.kill("SIGKILL");
+      // Wait for graceful shutdown
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Force kill if still running
+      try {
+        if (!serverProcess.killed) {
+          console.log(chalk.yellow("🔨 Force killing server..."));
+          process.kill(serverProcess.pid, "SIGKILL");
+
+          // Also force kill any remaining children
+          await execAsync(`pkill -9 -P ${serverProcess.pid}`).catch(() => {});
+        }
+      } catch {
+        // Process might already be dead
+        console.log(chalk.gray("Process already terminated"));
       }
-    }, 3000);
+    }
 
-    // Wait a bit for cleanup
+    // Wait a bit for final cleanup
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     console.log(chalk.cyan(`✨ Process completed with exit code: ${exitCode}`));

@@ -40,6 +40,8 @@ Orchestrates the full screenshot generation process by:
 **Features:**
 
 - Passes `PARALLELISM` environment variable to screenshot script
+- Proper process tree cleanup (kills npm and all child processes)
+- Uses `pkill` to terminate the entire Next.js server process tree
 - Graceful server shutdown with SIGTERM followed by SIGKILL fallback
 - Proper process exit codes
 - Signal handling (SIGINT, SIGTERM)
@@ -122,5 +124,35 @@ With 89 total screenshots (tools + blog + common pages):
 - **Sequential (old):** ~10-15 minutes
 - **Parallel (4 workers):** ~3-4 minutes
 - **Parallel (8 workers):** ~2-3 minutes
+
+## Troubleshooting
+
+### Server Not Stopping
+
+If the dev server doesn't stop after screenshot generation:
+
+1. The script now uses `pkill -P <pid>` to kill all child processes
+2. If port 3000 is still in use, manually kill it:
+   ```bash
+   npx kill-port 3000
+   ```
+3. Check for orphaned processes:
+   ```bash
+   ps aux | grep "next start"
+   lsof -i:3000
+   ```
+
+### Screenshots Failing
+
+- Check if the server is running: `curl http://localhost:3000`
+- Ensure the build completed successfully
+- Verify port 3000 is not already in use before running
+- Check system resources (memory/CPU) if using high parallelism
+
+### Performance Issues
+
+- **High memory usage:** Reduce parallelism (e.g., `PARALLELISM=2`)
+- **Slow generation:** Increase parallelism (e.g., `PARALLELISM=8`)
+- **System freezing:** Use default parallelism (4) and close other applications
 
 _Actual times depend on page complexity and system resources._
