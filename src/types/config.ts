@@ -69,6 +69,17 @@ export enum ApplicationIds {
   INVOICE_GENERATOR = "invoicegenerator",
   PARAPHRASING_TOOL = "paraphrasingtool",
   CSV_TO_JSON = "csvtojson",
+  SIP_CALCULATOR = "sipcalculator",
+  RETIREMENT_CALCULATOR = "retirementcalculator",
+  MORTGAGE_CALCULATOR = "mortgagecalculator",
+  ROI_CALCULATOR = "roicalculator",
+  BMI_CALCULATOR = "bmicalculator",
+  UNIT_CONVERTER = "unitconverter",
+  RANDOM_NUMBER_GENERATOR = "randomnumbergenerator",
+  DATE_CALCULATOR = "datecalculator",
+  DISCOUNT_CALCULATOR = "discountcalculator",
+  TIP_CALCULATOR = "tipcalculator",
+  GPA_CALCULATOR = "gpacalculator",
 }
 
 export interface BaseAppConfig {

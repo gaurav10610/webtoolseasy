@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CustomSvgIcon } from "./lib/icons";
-import { Typography, Chip, Box } from "@mui/material";
+import { Typography, Chip, Box, IconButton } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import AppMenu from "./appMenu";
 import ApplicationIcon from "@/data/icons/app-icon.svg";
 
@@ -31,7 +32,7 @@ export default function HeaderAppBar({
               </CustomSvgIcon>
             </div>
             <div className="flex flex-col">
-              <Typography className="!text-2xl !font-bold text-gray-900 tracking-tight">
+              <Typography className="hidden sm:block !text-2xl !font-bold text-gray-900 tracking-tight">
                 WebToolsEasy
               </Typography>
               <Typography className="!text-xs text-gray-600 hidden sm:block">
@@ -63,6 +64,18 @@ export default function HeaderAppBar({
               />
             </div>
             <AppMenu />
+            {/* GitHub Link */}
+            <IconButton
+              component="a"
+              href="https://github.com/gaurav10610/webtoolseasy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View source on GitHub"
+              className="!text-gray-700 hover:!text-gray-900 hover:!bg-gray-100 transition-colors duration-200"
+              size="large"
+            >
+              <GitHubIcon />
+            </IconButton>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **71+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **85+ free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -110,9 +110,20 @@ WebToolsEasy is a comprehensive collection of **71+ free, privacy-focused web to
 - [Age Calculator](https://webtoolseasy.com/tools/age-calculator) - Calculate exact age from birthdate
 - [IP Address Lookup](https://webtoolseasy.com/tools/ip-address-lookup) - Find your IP address and location
 - [Device Hardware Tester](https://webtoolseasy.com/tools/test-hardware) - Test camera, microphone, and screen
+- [BMI Calculator](https://webtoolseasy.com/tools/bmi-calculator) - Calculate Body Mass Index with health category assessment
+- [Unit Converter](https://webtoolseasy.com/tools/unit-converter) - Convert between length, weight, temperature, area, volume, speed
+- [Random Number Generator](https://webtoolseasy.com/tools/random-number-generator) - Generate random numbers for lottery, gaming, and more
+- [Date Calculator](https://webtoolseasy.com/tools/date-calculator) - Calculate date differences, add/subtract days, count working days
+- [Discount Calculator](https://webtoolseasy.com/tools/discount-calculator) - Calculate sale prices, discounts, and savings
+- [Tip Calculator](https://webtoolseasy.com/tools/tip-calculator) - Calculate tips and split bills for dining
+- [GPA Calculator](https://webtoolseasy.com/tools/gpa-calculator) - Calculate Grade Point Average for academic planning
 
 ### 💰 Finance Tools
 
+- [SIP Calculator](https://webtoolseasy.com/tools/sip-calculator) - Calculate mutual fund SIP returns and investment growth
+- [Retirement Calculator](https://webtoolseasy.com/tools/retirement-calculator) - Plan retirement savings and estimate corpus needed
+- [Mortgage Calculator](https://webtoolseasy.com/tools/mortgage-calculator) - Calculate home loan EMI with payment breakdown
+- [ROI Calculator](https://webtoolseasy.com/tools/roi-calculator) - Measure return on investment and profitability
 - [Interest Calculator Tool](https://webtoolseasy.com/tools/compound-interest-calculator) - Calculate compound interest
 - [Percentage Calculator](https://webtoolseasy.com/tools/percentage-calculator) - Calculate percentages, increases, decreases
 - [Loan EMI Calculator](https://webtoolseasy.com/tools/loan-emi-calculator) - Calculate monthly loan payments with amortization
