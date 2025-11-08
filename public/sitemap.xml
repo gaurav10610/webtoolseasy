@@ -7,445 +7,553 @@
 
   <url>
     <loc>https://webtoolseasy.com</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>1.0000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/blog</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.8000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/age-calculator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/audio-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/base64-decode</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/base64-encode</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/bmi-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/calorie-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/case-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/code-minifier</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/color-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/color-palette-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/compound-interest-calculator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/cron-expression</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/crop-image</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/css-formatter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/csv-to-json</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/csv-viewer</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/currency-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/date-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/discount-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/fraction-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/gpa-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/guid-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/hash-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/html-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/html-entities-encoder-decoder</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/html-formatter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/html-to-markdown</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/image-compress</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/image-format-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/image-resizer</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/image-to-text</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/images-to-pdf</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/invoice-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/ip-address-lookup</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/javascript-compiler</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/javascript-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/javascript-formatter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/json-formatter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/json-to-csv</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/json-viewer</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/jwt-decoder</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/loan-emi-calculator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/lorem-ipsum-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/markdown-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/markdown-to-html-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/mortgage-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/paraphrasing-tool</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/password-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/pdf-compress</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/pdf-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/pdf-merge</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/pdf-split</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/pdf-to-images</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/percentage-calculator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/python-compiler</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/qr-code-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/random-number-generator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/regex-tester</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/retirement-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/roi-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/salary-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/screen-recorder</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/signature-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/sip-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/speech-to-text</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/sql-formatter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/sql-practice-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/string-escape</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/test-hardware</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/text-compare</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/text-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/text-summarizer</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/time-duration-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/timezone-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/tip-calculator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/ulid-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/unit-converter</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/unix-timestamp-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/url-encoder-decoder</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/uuid-v1-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/uuid-v3-generator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/uuid-v4-generator</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/uuid-v5-generator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/uuid-v7-generator</loc>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/video-editor</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/video-to-audio-converter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/word-counter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/xml-to-json</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/tools/yaml-formatter</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/blog/decoding-jwt-comprehensive-guide</loc>
-    <lastmod>2025-11-01T16:19:18+00:00</lastmod>
+    <lastmod>2025-11-08T16:43:51+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 </urlset>
