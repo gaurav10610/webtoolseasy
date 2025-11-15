@@ -211,6 +211,7 @@ export default function WebcamRecorder({
         videoRef.current.srcObject = stream;
       }
 
+      setRecordingState(RecordingState.PREPARING);
       toolState.actions.showMessage("Camera preview started");
     } catch (err) {
       const errorMessage =
@@ -224,6 +225,13 @@ export default function WebcamRecorder({
     getVideoConstraints,
     toolState.actions,
   ]);
+
+  // Stop preview
+  const stopPreview = useCallback(() => {
+    cleanupStream();
+    setRecordingState(RecordingState.IDLE);
+    toolState.actions.showMessage("Preview stopped");
+  }, [cleanupStream, toolState.actions]);
 
   // Start recording
   const startRecording = useCallback(async () => {
@@ -400,6 +408,25 @@ export default function WebcamRecorder({
       ];
     }
 
+    if (recordingState === RecordingState.PREPARING) {
+      return [
+        {
+          type: "custom" as const,
+          text: "Start Recording",
+          onClick: startRecording,
+          icon: <PlayArrowIcon />,
+        },
+        {
+          type: "custom" as const,
+          text: "Stop Preview",
+          onClick: stopPreview,
+          icon: <StopIcon />,
+          color: "error" as const,
+        },
+        ...commonButtons,
+      ];
+    }
+
     if (recordingState === RecordingState.RECORDING) {
       return [
         {
@@ -413,6 +440,7 @@ export default function WebcamRecorder({
           text: "Stop",
           onClick: stopRecording,
           icon: <StopIcon />,
+          color: "error" as const,
         },
         ...commonButtons,
       ];
@@ -431,6 +459,7 @@ export default function WebcamRecorder({
           text: "Stop",
           onClick: stopRecording,
           icon: <StopIcon />,
+          color: "error" as const,
         },
         ...commonButtons,
       ];
@@ -459,6 +488,7 @@ export default function WebcamRecorder({
     recordingState,
     isSupported,
     startPreview,
+    stopPreview,
     startRecording,
     pauseRecording,
     resumeRecording,

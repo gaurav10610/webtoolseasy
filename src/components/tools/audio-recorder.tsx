@@ -417,6 +417,7 @@ export default function AudioRecorder({
           text: "Stop",
           onClick: stopRecording,
           icon: <StopIcon />,
+          color: "error" as const,
         },
         ...commonButtons,
       ];
@@ -435,6 +436,7 @@ export default function AudioRecorder({
           text: "Stop",
           onClick: stopRecording,
           icon: <StopIcon />,
+          color: "error" as const,
         },
         ...commonButtons,
       ];

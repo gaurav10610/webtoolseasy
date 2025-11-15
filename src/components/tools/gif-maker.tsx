@@ -319,24 +319,6 @@ export default function GIFMaker({
         {/* Progress Display */}
         {progress && <Alert severity="info">{progress}</Alert>}
 
-        {/* Video Preview */}
-        {videoUrl && (
-          <Card>
-            <CardContent>
-              <Typography variant="h6" className="mb-4">
-                Video Preview
-              </Typography>
-              <video
-                ref={videoRef}
-                src={videoUrl}
-                controls
-                onLoadedMetadata={handleVideoLoaded}
-                className="w-full rounded-lg"
-              />
-            </CardContent>
-          </Card>
-        )}
-
         {/* GIF Settings */}
         {videoFile && processingState !== ProcessingState.PROCESSING && (
           <Card>
@@ -426,6 +408,24 @@ export default function GIFMaker({
                   </Typography>
                 )}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Video Preview */}
+        {videoUrl && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" className="mb-4">
+                Video Preview
+              </Typography>
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                controls
+                onLoadedMetadata={handleVideoLoaded}
+                className="w-full rounded-lg"
+              />
             </CardContent>
           </Card>
         )}
