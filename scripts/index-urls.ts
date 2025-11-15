@@ -61,7 +61,11 @@ const clearNewToolsUrls = (): void => {
   try {
     const newToolsPath = path.join(__dirname, "new-tools-urls.json");
     const emptyConfig: NewToolsConfig = { urls: [] };
-    fs.writeFileSync(newToolsPath, JSON.stringify(emptyConfig, null, 2), "utf8");
+    fs.writeFileSync(
+      newToolsPath,
+      JSON.stringify(emptyConfig, null, 2),
+      "utf8"
+    );
     console.log("Cleared new tools URLs from config file");
   } catch (e) {
     console.error("Error clearing new tools URLs:", e);
@@ -130,7 +134,7 @@ export const indexUrlsInGoogle = () => {
         });
       });
     });
-    
+
     // Clear URLs after Google indexing (if not indexing all URLs)
     if (urlsToIndex.length > 0 && process.env.INDEX_ALL_URLS !== "true") {
       clearNewToolsUrls();
@@ -180,7 +184,7 @@ const indexUrlsInIndexNow = async () => {
       throw new Error(`Error: ${response.statusText}`);
     }
     console.log("URLs submitted successfully");
-    
+
     // Clear URLs after successful indexing
     if (urlsToIndex.length > 0 && process.env.INDEX_ALL_URLS !== "true") {
       clearNewToolsUrls();

@@ -143,10 +143,11 @@ export default function JsonToYaml({
 
   // Editor configurations
   const inputEditorProps = useEditorConfig({
-    language: toolState.code.trim().startsWith("{") ||
-             toolState.code.trim().startsWith("[")
-      ? "json"
-      : "yaml",
+    language:
+      toolState.code.trim().startsWith("{") ||
+      toolState.code.trim().startsWith("[")
+        ? "json"
+        : "yaml",
     value: toolState.code,
     onChange: toolState.setCode,
   });

@@ -73,7 +73,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "text-to-speech",
     pageTitle,
-    mainHeading: "Text to Speech Converter: Convert Text to Natural Voice Online",
+    mainHeading:
+      "Text to Speech Converter: Convert Text to Natural Voice Online",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

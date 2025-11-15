@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
 import {
   Typography,
   Button,
@@ -57,7 +63,7 @@ export default function TextToSpeech(): React.ReactElement {
           lang: voice.lang,
         }));
         setVoices(voiceList);
-        
+
         // Set default voice (prefer English)
         const englishVoice = voiceList.find((v) => v.lang.startsWith("en"));
         if (englishVoice && !selectedVoice) {
@@ -77,7 +83,9 @@ export default function TextToSpeech(): React.ReactElement {
   // Check if browser supports speech synthesis
   useEffect(() => {
     if (!window.speechSynthesis) {
-      setError("Your browser does not support Text to Speech. Please use a modern browser like Chrome, Edge, or Safari.");
+      setError(
+        "Your browser does not support Text to Speech. Please use a modern browser like Chrome, Edge, or Safari."
+      );
     }
   }, []);
 
@@ -198,18 +206,20 @@ export default function TextToSpeech(): React.ReactElement {
             Enter Text
           </Typography>
         </div>
-        
+
         <TextField
           fullWidth
           multiline
           minRows={6}
           maxRows={15}
           value={text}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setText(e.target.value)
+          }
           placeholder="Type or paste your text here..."
           variant="outlined"
         />
-        
+
         <Typography variant="caption" color="textSecondary" className="mt-2">
           {text.length} characters
         </Typography>
@@ -370,8 +380,10 @@ export default function TextToSpeech(): React.ReactElement {
       {/* Info */}
       <Alert severity="info">
         <Typography variant="body2">
-          <strong>Tip:</strong> This tool uses your browser&apos;s built-in speech synthesis. Voice quality and selection vary by browser and OS. 
-          Chrome and Edge typically offer the best voices. All processing happens locally in your browser for complete privacy.
+          <strong>Tip:</strong> This tool uses your browser&apos;s built-in
+          speech synthesis. Voice quality and selection vary by browser and OS.
+          Chrome and Edge typically offer the best voices. All processing
+          happens locally in your browser for complete privacy.
         </Typography>
       </Alert>
     </ToolLayout>
