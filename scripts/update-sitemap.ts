@@ -1,4 +1,4 @@
-import { readdirSync, writeFileSync } from "fs";
+import { readdirSync, writeFileSync, readFileSync, existsSync } from "fs";
 
 function convertDateFormat(isoDate) {
   const date = new Date(isoDate);
@@ -35,6 +35,39 @@ function generateSitemap(
 }
 
 function updateSitemap() {
+  // Read existing sitemap to preserve lastmod for existing URLs
+  const sitemapPath = `${process.cwd()}/public/sitemap.xml`;
+  const existingUrlMap = new Map<
+    string,
+    { lastmod?: string; priority?: string }
+  >();
+
+  if (existsSync(sitemapPath)) {
+    try {
+      const xml = readFileSync(sitemapPath, "utf-8");
+      // Naive XML parsing sufficient for our simple structure
+      const urlRegex = /<url>([\s\S]*?)<\/url>/g;
+      let match: RegExpExecArray | null;
+      while ((match = urlRegex.exec(xml)) !== null) {
+        const block = match[1];
+        const locMatch = block.match(/<loc>(.*?)<\/loc>/);
+        if (!locMatch) continue;
+        const loc = locMatch[1].trim();
+        const lastmodMatch = block.match(/<lastmod>(.*?)<\/lastmod>/);
+        const priorityMatch = block.match(/<priority>(.*?)<\/priority>/);
+        existingUrlMap.set(loc, {
+          lastmod: lastmodMatch?.[1]?.trim(),
+          priority: priorityMatch?.[1]?.trim(),
+        });
+      }
+    } catch {
+      // If parsing fails, continue with empty map
+      console.warn(
+        "Warning: Failed to parse existing sitemap.xml. Proceeding without preserving lastmod."
+      );
+    }
+  }
+
   const urlList = ["tools", "blog"]
     .map((folder) => `${process.cwd()}/src/data/${folder}`)
     .map((folderPath) => {
@@ -45,20 +78,32 @@ function updateSitemap() {
     .flat()
     .map((fileName) => fileName.replace(".ts", ""))
     .map((fileName) => fileName.replace(".json", ""))
-    .map((fileName) => ({
-      loc: `https://webtoolseasy.com/${fileName}`,
-      lastmod: convertDateFormat(new Date().toISOString()),
-    }));
+    .map((fileName) => {
+      const loc = `https://webtoolseasy.com/${fileName}`;
+      const existing = existingUrlMap.get(loc);
+      return {
+        loc,
+        // Preserve lastmod if URL already exists, otherwise set current timestamp
+        lastmod:
+          existing?.lastmod || convertDateFormat(new Date().toISOString()),
+        // Preserve priority if present
+        priority: existing?.priority,
+      };
+    });
 
   const commonUrls = [
     {
       loc: `https://webtoolseasy.com`,
-      lastmod: convertDateFormat(new Date().toISOString()),
+      lastmod:
+        existingUrlMap.get(`https://webtoolseasy.com`)?.lastmod ||
+        convertDateFormat(new Date().toISOString()),
       priority: "1.0000",
     },
     {
       loc: `https://webtoolseasy.com/blog`,
-      lastmod: convertDateFormat(new Date().toISOString()),
+      lastmod:
+        existingUrlMap.get(`https://webtoolseasy.com/blog`)?.lastmod ||
+        convertDateFormat(new Date().toISOString()),
       priority: "0.8000",
     },
   ];
