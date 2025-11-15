@@ -87,6 +87,12 @@ export enum ApplicationIds {
   SALARY_CALCULATOR = "salarycalculator",
   TIME_DURATION_CALCULATOR = "timedurationcalculator",
   FRACTION_CALCULATOR = "fractioncalculator",
+  TEXT_TO_SPEECH = "texttospeech",
+  JSON_TO_YAML = "jsontoyaml",
+  WEBCAM_RECORDER = "webcamrecorder",
+  AUDIO_RECORDER = "audiorecorder",
+  GIF_MAKER = "gifmaker",
+  VIDEO_COMPRESSOR = "videocompressor",
 }
 
 export interface BaseAppConfig {

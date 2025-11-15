@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **89 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **95 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -53,6 +53,7 @@ WebToolsEasy is a comprehensive collection of **89 free, privacy-focused web too
 - [XML JSON Converter](https://webtoolseasy.com/tools/xml-to-json) - Convert between XML and JSON
 - [JSON to CSV Converter](https://webtoolseasy.com/tools/json-to-csv) - Convert JSON data to CSV format instantly
 - [CSV to JSON Converter](https://webtoolseasy.com/tools/csv-to-json) - Convert CSV files to JSON format with custom delimiters
+- [JSON to YAML Converter](https://webtoolseasy.com/tools/json-to-yaml) - Convert JSON to YAML format with syntax highlighting
 - [HTML to Markdown Converter](https://webtoolseasy.com/tools/html-to-markdown) - Convert HTML to Markdown
 - [Code Minifier](https://webtoolseasy.com/tools/code-minifier) - Minify JavaScript, CSS, and HTML
 - [Base64 Encoder Tool](https://webtoolseasy.com/tools/base64-encode) - Encode text and files to Base64
@@ -80,6 +81,7 @@ WebToolsEasy is a comprehensive collection of **89 free, privacy-focused web too
 - [Paraphrasing Tool Free](https://webtoolseasy.com/tools/paraphrasing-tool) - Rewrite text with multiple paraphrasing modes
 - [Text Compare Tool](https://webtoolseasy.com/tools/text-compare) - Diff and compare text side-by-side
 - [Speech to Text Online](https://webtoolseasy.com/tools/speech-to-text) - Convert speech to text using your microphone
+- [Text to Speech Online](https://webtoolseasy.com/tools/text-to-speech) - Convert text to natural speech audio
 - [Lorem Ipsum Generator](https://webtoolseasy.com/tools/lorem-ipsum-generator) - Generate placeholder Lorem Ipsum text
 - [HTML Entities Encoder Decoder](https://webtoolseasy.com/tools/html-entities-encoder-decoder) - Encode/decode HTML special characters
 - [Markdown to HTML Converter](https://webtoolseasy.com/tools/markdown-to-html-converter) - Convert Markdown syntax to HTML
@@ -92,9 +94,13 @@ WebToolsEasy is a comprehensive collection of **89 free, privacy-focused web too
 - [Image Resizer](https://webtoolseasy.com/tools/image-resizer) - Resize and optimize images with quality control
 - [Image to Text OCR](https://webtoolseasy.com/tools/image-to-text) - Extract text from images
 - [Audio Converter Tool](https://webtoolseasy.com/tools/audio-converter) - Convert between MP3, WAV, OGG, M4A, AAC, FLAC formats
+- [Audio Recorder Online](https://webtoolseasy.com/tools/audio-recorder) - Record audio from microphone with real-time level visualization
 - [Video Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter) - Convert video to audio
 - [Video Editor Online](https://webtoolseasy.com/tools/video-editor) - Edit videos in browser
-- [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen
+- [Video Compressor Online](https://webtoolseasy.com/tools/video-compressor) - Compress videos to reduce file size with quality control
+- [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen with audio
+- [Webcam Recorder Online](https://webtoolseasy.com/tools/webcam-recorder) - Record video from webcam with device selection
+- [GIF Maker Online](https://webtoolseasy.com/tools/gif-maker) - Create animated GIFs from videos
 - [PDF Merge Tool](https://webtoolseasy.com/tools/pdf-merge) - Combine multiple PDF files into one document
 - [PDF Split Tool](https://webtoolseasy.com/tools/pdf-split) - Extract specific pages or ranges from PDF files
 - [PDF Compress Tool](https://webtoolseasy.com/tools/pdf-compress) - Reduce PDF file size with quality control

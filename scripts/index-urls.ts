@@ -13,6 +13,15 @@ interface GoogleServiceAccount {
   [k: string]: unknown;
 }
 
+interface NewToolUrl {
+  url: string;
+  createdAt: string;
+}
+
+interface NewToolsConfig {
+  urls: NewToolUrl[];
+}
+
 let key: GoogleServiceAccount | undefined = undefined;
 if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
   try {
@@ -34,7 +43,36 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
   );
 }
 
-const updatedUrls: string[] = [];
+// Load URLs from new-tools-urls.json
+const getNewToolsUrls = (): string[] => {
+  try {
+    const newToolsPath = path.join(__dirname, "new-tools-urls.json");
+    const rawData = fs.readFileSync(newToolsPath, "utf8");
+    const config: NewToolsConfig = JSON.parse(rawData);
+    return config.urls.map((item) => item.url);
+  } catch (e) {
+    console.warn("No new tools URLs found or error reading file:", e);
+    return [];
+  }
+};
+
+// Clear URLs from new-tools-urls.json after indexing
+const clearNewToolsUrls = (): void => {
+  try {
+    const newToolsPath = path.join(__dirname, "new-tools-urls.json");
+    const emptyConfig: NewToolsConfig = { urls: [] };
+    fs.writeFileSync(
+      newToolsPath,
+      JSON.stringify(emptyConfig, null, 2),
+      "utf8"
+    );
+    console.log("Cleared new tools URLs from config file");
+  } catch (e) {
+    console.error("Error clearing new tools URLs:", e);
+  }
+};
+
+const updatedUrls: string[] = getNewToolsUrls();
 
 export const indexUrlsInGoogle = () => {
   if (!key) {
@@ -96,6 +134,11 @@ export const indexUrlsInGoogle = () => {
         });
       });
     });
+
+    // Clear URLs after Google indexing (if not indexing all URLs)
+    if (urlsToIndex.length > 0 && process.env.INDEX_ALL_URLS !== "true") {
+      clearNewToolsUrls();
+    }
   });
 };
 
@@ -141,6 +184,11 @@ const indexUrlsInIndexNow = async () => {
       throw new Error(`Error: ${response.statusText}`);
     }
     console.log("URLs submitted successfully");
+
+    // Clear URLs after successful indexing
+    if (urlsToIndex.length > 0 && process.env.INDEX_ALL_URLS !== "true") {
+      clearNewToolsUrls();
+    }
   } catch (error) {
     console.error("Error indexing URLs:", error);
   }
