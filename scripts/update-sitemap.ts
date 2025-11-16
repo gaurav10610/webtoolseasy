@@ -1,6 +1,6 @@
 import { readdirSync, writeFileSync, readFileSync, existsSync } from "fs";
 
-function convertDateFormat(isoDate) {
+function convertDateFormat(isoDate: string) {
   const date = new Date(isoDate);
   const isoString = date.toISOString(); // Example: 2025-05-06T11:52:24.125Z
   const trimmed = isoString.split(".")[0]; // Remove milliseconds: "2025-05-06T11:52:24"

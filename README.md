@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **95 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -88,6 +88,7 @@ WebToolsEasy is a comprehensive collection of **95 free, privacy-focused web too
 
 ### 🎨 Media Processing Tools
 
+- [Background Remover](https://webtoolseasy.com/tools/background-remover) - Remove image backgrounds automatically with transparent PNG output
 - [Image Compressor Tool](https://webtoolseasy.com/tools/image-compress) - Reduce image file size without quality loss
 - [Image Format Converter](https://webtoolseasy.com/tools/image-format-converter) - Convert between image formats
 - [Image Cropper Tool](https://webtoolseasy.com/tools/crop-image) - Crop and resize images
@@ -106,10 +107,13 @@ WebToolsEasy is a comprehensive collection of **95 free, privacy-focused web too
 - [PDF Compress Tool](https://webtoolseasy.com/tools/pdf-compress) - Reduce PDF file size with quality control
 - [PDF to Images Converter](https://webtoolseasy.com/tools/pdf-to-images) - Convert PDF pages to PNG or JPG images
 - [Images to PDF Converter](https://webtoolseasy.com/tools/images-to-pdf) - Combine multiple images into a single PDF
+- [PDF to Word Converter](https://webtoolseasy.com/tools/pdf-to-word) - Convert PDF files to editable Word documents
+- [Word to PDF Converter](https://webtoolseasy.com/tools/word-to-pdf) - Convert Word documents to PDF format
 
 ### 🔧 Utility Tools
 
 - [QR Code Generator Free](https://webtoolseasy.com/tools/qr-code-generator) - Create QR codes instantly
+- [Barcode Generator](https://webtoolseasy.com/tools/barcode-generator) - Generate Code128, EAN13, UPC-A, and Code39 barcodes
 - [Password Generator Tool](https://webtoolseasy.com/tools/password-generator) - Generate secure passwords
 - [Signature Generator Free](https://webtoolseasy.com/tools/signature-generator) - Create digital signatures online - draw, type, or upload
 - [Invoice Generator Free](https://webtoolseasy.com/tools/invoice-generator) - Create professional invoices with PDF export
