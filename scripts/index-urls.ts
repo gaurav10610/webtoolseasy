@@ -3,6 +3,7 @@ import { google } from "googleapis";
 import fs from "fs";
 import path from "path";
 import { getAllUrlsFromSitemap } from "./indexing-utils";
+import { newToolsUrls } from "./new-tools-urls";
 
 // Load Google service account credentials from environment
 // Prefer setting GOOGLE_SERVICE_ACCOUNT_PATH to a local file path (gitignored)
@@ -11,15 +12,6 @@ interface GoogleServiceAccount {
   client_email: string;
   private_key: string;
   [k: string]: unknown;
-}
-
-interface NewToolUrl {
-  url: string;
-  createdAt: string;
-}
-
-interface NewToolsConfig {
-  urls: NewToolUrl[];
 }
 
 let key: GoogleServiceAccount | undefined = undefined;
@@ -43,29 +35,28 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
   );
 }
 
-// Load URLs from new-tools-urls.json
+// Load URLs from new-tools-urls.ts
 const getNewToolsUrls = (): string[] => {
   try {
-    const newToolsPath = path.join(__dirname, "new-tools-urls.json");
-    const rawData = fs.readFileSync(newToolsPath, "utf8");
-    const config: NewToolsConfig = JSON.parse(rawData);
-    return config.urls.map((item) => item.url);
+    return newToolsUrls.map((item) => item.url);
   } catch (e) {
     console.warn("No new tools URLs found or error reading file:", e);
     return [];
   }
 };
 
-// Clear URLs from new-tools-urls.json after indexing
+// Clear URLs from new-tools-urls.ts after indexing
 const clearNewToolsUrls = (): void => {
   try {
-    const newToolsPath = path.join(__dirname, "new-tools-urls.json");
-    const emptyConfig: NewToolsConfig = { urls: [] };
-    fs.writeFileSync(
-      newToolsPath,
-      JSON.stringify(emptyConfig, null, 2),
-      "utf8"
-    );
+    const newToolsPath = path.join(__dirname, "new-tools-urls.ts");
+    const emptyContent = `export interface NewToolUrl {
+  url: string;
+  createdAt: string;
+}
+
+export const newToolsUrls: NewToolUrl[] = [];
+`;
+    fs.writeFileSync(newToolsPath, emptyContent, "utf8");
     console.log("Cleared new tools URLs from config file");
   } catch (e) {
     console.error("Error clearing new tools URLs:", e);

@@ -663,4 +663,32 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "fraction-icon.svg",
     category: AppCategory.MISCELLANEOUS,
   },
+  "background-remover": {
+    applicationId: "background-remover",
+    displayText: "Background Remover",
+    navigateUrl: "tools/background-remover",
+    iconRelativeUrl: "image-icon.svg",
+    category: AppCategory.MEDIA,
+  },
+  "pdf-to-word": {
+    applicationId: "pdf-to-word",
+    displayText: "PDF to Word Converter",
+    navigateUrl: "tools/pdf-to-word",
+    iconRelativeUrl: "pdf-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  "word-to-pdf": {
+    applicationId: "word-to-pdf",
+    displayText: "Word to PDF Converter",
+    navigateUrl: "tools/word-to-pdf",
+    iconRelativeUrl: "pdf-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
+  "barcode-generator": {
+    applicationId: "barcode-generator",
+    displayText: "Barcode Generator",
+    navigateUrl: "tools/barcode-generator",
+    iconRelativeUrl: "barcode-icon.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
 };

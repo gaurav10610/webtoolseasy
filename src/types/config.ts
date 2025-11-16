@@ -93,6 +93,10 @@ export enum ApplicationIds {
   AUDIO_RECORDER = "audiorecorder",
   GIF_MAKER = "gifmaker",
   VIDEO_COMPRESSOR = "videocompressor",
+  BACKGROUND_REMOVER = "background-remover",
+  PDF_TO_WORD = "pdf-to-word",
+  WORD_TO_PDF = "word-to-pdf",
+  BARCODE_GENERATOR = "barcode-generator",
 }
 
 export interface BaseAppConfig {
