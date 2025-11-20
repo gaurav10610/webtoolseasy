@@ -30,8 +30,6 @@ export default function DiffChecker({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
-  const [language, setLanguage] = useState("javascript");
-  
   const [originalText, setOriginalText] = useState(
     `function calculateTotal(items) {
   let total = 0;
@@ -155,7 +153,7 @@ export default function DiffChecker({
   const diffEditorProps: DiffEditorProps = {
     original: originalText,
     value: modifiedText,
-    language: language,
+    language: "plaintext",
     onChange: setModifiedText,
   };
 
