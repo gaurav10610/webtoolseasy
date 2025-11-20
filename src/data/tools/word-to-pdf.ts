@@ -29,6 +29,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: pageTitle,
+    description: pageDescription,
     type: "website",
     url: navigationUrl,
     images: [

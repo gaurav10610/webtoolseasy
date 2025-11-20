@@ -97,6 +97,12 @@ export enum ApplicationIds {
   PDF_TO_WORD = "pdf-to-word",
   WORD_TO_PDF = "word-to-pdf",
   BARCODE_GENERATOR = "barcode-generator",
+  MEME_GENERATOR = "meme-generator",
+  META_TAG_GENERATOR = "meta-tag-generator",
+  ROBOTS_TXT_GENERATOR = "robots-txt-generator",
+  DIFF_CHECKER = "diff-checker",
+  STOPWATCH = "stopwatch",
+  COUNTDOWN_TIMER = "countdown-timer",
 }
 
 export interface BaseAppConfig {
@@ -132,6 +138,7 @@ export enum AppCategory {
   ONLINE_EDITORS = "Online Editors",
   MEDIA = "Media",
   FINANCE = "Finance",
+  SEO = "SEO & Development",
 }
 
 export interface AppCatalogue {
