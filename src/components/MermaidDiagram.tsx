@@ -14,6 +14,10 @@ if (typeof window !== "undefined") {
     theme: "default",
     securityLevel: "loose",
     fontFamily: "inherit",
+    flowchart: {
+      htmlLabels: true,
+      curve: "basis",
+    },
   });
 }
 

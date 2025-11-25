@@ -45,3 +45,9 @@
 .blog-div li strong {
   white-space: nowrap;
 }
+
+/* Mermaid diagram container */
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}

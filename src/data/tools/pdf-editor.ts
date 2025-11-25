@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-editor";
-const pageTitle = "PDF Editor Online - Edit, Merge & Split PDFs Free";
+const pageTitle =
+  "Private PDF Editor - Edit, Merge & Split PDFs Offline | No Upload";
 const pageDescription =
-  "Edit, merge, split, rotate, and annotate PDF files online for free. Add text, combine multiple PDFs, extract pages without registration or downloads.";
+  "Edit, merge, split, rotate PDFs 100% client-side. No file upload to servers. Complete privacy - your documents never leave your browser. Work offline without registration.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-editor.png`;
 
 const keywords =
-  "pdf editor,merge pdf,split pdf,pdf annotate,edit pdf online,pdf merger,rotate pdf,combine pdf,pdf splitter";
+  "pdf editor,private pdf editor,offline pdf merge,client-side pdf,no upload pdf editor,secure pdf merger,privacy pdf tools,split pdf offline,edit pdf browser,combine pdf securely";
 
 export const metadata: Metadata = {
   alternates: {
