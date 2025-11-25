@@ -1,5 +1,4 @@
 import { BlogEntityOverview } from "@/types/domain-entities";
-import { getRandomId } from "@/util/commonUtils";
 import { Typography } from "@mui/material";
 import { map } from "lodash-es";
 import Link from "next/link";
@@ -57,13 +56,12 @@ export default async function BlogList({
         WebToolsEasy blog
       </Typography>
       <SocialShareButtons
-        key={getRandomId()}
         pageUrl={`${process.env.HOSTNAME}/blog`}
         heading={"WEBTOOLSEASY BLOG"}
       />
       {map(blogList, (blogEntityOverview) => (
         <BlogOverviewListItem
-          key={getRandomId()}
+          key={blogEntityOverview.pageUrl}
           blogEntityOverview={blogEntityOverview}
         />
       ))}

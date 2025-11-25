@@ -1,5 +1,4 @@
 import { DescriptionBlock } from "@/types/description";
-import { getRandomId } from "@/util/commonUtils";
 import Typography from "@mui/material/Typography";
 import { isEmpty, isNil, map } from "lodash-es";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -13,7 +12,6 @@ export function AppHeading({
 }>) {
   return (
     <Typography
-      key={getRandomId()}
       variant="h1"
       className="text-center !text-2xl md:!text-4xl !font-normal"
     >
@@ -29,12 +27,12 @@ export function RelatedTools({
 }>) {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <Typography key={getRandomId()} variant="h2" fontSize={"inherit"}>
+      <Typography variant="h2" fontSize={"inherit"}>
         Related Tools
       </Typography>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full">
         {map(relatedToolsConfigs, (relatedToolConfig) => (
-          <div key={getRandomId()} className="w-full">
+          <div key={relatedToolConfig.applicationId} className="w-full">
             <RelatedToolCard config={relatedToolConfig} />
           </div>
         ))}
@@ -48,9 +46,9 @@ export function ToolDescription({
 }: Readonly<{ descriptionData: DescriptionBlock[] }>) {
   return (
     <div className="flex flex-col w-full gap-4">
-      {map(descriptionData, (descriptionBlock) => (
+      {map(descriptionData, (descriptionBlock, index) => (
         <ToolDescriptionBlock
-          key={getRandomId()}
+          key={`desc-${index}`}
           descriptionBlock={descriptionBlock}
         />
       ))}
@@ -64,7 +62,7 @@ function ToolDescriptionBlock({
   descriptionBlock: DescriptionBlock;
 }>) {
   return (
-    <div key={getRandomId()} className="flex flex-col w-full gap-2">
+    <div className="flex flex-col w-full gap-2">
       <Typography variant="h3" fontSize={"inherit"} color="info">
         {descriptionBlock.heading}
       </Typography>
@@ -91,10 +89,9 @@ function DescriptionLinks({
   return (
     <div className="flex flex-col gap-2">
       {map(links, (link) => (
-        <div key={getRandomId()} className="flex flex-row gap-2">
+        <div key={link.url} className="flex flex-row gap-2">
           <KeyboardArrowRightIcon />
           <Typography
-            key={getRandomId()}
             href={link.url}
             component={"a"}
             color="primary"
@@ -226,9 +223,13 @@ function DescriptionDataBlockData({
   };
 
   return (
-    <div key={getRandomId()} className="flex flex-col gap-2 w-full">
-      {map(blockData, (data) => (
-        <Typography key={getRandomId()} variant="body1" color="textSecondary">
+    <div className="flex flex-col gap-2 w-full">
+      {map(blockData, (data, index) => (
+        <Typography
+          key={`block-${index}`}
+          variant="body1"
+          color="textSecondary"
+        >
           {parseMarkdownText(data)}
         </Typography>
       ))}
@@ -353,11 +354,11 @@ function DescriptionDataListData({
   };
 
   return (
-    <div key={getRandomId()} className="flex flex-col gap-2 w-full">
-      {map(listData, (data) => (
-        <div key={getRandomId()} className="flex flex-row gap-2 w-full">
+    <div className="flex flex-col gap-2 w-full">
+      {map(listData, (data, index) => (
+        <div key={`list-${index}`} className="flex flex-row gap-2 w-full">
           <KeyboardArrowRightIcon />
-          <Typography key={getRandomId()} variant="body1" color="textSecondary">
+          <Typography variant="body1" color="textSecondary">
             {parseMarkdownText(data)}
           </Typography>
         </div>

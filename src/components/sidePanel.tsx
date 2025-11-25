@@ -1,5 +1,4 @@
 import { AppNavigationConfig } from "@/types/config";
-import { getRandomId } from "@/util/commonUtils";
 import { Typography } from "@mui/material";
 import { groupBy, keysIn, map, values } from "lodash-es";
 import Link from "next/link";
@@ -24,7 +23,7 @@ const SectionLinks = ({
       <Typography variant="body1">{category}</Typography>
       <div className="flex flex-col gap-2 pl-3 border-l-2">
         {map(appList, (app) => (
-          <Link href={`../${app.navigateUrl}`} key={getRandomId()}>
+          <Link href={`../${app.navigateUrl}`} key={app.applicationId}>
             <Typography
               color={
                 selectedPageUrl === app.navigateUrl
@@ -60,7 +59,7 @@ export default function SidePanel({
     <div className={`flex flex-col gap-4 p-3 ${className}`}>
       {map(keysIn(categoryWiseAppList), (category) => (
         <SectionLinks
-          key={getRandomId()}
+          key={category}
           category={category}
           appList={categoryWiseAppList[category] as AppNavigationConfig[]}
           pageUrl={pageUrl}

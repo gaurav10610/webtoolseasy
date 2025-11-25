@@ -13,16 +13,28 @@ The application is technically well-structured (Next.js App Router), but suffers
 
 ### A. React Key Anti-Pattern (`getRandomId`)
 
-**Location:** `src/components/commonComponents.tsx` and potentially others.
+**Status:** ✅ COMPLETED
+**Location:** Multiple component files
 **Issue:** Using `key={getRandomId()}` forces React to destroy and recreate DOM elements on every render.
 **Impact:**
 
 - **Performance:** Increases main thread work, causing UI jank.
 - **SEO:** Negatively impacts **Interaction to Next Paint (INP)** and **Cumulative Layout Shift (CLS)**, which are Core Web Vitals ranking factors.
-  **Recommendation:**
-  Replace random keys with stable identifiers (e.g., `tool.id`, `index`, or unique data properties).
+
+**Files Fixed:**
+
+- `src/components/commonComponents.tsx` (7 instances) - Used applicationId, index, url
+- `src/components/sidePanel.tsx` (2 instances) - Used app.applicationId and category names
+- `src/components/socialShareButtons.tsx` (7 instances) - Removed unnecessary keys
+- `src/components/lib/tables.tsx` (3 instances) - Used index for stable keys
+- `src/components/blogList.tsx` (2 instances) - Used blogEntityOverview.pageUrl
+
+**Solution Implemented:**
+All `key={getRandomId()}` replaced with stable identifiers (applicationId, index, url, pageUrl).
 
 ### B. Canonical URL Configuration
+
+**Status:** 🟡 NEEDS VERIFICATION
 
 **Location:** `src/data/tools/*.ts`
 **Issue:** Canonical URLs rely on `process.env.HOSTNAME`.
