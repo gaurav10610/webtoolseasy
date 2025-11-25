@@ -68,28 +68,39 @@ function updateSitemap() {
     }
   }
 
-  const urlList = ["tools", "blog"]
-    .map((folder) => `${process.cwd()}/src/data/${folder}`)
-    .map((folderPath) => {
-      return readdirSync(folderPath).map(
-        (file) => `${folderPath.split("/").pop()}/${file}`
-      );
-    })
-    .flat()
-    .map((fileName) => fileName.replace(".ts", ""))
-    .map((fileName) => fileName.replace(".json", ""))
-    .map((fileName) => {
+  // Get tools from src/data/tools/*.ts
+  const toolsPath = `${process.cwd()}/src/data/tools`;
+  const toolUrls = readdirSync(toolsPath)
+    .filter((file) => file.endsWith(".ts"))
+    .map((file) => {
+      const fileName = `tools/${file.replace(".ts", "")}`;
       const loc = `https://webtoolseasy.com/${fileName}`;
       const existing = existingUrlMap.get(loc);
       return {
         loc,
-        // Preserve lastmod if URL already exists, otherwise set current timestamp
         lastmod:
           existing?.lastmod || convertDateFormat(new Date().toISOString()),
-        // Preserve priority if present
         priority: existing?.priority,
       };
     });
+
+  // Get blogs from src/data/blog/config/*.ts
+  const blogConfigPath = `${process.cwd()}/src/data/blog/config`;
+  const blogUrls = readdirSync(blogConfigPath)
+    .filter((file) => file.endsWith(".ts"))
+    .map((file) => {
+      const fileName = `blog/${file.replace(".ts", "")}`;
+      const loc = `https://webtoolseasy.com/${fileName}`;
+      const existing = existingUrlMap.get(loc);
+      return {
+        loc,
+        lastmod:
+          existing?.lastmod || convertDateFormat(new Date().toISOString()),
+        priority: existing?.priority,
+      };
+    });
+
+  const urlList = [...toolUrls, ...blogUrls];
 
   const commonUrls = [
     {

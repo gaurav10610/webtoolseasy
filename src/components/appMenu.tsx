@@ -7,10 +7,12 @@ export const menuItems = [
   {
     label: "Home",
     routeLink: "/",
+    openInNewTab: false,
   },
   {
     label: "Blog",
     routeLink: "/blog",
+    openInNewTab: true,
   },
 ];
 
@@ -30,6 +32,8 @@ export default function AppMenu({ className = "" }: { className?: string }) {
           size="small"
           variant="outlined"
           className="!capitalize !border-gray-300 hover:!border-blue-500 hover:!bg-blue-50 !text-gray-700 transition-all duration-200"
+          target={menuItem.openInNewTab ? "_blank" : undefined}
+          rel={menuItem.openInNewTab ? "noopener noreferrer" : undefined}
         />
       ))}
     </nav>

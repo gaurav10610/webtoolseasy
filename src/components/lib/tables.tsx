@@ -1,4 +1,3 @@
-import { getRandomId } from "@/util/commonUtils";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -30,8 +29,8 @@ export function BasicTable({
   cellStyles?: Record<string, unknown>;
   size?: "small" | "medium";
 }>) {
-  const tableHeaders = headers.map((header) => (
-    <TableCell align={align} key={getRandomId()}>
+  const tableHeaders = headers.map((header, index) => (
+    <TableCell align={align} key={`header-${index}`}>
       {header}
     </TableCell>
   ));
@@ -40,10 +39,14 @@ export function BasicTable({
     ...cellStyles,
   };
 
-  const tableRows = rows.map((row) => (
-    <TableRow key={getRandomId()}>
-      {map(row, (cell: ReactNode | string) => (
-        <TableCell align={align} sx={cellStyleObj} key={getRandomId()}>
+  const tableRows = rows.map((row, rowIndex) => (
+    <TableRow key={`row-${rowIndex}`}>
+      {map(row, (cell: ReactNode | string, cellIndex: number) => (
+        <TableCell
+          align={align}
+          sx={cellStyleObj}
+          key={`cell-${rowIndex}-${cellIndex}`}
+        >
           {cell}
         </TableCell>
       ))}

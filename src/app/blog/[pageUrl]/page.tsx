@@ -1,11 +1,8 @@
-import { getJsonData } from "@/util/appDataUtils";
-import parse, { DOMNode, domToReact } from "html-react-parser";
 import "./blog.css";
-import { Link, Typography } from "@mui/material";
+import { Link, Typography, Chip, Box } from "@mui/material";
 import { ButtonWithHandler } from "@/components/lib/buttons";
-import { BlogEntity } from "@/types/domain-entities";
-import { join, map } from "lodash-es";
 import fs from "fs";
+import path from "path";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import { H1Heading } from "@/components/baseComponents/headings";
 import { PageMetadata } from "@/components/baseComponents/pageMetadata";
@@ -15,6 +12,15 @@ import {
   generateBreadcrumbSchema,
   generateOrganizationSchema,
 } from "@/components/structuredData";
+import { ServerMarkdownRenderer } from "@/components/ServerMarkdownRenderer";
+import { BlogIds } from "@/types/blog-config";
+
+// Import all blog configs
+import { blogConfig as decodingJwtGuide } from "@/data/blog/config/decoding-jwt-comprehensive-guide";
+
+const blogConfigs = {
+  [BlogIds.DECODING_JWT_COMPREHENSIVE_GUIDE]: decodingJwtGuide,
+};
 
 export async function generateMetadata(
   props: Readonly<{
@@ -22,66 +28,24 @@ export async function generateMetadata(
   }>
 ) {
   const { pageUrl } = await props.params;
-  const jsonData = (await getJsonData(`blog/${pageUrl}`)) as BlogEntity;
+  const blogConfig = Object.values(blogConfigs).find(
+    (config) => config.slug === pageUrl
+  );
 
-  return {
-    alternates: {
-      canonical: `${process.env.HOSTNAME}/blog/${pageUrl}`,
-    },
-    title: jsonData.pageMetadata.title,
-    description: jsonData.pageMetadata.description,
-    icons: "/favicon.png",
-    authors: {
-      name: "Gaurav Kumar Yadav",
-    },
-    robots: "index, follow",
-    metadataBase: new URL(process.env.HOSTNAME!),
-    openGraph: {
-      title: jsonData.pageMetadata.title,
-      type: "website",
-      url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
-      images: [`/screenshots/blog/${pageUrl}.png`],
-      description: jsonData.pageMetadata.description,
-      siteName: "WebToolsEasy",
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@webtoolseasy",
-      title: jsonData.pageMetadata.title,
-      description: jsonData.pageMetadata.title,
-      images: [`/screenshots/blog/${pageUrl}.png`],
-    },
-    keywords: join(
-      map(jsonData.tags, (tag) => tag),
-      ", "
-    ),
-  };
+  if (!blogConfig) {
+    return {
+      title: "Blog Post Not Found",
+      description: "The requested blog post could not be found.",
+    };
+  }
+
+  return blogConfig.metadata;
 }
 
-const AdminControls = ({ pageUrl }: { pageUrl: string }) => {
-  return (
-    <div className="flex flex-col gap-4 w-full items-center p-3 rounded-md border-2 border-gray-300">
-      <Typography variant="h5">Admin Controls</Typography>
-      <div className="flex flex-row gap-2 w-full justify-end">
-        <Link href={`${pageUrl}/edit`} target="_blank">
-          <ButtonWithHandler buttonText="Edit Blog Page" size="small" />
-        </Link>
-      </div>
-    </div>
-  );
-};
-
 export async function generateStaticParams() {
-  const staticParams: { pageUrl: string }[] = [];
-  const baseFolderPath = `${process.cwd()}/src/data/blog`;
-  const files = fs.readdirSync(baseFolderPath);
-  files.forEach((file) => {
-    const pageUrl = file.replace(".json", "");
-    staticParams.push({
-      pageUrl,
-    });
-  });
-  return staticParams;
+  return Object.values(blogConfigs).map((config) => ({
+    pageUrl: config.slug,
+  }));
 }
 
 export default async function BlogPage(
@@ -90,30 +54,43 @@ export default async function BlogPage(
   }>
 ) {
   const { pageUrl } = await props.params;
-  const jsonData = (await getJsonData(`blog/${pageUrl}`)) as BlogEntity;
+  const blogConfig = Object.values(blogConfigs).find(
+    (config) => config.slug === pageUrl
+  );
 
-  const options = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    replace: (domNode: any) => {
-      if (domNode.name === "body") {
-        return (
-          <>{domToReact(domNode.children as unknown as DOMNode[], options)}</>
-        );
-      }
-    },
-  };
+  if (!blogConfig) {
+    return (
+      <div className="w-full flex flex-col gap-3 items-center">
+        <Typography variant="h4" color="error">
+          Blog Post Not Found
+        </Typography>
+        <Typography variant="body1">
+          The requested blog post could not be found.
+        </Typography>
+        <Link href="/blog">
+          <ButtonWithHandler buttonText="Back to Blog" size="medium" />
+        </Link>
+      </div>
+    );
+  }
 
-  const parsedContent = parse(jsonData.html, options);
+  // Read markdown content
+  const contentPath = path.join(
+    process.cwd(),
+    "src/data/blog/content",
+    blogConfig.contentFile
+  );
+  const markdownContent = fs.readFileSync(contentPath, "utf-8");
 
   // Generate structured data for blog post
   const articleSchema = generateArticleSchema({
-    headline: jsonData.heading,
-    description: jsonData.pageMetadata.description,
-    url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
-    image: `${process.env.SCREENSHOTS_BASE_URL}/blog/${pageUrl}.png`,
-    datePublished: jsonData.updatedAt,
-    dateModified: jsonData.updatedAt,
-    keywords: jsonData.tags,
+    headline: blogConfig.title,
+    description: blogConfig.excerpt,
+    url: `${process.env.HOSTNAME}/blog/${blogConfig.slug}`,
+    image: `${process.env.SCREENSHOTS_BASE_URL}/blog/${blogConfig.slug}.png`,
+    datePublished: blogConfig.publishedAt,
+    dateModified: blogConfig.updatedAt,
+    keywords: blogConfig.tags,
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema({
@@ -121,8 +98,8 @@ export default async function BlogPage(
       { name: "Home", url: process.env.HOSTNAME! },
       { name: "Blog", url: `${process.env.HOSTNAME}/blog` },
       {
-        name: jsonData.heading,
-        url: `${process.env.HOSTNAME}/blog/${pageUrl}`,
+        name: blogConfig.title,
+        url: `${process.env.HOSTNAME}/blog/${blogConfig.slug}`,
       },
     ],
   });
@@ -137,19 +114,54 @@ export default async function BlogPage(
       <StructuredData data={organizationSchema} />
 
       <div className="w-full flex flex-col gap-3 blog-div">
-        {process.env.NODE_ENV !== "production" && (
-          <AdminControls pageUrl={jsonData.pageUrl} />
-        )}
-        <H1Heading heading={jsonData.heading} />
-        <SocialShareButtons
-          pageUrl={`${process.env.HOSTNAME}${jsonData.pageUrl}`}
-          heading={jsonData.heading}
-        />
+        {/* Blog Header */}
+        <H1Heading heading={blogConfig.title} />
+
+        {/* Category and Reading Time */}
+        <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
+          <Chip label={blogConfig.category} color="primary" size="small" />
+          <Typography variant="body2" color="textSecondary">
+            {blogConfig.readingTimeMinutes} min read
+          </Typography>
+        </Box>
+
+        {/* Author and Date */}
         <PageMetadata
-          updatedBy={jsonData.updatedBy}
-          updatedAt={jsonData.updatedAt}
+          updatedBy={blogConfig.author}
+          updatedAt={blogConfig.updatedAt}
         />
-        {parsedContent}
+
+        {/* Social Share */}
+        <SocialShareButtons
+          pageUrl={`${process.env.HOSTNAME}/blog/${blogConfig.slug}`}
+          heading={blogConfig.title}
+        />
+
+        {/* Tags */}
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 3 }}>
+          {blogConfig.tags.slice(0, 10).map((tag, index) => (
+            <Chip
+              key={`tag-${index}`}
+              label={tag}
+              size="small"
+              variant="outlined"
+            />
+          ))}
+        </Box>
+
+        {/* Markdown Content */}
+        <ServerMarkdownRenderer content={markdownContent} />
+
+        {/* Bottom Social Share */}
+        <Box sx={{ mt: 4, pt: 4, borderTop: "1px solid #e0e0e0" }}>
+          <Typography variant="h6" gutterBottom>
+            Share this article
+          </Typography>
+          <SocialShareButtons
+            pageUrl={`${process.env.HOSTNAME}/blog/${blogConfig.slug}`}
+            heading={blogConfig.title}
+          />
+        </Box>
       </div>
     </>
   );
