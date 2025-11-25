@@ -5,27 +5,19 @@ export interface NewToolUrl {
 
 export const newToolsUrls: NewToolUrl[] = [
   {
-    url: "https://webtoolseasy.com/tools/meme-generator",
-    createdAt: "2025-11-20",
+    url: "https://webtoolseasy.com/tools/resume-builder",
+    createdAt: "2025-11-25",
   },
   {
-    url: "https://webtoolseasy.com/tools/meta-tag-generator",
-    createdAt: "2025-11-20",
+    url: "https://webtoolseasy.com/tools/favicon-generator",
+    createdAt: "2025-11-25",
   },
   {
-    url: "https://webtoolseasy.com/tools/robots-txt-generator",
-    createdAt: "2025-11-20",
+    url: "https://webtoolseasy.com/tools/ascii-art-generator",
+    createdAt: "2025-11-25",
   },
   {
-    url: "https://webtoolseasy.com/tools/diff-checker",
-    createdAt: "2025-11-20",
-  },
-  {
-    url: "https://webtoolseasy.com/tools/stopwatch",
-    createdAt: "2025-11-20",
-  },
-  {
-    url: "https://webtoolseasy.com/tools/countdown-timer",
-    createdAt: "2025-11-20",
+    url: "https://webtoolseasy.com/tools/table-generator",
+    createdAt: "2025-11-25",
   },
 ];

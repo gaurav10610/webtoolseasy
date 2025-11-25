@@ -9,7 +9,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy is a comprehensive collection of **115 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
 
 🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
 
@@ -63,6 +63,7 @@ WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web too
 - [JWT Decoder Tool](https://webtoolseasy.com/tools/jwt-decoder) - Decode and inspect JWT tokens
 - [Hash Generator](https://webtoolseasy.com/tools/hash-generator) - Generate MD5, SHA-1, SHA-256, and more
 - [Regex Tester Online](https://webtoolseasy.com/tools/regex-tester) - Test regular expressions with live matching
+- [Diff Checker Tool](https://webtoolseasy.com/tools/diff-checker) - Compare text and code differences side-by-side
 - [Cron Generator Tool](https://webtoolseasy.com/tools/cron-expression) - Generate cron expressions visually
 - [UUID Generator Tool](https://webtoolseasy.com/tools/uuid-v4-generator) - Generate UUID v4
 - [UUID V1 Generator](https://webtoolseasy.com/tools/uuid-v1-generator) - Generate UUID v1
@@ -72,6 +73,8 @@ WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web too
 - [GUID Generator Tool](https://webtoolseasy.com/tools/guid-generator) - Generate GUIDs
 - [ULID Generator](https://webtoolseasy.com/tools/ulid-generator) - Generate ULIDs
 - [CSV Viewer Online](https://webtoolseasy.com/tools/csv-viewer) - View and analyze CSV files
+- [ASCII Art Generator](https://webtoolseasy.com/tools/ascii-art-generator) - Convert text to ASCII art with multiple font styles
+- [Table Generator Online](https://webtoolseasy.com/tools/table-generator) - Create HTML, Markdown, and CSV tables with visual editor
 
 ### 📝 Text Processing Tools
 
@@ -102,6 +105,7 @@ WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web too
 - [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen with audio
 - [Webcam Recorder Online](https://webtoolseasy.com/tools/webcam-recorder) - Record video from webcam with device selection
 - [GIF Maker Online](https://webtoolseasy.com/tools/gif-maker) - Create animated GIFs from videos
+- [Meme Generator Free](https://webtoolseasy.com/tools/meme-generator) - Create custom memes with text overlay
 - [PDF Merge Tool](https://webtoolseasy.com/tools/pdf-merge) - Combine multiple PDF files into one document
 - [PDF Split Tool](https://webtoolseasy.com/tools/pdf-split) - Extract specific pages or ranges from PDF files
 - [PDF Compress Tool](https://webtoolseasy.com/tools/pdf-compress) - Reduce PDF file size with quality control
@@ -117,6 +121,8 @@ WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web too
 - [Password Generator Tool](https://webtoolseasy.com/tools/password-generator) - Generate secure passwords
 - [Signature Generator Free](https://webtoolseasy.com/tools/signature-generator) - Create digital signatures online - draw, type, or upload
 - [Invoice Generator Free](https://webtoolseasy.com/tools/invoice-generator) - Create professional invoices with PDF export
+- [Resume Builder Free](https://webtoolseasy.com/tools/resume-builder) - Create professional resumes with customizable templates and PDF export
+- [Favicon Generator](https://webtoolseasy.com/tools/favicon-generator) - Generate favicons in multiple sizes from any image
 - [Color Palette Generator](https://webtoolseasy.com/tools/color-palette-generator) - Create color schemes
 - [Color Converter](https://webtoolseasy.com/tools/color-converter) - Convert between HEX, RGB, HSL, CMYK color formats
 - [Timezone Converter](https://webtoolseasy.com/tools/timezone-converter) - Convert between timezones
@@ -133,7 +139,11 @@ WebToolsEasy is a comprehensive collection of **99 free, privacy-focused web too
 - [GPA Calculator](https://webtoolseasy.com/tools/gpa-calculator) - Calculate Grade Point Average for academic planning
 - [Calorie Calculator](https://webtoolseasy.com/tools/calorie-calculator) - Calculate daily calorie needs, BMR, and TDEE
 - [Time Duration Calculator](https://webtoolseasy.com/tools/time-duration-calculator) - Calculate time between hours, add/subtract time
+- [Countdown Timer Online](https://webtoolseasy.com/tools/countdown-timer) - Set custom countdown timer with alarm notifications
+- [Stopwatch Online](https://webtoolseasy.com/tools/stopwatch) - Digital stopwatch with lap timer for precise time tracking
 - [Fraction Calculator](https://webtoolseasy.com/tools/fraction-calculator) - Add, subtract, multiply, divide fractions with simplification
+- [Meta Tag Generator](https://webtoolseasy.com/tools/meta-tag-generator) - Generate SEO meta tags, Open Graph, and Twitter Cards
+- [Robots.txt Generator](https://webtoolseasy.com/tools/robots-txt-generator) - Create robots.txt file for SEO and crawlers
 
 ### 💰 Finance Tools
 
