@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/jwt-decoder";
-const pageTitle = "JWT Decoder Online - Decode JSON Web Tokens Free";
+const pageTitle =
+  "Private JWT Decoder - Decode JSON Web Tokens Client-Side | No Server Upload";
 const pageDescription =
-  "Decode and validate JSON Web Tokens online. View JWT header, payload, signature details securely. Free JWT debugger for developers and API testing.";
+  "Decode and validate JWT tokens 100% client-side. No server upload - complete privacy. View header, payload, signature securely in your browser. Perfect for sensitive API tokens and security testing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/jwt-decoder.png`;
 const keywords =
-  "jwt decoder,decode jwt online,jwt debugger,json web token decoder,jwt validator,jwt parser,jwt analyzer,validate jwt";
+  "jwt decoder,private jwt decoder,client-side jwt,secure jwt validator,offline jwt parser,no upload jwt,jwt debugger,decode jwt browser,safe jwt analyzer,json web token decoder";
 
 export const metadata: Metadata = {
   alternates: {

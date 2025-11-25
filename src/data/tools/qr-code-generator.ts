@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/qr-code-generator";
-const pageTitle = "QR Code Generator - Create Custom QR Codes Free";
+const pageTitle =
+  "Private QR Code Generator - Create QR Codes Offline | No Data Upload";
 const pageDescription =
-  "Generate QR codes for text, URLs, WiFi, contact info instantly. Free QR code creator with customization options. Download PNG, SVG formats easily.";
+  "Generate QR codes 100% client-side for URLs, WiFi, contacts. Your data never leaves your browser. Work offline, download PNG/SVG instantly. No signup, complete privacy.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
-  "qr code generator,create qr code,qr code maker,free qr generator,qr code creator,custom qr code,generate qr online,qr builder";
+  "qr code generator,private qr maker,offline qr generator,client-side qr code,secure qr creator,no upload qr,free qr builder,qr code browser,safe qr generator,custom qr offline";
 
 export const metadata: Metadata = {
   alternates: {

@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Suspense, memo, useCallback } from "react";
 import { ToolComponentProps } from "@/types/component";
-import { SkeletonWithProps } from "./lib/skeletons";
+import { ToolPageSkeleton } from "./lib/skeletons";
 
 interface ToolComponentWrapperProps {
   pageUrl: string;
@@ -40,7 +40,7 @@ const ToolComponentWrapper = memo(
             };
           }),
         {
-          loading: () => <SkeletonWithProps />,
+          loading: () => <ToolPageSkeleton />,
           ssr: false,
         }
       ) as React.FC<ToolComponentProps>;
@@ -49,7 +49,7 @@ const ToolComponentWrapper = memo(
     }, [pageUrl, hostname, queryParams]);
 
     return (
-      <Suspense fallback={<SkeletonWithProps />}>
+      <Suspense fallback={<ToolPageSkeleton />}>
         <ToolComponent />
       </Suspense>
     );
