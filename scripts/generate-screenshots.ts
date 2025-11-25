@@ -87,21 +87,27 @@ const generateScreenshots = async (): Promise<void> => {
     { url: "http://localhost:3000/blog", fileName: "blog" },
   ];
 
-  const screenshotsUrls: ScreenshotTask[] = ["tools", "blog"]
-    .map((folder) => `${process.cwd()}/src/data/${folder}`)
-    .map((folderPath) => {
-      return readdirSync(folderPath).map(
-        (file) => `${folderPath.split("/").pop()}/${file}`
-      );
-    })
-    .flat()
-    .map((fileName) => fileName.replace(".ts", ""))
-    .map((fileName) => fileName.replace(".json", ""))
-    .map((fileName) => ({
-      url: `http://localhost:3000/${fileName}`,
-      fileName: fileName.split("/").pop(),
-      folder: fileName.split("/")[0],
+  // Get tools from src/data/tools/*.ts
+  const toolsPath = `${process.cwd()}/src/data/tools`;
+  const toolFiles = readdirSync(toolsPath)
+    .filter((file) => file.endsWith(".ts"))
+    .map((file) => ({
+      url: `http://localhost:3000/tools/${file.replace(".ts", "")}`,
+      fileName: file.replace(".ts", ""),
+      folder: "tools",
     }));
+
+  // Get blogs from src/data/blog/config/*.ts
+  const blogConfigPath = `${process.cwd()}/src/data/blog/config`;
+  const blogFiles = readdirSync(blogConfigPath)
+    .filter((file) => file.endsWith(".ts"))
+    .map((file) => ({
+      url: `http://localhost:3000/blog/${file.replace(".ts", "")}`,
+      fileName: file.replace(".ts", ""),
+      folder: "blog",
+    }));
+
+  const screenshotsUrls: ScreenshotTask[] = [...toolFiles, ...blogFiles];
 
   screenshotsUrls.unshift(...commonUrls);
 

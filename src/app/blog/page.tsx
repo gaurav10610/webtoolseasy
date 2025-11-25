@@ -1,15 +1,15 @@
-import { join, map } from "lodash-es";
-import blogList from "@/data/blogList.json";
 import BlogList from "@/components/blogList";
 import {
   StructuredData,
   generateOrganizationSchema,
   generateWebsiteSchema,
 } from "@/components/structuredData";
+import { getAllBlogPosts, sortBlogPostsByDate } from "@/data/blogPosts";
+import { join, map } from "lodash-es";
 
-const pageTitle = "WebToolsEasy Blogs";
+const pageTitle = "Web Development Guides & Online Tools Blog | WebToolsEasy";
 const pageDescription =
-  "Discover the latest online web tools and technologies on the WebToolsEasy blog. Learn about SEO tools, image editors, converters, and more to boost your productivity.";
+  "Expert tutorials and guides on JWT authentication, API security, web development tools, and productivity solutions. Learn how to leverage powerful online tools for efficient development.";
 const keywords: string[] = [
   "online web tools",
   "web tools",
@@ -107,6 +107,9 @@ export async function generateMetadata() {
 }
 
 export default async function BlogListPage() {
+  // Get all blog posts sorted by date
+  const allBlogPosts = sortBlogPostsByDate(getAllBlogPosts());
+
   // Generate structured data for blog page
   const organizationSchema = generateOrganizationSchema();
   const websiteSchema = generateWebsiteSchema();
@@ -117,7 +120,7 @@ export default async function BlogListPage() {
       <StructuredData data={organizationSchema} />
       <StructuredData data={websiteSchema} />
 
-      <BlogList blogList={blogList} />
+      <BlogList blogPosts={allBlogPosts} />
     </>
   );
 }

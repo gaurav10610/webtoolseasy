@@ -28,9 +28,20 @@
 }
 
 .blog-div ul {
-  @apply list-disc list-inside;
+  @apply list-disc ml-6 mb-4;
+  list-style-position: outside;
 }
 
 .blog-div ol {
-  @apply list-disc list-inside;
+  @apply list-decimal ml-6 mb-4;
+  list-style-position: outside;
+}
+
+.blog-div li {
+  @apply mb-2;
+  line-height: 1.8;
+}
+
+.blog-div li strong {
+  white-space: nowrap;
 }
