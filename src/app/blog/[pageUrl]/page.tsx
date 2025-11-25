@@ -17,9 +17,13 @@ import { BlogIds } from "@/types/blog-config";
 
 // Import all blog configs
 import { blogConfig as decodingJwtGuide } from "@/data/blog/config/decoding-jwt-comprehensive-guide";
+import { blogConfig as pdfToWordGuide } from "@/data/blog/config/pdf-to-word-privacy-guide";
+import { blogConfig as restApiJwtGuide } from "@/data/blog/config/rest-api-jwt-authentication-guide";
 
 const blogConfigs = {
   [BlogIds.DECODING_JWT_COMPREHENSIVE_GUIDE]: decodingJwtGuide,
+  [BlogIds.PDF_TO_WORD_PRIVACY_GUIDE]: pdfToWordGuide,
+  [BlogIds.REST_API_JWT_AUTHENTICATION_GUIDE]: restApiJwtGuide,
 };
 
 export async function generateMetadata(

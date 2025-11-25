@@ -12,6 +12,8 @@ export enum BlogCategory {
 
 export enum BlogIds {
   DECODING_JWT_COMPREHENSIVE_GUIDE = "decoding-jwt-comprehensive-guide",
+  PDF_TO_WORD_PRIVACY_GUIDE = "pdf-to-word-privacy-guide",
+  REST_API_JWT_AUTHENTICATION_GUIDE = "rest-api-jwt-authentication-guide",
 }
 
 export interface BlogAuthor {
