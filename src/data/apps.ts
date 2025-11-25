@@ -733,4 +733,32 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "timer-icon.svg",
     category: AppCategory.MISCELLANEOUS,
   },
+  "resume-builder": {
+    applicationId: "resume-builder",
+    displayText: "Resume Builder Free",
+    navigateUrl: "tools/resume-builder",
+    iconRelativeUrl: "resume-icon.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
+  "favicon-generator": {
+    applicationId: "favicon-generator",
+    displayText: "Favicon Generator",
+    navigateUrl: "tools/favicon-generator",
+    iconRelativeUrl: "favicon-gen-icon.svg",
+    category: AppCategory.SEO,
+  },
+  "ascii-art-generator": {
+    applicationId: "ascii-art-generator",
+    displayText: "ASCII Art Generator",
+    navigateUrl: "tools/ascii-art-generator",
+    iconRelativeUrl: "ascii-icon.svg",
+    category: AppCategory.TEXT,
+  },
+  "table-generator": {
+    applicationId: "table-generator",
+    displayText: "Table Generator",
+    navigateUrl: "tools/table-generator",
+    iconRelativeUrl: "table-icon.svg",
+    category: AppCategory.PROGRAMMING,
+  },
 };

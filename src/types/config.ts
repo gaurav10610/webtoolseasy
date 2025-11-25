@@ -103,6 +103,10 @@ export enum ApplicationIds {
   DIFF_CHECKER = "diff-checker",
   STOPWATCH = "stopwatch",
   COUNTDOWN_TIMER = "countdown-timer",
+  RESUME_BUILDER = "resume-builder",
+  FAVICON_GENERATOR = "favicon-generator",
+  ASCII_ART_GENERATOR = "ascii-art-generator",
+  TABLE_GENERATOR = "table-generator",
 }
 
 export interface BaseAppConfig {
