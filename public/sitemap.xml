@@ -676,4 +676,16 @@
     <lastmod>2025-11-08T17:08:22+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/pdf-to-word-privacy-guide</loc>
+    <lastmod>2025-11-25T17:31:12+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/rest-api-jwt-authentication-guide</loc>
+    <lastmod>2025-11-25T17:31:12+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
 </urlset>
