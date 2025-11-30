@@ -51,9 +51,12 @@ Use [WebToolsEasy JWT Decoder](https://webtoolseasy.com/tools/jwt-decoder) to in
 ```mermaid
 graph LR
     A[JWT Token] --> B[Base64 Decode]
-    B --> C[Header<br/>Algorithm & Type]
-    B --> D[Payload<br/>Claims & Data]
-    B --> E[Signature<br/>Verification]
+    B --> C["Header
+Algorithm & Type"]
+    B --> D["Payload
+Claims & Data"]
+    B --> E["Signature
+Verification"]
 
     C --> F[Validation]
     D --> F
@@ -181,7 +184,8 @@ sequenceDiagram
 
     Note over C: Store token securely
 
-    C->>A: GET /api/data<br/>Authorization: Bearer {token}
+    C->>A: GET /api/data
+    Note over C,A: Authorization: Bearer token
     A->>V: Validate token signature
     V->>V: Check expiration
     V->>A: Token valid
@@ -189,7 +193,8 @@ sequenceDiagram
     D->>A: Return data
     A->>C: Return response
 
-    Note over C,A: Token remains valid<br/>until expiration
+    Note over C,A: Token remains valid
+    Note over C,A: until expiration
 ```
 
 ## Security Best Practices

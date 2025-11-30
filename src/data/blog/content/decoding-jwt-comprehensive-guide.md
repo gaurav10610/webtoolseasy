@@ -19,11 +19,14 @@ flowchart LR
     A[JWT Token] --> B[Header]
     A --> C[Payload]
     A --> D[Signature]
-    B --> E[Algorithm<br/>HS256/RS256]
-    B --> F[Token Type<br/>JWT]
+    B --> E["Algorithm
+HS256/RS256"]
+    B --> F["Token Type
+JWT"]
     C --> G[User Claims]
     C --> H[Permissions]
-    D --> I[Integrity<br/>Verification]
+    D --> I["Integrity
+Verification"]
 ```
 
 ## How does JWT decoding enhance security in applications

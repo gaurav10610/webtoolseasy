@@ -17,9 +17,13 @@ flowchart TD
     A[Your PDF Document] --> B{Conversion Method}
     B -->|Upload to Server| C[Server-Side Processing]
     B -->|Client-Side Tool| D[Local Browser Processing]
-    C --> E[Privacy Risk<br/>Data stored on servers<br/>Potential breaches]
+    C --> E["Privacy Risk
+Data stored on servers
+Potential breaches"]
     C --> F[Your Word Document]
-    D --> G[Complete Privacy<br/>No upload required<br/>Data stays local]
+    D --> G["Complete Privacy
+No upload required
+Data stays local"]
     D --> F
 
     style E fill:#ffcccc
@@ -65,8 +69,10 @@ sequenceDiagram
     B->>B: Generate DOCX file
     T->>U: Download converted file
 
-    Note over B,T: All processing happens<br/>locally in browser
-    Note over U,FS: Original file never<br/>leaves your device
+    Note over B,T: All processing happens
+    Note over B,T: locally in browser
+    Note over U,FS: Original file never
+    Note over U,FS: leaves your device
 ```
 
 ### Key Features That Protect Your Privacy

@@ -47,7 +47,22 @@
 }
 
 /* Mermaid diagram container */
+.mermaid-diagram {
+  @apply w-full overflow-x-auto;
+}
+
 .mermaid-diagram svg {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Ensure text in mermaid nodes stays within rectangles */
+.mermaid-diagram .nodeLabel {
+  overflow: visible;
+  display: inline-block;
+}
+
+.mermaid-diagram .edgeLabel {
+  background-color: white;
 }

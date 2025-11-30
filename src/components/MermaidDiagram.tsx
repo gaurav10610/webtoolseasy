@@ -17,6 +17,16 @@ if (typeof window !== "undefined") {
     flowchart: {
       htmlLabels: true,
       curve: "basis",
+      useMaxWidth: true,
+      padding: 15,
+    },
+    sequence: {
+      useMaxWidth: true,
+      wrap: true,
+      wrapPadding: 10,
+    },
+    gantt: {
+      useMaxWidth: true,
     },
   });
 }
@@ -86,6 +96,7 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ code }) => {
         backgroundColor: "#f9f9f9",
         borderRadius: "8px",
         overflow: "auto",
+        width: "100%",
       }}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
