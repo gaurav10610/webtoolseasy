@@ -1,4 +1,3 @@
-import { CustomSvgIcon } from "../lib/icons";
 import ManUserIcon from "@/data/icons/man-user.svg";
 import WomenUserIcon from "@/data/icons/woman-user.svg";
 import { UpdatedBy } from "@/types/domain-entities";
@@ -16,21 +15,39 @@ export function UpdatedByWithIcon({
 }>) {
   return (
     <div className={className}>
-      <CustomSvgIcon
-        sx={{
-          fontSize: "2rem",
-        }}
-      >
-        {updatedBy.gender === "F" ? (
-          <>
-            <WomenUserIcon />
-          </>
-        ) : (
-          <>
-            <ManUserIcon />
-          </>
-        )}
-      </CustomSvgIcon>
+      {updatedBy.gender === "F" ? (
+        <WomenUserIcon
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+          focusable="false"
+          aria-hidden="true"
+          style={{
+            userSelect: "none",
+            width: "1em",
+            height: "1em",
+            display: "inline-block",
+            fill: "currentColor",
+            flexShrink: 0,
+            transition: "fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+            fontSize: "2rem",
+          }}
+        />
+      ) : (
+        <ManUserIcon
+          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+          focusable="false"
+          aria-hidden="true"
+          style={{
+            userSelect: "none",
+            width: "1em",
+            height: "1em",
+            display: "inline-block",
+            fill: "currentColor",
+            flexShrink: 0,
+            transition: "fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+            fontSize: "2rem",
+          }}
+        />
+      )}
       <div className="flex flex-col">
         <Typography variant="caption">{label}</Typography>
         <Typography variant="caption" align="right" color="text.secondary">

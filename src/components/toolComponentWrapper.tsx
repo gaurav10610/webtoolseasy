@@ -1,18 +1,37 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Suspense, memo, useCallback } from "react";
+import { Suspense, memo, useCallback, useEffect, useState } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { ToolPageSkeleton } from "./lib/skeletons";
+import { useSearchParams } from "next/navigation";
+import { decompressStringFromBase64 } from "@/util/commonUtils";
 
 interface ToolComponentWrapperProps {
   pageUrl: string;
-  queryParams: { [key: string]: string };
   hostname: string;
 }
 
 const ToolComponentWrapper = memo(
-  ({ pageUrl, queryParams, hostname }: Readonly<ToolComponentWrapperProps>) => {
+  ({ pageUrl, hostname }: Readonly<ToolComponentWrapperProps>) => {
+    const searchParams = useSearchParams();
+    const [queryParams, setQueryParams] = useState<{ [key: string]: string }>(
+      {}
+    );
+
+    useEffect(() => {
+      const processParams = async () => {
+        const params: { [key: string]: string } = {};
+        if (searchParams) {
+          for (const [key, value] of searchParams.entries()) {
+            params[key] = await decompressStringFromBase64(value);
+          }
+        }
+        setQueryParams(params);
+      };
+      processParams();
+    }, [searchParams]);
+
     // Memoize the dynamic import to prevent recreation on re-renders
     const ToolComponent = useCallback(() => {
       const Component = dynamic(

@@ -20,6 +20,7 @@ const nextConfig = {
   async redirects() {
     return [
       // Block Pyodide internal files from being treated as tools
+      /*
       {
         source: "/tools/:path*.js",
         destination: "/404",
@@ -40,6 +41,7 @@ const nextConfig = {
         destination: "/404",
         permanent: false,
       },
+      */
     ];
   },
   webpack(config) {
