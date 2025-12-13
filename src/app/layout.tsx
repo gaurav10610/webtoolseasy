@@ -7,6 +7,28 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";
 import { AdSense } from "@/components/adSense";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.HOSTNAME || "https://webtoolseasy.com"),
+  title: {
+    default: "WebToolsEasy - Free Online Developer Tools & Utilities",
+    template: "%s | WebToolsEasy",
+  },
+  description:
+    "Free online tools for developers and power users. Converters, formatters, editors, and calculators. No download required.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "WebToolsEasy",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@webtoolseasy",
+    creator: "@gauravkyadav",
+  },
+};
 
 export default function RootLayout({
   children,
