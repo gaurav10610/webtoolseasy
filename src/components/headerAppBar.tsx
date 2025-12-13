@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CustomSvgIcon } from "./lib/icons";
 import { Typography, Chip, Box, IconButton } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import AppMenu from "./appMenu";
@@ -24,12 +23,21 @@ export default function HeaderAppBar({
           >
             <div className="relative">
               <div className="absolute inset-0 bg-blue-50 rounded-full blur-sm group-hover:bg-blue-100 transition-colors duration-200"></div>
-              <CustomSvgIcon
-                size="large"
-                className="relative text-blue-600 drop-shadow-sm"
-              >
-                <ApplicationIcon />
-              </CustomSvgIcon>
+              <ApplicationIcon
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge relative text-blue-600 drop-shadow-sm"
+                focusable="false"
+                aria-hidden="true"
+                style={{
+                  fontSize: "2.1875rem",
+                  width: "1em",
+                  height: "1em",
+                  display: "inline-block",
+                  fill: "currentColor",
+                  flexShrink: 0,
+                  transition: "fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                  userSelect: "none",
+                }}
+              />
             </div>
             <div className="flex flex-col">
               <Typography className="hidden sm:block !text-2xl !font-bold text-gray-900 tracking-tight">

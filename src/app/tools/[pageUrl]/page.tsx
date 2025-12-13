@@ -1,7 +1,7 @@
-import { decompressStringFromBase64 } from "@/util/commonUtils";
-import { keysIn } from "lodash-es";
 import ToolComponentWrapper from "@/components/toolComponentWrapper";
 import fs from "fs";
+import { Suspense } from "react";
+import { ToolPageSkeleton } from "@/components/lib/skeletons";
 
 export async function generateStaticParams() {
   const baseToolsPath = `${process.cwd()}/src/components/tools`;
@@ -13,26 +13,19 @@ export async function generateStaticParams() {
 
 export default async function WebToolPage(
   props: Readonly<{
-    params: Promise<{ [key: string]: string }>;
-    searchParams: Promise<{ [key: string]: string }>;
+    params: Promise<{ pageUrl: string }>;
   }>
 ) {
-  const searchParams = await props.searchParams;
   const params = await props.params;
-
-  const queryParams: { [key: string]: string } = {};
-
-  for (const key of keysIn(searchParams)) {
-    queryParams[key] = await decompressStringFromBase64(searchParams[key]);
-  }
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <ToolComponentWrapper
-        pageUrl={params.pageUrl}
-        queryParams={queryParams}
-        hostname={process.env.HOSTNAME!}
-      />
+      <Suspense fallback={<ToolPageSkeleton />}>
+        <ToolComponentWrapper
+          pageUrl={params.pageUrl}
+          hostname={process.env.HOSTNAME!}
+        />
+      </Suspense>
     </div>
   );
 }

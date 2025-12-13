@@ -26,7 +26,8 @@ test.describe("Blog Posts E2E Tests", () => {
       const h1 = page.locator("h1").first();
       await expect(h1).toBeVisible({ timeout: 10000 });
       const headingText = await h1.textContent();
-      expect(headingText?.toLowerCase()).toContain("blog");
+      // expect(headingText?.toLowerCase()).toContain("blog");
+      expect(headingText?.toLowerCase()).toContain("expert guides");
 
       // Verify page title
       const title = await page.title();
@@ -79,7 +80,7 @@ test.describe("Blog Posts E2E Tests", () => {
       await page.goto("/blog", { waitUntil: "domcontentloaded" });
 
       // Check for heading
-      const heading = page.locator("h1");
+      const heading = page.locator("h1").first();
       await expect(heading).toBeVisible();
 
       // Check for description text
@@ -151,15 +152,17 @@ test.describe("Blog Posts E2E Tests", () => {
         await page.goto(`/blog/${blogSlug}`, { waitUntil: "domcontentloaded" });
 
         // Check for author information
-        const author = page.locator(
-          'text=/by|author|written/i, [data-testid="author"], .author'
-        );
+        const author = page
+          .locator("text=/by|author|written/i")
+          .or(page.locator('[data-testid="author"]'))
+          .or(page.locator(".author"));
         const authorVisible = (await author.count()) > 0;
 
         // Check for date information
-        const date = page.locator(
-          'text=/\\d{4}|updated|published/i, time, [data-testid="date"]'
-        );
+        const date = page
+          .locator("text=/\\d{4}|updated|published/i")
+          .or(page.locator("time"))
+          .or(page.locator('[data-testid="date"]'));
         const dateVisible = (await date.count()) > 0;
 
         // At least one of author or date should be visible
@@ -397,13 +400,20 @@ test.describe("Blog Posts E2E Tests", () => {
       await expect(firstBlogLink).toBeVisible();
 
       const linkHref = await firstBlogLink.getAttribute("href");
-      await firstBlogLink.click();
 
-      // Wait for navigation
-      await page.waitForURL(new RegExp(linkHref!), { timeout: 10000 });
+      // Handle new tab navigation since links have target="_blank"
+      const [newPage] = await Promise.all([
+        page.context().waitForEvent("page"),
+        firstBlogLink.click(),
+      ]);
+
+      await newPage.waitForLoadState();
+
+      // Verify URL on the new page
+      await expect(newPage).toHaveURL(new RegExp(linkHref!));
 
       // Verify we're on the blog post page
-      const h1 = page.locator("h1").first();
+      const h1 = newPage.locator("h1").first();
       await expect(h1).toBeVisible();
 
       console.log(`✓ Successfully navigated to blog post: ${linkHref}`);

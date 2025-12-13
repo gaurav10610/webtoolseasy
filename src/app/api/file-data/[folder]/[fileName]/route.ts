@@ -11,7 +11,7 @@ import { updateJsonFile } from "@/service/apiService";
  */
 export async function GET(
   request: Request,
-  props: { params: Promise<{ folder: string; pageUrl: string }> }
+  props: { params: Promise<{ folder: string; fileName: string }> }
 ) {
   const params = await props.params;
   try {
@@ -25,9 +25,9 @@ export async function GET(
     }
 
     const folder = params.folder;
-    const pageUrl = params.pageUrl;
+    const fileName = params.fileName;
 
-    const filePath = join(process.cwd(), `/src/data/${folder}/${pageUrl}`);
+    const filePath = join(process.cwd(), `/src/data/${folder}/${fileName}`);
 
     if (!fs.existsSync(filePath)) {
       return NextResponse.json(
