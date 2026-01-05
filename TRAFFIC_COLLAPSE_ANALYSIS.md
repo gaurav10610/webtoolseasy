@@ -122,7 +122,13 @@ To the correct filename:
 
 ### Suggested Code Improvement
 
-Create a shared metadata utility:
+**Option 1: Fix the Typo (Recommended)**
+1. Rename `/public/favion_512.png` to `/public/favicon_512.png` (correct spelling)
+2. Update all references across the codebase from `/favion_512.png` to `/favicon_512.png`
+3. This ensures consistency and prevents future confusion
+
+**Option 2: Create Shared Configuration (After fixing typo)**
+Create a shared metadata utility to prevent future inconsistencies:
 ```typescript
 // src/util/metadataUtils.ts
 export const iconConfig = {
@@ -130,7 +136,7 @@ export const iconConfig = {
     { url: "/favicon.ico" },
     { url: "/favicon.svg", type: "image/svg+xml" },
     { url: "/favicon_48.png", sizes: "48x48" },
-    { url: "/favion_512.png", sizes: "512x512" }, // Note: file has typo in name
+    { url: "/favicon_512.png", sizes: "512x512" },
   ],
   shortcut: "/favicon.ico",
   apple: "/favicon.png",
@@ -138,6 +144,8 @@ export const iconConfig = {
 ```
 
 Then import and use this in all metadata configurations to ensure consistency.
+
+**Note**: This PR intentionally does NOT rename the file to minimize risk and keep changes surgical. The file rename should be done in a separate PR with comprehensive testing.
 
 ## Expected Recovery Timeline
 
