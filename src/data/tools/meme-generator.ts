@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/meme-generator";
-const pageTitle = "Meme Generator - Create Funny Memes Online Free";
+const pageTitle = "Free Meme Generator - Private, No Upload";
 const pageDescription =
   "Create custom memes online instantly. Add text to images, choose fonts, download high-quality memes. Free meme maker with popular templates.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/meme-generator.png`;

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/countdown-timer";
-const pageTitle = "Countdown Timer - Free Online Timer with Alarm";
+const pageTitle = "Countdown Timer - Private & No Tracking | Free";
 const pageDescription =
   "Set custom countdown timer online for free. Alarm notifications, presets for cooking, workouts, meditation. Perfect time management tool for productivity.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/countdown-timer.png`;

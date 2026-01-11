@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-to-images";
-const pageTitle = "PDF to Images - Convert PDF to PNG/JPG Online Free";
+const pageTitle = "PDF to Images - Private & No Upload | Free Online";
 const pageDescription =
   "Free online PDF to image converter. Convert PDF pages to PNG or JPG images. High quality conversion in your browser with no upload.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-to-images.png`;

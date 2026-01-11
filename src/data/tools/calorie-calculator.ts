@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/calorie-calculator";
-const pageTitle = "Calorie Calculator - Daily Calorie Needs & BMR";
+const pageTitle = "Free Calorie Calculator - Private, No Tracking";
 const pageDescription =
   "Calculate daily calorie needs, BMR, and TDEE. Free calorie calculator for weight loss, maintenance, and muscle gain goals with personalized results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/calorie-calculator.png`;

@@ -75,6 +75,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Free Diff Checker: Compare Text & Code Online Instantly",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my code or text saved when comparing?",
+        answer:
+          "No, all comparison happens locally in your browser. Your code and text never leave your device - we use 100% client-side processing for complete privacy.",
+      },
+      {
+        question: "What formats can I compare with the diff checker?",
+        answer:
+          "You can compare any text-based content including plain text, source code (JavaScript, Python, Java, etc.), JSON, XML, HTML, CSS, Markdown, and more.",
+      },
+      {
+        question: "Does this diff checker support side-by-side view?",
+        answer:
+          "Yes, our diff checker displays differences in a clear side-by-side view with line-by-line highlighting. Added lines are shown in green and removed lines in red.",
+      },
+      {
+        question: "Is the diff checker free to use?",
+        answer:
+          "Yes, our diff checker is completely free with no limits on text length, number of comparisons, or usage. No account required.",
+      },
+    ],
   }),
 };
 

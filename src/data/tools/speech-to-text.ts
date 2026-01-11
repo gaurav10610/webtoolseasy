@@ -4,7 +4,7 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/speech-to-text";
-const pageTitle = "Speech to Text - Private & Offline | No Upload | Free";
+const pageTitle = "Speech to Text - Private & No Upload | Free Offline";
 const metaDescription =
   "Convert speech to text with 100% client-side processing. Your audio never leaves your browser - no server uploads, complete privacy. Supports 20+ languages with real-time transcription.";
 

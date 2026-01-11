@@ -22,6 +22,12 @@ import { blogConfig as restApiJwtGuide } from "@/data/blog/config/rest-api-jwt-a
 import { blogConfig as privateImageCompressionGuide } from "@/data/blog/config/private-image-compression-guide";
 import { blogConfig as clientSideJsonFormattingGuide } from "@/data/blog/config/client-side-json-formatting-guide";
 import { blogConfig as securePasswordGenerationGuide } from "@/data/blog/config/secure-password-generation-guide";
+import { blogConfig as privacyFirstPdfToolsGuide } from "@/data/blog/config/privacy-first-pdf-tools-guide";
+import { blogConfig as offlineWebToolsGuide } from "@/data/blog/config/offline-web-tools-guide";
+import { blogConfig as freeDeveloperToolsGuide } from "@/data/blog/config/free-developer-tools-guide";
+import { blogConfig as freeImageEditingToolsGuide } from "@/data/blog/config/free-image-editing-tools-guide";
+import { blogConfig as textWritingToolsGuide } from "@/data/blog/config/text-writing-tools-guide";
+import { blogConfig as freeCalculatorToolsGuide } from "@/data/blog/config/free-calculator-tools-guide";
 
 const blogConfigs = {
   [BlogIds.DECODING_JWT_COMPREHENSIVE_GUIDE]: decodingJwtGuide,
@@ -30,6 +36,12 @@ const blogConfigs = {
   [BlogIds.PRIVATE_IMAGE_COMPRESSION_GUIDE]: privateImageCompressionGuide,
   [BlogIds.CLIENT_SIDE_JSON_FORMATTING_GUIDE]: clientSideJsonFormattingGuide,
   [BlogIds.SECURE_PASSWORD_GENERATION_GUIDE]: securePasswordGenerationGuide,
+  [BlogIds.PRIVACY_FIRST_PDF_TOOLS_GUIDE]: privacyFirstPdfToolsGuide,
+  [BlogIds.OFFLINE_WEB_TOOLS_GUIDE]: offlineWebToolsGuide,
+  [BlogIds.FREE_DEVELOPER_TOOLS_GUIDE]: freeDeveloperToolsGuide,
+  [BlogIds.FREE_IMAGE_EDITING_TOOLS_GUIDE]: freeImageEditingToolsGuide,
+  [BlogIds.TEXT_WRITING_TOOLS_GUIDE]: textWritingToolsGuide,
+  [BlogIds.FREE_CALCULATOR_TOOLS_GUIDE]: freeCalculatorToolsGuide,
 };
 
 export async function generateMetadata(

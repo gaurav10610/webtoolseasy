@@ -74,6 +74,28 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my text saved anywhere when I use this word counter?",
+        answer:
+          "No, your text stays entirely in your browser. We don't upload, store, or transmit your content to any server. All processing happens locally on your device.",
+      },
+      {
+        question: "How accurate is the word count?",
+        answer:
+          "Our tool uses standard word counting algorithms that match the behavior of popular word processors. It accurately counts words separated by spaces and line breaks.",
+      },
+      {
+        question: "Can I count characters for Twitter or SMS limits?",
+        answer:
+          "Yes, our tool shows character counts both with and without spaces, making it perfect for checking Twitter (280 characters), SMS (160 characters), and other platform-specific limits.",
+      },
+      {
+        question: "Does the word counter work offline?",
+        answer:
+          "Yes, once the page loads, you can use the word counter completely offline. All counting happens in your browser with no internet connection required.",
+      },
+    ],
   }),
 };
 

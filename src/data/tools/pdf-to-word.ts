@@ -67,6 +67,23 @@ export const componentConfig: ApplicationConfig = {
     pageTitle: pageTitle,
     mainHeading: "PDF to Word Converter",
     keywords: keywords.split(","),
+    faqs: [
+      {
+        question: "Does this tool upload my PDF to a server?",
+        answer:
+          "No, the conversion happens entirely in your browser. Your PDF files never leave your device, ensuring complete privacy and security.",
+      },
+      {
+        question: "Is the conversion quality good?",
+        answer:
+          "Yes, our converter preserves text, formatting, tables, and images from your original PDF document in the Word output.",
+      },
+      {
+        question: "Is this PDF to Word converter free?",
+        answer:
+          "Yes, completely free with no limits, no watermarks, and no registration required.",
+      },
+    ],
   }),
 };
 

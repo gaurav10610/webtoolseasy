@@ -75,6 +75,23 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Hash Generator: MD5, SHA-1 & SHA-256",
     keywords: keywords.split(",").map((w) => w.trim()),
+    faqs: [
+      {
+        question: "Is this hash generator secure?",
+        answer:
+          "Yes, our hash generator runs entirely in your browser using the Web Crypto API. Your data is never sent to any server.",
+      },
+      {
+        question: "What hash algorithms are supported?",
+        answer:
+          "Our tool supports MD5, SHA-1, SHA-256, and SHA-512 algorithms. You can generate all hash types simultaneously from your input.",
+      },
+      {
+        question: "Is my data sent to any server?",
+        answer:
+          "No, all hash computation happens 100% client-side in your browser. Your data never leaves your device, ensuring complete privacy.",
+      },
+    ],
   }),
 };
 

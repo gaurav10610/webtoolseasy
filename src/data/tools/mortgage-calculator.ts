@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/mortgage-calculator";
-const pageTitle = "Mortgage Calculator - Home Loan EMI & Payment Plan";
+const pageTitle = "Mortgage Calculator - Free, Private & No Upload";
 const pageDescription =
   "Calculate mortgage EMI with our free home loan calculator. Get detailed amortization schedule, total interest, and monthly payment breakdown.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/mortgage-calculator.png`;

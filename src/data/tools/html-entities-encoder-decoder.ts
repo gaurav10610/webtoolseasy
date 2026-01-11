@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-entities-encoder-decoder";
-const pageTitle = "HTML Entity Encoder Decoder - Escape HTML Characters";
+const pageTitle = "HTML Entity Encoder Decoder - Private & Offline | Free";
 const pageDescription =
   "Encode and decode HTML entities instantly. Convert special characters to HTML entities and vice versa. Free HTML entity converter online.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-entities-encoder-decoder.png`;

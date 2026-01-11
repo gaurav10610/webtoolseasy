@@ -3,7 +3,7 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-const pageTitle = "HTML to Markdown Converter - Fast & Accurate Online";
+const pageTitle = "Free HTML to Markdown Converter | Private & Offline";
 const pageDescription =
   "Convert HTML to Markdown instantly with our free online converter. Accurate, fast conversion works entirely in browser. Perfect for developers and writers.";
 const keywords =

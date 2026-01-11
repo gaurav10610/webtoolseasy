@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/compound-interest-calculator";
-const pageTitle = "Compound Interest Calculator - Investment Growth Tool";
+const pageTitle = "Compound Interest Calculator - Free & Private";
 const pageDescription =
   "Calculate compound interest for investments and savings. Free calculator shows growth over time with customizable interest rates and compounding periods.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/compound-interest-calculator.png`;

@@ -78,6 +78,28 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Are the generated UUIDs cryptographically secure?",
+        answer:
+          "Yes, our UUID v4 generator uses your browser's built-in crypto.getRandomValues() API, which provides cryptographically strong random number generation for maximum security.",
+      },
+      {
+        question: "Is there a limit on how many UUIDs I can generate?",
+        answer:
+          "No, you can generate unlimited UUIDs completely free. Generate single UUIDs or bulk generate thousands at once with no restrictions.",
+      },
+      {
+        question: "Are the generated UUIDs stored or logged anywhere?",
+        answer:
+          "No, all UUIDs are generated locally in your browser and are never sent to any server. Your generated identifiers remain completely private.",
+      },
+      {
+        question: "Are UUID v4 identifiers truly unique?",
+        answer:
+          "Yes, UUID v4 has 122 random bits, giving approximately 5.3 × 10^36 possible combinations. The probability of generating duplicate UUIDs is astronomically low.",
+      },
+    ],
   }),
 };
 

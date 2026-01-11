@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/robots-txt-generator";
-const pageTitle = "Robots.txt Generator - Create Robots File Online Free";
+const pageTitle = "Free Robots.txt Generator - Private & Offline";
 const pageDescription =
   "Generate robots.txt file instantly for SEO. Free tool to create robot exclusion protocol with user-agents, disallow rules, and sitemap URLs.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/robots-txt-generator.png`;

@@ -82,6 +82,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is this JSON formatter private?",
+        answer:
+          "Yes, our JSON formatter is 100% client-side. Your data never leaves your browser and is never uploaded to any server, ensuring complete privacy.",
+      },
+      {
+        question: "Does this JSON formatter work offline?",
+        answer:
+          "Yes, all JSON formatting and validation happens locally in your browser. Once the page loads, you can use it without an internet connection.",
+      },
+      {
+        question: "Is this JSON formatter free?",
+        answer:
+          "Yes, this JSON formatter is completely free with no usage limits, no registration required, and no hidden fees.",
+      },
+    ],
   }),
 };
 

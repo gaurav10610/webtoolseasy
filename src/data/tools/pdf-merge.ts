@@ -70,6 +70,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "PDF Merge: Combine PDF Files Online Free",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Does this PDF merger upload my files?",
+        answer:
+          "No, all PDF merging happens locally in your browser. Your files never leave your device, ensuring complete privacy and security.",
+      },
+      {
+        question: "How many PDFs can I merge at once?",
+        answer:
+          "You can merge unlimited PDF files with no restrictions. There are no file count limits or size restrictions on our client-side PDF merger.",
+      },
+      {
+        question: "Is the PDF merger completely free?",
+        answer:
+          "Yes, our PDF merger is 100% free with no hidden costs, watermarks, or premium tiers. Use it as often as you need without any limitations.",
+      },
+      {
+        question: "Can I reorder pages before merging PDFs?",
+        answer:
+          "Yes, you can drag and drop to reorder PDF files before merging. Preview all documents and arrange them in your preferred order.",
+      },
+    ],
   }),
 };
 

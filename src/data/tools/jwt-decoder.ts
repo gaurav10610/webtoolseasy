@@ -79,6 +79,23 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Online JWT Decoder: Validate and Decode JSON Web Token",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is it safe to paste my JWT here?",
+        answer:
+          "Yes, decoding happens 100% locally in your browser. Your JWT token is never sent to any server, ensuring complete privacy for sensitive API tokens.",
+      },
+      {
+        question: "Does this verify JWT signatures?",
+        answer:
+          "This tool decodes and displays JWT contents (header, payload, signature), but full signature verification requires the secret key which should never be shared online.",
+      },
+      {
+        question: "What information does a JWT contain?",
+        answer:
+          "A JWT contains three parts: Header (algorithm and token type), Payload (claims like user ID, expiration, and custom data), and Signature (verification hash).",
+      },
+    ],
   }),
 };
 

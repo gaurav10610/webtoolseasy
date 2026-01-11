@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-compare";
-const pageTitle = "Text Compare - Private & Offline | No Upload | Free";
+const pageTitle = "Text Compare - Private & No Upload | Free Offline";
 const pageDescription = `Compare two texts side by side with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Highlight differences instantly for documents, code, and content analysis.`;
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-diff.png`;
 const keywords =

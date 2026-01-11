@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/retirement-calculator";
-const pageTitle = "Retirement Calculator - Plan Your Golden Years";
+const pageTitle = "Free Retirement Calculator - Private, No Data Stored";
 const pageDescription =
   "Calculate retirement savings needed. Free tool helps plan your retirement corpus based on current age, savings, and monthly contributions.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/retirement-calculator.png`;

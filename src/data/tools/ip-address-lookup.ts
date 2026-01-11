@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ip-address-lookup";
-const pageTitle = "IP Address Lookup - Find My IP Address & Location";
+const pageTitle = "IP Address Lookup - Free & Private | No Tracking";
 const pageDescription =
   "Find your IP address instantly. Free IP lookup tool shows your public IP, location, ISP, and network details. Check IP address online now.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ip-address-lookup.png`;

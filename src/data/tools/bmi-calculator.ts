@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/bmi-calculator";
-const pageTitle = "BMI Calculator - Body Mass Index Calculator Online";
+const pageTitle = "BMI Calculator - Free & Private | No Data Tracking";
 const pageDescription =
   "Calculate your BMI (Body Mass Index) instantly. Free tool to check if you're underweight, normal, overweight, or obese with health tips.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/bmi-calculator.png`;

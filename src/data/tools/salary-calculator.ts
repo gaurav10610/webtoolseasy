@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/salary-calculator";
-const pageTitle = "Salary Calculator - Hourly to Annual Conversion";
+const pageTitle = "Free Salary Calculator - Private & Offline";
 const pageDescription =
   "Convert between hourly, monthly, and annual salary. Free salary calculator with take-home pay estimates. Calculate hourly wage, yearly income, and more.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/salary-calculator.png`;

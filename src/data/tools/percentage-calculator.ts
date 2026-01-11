@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/percentage-calculator";
-const pageTitle = "Percentage Calculator - Calculate Percentages Online";
+const pageTitle = "Percentage Calculator - Free & Private Online";
 const pageDescription =
   "Free percentage calculator. Calculate percentage of value, increase, decrease, and percentage difference instantly. Easy-to-use online tool.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/percentage-calculator.png`;

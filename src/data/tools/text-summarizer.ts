@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-summarizer";
-const pageTitle = "Text Summarizer - Private & Offline | No Upload | Free";
+const pageTitle = "Text Summarizer - Private & No Upload | Free Offline";
 const pageDescription =
   "Summarize long text instantly with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Free AI text summarizer for articles, essays, documents.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-summarizer.png`;

@@ -67,6 +67,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Free Background Remover - Remove Image Backgrounds Online",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Do you upload my images to remove backgrounds?",
+        answer:
+          "No, the AI processing runs entirely in your browser using client-side technology. Your images never leave your device, ensuring complete privacy.",
+      },
+      {
+        question: "Is this background remover free?",
+        answer:
+          "Yes, completely free with no limits, no watermarks, and no registration required. Process as many images as you need.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "The tool supports JPEG, PNG, and WebP formats for input. Output is always a PNG file with transparent background.",
+      },
+      {
+        question: "How accurate is the background removal?",
+        answer:
+          "The tool uses advanced edge detection algorithms with adjustable threshold and edge smoothing controls for precise, professional results.",
+      },
+    ],
   }),
 };
 

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-editor";
-const pageTitle = "HTML CSS Editor Online - Live Preview & Code Editor";
+const pageTitle = "HTML CSS Editor - Private & Offline | No Upload | Free";
 const pageDescription =
   "Write, edit, and run HTML & CSS code with real-time preview. Free online editor with syntax highlighting, code completion, and responsive design testing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-editor.png`;

@@ -74,6 +74,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Online Case Converter: Convert Text to Lowercase, Uppercase, Sentence Case & Title Case",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my text private when using this tool?",
+        answer:
+          "Yes, all text conversion happens 100% in your browser. Your text is never sent to any server, ensuring complete privacy.",
+      },
+      {
+        question: "What case formats are supported?",
+        answer:
+          "UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, and kebab-case are all supported.",
+      },
+      {
+        question: "Is this case converter free?",
+        answer:
+          "Yes, completely free with no limits and no registration required. Convert as much text as you need.",
+      },
+    ],
   }),
 };
 

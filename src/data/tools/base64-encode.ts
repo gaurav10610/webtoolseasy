@@ -74,6 +74,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is Base64 encoding secure?",
+        answer:
+          "Base64 is encoding, not encryption - it transforms data into a text format but doesn't protect it. For privacy, our tool runs entirely in your browser, so your data never leaves your device.",
+      },
+      {
+        question: "Does this tool upload my data to any server?",
+        answer:
+          "No, all encoding happens 100% client-side in your browser. Your files and data are never uploaded to any server, ensuring complete privacy.",
+      },
+      {
+        question: "Is this Base64 encoder free to use?",
+        answer:
+          "Yes, our Base64 encoder is completely free with no limits on file size or number of conversions. No signup or registration required.",
+      },
+    ],
   }),
 };
 

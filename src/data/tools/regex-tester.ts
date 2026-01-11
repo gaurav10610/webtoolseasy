@@ -77,6 +77,28 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online Regex Tester - Test Regular Expressions & Validate Patterns",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my test data private when using this regex tester?",
+        answer:
+          "Yes, all regex testing happens 100% in your browser. Your patterns and test strings are never uploaded to any server, ensuring complete privacy for sensitive data.",
+      },
+      {
+        question: "Does this regex tester work offline?",
+        answer:
+          "Yes, once the page loads, you can use the regex tester completely offline. All pattern matching is done locally using JavaScript's built-in regex engine.",
+      },
+      {
+        question: "What regex flavors are supported?",
+        answer:
+          "This tool uses JavaScript's native regex engine (ECMAScript), which supports features like lookahead, lookbehind, named capture groups, and Unicode property escapes.",
+      },
+      {
+        question: "Is this regex tester free to use?",
+        answer:
+          "Yes, our regex tester is completely free with no limits. Test as many patterns as you need with no signup or registration required.",
+      },
+    ],
   }),
 };
 

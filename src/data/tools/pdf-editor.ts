@@ -79,6 +79,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Free Online PDF Editor: Edit, Merge, Split & Annotate PDFs",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Do I need to upload my PDF to a server?",
+        answer:
+          "No, all PDF editing happens entirely in your browser. Your documents never leave your device and are never uploaded to any server.",
+      },
+      {
+        question: "Is this PDF editor free?",
+        answer:
+          "Yes, this PDF editor is completely free with no file size limits, no watermarks, and no registration required.",
+      },
+      {
+        question: "Can I add text and images to PDFs?",
+        answer:
+          "Yes, our PDF editor provides full editing capabilities including adding text, images, annotations, merging multiple PDFs, splitting documents, and rotating pages.",
+      },
+      {
+        question: "Does the PDF editor work offline?",
+        answer:
+          "Yes, once the page loads, all PDF processing happens locally in your browser. You can continue editing even without an internet connection.",
+      },
+    ],
   }),
 };
 

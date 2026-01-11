@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-editor";
-const pageTitle = "Video Editor Online - Edit, Trim & Add Effects Free";
+const pageTitle = "Video Editor - Private & Offline | No Upload | Free";
 const pageDescription =
   "Edit videos online for free with cutting, trimming, text overlay, and effects. Professional video editor with real-time preview. No downloads required.";
 

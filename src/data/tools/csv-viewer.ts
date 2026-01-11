@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-viewer";
-const pageTitle = "CSV Viewer Online - Handle Large Files with Streaming";
+const pageTitle = "CSV Viewer - Private & Offline | No Upload | Free";
 const pageDescription =
   "View and edit large CSV files efficiently with our streaming CSV viewer. Handle multi-GB files, search data, and export results. No file size limits.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-viewer.png`;

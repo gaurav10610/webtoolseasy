@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/webcam-recorder";
-const pageTitle = "Webcam Recorder - Record Video Online Free";
+const pageTitle = "Webcam Recorder - Private & No Upload | Free Online";
 const pageDescription =
   "Record webcam video online for free. Capture video and audio from your camera with no download required. Perfect for video messages and vlogs.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/webcam-recorder.png`;

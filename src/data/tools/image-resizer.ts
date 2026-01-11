@@ -70,6 +70,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Image Resizer: Resize & Compress Images Online Free",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Do you upload images to resize them?",
+        answer:
+          "No, all image resizing happens directly in your browser. Your images never leave your device - we use 100% client-side processing for complete privacy.",
+      },
+      {
+        question: "Can I resize multiple images at once?",
+        answer:
+          "Yes, our image resizer supports batch processing. Upload multiple images and resize them all with the same dimensions in one go.",
+      },
+      {
+        question: "What dimensions can I resize images to?",
+        answer:
+          "You can resize to any custom width and height, use preset sizes for social media platforms, or scale by percentage while maintaining aspect ratio.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "We support all major image formats including JPG, PNG, WebP, GIF, and BMP. You can also convert between formats while resizing.",
+      },
+    ],
   }),
 };
 

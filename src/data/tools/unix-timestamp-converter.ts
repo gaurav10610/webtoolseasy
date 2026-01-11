@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/unix-timestamp-converter";
-const pageTitle = "UNIX Timestamp Converter - Epoch Time Converter Online";
+const pageTitle = "UNIX Timestamp Converter - Private & Free | No Upload";
 const pageDescription =
   "Convert UNIX timestamps to readable dates and vice versa. Free epoch time converter with timezone support. Convert timestamps instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/unix-timestamp-converter.png`;

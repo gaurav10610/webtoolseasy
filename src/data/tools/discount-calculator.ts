@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/discount-calculator";
-const pageTitle = "Discount Calculator - Calculate Sale Price & Savings";
+const pageTitle = "Discount Calculator - Free & Private | No Tracking";
 const pageDescription =
   "Calculate final price after discount, amount saved, and discount percentage. Essential for shoppers comparing deals and retailers planning promotions.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/discount-calculator.png`;

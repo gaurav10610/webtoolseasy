@@ -74,6 +74,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online Password Generator: Create Strong, Secure & Random Passwords",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is this password generator secure?",
+        answer:
+          "Yes, our password generator uses the browser's built-in Web Crypto API for cryptographically secure randomness. Passwords are generated entirely in your browser.",
+      },
+      {
+        question: "Does anyone see my generated password?",
+        answer:
+          "No, passwords are generated locally in your browser only. They are never transmitted to any server or stored anywhere.",
+      },
+      {
+        question: "What makes a strong password?",
+        answer:
+          "A strong password should be at least 16 characters long and include a mix of uppercase letters, lowercase letters, numbers, and special symbols. Avoid common words and personal information.",
+      },
+    ],
   }),
 };
 

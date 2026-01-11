@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/code-minifier";
-const pageTitle = "Code Minifier - JS/CSS/HTML";
+const pageTitle = "Free Code Minifier - JS/CSS/HTML | Private & Offline";
 const pageDescription =
   "Minify JavaScript, CSS and HTML online. Remove comments and whitespace to reduce bundle size for production.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/code-minifier.png`;

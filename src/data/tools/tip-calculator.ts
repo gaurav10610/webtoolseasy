@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/tip-calculator";
-const pageTitle = "Tip Calculator - Calculate Tips and Split Bills";
+const pageTitle = "Tip Calculator - Free & Private | Works Offline";
 const pageDescription =
   "Calculate tips and split bills easily. Determine tip amounts by percentage, divide costs among people, and see total amounts per person instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/tip-calculator.png`;

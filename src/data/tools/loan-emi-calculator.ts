@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/loan-emi-calculator";
-const pageTitle = "Loan EMI Calculator - Calculate Monthly Payments Online";
+const pageTitle = "Loan EMI Calculator - Free, Private & Offline";
 const pageDescription =
   "Free loan EMI calculator. Calculate monthly payments for home loans, car loans, personal loans. View amortization schedule with interest breakdown.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/loan-emi-calculator.png`;

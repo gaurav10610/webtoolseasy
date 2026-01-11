@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/test-hardware";
-const pageTitle = "Online Hardware Test | Test Camera, Mic, & Speakers";
+const pageTitle = "Hardware Test - Private & Free | Camera, Mic, Speakers";
 const pageDescription =
   "Easily test your camera, microphone, speakers, and other hardware with our free online tool. Get instant results for your webcam, mic, battery, and more.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/test-hardware.png`;

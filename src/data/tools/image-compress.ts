@@ -74,6 +74,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Are my images uploaded to a server?",
+        answer:
+          "No, image compression happens entirely in your browser. Your photos never leave your device and are never uploaded to any server.",
+      },
+      {
+        question: "Is this image compressor free?",
+        answer:
+          "Yes, this image compressor is completely free with no file size limits, no watermarks, and no registration required.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "Our compressor supports JPEG, PNG, WebP, GIF, and BMP formats. You can compress multiple images at once and download them individually or as a ZIP file.",
+      },
+    ],
   }),
 };
 

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/date-calculator";
-const pageTitle = "Date Calculator - Calculate Date Differences";
+const pageTitle = "Free Date Calculator - Private, No Upload Required";
 const pageDescription =
   "Calculate date differences, add or subtract days, and find dates for past or future events. Essential for project planning and deadline tracking.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/date-calculator.png`;

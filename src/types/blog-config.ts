@@ -19,6 +19,10 @@ export enum BlogIds {
   SECURE_PASSWORD_GENERATION_GUIDE = "secure-password-generation-guide",
   PRIVACY_FIRST_PDF_TOOLS_GUIDE = "privacy-first-pdf-tools-guide",
   OFFLINE_WEB_TOOLS_GUIDE = "offline-web-tools-guide",
+  FREE_DEVELOPER_TOOLS_GUIDE = "free-developer-tools-guide",
+  FREE_IMAGE_EDITING_TOOLS_GUIDE = "free-image-editing-tools-guide",
+  TEXT_WRITING_TOOLS_GUIDE = "text-writing-tools-guide",
+  FREE_CALCULATOR_TOOLS_GUIDE = "free-calculator-tools-guide",
 }
 
 export interface BlogAuthor {
