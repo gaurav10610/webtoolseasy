@@ -672,8 +672,38 @@
   </url>
 
   <url>
+    <loc>https://webtoolseasy.com/blog/client-side-json-formatting-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
     <loc>https://webtoolseasy.com/blog/decoding-jwt-comprehensive-guide</loc>
     <lastmod>2025-11-08T17:08:22+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/free-calculator-tools-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/free-developer-tools-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/free-image-editing-tools-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/offline-web-tools-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
     <priority>0.7000</priority>
   </url>
 
@@ -684,8 +714,62 @@
   </url>
 
   <url>
+    <loc>https://webtoolseasy.com/blog/privacy-first-pdf-tools-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/private-image-compression-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
     <loc>https://webtoolseasy.com/blog/rest-api-jwt-authentication-guide</loc>
     <lastmod>2025-11-25T17:31:12+00:00</lastmod>
     <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/secure-password-generation-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/blog/text-writing-tools-guide</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/category/pdf-tools</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/category/image-tools</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/category/dev-tools</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/category/text-tools</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/tools/category/calculators</loc>
+    <lastmod>2026-01-11T11:51:45+00:00</lastmod>
+    <priority>0.8000</priority>
   </url>
 </urlset>

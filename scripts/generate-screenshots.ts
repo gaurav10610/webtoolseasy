@@ -3,6 +3,7 @@
 import { isNil } from "lodash-es";
 import { readdirSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import puppeteer, { Browser, Page } from "puppeteer";
+import { getAllCategorySlugs } from "../src/data/categories";
 
 // Get parallelism from environment variable, default to 4
 const PARALLELISM = parseInt(process.env.PARALLELISM || "4", 10);
@@ -107,7 +108,19 @@ const generateScreenshots = async (): Promise<void> => {
       folder: "blog",
     }));
 
-  const screenshotsUrls: ScreenshotTask[] = [...toolFiles, ...blogFiles];
+  // Get category pages from categories configuration
+  const categorySlugs = getAllCategorySlugs();
+  const categoryFiles = categorySlugs.map((slug) => ({
+    url: `http://localhost:3000/tools/category/${slug}`,
+    fileName: slug,
+    folder: "category",
+  }));
+
+  const screenshotsUrls: ScreenshotTask[] = [
+    ...toolFiles,
+    ...blogFiles,
+    ...categoryFiles,
+  ];
 
   screenshotsUrls.unshift(...commonUrls);
 

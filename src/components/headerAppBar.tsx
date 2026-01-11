@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { CustomSvgIcon } from "./lib/icons";
-import { Typography, Chip, Box, IconButton } from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { Typography, Chip, Box } from "@mui/material";
 import AppMenu from "./appMenu";
 import ApplicationIcon from "@/data/icons/app-icon.svg";
 
@@ -65,7 +64,7 @@ export default function HeaderAppBar({
             </div>
             <AppMenu />
             {/* GitHub Link */}
-            <IconButton
+            {/* <IconButton
               component="a"
               href="https://github.com/gaurav10610/webtoolseasy"
               target="_blank"
@@ -75,7 +74,7 @@ export default function HeaderAppBar({
               size="large"
             >
               <GitHubIcon />
-            </IconButton>
+            </IconButton> */}
           </div>
         </div>
       </div>
