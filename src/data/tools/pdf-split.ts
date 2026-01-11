@@ -4,12 +4,12 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-split";
-const pageTitle = "PDF Split - Split PDF Pages Online Free";
+const pageTitle = "PDF Split - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Free online PDF splitter. Extract or split PDF pages into separate files. Fast, secure, browser-based with no upload required.";
+  "Split PDF pages with 100% client-side processing. Your documents never leave your browser - no server uploads, complete privacy. Extract pages into separate files.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-split.png`;
 const keywords =
-  "pdf split,split pdf,extract pdf pages,pdf page splitter,separate pdf pages,pdf divider,split pdf online,pdf page extractor";
+  "pdf split,split pdf,extract pdf pages,pdf page splitter,separate pdf pages,pdf divider,split pdf online,pdf page extractor,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

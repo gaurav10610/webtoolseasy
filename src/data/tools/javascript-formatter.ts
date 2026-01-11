@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-formatter";
-const pageTitle = "JavaScript Formatter - Beautify & Format JS Code";
+const pageTitle = "JavaScript Formatter - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Format and beautify JavaScript code online for free. Clean, indent, and organize JS code with proper structure. Improve code readability instantly.";
+  "Format and beautify JavaScript code 100% client-side. No server upload, your code never leaves your browser. Private, secure JS formatting with instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-format.png`;
 
 const keywords =
-  "javascript formatter,js formatter,beautify javascript,format javascript online,javascript beautifier,javascript prettifier,js code formatter";
+  "javascript formatter,js formatter,beautify javascript,format javascript online,javascript beautifier,javascript prettifier,js code formatter,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -75,7 +75,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "javascript-formatter",
     pageTitle,
-    mainHeading: "Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease",
+    mainHeading:
+      "Free Online JavaScript Beautifier and Formatter: Beautify and Format Your JavaScript Code with Ease",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

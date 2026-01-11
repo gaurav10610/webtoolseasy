@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-formatter";
-const pageTitle = "HTML Formatter Online - Beautify & Format HTML Code";
+const pageTitle =
+  "Private HTML Formatter - Format HTML Offline | No Upload | Free";
 const pageDescription =
-  "Format and beautify HTML code online for free. Clean, indent, and organize HTML markup with proper structure. Improve code readability instantly.";
+  "100% client-side HTML formatter - your code never leaves your browser. Beautify and format HTML privately with proper indentation. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
 
 const keywords =
-  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html";
+  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -75,7 +76,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "html-formatter",
     pageTitle,
-    mainHeading: "Free Online HTML Beautifier and Formatter: Beautify and Format HTML Code",
+    mainHeading:
+      "Free Online HTML Beautifier and Formatter: Beautify and Format HTML Code",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

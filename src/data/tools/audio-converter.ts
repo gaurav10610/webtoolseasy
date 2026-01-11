@@ -4,12 +4,12 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/audio-converter";
-const pageTitle = "Audio Converter - Convert Audio Files Online Free";
+const pageTitle = "Audio Converter - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Free online audio converter. Convert MP3, WAV, OGG, M4A, AAC, FLAC and more. Fast browser-based conversion with no upload required.";
+  "Convert audio files with 100% client-side processing. Your audio never leaves your browser - no server uploads, complete privacy. Supports MP3, WAV, OGG, M4A, AAC, FLAC.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/audio-converter.png`;
 const keywords =
-  "audio converter,convert audio,MP3 converter,WAV converter,audio format converter,convert to MP3,audio file converter,online audio converter,free audio converter";
+  "audio converter,convert audio,MP3 converter,WAV converter,audio format converter,convert to MP3,audio file converter,online audio converter,free audio converter,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

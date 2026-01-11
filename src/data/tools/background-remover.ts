@@ -5,11 +5,11 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/background-remover";
-const pageTitle = "Background Remover - Remove Image Background Free";
+const pageTitle = "Background Remover - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Remove image backgrounds automatically online. Free background remover tool creates transparent PNG images instantly in your browser.";
+  "Remove image backgrounds with 100% client-side processing. Your images never leave your browser - no server uploads, complete privacy. Create transparent PNGs instantly.";
 const keywords =
-  "background remover,remove background,bg remover,background eraser,remove bg,photo background remover,transparent background,image background remover";
+  "background remover,remove background,bg remover,background eraser,remove bg,photo background remover,transparent background,image background remover,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

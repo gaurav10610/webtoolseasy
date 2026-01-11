@@ -209,6 +209,10 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
       {structuredData?.website && (
         <StructuredData data={structuredData.website} />
       )}
+      {structuredData?.faqPage && (
+        <StructuredData data={structuredData.faqPage} />
+      )}
+      {structuredData?.howTo && <StructuredData data={structuredData.howTo} />}
 
       <div className="w-full px-2 py-4">
         {/* Desktop Layout with 60% restriction */}

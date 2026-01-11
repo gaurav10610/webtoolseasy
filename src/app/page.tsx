@@ -1,5 +1,4 @@
 import { AppHeading } from "@/components/commonComponents";
-import { getRandomId } from "@/util/commonUtils";
 import { apps } from "@/data/apps";
 import { AppNavigationConfig, AppCategory } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
@@ -25,11 +24,12 @@ import {
 import { SkeletonWithProps } from "@/components/lib/skeletons";
 import { Suspense } from "react";
 
-const pageTitle = "Free Online Tools - Web Utilities & Productivity";
+const pageTitle =
+  "115+ Free Private Online Tools | No Data Upload | WebToolsEasy";
 const pageDescription =
-  "Access 30+ free online tools for development, text editing, media conversion & more. No downloads required. Boost productivity instantly.";
+  "Access 115+ free privacy-first online tools that run 100% in your browser. No server uploads, complete data privacy. JSON formatter, PDF editor, image compressor & more. No signup required.";
 const keywords =
-  "free online tools, web utilities, productivity tools, developer tools, text editor online, converter tools, no download required";
+  "free online tools, private tools, client-side tools, no upload, privacy-first, browser tools, secure online tools, offline tools, developer tools, JSON formatter, PDF editor, image compressor, no signup";
 
 const ENABLE_POPULAR_TOOLS = false;
 
@@ -143,7 +143,11 @@ function AppDiscoveryFilters({
               : `/?category=${encodeURIComponent(category)}`;
 
             return (
-              <Link key={getRandomId()} href={href} className="no-underline">
+              <Link
+                key={`cat-${category}`}
+                href={href}
+                className="no-underline"
+              >
                 <Chip
                   label={category}
                   variant={
@@ -271,7 +275,7 @@ function PopularToolsSection({
         >
           {featuredTools.map((config, index) => (
             <div
-              key={getRandomId()}
+              key={config.applicationId}
               className="w-full"
               style={{ animationDelay: `${index * 150}ms` }}
             >
@@ -305,7 +309,6 @@ function SectionAppList({
       {showCategoryTitle && (
         <header className="flex items-center gap-3 pb-2 border-b border-gray-200">
           <Typography
-            key={getRandomId()}
             variant="h2"
             className="!text-xl md:!text-2xl !font-medium !text-gray-800"
             color="textSecondary"
@@ -337,7 +340,7 @@ function SectionAppList({
           {map(configs, (config, index) => {
             return (
               <article
-                key={getRandomId()}
+                key={config.applicationId}
                 className="w-full"
                 style={{
                   animationDelay: `${index * 100}ms`,
@@ -350,9 +353,9 @@ function SectionAppList({
               </article>
             );
           })}
-          {map(new Array(emptyColumns), () => {
+          {map(new Array(emptyColumns), (_, idx) => {
             return (
-              <div key={getRandomId()} className="w-full hidden md:block" />
+              <div key={`empty-${idx}`} className="w-full hidden md:block" />
             );
           })}
         </Suspense>
@@ -465,7 +468,7 @@ export default async function Home({
                       ).length;
                       return (
                         <Link
-                          key={getRandomId()}
+                          key={`quick-${category}`}
                           href={`/?category=${encodeURIComponent(category)}`}
                           className="no-underline"
                         >
@@ -502,7 +505,7 @@ export default async function Home({
                   {map(categoryWiseAppList, (configs, category) => {
                     return (
                       <SectionAppList
-                        key={getRandomId()}
+                        key={`section-${category}`}
                         category={category}
                         configs={configs}
                         showCategoryTitle={!searchQuery}
@@ -567,7 +570,7 @@ export default async function Home({
               {map(categoryWiseAppList, (configs, category) => {
                 return (
                   <SectionAppList
-                    key={getRandomId()}
+                    key={`mobile-section-${category}`}
                     category={category}
                     configs={configs}
                     showCategoryTitle={!searchQuery}

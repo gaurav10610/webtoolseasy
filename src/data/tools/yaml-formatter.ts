@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/yaml-formatter";
-const pageTitle = "YAML Formatter & Validator";
+const pageTitle =
+  "YAML Formatter & Validator - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Format, validate and convert YAML online. Beautify YAML, detect syntax errors, and convert to JSON in the browser.";
+  "Format, validate and convert YAML 100% client-side. No server upload, your data never leaves your browser. Private, secure YAML formatting with instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/yaml-formatter.png`;
 
 const keywords =
-  "yaml formatter,yaml validator,yaml beautifier,format yaml online,convert yaml to json,yaml lint,yaml prettify";
+  "yaml formatter,yaml validator,yaml beautifier,format yaml online,convert yaml to json,yaml lint,yaml prettify,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

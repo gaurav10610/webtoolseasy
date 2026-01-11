@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-editor";
-const pageTitle = "Markdown Editor Online - Live Preview & Export";
+const pageTitle = "Markdown Editor - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Write and edit Markdown with live preview. Free online editor with syntax highlighting, export to HTML/PDF, and real-time formatting assistance.";
+  "Write and edit Markdown 100% client-side with live preview. No server upload, your content never leaves your browser. Private, secure Markdown editing with export options.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-editor.png`;
 
 const keywords =
-  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter";
+  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,7 +70,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "markdown-editor",
     pageTitle,
-    mainHeading: "Free Online Markdown Editor: Write, Edit and Preview Markdown in Real Time",
+    mainHeading:
+      "Free Online Markdown Editor: Write, Edit and Preview Markdown in Real Time",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

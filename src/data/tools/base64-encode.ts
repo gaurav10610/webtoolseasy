@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/base64-encode";
-const pageTitle = "Base64 Encoder Free - Convert Files to Base64 Online";
+const pageTitle =
+  "Private Base64 Encoder - Encode Files Offline | No Upload | Free";
 const pageDescription =
-  "Convert any file to Base64 format instantly. Free online encoder supports images, PDFs, documents. Secure browser-based encoding, no file uploads.";
+  "100% client-side Base64 encoder - your files never leave your browser. Convert images, PDFs, and documents to Base64 privately. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-encode.png`;
 
 const keywords =
-  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder";
+  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

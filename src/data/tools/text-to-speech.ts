@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-to-speech";
-const pageTitle = "Text to Speech - Free Online TTS Voice Generator";
+const pageTitle = "Text to Speech - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Convert text to speech online for free. Natural AI voices with adjustable speed, pitch, and volume. Download as audio or listen instantly.";
+  "Convert text to speech with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Natural voices with adjustable speed, pitch, and volume.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-to-speech.png`;
 
 const keywords =
-  "text to speech,tts,text to voice,speech generator,voice generator,read aloud,text reader,natural voice,ai voice";
+  "text to speech,tts,text to voice,speech generator,voice generator,read aloud,text reader,natural voice,ai voice,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

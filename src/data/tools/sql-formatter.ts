@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sql-formatter";
-const pageTitle = "SQL Formatter - Beautify & Format SQL";
+const pageTitle = "SQL Formatter - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Format and tidy SQL queries for better readability. Convert compact SQL into indented, easy-to-read queries with clause separation and basic formatting.";
+  "Format and beautify SQL queries 100% client-side. No server upload, your queries never leave your browser. Private, secure SQL formatting with instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/sql-formatter.png`;
 
 const keywords =
-  "sql formatter,format sql online,sql beautifier,sql prettify,format sql query,sql formatting tool";
+  "sql formatter,format sql online,sql beautifier,sql prettify,format sql query,sql formatting tool,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

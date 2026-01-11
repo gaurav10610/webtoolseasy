@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/word-counter";
-const pageTitle = "Word Counter - Count Words, Characters & Sentences";
+const pageTitle =
+  "Private Word Counter - Count Text Offline | No Upload | Free";
 const pageDescription =
-  "Count words, characters, and sentences in your text instantly. Free online word counter tool with detailed statistics for writing and content creation.";
+  "Works offline - count words, characters, and sentences 100% client-side. Your text never leaves your browser. Private, secure word counting with detailed statistics.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/word-counter.png`;
 
 const keywords =
-  "word counter,character counter,sentence counter,word count tool,character count tool,text statistics,writing tool,content analysis";
+  "word counter,character counter,sentence counter,word count tool,character count tool,text statistics,writing tool,content analysis,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,7 +71,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "word-counter",
     pageTitle,
-    mainHeading: "Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text",
+    mainHeading:
+      "Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

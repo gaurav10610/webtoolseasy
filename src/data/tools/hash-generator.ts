@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/hash-generator";
-const pageTitle = "Hash Generator - MD5, SHA-1, SHA-256"; // <=55 chars
+const pageTitle =
+  "Private Hash Generator - MD5, SHA-256 Offline | No Upload | Free";
 const pageDescription =
-  "Generate MD5, SHA-1 and SHA-256 hashes online. Compute, copy, or download hash results securely in your browser."; // <=150 chars
+  "100% client-side hash generator for MD5, SHA-1, SHA-256. Your data never leaves your browser - completely private and secure. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/hash-generator.png`;
 
 const keywords =
-  "hash generator,md5,sha1,sha256,hash online,generate hash,crypto hash,checksum";
+  "hash generator,md5,sha1,sha256,hash online,generate hash,crypto hash,checksum,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

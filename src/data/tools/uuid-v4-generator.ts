@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v4-generator";
-const pageTitle = "UUID v4 Generator - Generate Random UUIDs Online";
+const pageTitle =
+  "Private UUID Generator - Generate UUIDs Offline | No Upload | Free";
 const pageDescription =
-  "Generate random UUID v4 identifiers instantly. Create single or bulk UUIDs for development projects. Copy, download multiple unique identifiers easily.";
+  "100% client-side UUID v4 generator - your data never leaves your browser. Generate single or bulk random UUIDs privately. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator";
+  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -74,7 +75,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "uuid-v4-generator",
     pageTitle,
-    mainHeading: "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
+    mainHeading:
+      "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };
