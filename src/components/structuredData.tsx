@@ -333,3 +333,73 @@ export function generateRandomRating(): {
     worstRating: 1,
   };
 }
+
+/**
+ * Generate FAQPage schema for enhanced search appearance
+ * FAQs can help tools appear in rich snippets and featured snippets
+ */
+export function generateFAQPageSchema({
+  faqs,
+}: {
+  faqs: Array<{ question: string; answer: string }>;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+/**
+ * Generate HowTo schema for step-by-step tool instructions
+ * Improves chances of appearing in "How to" rich results
+ */
+export function generateHowToSchema({
+  name,
+  description,
+  steps,
+  totalTime,
+  image,
+}: {
+  name: string;
+  description: string;
+  steps: Array<{ name: string; text: string; image?: string }>;
+  totalTime?: string; // ISO 8601 duration, e.g., "PT5M" for 5 minutes
+  image?: string;
+}) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      ...(step.image && {
+        image: {
+          "@type": "ImageObject",
+          url: step.image,
+        },
+      }),
+    })),
+  };
+
+  if (totalTime) schema.totalTime = totalTime;
+  if (image) {
+    schema.image = {
+      "@type": "ImageObject",
+      url: image,
+    };
+  }
+
+  return schema;
+}

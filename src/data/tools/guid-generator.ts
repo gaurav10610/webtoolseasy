@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/guid-generator";
-const pageTitle = "GUID Generator Online - Generate Single or Bulk GUIDs";
+const pageTitle = "GUID Generator - Private & Offline | No Upload | Free";
 const pageDescription =
   "Generate globally unique identifiers (GUIDs) instantly. Create single or bulk GUIDs for your development projects. Copy and download results easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/guid-generator.png`;
@@ -74,7 +74,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "guid-generator",
     pageTitle,
-    mainHeading: "Online GUID Generator - Generate Single or Bulk Globally Unique Identifiers (GUIDs)",
+    mainHeading:
+      "Online GUID Generator - Generate Single or Bulk Globally Unique Identifiers (GUIDs)",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

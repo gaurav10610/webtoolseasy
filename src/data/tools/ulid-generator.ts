@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ulid-generator";
-const pageTitle = "ULID Generator - Time-sortable IDs";
+const pageTitle = "Free ULID Generator - Private & Offline";
 const pageDescription =
   "Generate time-sortable ULIDs online. Create single or bulk ULIDs for databases, ordered keys, and distributed systems.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ulid-generator.png`;

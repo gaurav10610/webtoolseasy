@@ -5,7 +5,7 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/barcode-generator";
-const pageTitle = "Barcode Generator - Create Barcodes Online Free";
+const pageTitle = "Free Barcode Generator - Private, No Upload";
 const pageDescription =
   "Generate barcodes online instantly. Create Code128, EAN13, UPC, and more barcode formats. Download as PNG or SVG for free in your browser.";
 const keywords =

@@ -5,7 +5,7 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 import { ApplicationIds } from "@/types/config";
 
 const navigationUrl = "/tools/image-to-text";
-const pageTitle = "Free Image to Text Converter | OCR Tool Online";
+const pageTitle = "Image to Text OCR - Private & Free | No Upload";
 const pageDescription =
   "Convert images to text instantly with our powerful OCR tool. Extract text from JPG, PNG, JPEG, and other image formats. Free online image to text converter with accurate text recognition. Perfect for digitizing documents, photos, and scanned files.";
 

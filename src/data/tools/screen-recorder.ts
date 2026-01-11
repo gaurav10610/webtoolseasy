@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/screen-recorder";
-const pageTitle = "Screen Recorder Online - Record Screen with Audio";
+const pageTitle = "Screen Recorder - Private & No Upload | Free Online";
 const pageDescription =
   "Record your screen with audio and webcam for free. Online screen recorder with no watermark, no time limits. Perfect for tutorials and demos.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/screen-recorder.png`;
@@ -70,7 +70,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "screen-recorder",
     pageTitle,
-    mainHeading: "Free Online Screen Recorder - Record Your Screen with Audio, Webcam",
+    mainHeading:
+      "Free Online Screen Recorder - Record Your Screen with Audio, Webcam",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

@@ -72,6 +72,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Free QR Code Generator: Generate QR Codes with Free Text",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my QR code data private?",
+        answer:
+          "Yes, all QR codes are generated 100% locally in your browser. Your data never leaves your device - no server uploads, no tracking, complete privacy.",
+      },
+      {
+        question: "What can I encode in a QR code?",
+        answer:
+          "You can encode URLs, plain text, contact information (vCard), WiFi credentials, email addresses, phone numbers, and more. Our generator supports all standard QR code data types.",
+      },
+      {
+        question: "Is this QR code generator free?",
+        answer:
+          "Yes, our QR code generator is completely free with no limits on the number of codes you can create. No signup required, no watermarks added.",
+      },
+      {
+        question: "Can I download QR codes in different formats?",
+        answer:
+          "Yes, you can download your QR codes in PNG, JPEG, SVG, or WEBP formats. SVG is recommended for print materials as it scales without quality loss.",
+      },
+    ],
   }),
 };
 

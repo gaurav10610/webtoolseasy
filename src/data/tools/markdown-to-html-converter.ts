@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-to-html-converter";
-const pageTitle = "Markdown to HTML Converter - Convert MD to HTML Online";
+const pageTitle = "Free Markdown to HTML Converter | Private & Offline";
 const pageDescription =
   "Convert Markdown to HTML instantly. Free online Markdown converter with live preview. Transform MD files to clean HTML code easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-to-html-converter.png`;

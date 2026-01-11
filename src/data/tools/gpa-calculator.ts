@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/gpa-calculator";
-const pageTitle = "GPA Calculator - Calculate Grade Point Average";
+const pageTitle = "GPA Calculator - Free & Private | No Data Upload";
 const pageDescription =
   "Calculate your GPA based on course grades and credit hours. Track semester and cumulative GPA for academic planning and scholarship eligibility.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/gpa-calculator.png`;

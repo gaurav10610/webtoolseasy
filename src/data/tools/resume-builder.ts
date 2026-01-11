@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/resume-builder";
-const pageTitle =
-  "Private Resume Builder - Create Professional Resume Offline | No Signup";
+const pageTitle = "Free Resume Builder - Private, Offline, No Signup";
 const pageDescription =
   "Build professional resume 100% client-side with complete privacy. No data upload, no signup required. Work offline, customize templates, and download PDF instantly. Your data never leaves your device.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/resume-builder.png`;

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/paraphrasing-tool";
-const pageTitle = "Free Paraphrasing Tool - Rewrite Text Online";
+const pageTitle = "Paraphrasing Tool - Private & No Upload | Free Online";
 const pageDescription =
   "Paraphrase and rewrite text instantly with our free online tool. Choose from standard, formal, creative, and fluency modes. Perfect for students, writers, and content creators.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/paraphrasing-tool.png`;

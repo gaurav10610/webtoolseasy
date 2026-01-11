@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/stopwatch";
-const pageTitle = "Stopwatch Online - Free Digital Stopwatch with Lap Timer";
+const pageTitle = "Stopwatch Online - Private & No Tracking | Free";
 const pageDescription =
   "Use our free online stopwatch with lap times. Accurate digital timer for sports, workouts, cooking, studying. Track splits and measure time precisely.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/stopwatch.png`;

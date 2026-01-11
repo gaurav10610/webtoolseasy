@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/fraction-calculator";
-const pageTitle = "Fraction Calculator - Add, Subtract, Simplify";
+const pageTitle = "Free Fraction Calculator - Private, No Tracking";
 const pageDescription =
   "Add, subtract, multiply, and divide fractions. Simplify fractions, convert mixed numbers, and get step-by-step solutions instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/fraction-calculator.png`;

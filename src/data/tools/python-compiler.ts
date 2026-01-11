@@ -5,7 +5,7 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/python-compiler";
 
-const pageTitle = "Online Python Compiler (Interpreter): Run Python in Browser";
+const pageTitle = "Python Compiler - Private & Offline | No Upload | Free";
 const pageDescription =
   "Our free online Python compiler lets you write, run, and test Python code directly in your browser. No setup required. Perfect for learning, practicing, and quick scripting. Execute Python 3 code instantly.";
 

@@ -4,12 +4,12 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/image-resizer";
-const pageTitle = "Image Resizer - Resize Images Online Free";
+const pageTitle = "Image Resizer - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Free online image resizer. Resize, compress, and optimize images instantly. Support for JPG, PNG, WebP. No upload required - works offline.";
+  "Resize images with 100% client-side processing. Your images never leave your browser - no server uploads, complete privacy. Support for JPG, PNG, WebP. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-resizer.png`;
 const keywords =
-  "image resizer,resize image,compress image,reduce image size,optimize image,image optimizer,photo resizer,picture resizer,resize photo online";
+  "image resizer,resize image,compress image,reduce image size,optimize image,image optimizer,photo resizer,picture resizer,resize photo online,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,6 +70,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Image Resizer: Resize & Compress Images Online Free",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Do you upload images to resize them?",
+        answer:
+          "No, all image resizing happens directly in your browser. Your images never leave your device - we use 100% client-side processing for complete privacy.",
+      },
+      {
+        question: "Can I resize multiple images at once?",
+        answer:
+          "Yes, our image resizer supports batch processing. Upload multiple images and resize them all with the same dimensions in one go.",
+      },
+      {
+        question: "What dimensions can I resize images to?",
+        answer:
+          "You can resize to any custom width and height, use preset sizes for social media platforms, or scale by percentage while maintaining aspect ratio.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "We support all major image formats including JPG, PNG, WebP, GIF, and BMP. You can also convert between formats while resizing.",
+      },
+    ],
   }),
 };
 

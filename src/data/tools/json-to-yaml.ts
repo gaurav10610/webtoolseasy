@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-to-yaml";
-const pageTitle = "JSON to YAML Converter - Free Online Converter Tool";
+const pageTitle = "Free JSON to YAML Converter | Private & Offline";
 const pageDescription =
   "Convert JSON to YAML and YAML to JSON online for free. Bidirectional converter with syntax validation and formatting.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-to-yaml.png`;

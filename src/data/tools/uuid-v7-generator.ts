@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v7-generator";
-const pageTitle = "UUID v7 Generator - Time-Ordered UUID Online";
+const pageTitle = "UUID v7 Generator - Private & Offline | No Upload | Free";
 const pageDescription =
   "Generate UUID v7 with timestamp ordering. Perfect for database keys, distributed systems, and sortable unique identifiers with chronological ordering.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v7-generator.png`;

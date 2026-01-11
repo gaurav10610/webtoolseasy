@@ -4,11 +4,11 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-compare";
-const pageTitle = "Text Compare Tool - Compare Text Differences Online";
-const pageDescription = `Compare two texts side by side and highlight differences instantly. Free online text comparison tool perfect for documents, code, and content analysis.`;
+const pageTitle = "Text Compare - Private & No Upload | Free Offline";
+const pageDescription = `Compare two texts side by side with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Highlight differences instantly for documents, code, and content analysis.`;
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-diff.png`;
 const keywords =
-  "text compare,compare text online,text diff tool,text comparison,compare documents,text difference,document compare,text checker";
+  "text compare,compare text online,text diff tool,text comparison,compare documents,text difference,document compare,text checker,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -68,7 +68,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "text-compare",
     pageTitle,
-    mainHeading: "Free Online Text Compare Tool: Find Differences Between Two Texts Easily",
+    mainHeading:
+      "Free Online Text Compare Tool: Find Differences Between Two Texts Easily",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

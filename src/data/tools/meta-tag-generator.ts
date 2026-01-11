@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/meta-tag-generator";
-const pageTitle = "Meta Tag Generator - Create SEO Meta Tags Online Free";
+const pageTitle = "Free Meta Tag Generator - Private & Offline";
 const pageDescription =
   "Generate HTML meta tags, Open Graph, Twitter Cards instantly. Free SEO meta tag generator for better search rankings and social media sharing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/meta-tag-generator.png`;

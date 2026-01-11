@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/signature-generator";
-const pageTitle = "Free Signature Generator - Create Digital Signatures";
+const pageTitle = "Free Signature Generator - Private, No Upload";
 const pageDescription =
   "Create digital signatures online free. Draw, type, or upload your signature. Download as transparent PNG. Perfect for documents and forms.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/signature-generator.png`;

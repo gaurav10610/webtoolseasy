@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-to-json";
-const pageTitle = "CSV to JSON Converter - Free Online CSV JSON Tool";
+const pageTitle = "Free CSV to JSON Converter | Private & No Upload";
 const pageDescription =
   "Convert CSV to JSON instantly. Free online tool with customizable delimiters and headers. Supports nested objects, arrays, large files. No upload needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-to-json.png`;

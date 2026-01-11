@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/unit-converter";
-const pageTitle = "Unit Converter - Convert Length, Weight & Temperature";
+const pageTitle = "Free Unit Converter - Private & Works Offline";
 const pageDescription =
   "Free online unit converter for length, weight, temperature, area, volume, and more. Instant conversions between metric and imperial units.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/unit-converter.png`;

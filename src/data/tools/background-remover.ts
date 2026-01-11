@@ -5,11 +5,11 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/background-remover";
-const pageTitle = "Background Remover - Remove Image Background Free";
+const pageTitle = "Background Remover - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Remove image backgrounds automatically online. Free background remover tool creates transparent PNG images instantly in your browser.";
+  "Remove image backgrounds with 100% client-side processing. Your images never leave your browser - no server uploads, complete privacy. Create transparent PNGs instantly.";
 const keywords =
-  "background remover,remove background,bg remover,background eraser,remove bg,photo background remover,transparent background,image background remover";
+  "background remover,remove background,bg remover,background eraser,remove bg,photo background remover,transparent background,image background remover,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -67,6 +67,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Free Background Remover - Remove Image Backgrounds Online",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Do you upload my images to remove backgrounds?",
+        answer:
+          "No, the AI processing runs entirely in your browser using client-side technology. Your images never leave your device, ensuring complete privacy.",
+      },
+      {
+        question: "Is this background remover free?",
+        answer:
+          "Yes, completely free with no limits, no watermarks, and no registration required. Process as many images as you need.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "The tool supports JPEG, PNG, and WebP formats for input. Output is always a PNG file with transparent background.",
+      },
+      {
+        question: "How accurate is the background removal?",
+        answer:
+          "The tool uses advanced edge detection algorithms with adjustable threshold and edge smoothing controls for precise, professional results.",
+      },
+    ],
   }),
 };
 

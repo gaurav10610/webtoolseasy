@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/xml-to-json";
-const pageTitle = "XML to JSON Converter - Transform XML Data Online";
+const pageTitle = "Free XML to JSON Converter | Private & No Upload";
 const pageDescription =
   "Convert XML to JSON format instantly with our free online converter. Transform XML data with validation and formatting. Easy, secure browser-based conversion.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/xml-to-json.png`;

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/time-duration-calculator";
-const pageTitle = "Time Duration Calculator - Calculate Time Between";
+const pageTitle = "Free Time Calculator - Private & Offline";
 const pageDescription =
   "Calculate time duration between hours, add or subtract time, and convert between time formats. Free time calculator for work hours, project tracking.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/time-duration-calculator.png`;

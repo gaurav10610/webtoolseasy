@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/currency-converter";
-const pageTitle = "Currency Converter - Live Exchange Rates Calculator";
+const pageTitle = "Free Currency Converter - Private, No Data Stored";
 const pageDescription =
   "Convert currencies instantly with live exchange rates. Support for 150+ currencies including USD, EUR, GBP, INR, CNY, JPY and more.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/currency-converter.png`;

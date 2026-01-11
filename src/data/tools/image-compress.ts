@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/image-compress";
-const pageTitle = "Image Compressor Online - Reduce Photo File Size";
+const pageTitle =
+  "Private Image Compressor - Compress Images Offline | No Upload | Free";
 const pageDescription =
-  "Compress images online while maintaining quality. Free tool reduces JPG, PNG, WEBP file sizes for web optimization. No uploads, secure compression.";
+  "Compress images 100% client-side in your browser. No server uploads - your photos stay completely private. Reduce JPG, PNG, WebP file size while maintaining quality. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-compressor.png`;
 
 const keywords =
-  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,web optimization";
+  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,web optimization,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,8 +71,26 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "image-compress",
     pageTitle,
-    mainHeading: "Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images",
+    mainHeading:
+      "Free Online Image Compressor: Compress JPEG, PNG, WEBP & BMP Images",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Are my images uploaded to a server?",
+        answer:
+          "No, image compression happens entirely in your browser. Your photos never leave your device and are never uploaded to any server.",
+      },
+      {
+        question: "Is this image compressor free?",
+        answer:
+          "Yes, this image compressor is completely free with no file size limits, no watermarks, and no registration required.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "Our compressor supports JPEG, PNG, WebP, GIF, and BMP formats. You can compress multiple images at once and download them individually or as a ZIP file.",
+      },
+    ],
   }),
 };
 

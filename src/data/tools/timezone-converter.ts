@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/timezone-converter";
-const pageTitle = "Timezone Converter - World Timezones & Current Time";
+const pageTitle = "Free Timezone Converter - Private & Offline";
 const pageDescription =
   "Convert times across major world time zones. See current time in top global zones and switch between 12/24 hour formats.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/timezone-converter.png`;

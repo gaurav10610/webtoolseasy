@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sip-calculator";
-const pageTitle = "SIP Calculator - Mutual Fund Investment Planning";
+const pageTitle = "SIP Calculator - Free & Private | No Data Tracking";
 const pageDescription =
   "Calculate SIP returns for mutual fund investments. Free calculator shows wealth creation with monthly SIP, expected returns, and investment period.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/sip-calculator.png`;

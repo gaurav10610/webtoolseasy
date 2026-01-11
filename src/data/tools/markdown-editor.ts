@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-editor";
-const pageTitle = "Markdown Editor Online - Live Preview & Export";
+const pageTitle = "Markdown Editor - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Write and edit Markdown with live preview. Free online editor with syntax highlighting, export to HTML/PDF, and real-time formatting assistance.";
+  "Write and edit Markdown 100% client-side with live preview. No server upload, your content never leaves your browser. Private, secure Markdown editing with export options.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-editor.png`;
 
 const keywords =
-  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter";
+  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,8 +70,31 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "markdown-editor",
     pageTitle,
-    mainHeading: "Free Online Markdown Editor: Write, Edit and Preview Markdown in Real Time",
+    mainHeading:
+      "Free Online Markdown Editor: Write, Edit and Preview Markdown in Real Time",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my markdown content saved on a server?",
+        answer:
+          "No, everything stays in your browser. Your content is never uploaded to any server, ensuring complete privacy for sensitive documents.",
+      },
+      {
+        question: "Can I export to HTML?",
+        answer:
+          "Yes, you can export your formatted markdown to HTML, PDF, and plain text formats for use in websites, documentation, or other applications.",
+      },
+      {
+        question: "Does this support live preview?",
+        answer:
+          "Yes, the editor features side-by-side editing and preview with synchronized scrolling, so you can see your formatted output in real-time.",
+      },
+      {
+        question: "What markdown features are supported?",
+        answer:
+          "The editor supports GitHub Flavored Markdown (GFM) including tables, task lists, code blocks with syntax highlighting, and mathematical equations.",
+      },
+    ],
   }),
 };
 

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-formatter";
-const pageTitle = "JSON Formatter - Beautify & Format JSON Data Online";
+const pageTitle =
+  "Private JSON Formatter - Format & Beautify JSON Offline | No Data Upload";
 const pageDescription =
-  "Format and beautify JSON data with our free online JSON formatter. Clean, indent, and validate JSON with syntax highlighting and error detection.";
+  "Format and beautify JSON data 100% client-side. No server upload - your data stays private. Free JSON formatter with validation, syntax highlighting & instant formatting. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-format.png`;
 
 const keywords =
-  "json formatter,json beautifier,format json online,json validator,beautify json,json prettifier,json parser,validate json";
+  "json formatter,private json formatter,offline json beautifier,client-side json,secure json formatter,format json online,no upload json,json validator,beautify json,json prettifier";
 
 export const metadata: Metadata = {
   alternates: {
@@ -81,6 +82,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is this JSON formatter private?",
+        answer:
+          "Yes, our JSON formatter is 100% client-side. Your data never leaves your browser and is never uploaded to any server, ensuring complete privacy.",
+      },
+      {
+        question: "Does this JSON formatter work offline?",
+        answer:
+          "Yes, all JSON formatting and validation happens locally in your browser. Once the page loads, you can use it without an internet connection.",
+      },
+      {
+        question: "Is this JSON formatter free?",
+        answer:
+          "Yes, this JSON formatter is completely free with no usage limits, no registration required, and no hidden fees.",
+      },
+    ],
   }),
 };
 

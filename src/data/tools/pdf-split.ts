@@ -4,12 +4,12 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-split";
-const pageTitle = "PDF Split - Split PDF Pages Online Free";
+const pageTitle = "PDF Split - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Free online PDF splitter. Extract or split PDF pages into separate files. Fast, secure, browser-based with no upload required.";
+  "Split PDF pages with 100% client-side processing. Your documents never leave your browser - no server uploads, complete privacy. Extract pages into separate files.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-split.png`;
 const keywords =
-  "pdf split,split pdf,extract pdf pages,pdf page splitter,separate pdf pages,pdf divider,split pdf online,pdf page extractor";
+  "pdf split,split pdf,extract pdf pages,pdf page splitter,separate pdf pages,pdf divider,split pdf online,pdf page extractor,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,6 +70,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "PDF Split: Extract Pages from PDF Online Free",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Does splitting my PDF upload it online?",
+        answer:
+          "No, all PDF splitting happens locally in your browser. Your documents never leave your device - we use 100% client-side processing for complete privacy.",
+      },
+      {
+        question: "Can I split PDF by page range?",
+        answer:
+          "Yes, you can extract specific page ranges, select individual pages, or split the entire PDF into single-page files. Full flexibility for your needs.",
+      },
+      {
+        question: "Is this PDF splitter free to use?",
+        answer:
+          "Yes, our PDF splitter is completely free with no limits on file size, number of pages, or usage. No watermarks or premium features.",
+      },
+      {
+        question: "What happens to my PDF after splitting?",
+        answer:
+          "Your original PDF remains unchanged. The split pages are created as new files that you download directly to your device. Nothing is stored on any server.",
+      },
+    ],
   }),
 };
 

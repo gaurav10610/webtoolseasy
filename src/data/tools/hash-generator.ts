@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/hash-generator";
-const pageTitle = "Hash Generator - MD5, SHA-1, SHA-256"; // <=55 chars
+const pageTitle =
+  "Private Hash Generator - MD5, SHA-256 Offline | No Upload | Free";
 const pageDescription =
-  "Generate MD5, SHA-1 and SHA-256 hashes online. Compute, copy, or download hash results securely in your browser."; // <=150 chars
+  "100% client-side hash generator for MD5, SHA-1, SHA-256. Your data never leaves your browser - completely private and secure. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/hash-generator.png`;
 
 const keywords =
-  "hash generator,md5,sha1,sha256,hash online,generate hash,crypto hash,checksum";
+  "hash generator,md5,sha1,sha256,hash online,generate hash,crypto hash,checksum,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -74,6 +75,23 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Hash Generator: MD5, SHA-1 & SHA-256",
     keywords: keywords.split(",").map((w) => w.trim()),
+    faqs: [
+      {
+        question: "Is this hash generator secure?",
+        answer:
+          "Yes, our hash generator runs entirely in your browser using the Web Crypto API. Your data is never sent to any server.",
+      },
+      {
+        question: "What hash algorithms are supported?",
+        answer:
+          "Our tool supports MD5, SHA-1, SHA-256, and SHA-512 algorithms. You can generate all hash types simultaneously from your input.",
+      },
+      {
+        question: "Is my data sent to any server?",
+        answer:
+          "No, all hash computation happens 100% client-side in your browser. Your data never leaves your device, ensuring complete privacy.",
+      },
+    ],
   }),
 };
 

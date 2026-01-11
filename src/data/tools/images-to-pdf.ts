@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/images-to-pdf";
-const pageTitle = "Images to PDF - Convert JPG/PNG to PDF Online Free";
+const pageTitle = "Images to PDF - Private & No Upload | Free Converter";
 const pageDescription =
   "Free online image to PDF converter. Combine multiple JPG, PNG images into a single PDF file. Rearrange order, adjust layout in browser.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/images-to-pdf.png`;

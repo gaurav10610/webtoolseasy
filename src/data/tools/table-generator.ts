@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/table-generator";
-const pageTitle = "Table Generator - Create HTML, Markdown, CSV Tables";
+const pageTitle = "Free Table Generator - Private & Offline";
 const pageDescription =
   "Generate tables online free. Create HTML, Markdown, CSV tables with visual editor. Add rows, columns, customize styling instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/table-generator.png`;

@@ -1,21 +1,28 @@
 import { getToolRating } from "./ratingUtils";
 
+export interface ToolFAQ {
+  question: string;
+  answer: string;
+}
+
 export function createToolStructuredData({
   pageUrl,
   pageTitle,
   mainHeading,
   keywords,
+  faqs,
 }: {
   pageUrl: string;
   pageTitle: string;
   mainHeading: string;
   keywords: string[];
+  faqs?: ToolFAQ[];
 }) {
   const toolUrl = `${process.env.HOSTNAME}/tools/${pageUrl}`;
   const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/${pageUrl}.png`;
   const toolRating = getToolRating(pageUrl);
 
-  return {
+  const result: Record<string, unknown> = {
     webApplication: {
       "@context": "https://schema.org",
       "@type": "WebApplication",
@@ -90,7 +97,7 @@ export function createToolStructuredData({
       url: process.env.HOSTNAME,
       logo: `${process.env.HOSTNAME}/favicon.png`,
       description:
-        "Free online tools and utilities for developers, designers, and content creators. No registration required.",
+        "Privacy-first online tools that run 100% client-side. Your data never leaves your browser.",
       sameAs: [
         "https://twitter.com/webtoolseasy",
         "https://www.linkedin.com/company/webtoolseasy/",
@@ -108,7 +115,7 @@ export function createToolStructuredData({
       name: "WebToolsEasy",
       url: process.env.HOSTNAME,
       description:
-        "Free online tools and utilities for developers, designers, and content creators. No registration required.",
+        "Privacy-first online tools that run 100% client-side. Your data never leaves your browser.",
       publisher: {
         "@type": "Organization",
         name: "WebToolsEasy",
@@ -123,4 +130,22 @@ export function createToolStructuredData({
       },
     },
   };
+
+  // Add FAQ schema if FAQs are provided
+  if (faqs && faqs.length > 0) {
+    result.faqPage = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    };
+  }
+
+  return result;
 }

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/invoice-generator";
-const pageTitle = "Free Invoice Generator - Create Professional Invoices";
+const pageTitle = "Free Invoice Generator - Private, No Upload";
 const pageDescription =
   "Create professional invoices in seconds with our free invoice generator. Add your company logo, customize fields, calculate taxes automatically, and export to PDF.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/invoice-generator.png`;

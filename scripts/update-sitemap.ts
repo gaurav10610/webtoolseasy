@@ -1,4 +1,5 @@
 import { readdirSync, writeFileSync, readFileSync, existsSync } from "fs";
+import { getAllCategorySlugs } from "../src/data/categories";
 
 function convertDateFormat(isoDate: string) {
   const date = new Date(isoDate);
@@ -100,7 +101,19 @@ function updateSitemap() {
       };
     });
 
-  const urlList = [...toolUrls, ...blogUrls];
+  // Get category pages from categories configuration
+  const categorySlugs = getAllCategorySlugs();
+  const categoryUrls = categorySlugs.map((slug) => {
+    const loc = `https://webtoolseasy.com/tools/category/${slug}`;
+    const existing = existingUrlMap.get(loc);
+    return {
+      loc,
+      lastmod: existing?.lastmod || convertDateFormat(new Date().toISOString()),
+      priority: existing?.priority || "0.8000",
+    };
+  });
+
+  const urlList = [...toolUrls, ...blogUrls, ...categoryUrls];
 
   const commonUrls = [
     {

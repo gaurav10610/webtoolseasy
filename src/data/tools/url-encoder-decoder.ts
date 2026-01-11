@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/url-encoder-decoder";
-const pageTitle = "URL Encoder Decoder Free - Encode Decode URLs Online";
+const pageTitle = "URL Encoder Decoder - Private & Free | No Upload";
 const pageDescription =
   "Free online URL encoder and decoder tool. Encode and decode URLs, URI components, query parameters instantly. Supports all special characters.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/url-encoder-decoder.png`;

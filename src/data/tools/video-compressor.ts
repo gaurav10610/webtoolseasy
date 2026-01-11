@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-compressor";
-const pageTitle = "Video Compressor - Compress Video Online Free";
+const pageTitle = "Video Compressor - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Compress video files online for free. Reduce video size without losing quality. Support for MP4, AVI, MOV, and all major formats. No watermark.";
+  "Compress videos with 100% client-side processing. Your videos never leave your browser - no server uploads, complete privacy. Reduce size without losing quality. Supports MP4, AVI, MOV.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/video-compressor.png`;
 
 const keywords =
-  "video compressor,compress video,reduce video size,video size reducer,compress mp4,shrink video,video optimizer";
+  "video compressor,compress video,reduce video size,video size reducer,compress mp4,shrink video,video optimizer,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

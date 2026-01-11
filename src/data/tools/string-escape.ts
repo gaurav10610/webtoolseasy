@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/string-escape";
-const pageTitle = "String Escape & Unescape"; // <=55 chars
+const pageTitle = "Free String Escape & Unescape | Private & Offline";
 const pageDescription =
   "Escape and unescape strings for JavaScript, HTML, URL and Base64 online. Convert, copy, or download results quickly in your browser."; // <=150 chars
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/string-escape.png`;

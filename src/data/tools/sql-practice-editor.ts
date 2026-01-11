@@ -5,7 +5,7 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sql-practice-editor";
 
-const pageTitle = "SQL Practice Editor: Learn & Practice SQL Online";
+const pageTitle = "SQL Practice Editor - Private & Offline | No Upload | Free";
 const pageDescription =
   "Free online SQL practice editor with built-in database. Learn SQL commands, practice queries, and visualize data relationships in your browser.";
 

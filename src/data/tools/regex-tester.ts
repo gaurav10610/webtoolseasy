@@ -3,11 +3,11 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-const pageTitle = "Regex Tester Online - Test Regular Expressions";
+const pageTitle = "Regex Tester - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Test and validate regular expressions with real-time matching. Free regex tester with flags support, detailed match results, and pattern debugging tools.";
+  "Test and validate regular expressions 100% client-side. No server upload, your patterns never leave your browser. Private, secure regex testing with real-time matching.";
 const keywords =
-  "regex tester,regular expression tester,regex validator,regex checker,regex debugger,regex online,pattern matching,regex flags";
+  "regex tester,regular expression tester,regex validator,regex checker,regex debugger,regex online,pattern matching,regex flags,private,offline,client-side,secure,no upload,browser-based";
 const navigationUrl = "/tools/regex-tester";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/regex-tester.png`;
 
@@ -77,6 +77,28 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online Regex Tester - Test Regular Expressions & Validate Patterns",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is my test data private when using this regex tester?",
+        answer:
+          "Yes, all regex testing happens 100% in your browser. Your patterns and test strings are never uploaded to any server, ensuring complete privacy for sensitive data.",
+      },
+      {
+        question: "Does this regex tester work offline?",
+        answer:
+          "Yes, once the page loads, you can use the regex tester completely offline. All pattern matching is done locally using JavaScript's built-in regex engine.",
+      },
+      {
+        question: "What regex flavors are supported?",
+        answer:
+          "This tool uses JavaScript's native regex engine (ECMAScript), which supports features like lookahead, lookbehind, named capture groups, and Unicode property escapes.",
+      },
+      {
+        question: "Is this regex tester free to use?",
+        answer:
+          "Yes, our regex tester is completely free with no limits. Test as many patterns as you need with no signup or registration required.",
+      },
+    ],
   }),
 };
 

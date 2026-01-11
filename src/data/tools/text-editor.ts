@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-editor";
-const pageTitle = "Text Editor Online - Write & Edit Plain Text";
+const pageTitle = "Text Editor - Private & Offline | No Upload | Free";
 const pageDescription =
   "Write and edit text online with our distraction-free editor. Perfect for notes, articles, and creative writing. Access your work from anywhere securely.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-editor.png`;

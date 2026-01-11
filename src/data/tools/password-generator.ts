@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/password-generator";
-const pageTitle = "Password Generator - Create Strong Secure Passwords";
+const pageTitle =
+  "Private Password Generator - Generate Passwords Offline | No Upload | Free";
 const pageDescription =
-  "Generate strong, secure passwords instantly. Free password generator with customizable length, characters, and bulk generation. Enhance your security now.";
+  "100% client-side password generator - passwords never leave your browser. Generate strong, secure passwords privately with cryptographic randomness. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/password-generator.png`;
 
 const keywords =
-  "password generator,strong password generator,secure passwords,random password generator,password creator,bulk password generator,password maker";
+  "password generator,strong password generator,secure passwords,random password generator,password creator,bulk password generator,password maker,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -70,8 +71,26 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "password-generator",
     pageTitle,
-    mainHeading: "Free Online Password Generator: Create Strong, Secure & Random Passwords",
+    mainHeading:
+      "Free Online Password Generator: Create Strong, Secure & Random Passwords",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is this password generator secure?",
+        answer:
+          "Yes, our password generator uses the browser's built-in Web Crypto API for cryptographically secure randomness. Passwords are generated entirely in your browser.",
+      },
+      {
+        question: "Does anyone see my generated password?",
+        answer:
+          "No, passwords are generated locally in your browser only. They are never transmitted to any server or stored anywhere.",
+      },
+      {
+        question: "What makes a strong password?",
+        answer:
+          "A strong password should be at least 16 characters long and include a mix of uppercase letters, lowercase letters, numbers, and special symbols. Avoid common words and personal information.",
+      },
+    ],
   }),
 };
 

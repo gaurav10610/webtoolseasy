@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/color-palette-generator";
-const pageTitle = "Color Palette Generator"; // <=55 chars
+const pageTitle =
+  "Color Palette Generator - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Generate harmonious color palettes online. Pick a base color, explore complementary, triadic and analogous palettes, and export SVG or CSS variables."; // <=150 chars
+  "Generate harmonious color palettes 100% client-side. No server upload, your designs never leave your browser. Private, secure palette creation with export options.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/color-palette-generator.png`;
 
 const keywords =
-  "color palette generator,color picker,palette maker,generate color palette,complementary colors,triadic colors,analogous palettes,download palette,css variables,export palette";
+  "color palette generator,color picker,palette maker,generate color palette,complementary colors,triadic colors,analogous palettes,download palette,css variables,export palette,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

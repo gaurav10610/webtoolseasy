@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/age-calculator";
-const pageTitle = "Age Calculator - Calculate Your Exact Age Online";
+const pageTitle = "Free Age Calculator - Private & Works Offline";
 const pageDescription =
   "Free age calculator to find your exact age in years, months, days, hours, and minutes. Calculate age from birthdate instantly with our online tool.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/age-calculator.png`;

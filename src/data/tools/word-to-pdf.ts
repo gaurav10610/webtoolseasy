@@ -5,7 +5,7 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/word-to-pdf";
-const pageTitle = "Word to PDF Converter - Convert DOCX to PDF Free";
+const pageTitle = "Word to PDF - Private & No Upload | Free Converter";
 const pageDescription =
   "Convert Word documents to PDF format online. Free DOCX to PDF converter with perfect formatting preservation directly in your browser.";
 const keywords =

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/audio-recorder";
-const pageTitle = "Audio Recorder - Record Audio Online Free";
+const pageTitle = "Audio Recorder - Private & No Upload | Free Online";
 const pageDescription =
   "Record audio online for free. Capture high-quality audio from your microphone with no download required. Perfect for voice memos and podcasts.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/audio-recorder.png`;

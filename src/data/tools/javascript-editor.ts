@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-editor";
-const pageTitle = "JavaScript Editor Online - Write & Edit JS Code";
+const pageTitle = "JavaScript Editor - Private & Offline | No Upload | Free";
 const pageDescription =
   "Write, edit, and run JavaScript code with live preview. Free online JS editor with syntax highlighting, error checking, and code completion features.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-editor.png`;

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v5-generator";
-const pageTitle = "UUID v5 Generator - SHA-1 Name-Based UUID";
+const pageTitle = "UUID v5 Generator - Private & Offline | No Upload | Free";
 const pageDescription =
   "Generate UUID v5 identifiers using SHA-1 hash with namespace and name. Create reproducible, name-based UUIDs for APIs, databases, and systems.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v5-generator.png`;

@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/favicon-generator";
-const pageTitle = "Favicon Generator - Create Favicon from Image Online";
+const pageTitle = "Favicon Generator - Private & Offline | No Upload | Free";
 const pageDescription =
   "Generate favicon from any image. Create .ico, PNG favicons in multiple sizes (16x16, 32x32, 64x64). Free online favicon maker.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/favicon-generator.png`;

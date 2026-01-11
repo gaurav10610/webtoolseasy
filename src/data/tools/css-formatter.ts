@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/css-formatter";
-const pageTitle = "CSS Formatter Online - Beautify & Format CSS Code";
+const pageTitle =
+  "Private CSS Formatter - Format CSS Offline | No Upload | Free";
 const pageDescription =
-  "Format and beautify CSS code online for free. Clean, indent, and organize CSS stylesheets with proper structure. Improve code readability instantly.";
+  "100% client-side CSS formatter - your code never leaves your browser. Beautify and format CSS stylesheets privately. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/css-format.png`;
 
 const keywords =
-  "css formatter,css beautifier,format css online,css code formatter,beautify css,css prettifier,clean css code,indent css";
+  "css formatter,css beautifier,format css online,css code formatter,beautify css,css prettifier,clean css code,indent css,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -75,7 +76,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "css-formatter",
     pageTitle,
-    mainHeading: "Free Online CSS Beautifier and Formatter: Beautify and Format Your CSS Code",
+    mainHeading:
+      "Free Online CSS Beautifier and Formatter: Beautify and Format Your CSS Code",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

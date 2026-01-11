@@ -71,6 +71,28 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "Color Converter: Convert Between HEX, RGB, HSL, and CMYK",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is this color converter free to use?",
+        answer:
+          "Yes, our color converter is completely free with no limits. Convert as many colors as you need between HEX, RGB, HSL, and CMYK formats.",
+      },
+      {
+        question: "What color formats are supported?",
+        answer:
+          "We support HEX, RGB, HSL, and CMYK color formats. Enter a color in any format and instantly get conversions to all other formats with live preview.",
+      },
+      {
+        question: "Can I copy colors in different formats?",
+        answer:
+          "Yes, you can copy the converted color value in any format with one click. Perfect for quickly using colors in web development, design software, or print projects.",
+      },
+      {
+        question: "Does the color converter work offline?",
+        answer:
+          "Yes, all color conversions happen locally in your browser using client-side processing. Once loaded, the tool works without an internet connection.",
+      },
+    ],
   }),
 };
 

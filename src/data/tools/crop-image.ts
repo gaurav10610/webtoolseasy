@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/crop-image";
-const pageTitle = "Image Cropper Online - Crop Photos Free & Precision";
+const pageTitle = "Image Cropper - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Crop images online with precision tools and aspect ratio presets. Free photo cropper supports JPG, PNG, WEBP. No registration required.";
+  "Crop images online 100% client-side with precision tools. No server upload, your photos never leave your browser. Private, secure photo cropping with aspect ratio presets.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-cropper.png`;
 
 const keywords =
-  "image cropper,crop image online,photo cropper,crop photos,image crop tool,online image editor,photo editing,aspect ratio cropper";
+  "image cropper,crop image online,photo cropper,crop photos,image crop tool,online image editor,photo editing,aspect ratio cropper,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

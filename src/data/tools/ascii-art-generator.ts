@@ -4,13 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ascii-art-generator";
-const pageTitle = "ASCII Art Generator - Text to ASCII Art Converter";
+const pageTitle = "ASCII Art Generator - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Convert text to ASCII art online. Create cool ASCII text art with multiple fonts and styles. Free ASCII generator for banners and designs.";
+  "Convert text to ASCII art with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Create cool ASCII art with multiple fonts and styles.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ascii-art-generator.png`;
 
 const keywords =
-  "ascii art generator,text to ascii,ascii art maker,ascii text generator,ascii art converter,ascii banner,text art generator";
+  "ascii art generator,text to ascii,ascii art maker,ascii text generator,ascii art converter,ascii banner,text art generator,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {

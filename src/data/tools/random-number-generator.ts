@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/random-number-generator";
-const pageTitle = "Random Number Generator - Generate Random Numbers";
+const pageTitle = "Free Random Number Generator - Private & Offline";
 const pageDescription =
   "Generate random numbers instantly with our free tool. Perfect for lottery, gaming, passwords, and statistical sampling. Customizable range.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/random-number-generator.png`;

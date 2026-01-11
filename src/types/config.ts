@@ -133,6 +133,8 @@ export interface StructuredDataConfig {
   breadcrumb?: Record<string, unknown>;
   organization?: Record<string, unknown>;
   website?: Record<string, unknown>;
+  faqPage?: Record<string, unknown>;
+  howTo?: Record<string, unknown>;
 }
 
 export enum AppCategory {

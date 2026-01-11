@@ -7,6 +7,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";
 import { AdSense } from "@/components/adSense";
+import { SiteFooter } from "@/components/siteFooter";
 
 export default function RootLayout({
   children,
@@ -33,6 +34,7 @@ export default function RootLayout({
               <CommonSiteData className="w-full" />
               <span className="hidden md:block w-[20%]"></span>
             </div>
+            <SiteFooter />
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

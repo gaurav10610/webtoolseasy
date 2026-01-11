@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/base64-encode";
-const pageTitle = "Base64 Encoder Free - Convert Files to Base64 Online";
+const pageTitle =
+  "Private Base64 Encoder - Encode Files Offline | No Upload | Free";
 const pageDescription =
-  "Convert any file to Base64 format instantly. Free online encoder supports images, PDFs, documents. Secure browser-based encoding, no file uploads.";
+  "100% client-side Base64 encoder - your files never leave your browser. Convert images, PDFs, and documents to Base64 privately. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-encode.png`;
 
 const keywords =
-  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder";
+  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -73,6 +74,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Is Base64 encoding secure?",
+        answer:
+          "Base64 is encoding, not encryption - it transforms data into a text format but doesn't protect it. For privacy, our tool runs entirely in your browser, so your data never leaves your device.",
+      },
+      {
+        question: "Does this tool upload my data to any server?",
+        answer:
+          "No, all encoding happens 100% client-side in your browser. Your files and data are never uploaded to any server, ensuring complete privacy.",
+      },
+      {
+        question: "Is this Base64 encoder free to use?",
+        answer:
+          "Yes, our Base64 encoder is completely free with no limits on file size or number of conversions. No signup or registration required.",
+      },
+    ],
   }),
 };
 

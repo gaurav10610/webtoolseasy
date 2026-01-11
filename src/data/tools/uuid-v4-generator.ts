@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v4-generator";
-const pageTitle = "UUID v4 Generator - Generate Random UUIDs Online";
+const pageTitle =
+  "Private UUID Generator - Generate UUIDs Offline | No Upload | Free";
 const pageDescription =
-  "Generate random UUID v4 identifiers instantly. Create single or bulk UUIDs for development projects. Copy, download multiple unique identifiers easily.";
+  "100% client-side UUID v4 generator - your data never leaves your browser. Generate single or bulk random UUIDs privately. Works offline.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator";
+  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -74,8 +75,31 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "uuid-v4-generator",
     pageTitle,
-    mainHeading: "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
+    mainHeading:
+      "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Are the generated UUIDs cryptographically secure?",
+        answer:
+          "Yes, our UUID v4 generator uses your browser's built-in crypto.getRandomValues() API, which provides cryptographically strong random number generation for maximum security.",
+      },
+      {
+        question: "Is there a limit on how many UUIDs I can generate?",
+        answer:
+          "No, you can generate unlimited UUIDs completely free. Generate single UUIDs or bulk generate thousands at once with no restrictions.",
+      },
+      {
+        question: "Are the generated UUIDs stored or logged anywhere?",
+        answer:
+          "No, all UUIDs are generated locally in your browser and are never sent to any server. Your generated identifiers remain completely private.",
+      },
+      {
+        question: "Are UUID v4 identifiers truly unique?",
+        answer:
+          "Yes, UUID v4 has 122 random bits, giving approximately 5.3 × 10^36 possible combinations. The probability of generating duplicate UUIDs is astronomically low.",
+      },
+    ],
   }),
 };
 

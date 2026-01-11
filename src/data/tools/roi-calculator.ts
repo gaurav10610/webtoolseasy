@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/roi-calculator";
-const pageTitle = "ROI Calculator - Return on Investment Calculator";
+const pageTitle = "ROI Calculator - Free & Private | Works Offline";
 const pageDescription =
   "Calculate return on investment (ROI) instantly. Free tool to measure investment performance, profitability, and annual returns.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/roi-calculator.png`;

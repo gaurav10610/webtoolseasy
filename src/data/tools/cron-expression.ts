@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/cron-expression";
-const pageTitle = "Cron Expression Generator - Create Cron Jobs Online";
+const pageTitle =
+  "Cron Expression Generator - Private & Offline | No Upload | Free";
 const pageDescription =
-  "Generate cron expressions visually with our free online tool. Create scheduled tasks easily with interactive interface and real-time validation.";
+  "Generate cron expressions visually 100% client-side. No server upload, your schedules never leave your browser. Private, secure cron job creation with real-time validation.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
-  "cron expression generator,cron job generator,cron expression builder,schedule tasks,cron maker,crontab generator,task scheduler";
+  "cron expression generator,cron job generator,cron expression builder,schedule tasks,cron maker,crontab generator,task scheduler,private,offline,client-side,secure,no upload,browser-based";
 
 export const metadata: Metadata = {
   alternates: {
@@ -69,7 +70,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "cron-expression",
     pageTitle,
-    mainHeading: "Free Online Cron Expression Generator: Create Cron Expressions",
+    mainHeading:
+      "Free Online Cron Expression Generator: Create Cron Expressions",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };
