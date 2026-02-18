@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ip-address-lookup";
-const pageTitle =
-  "IP Address Lookup Online - Find IP Location & Details Free";
+const pageTitle = "IP Address Lookup Online - Find IP Location & Details Free";
 const pageDescription =
   "Look up any IP address to find its geolocation, ISP, hostname, and network details. Free IP address lookup tool also shows your current public IP address.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ip-address-lookup.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

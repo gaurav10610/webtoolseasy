@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v7-generator";
-const pageTitle =
-  "UUID v7 Generator Online - Generate Time-Ordered UUIDs Free";
+const pageTitle = "UUID v7 Generator Online - Generate Time-Ordered UUIDs Free";
 const pageDescription =
   "Generate UUID version 7 (time-ordered) identifiers online for free. Create sortable v7 UUIDs with millisecond precision timestamps. Modern replacement for UUID v1.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v7-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

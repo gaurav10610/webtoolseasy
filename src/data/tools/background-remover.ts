@@ -5,8 +5,7 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/background-remover";
-const pageTitle =
-  "Background Remover Online Free - Remove Image Background";
+const pageTitle = "Background Remover Online Free - Remove Image Background";
 const pageDescription =
   "Remove backgrounds from images online for free. AI-powered background remover creates transparent PNG images instantly. Perfect for product photos, portraits, and design assets. No signup needed.";
 const keywords =

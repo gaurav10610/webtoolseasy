@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  TextField,
-  Typography,
-  LinearProgress,
-  Box,
-} from "@mui/material";
+import { TextField, Typography, LinearProgress, Box } from "@mui/material";
 import { useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -71,7 +66,7 @@ export default function WordCounter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [toolState]
+    [toolState],
   );
 
   return (
@@ -227,7 +222,7 @@ export default function WordCounter({
             {CHAR_LIMITS.map((info) => {
               const percentage = Math.min(
                 (stats.characters / info.limit) * 100,
-                100
+                100,
               );
               const isOver = stats.characters > info.limit;
               return (

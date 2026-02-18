@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/audio-recorder";
-const pageTitle =
-  "Audio Recorder Online - Record Audio from Microphone Free";
+const pageTitle = "Audio Recorder Online - Record Audio from Microphone Free";
 const pageDescription =
   "Record audio from your microphone online for free. Free browser-based audio recorder with playback and download. Save recordings as MP3 or WAV. No software installation required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/audio-recorder.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

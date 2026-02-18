@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/countdown-timer";
-const pageTitle =
-  "Countdown Timer Online - Free Online Timer with Alarm";
+const pageTitle = "Countdown Timer Online - Free Online Timer with Alarm";
 const pageDescription =
   "Set a countdown timer online for free. Free browser-based timer with alarm sound, fullscreen mode, and customizable display. Perfect for cooking, workouts, and presentations.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/countdown-timer.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

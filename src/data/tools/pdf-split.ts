@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-split";
-const pageTitle =
-  "Split PDF Online Free - Extract & Separate PDF Pages";
+const pageTitle = "Split PDF Online Free - Extract & Separate PDF Pages";
 const pageDescription =
   "Split PDF files into separate pages or extract specific pages online. Free PDF splitter processes files in your browser — no upload required. Remove unwanted pages easily.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-split.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

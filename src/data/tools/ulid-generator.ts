@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ulid-generator";
-const pageTitle =
-  "ULID Generator Online - Generate ULIDs Free";
+const pageTitle = "ULID Generator Online - Generate ULIDs Free";
 const pageDescription =
   "Generate ULIDs (Universally Unique Lexicographically Sortable Identifiers) online. Free ULID generator creates time-sortable unique IDs. Generate single or bulk ULIDs.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ulid-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

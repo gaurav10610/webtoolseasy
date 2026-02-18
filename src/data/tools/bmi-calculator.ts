@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/bmi-calculator";
-const pageTitle =
-  "BMI Calculator Online - Calculate Body Mass Index Free";
+const pageTitle = "BMI Calculator Online - Calculate Body Mass Index Free";
 const pageDescription =
   "Calculate your Body Mass Index (BMI) online for free. Enter height and weight to get your BMI score with health category. Supports metric and imperial units.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/bmi-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

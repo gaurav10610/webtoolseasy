@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [
@@ -89,7 +89,8 @@ export const componentConfig: ApplicationConfig = {
           "Yes, our tool validates your JSON in real-time as you type. It shows whether your JSON is valid or invalid, highlights error positions with line and column numbers, and displays structure stats including key count, nesting depth, and data size.",
       },
       {
-        question: "What is the difference between formatting and minifying JSON?",
+        question:
+          "What is the difference between formatting and minifying JSON?",
         answer:
           "Formatting (beautifying) adds proper indentation and line breaks to make JSON human-readable. Minifying removes all whitespace and line breaks to create the smallest possible JSON string, which is ideal for APIs and data transfer.",
       },

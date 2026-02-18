@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/guid-generator";
-const pageTitle =
-  "GUID Generator Online - Generate Random GUIDs Free";
+const pageTitle = "GUID Generator Online - Generate Random GUIDs Free";
 const pageDescription =
   "Generate random GUIDs (Globally Unique Identifiers) online for free. Create single or bulk GUIDs with different formats. Copy to clipboard instantly. RFC 4122 compliant.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/guid-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

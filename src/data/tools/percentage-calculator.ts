@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/percentage-calculator";
-const pageTitle =
-  "Percentage Calculator Online - Calculate Percentages Free";
+const pageTitle = "Percentage Calculator Online - Calculate Percentages Free";
 const pageDescription =
   "Calculate percentages online with multiple calculation modes. Find percentage of a number, percentage change, percentage difference, and more. Free and instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/percentage-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

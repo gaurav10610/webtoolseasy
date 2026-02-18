@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/compound-interest-calculator";
-const pageTitle =
-  "Compound Interest Calculator Online Free - Calculate Growth";
+const pageTitle = "Compound Interest Calculator Online Free - Calculate Growth";
 const pageDescription =
   "Calculate compound interest with detailed breakdowns. Free compound interest calculator shows growth over time with charts. Input principal, rate, time, and compounding frequency.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/compound-interest-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

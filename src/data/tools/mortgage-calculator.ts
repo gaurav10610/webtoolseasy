@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/mortgage-calculator";
-const pageTitle =
-  "Mortgage Calculator Online Free - Monthly Payment Estimator";
+const pageTitle = "Mortgage Calculator Online Free - Monthly Payment Estimator";
 const pageDescription =
   "Calculate your monthly mortgage payment, total interest, and amortization schedule. Free mortgage calculator with taxes, insurance, and PMI. Compare fixed and adjustable rates.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/mortgage-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

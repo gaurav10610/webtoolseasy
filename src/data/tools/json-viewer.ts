@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-viewer";
-const pageTitle =
-  "JSON Viewer Online - Visualize & Explore JSON Data Free";
+const pageTitle = "JSON Viewer Online - Visualize & Explore JSON Data Free";
 const pageDescription =
   "View and explore JSON data in a tree format online. Free JSON viewer with collapsible nodes, search, and syntax highlighting. Paste or upload JSON files for instant visualization.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-viewer.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/webcam-recorder";
-const pageTitle =
-  "Webcam Recorder Online - Record Webcam Video Free";
+const pageTitle = "Webcam Recorder Online - Record Webcam Video Free";
 const pageDescription =
   "Record video from your webcam online for free. Free browser-based webcam recorder with audio capture. Download recordings as MP4 or WebM. No installation or plugins required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/webcam-recorder.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-editor";
-const pageTitle =
-  "JavaScript Editor Online - Write & Run JavaScript Free";
+const pageTitle = "JavaScript Editor Online - Write & Run JavaScript Free";
 const pageDescription =
   "Write and run JavaScript code online with instant output. Free JavaScript editor with syntax highlighting, console output, and error detection. No setup required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-editor.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

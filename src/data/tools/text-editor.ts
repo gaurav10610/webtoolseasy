@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-editor";
-const pageTitle =
-  "Text Editor Online - Free Online Notepad & Text Editor";
+const pageTitle = "Text Editor Online - Free Online Notepad & Text Editor";
 const pageDescription =
   "Write and edit text online with this free text editor. Features include find & replace, word count, and formatting. No signup required — use as an online notepad instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-editor.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

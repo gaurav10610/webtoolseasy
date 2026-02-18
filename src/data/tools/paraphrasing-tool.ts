@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/paraphrasing-tool";
-const pageTitle =
-  "Paraphrasing Tool Online Free - Rewrite Text Instantly";
+const pageTitle = "Paraphrasing Tool Online Free - Rewrite Text Instantly";
 const pageDescription =
   "Paraphrase text online for free. Rewrite sentences and paragraphs while keeping the original meaning. Free paraphrasing tool helps improve clarity and avoid plagiarism.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/paraphrasing-tool.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

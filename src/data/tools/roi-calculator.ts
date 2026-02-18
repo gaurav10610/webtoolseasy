@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/roi-calculator";
-const pageTitle =
-  "ROI Calculator Online Free - Calculate Return on Investment";
+const pageTitle = "ROI Calculator Online Free - Calculate Return on Investment";
 const pageDescription =
   "Calculate return on investment (ROI) online for free. Enter initial investment and returns to find ROI percentage, annualized ROI, and net profit. Compare multiple investments.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/roi-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

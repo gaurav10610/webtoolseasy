@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/favicon-generator";
-const pageTitle =
-  "Favicon Generator Online - Create Favicons from Images Free";
+const pageTitle = "Favicon Generator Online - Create Favicons from Images Free";
 const pageDescription =
   "Generate favicons from images online for free. Create ICO, PNG, and SVG favicons in all sizes (16x16, 32x32, 48x48, 192x192). Generate favicon HTML code for your website.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/favicon-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

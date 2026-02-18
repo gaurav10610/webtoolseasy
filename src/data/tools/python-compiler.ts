@@ -5,8 +5,7 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/python-compiler";
 
-const pageTitle =
-  "Python Compiler Online - Run Python Code Free";
+const pageTitle = "Python Compiler Online - Run Python Code Free";
 const pageDescription =
   "Run Python code online for free. Free browser-based Python compiler with syntax highlighting and output console. Execute Python scripts instantly — no installation required.";
 
@@ -25,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [
@@ -69,9 +68,8 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
-    ApplicationIds.HTML_EDITOR,
-    ApplicationIds.MARKDOWN_EDITOR,
     ApplicationIds.JS_COMPILER,
+    ApplicationIds.TS_COMPILER,
   ],
   structuredData: createToolStructuredData({
     pageUrl: "python-compiler",

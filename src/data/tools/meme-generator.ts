@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/meme-generator";
-const pageTitle =
-  "Meme Generator Online Free - Create Custom Memes";
+const pageTitle = "Meme Generator Online Free - Create Custom Memes";
 const pageDescription =
   "Create custom memes online for free. Add text to popular meme templates or upload your own images. Free meme maker with customizable fonts, colors, and sizes. Download or share instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/meme-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

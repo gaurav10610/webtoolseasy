@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-merge";
-const pageTitle =
-  "Merge PDF Online Free - Combine Multiple PDF Files";
+const pageTitle = "Merge PDF Online Free - Combine Multiple PDF Files";
 const pageDescription =
   "Merge multiple PDF files into one document online. Free PDF combiner processes files in your browser with no server upload. Drag and drop to reorder pages. Fast and secure.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-merge.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

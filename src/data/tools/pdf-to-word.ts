@@ -5,8 +5,7 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-to-word";
-const pageTitle =
-  "PDF to Word Converter Online Free - Convert PDF to DOCX";
+const pageTitle = "PDF to Word Converter Online Free - Convert PDF to DOCX";
 const pageDescription =
   "Convert PDF files to editable Word documents online for free. Browser-based PDF to Word converter preserves formatting and layout. No registration or upload to servers required.";
 const keywords =

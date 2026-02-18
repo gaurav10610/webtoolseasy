@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/crop-image";
-const pageTitle =
-  "Crop Image Online Free - Crop Photos & Pictures Instantly";
+const pageTitle = "Crop Image Online Free - Crop Photos & Pictures Instantly";
 const pageDescription =
   "Crop images online for free. Select custom crop area or use preset aspect ratios like 1:1, 16:9, 4:3. Free browser-based image cropper for JPG, PNG, and WebP. No upload needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-cropper.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

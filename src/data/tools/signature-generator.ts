@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/signature-generator";
-const pageTitle =
-  "Signature Generator Online Free - Create Digital Signatures";
+const pageTitle = "Signature Generator Online Free - Create Digital Signatures";
 const pageDescription =
   "Create digital signatures online for free. Draw your signature with mouse or touchscreen, or type your name to generate a stylish signature. Download as PNG or SVG.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/signature-generator.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

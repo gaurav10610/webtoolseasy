@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-editor";
-const pageTitle =
-  "PDF Editor Online Free - Edit, Annotate & Sign PDFs";
+const pageTitle = "PDF Editor Online Free - Edit, Annotate & Sign PDFs";
 const pageDescription =
   "Edit PDF files online for free. Add text, images, annotations, and signatures. Free browser-based PDF editor — no registration or upload required. Modify PDFs instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-editor.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

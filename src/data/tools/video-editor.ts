@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-editor";
-const pageTitle =
-  "Video Editor Online Free - Trim, Cut & Edit Videos";
+const pageTitle = "Video Editor Online Free - Trim, Cut & Edit Videos";
 const pageDescription =
   "Edit videos online for free. Trim, cut, crop, and merge video files directly in your browser. Free online video editor supports MP4, AVI, MOV, and WebM. No software download required.";
 
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

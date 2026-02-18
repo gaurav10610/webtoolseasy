@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-summarizer";
-const pageTitle =
-  "Text Summarizer Online - Summarize Articles & Text Free";
+const pageTitle = "Text Summarizer Online - Summarize Articles & Text Free";
 const pageDescription =
   "Summarize long text and articles into key points instantly. Free AI-powered text summarizer extracts the most important sentences. Paste text and get a concise summary.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-summarizer.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

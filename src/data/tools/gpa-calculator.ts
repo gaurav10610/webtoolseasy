@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/gpa-calculator";
-const pageTitle =
-  "GPA Calculator Online - Calculate Grade Point Average Free";
+const pageTitle = "GPA Calculator Online - Calculate Grade Point Average Free";
 const pageDescription =
   "Calculate your GPA online for free. Enter grades and credits to get your grade point average. Supports 4.0, 5.0, and custom grading scales. Semester and cumulative GPA calculator.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/gpa-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

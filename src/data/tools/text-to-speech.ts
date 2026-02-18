@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-to-speech";
-const pageTitle =
-  "Text to Speech Online Free - Convert Text to Audio";
+const pageTitle = "Text to Speech Online Free - Convert Text to Audio";
 const pageDescription =
   "Convert text to speech online for free. Listen to any text with natural-sounding voices. Free TTS tool supports multiple languages and voice options. Download audio or listen in real-time.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-to-speech.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

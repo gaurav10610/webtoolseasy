@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-viewer";
-const pageTitle =
-  "CSV Viewer Online - View & Edit CSV Files Free";
+const pageTitle = "CSV Viewer Online - View & Edit CSV Files Free";
 const pageDescription =
   "View and edit CSV files online in a spreadsheet-like table. Free CSV viewer with sorting, filtering, and search. Open CSV files instantly in your browser — no software needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-viewer.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/stopwatch";
-const pageTitle =
-  "Stopwatch Online - Free Online Stopwatch with Lap Timer";
+const pageTitle = "Stopwatch Online - Free Online Stopwatch with Lap Timer";
 const pageDescription =
   "Use a precise online stopwatch with lap timer and split times. Free browser-based stopwatch with millisecond accuracy. Start, stop, and record lap times instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/stopwatch.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

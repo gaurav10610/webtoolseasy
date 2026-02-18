@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [
@@ -71,7 +71,8 @@ export const componentConfig: ApplicationConfig = {
   structuredData: createToolStructuredData({
     pageUrl: "video-to-audio-converter",
     pageTitle,
-    mainHeading: "Free Video to Audio Converter: Convert Any Video to Audio in Any Format",
+    mainHeading:
+      "Free Video to Audio Converter: Convert Any Video to Audio in Any Format",
     keywords: keywords.split(",").map((word) => word.trim()),
   }),
 };

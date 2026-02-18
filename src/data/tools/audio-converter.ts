@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/audio-converter";
-const pageTitle =
-  "Audio Converter Online - Convert MP3, WAV, OGG, AAC Free";
+const pageTitle = "Audio Converter Online - Convert MP3, WAV, OGG, AAC Free";
 const pageDescription =
   "Convert audio files between formats online for free. Supports MP3, WAV, OGG, AAC, FLAC, and more. Free browser-based audio converter — no upload to server. Fast and high quality.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/audio-converter.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   openGraph: {
     title: pageTitle,

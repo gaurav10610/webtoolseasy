@@ -761,5 +761,11 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "table-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
-
+  tscompiler: {
+    applicationId: "tscompiler",
+    displayText: "TypeScript Compiler Online",
+    navigateUrl: "tools/typescript-compiler",
+    iconRelativeUrl: "ts-icon.svg",
+    category: AppCategory.ONLINE_EDITORS,
+  },
 };

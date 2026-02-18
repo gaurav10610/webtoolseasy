@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/code-minifier";
-const pageTitle =
-  "Code Minifier Online - Minify JavaScript, CSS & HTML Free";
+const pageTitle = "Code Minifier Online - Minify JavaScript, CSS & HTML Free";
 const pageDescription =
   "Minify JavaScript, CSS, and HTML code online for free. Reduce file size by removing whitespace, comments, and unnecessary characters. Free code minifier with instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/code-minifier.png`;
@@ -21,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

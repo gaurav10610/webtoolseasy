@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/age-calculator";
-const pageTitle =
-  "Age Calculator Online - Calculate Your Exact Age Free";
+const pageTitle = "Age Calculator Online - Calculate Your Exact Age Free";
 const pageDescription =
   "Calculate your exact age in years, months, days, hours, and minutes. Free online age calculator shows age at any date. Find out how many days old you are.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/age-calculator.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   openGraph: {
     title: pageTitle,

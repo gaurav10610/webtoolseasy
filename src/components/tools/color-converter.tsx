@@ -77,7 +77,7 @@ export default function ColorConverter({
   const rgbToHsl = (
     r: number,
     g: number,
-    b: number
+    b: number,
   ): [number, number, number] => {
     r /= 255;
     g /= 255;
@@ -112,7 +112,7 @@ export default function ColorConverter({
   const rgbToCmyk = (
     r: number,
     g: number,
-    b: number
+    b: number,
   ): [number, number, number, number] => {
     const rNorm = r / 255;
     const gNorm = g / 255;
@@ -131,36 +131,36 @@ export default function ColorConverter({
     ];
   };
 
-  const updateFromRgb = useCallback(
-    (r: number, g: number, b: number) => {
-      const hex = rgbToHex(r, g, b);
-      const [h, s, l] = rgbToHsl(r, g, b);
-      const [c, m, y, k] = rgbToCmyk(r, g, b);
+  const updateFromRgb = useCallback((r: number, g: number, b: number) => {
+    const hex = rgbToHex(r, g, b);
+    const [h, s, l] = rgbToHsl(r, g, b);
+    const [c, m, y, k] = rgbToCmyk(r, g, b);
 
-      setColorFormats({
-        hex: hex.toUpperCase(),
-        rgb: `rgb(${r}, ${g}, ${b})`,
-        hsl: `hsl(${h}, ${s}%, ${l}%)`,
-        cmyk: `cmyk(${c}%, ${m}%, ${y}%, ${k}%)`,
-      });
-      setRgbSliders({ r, g, b });
-    },
-    []
-  );
+    setColorFormats({
+      hex: hex.toUpperCase(),
+      rgb: `rgb(${r}, ${g}, ${b})`,
+      hsl: `hsl(${h}, ${s}%, ${l}%)`,
+      cmyk: `cmyk(${c}%, ${m}%, ${y}%, ${k}%)`,
+    });
+    setRgbSliders({ r, g, b });
+  }, []);
 
   useEffect(() => {
     const parseInput = (input: string): [number, number, number] | null => {
       const trimmed = input.trim();
 
       // HEX (3-digit and 6-digit)
-      if (/^#?[0-9A-Fa-f]{3}$/.test(trimmed) || /^#?[0-9A-Fa-f]{6}$/.test(trimmed)) {
+      if (
+        /^#?[0-9A-Fa-f]{3}$/.test(trimmed) ||
+        /^#?[0-9A-Fa-f]{6}$/.test(trimmed)
+      ) {
         const hex = trimmed.startsWith("#") ? trimmed : "#" + trimmed;
         return hexToRgb(hex);
       }
 
       // RGB
       const rgbMatch = trimmed.match(
-        /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/
+        /rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/,
       );
       if (rgbMatch) {
         return [
@@ -196,7 +196,7 @@ export default function ColorConverter({
       const hex = rgbToHex(newRgb.r, newRgb.g, newRgb.b);
       toolState.setCode(hex.toUpperCase());
     },
-    [rgbSliders, toolState]
+    [rgbSliders, toolState],
   );
 
   const copyFormat = (format: string, value: string) => {
@@ -269,7 +269,10 @@ export default function ColorConverter({
         {/* RGB Sliders */}
         <Card className="border border-gray-200">
           <CardContent className="flex flex-col gap-3">
-            <Typography variant="subtitle2" className="!font-semibold flex items-center gap-2">
+            <Typography
+              variant="subtitle2"
+              className="!font-semibold flex items-center gap-2"
+            >
               <PaletteIcon fontSize="small" color="primary" />
               RGB Sliders
             </Typography>
@@ -279,21 +282,36 @@ export default function ColorConverter({
                   variant="body2"
                   className="!font-mono !font-bold !w-6 text-center"
                   sx={{
-                    color: channel === "r" ? "#ef4444" : channel === "g" ? "#22c55e" : "#3b82f6",
+                    color:
+                      channel === "r"
+                        ? "#ef4444"
+                        : channel === "g"
+                          ? "#22c55e"
+                          : "#3b82f6",
                   }}
                 >
                   {channel.toUpperCase()}
                 </Typography>
                 <Slider
                   value={rgbSliders[channel]}
-                  onChange={(_, val) => handleSliderChange(channel, val as number)}
+                  onChange={(_, val) =>
+                    handleSliderChange(channel, val as number)
+                  }
                   min={0}
                   max={255}
                   sx={{
-                    color: channel === "r" ? "#ef4444" : channel === "g" ? "#22c55e" : "#3b82f6",
+                    color:
+                      channel === "r"
+                        ? "#ef4444"
+                        : channel === "g"
+                          ? "#22c55e"
+                          : "#3b82f6",
                   }}
                 />
-                <Typography variant="body2" className="!font-mono !w-8 text-right">
+                <Typography
+                  variant="body2"
+                  className="!font-mono !w-8 text-right"
+                >
                   {rgbSliders[channel]}
                 </Typography>
               </Box>
@@ -425,8 +443,8 @@ export default function ColorConverter({
           <CardContent>
             <Typography variant="body2" className="text-gray-700">
               <strong>Tip:</strong> Enter any color format or use the RGB
-              sliders for precise control. Supported inputs: HEX (#FF5733 or #F53),
-              RGB (255, 87, 51), or rgb(255, 87, 51).
+              sliders for precise control. Supported inputs: HEX (#FF5733 or
+              #F53), RGB (255, 87, 51), or rgb(255, 87, 51).
             </Typography>
           </CardContent>
         </Card>

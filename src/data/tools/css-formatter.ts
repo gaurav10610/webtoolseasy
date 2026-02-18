@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/css-formatter";
-const pageTitle =
-  "CSS Formatter & Beautifier Online - Format CSS Code Free";
+const pageTitle = "CSS Formatter & Beautifier Online - Format CSS Code Free";
 const pageDescription =
   "Format and beautify CSS code with proper indentation and syntax highlighting. Free online CSS formatter with minification support. Paste unformatted CSS and get clean, readable code instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/css-format.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/jwt-decoder";
-const pageTitle =
-  "JWT Decoder Online - Decode & Inspect JSON Web Tokens Free";
+const pageTitle = "JWT Decoder Online - Decode & Inspect JSON Web Tokens Free";
 const pageDescription =
   "Decode JWT tokens to view header, payload, and signature instantly. Free online JWT decoder with expiration checking and claim validation. Debug authentication tokens securely in your browser.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/jwt-decoder.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -3,8 +3,7 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-const pageTitle =
-  "Regex Tester Online - Test & Debug Regular Expressions Free";
+const pageTitle = "Regex Tester Online - Test & Debug Regular Expressions Free";
 const pageDescription =
   "Test regular expressions with real-time matching and highlighting. Free online regex tester with match groups, flags support, and common pattern library. Debug regex patterns instantly.";
 const keywords =
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

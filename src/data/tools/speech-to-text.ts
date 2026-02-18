@@ -4,8 +4,7 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/speech-to-text";
-const pageTitle =
-  "Speech to Text Online Free - Voice to Text Converter";
+const pageTitle = "Speech to Text Online Free - Voice to Text Converter";
 const metaDescription =
   "Convert speech to text online for free. Dictate using your microphone and get accurate transcription. Free voice-to-text tool works directly in your browser with no installation.";
 
@@ -29,7 +28,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

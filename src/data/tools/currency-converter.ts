@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/currency-converter";
-const pageTitle =
-  "Currency Converter Online - Real-Time Exchange Rates Free";
+const pageTitle = "Currency Converter Online - Real-Time Exchange Rates Free";
 const pageDescription =
   "Convert between world currencies with live exchange rates. Free online currency converter supports 150+ currencies including USD, EUR, GBP, INR, JPY. Fast and accurate.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/currency-converter.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   openGraph: {
     title: pageTitle,

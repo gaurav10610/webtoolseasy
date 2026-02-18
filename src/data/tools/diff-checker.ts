@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/diff-checker";
-const pageTitle =
-  "Diff Checker Online - Compare Code & Text Differences Free";
+const pageTitle = "Diff Checker Online - Compare Code & Text Differences Free";
 const pageDescription =
   "Compare code or text side by side and see differences highlighted. Free online diff checker with line-by-line comparison, syntax highlighting, and merge conflict detection. No upload needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/diff-checker.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

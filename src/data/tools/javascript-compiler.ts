@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [
@@ -68,9 +68,8 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
-    ApplicationIds.HTML_EDITOR,
-    ApplicationIds.MARKDOWN_EDITOR,
     ApplicationIds.PYTHON_COMPILER,
+    ApplicationIds.TS_COMPILER,
   ],
   structuredData: createToolStructuredData({
     pageUrl: "javascript-compiler",

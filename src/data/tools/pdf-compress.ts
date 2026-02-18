@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-compress";
-const pageTitle =
-  "PDF Compressor Online - Reduce PDF File Size Free";
+const pageTitle = "PDF Compressor Online - Reduce PDF File Size Free";
 const pageDescription =
   "Compress PDF files and reduce file size while keeping quality. Free online PDF compressor processes files in your browser — no upload to any server. Shrink PDFs for email and sharing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-compress.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/string-escape";
-const pageTitle =
-  "String Escape & Unescape Online - Escape Strings Free";
+const pageTitle = "String Escape & Unescape Online - Escape Strings Free";
 const pageDescription =
   "Escape and unescape strings for JSON, HTML, XML, CSV, and JavaScript. Free online string escaper handles special characters, quotes, and backslashes. Copy escaped output instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/string-escape.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

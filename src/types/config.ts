@@ -107,6 +107,7 @@ export enum ApplicationIds {
   FAVICON_GENERATOR = "favicon-generator",
   ASCII_ART_GENERATOR = "ascii-art-generator",
   TABLE_GENERATOR = "table-generator",
+  TS_COMPILER = "tscompiler",
 }
 
 export interface BaseAppConfig {

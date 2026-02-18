@@ -17,7 +17,12 @@ interface ValidationResult {
   errorMessage?: string;
   errorLine?: number;
   errorColumn?: number;
-  stats?: { keys: number; depth: number; arrayElements: number; sizeBytes: number };
+  stats?: {
+    keys: number;
+    depth: number;
+    arrayElements: number;
+    sizeBytes: number;
+  };
 }
 
 function validateAndAnalyze(input: string): ValidationResult {
@@ -28,27 +33,39 @@ function validateAndAnalyze(input: string): ValidationResult {
     const parsed = JSON.parse(input);
     const sizeBytes = new TextEncoder().encode(JSON.stringify(parsed)).length;
 
-    function countKeys(obj: unknown, depth = 0): { keys: number; maxDepth: number; arrays: number } {
-      let keys = 0, maxDepth = depth, arrays = 0;
+    function countKeys(
+      obj: unknown,
+      depth = 0,
+    ): { keys: number; maxDepth: number; arrays: number } {
+      let keys = 0,
+        maxDepth = depth,
+        arrays = 0;
       if (Array.isArray(obj)) {
         arrays += obj.length;
         for (const item of obj) {
           const sub = countKeys(item, depth + 1);
-          keys += sub.keys; maxDepth = Math.max(maxDepth, sub.maxDepth); arrays += sub.arrays;
+          keys += sub.keys;
+          maxDepth = Math.max(maxDepth, sub.maxDepth);
+          arrays += sub.arrays;
         }
       } else if (obj && typeof obj === "object") {
         const entries = Object.entries(obj);
         keys += entries.length;
         for (const [, value] of entries) {
           const sub = countKeys(value, depth + 1);
-          keys += sub.keys; maxDepth = Math.max(maxDepth, sub.maxDepth); arrays += sub.arrays;
+          keys += sub.keys;
+          maxDepth = Math.max(maxDepth, sub.maxDepth);
+          arrays += sub.arrays;
         }
       }
       return { keys, maxDepth, arrays };
     }
 
     const { keys, maxDepth, arrays } = countKeys(parsed);
-    return { isValid: true, stats: { keys, depth: maxDepth, arrayElements: arrays, sizeBytes } };
+    return {
+      isValid: true,
+      stats: { keys, depth: maxDepth, arrayElements: arrays, sizeBytes },
+    };
   } catch (e) {
     const error = e as SyntaxError;
     let errorLine: number | undefined;
@@ -60,7 +77,12 @@ function validateAndAnalyze(input: string): ValidationResult {
       errorLine = lines.length;
       errorColumn = lines[lines.length - 1].length + 1;
     }
-    return { isValid: false, errorMessage: error.message, errorLine, errorColumn };
+    return {
+      isValid: false,
+      errorMessage: error.message,
+      errorLine,
+      errorColumn,
+    };
   }
 }
 
@@ -85,7 +107,10 @@ export default function JsonFormatter({
   });
 
   // Real-time validation
-  const validation = useMemo(() => validateAndAnalyze(toolState.code), [toolState.code]);
+  const validation = useMemo(
+    () => validateAndAnalyze(toolState.code),
+    [toolState.code],
+  );
 
   const formatJson = useCallback(() => {
     try {
@@ -102,7 +127,7 @@ export default function JsonFormatter({
   const copyFormattedCode = useCallback(() => {
     toolState.actions.copyText(
       formattedCode,
-      "Formatted JSON copied to clipboard!"
+      "Formatted JSON copied to clipboard!",
     );
   }, [formattedCode, toolState.actions]);
 
@@ -122,7 +147,7 @@ export default function JsonFormatter({
     (value: string) => {
       toolState.setCode(value);
     },
-    [toolState]
+    [toolState],
   );
 
   // Editor configurations
@@ -162,7 +187,7 @@ export default function JsonFormatter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatJson, minifyJson, copyFormattedCode, toolState]
+    [formatJson, minifyJson, copyFormattedCode, toolState],
   );
 
   return (
@@ -195,10 +220,26 @@ export default function JsonFormatter({
               <strong>Valid JSON</strong>
               {validation.stats && (
                 <>
-                  <Chip label={`${validation.stats.keys} keys`} size="small" variant="outlined" />
-                  <Chip label={`depth: ${validation.stats.depth}`} size="small" variant="outlined" />
-                  <Chip label={`${validation.stats.arrayElements} array items`} size="small" variant="outlined" />
-                  <Chip label={`${validation.stats.sizeBytes} bytes`} size="small" variant="outlined" />
+                  <Chip
+                    label={`${validation.stats.keys} keys`}
+                    size="small"
+                    variant="outlined"
+                  />
+                  <Chip
+                    label={`depth: ${validation.stats.depth}`}
+                    size="small"
+                    variant="outlined"
+                  />
+                  <Chip
+                    label={`${validation.stats.arrayElements} array items`}
+                    size="small"
+                    variant="outlined"
+                  />
+                  <Chip
+                    label={`${validation.stats.sizeBytes} bytes`}
+                    size="small"
+                    variant="outlined"
+                  />
                 </>
               )}
             </div>
@@ -213,7 +254,8 @@ export default function JsonFormatter({
               {validation.errorLine && (
                 <Typography variant="body2" color="error">
                   Line {validation.errorLine}
-                  {validation.errorColumn && `, Column ${validation.errorColumn}`}
+                  {validation.errorColumn &&
+                    `, Column ${validation.errorColumn}`}
                 </Typography>
               )}
             </div>

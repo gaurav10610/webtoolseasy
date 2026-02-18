@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/discount-calculator";
-const pageTitle =
-  "Discount Calculator Online - Calculate Sale Price Free";
+const pageTitle = "Discount Calculator Online - Calculate Sale Price Free";
 const pageDescription =
   "Calculate discounts and sale prices instantly. Free discount calculator shows savings amount and final price. Supports percentage-off and fixed-amount discounts with tax calculation.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/discount-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

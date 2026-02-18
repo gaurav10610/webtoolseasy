@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-formatter";
-const pageTitle =
-  "HTML Formatter & Beautifier Online - Format HTML Code Free";
+const pageTitle = "HTML Formatter & Beautifier Online - Format HTML Code Free";
 const pageDescription =
   "Format and beautify HTML code with proper indentation and tag structure. Free online HTML formatter with syntax highlighting. Clean up messy HTML instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-to-csv";
-const pageTitle =
-  "JSON to CSV Converter Online - Convert JSON to CSV Free";
+const pageTitle = "JSON to CSV Converter Online - Convert JSON to CSV Free";
 const pageDescription =
   "Convert JSON data to CSV format instantly. Free online JSON to CSV converter handles nested objects, arrays, and complex structures. Download as CSV file or copy to clipboard.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-to-csv.png`;
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/screen-recorder";
-const pageTitle =
-  "Screen Recorder Online Free - Record Screen & Audio";
+const pageTitle = "Screen Recorder Online Free - Record Screen & Audio";
 const pageDescription =
   "Record your screen online for free. Capture screen, webcam, and audio directly in your browser. Free online screen recorder — no software installation needed. Download as MP4 or WebM.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/screen-recorder.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/table-generator";
-const pageTitle =
-  "Table Generator Online - Create HTML & Markdown Tables Free";
+const pageTitle = "Table Generator Online - Create HTML & Markdown Tables Free";
 const pageDescription =
   "Create tables online for free. Generate HTML, Markdown, CSV, and LaTeX tables with a visual editor. Add rows, columns, and content. Copy or export table code instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/table-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

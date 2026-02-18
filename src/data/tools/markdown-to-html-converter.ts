@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-to-html-converter";
-const pageTitle =
-  "Markdown to HTML Converter Online - Convert MD to HTML Free";
+const pageTitle = "Markdown to HTML Converter Online - Convert MD to HTML Free";
 const pageDescription =
   "Convert Markdown to clean HTML code instantly. Free online Markdown to HTML converter with live preview and syntax highlighting. Copy or download the generated HTML.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-to-html-converter.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

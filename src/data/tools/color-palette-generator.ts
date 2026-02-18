@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/color-palette-generator";
-const pageTitle =
-  "Color Palette Generator Online - Create Color Schemes Free";
+const pageTitle = "Color Palette Generator Online - Create Color Schemes Free";
 const pageDescription =
   "Generate beautiful color palettes with complementary, analogous, and triadic color schemes. Free online color palette generator with export to CSS, SCSS, and Tailwind.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/color-palette-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

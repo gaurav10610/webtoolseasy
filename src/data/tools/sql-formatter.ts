@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sql-formatter";
-const pageTitle =
-  "SQL Formatter Online - Format & Beautify SQL Queries Free";
+const pageTitle = "SQL Formatter Online - Format & Beautify SQL Queries Free";
 const pageDescription =
   "Format and beautify SQL queries with proper indentation. Free online SQL formatter supports MySQL, PostgreSQL, SQLite, and SQL Server syntax. Paste messy SQL and get clean, readable code.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/sql-formatter.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

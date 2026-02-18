@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/tip-calculator";
-const pageTitle =
-  "Tip Calculator Online - Calculate Tips & Split Bills Free";
+const pageTitle = "Tip Calculator Online - Calculate Tips & Split Bills Free";
 const pageDescription =
   "Calculate tip amount and split the bill among friends. Free tip calculator with customizable tip percentages. See tip per person and total amount per person instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/tip-calculator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

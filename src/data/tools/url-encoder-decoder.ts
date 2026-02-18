@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/url-encoder-decoder";
-const pageTitle =
-  "URL Encoder Decoder Online - Encode & Decode URLs Free";
+const pageTitle = "URL Encoder Decoder Online - Encode & Decode URLs Free";
 const pageDescription =
   "Encode and decode URLs online for free. Convert special characters to percent-encoded format and vice versa. Free URL encoding and decoding tool with instant results. Supports full URL and component encoding.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/url-encoder-decoder.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

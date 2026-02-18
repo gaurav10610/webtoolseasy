@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/robots-txt-generator";
-const pageTitle =
-  "Robots.txt Generator Online - Create Robots.txt File Free";
+const pageTitle = "Robots.txt Generator Online - Create Robots.txt File Free";
 const pageDescription =
   "Generate robots.txt files for your website. Free robots.txt generator helps control search engine crawling with allow/disallow rules, sitemap references, and crawl delay settings.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/robots-txt-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

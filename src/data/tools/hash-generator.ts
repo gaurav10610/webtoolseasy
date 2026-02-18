@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/hash-generator";
-const pageTitle =
-  "Hash Generator Online - MD5, SHA-1, SHA-256, SHA-512 Free";
+const pageTitle = "Hash Generator Online - MD5, SHA-1, SHA-256, SHA-512 Free";
 const pageDescription =
   "Generate MD5, SHA-1, SHA-256, and SHA-512 hashes instantly. Free online hash generator and checksum calculator for text and files. Verify file integrity with secure hashing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/hash-generator.png`;
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

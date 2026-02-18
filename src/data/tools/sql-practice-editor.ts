@@ -5,8 +5,7 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sql-practice-editor";
 
-const pageTitle =
-  "SQL Practice Editor Online - Write & Run SQL Queries Free";
+const pageTitle = "SQL Practice Editor Online - Write & Run SQL Queries Free";
 const pageDescription =
   "Practice SQL queries online with a built-in database editor. Free SQL playground lets you write, run, and test SELECT, INSERT, UPDATE, and DELETE queries. Learn SQL interactively.";
 
@@ -25,7 +24,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [

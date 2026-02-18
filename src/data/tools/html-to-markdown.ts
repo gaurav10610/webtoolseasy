@@ -3,8 +3,7 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-const pageTitle =
-  "HTML to Markdown Converter Online - Convert HTML to MD Free";
+const pageTitle = "HTML to Markdown Converter Online - Convert HTML to MD Free";
 const pageDescription =
   "Convert HTML to Markdown format instantly. Free online HTML to Markdown converter preserves headings, links, lists, and formatting. Paste HTML and get clean Markdown output.";
 const keywords =
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://webtoolseasy.com"
+      : "https://webtoolseasy.com",
   ),
   icons: {
     icon: [
