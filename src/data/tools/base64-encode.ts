@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/base64-encode";
 const pageTitle =
-  "Private Base64 Encoder - Encode Files Offline | No Upload | Free";
+  "Base64 Encode Online - Convert Text, Files & Images to Base64 Free";
 const pageDescription =
-  "100% client-side Base64 encoder - your files never leave your browser. Convert images, PDFs, and documents to Base64 privately. Works offline.";
+  "Encode text, images, PDFs and files to Base64 instantly in your browser. Free online Base64 encoder with no file size limits. Supports drag-and-drop, copy-paste, and file upload.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-encode.png`;
 
 const keywords =
-  "base64 encoder,file to base64,base64 converter,encode file online,base64 encoding tool,image to base64,pdf to base64,text to base64,online encoder,private,offline,client-side,secure,no upload,browser-based";
+  "base64 encode,base64 encoder,base64 encode online,text to base64,image to base64,file to base64,base64 converter,encode base64,base64 encoding tool,convert to base64,base64 string encoder,online base64 encoder free,pdf to base64,base64 image encoder,data uri generator";
 
 export const metadata: Metadata = {
   alternates: {

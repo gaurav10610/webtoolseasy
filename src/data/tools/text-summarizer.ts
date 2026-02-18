@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-summarizer";
-const pageTitle = "Text Summarizer - Private & No Upload | Free Offline";
+const pageTitle =
+  "Text Summarizer Online - Summarize Articles & Text Free";
 const pageDescription =
-  "Summarize long text instantly with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Free AI text summarizer for articles, essays, documents.";
+  "Summarize long text and articles into key points instantly. Free AI-powered text summarizer extracts the most important sentences. Paste text and get a concise summary.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-summarizer.png`;
 const keywords =
-  "text summarizer,summarize text,summary generator,article summarizer,text summary tool,summarize article,auto summary,private,offline,client-side,secure,no upload,browser-based";
+  "text summarizer,text summarizer online,summarize text,article summarizer,text summary generator,summarizer,summarize article,online summarizer,free text summarizer,summarize text online free,paragraph summarizer,ai text summarizer";
 
 export const metadata: Metadata = {
   alternates: {

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-formatter";
 const pageTitle =
-  "Private HTML Formatter - Format HTML Offline | No Upload | Free";
+  "HTML Formatter & Beautifier Online - Format HTML Code Free";
 const pageDescription =
-  "100% client-side HTML formatter - your code never leaves your browser. Beautify and format HTML privately with proper indentation. Works offline.";
+  "Format and beautify HTML code with proper indentation and tag structure. Free online HTML formatter with syntax highlighting. Clean up messy HTML instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-format.png`;
 
 const keywords =
-  "html formatter,html beautifier,format html online,html code formatter,beautify html,html prettifier,clean html code,indent html,private,offline,client-side,secure,no upload,browser-based";
+  "html formatter,html beautifier,html formatter online,format html,beautify html,html prettifier,html code formatter,html indent,html beautifier online,format html code online,html formatter free,clean html code,html pretty print,html tidy";
 
 export const metadata: Metadata = {
   alternates: {

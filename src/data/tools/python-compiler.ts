@@ -5,14 +5,15 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/python-compiler";
 
-const pageTitle = "Python Compiler - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Python Compiler Online - Run Python Code Free";
 const pageDescription =
-  "Our free online Python compiler lets you write, run, and test Python code directly in your browser. No setup required. Perfect for learning, practicing, and quick scripting. Execute Python 3 code instantly.";
+  "Run Python code online for free. Free browser-based Python compiler with syntax highlighting and output console. Execute Python scripts instantly — no installation required.";
 
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/python-compiler.png`;
 
 const keywords =
-  "online python compiler, python compiler online, run python online, python interpreter online, online python editor, execute python online, python code runner, free python compiler, python in browser, online python ide, python sandbox, test python code online, python 3 compiler";
+  "python compiler,python compiler online,run python online,python online,python compiler free,python editor online,online python compiler,python interpreter online,python compiler online free,execute python online,python code runner,run python code online free";
 
 export const metadata: Metadata = {
   alternates: {

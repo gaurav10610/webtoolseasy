@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/code-minifier";
-const pageTitle = "Free Code Minifier - JS/CSS/HTML | Private & Offline";
+const pageTitle =
+  "Code Minifier Online - Minify JavaScript, CSS & HTML Free";
 const pageDescription =
-  "Minify JavaScript, CSS and HTML online. Remove comments and whitespace to reduce bundle size for production.";
+  "Minify JavaScript, CSS, and HTML code online for free. Reduce file size by removing whitespace, comments, and unnecessary characters. Free code minifier with instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/code-minifier.png`;
 
 const keywords =
-  "code minifier,minify js,minify css,minify html,online minifier,remove comments,minify code";
+  "code minifier,minify code,javascript minifier,css minifier,html minifier,code minifier online,minify javascript,minify css,minify html,js minifier,code minifier free,minify code online free,uglify javascript,compress code";
 
 export const metadata: Metadata = {
   alternates: { canonical: `${process.env.HOSTNAME}${navigationUrl}` },

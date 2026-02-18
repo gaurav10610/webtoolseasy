@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-formatter";
-const pageTitle = "JavaScript Formatter - Private & Offline | No Upload | Free";
+const pageTitle =
+  "JavaScript Formatter & Beautifier Online - Format JS Code Free";
 const pageDescription =
-  "Format and beautify JavaScript code 100% client-side. No server upload, your code never leaves your browser. Private, secure JS formatting with instant results.";
+  "Format and beautify JavaScript code with proper indentation. Free online JavaScript formatter with syntax highlighting and minification. Paste JS code and get clean, readable output.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-format.png`;
 
 const keywords =
-  "javascript formatter,js formatter,beautify javascript,format javascript online,javascript beautifier,javascript prettifier,js code formatter,private,offline,client-side,secure,no upload,browser-based";
+  "javascript formatter,javascript beautifier,js formatter,format javascript,beautify javascript,javascript formatter online,js beautifier,javascript code formatter,format js online,javascript prettifier,js formatter online free,javascript formatter free";
 
 export const metadata: Metadata = {
   alternates: {

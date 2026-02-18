@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ulid-generator";
-const pageTitle = "Free ULID Generator - Private & Offline";
+const pageTitle =
+  "ULID Generator Online - Generate ULIDs Free";
 const pageDescription =
-  "Generate time-sortable ULIDs online. Create single or bulk ULIDs for databases, ordered keys, and distributed systems.";
+  "Generate ULIDs (Universally Unique Lexicographically Sortable Identifiers) online. Free ULID generator creates time-sortable unique IDs. Generate single or bulk ULIDs.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ulid-generator.png`;
 
 const keywords =
-  "ulid generator,ulid generator online,time-sortable id,ulid bulk generator,unique id generator,ulid vs uuid,lexicographically sortable ids,ordered id generator";
+  "ulid generator,ulid generator online,generate ulid,ulid,ulid creator,ulid maker,ulid generator free,ulid vs uuid,create ulid,universally unique lexicographically sortable identifier,ulid generator online free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/hash-generator";
 const pageTitle =
-  "Private Hash Generator - MD5, SHA-256 Offline | No Upload | Free";
+  "Hash Generator Online - MD5, SHA-1, SHA-256, SHA-512 Free";
 const pageDescription =
-  "100% client-side hash generator for MD5, SHA-1, SHA-256. Your data never leaves your browser - completely private and secure. Works offline.";
+  "Generate MD5, SHA-1, SHA-256, and SHA-512 hashes instantly. Free online hash generator and checksum calculator for text and files. Verify file integrity with secure hashing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/hash-generator.png`;
 
 const keywords =
-  "hash generator,md5,sha1,sha256,hash online,generate hash,crypto hash,checksum,private,offline,client-side,secure,no upload,browser-based";
+  "hash generator,md5 hash generator,sha256 hash generator,sha1 generator,hash calculator,online hash generator,md5 generator online,sha512 hash,checksum calculator,file hash checker,hash generator free,crypto hash tool,generate md5,generate sha256,text to hash";
 
 export const metadata: Metadata = {
   alternates: {

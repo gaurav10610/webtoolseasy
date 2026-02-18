@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-viewer";
-const pageTitle = "JSON Viewer - Private & Offline | No Upload | Free";
+const pageTitle =
+  "JSON Viewer Online - Visualize & Explore JSON Data Free";
 const pageDescription =
-  "Visualize JSON data in tree format 100% client-side. No server upload, your data never leaves your browser. Private, secure JSON viewing for debugging and analysis.";
+  "View and explore JSON data in a tree format online. Free JSON viewer with collapsible nodes, search, and syntax highlighting. Paste or upload JSON files for instant visualization.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-viewer.png`;
 
 const keywords =
-  "json viewer,json tree viewer,view json online,json visualizer,json formatter,json explorer,json parser,validate json,private,offline,client-side,secure,no upload,browser-based";
+  "json viewer,json viewer online,json tree viewer,view json,json explorer,json viewer free,json visualizer,json viewer online free,json tree,json browser,open json file,json reader online";
 
 export const metadata: Metadata = {
   alternates: {

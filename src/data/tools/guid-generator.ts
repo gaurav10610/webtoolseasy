@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/guid-generator";
-const pageTitle = "GUID Generator - Private & Offline | No Upload | Free";
+const pageTitle =
+  "GUID Generator Online - Generate Random GUIDs Free";
 const pageDescription =
-  "Generate globally unique identifiers (GUIDs) instantly. Create single or bulk GUIDs for your development projects. Copy and download results easily.";
+  "Generate random GUIDs (Globally Unique Identifiers) online for free. Create single or bulk GUIDs with different formats. Copy to clipboard instantly. RFC 4122 compliant.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/guid-generator.png`;
 
 const keywords =
-  "guid generator,guid generator online,uuid generator,globally unique identifier,generate guid,bulk guid generator,unique id generator";
+  "guid generator,guid generator online,generate guid,guid,guid maker,guid creator,random guid,guid generator free,guid generator online free,create guid,guidgen,guid generator bulk,new guid";
 
 export const metadata: Metadata = {
   alternates: {

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/word-counter";
 const pageTitle =
-  "Private Word Counter - Count Text Offline | No Upload | Free";
+  "Online Word Counter & Character Counter - Free Text Analysis Tool";
 const pageDescription =
-  "Works offline - count words, characters, and sentences 100% client-side. Your text never leaves your browser. Private, secure word counting with detailed statistics.";
+  "Count words, characters, sentences, and paragraphs instantly. Check Twitter, Instagram, and SEO character limits. Free online word counter with reading time and speaking time estimates.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/word-counter.png`;
 
 const keywords =
-  "word counter,character counter,sentence counter,word count tool,character count tool,text statistics,writing tool,content analysis,private,offline,client-side,secure,no upload,browser-based";
+  "word counter,character counter,online word counter,word count tool,character count online,letter counter,text counter,word counter free,count words in text,sentence counter,paragraph counter,reading time calculator,twitter character counter,instagram character limit,seo meta description length checker,text analysis tool,speaking time calculator";
 
 export const metadata: Metadata = {
   alternates: {
@@ -63,16 +63,16 @@ export const metadata: Metadata = {
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    "Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text",
+    "Free Word Counter & Character Counter: Count Words, Characters, Sentences with Social Media Limits",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  relatedTools: [ApplicationIds.TEXT_COMPARE],
+  relatedTools: [ApplicationIds.TEXT_COMPARE, ApplicationIds.CASE_CONVERETR],
   structuredData: createToolStructuredData({
     pageUrl: "word-counter",
     pageTitle,
     mainHeading:
-      "Word, Character, and Sentence Counter: Count Words, Characters, and Sentences in Your Text",
+      "Free Word Counter & Character Counter: Count Words, Characters, Sentences with Social Media Limits",
     keywords: keywords.split(",").map((word) => word.trim()),
     faqs: [
       {
@@ -86,14 +86,19 @@ export const componentConfig: ApplicationConfig = {
           "Our tool uses standard word counting algorithms that match the behavior of popular word processors. It accurately counts words separated by spaces and line breaks.",
       },
       {
-        question: "Can I count characters for Twitter or SMS limits?",
+        question: "Can I check Twitter and Instagram character limits?",
         answer:
-          "Yes, our tool shows character counts both with and without spaces, making it perfect for checking Twitter (280 characters), SMS (160 characters), and other platform-specific limits.",
+          "Yes, our tool shows real-time progress bars for Twitter/X (280 characters), Instagram captions (2,200 characters), LinkedIn posts (3,000 characters), Meta titles (60 characters), Meta descriptions (160 characters), and SMS (160 characters).",
       },
       {
-        question: "Does the word counter work offline?",
+        question: "Does the word counter calculate reading time?",
         answer:
-          "Yes, once the page loads, you can use the word counter completely offline. All counting happens in your browser with no internet connection required.",
+          "Yes, our tool estimates both reading time (based on 225 words per minute average) and speaking time (based on 140 words per minute average), making it perfect for speech preparation and content planning.",
+      },
+      {
+        question: "What statistics does this word counter provide?",
+        answer:
+          "Our word counter provides 8 statistics: word count, character count, characters without spaces, sentence count, paragraph count, line count, estimated reading time, and estimated speaking time.",
       },
     ],
   }),

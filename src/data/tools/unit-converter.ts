@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/unit-converter";
-const pageTitle = "Free Unit Converter - Private & Works Offline";
+const pageTitle =
+  "Unit Converter Online - Convert Length, Weight, Temperature Free";
 const pageDescription =
-  "Free online unit converter for length, weight, temperature, area, volume, and more. Instant conversions between metric and imperial units.";
+  "Convert between measurement units instantly. Free online unit converter for length, weight, temperature, volume, area, speed, and more. Supports metric and imperial units.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/unit-converter.png`;
 
 const keywords =
-  "unit converter,measurement converter,length converter,weight converter,temperature converter,metric converter,imperial converter";
+  "unit converter,unit converter online,convert units,measurement converter,length converter,weight converter,temperature converter,volume converter,metric to imperial,unit conversion,online unit converter free,conversion calculator";
 
 export const metadata: Metadata = {
   alternates: {

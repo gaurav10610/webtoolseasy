@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/compound-interest-calculator";
-const pageTitle = "Compound Interest Calculator - Free & Private";
+const pageTitle =
+  "Compound Interest Calculator Online Free - Calculate Growth";
 const pageDescription =
-  "Calculate compound interest for investments and savings. Free calculator shows growth over time with customizable interest rates and compounding periods.";
+  "Calculate compound interest with detailed breakdowns. Free compound interest calculator shows growth over time with charts. Input principal, rate, time, and compounding frequency.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/compound-interest-calculator.png`;
 
 const keywords =
-  "compound interest calculator,investment calculator,financial calculator,savings calculator,interest rate calculator,future value calculator";
+  "compound interest calculator,compound interest calculator online,calculate compound interest,compound interest,ci calculator,compound interest formula calculator,compound interest calculator free,compound interest calculator with monthly deposits,calculate compound interest online";
 
 export const metadata: Metadata = {
   alternates: {

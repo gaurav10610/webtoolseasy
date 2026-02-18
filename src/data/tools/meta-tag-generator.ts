@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/meta-tag-generator";
-const pageTitle = "Free Meta Tag Generator - Private & Offline";
+const pageTitle =
+  "Meta Tag Generator Online - Create SEO Meta Tags Free";
 const pageDescription =
-  "Generate HTML meta tags, Open Graph, Twitter Cards instantly. Free SEO meta tag generator for better search rankings and social media sharing.";
+  "Generate SEO-optimized meta tags for your website. Free meta tag generator creates title, description, Open Graph, and Twitter Card tags. Preview how your page appears in search results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/meta-tag-generator.png`;
 
 const keywords =
-  "meta tag generator,seo meta tags,open graph generator,twitter card generator,html meta tags,og tags,social meta tags";
+  "meta tag generator,meta tag generator online,seo meta tags,generate meta tags,meta description generator,og tag generator,open graph generator,meta tag creator,meta tag generator free,seo tag generator,meta tags for seo,html meta tag generator";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-to-csv";
-const pageTitle = "Free JSON to CSV Converter | Private & No Upload";
+const pageTitle =
+  "JSON to CSV Converter Online - Convert JSON to CSV Free";
 const pageDescription =
-  "Convert JSON to CSV instantly. Free online tool with real-time preview. Supports nested objects, arrays, large files. No upload needed.";
+  "Convert JSON data to CSV format instantly. Free online JSON to CSV converter handles nested objects, arrays, and complex structures. Download as CSV file or copy to clipboard.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-to-csv.png`;
 const keywords =
-  "json to csv,json csv converter,convert json to csv,json to csv online,json csv tool,json array to csv,json file converter";
+  "json to csv,json to csv converter,convert json to csv,json to csv online,json to csv converter online,json to csv free,json array to csv,json to csv download,json to csv file,export json to csv,json to csv online free";
 
 export const metadata: Metadata = {
   alternates: {

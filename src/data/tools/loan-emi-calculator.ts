@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/loan-emi-calculator";
-const pageTitle = "Loan EMI Calculator - Free, Private & Offline";
+const pageTitle =
+  "EMI Calculator Online - Loan EMI Calculator for Home, Car & Personal Loans";
 const pageDescription =
-  "Free loan EMI calculator. Calculate monthly payments for home loans, car loans, personal loans. View amortization schedule with interest breakdown.";
+  "Calculate monthly EMI for home, car, and personal loans. Free EMI calculator shows payment breakdowns with interest and principal. Amortization schedule and charts included.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/loan-emi-calculator.png`;
 
 const keywords =
-  "loan calculator,EMI calculator,mortgage calculator,home loan calculator,car loan calculator,monthly payment calculator,loan amortization";
+  "emi calculator,emi calculator online,loan emi calculator,home loan emi calculator,car loan emi calculator,personal loan emi calculator,emi calculator free,loan calculator,monthly emi calculator,emi calculator online free,loan repayment calculator";
 
 export const metadata: Metadata = {
   alternates: {

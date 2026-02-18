@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-merge";
-const pageTitle = "PDF Merge - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Merge PDF Online Free - Combine Multiple PDF Files";
 const pageDescription =
-  "Merge PDF files with 100% client-side processing. Your documents never leave your browser - no server uploads, complete privacy. Combine multiple PDFs into one document.";
+  "Merge multiple PDF files into one document online. Free PDF combiner processes files in your browser with no server upload. Drag and drop to reorder pages. Fast and secure.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-merge.png`;
 const keywords =
-  "pdf merge,combine pdf,merge pdf online,join pdf,pdf combiner,merge pdf files,combine pdf files online,pdf joiner,private,offline,client-side,secure,no upload,browser-based";
+  "merge pdf,merge pdf online,combine pdf,pdf merger,merge pdf files,combine pdf files online free,pdf combiner,join pdf,pdf joiner online,merge pdf online free,merge two pdf files,combine pdf files into one";
 
 export const metadata: Metadata = {
   alternates: {

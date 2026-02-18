@@ -3,11 +3,12 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-const pageTitle = "Free HTML to Markdown Converter | Private & Offline";
+const pageTitle =
+  "HTML to Markdown Converter Online - Convert HTML to MD Free";
 const pageDescription =
-  "Convert HTML to Markdown instantly with our free online converter. Accurate, fast conversion works entirely in browser. Perfect for developers and writers.";
+  "Convert HTML to Markdown format instantly. Free online HTML to Markdown converter preserves headings, links, lists, and formatting. Paste HTML and get clean Markdown output.";
 const keywords =
-  "html to markdown,html to markdown converter,html2md,html markdown online,html to md,html2markdown,html markdown tool,convert html markdown";
+  "html to markdown,html to markdown converter,convert html to markdown,html to md,html to markdown online,html to markdown converter online,html to md converter,convert html to md,html to markdown free,html to markdown online free";
 const navigationUrl = "/tools/html-to-markdown";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/html-to-markdown.png`;
 

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/css-formatter";
 const pageTitle =
-  "Private CSS Formatter - Format CSS Offline | No Upload | Free";
+  "CSS Formatter & Beautifier Online - Format CSS Code Free";
 const pageDescription =
-  "100% client-side CSS formatter - your code never leaves your browser. Beautify and format CSS stylesheets privately. Works offline.";
+  "Format and beautify CSS code with proper indentation and syntax highlighting. Free online CSS formatter with minification support. Paste unformatted CSS and get clean, readable code instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/css-format.png`;
 
 const keywords =
-  "css formatter,css beautifier,format css online,css code formatter,beautify css,css prettifier,clean css code,indent css,private,offline,client-side,secure,no upload,browser-based";
+  "css formatter,css beautifier,css formatter online,format css,beautify css,css prettifier,css code formatter,css minifier,css indent,clean css code,css formatter free,css beautifier online,format css code online,css pretty print";
 
 export const metadata: Metadata = {
   alternates: {

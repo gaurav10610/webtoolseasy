@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-to-audio-converter";
-const pageTitle = "Video to Audio Converter - Extract MP3 from Video";
+const pageTitle =
+  "Video to Audio Converter Online - Extract Audio from Video Free";
 const pageDescription =
-  "Convert video to audio online for free. Extract MP3, WAV from MP4, AVI, MKV videos with high quality results. No upload limits or registration.";
+  "Extract audio from video files online for free. Convert MP4, AVI, MOV, WebM to MP3, WAV, AAC, and more. Free browser-based video to audio converter — no software needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/video-to-audio-converter.png`;
 
 const keywords =
-  "video to audio converter,extract audio from video,mp4 to mp3,video to mp3,audio extractor,convert video online,mp4 to wav";
+  "video to audio converter,video to audio,extract audio from video,video to mp3,mp4 to mp3,video to audio converter online,convert video to audio,extract audio from video online,video to mp3 converter,video to audio online free,mp4 to mp3 converter online free";
 
 export const metadata: Metadata = {
   alternates: {

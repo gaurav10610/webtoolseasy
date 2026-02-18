@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/discount-calculator";
-const pageTitle = "Discount Calculator - Free & Private | No Tracking";
+const pageTitle =
+  "Discount Calculator Online - Calculate Sale Price Free";
 const pageDescription =
-  "Calculate final price after discount, amount saved, and discount percentage. Essential for shoppers comparing deals and retailers planning promotions.";
+  "Calculate discounts and sale prices instantly. Free discount calculator shows savings amount and final price. Supports percentage-off and fixed-amount discounts with tax calculation.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/discount-calculator.png`;
 
 const keywords =
-  "discount calculator,sale price calculator,percentage off calculator,savings calculator,price reduction,discount percentage,final price calculator,shopping calculator,sale calculator,markdown calculator,clearance calculator";
+  "discount calculator,discount calculator online,calculate discount,percentage discount calculator,sale price calculator,discount calculator free,how much is percent off,calculate sale price,percent off calculator,price after discount,discount calculator online free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v7-generator";
-const pageTitle = "UUID v7 Generator - Private & Offline | No Upload | Free";
+const pageTitle =
+  "UUID v7 Generator Online - Generate Time-Ordered UUIDs Free";
 const pageDescription =
-  "Generate UUID v7 with timestamp ordering. Perfect for database keys, distributed systems, and sortable unique identifiers with chronological ordering.";
+  "Generate UUID version 7 (time-ordered) identifiers online for free. Create sortable v7 UUIDs with millisecond precision timestamps. Modern replacement for UUID v1.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v7-generator.png`;
 
 const keywords =
-  "uuid v7 generator,uuid v7 generator online,time-ordered uuid,sortable uuid,database uuid,timestamp uuid,uuidv7,distributed systems uuid";
+  "uuid v7 generator,uuid v7,uuid version 7,uuid v7 generator online,generate uuid v7,time ordered uuid,uuid v7 generator free,uuid v7 online,create uuid v7,uuid version 7 generator online,sortable uuid";
 
 export const metadata: Metadata = {
   alternates: {

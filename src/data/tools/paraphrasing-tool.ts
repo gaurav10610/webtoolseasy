@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/paraphrasing-tool";
-const pageTitle = "Paraphrasing Tool - Private & No Upload | Free Online";
+const pageTitle =
+  "Paraphrasing Tool Online Free - Rewrite Text Instantly";
 const pageDescription =
-  "Paraphrase and rewrite text instantly with our free online tool. Choose from standard, formal, creative, and fluency modes. Perfect for students, writers, and content creators.";
+  "Paraphrase text online for free. Rewrite sentences and paragraphs while keeping the original meaning. Free paraphrasing tool helps improve clarity and avoid plagiarism.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/paraphrasing-tool.png`;
 const keywords =
-  "paraphrasing tool, paraphrase generator, rewrite text, text rewriter, rephrase tool, sentence rephraser, article rewriter, paraphrase online";
+  "paraphrasing tool,paraphrasing tool online,paraphrase,rephrase text,rewrite text,paraphraser,sentence rephraser,paraphrasing tool free,paraphrase online,rewording tool,text rewriter,paraphrase tool online free";
 
 export const metadata: Metadata = {
   alternates: {

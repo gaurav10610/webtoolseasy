@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-entities-encoder-decoder";
-const pageTitle = "HTML Entity Encoder Decoder - Private & Offline | Free";
+const pageTitle =
+  "HTML Entity Encoder Decoder Online - Encode & Decode HTML Free";
 const pageDescription =
-  "Encode and decode HTML entities instantly. Convert special characters to HTML entities and vice versa. Free HTML entity converter online.";
+  "Encode and decode HTML entities online. Convert special characters like <, >, & to HTML entities and vice versa. Free online HTML entity encoder and decoder with instant preview.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-entities-encoder-decoder.png`;
 
 const keywords =
-  "html entities encoder,html decoder,html escape,html entity converter,encode html,decode html entities,html special characters";
+  "html entity encoder,html entity decoder,html entities,encode html,decode html entities,html special characters,html entity converter,html encode online,html decode online,html entity encoder decoder online,html character encoder,html escape";
 
 export const metadata: Metadata = {
   alternates: {

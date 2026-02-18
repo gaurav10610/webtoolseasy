@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-editor";
-const pageTitle = "Markdown Editor - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Markdown Editor Online - Live Preview & Syntax Highlighting Free";
 const pageDescription =
-  "Write and edit Markdown 100% client-side with live preview. No server upload, your content never leaves your browser. Private, secure Markdown editing with export options.";
+  "Write and preview Markdown online with live rendering. Free Markdown editor with syntax highlighting, formatting toolbar, and instant HTML preview. Export to HTML or copy formatted text.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-editor.png`;
 
 const keywords =
-  "markdown editor,markdown editor online,md editor,markdown preview,live markdown editor,markdown to html,markdown converter,private,offline,client-side,secure,no upload,browser-based";
+  "markdown editor,markdown editor online,markdown preview,markdown editor with preview,online markdown editor,md editor,markdown viewer,markdown editor free,live markdown editor,markdown editor online free,markdown to html,markdown formatter,wysiwyg markdown editor";
 
 export const metadata: Metadata = {
   alternates: {

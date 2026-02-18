@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/image-format-converter";
 const pageTitle =
-  "Image Format Converter - Private & Offline | No Upload | Free";
+  "Image Converter Online - Convert JPG, PNG, WebP, GIF & BMP Free";
 const pageDescription =
-  "Convert images between formats 100% client-side. No server upload, your images never leave your browser. Private, secure JPG, PNG, WEBP, GIF conversion instantly.";
+  "Convert images between JPG, PNG, WebP, GIF, BMP, and SVG formats instantly. Free online image format converter with batch conversion, quality control, and instant download.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-format-converter.png`;
 
 const keywords =
-  "image format converter,convert jpg to png,convert png to jpg,webp converter,gif converter,image converter online,change image format,convert images,jpg converter,png converter,private,offline,client-side,secure,no upload,browser-based";
+  "image converter,image converter online,convert jpg to png,convert png to jpg,webp converter,image format converter,jpg to webp,png to webp,gif to png,image converter free,convert image format online,change image format,bmp to jpg,heic to jpg,batch image converter";
 
 export const metadata: Metadata = {
   alternates: {

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/image-compress";
 const pageTitle =
-  "Private Image Compressor - Compress Images Offline | No Upload | Free";
+  "Image Compressor Online - Compress JPG, PNG & WebP Images Free";
 const pageDescription =
-  "Compress images 100% client-side in your browser. No server uploads - your photos stay completely private. Reduce JPG, PNG, WebP file size while maintaining quality. Works offline.";
+  "Compress and optimize images online without losing quality. Reduce JPG, PNG, and WebP file sizes by up to 80%. Free image compressor with batch processing, no signup, and instant download.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-compressor.png`;
 
 const keywords =
-  "image compressor,compress images online,reduce image size,image optimizer,photo compressor,compress jpg,compress png,web optimization,private,offline,client-side,secure,no upload,browser-based";
+  "image compressor,compress image online,image compressor online,compress jpg,compress png,reduce image size,image optimizer,photo compressor,compress webp,image compression tool,reduce file size image,compress image without losing quality,bulk image compressor,image size reducer online free";
 
 export const metadata: Metadata = {
   alternates: {

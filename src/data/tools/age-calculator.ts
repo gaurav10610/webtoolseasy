@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/age-calculator";
-const pageTitle = "Free Age Calculator - Private & Works Offline";
+const pageTitle =
+  "Age Calculator Online - Calculate Your Exact Age Free";
 const pageDescription =
-  "Free age calculator to find your exact age in years, months, days, hours, and minutes. Calculate age from birthdate instantly with our online tool.";
+  "Calculate your exact age in years, months, days, hours, and minutes. Free online age calculator shows age at any date. Find out how many days old you are.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/age-calculator.png`;
 const keywords =
-  "age calculator,calculate age,how old am I,age from birthdate,birthday calculator,age in days,age in months,exact age calculator,date of birth calculator";
+  "age calculator,age calculator online,calculate age,how old am i,age finder,date of birth calculator,age calculator free,age in days,exact age calculator,age calculator online free,chronological age calculator,birthday calculator";
 
 export const metadata: Metadata = {
   alternates: {

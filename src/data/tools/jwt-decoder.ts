@@ -5,12 +5,12 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/jwt-decoder";
 const pageTitle =
-  "Private JWT Decoder - Decode JSON Web Tokens Client-Side | No Server Upload";
+  "JWT Decoder Online - Decode & Inspect JSON Web Tokens Free";
 const pageDescription =
-  "Decode and validate JWT tokens 100% client-side. No server upload - complete privacy. View header, payload, signature securely in your browser. Perfect for sensitive API tokens and security testing.";
+  "Decode JWT tokens to view header, payload, and signature instantly. Free online JWT decoder with expiration checking and claim validation. Debug authentication tokens securely in your browser.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/jwt-decoder.png`;
 const keywords =
-  "jwt decoder,private jwt decoder,client-side jwt,secure jwt validator,offline jwt parser,no upload jwt,jwt debugger,decode jwt browser,safe jwt analyzer,json web token decoder";
+  "jwt decoder,jwt decoder online,decode jwt,json web token decoder,jwt debugger,jwt parser,jwt validator,jwt viewer,jwt token decoder,decode json web token,jwt inspector,jwt decode online free,jwt.io alternative,jwt payload viewer";
 
 export const metadata: Metadata = {
   alternates: {

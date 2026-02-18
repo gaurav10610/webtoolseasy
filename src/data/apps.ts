@@ -761,4 +761,5 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "table-icon.svg",
     category: AppCategory.PROGRAMMING,
   },
+
 };

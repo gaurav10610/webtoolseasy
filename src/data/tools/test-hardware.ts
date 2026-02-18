@@ -4,25 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/test-hardware";
-const pageTitle = "Hardware Test - Private & Free | Camera, Mic, Speakers";
+const pageTitle =
+  "Hardware Test Online - Test Camera, Microphone & Speakers Free";
 const pageDescription =
-  "Easily test your camera, microphone, speakers, and other hardware with our free online tool. Get instant results for your webcam, mic, battery, and more.";
+  "Test your camera, microphone, and speakers online for free. Free browser-based hardware testing tool checks if your devices work properly before video calls and recordings.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/test-hardware.png`;
 
-const keywords = [
-  "hardware test",
-  "online hardware test",
-  "webcam test",
-  "mic test",
-  "speaker test",
-  "microphone test",
-  "camera test",
-  "test my hardware",
-  "device tester",
-  "battery test",
-  "gpu test",
-  "system information",
-].join(", ");
+const keywords =
+  "hardware test,test camera online,test microphone online,test speakers online,camera test,mic test,speaker test,webcam test,hardware test online,microphone test online,camera test online,test my camera,test my mic";
 
 export const metadata: Metadata = {
   alternates: { canonical: `${process.env.HOSTNAME}${navigationUrl}` },

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/color-palette-generator";
 const pageTitle =
-  "Color Palette Generator - Private & Offline | No Upload | Free";
+  "Color Palette Generator Online - Create Color Schemes Free";
 const pageDescription =
-  "Generate harmonious color palettes 100% client-side. No server upload, your designs never leave your browser. Private, secure palette creation with export options.";
+  "Generate beautiful color palettes with complementary, analogous, and triadic color schemes. Free online color palette generator with export to CSS, SCSS, and Tailwind.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/color-palette-generator.png`;
 
 const keywords =
-  "color palette generator,color picker,palette maker,generate color palette,complementary colors,triadic colors,analogous palettes,download palette,css variables,export palette,private,offline,client-side,secure,no upload,browser-based";
+  "color palette generator,color palette generator online,color scheme generator,generate color palette,color palette maker,complementary colors,triadic colors,analogous colors,color combinations,palette generator free,css color palette,tailwind color palette,color harmony,color palette creator";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/diff-checker";
-const pageTitle = "Diff Checker - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Diff Checker Online - Compare Code & Text Differences Free";
 const pageDescription =
-  "Compare text files or code blocks with 100% client-side processing. Your data never leaves your browser - no server uploads, complete privacy. Side-by-side diff highlighting for easy comparison.";
+  "Compare code or text side by side and see differences highlighted. Free online diff checker with line-by-line comparison, syntax highlighting, and merge conflict detection. No upload needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/diff-checker.png`;
 
 const keywords =
-  "diff checker,text compare,code diff,difference checker,file comparison,text diff,compare files,diff tool,private,offline,client-side,secure,no upload,browser-based";
+  "diff checker,diff checker online,compare code online,code diff,text diff,compare two files,diff tool online,online diff,compare text differences,side by side diff,diff viewer,code comparison tool,file compare online free";
 
 export const metadata: Metadata = {
   alternates: {

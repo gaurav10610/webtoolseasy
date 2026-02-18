@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-to-json";
-const pageTitle = "Free CSV to JSON Converter | Private & No Upload";
+const pageTitle =
+  "CSV to JSON Converter Online - Convert CSV to JSON Free";
 const pageDescription =
-  "Convert CSV to JSON instantly. Free online tool with customizable delimiters and headers. Supports nested objects, arrays, large files. No upload needed.";
+  "Convert CSV data to JSON format instantly. Free online CSV to JSON converter with custom delimiters, header detection, and pretty print. Paste CSV or upload files.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-to-json.png`;
 
 const keywords =
-  "csv to json, csv json converter, convert csv to json, csv to json online, csv json tool, csv file converter, csv parser, json generator";
+  "csv to json,csv to json converter,convert csv to json,csv to json online,csv to json converter online,csv parser,csv to json free,csv to json array,csv to json api,csv file to json,csv to json online converter free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/ip-address-lookup";
-const pageTitle = "IP Address Lookup - Free & Private | No Tracking";
+const pageTitle =
+  "IP Address Lookup Online - Find IP Location & Details Free";
 const pageDescription =
-  "Find your IP address instantly. Free IP lookup tool shows your public IP, location, ISP, and network details. Check IP address online now.";
+  "Look up any IP address to find its geolocation, ISP, hostname, and network details. Free IP address lookup tool also shows your current public IP address.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/ip-address-lookup.png`;
 
 const keywords =
-  "ip address lookup,what is my ip,find my ip,ip location,ip address finder,check ip address,my ip address,public ip lookup";
+  "ip address lookup,ip lookup,what is my ip,ip address finder,ip geolocation,ip location,find ip address,ip lookup online,my ip address,ip checker,ip address lookup free,ip address locator,ip tracker";
 
 export const metadata: Metadata = {
   alternates: {

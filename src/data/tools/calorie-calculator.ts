@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/calorie-calculator";
-const pageTitle = "Free Calorie Calculator - Private, No Tracking";
+const pageTitle =
+  "Calorie Calculator Online - Daily Calorie Needs Estimator Free";
 const pageDescription =
-  "Calculate daily calorie needs, BMR, and TDEE. Free calorie calculator for weight loss, maintenance, and muscle gain goals with personalized results.";
+  "Calculate your daily calorie needs based on age, gender, weight, height, and activity level. Free calorie calculator for weight loss, maintenance, or muscle gain. Uses Mifflin-St Jeor formula.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/calorie-calculator.png`;
 
 const keywords =
-  "calorie calculator,daily calorie needs,BMR calculator,TDEE calculator,calories per day,weight loss calculator,calorie intake calculator,how many calories,maintenance calories";
+  "calorie calculator,calorie calculator online,daily calorie calculator,calorie intake calculator,calories per day,tdee calculator,calorie needs,calorie calculator free,how many calories do i need,calorie calculator for weight loss,calorie calculator online free";
 
 export const metadata: Metadata = {
   alternates: {

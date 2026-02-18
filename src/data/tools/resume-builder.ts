@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/resume-builder";
-const pageTitle = "Free Resume Builder - Private, Offline, No Signup";
+const pageTitle =
+  "Resume Builder Online Free - Create Professional Resumes & Download PDF";
 const pageDescription =
-  "Build professional resume 100% client-side with complete privacy. No data upload, no signup required. Work offline, customize templates, and download PDF instantly. Your data never leaves your device.";
+  "Build a professional resume online for free. Free resume builder with customizable templates, sections, and PDF download. No signup required — create your resume now.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/resume-builder.png`;
 
 const keywords =
-  "resume builder,private resume builder,offline resume maker,cv builder,no signup resume,client-side resume,secure cv maker,privacy resume builder,free resume template,professional resume generator";
+  "resume builder,resume builder online,resume builder free,free resume builder,create resume,resume maker,resume builder online free,resume creator,resume generator,build resume online,free resume builder no sign up,resume builder pdf";
 
 export const metadata: Metadata = {
   alternates: {

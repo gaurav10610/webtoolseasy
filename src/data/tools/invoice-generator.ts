@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/invoice-generator";
-const pageTitle = "Free Invoice Generator - Private, No Upload";
+const pageTitle =
+  "Invoice Generator Online Free - Create & Download Invoices (PDF)";
 const pageDescription =
-  "Create professional invoices in seconds with our free invoice generator. Add your company logo, customize fields, calculate taxes automatically, and export to PDF.";
+  "Create professional invoices online for free. Free invoice generator with customizable templates, tax calculation, and PDF download. Add your logo, items, and payment terms.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/invoice-generator.png`;
 const keywords =
-  "invoice generator, create invoice, free invoice maker, invoice template, pdf invoice, business invoice, invoice creator, generate invoice online";
+  "invoice generator,invoice generator online,free invoice generator,create invoice,invoice maker,invoice generator free,invoice template,make invoice online,invoice creator,invoice generator online free,pdf invoice generator,free invoice maker";
 
 export const metadata: Metadata = {
   alternates: {

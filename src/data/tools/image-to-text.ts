@@ -5,14 +5,15 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 import { ApplicationIds } from "@/types/config";
 
 const navigationUrl = "/tools/image-to-text";
-const pageTitle = "Image to Text OCR - Private & Free | No Upload";
+const pageTitle =
+  "Image to Text Converter (OCR) Online Free - Extract Text from Images";
 const pageDescription =
-  "Convert images to text instantly with our powerful OCR tool. Extract text from JPG, PNG, JPEG, and other image formats. Free online image to text converter with accurate text recognition. Perfect for digitizing documents, photos, and scanned files.";
+  "Extract text from images using OCR online for free. Convert JPG, PNG, and screenshots to editable text. Free browser-based image to text converter with multi-language support.";
 
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-to-text.png`;
 
 const keywords =
-  "image to text converter, extract text from image, OCR online free, convert image to text, photo to text converter, picture text extractor, scan to text, JPG to text, PNG to text, image text recognition, document digitization, text extraction tool";
+  "image to text,ocr online,image to text converter,extract text from image,ocr,image to text online,picture to text,photo to text,ocr free,image to text converter online,extract text from image online free,ocr converter,screenshot to text";
 
 export const metadata: Metadata = {
   alternates: {

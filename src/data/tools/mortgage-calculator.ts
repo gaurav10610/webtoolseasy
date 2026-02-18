@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/mortgage-calculator";
-const pageTitle = "Mortgage Calculator - Free, Private & No Upload";
+const pageTitle =
+  "Mortgage Calculator Online Free - Monthly Payment Estimator";
 const pageDescription =
-  "Calculate mortgage EMI with our free home loan calculator. Get detailed amortization schedule, total interest, and monthly payment breakdown.";
+  "Calculate your monthly mortgage payment, total interest, and amortization schedule. Free mortgage calculator with taxes, insurance, and PMI. Compare fixed and adjustable rates.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/mortgage-calculator.png`;
 
 const keywords =
-  "mortgage calculator,home loan calculator,mortgage emi calculator,home loan emi,housing loan calculator,property loan calculator";
+  "mortgage calculator,mortgage calculator online,calculate mortgage,mortgage payment calculator,home loan calculator,mortgage calculator free,monthly mortgage payment,mortgage calculator with taxes,mortgage calculator online free,house payment calculator,mortgage interest calculator";
 
 export const metadata: Metadata = {
   alternates: {

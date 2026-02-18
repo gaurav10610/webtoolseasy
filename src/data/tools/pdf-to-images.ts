@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-to-images";
-const pageTitle = "PDF to Images - Private & No Upload | Free Online";
+const pageTitle =
+  "PDF to Image Converter Online - Convert PDF to JPG, PNG Free";
 const pageDescription =
-  "Free online PDF to image converter. Convert PDF pages to PNG or JPG images. High quality conversion in your browser with no upload.";
+  "Convert PDF pages to high-quality JPG or PNG images online. Free PDF to image converter works in your browser with no upload. Batch convert all pages or select specific ones.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-to-images.png`;
 const keywords =
-  "pdf to image,pdf to png,pdf to jpg,convert pdf to image,pdf to jpeg,pdf image converter,extract images from pdf,pdf to pictures";
+  "pdf to image,pdf to jpg,pdf to png,convert pdf to image,pdf to image converter online,pdf to jpg converter,convert pdf to png,pdf to image online free,export pdf as image,pdf to photo,pdf to picture,convert pdf pages to images";
 
 export const metadata: Metadata = {
   alternates: {

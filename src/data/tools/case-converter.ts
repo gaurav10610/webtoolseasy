@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/case-converter";
 const pageTitle =
-  "Private Case Converter - Transform Text Offline | No Upload | Free";
+  "Case Converter Online - Uppercase, Lowercase, Title Case Free";
 const pageDescription =
-  "100% client-side text case converter - your text never leaves your browser. Convert to uppercase, lowercase, title case privately. Works offline.";
+  "Convert text between uppercase, lowercase, title case, sentence case, and camelCase instantly. Free online case converter for text formatting with one-click copy.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/case-converter.png`;
 
 const keywords =
-  "case converter,text case converter,uppercase converter,lowercase converter,title case,sentence case,text formatter,convert case online,private,offline,client-side,secure,no upload,browser-based";
+  "case converter,case converter online,uppercase converter,lowercase converter,title case converter,text case converter,change case,convert to uppercase,convert to lowercase,sentence case,camelcase converter,text formatter,capital letters converter,case changer online free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/string-escape";
-const pageTitle = "Free String Escape & Unescape | Private & Offline";
+const pageTitle =
+  "String Escape & Unescape Online - Escape Strings Free";
 const pageDescription =
-  "Escape and unescape strings for JavaScript, HTML, URL and Base64 online. Convert, copy, or download results quickly in your browser."; // <=150 chars
+  "Escape and unescape strings for JSON, HTML, XML, CSV, and JavaScript. Free online string escaper handles special characters, quotes, and backslashes. Copy escaped output instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/string-escape.png`;
 
 const keywords =
-  "string escape,string unescape,html escape,js escape,json escape,json unescape,url encode,base64 encode,online string converter";
+  "string escape,string unescape,escape string online,json escape,html escape,javascript escape,escape special characters,string escaper,unescape string online,escape characters,string escape online free,escape quotes";
 
 export const metadata: Metadata = {
   alternates: {

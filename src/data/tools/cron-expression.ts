@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/cron-expression";
 const pageTitle =
-  "Cron Expression Generator - Private & Offline | No Upload | Free";
+  "Cron Expression Generator & Parser - Build Cron Jobs Online Free";
 const pageDescription =
-  "Generate cron expressions visually 100% client-side. No server upload, your schedules never leave your browser. Private, secure cron job creation with real-time validation.";
+  "Build and parse cron expressions visually with a simple interface. Free online cron expression generator with human-readable descriptions and next-run previews. Supports 5 and 6 field cron formats.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/cron-expression.png`;
 
 const keywords =
-  "cron expression generator,cron job generator,cron expression builder,schedule tasks,cron maker,crontab generator,task scheduler,private,offline,client-side,secure,no upload,browser-based";
+  "cron expression generator,cron generator,cron expression builder,crontab generator,cron job generator,cron schedule,cron expression parser,cron maker,cron expression explainer,crontab guru alternative,cron converter,build cron expression,cron syntax,cron schedule generator free";
 
 export const metadata: Metadata = {
   alternates: {

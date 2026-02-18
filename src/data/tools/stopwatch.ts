@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/stopwatch";
-const pageTitle = "Stopwatch Online - Private & No Tracking | Free";
+const pageTitle =
+  "Stopwatch Online - Free Online Stopwatch with Lap Timer";
 const pageDescription =
-  "Use our free online stopwatch with lap times. Accurate digital timer for sports, workouts, cooking, studying. Track splits and measure time precisely.";
+  "Use a precise online stopwatch with lap timer and split times. Free browser-based stopwatch with millisecond accuracy. Start, stop, and record lap times instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/stopwatch.png`;
 
 const keywords =
-  "stopwatch online,digital stopwatch,lap timer,online timer,split timer,free stopwatch,precise timer,interval timer";
+  "stopwatch,stopwatch online,online stopwatch,stopwatch free,stopwatch timer,lap timer,stopwatch online free,digital stopwatch,stopwatch with laps,split timer,online stopwatch free,millisecond stopwatch";
 
 export const metadata: Metadata = {
   alternates: {

@@ -5,11 +5,12 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/barcode-generator";
-const pageTitle = "Free Barcode Generator - Private, No Upload";
+const pageTitle =
+  "Barcode Generator Online - Create Barcodes Free (Code128, EAN, UPC)";
 const pageDescription =
-  "Generate barcodes online instantly. Create Code128, EAN13, UPC, and more barcode formats. Download as PNG or SVG for free in your browser.";
+  "Generate barcodes online for free. Create Code128, EAN-13, UPC-A, Code39, and other barcode formats. Free barcode generator with download as PNG or SVG.";
 const keywords =
-  "barcode generator,create barcode,barcode maker,free barcode generator,barcode creator,generate barcode,online barcode,barcode tool";
+  "barcode generator,barcode generator online,create barcode,barcode maker,barcode generator free,generate barcode,barcode creator,barcode generator online free,code128 barcode generator,ean barcode generator,upc barcode generator,free barcode maker";
 
 export const metadata: Metadata = {
   alternates: {

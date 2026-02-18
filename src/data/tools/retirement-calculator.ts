@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/retirement-calculator";
-const pageTitle = "Free Retirement Calculator - Private, No Data Stored";
+const pageTitle =
+  "Retirement Calculator Online Free - Plan Your Retirement Savings";
 const pageDescription =
-  "Calculate retirement savings needed. Free tool helps plan your retirement corpus based on current age, savings, and monthly contributions.";
+  "Plan your retirement with a free savings calculator. Estimate how much you need to save and when you can retire. Factor in inflation, returns, and Social Security.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/retirement-calculator.png`;
 
 const keywords =
-  "retirement calculator,retirement planning,retirement corpus calculator,pension calculator,retirement savings calculator,future planning tool";
+  "retirement calculator,retirement calculator online,retirement savings calculator,retirement planning calculator,when can i retire,retirement calculator free,retirement fund calculator,retirement income calculator,how much do i need to retire,retirement calculator online free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/unix-timestamp-converter";
-const pageTitle = "UNIX Timestamp Converter - Private & Free | No Upload";
+const pageTitle =
+  "Unix Timestamp Converter Online - Epoch to Date & Date to Epoch";
 const pageDescription =
-  "Convert UNIX timestamps to readable dates and vice versa. Free epoch time converter with timezone support. Convert timestamps instantly.";
+  "Convert Unix timestamps to readable dates and dates to Unix epoch online. Free timestamp converter supports milliseconds, seconds, and multiple date formats. Get current Unix timestamp.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/unix-timestamp-converter.png`;
 
 const keywords =
-  "unix timestamp converter,epoch converter,timestamp to date,unix time converter,epoch time,timestamp converter,date to timestamp";
+  "unix timestamp converter,epoch converter,unix timestamp to date,timestamp converter,epoch to date,date to timestamp,unix time converter,epoch time converter,unix timestamp,current unix timestamp,epoch converter online,timestamp converter online free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-to-html-converter";
-const pageTitle = "Free Markdown to HTML Converter | Private & Offline";
+const pageTitle =
+  "Markdown to HTML Converter Online - Convert MD to HTML Free";
 const pageDescription =
-  "Convert Markdown to HTML instantly. Free online Markdown converter with live preview. Transform MD files to clean HTML code easily.";
+  "Convert Markdown to clean HTML code instantly. Free online Markdown to HTML converter with live preview and syntax highlighting. Copy or download the generated HTML.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-to-html-converter.png`;
 
 const keywords =
-  "markdown to html,md to html converter,markdown converter,convert markdown,markdown parser,md to html online,markdown html generator";
+  "markdown to html,markdown to html converter,convert markdown to html,md to html,markdown converter,markdown to html online,markdown to html converter online,markdown parser,md to html converter,markdown to html free,convert md to html online";
 
 export const metadata: Metadata = {
   alternates: {

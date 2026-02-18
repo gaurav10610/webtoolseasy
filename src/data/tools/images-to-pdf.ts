@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/images-to-pdf";
-const pageTitle = "Images to PDF - Private & No Upload | Free Converter";
+const pageTitle =
+  "Image to PDF Converter Online - Convert JPG, PNG to PDF Free";
 const pageDescription =
-  "Free online image to PDF converter. Combine multiple JPG, PNG images into a single PDF file. Rearrange order, adjust layout in browser.";
+  "Convert images to PDF online for free. Combine multiple JPG, PNG, or WebP images into a single PDF document. Drag, drop, and reorder images. No upload to server required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/images-to-pdf.png`;
 const keywords =
-  "images to pdf,jpg to pdf,png to pdf,convert images to pdf,image to pdf converter,pictures to pdf,photos to pdf,combine images to pdf";
+  "image to pdf,jpg to pdf,png to pdf,convert image to pdf,image to pdf converter online,jpg to pdf converter,images to pdf,photo to pdf,combine images into pdf,picture to pdf,image to pdf online free,multiple images to pdf";
 
 export const metadata: Metadata = {
   alternates: {

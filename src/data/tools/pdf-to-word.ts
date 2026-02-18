@@ -5,11 +5,12 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-to-word";
-const pageTitle = "PDF to Word Converter - Convert PDF to DOCX Free";
+const pageTitle =
+  "PDF to Word Converter Online Free - Convert PDF to DOCX";
 const pageDescription =
-  "Convert PDF files to editable Word documents online. Free PDF to DOCX converter with text and formatting preservation in your browser.";
+  "Convert PDF files to editable Word documents online for free. Browser-based PDF to Word converter preserves formatting and layout. No registration or upload to servers required.";
 const keywords =
-  "pdf to word,pdf to docx,convert pdf to word,pdf converter,pdf to word converter,pdf to doc,pdf to word online,free pdf to word";
+  "pdf to word,pdf to word converter,convert pdf to word,pdf to docx,pdf to word online free,pdf to word converter online,convert pdf to doc,pdf to editable word,pdf to word free,online pdf to word converter free,pdf to word converter without email";
 
 export const metadata: Metadata = {
   alternates: {

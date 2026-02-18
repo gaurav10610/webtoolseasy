@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/roi-calculator";
-const pageTitle = "ROI Calculator - Free & Private | Works Offline";
+const pageTitle =
+  "ROI Calculator Online Free - Calculate Return on Investment";
 const pageDescription =
-  "Calculate return on investment (ROI) instantly. Free tool to measure investment performance, profitability, and annual returns.";
+  "Calculate return on investment (ROI) online for free. Enter initial investment and returns to find ROI percentage, annualized ROI, and net profit. Compare multiple investments.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/roi-calculator.png`;
 
 const keywords =
-  "roi calculator,return on investment calculator,investment return calculator,profit calculator,investment performance,annualized return";
+  "roi calculator,roi calculator online,return on investment calculator,calculate roi,roi calculator free,investment return calculator,roi formula calculator,roi calculator online free,investment roi calculator,calculate return on investment";
 
 export const metadata: Metadata = {
   alternates: {

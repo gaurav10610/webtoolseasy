@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/percentage-calculator";
-const pageTitle = "Percentage Calculator - Free & Private Online";
+const pageTitle =
+  "Percentage Calculator Online - Calculate Percentages Free";
 const pageDescription =
-  "Free percentage calculator. Calculate percentage of value, increase, decrease, and percentage difference instantly. Easy-to-use online tool.";
+  "Calculate percentages online with multiple calculation modes. Find percentage of a number, percentage change, percentage difference, and more. Free and instant results.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/percentage-calculator.png`;
 
 const keywords =
-  "percentage calculator,calculate percentage,percent calculator,percentage increase,percentage decrease,percentage difference,percent of number";
+  "percentage calculator,percentage calculator online,calculate percentage,percent calculator,percentage change calculator,percentage difference,what percent of,percentage increase calculator,percentage decrease calculator,percentage calculator free,how to calculate percentage";
 
 export const metadata: Metadata = {
   alternates: {

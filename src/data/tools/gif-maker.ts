@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/gif-maker";
-const pageTitle = "GIF Maker - Private & Offline | No Upload | Free";
+const pageTitle =
+  "GIF Maker Online - Create Animated GIFs from Images & Videos Free";
 const pageDescription =
-  "Create animated GIFs with 100% client-side processing. Your files never leave your browser - no server uploads, complete privacy. Convert video to GIF or make GIF from images.";
+  "Create animated GIFs from images or video clips online for free. Free GIF maker with speed control, cropping, and text overlay. Make GIFs directly in your browser.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/gif-maker.png`;
 
 const keywords =
-  "gif maker,create gif,video to gif,make gif online,gif creator,animated gif maker,convert video to gif,image to gif,private,offline,client-side,secure,no upload,browser-based";
+  "gif maker,gif maker online,create gif,make gif,gif creator,gif maker free,gif maker online free,video to gif,images to gif,gif generator,animated gif maker,create gif online,make gif from video,gif creator online free";
 
 export const metadata: Metadata = {
   alternates: {

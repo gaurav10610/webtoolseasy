@@ -1,11 +1,25 @@
 "use client";
 
-import { TextField, Typography } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  LinearProgress,
+  Box,
+} from "@mui/material";
 import { useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
+
+const CHAR_LIMITS = [
+  { name: "Twitter/X", limit: 280, emoji: "🐦" },
+  { name: "Meta Title", limit: 60, emoji: "🔍" },
+  { name: "Meta Description", limit: 160, emoji: "📝" },
+  { name: "SMS", limit: 160, emoji: "💬" },
+  { name: "Instagram Caption", limit: 2200, emoji: "📸" },
+  { name: "LinkedIn Post", limit: 3000, emoji: "💼" },
+];
 
 export default function WordCounter({
   hostname,
@@ -21,24 +35,29 @@ export default function WordCounter({
 
   // Calculate statistics
   const stats = useMemo(() => {
-    const words = toolState.code.split(/\s+/).filter((word) => word !== "");
-    const sentences = toolState.code
+    const text = toolState.code;
+    const words = text.split(/\s+/).filter((word) => word !== "");
+    const sentences = text
       .split(/[.!?]+/)
       .filter((sentence) => sentence.trim() !== "");
-    const paragraphs = toolState.code
+    const paragraphs = text
       .split(/\n\s*\n/)
       .filter((para) => para.trim() !== "");
+    const lines = text.split(/\n/).length;
 
-    // Calculate reading time (average 200 words per minute)
-    const readingTimeMinutes = Math.ceil(words.length / 200);
+    // Reading time: ~225 wpm average; Speaking time: ~140 wpm average
+    const readingTimeMinutes = Math.max(Math.ceil(words.length / 225), 0);
+    const speakingTimeMinutes = Math.max(Math.ceil(words.length / 140), 0);
 
     return {
       words: words.length,
-      characters: toolState.code.length,
-      charactersNoSpaces: toolState.code.replace(/\s/g, "").length,
+      characters: text.length,
+      charactersNoSpaces: text.replace(/\s/g, "").length,
       sentences: sentences.length,
       paragraphs: paragraphs.length,
+      lines,
       readingTime: readingTimeMinutes,
+      speakingTime: speakingTimeMinutes,
     };
   }, [toolState.code]);
 
@@ -65,8 +84,8 @@ export default function WordCounter({
       }}
     >
       <SEOContent
-        title="Word Counter"
-        description="Free online word counter tool. Count words, characters, sentences, and paragraphs in your text."
+        title="Word & Character Counter"
+        description="Free online word counter and character counter tool. Count words, characters, sentences, paragraphs, and check social media character limits. Works offline."
         exampleCode={initialValue}
         exampleOutput="Words: 7, Characters: 47, Sentences: 2"
       />
@@ -88,13 +107,14 @@ export default function WordCounter({
             rows={8}
             value={toolState.code}
             onChange={(e) => toolState.setCode(e.target.value)}
-            placeholder="Enter text to analyze..."
+            placeholder="Start typing or paste your text here to count words, characters, sentences, and more..."
             variant="outlined"
             className="w-full"
           />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+        {/* Main Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
           <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
             <Typography variant="h4" className="!font-bold !text-blue-600">
               {stats.words}
@@ -156,6 +176,18 @@ export default function WordCounter({
             </Typography>
           </div>
           <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-teal-600">
+              {stats.lines}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
+              Lines
+            </Typography>
+          </div>
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
             <Typography variant="h4" className="!font-bold !text-indigo-600">
               {stats.readingTime}
             </Typography>
@@ -166,6 +198,65 @@ export default function WordCounter({
             >
               Min Read
             </Typography>
+          </div>
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-pink-600">
+              {stats.speakingTime}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
+              Min Speak
+            </Typography>
+          </div>
+        </div>
+
+        {/* Social Media Character Limits */}
+        <div className="w-full">
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            className="!text-lg !font-semibold !mb-3 flex items-center gap-2"
+          >
+            <span>📊</span>
+            <span>Character Limits</span>
+          </Typography>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {CHAR_LIMITS.map((info) => {
+              const percentage = Math.min(
+                (stats.characters / info.limit) * 100,
+                100
+              );
+              const isOver = stats.characters > info.limit;
+              return (
+                <Box
+                  key={info.name}
+                  className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
+                >
+                  <div className="flex justify-between items-center mb-1">
+                    <Typography variant="body2" className="!font-medium">
+                      {info.emoji} {info.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      className={isOver ? "!text-red-600 !font-bold" : ""}
+                    >
+                      {stats.characters} / {info.limit}
+                    </Typography>
+                  </div>
+                  <LinearProgress
+                    variant="determinate"
+                    value={percentage}
+                    color={
+                      isOver ? "error" : percentage > 80 ? "warning" : "primary"
+                    }
+                    className="!rounded-full !h-2"
+                  />
+                </Box>
+              );
+            })}
           </div>
         </div>
       </div>

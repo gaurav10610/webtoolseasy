@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/salary-calculator";
-const pageTitle = "Free Salary Calculator - Private & Offline";
+const pageTitle =
+  "Salary Calculator Online - Convert Hourly to Annual & Take-Home Pay";
 const pageDescription =
-  "Convert between hourly, monthly, and annual salary. Free salary calculator with take-home pay estimates. Calculate hourly wage, yearly income, and more.";
+  "Calculate your salary with deductions for tax, insurance, and retirement. Free salary calculator converts hourly to annual, monthly, and weekly pay. Estimate take-home pay.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/salary-calculator.png`;
 
 const keywords =
-  "salary calculator,hourly to annual,annual to hourly,monthly salary calculator,wage calculator,hourly wage calculator,yearly salary,paycheck calculator,income calculator";
+  "salary calculator,salary calculator online,take home pay calculator,net salary calculator,hourly to salary,salary after tax,pay calculator,salary calculator free,annual salary calculator,paycheck calculator,salary calculator online free,gross to net salary";
 
 export const metadata: Metadata = {
   alternates: {

@@ -1,7 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { TextField, Card, CardContent, Typography } from "@mui/material";
+import { useState, useEffect, useCallback } from "react";
+import {
+  TextField,
+  Card,
+  CardContent,
+  Typography,
+  Slider,
+  Box,
+} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { ToolComponentProps } from "@/types/component";
@@ -33,7 +40,18 @@ export default function ColorConverter({
     cmyk: "cmyk(76%, 47%, 0%, 4%)",
   });
 
+  const [rgbSliders, setRgbSliders] = useState({ r: 59, g: 130, b: 246 });
+
   const hexToRgb = (hex: string): [number, number, number] | null => {
+    // Support both 3-digit and 6-digit hex
+    const short = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(hex);
+    if (short) {
+      return [
+        parseInt(short[1] + short[1], 16),
+        parseInt(short[2] + short[2], 16),
+        parseInt(short[3] + short[3], 16),
+      ];
+    }
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? [
@@ -113,12 +131,29 @@ export default function ColorConverter({
     ];
   };
 
+  const updateFromRgb = useCallback(
+    (r: number, g: number, b: number) => {
+      const hex = rgbToHex(r, g, b);
+      const [h, s, l] = rgbToHsl(r, g, b);
+      const [c, m, y, k] = rgbToCmyk(r, g, b);
+
+      setColorFormats({
+        hex: hex.toUpperCase(),
+        rgb: `rgb(${r}, ${g}, ${b})`,
+        hsl: `hsl(${h}, ${s}%, ${l}%)`,
+        cmyk: `cmyk(${c}%, ${m}%, ${y}%, ${k}%)`,
+      });
+      setRgbSliders({ r, g, b });
+    },
+    []
+  );
+
   useEffect(() => {
     const parseInput = (input: string): [number, number, number] | null => {
       const trimmed = input.trim();
 
-      // HEX
-      if (/^#?[0-9A-Fa-f]{6}$/.test(trimmed)) {
+      // HEX (3-digit and 6-digit)
+      if (/^#?[0-9A-Fa-f]{3}$/.test(trimmed) || /^#?[0-9A-Fa-f]{6}$/.test(trimmed)) {
         const hex = trimmed.startsWith("#") ? trimmed : "#" + trimmed;
         return hexToRgb(hex);
       }
@@ -150,19 +185,19 @@ export default function ColorConverter({
 
     const rgb = parseInput(toolState.code);
     if (rgb) {
-      const [r, g, b] = rgb;
-      const hex = rgbToHex(r, g, b);
-      const [h, s, l] = rgbToHsl(r, g, b);
-      const [c, m, y, k] = rgbToCmyk(r, g, b);
-
-      setColorFormats({
-        hex: hex.toUpperCase(),
-        rgb: `rgb(${r}, ${g}, ${b})`,
-        hsl: `hsl(${h}, ${s}%, ${l}%)`,
-        cmyk: `cmyk(${c}%, ${m}%, ${y}%, ${k}%)`,
-      });
+      updateFromRgb(rgb[0], rgb[1], rgb[2]);
     }
-  }, [toolState.code]);
+  }, [toolState.code, updateFromRgb]);
+
+  const handleSliderChange = useCallback(
+    (channel: "r" | "g" | "b", value: number) => {
+      const newRgb = { ...rgbSliders, [channel]: value };
+      setRgbSliders(newRgb);
+      const hex = rgbToHex(newRgb.r, newRgb.g, newRgb.b);
+      toolState.setCode(hex.toUpperCase());
+    },
+    [rgbSliders, toolState]
+  );
 
   const copyFormat = (format: string, value: string) => {
     toolState.actions.copyText(value, `${format} copied!`);
@@ -210,27 +245,70 @@ export default function ColorConverter({
     >
       <SEOContent
         title="Color Converter Tool"
-        description="Convert colors between HEX, RGB, HSL, and CMYK formats. Live color preview with instant conversion."
+        description="Convert colors between HEX, RGB, HSL, and CMYK formats. Live color preview with instant conversion and RGB sliders."
       />
 
       <div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col md:flex-row gap-4 items-start">
           <TextField
-            label="Enter Color (HEX, RGB, HSL)"
+            label="Enter Color (HEX, RGB)"
             value={toolState.code}
             onChange={(e) => toolState.setCode(e.target.value)}
-            placeholder="#3B82F6 or rgb(59, 130, 246)"
+            placeholder="#3B82F6, #F00, or rgb(59, 130, 246)"
             fullWidth
             size="small"
+            helperText="Supports 3-digit (#F00) and 6-digit (#FF0000) hex, RGB values"
           />
           <div
-            className="w-full md:w-32 h-12 border-2 border-gray-300 rounded"
+            className="w-full md:w-32 h-12 border-2 border-gray-300 rounded shrink-0"
             style={{ backgroundColor: colorFormats.hex }}
             title="Color Preview"
           />
         </div>
 
+        {/* RGB Sliders */}
+        <Card className="border border-gray-200">
+          <CardContent className="flex flex-col gap-3">
+            <Typography variant="subtitle2" className="!font-semibold flex items-center gap-2">
+              <PaletteIcon fontSize="small" color="primary" />
+              RGB Sliders
+            </Typography>
+            {(["r", "g", "b"] as const).map((channel) => (
+              <Box key={channel} className="flex items-center gap-3">
+                <Typography
+                  variant="body2"
+                  className="!font-mono !font-bold !w-6 text-center"
+                  sx={{
+                    color: channel === "r" ? "#ef4444" : channel === "g" ? "#22c55e" : "#3b82f6",
+                  }}
+                >
+                  {channel.toUpperCase()}
+                </Typography>
+                <Slider
+                  value={rgbSliders[channel]}
+                  onChange={(_, val) => handleSliderChange(channel, val as number)}
+                  min={0}
+                  max={255}
+                  sx={{
+                    color: channel === "r" ? "#ef4444" : channel === "g" ? "#22c55e" : "#3b82f6",
+                  }}
+                />
+                <Typography variant="body2" className="!font-mono !w-8 text-right">
+                  {rgbSliders[channel]}
+                </Typography>
+              </Box>
+            ))}
+          </CardContent>
+        </Card>
+
         <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+        {/* Large Color Preview */}
+        <div
+          className="w-full h-24 rounded-lg border-2 border-gray-300 transition-colors duration-200"
+          style={{ backgroundColor: colorFormats.hex }}
+          title="Color Preview"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="border border-gray-200">
@@ -346,8 +424,8 @@ export default function ColorConverter({
         <Card className="border border-blue-200 bg-blue-50">
           <CardContent>
             <Typography variant="body2" className="text-gray-700">
-              <strong>Tip:</strong> Enter any color format and get instant
-              conversions to all other formats. Supported inputs: HEX (#FF5733),
+              <strong>Tip:</strong> Enter any color format or use the RGB
+              sliders for precise control. Supported inputs: HEX (#FF5733 or #F53),
               RGB (255, 87, 51), or rgb(255, 87, 51).
             </Typography>
           </CardContent>

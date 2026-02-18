@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-editor";
 const pageTitle =
-  "Private PDF Editor - Edit, Merge & Split PDFs Offline | No Upload";
+  "PDF Editor Online Free - Edit, Annotate & Sign PDFs";
 const pageDescription =
-  "Edit, merge, split, rotate PDFs 100% client-side. No file upload to servers. Complete privacy - your documents never leave your browser. Work offline without registration.";
+  "Edit PDF files online for free. Add text, images, annotations, and signatures. Free browser-based PDF editor — no registration or upload required. Modify PDFs instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-editor.png`;
 
 const keywords =
-  "pdf editor,private pdf editor,offline pdf merge,client-side pdf,no upload pdf editor,secure pdf merger,privacy pdf tools,split pdf offline,edit pdf browser,combine pdf securely";
+  "pdf editor,pdf editor online free,edit pdf,pdf editor free,edit pdf online,pdf annotator,add text to pdf,pdf editor online no sign up,modify pdf online,annotate pdf online,pdf editor browser,free pdf editor no watermark";
 
 export const metadata: Metadata = {
   alternates: {

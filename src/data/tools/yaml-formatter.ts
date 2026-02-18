@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/yaml-formatter";
 const pageTitle =
-  "YAML Formatter & Validator - Private & Offline | No Upload | Free";
+  "YAML Formatter & Validator Online - Format and Validate YAML Free";
 const pageDescription =
-  "Format, validate and convert YAML 100% client-side. No server upload, your data never leaves your browser. Private, secure YAML formatting with instant results.";
+  "Format, validate, and convert YAML data online. Free YAML formatter with syntax validation, JSON conversion, and proper indentation. Detect YAML errors instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/yaml-formatter.png`;
 
 const keywords =
-  "yaml formatter,yaml validator,yaml beautifier,format yaml online,convert yaml to json,yaml lint,yaml prettify,private,offline,client-side,secure,no upload,browser-based";
+  "yaml formatter,yaml formatter online,yaml validator,yaml beautifier,format yaml,yaml lint,yaml to json,yaml parser,yaml checker,yaml formatter free,validate yaml online,yaml pretty print,yaml converter,yaml syntax checker,yaml editor online";
 
 export const metadata: Metadata = {
   alternates: {

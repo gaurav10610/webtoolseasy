@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sql-formatter";
-const pageTitle = "SQL Formatter - Private & Offline | No Upload | Free";
+const pageTitle =
+  "SQL Formatter Online - Format & Beautify SQL Queries Free";
 const pageDescription =
-  "Format and beautify SQL queries 100% client-side. No server upload, your queries never leave your browser. Private, secure SQL formatting with instant results.";
+  "Format and beautify SQL queries with proper indentation. Free online SQL formatter supports MySQL, PostgreSQL, SQLite, and SQL Server syntax. Paste messy SQL and get clean, readable code.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/sql-formatter.png`;
 
 const keywords =
-  "sql formatter,format sql online,sql beautifier,sql prettify,format sql query,sql formatting tool,private,offline,client-side,secure,no upload,browser-based";
+  "sql formatter,sql formatter online,format sql,sql beautifier,sql formatter free,sql query formatter,beautify sql,sql prettifier,format sql online,sql formatter online free,sql code formatter,sql pretty print,format sql query";
 
 export const metadata: Metadata = {
   alternates: {

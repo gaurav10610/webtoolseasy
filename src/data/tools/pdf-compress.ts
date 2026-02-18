@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/pdf-compress";
-const pageTitle = "PDF Compress - Private & Offline | No Upload | Free";
+const pageTitle =
+  "PDF Compressor Online - Reduce PDF File Size Free";
 const pageDescription =
-  "Compress PDF files with 100% client-side processing. Your documents never leave your browser - no server uploads, complete privacy. Reduce PDF size without losing quality.";
+  "Compress PDF files and reduce file size while keeping quality. Free online PDF compressor processes files in your browser — no upload to any server. Shrink PDFs for email and sharing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/pdf-compress.png`;
 const keywords =
-  "pdf compress,compress pdf,reduce pdf size,pdf compressor,shrink pdf,make pdf smaller,pdf size reducer,optimize pdf,private,offline,client-side,secure,no upload,browser-based";
+  "pdf compressor,compress pdf,reduce pdf size,pdf compressor online,shrink pdf,pdf size reducer,compress pdf online free,make pdf smaller,pdf optimizer,pdf file compressor,compress pdf without losing quality,reduce pdf file size online free";
 
 export const metadata: Metadata = {
   alternates: {

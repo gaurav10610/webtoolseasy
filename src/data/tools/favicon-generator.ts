@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/favicon-generator";
-const pageTitle = "Favicon Generator - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Favicon Generator Online - Create Favicons from Images Free";
 const pageDescription =
-  "Generate favicon from any image. Create .ico, PNG favicons in multiple sizes (16x16, 32x32, 64x64). Free online favicon maker.";
+  "Generate favicons from images online for free. Create ICO, PNG, and SVG favicons in all sizes (16x16, 32x32, 48x48, 192x192). Generate favicon HTML code for your website.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/favicon-generator.png`;
 
 const keywords =
-  "favicon generator,create favicon,favicon maker,ico generator,favicon from image,favicon converter,website favicon,favicon tool";
+  "favicon generator,favicon generator online,create favicon,favicon maker,favicon generator free,ico generator,favicon creator,generate favicon,favicon generator online free,favicon from image,website favicon generator,favicon converter";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/date-calculator";
-const pageTitle = "Free Date Calculator - Private, No Upload Required";
+const pageTitle =
+  "Date Calculator Online - Days Between Dates & Add/Subtract Days";
 const pageDescription =
-  "Calculate date differences, add or subtract days, and find dates for past or future events. Essential for project planning and deadline tracking.";
+  "Calculate the number of days between two dates or add/subtract days from a date. Free date calculator with business days option. Find duration in years, months, and days.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/date-calculator.png`;
 
 const keywords =
-  "date calculator,date difference calculator,days between dates,add days to date,subtract days from date,working days calculator,business days calculator,age in days calculator,date arithmetic,day counter,date tools,calendar calculator";
+  "date calculator,date calculator online,days between dates,date difference calculator,add days to date,subtract days from date,date calculator free,how many days between two dates,date duration calculator,day counter,date calculator online free";
 
 export const metadata: Metadata = {
   alternates: {

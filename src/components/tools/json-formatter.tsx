@@ -2,12 +2,67 @@
 
 import { useState, useCallback, useMemo } from "react";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
 import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+import { Alert, Chip, Typography } from "@mui/material";
+
+interface ValidationResult {
+  isValid: boolean;
+  errorMessage?: string;
+  errorLine?: number;
+  errorColumn?: number;
+  stats?: { keys: number; depth: number; arrayElements: number; sizeBytes: number };
+}
+
+function validateAndAnalyze(input: string): ValidationResult {
+  if (!input || input.trim().length === 0) {
+    return { isValid: false, errorMessage: "Input is empty" };
+  }
+  try {
+    const parsed = JSON.parse(input);
+    const sizeBytes = new TextEncoder().encode(JSON.stringify(parsed)).length;
+
+    function countKeys(obj: unknown, depth = 0): { keys: number; maxDepth: number; arrays: number } {
+      let keys = 0, maxDepth = depth, arrays = 0;
+      if (Array.isArray(obj)) {
+        arrays += obj.length;
+        for (const item of obj) {
+          const sub = countKeys(item, depth + 1);
+          keys += sub.keys; maxDepth = Math.max(maxDepth, sub.maxDepth); arrays += sub.arrays;
+        }
+      } else if (obj && typeof obj === "object") {
+        const entries = Object.entries(obj);
+        keys += entries.length;
+        for (const [, value] of entries) {
+          const sub = countKeys(value, depth + 1);
+          keys += sub.keys; maxDepth = Math.max(maxDepth, sub.maxDepth); arrays += sub.arrays;
+        }
+      }
+      return { keys, maxDepth, arrays };
+    }
+
+    const { keys, maxDepth, arrays } = countKeys(parsed);
+    return { isValid: true, stats: { keys, depth: maxDepth, arrayElements: arrays, sizeBytes } };
+  } catch (e) {
+    const error = e as SyntaxError;
+    let errorLine: number | undefined;
+    let errorColumn: number | undefined;
+    const posMatch = error.message.match(/position (\d+)/i);
+    if (posMatch) {
+      const pos = parseInt(posMatch[1], 10);
+      const lines = input.substring(0, pos).split("\n");
+      errorLine = lines.length;
+      errorColumn = lines[lines.length - 1].length + 1;
+    }
+    return { isValid: false, errorMessage: error.message, errorLine, errorColumn };
+  }
+}
 
 export default function JsonFormatter({
   hostname,
@@ -28,6 +83,9 @@ export default function JsonFormatter({
       return "";
     }
   });
+
+  // Real-time validation
+  const validation = useMemo(() => validateAndAnalyze(toolState.code), [toolState.code]);
 
   const formatJson = useCallback(() => {
     try {
@@ -60,11 +118,18 @@ export default function JsonFormatter({
     }
   }, [toolState]);
 
+  const handleCodeChange = useCallback(
+    (value: string) => {
+      toolState.setCode(value);
+    },
+    [toolState]
+  );
+
   // Editor configurations
   const rawEditorProps = useEditorConfig({
     language: "json",
     value: toolState.code,
-    onChange: toolState.setCode,
+    onChange: handleCodeChange,
   });
 
   const formattedEditorProps = useEditorConfig({
@@ -110,13 +175,51 @@ export default function JsonFormatter({
       }}
     >
       <SEOContent
-        title="JSON Formatter"
-        description="Free online JSON formatter, validator and beautifier. Format, validate and beautify your JSON data with proper indentation."
+        title="JSON Formatter & Validator"
+        description="Free online JSON formatter, validator and beautifier. Format, validate and beautify your JSON data with real-time error detection, stats, and proper indentation."
         exampleCode={initialValue}
         exampleOutput={JSON.stringify(JSON.parse(initialValue), null, 2)}
       />
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      {/* Real-time Validation Status */}
+      {toolState.code.trim().length > 0 && (
+        <Alert
+          severity={validation.isValid ? "success" : "error"}
+          icon={validation.isValid ? <CheckCircleIcon /> : <ErrorIcon />}
+          className="!rounded-lg w-full"
+        >
+          {validation.isValid ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <strong>Valid JSON</strong>
+              {validation.stats && (
+                <>
+                  <Chip label={`${validation.stats.keys} keys`} size="small" variant="outlined" />
+                  <Chip label={`depth: ${validation.stats.depth}`} size="small" variant="outlined" />
+                  <Chip label={`${validation.stats.arrayElements} array items`} size="small" variant="outlined" />
+                  <Chip label={`${validation.stats.sizeBytes} bytes`} size="small" variant="outlined" />
+                </>
+              )}
+            </div>
+          ) : (
+            <div>
+              <strong>Invalid JSON</strong>
+              {validation.errorMessage && (
+                <Typography variant="body2" className="!mt-1">
+                  {validation.errorMessage}
+                </Typography>
+              )}
+              {validation.errorLine && (
+                <Typography variant="body2" color="error">
+                  Line {validation.errorLine}
+                  {validation.errorColumn && `, Column ${validation.errorColumn}`}
+                </Typography>
+              )}
+            </div>
+          )}
+        </Alert>
+      )}
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

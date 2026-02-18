@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v1-generator";
-const pageTitle = "UUID v1 Generator - Private & Offline | Free Online";
+const pageTitle =
+  "UUID v1 Generator Online - Generate Time-Based UUIDs Free";
 const pageDescription =
-  "Generate UUID v1 identifiers based on MAC address and timestamp. Create single or bulk UUIDs instantly for your development projects and databases.";
+  "Generate UUID version 1 (time-based) identifiers online for free. Create single or bulk v1 UUIDs with timestamp and node information. RFC 4122 compliant.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v1-generator.png`;
 
 const keywords =
-  "uuid v1 generator,uuid generator online,time-based uuid,mac address uuid,generate uuid,uuid creator,unique identifier generator";
+  "uuid v1 generator,uuid v1,uuid version 1,uuid v1 generator online,generate uuid v1,time based uuid,uuid v1 generator free,uuid v1 online,create uuid v1,uuid version 1 generator online";
 
 export const metadata: Metadata = {
   alternates: {

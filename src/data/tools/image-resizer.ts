@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/image-resizer";
-const pageTitle = "Image Resizer - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Image Resizer Online - Resize Images by Pixels or Percentage Free";
 const pageDescription =
-  "Resize images with 100% client-side processing. Your images never leave your browser - no server uploads, complete privacy. Support for JPG, PNG, WebP. Works offline.";
+  "Resize images online by pixels, percentage, or custom dimensions. Free image resizer supports JPG, PNG, WebP, and GIF. Maintain aspect ratio and quality. No upload to server.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/image-resizer.png`;
 const keywords =
-  "image resizer,resize image,compress image,reduce image size,optimize image,image optimizer,photo resizer,picture resizer,resize photo online,private,offline,client-side,secure,no upload,browser-based";
+  "image resizer,image resizer online,resize image,resize image online,resize photo,image resize online free,photo resizer,resize image pixels,resize image to specific size,image resizer free,resize picture,reduce image size";
 
 export const metadata: Metadata = {
   alternates: {

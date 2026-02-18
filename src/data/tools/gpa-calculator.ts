@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/gpa-calculator";
-const pageTitle = "GPA Calculator - Free & Private | No Data Upload";
+const pageTitle =
+  "GPA Calculator Online - Calculate Grade Point Average Free";
 const pageDescription =
-  "Calculate your GPA based on course grades and credit hours. Track semester and cumulative GPA for academic planning and scholarship eligibility.";
+  "Calculate your GPA online for free. Enter grades and credits to get your grade point average. Supports 4.0, 5.0, and custom grading scales. Semester and cumulative GPA calculator.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/gpa-calculator.png`;
 
 const keywords =
-  "gpa calculator,grade point average calculator,cumulative gpa calculator,semester gpa,college gpa calculator,high school gpa,weighted gpa calculator,unweighted gpa,academic calculator,grade calculator,student gpa tool";
+  "gpa calculator,gpa calculator online,calculate gpa,grade calculator,gpa calculator free,college gpa calculator,gpa calculator online free,grade point average calculator,cumulative gpa calculator,semester gpa calculator,high school gpa calculator";
 
 export const metadata: Metadata = {
   alternates: {

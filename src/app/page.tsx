@@ -20,18 +20,19 @@ import {
   StructuredData,
   generateOrganizationSchema,
   generateWebsiteSchema,
+  generateFAQPageSchema,
 } from "@/components/structuredData";
 import { SkeletonWithProps } from "@/components/lib/skeletons";
 import { Suspense } from "react";
 
 const pageTitle =
-  "115+ Free Private Online Tools | No Data Upload | WebToolsEasy";
+  "115+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
 const pageDescription =
-  "Access 115+ free privacy-first online tools that run 100% in your browser. No server uploads, complete data privacy. JSON formatter, PDF editor, image compressor & more. No signup required.";
+  "Use 115+ free online tools that run 100% in your browser with complete privacy. JSON formatter, PDF editor, image compressor, code beautifier, resume builder, video converter & more. No signup, no data upload, works offline.";
 const keywords =
-  "free online tools, private tools, client-side tools, no upload, privacy-first, browser tools, secure online tools, offline tools, developer tools, JSON formatter, PDF editor, image compressor, no signup";
+  "free online tools, private tools, client-side tools, no upload, privacy-first, browser tools, secure online tools, offline tools, developer tools, JSON formatter, PDF editor, image compressor, code formatter, resume builder, video converter, QR code generator, password generator, base64 encoder, markdown editor, text compare, word counter, no signup, best free online tools 2026";
 
-const ENABLE_POPULAR_TOOLS = false;
+const ENABLE_POPULAR_TOOLS = true;
 
 export const metadata: Metadata = {
   alternates: {
@@ -138,7 +139,7 @@ function AppDiscoveryFilters({
           {map(categories, (category) => {
             const href = searchQuery
               ? `/?category=${encodeURIComponent(
-                  category
+                  category,
                 )}&search=${encodeURIComponent(searchQuery)}`
               : `/?category=${encodeURIComponent(category)}`;
 
@@ -383,7 +384,7 @@ export default async function Home({
   if (selectedCategory) {
     filteredApps = filter(
       filteredApps,
-      (app) => app.category === selectedCategory
+      (app) => app.category === selectedCategory,
     );
   }
 
@@ -394,7 +395,7 @@ export default async function Home({
       filteredApps,
       (app) =>
         includes(toLower(app.displayText), searchLower) ||
-        includes(toLower(app.category), searchLower)
+        includes(toLower(app.category), searchLower),
     );
   }
 
@@ -407,19 +408,49 @@ export default async function Home({
     ...new Set(
       allApps
         .map((app) => app.category)
-        .filter((category) => category && category.trim())
+        .filter((category) => category && category.trim()),
     ),
   ].sort();
 
   // Generate structured data for home page
   const organizationSchema = generateOrganizationSchema();
   const websiteSchema = generateWebsiteSchema();
+  const faqSchema = generateFAQPageSchema({
+    faqs: [
+      {
+        question: "What is WebToolsEasy?",
+        answer:
+          "WebToolsEasy is a collection of 115+ free online tools including JSON formatter, PDF editor, image compressor, code beautifier, resume builder, and more. All tools run 100% in your browser — your data never leaves your device.",
+      },
+      {
+        question: "Are these tools completely free?",
+        answer:
+          "Yes, all 115+ tools on WebToolsEasy are completely free to use with no hidden charges, no signup required, and no usage limits.",
+      },
+      {
+        question: "Is my data safe when using these tools?",
+        answer:
+          "Absolutely. All tools process your data locally in your browser using client-side JavaScript. No data is ever uploaded to any server, ensuring 100% privacy and security.",
+      },
+      {
+        question: "Do these tools work offline?",
+        answer:
+          "Yes. Once the page is loaded, most tools work without an internet connection since all processing happens directly in your browser.",
+      },
+      {
+        question: "What categories of tools are available?",
+        answer:
+          "WebToolsEasy offers tools across 7 categories: Programming (JSON formatter, code minifier, regex tester), Media (image compressor, video converter, GIF maker), Text (word counter, case converter), Finance (loan calculator, SIP calculator), Online Editors (JavaScript editor, HTML editor, Markdown editor), SEO & Development (meta tag generator, robots.txt generator), and Miscellaneous (password generator, QR code generator, resume builder).",
+      },
+    ],
+  });
 
   return (
     <>
       {/* Structured Data */}
       <StructuredData data={organizationSchema} />
       <StructuredData data={websiteSchema} />
+      <StructuredData data={faqSchema} />
 
       <div className="w-full px-2 py-4">
         {/* Desktop Layout with 60% restriction */}
@@ -464,7 +495,7 @@ export default async function Home({
                   >
                     {allCategories.slice(0, 4).map((category) => {
                       const categoryCount = allApps.filter(
-                        (app) => app.category === category
+                        (app) => app.category === category,
                       ).length;
                       return (
                         <Link
@@ -601,6 +632,122 @@ export default async function Home({
           )}
           <BaseToolsAds className="w-full" />
         </div>
+
+        {/* SEO Content Section — visible to search engines and users */}
+        <section className="w-full px-4 py-8 mt-8 bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-100">
+          <div className="max-w-4xl mx-auto">
+            <Typography
+              variant="h2"
+              className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 !mb-6"
+            >
+              Free Online Tools for Developers, Designers &amp; Everyone
+            </Typography>
+
+            <Typography
+              variant="body1"
+              className="!text-gray-600 !mb-4 !leading-relaxed"
+            >
+              WebToolsEasy provides 115+ free browser-based utilities that
+              handle everything from JSON formatting and code beautification to
+              PDF editing, image compression, and financial calculations. Unlike
+              other online tools,{" "}
+              <strong>your data never leaves your browser</strong> — every
+              operation runs locally using client-side JavaScript, giving you
+              complete privacy and security without any server uploads.
+            </Typography>
+
+            <Typography
+              variant="h3"
+              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+            >
+              Popular Developer Tools
+            </Typography>
+            <Typography
+              variant="body1"
+              className="!text-gray-600 !mb-4 !leading-relaxed"
+            >
+              Our developer toolkit includes a powerful{" "}
+              <strong>JSON formatter</strong> and validator,{" "}
+              <strong>JavaScript editor</strong> with live preview,{" "}
+              <strong>HTML/CSS/SQL formatter</strong>,{" "}
+              <strong>regex tester</strong>,{" "}
+              <strong>Base64 encoder/decoder</strong>,{" "}
+              <strong>JWT decoder</strong>, <strong>diff checker</strong>, and
+              converters for JSON&#8596;CSV, JSON&#8596;YAML, XML&#8596;JSON,
+              and Markdown&#8596;HTML. All formatters support syntax
+              highlighting, error detection, and one-click copy.
+            </Typography>
+
+            <Typography
+              variant="h3"
+              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+            >
+              Image &amp; Media Tools
+            </Typography>
+            <Typography
+              variant="body1"
+              className="!text-gray-600 !mb-4 !leading-relaxed"
+            >
+              Compress images, convert formats (PNG, JPG, WebP, SVG), resize and
+              crop photos, remove backgrounds, and create GIFs — all without
+              uploading to any server. Our <strong>video converter</strong>,{" "}
+              <strong>screen recorder</strong>, and{" "}
+              <strong>audio recorder</strong> tools let you work with media
+              files directly in your browser using WebAssembly-powered
+              processing.
+            </Typography>
+
+            <Typography
+              variant="h3"
+              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+            >
+              PDF &amp; Document Tools
+            </Typography>
+            <Typography
+              variant="body1"
+              className="!text-gray-600 !mb-4 !leading-relaxed"
+            >
+              Edit, merge, split, and compress PDF files online for free.
+              Convert PDFs to images or Word documents and vice versa. Our{" "}
+              <strong>resume builder</strong> and{" "}
+              <strong>invoice generator</strong> create professional documents
+              instantly with no signup required.
+            </Typography>
+
+            <Typography
+              variant="h3"
+              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+            >
+              Why Choose WebToolsEasy?
+            </Typography>
+            <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-6">
+              <li>
+                <strong>100% Free</strong> — No hidden fees, no premium tiers,
+                no usage limits
+              </li>
+              <li>
+                <strong>Complete Privacy</strong> — All processing happens in
+                your browser, zero server uploads
+              </li>
+              <li>
+                <strong>No Signup Required</strong> — Use any tool instantly
+                without creating an account
+              </li>
+              <li>
+                <strong>Works Offline</strong> — Once loaded, most tools
+                function without internet
+              </li>
+              <li>
+                <strong>Mobile Friendly</strong> — Responsive design works on
+                phones, tablets, and desktops
+              </li>
+              <li>
+                <strong>Auto-Save</strong> — Your work is automatically saved
+                and restored on page reload
+              </li>
+            </ul>
+          </div>
+        </section>
       </div>
     </>
   );
@@ -615,11 +762,11 @@ export async function generateStaticParams(): Promise<{ category: string }[]> {
       allApps
         .map((a) => a.category)
         .filter(
-          (c): c is AppCategory => !!c && enumValues.has(c as AppCategory)
-        )
-    )
+          (c): c is AppCategory => !!c && enumValues.has(c as AppCategory),
+        ),
+    ),
   ).sort((a: AppCategory, b: AppCategory) =>
-    String(a).localeCompare(String(b))
+    String(a).localeCompare(String(b)),
   );
 
   return categories.map((category) => ({ category: String(category) }));

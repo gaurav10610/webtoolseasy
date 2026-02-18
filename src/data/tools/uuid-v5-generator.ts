@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v5-generator";
-const pageTitle = "UUID v5 Generator - Private & Offline | No Upload | Free";
+const pageTitle =
+  "UUID v5 Generator Online - Generate Name-Based UUIDs (SHA-1) Free";
 const pageDescription =
-  "Generate UUID v5 identifiers using SHA-1 hash with namespace and name. Create reproducible, name-based UUIDs for APIs, databases, and systems.";
+  "Generate UUID version 5 (SHA-1 name-based) identifiers online for free. Create deterministic v5 UUIDs from namespace and name inputs. RFC 4122 compliant.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v5-generator.png`;
 
 const keywords =
-  "uuid v5 generator,uuid v5 generator online,name-based uuid,sha-1 uuid,namespace uuid,deterministic uuid,reproducible uuid,uuid from string";
+  "uuid v5 generator,uuid v5,uuid version 5,uuid v5 generator online,generate uuid v5,name based uuid sha1,sha1 uuid,uuid v5 generator free,uuid v5 online,create uuid v5,uuid version 5 generator online";
 
 export const metadata: Metadata = {
   alternates: {

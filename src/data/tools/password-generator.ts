@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/password-generator";
 const pageTitle =
-  "Private Password Generator - Generate Passwords Offline | No Upload | Free";
+  "Password Generator Online - Create Strong Random Passwords Free";
 const pageDescription =
-  "100% client-side password generator - passwords never leave your browser. Generate strong, secure passwords privately with cryptographic randomness. Works offline.";
+  "Generate strong, secure random passwords instantly. Customize length, uppercase, lowercase, numbers, and symbols. Free online password generator with bulk generation and password strength indicator.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/password-generator.png`;
 
 const keywords =
-  "password generator,strong password generator,secure passwords,random password generator,password creator,bulk password generator,password maker,private,offline,client-side,secure,no upload,browser-based";
+  "password generator,password generator online,strong password generator,random password generator,secure password generator,generate password,password creator,password maker,bulk password generator,password generator free,complex password generator,passphrase generator,8 character password,12 character password,password strength checker";
 
 export const metadata: Metadata = {
   alternates: {

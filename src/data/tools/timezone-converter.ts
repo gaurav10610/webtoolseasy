@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/timezone-converter";
-const pageTitle = "Free Timezone Converter - Private & Offline";
+const pageTitle =
+  "Time Zone Converter Online - Convert Between Time Zones Free";
 const pageDescription =
-  "Convert times across major world time zones. See current time in top global zones and switch between 12/24 hour formats.";
+  "Convert time between different time zones instantly. Free online timezone converter shows current time across all major time zones. Supports DST and UTC offsets.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/timezone-converter.png`;
 
 const keywords =
-  "timezone converter, world time converter, current time zones, convert time zones online, time zone difference, international meeting time, convert local time";
+  "timezone converter,time zone converter,timezone converter online,convert time zones,world clock,time difference calculator,utc converter,est to ist,pst to est,time zone converter online free,timezone conversion,time zone calculator";
 
 export const metadata: Metadata = {
   alternates: { canonical: `${process.env.HOSTNAME}${navigationUrl}` },

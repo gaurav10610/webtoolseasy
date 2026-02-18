@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/bmi-calculator";
-const pageTitle = "BMI Calculator - Free & Private | No Data Tracking";
+const pageTitle =
+  "BMI Calculator Online - Calculate Body Mass Index Free";
 const pageDescription =
-  "Calculate your BMI (Body Mass Index) instantly. Free tool to check if you're underweight, normal, overweight, or obese with health tips.";
+  "Calculate your Body Mass Index (BMI) online for free. Enter height and weight to get your BMI score with health category. Supports metric and imperial units.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/bmi-calculator.png`;
 
 const keywords =
-  "bmi calculator,body mass index calculator,bmi chart,ideal weight calculator,weight calculator,health calculator";
+  "bmi calculator,bmi calculator online,calculate bmi,body mass index calculator,bmi,bmi checker,bmi calculator free,bmi calculator metric,bmi calculator online free,check bmi,weight calculator bmi,bmi for adults";
 
 export const metadata: Metadata = {
   alternates: {

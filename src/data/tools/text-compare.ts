@@ -4,11 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-compare";
-const pageTitle = "Text Compare - Private & No Upload | Free Offline";
-const pageDescription = `Compare two texts side by side with 100% client-side processing. Your text never leaves your browser - no server uploads, complete privacy. Highlight differences instantly for documents, code, and content analysis.`;
+const pageTitle =
+  "Text Compare Online - Find Differences Between Two Texts Free";
+const pageDescription =
+  "Compare two texts side by side and highlight differences instantly. Free online text comparison tool shows additions, deletions, and changes. Perfect for comparing code, documents, and content.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-diff.png`;
 const keywords =
-  "text compare,compare text online,text diff tool,text comparison,compare documents,text difference,document compare,text checker,private,offline,client-side,secure,no upload,browser-based";
+  "text compare,text compare online,compare two texts,text diff,text comparison tool,find differences between two texts,compare text online,diff checker,text diff online,compare documents online,side by side comparison,text difference finder";
 
 export const metadata: Metadata = {
   alternates: {

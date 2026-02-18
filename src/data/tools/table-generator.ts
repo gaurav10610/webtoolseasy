@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/table-generator";
-const pageTitle = "Free Table Generator - Private & Offline";
+const pageTitle =
+  "Table Generator Online - Create HTML & Markdown Tables Free";
 const pageDescription =
-  "Generate tables online free. Create HTML, Markdown, CSV tables with visual editor. Add rows, columns, customize styling instantly.";
+  "Create tables online for free. Generate HTML, Markdown, CSV, and LaTeX tables with a visual editor. Add rows, columns, and content. Copy or export table code instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/table-generator.png`;
 
 const keywords =
-  "table generator,html table generator,markdown table generator,csv table,table maker,create table online,table builder";
+  "table generator,table generator online,create table,html table generator,markdown table generator,table maker,table creator,table generator free,online table generator,generate table,csv table generator,table generator online free";
 
 export const metadata: Metadata = {
   alternates: {

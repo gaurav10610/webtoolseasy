@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/csv-viewer";
-const pageTitle = "CSV Viewer - Private & Offline | No Upload | Free";
+const pageTitle =
+  "CSV Viewer Online - View & Edit CSV Files Free";
 const pageDescription =
-  "View and edit large CSV files efficiently with our streaming CSV viewer. Handle multi-GB files, search data, and export results. No file size limits.";
+  "View and edit CSV files online in a spreadsheet-like table. Free CSV viewer with sorting, filtering, and search. Open CSV files instantly in your browser — no software needed.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/csv-viewer.png`;
 
 const keywords =
-  "csv viewer online,large csv file viewer,csv streaming,csv file viewer,csv editor,csv to table,view csv data,csv table viewer";
+  "csv viewer,csv viewer online,view csv,csv file viewer,csv editor online,csv reader online,open csv file,csv viewer free,csv viewer online free,csv file reader,view csv online,csv table viewer,csv editor";
 
 export const metadata: Metadata = {
   alternates: {

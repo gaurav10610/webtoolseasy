@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-compiler";
-const pageTitle = "JavaScript Compiler Online - Run JS Code in Browser";
+const pageTitle =
+  "JavaScript Compiler Online - Run & Test JavaScript Code Free";
 const pageDescription =
-  "Compile and execute JavaScript code instantly in your browser. Free online JS compiler with debugging tools perfect for learning and testing code.";
+  "Compile and run JavaScript code online for free. Free online JavaScript compiler with console output, error detection, and ES6+ support. Test JavaScript snippets instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/javascript-compiler.png`;
 
 const keywords =
-  "javascript compiler online,js compiler,run javascript online,javascript online,execute js code,online js compiler,javascript code runner";
+  "javascript compiler,javascript compiler online,run javascript,javascript runner,javascript compiler free,compile javascript online,javascript executor,js compiler online,javascript compiler online free,run js online,test javascript online";
 
 export const metadata: Metadata = {
   alternates: {

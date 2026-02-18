@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/xml-to-json";
-const pageTitle = "Free XML to JSON Converter | Private & No Upload";
+const pageTitle =
+  "XML to JSON Converter Online - Convert XML to JSON Free";
 const pageDescription =
-  "Convert XML to JSON format instantly with our free online converter. Transform XML data with validation and formatting. Easy, secure browser-based conversion.";
+  "Convert XML data to JSON format instantly. Free online XML to JSON converter with proper structure mapping. Also supports JSON to XML conversion. Fast and accurate.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/xml-to-json.png`;
 
 const keywords =
-  "xml to json converter,convert xml to json,xml json converter,xml parser,json converter,data converter,xml transformation";
+  "xml to json,xml to json converter,convert xml to json,xml to json online,xml to json converter online,json to xml,xml parser online,xml to json free,xml to json converter free,xml to json online free";
 
 export const metadata: Metadata = {
   alternates: {

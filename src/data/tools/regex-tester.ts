@@ -3,11 +3,12 @@ import { DescriptionBlock } from "@/types/description";
 import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
-const pageTitle = "Regex Tester - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Regex Tester Online - Test & Debug Regular Expressions Free";
 const pageDescription =
-  "Test and validate regular expressions 100% client-side. No server upload, your patterns never leave your browser. Private, secure regex testing with real-time matching.";
+  "Test regular expressions with real-time matching and highlighting. Free online regex tester with match groups, flags support, and common pattern library. Debug regex patterns instantly.";
 const keywords =
-  "regex tester,regular expression tester,regex validator,regex checker,regex debugger,regex online,pattern matching,regex flags,private,offline,client-side,secure,no upload,browser-based";
+  "regex tester,regex tester online,regular expression tester,regex checker,regex debugger,test regex,regex validator,regex online,regex editor,regex pattern tester,regex match,regex replace,regex101 alternative,regex tester free,regular expression checker";
 const navigationUrl = "/tools/regex-tester";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/regex-tester.png`;
 

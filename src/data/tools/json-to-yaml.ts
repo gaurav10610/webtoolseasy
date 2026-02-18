@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-to-yaml";
-const pageTitle = "Free JSON to YAML Converter | Private & Offline";
+const pageTitle =
+  "JSON to YAML Converter Online - Convert JSON to YAML Free";
 const pageDescription =
-  "Convert JSON to YAML and YAML to JSON online for free. Bidirectional converter with syntax validation and formatting.";
+  "Convert JSON to YAML format instantly. Free online JSON to YAML converter with proper indentation. Also supports YAML to JSON conversion. Paste data and convert in seconds.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-to-yaml.png`;
 
 const keywords =
-  "json to yaml,yaml to json,convert json yaml,json yaml converter,yaml converter,json converter,format json yaml";
+  "json to yaml,json to yaml converter,convert json to yaml,json to yaml online,yaml to json,json to yaml converter online,json yaml converter,json to yml,convert json to yaml online free,json to yaml online free";
 
 export const metadata: Metadata = {
   alternates: {

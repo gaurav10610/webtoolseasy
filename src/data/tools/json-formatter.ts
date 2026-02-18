@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/json-formatter";
 const pageTitle =
-  "Private JSON Formatter - Format & Beautify JSON Offline | No Data Upload";
+  "JSON Formatter & Validator Online - Beautify, Minify & Validate JSON Free";
 const pageDescription =
-  "Format and beautify JSON data 100% client-side. No server upload - your data stays private. Free JSON formatter with validation, syntax highlighting & instant formatting. Works offline.";
+  "Format, beautify, validate, and minify JSON data online. Real-time JSON validation with error line detection, structure stats, and syntax highlighting. Free JSON formatter with no signup required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/json-format.png`;
 
 const keywords =
-  "json formatter,private json formatter,offline json beautifier,client-side json,secure json formatter,format json online,no upload json,json validator,beautify json,json prettifier";
+  "json formatter,json formatter online,json beautifier,json validator,format json,beautify json,minify json,json prettifier,json lint,json checker,json parser,validate json online,json syntax checker,json viewer online,json formatter free,json minifier,pretty print json";
 
 export const metadata: Metadata = {
   alternates: {
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    "Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data",
+    "JSON Formatter, Validator & Beautifier: Format, Validate and Minify JSON Online",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
@@ -80,23 +80,33 @@ export const componentConfig: ApplicationConfig = {
     pageUrl: "json-formatter",
     pageTitle,
     mainHeading:
-      "Free Online JSON Beautifier and Formatter: Beautify and Format Your JSON Data",
+      "JSON Formatter, Validator & Beautifier: Format, Validate and Minify JSON Online",
     keywords: keywords.split(",").map((word) => word.trim()),
     faqs: [
+      {
+        question: "Does this JSON formatter also validate JSON?",
+        answer:
+          "Yes, our tool validates your JSON in real-time as you type. It shows whether your JSON is valid or invalid, highlights error positions with line and column numbers, and displays structure stats including key count, nesting depth, and data size.",
+      },
+      {
+        question: "What is the difference between formatting and minifying JSON?",
+        answer:
+          "Formatting (beautifying) adds proper indentation and line breaks to make JSON human-readable. Minifying removes all whitespace and line breaks to create the smallest possible JSON string, which is ideal for APIs and data transfer.",
+      },
       {
         question: "Is this JSON formatter private?",
         answer:
           "Yes, our JSON formatter is 100% client-side. Your data never leaves your browser and is never uploaded to any server, ensuring complete privacy.",
       },
       {
-        question: "Does this JSON formatter work offline?",
+        question: "Can I use this for large JSON files?",
         answer:
-          "Yes, all JSON formatting and validation happens locally in your browser. Once the page loads, you can use it without an internet connection.",
+          "Yes, our JSON formatter handles large JSON files efficiently using browser-based processing. It works with JSON data up to several megabytes in size with real-time formatting and validation.",
       },
       {
-        question: "Is this JSON formatter free?",
+        question: "What JSON errors does the validator detect?",
         answer:
-          "Yes, this JSON formatter is completely free with no usage limits, no registration required, and no hidden fees.",
+          "Our validator detects all JSON syntax errors including missing commas, unclosed brackets, invalid property names, trailing commas, duplicate keys, and malformed strings. Error positions are shown with exact line and column numbers.",
       },
     ],
   }),

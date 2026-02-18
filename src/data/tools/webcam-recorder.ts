@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/webcam-recorder";
-const pageTitle = "Webcam Recorder - Private & No Upload | Free Online";
+const pageTitle =
+  "Webcam Recorder Online - Record Webcam Video Free";
 const pageDescription =
-  "Record webcam video online for free. Capture video and audio from your camera with no download required. Perfect for video messages and vlogs.";
+  "Record video from your webcam online for free. Free browser-based webcam recorder with audio capture. Download recordings as MP4 or WebM. No installation or plugins required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/webcam-recorder.png`;
 
 const keywords =
-  "webcam recorder,record webcam,webcam video recorder,online webcam recorder,free webcam recorder,record video online,camera recorder";
+  "webcam recorder,webcam recorder online,record webcam,online webcam recorder,webcam video recorder,record webcam online free,webcam capture,webcam recorder free,record video from webcam,online webcam recorder free,browser webcam recorder";
 
 export const metadata: Metadata = {
   alternates: {

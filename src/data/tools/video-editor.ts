@@ -4,14 +4,15 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/video-editor";
-const pageTitle = "Video Editor - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Video Editor Online Free - Trim, Cut & Edit Videos";
 const pageDescription =
-  "Edit videos online for free with cutting, trimming, text overlay, and effects. Professional video editor with real-time preview. No downloads required.";
+  "Edit videos online for free. Trim, cut, crop, and merge video files directly in your browser. Free online video editor supports MP4, AVI, MOV, and WebM. No software download required.";
 
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/video-editor.png`;
 
 const keywords =
-  "video editor online,edit video free,online video editor,video editing tool,cut video online,trim video,video effects,add text to video";
+  "video editor,video editor online,video editor free,edit video online,online video editor,video trimmer,cut video online,trim video online,video editor online free,free video editor no watermark,video cutter online,crop video online";
 
 export const metadata: Metadata = {
   alternates: {

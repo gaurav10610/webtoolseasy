@@ -4,14 +4,15 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/speech-to-text";
-const pageTitle = "Speech to Text - Private & No Upload | Free Offline";
+const pageTitle =
+  "Speech to Text Online Free - Voice to Text Converter";
 const metaDescription =
-  "Convert speech to text with 100% client-side processing. Your audio never leaves your browser - no server uploads, complete privacy. Supports 20+ languages with real-time transcription.";
+  "Convert speech to text online for free. Dictate using your microphone and get accurate transcription. Free voice-to-text tool works directly in your browser with no installation.";
 
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/speech-to-text.png`;
 
 const keywords =
-  "speech to text,voice to text,speech recognition,voice recognition,audio transcription,dictation tool,voice dictation,real-time transcription,private,offline,client-side,secure,no upload,browser-based";
+  "speech to text,speech to text online,voice to text,transcribe audio,speech recognition,voice typing,dictation,speech to text free,voice to text online,speech to text converter,online voice typing,transcribe speech to text free";
 
 export const metadata: Metadata = {
   title: pageTitle,

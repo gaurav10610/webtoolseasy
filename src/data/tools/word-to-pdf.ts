@@ -5,11 +5,12 @@ import { DescriptionBlock } from "@/types/description";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/word-to-pdf";
-const pageTitle = "Word to PDF - Private & No Upload | Free Converter";
+const pageTitle =
+  "Word to PDF Converter Online Free - Convert DOCX to PDF";
 const pageDescription =
-  "Convert Word documents to PDF format online. Free DOCX to PDF converter with perfect formatting preservation directly in your browser.";
+  "Convert Word documents to PDF online for free. Browser-based Word to PDF converter preserves formatting and fonts. No registration or upload to servers. Instant DOCX to PDF conversion.";
 const keywords =
-  "word to pdf,docx to pdf,convert word to pdf,doc to pdf,word to pdf converter,docx to pdf online,free word to pdf,doc to pdf converter";
+  "word to pdf,word to pdf converter,convert word to pdf,docx to pdf,word to pdf online free,word to pdf converter online,doc to pdf,convert docx to pdf,word to pdf converter free,word to pdf online,doc to pdf converter free";
 
 export const metadata: Metadata = {
   alternates: {

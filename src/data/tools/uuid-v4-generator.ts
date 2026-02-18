@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v4-generator";
 const pageTitle =
-  "Private UUID Generator - Generate UUIDs Offline | No Upload | Free";
+  "UUID Generator Online - Generate Random UUID v4 & GUID Free";
 const pageDescription =
-  "100% client-side UUID v4 generator - your data never leaves your browser. Generate single or bulk random UUIDs privately. Works offline.";
+  "Generate UUID v4 (random) identifiers instantly. Create single or bulk UUIDs with one click. Free online UUID/GUID generator with copy and download options.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "uuid v4 generator,uuid generator,generate uuid online,random uuid,unique identifier generator,bulk uuid,uuid creator,guid generator,private,offline,client-side,secure,no upload,browser-based";
+  "uuid generator,uuid generator online,uuid v4 generator,generate uuid,random uuid,guid generator,uuid creator,bulk uuid generator,unique identifier generator,uuid online free,uuid v4,create uuid,uuid maker,online guid generator";
 
 export const metadata: Metadata = {
   alternates: {

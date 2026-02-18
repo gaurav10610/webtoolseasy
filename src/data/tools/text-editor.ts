@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/text-editor";
-const pageTitle = "Text Editor - Private & Offline | No Upload | Free";
+const pageTitle =
+  "Text Editor Online - Free Online Notepad & Text Editor";
 const pageDescription =
-  "Write and edit text online with our distraction-free editor. Perfect for notes, articles, and creative writing. Access your work from anywhere securely.";
+  "Write and edit text online with this free text editor. Features include find & replace, word count, and formatting. No signup required — use as an online notepad instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/text-editor.png`;
 
 const keywords =
-  "online text editor,online notepad,writing tool,distraction-free writing,text editor online,plain text editor,notepad online";
+  "text editor,text editor online,online notepad,text editor free,online text editor,notepad online,free text editor,text editor online free,simple text editor,plain text editor,edit text online,online notepad free";
 
 export const metadata: Metadata = {
   alternates: {

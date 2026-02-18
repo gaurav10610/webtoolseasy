@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/currency-converter";
-const pageTitle = "Free Currency Converter - Private, No Data Stored";
+const pageTitle =
+  "Currency Converter Online - Real-Time Exchange Rates Free";
 const pageDescription =
-  "Convert currencies instantly with live exchange rates. Support for 150+ currencies including USD, EUR, GBP, INR, CNY, JPY and more.";
+  "Convert between world currencies with live exchange rates. Free online currency converter supports 150+ currencies including USD, EUR, GBP, INR, JPY. Fast and accurate.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/currency-converter.png`;
 const keywords =
-  "currency converter,exchange rate,forex converter,money converter,USD to EUR,currency calculator,foreign exchange,convert currency";
+  "currency converter,currency converter online,exchange rate,money converter,currency exchange,usd to eur,usd to inr,currency conversion,live exchange rates,forex converter,online currency converter free,currency calculator";
 
 export const metadata: Metadata = {
   alternates: {

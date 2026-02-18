@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/tip-calculator";
-const pageTitle = "Tip Calculator - Free & Private | Works Offline";
+const pageTitle =
+  "Tip Calculator Online - Calculate Tips & Split Bills Free";
 const pageDescription =
-  "Calculate tips and split bills easily. Determine tip amounts by percentage, divide costs among people, and see total amounts per person instantly.";
+  "Calculate tip amount and split the bill among friends. Free tip calculator with customizable tip percentages. See tip per person and total amount per person instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/tip-calculator.png`;
 
 const keywords =
-  "tip calculator,gratuity calculator,bill splitter,split bill calculator,restaurant tip calculator,tip percentage calculator,dining calculator,service charge calculator,calculate tip,tip calculator with split,group dining calculator";
+  "tip calculator,tip calculator online,calculate tip,tip calculator free,bill splitter,how much to tip,split bill calculator,tip calculator online free,gratuity calculator,restaurant tip calculator,tip percentage calculator";
 
 export const metadata: Metadata = {
   alternates: {

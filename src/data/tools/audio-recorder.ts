@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/audio-recorder";
-const pageTitle = "Audio Recorder - Private & No Upload | Free Online";
+const pageTitle =
+  "Audio Recorder Online - Record Audio from Microphone Free";
 const pageDescription =
-  "Record audio online for free. Capture high-quality audio from your microphone with no download required. Perfect for voice memos and podcasts.";
+  "Record audio from your microphone online for free. Free browser-based audio recorder with playback and download. Save recordings as MP3 or WAV. No software installation required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/audio-recorder.png`;
 
 const keywords =
-  "audio recorder,record audio,online audio recorder,voice recorder,microphone recorder,free audio recorder,record voice online";
+  "audio recorder,audio recorder online,record audio,online voice recorder,mic recorder,record audio online,audio recorder free,voice recorder online,record microphone online,online audio recorder free,record voice online,browser audio recorder";
 
 export const metadata: Metadata = {
   alternates: {

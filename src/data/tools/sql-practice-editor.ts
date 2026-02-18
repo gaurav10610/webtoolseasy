@@ -5,14 +5,15 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sql-practice-editor";
 
-const pageTitle = "SQL Practice Editor - Private & Offline | No Upload | Free";
+const pageTitle =
+  "SQL Practice Editor Online - Write & Run SQL Queries Free";
 const pageDescription =
-  "Free online SQL practice editor with built-in database. Learn SQL commands, practice queries, and visualize data relationships in your browser.";
+  "Practice SQL queries online with a built-in database editor. Free SQL playground lets you write, run, and test SELECT, INSERT, UPDATE, and DELETE queries. Learn SQL interactively.";
 
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/sql-practice-editor.png`;
 
 const keywords =
-  "sql practice editor, online sql editor, sql practice online, learn sql online, sql playground, sql tutorial, sql queries practice, database practice, sql commands online, sql exercises, free sql editor, sql learning tool";
+  "sql practice,sql editor online,sql practice online,sql playground,run sql online,sql editor,practice sql queries,sql editor online free,sql practice editor,learn sql online,sql fiddle,sql online,write sql online free";
 
 export const metadata: Metadata = {
   alternates: {

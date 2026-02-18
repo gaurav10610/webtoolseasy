@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/fraction-calculator";
-const pageTitle = "Free Fraction Calculator - Private, No Tracking";
+const pageTitle =
+  "Fraction Calculator Online - Add, Subtract, Multiply & Divide Fractions";
 const pageDescription =
-  "Add, subtract, multiply, and divide fractions. Simplify fractions, convert mixed numbers, and get step-by-step solutions instantly.";
+  "Calculate fractions online with step-by-step solutions. Free fraction calculator for addition, subtraction, multiplication, and division. Simplify fractions and convert to decimals.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/fraction-calculator.png`;
 
 const keywords =
-  "fraction calculator,add fractions,subtract fractions,multiply fractions,divide fractions,simplify fractions,mixed numbers,fraction to decimal,decimal to fraction,reduce fractions";
+  "fraction calculator,fraction calculator online,calculate fractions,add fractions,subtract fractions,multiply fractions,divide fractions,fraction calculator free,simplify fractions,fraction to decimal,mixed number calculator,fraction calculator online free";
 
 export const metadata: Metadata = {
   alternates: {

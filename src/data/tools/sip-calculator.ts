@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/sip-calculator";
-const pageTitle = "SIP Calculator - Free & Private | No Data Tracking";
+const pageTitle =
+  "SIP Calculator Online - Calculate SIP Returns & Maturity Value Free";
 const pageDescription =
-  "Calculate SIP returns for mutual fund investments. Free calculator shows wealth creation with monthly SIP, expected returns, and investment period.";
+  "Calculate SIP returns and maturity value for mutual fund investments. Free SIP calculator shows wealth growth with step-up SIP and lump sum options. Visual charts included.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/sip-calculator.png`;
 
 const keywords =
-  "sip calculator,mutual fund calculator,systematic investment plan,sip returns calculator,investment calculator,sip planning tool";
+  "sip calculator,sip calculator online,sip return calculator,mutual fund sip calculator,sip calculator free,sip maturity calculator,sip investment calculator,monthly sip calculator,sip calculator online free,step up sip calculator,sip interest calculator";
 
 export const metadata: Metadata = {
   alternates: {

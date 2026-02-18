@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/screen-recorder";
-const pageTitle = "Screen Recorder - Private & No Upload | Free Online";
+const pageTitle =
+  "Screen Recorder Online Free - Record Screen & Audio";
 const pageDescription =
-  "Record your screen with audio and webcam for free. Online screen recorder with no watermark, no time limits. Perfect for tutorials and demos.";
+  "Record your screen online for free. Capture screen, webcam, and audio directly in your browser. Free online screen recorder — no software installation needed. Download as MP4 or WebM.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/screen-recorder.png`;
 
 const keywords =
-  "screen recorder online,free screen recorder,screen recorder with audio,screen recorder webcam,record screen online,no watermark screen recorder";
+  "screen recorder,screen recorder online,record screen,screen capture,screen recorder free,online screen recorder,record screen online,screen recording,screen recorder online free,free screen recorder no watermark,screen recorder no download,browser screen recorder";
 
 export const metadata: Metadata = {
   alternates: {

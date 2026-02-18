@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/robots-txt-generator";
-const pageTitle = "Free Robots.txt Generator - Private & Offline";
+const pageTitle =
+  "Robots.txt Generator Online - Create Robots.txt File Free";
 const pageDescription =
-  "Generate robots.txt file instantly for SEO. Free tool to create robot exclusion protocol with user-agents, disallow rules, and sitemap URLs.";
+  "Generate robots.txt files for your website. Free robots.txt generator helps control search engine crawling with allow/disallow rules, sitemap references, and crawl delay settings.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/robots-txt-generator.png`;
 
 const keywords =
-  "robots.txt generator,robots txt,robot exclusion,seo robots,create robots.txt,robots file,sitemap robots";
+  "robots txt generator,robots.txt generator,robots txt generator online,create robots.txt,robots.txt maker,robots txt creator,robots.txt generator free,generate robots.txt,robots txt generator online free,robots.txt file generator,robots txt editor";
 
 export const metadata: Metadata = {
   alternates: {

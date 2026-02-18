@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/html-editor";
-const pageTitle = "HTML CSS Editor - Private & Offline | No Upload | Free";
+const pageTitle =
+  "HTML Editor Online - Live Preview & Syntax Highlighting Free";
 const pageDescription =
-  "Write, edit, and run HTML & CSS code with real-time preview. Free online editor with syntax highlighting, code completion, and responsive design testing.";
+  "Write and preview HTML code online with instant live rendering. Free online HTML editor with CSS and JavaScript support, syntax highlighting, and export options.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/html-editor.png`;
 
 const keywords =
-  "html editor online,css editor,html css editor,live preview,online web editor,html code editor,css code editor,web development tool";
+  "html editor,html editor online,online html editor,html editor with preview,html code editor,html live preview,html viewer,html playground,html editor online free,html editor with css,try html online,html css editor,html editor free";
 
 export const metadata: Metadata = {
   alternates: {

@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/lorem-ipsum-generator";
 const pageTitle =
-  "Lorem Ipsum Generator - Private & Offline | No Upload | Free";
+  "Lorem Ipsum Generator Online - Free Dummy & Placeholder Text";
 const pageDescription =
-  "Generate Lorem Ipsum dummy text with 100% client-side processing. Works entirely in your browser - no server uploads, complete privacy. Create placeholder content for designs, mockups, and websites.";
+  "Generate Lorem Ipsum placeholder text for websites, mockups, and design projects. Choose paragraphs, sentences, or words. Free online dummy text generator with instant copy.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/lorem-ipsum-generator.png`;
 
 const keywords =
-  "lorem ipsum generator,dummy text generator,placeholder text,lorem ipsum,fake text generator,text generator,sample text,lorem ipsum dolor,private,offline,client-side,secure,no upload,browser-based";
+  "lorem ipsum generator,lorem ipsum generator online,dummy text generator,placeholder text generator,lorem ipsum,fake text generator,sample text generator,lorem ipsum creator,random text generator,filler text,lipsum generator,generate lorem ipsum,placeholder text for website";
 
 export const metadata: Metadata = {
   alternates: {

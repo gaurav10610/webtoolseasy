@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/random-number-generator";
-const pageTitle = "Free Random Number Generator - Private & Offline";
+const pageTitle =
+  "Random Number Generator Online - Generate Random Numbers Free";
 const pageDescription =
-  "Generate random numbers instantly with our free tool. Perfect for lottery, gaming, passwords, and statistical sampling. Customizable range.";
+  "Generate random numbers online with custom range. Free random number generator for integers, decimals, and sequences. Set min, max, and quantity. Perfect for lotteries and games.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/random-number-generator.png`;
 
 const keywords =
-  "random number generator,random generator,number picker,lottery number generator,random picker,dice roller";
+  "random number generator,random number generator online,random number,rng,random number generator 1-100,generate random number,random number generator free,random number picker,number randomizer,random number generator online free,random integer generator";
 
 export const metadata: Metadata = {
   alternates: {

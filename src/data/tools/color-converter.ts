@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/color-converter";
-const pageTitle = "Color Converter - HEX RGB HSL CMYK Converter Online";
+const pageTitle =
+  "Color Converter Online - HEX to RGB, HSL & CMYK with Sliders";
 const pageDescription =
-  "Convert colors between HEX, RGB, HSL, and CMYK formats instantly. Free online color converter with live preview. Perfect for designers and developers.";
+  "Convert colors between HEX, RGB, HSL, and CMYK formats with live preview and RGB sliders. Supports 3-digit and 6-digit hex codes. Free color converter for web designers and developers.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/color-converter.png`;
 
 const keywords =
-  "color converter,hex to rgb,rgb to hex,hsl converter,cmyk converter,color format converter,hex color converter,rgb color picker";
+  "color converter,hex to rgb,rgb to hex,color converter online,hex to rgb converter,rgb to hex converter,hsl converter,cmyk converter,color picker,hex color converter,color code converter,rgb color picker,hex to rgba,color format converter,color converter free,css color converter";
 
 export const metadata: Metadata = {
   alternates: {

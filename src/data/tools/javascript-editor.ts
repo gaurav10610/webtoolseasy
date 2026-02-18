@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/javascript-editor";
-const pageTitle = "JavaScript Editor - Private & Offline | No Upload | Free";
+const pageTitle =
+  "JavaScript Editor Online - Write & Run JavaScript Free";
 const pageDescription =
-  "Write, edit, and run JavaScript code with live preview. Free online JS editor with syntax highlighting, error checking, and code completion features.";
+  "Write and run JavaScript code online with instant output. Free JavaScript editor with syntax highlighting, console output, and error detection. No setup required.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/js-editor.png`;
 
 const keywords =
-  "javascript editor online,js editor,online javascript editor,javascript ide online,write javascript code,edit javascript code,js code editor";
+  "javascript editor,javascript editor online,js editor,write javascript online,javascript editor free,online javascript editor,javascript playground,js editor online,javascript code editor,run javascript online,javascript editor online free";
 
 export const metadata: Metadata = {
   alternates: {

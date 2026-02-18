@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/meme-generator";
-const pageTitle = "Free Meme Generator - Private, No Upload";
+const pageTitle =
+  "Meme Generator Online Free - Create Custom Memes";
 const pageDescription =
-  "Create custom memes online instantly. Add text to images, choose fonts, download high-quality memes. Free meme maker with popular templates.";
+  "Create custom memes online for free. Add text to popular meme templates or upload your own images. Free meme maker with customizable fonts, colors, and sizes. Download or share instantly.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/meme-generator.png`;
 
 const keywords =
-  "meme generator,meme maker,create memes,funny meme generator,meme creator,free meme maker,custom memes,meme builder";
+  "meme generator,meme generator online,meme maker,create meme,meme creator,make meme,meme generator free,meme maker online,custom meme maker,meme maker free,meme generator online free,make meme online,meme creator free,meme template generator";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,12 +4,13 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/signature-generator";
-const pageTitle = "Free Signature Generator - Private, No Upload";
+const pageTitle =
+  "Signature Generator Online Free - Create Digital Signatures";
 const pageDescription =
-  "Create digital signatures online free. Draw, type, or upload your signature. Download as transparent PNG. Perfect for documents and forms.";
+  "Create digital signatures online for free. Draw your signature with mouse or touchscreen, or type your name to generate a stylish signature. Download as PNG or SVG.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/signature-generator.png`;
 const keywords =
-  "signature generator,digital signature,create signature online,signature maker,electronic signature,esignature,sign document online";
+  "signature generator,signature generator online,create signature,digital signature maker,online signature,signature maker,signature generator free,draw signature online,electronic signature creator,signature generator online free,e-signature generator,handwritten signature maker";
 
 export const metadata: Metadata = {
   alternates: {

@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/time-duration-calculator";
-const pageTitle = "Free Time Calculator - Private & Offline";
+const pageTitle =
+  "Time Duration Calculator Online - Calculate Hours, Minutes & Seconds";
 const pageDescription =
-  "Calculate time duration between hours, add or subtract time, and convert between time formats. Free time calculator for work hours, project tracking.";
+  "Calculate time duration between two times or add/subtract hours, minutes, and seconds. Free online time calculator for work hours, elapsed time, and time differences.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/time-duration-calculator.png`;
 
 const keywords =
-  "time calculator,duration calculator,time between calculator,hours calculator,time difference calculator,work hours calculator,time addition,time subtraction,elapsed time calculator";
+  "time duration calculator,time calculator,hours calculator,time difference calculator,time duration calculator online,calculate time difference,hours and minutes calculator,elapsed time calculator,time calculator online free,add time,subtract time,time calculator between two times";
 
 export const metadata: Metadata = {
   alternates: {
