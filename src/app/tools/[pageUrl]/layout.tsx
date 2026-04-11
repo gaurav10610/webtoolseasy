@@ -121,9 +121,11 @@ export async function generateMetadata(
 
   try {
     const { metadata, componentConfig } = await getToolData(params.pageUrl);
+    const titleText =
+      metadata.title || componentConfig.pageTitle || "WebToolsEasy Tool";
     return {
       ...metadata,
-      title: metadata.title || componentConfig.pageTitle || "WebToolsEasy Tool",
+      title: { absolute: String(titleText) },
       description:
         metadata.description ||
         componentConfig.mainHeading ||

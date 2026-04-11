@@ -1,7 +1,6 @@
 import { apps } from "@/data/apps";
 import { categoryConfigs } from "@/data/categories";
 import { AppCategory, ApplicationIds } from "@/types/config";
-import { getToolRating } from "./ratingUtils";
 
 export interface ToolFAQ {
   question: string;
@@ -33,7 +32,6 @@ export function createToolStructuredData({
 }) {
   const toolUrl = `${process.env.HOSTNAME}/tools/${pageUrl}`;
   const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/${pageUrl}.png`;
-  const toolRating = getToolRating(pageUrl);
   const currentAppConfig = Object.values(apps).find(
     (appConfig) => appConfig.navigateUrl === `tools/${pageUrl}`,
   );
@@ -82,13 +80,6 @@ export function createToolStructuredData({
         url: imageUrl,
         width: 1200,
         height: 630,
-      },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: toolRating.ratingValue,
-        reviewCount: toolRating.reviewCount,
-        bestRating: toolRating.bestRating,
-        worstRating: toolRating.worstRating,
       },
       datePublished: "2024-01-01",
       dateModified: new Date().toISOString().split("T")[0],

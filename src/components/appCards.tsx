@@ -44,8 +44,8 @@ export async function AppHomeCard({
               {config.displayText}
             </AppText>
             <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
-              Fast, browser-based workflow for{" "}
-              {String(config.category || "daily").toLowerCase()} tasks.
+              Free online {config.displayText.toLowerCase()} — no signup, runs
+              in your browser.
             </AppText>
           </div>
         </div>

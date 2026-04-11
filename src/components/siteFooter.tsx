@@ -5,19 +5,24 @@ const footerGroups = [
   {
     title: "Tool categories",
     links: [
-      { href: "/?category=Programming", label: "Programming" },
-      { href: "/?category=Media", label: "Media" },
-      { href: "/?category=Text", label: "Text" },
-      { href: "/?category=Finance", label: "Finance" },
+      { href: "/tools/category/dev-tools", label: "Developer Tools" },
+      { href: "/tools/category/image-tools", label: "Image Tools" },
+      { href: "/tools/category/pdf-tools", label: "PDF Tools" },
+      { href: "/tools/category/text-tools", label: "Text Tools" },
+      { href: "/tools/category/calculators", label: "Calculators" },
     ],
   },
   {
     title: "Popular tools",
     links: [
       { href: "/tools/json-formatter", label: "JSON Formatter" },
-      { href: "/tools/image-compressor", label: "Image Compressor" },
-      { href: "/tools/pdf-compress", label: "PDF Compress" },
+      { href: "/tools/image-compress", label: "Image Compressor" },
+      { href: "/tools/pdf-editor", label: "PDF Editor" },
       { href: "/tools/regex-tester", label: "Regex Tester" },
+      { href: "/tools/password-generator", label: "Password Generator" },
+      { href: "/tools/screen-recorder", label: "Screen Recorder" },
+      { href: "/tools/qr-code-generator", label: "QR Code Generator" },
+      { href: "/tools/resume-builder", label: "Resume Builder" },
     ],
   },
   {
@@ -88,7 +93,7 @@ export function SiteFooter() {
             signup and no forced uploads.
           </AppText>
           <AppText className="!text-sm !text-slate-400">
-            Built for better UX, stronger SEO, and faster workflows.
+            All tools run in your browser. Your files never leave your device.
           </AppText>
         </div>
       </div>

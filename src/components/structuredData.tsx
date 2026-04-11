@@ -31,7 +31,6 @@ export function generateWebApplicationSchema({
   datePublished,
   dateModified,
   image,
-  aggregateRating,
 }: {
   name: string;
   description: string;
@@ -45,12 +44,6 @@ export function generateWebApplicationSchema({
   datePublished?: string;
   dateModified?: string;
   image?: string;
-  aggregateRating?: {
-    ratingValue: number;
-    reviewCount: number;
-    bestRating?: number;
-    worstRating?: number;
-  };
 }) {
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -91,16 +84,6 @@ export function generateWebApplicationSchema({
       height: 630,
     };
   }
-  if (aggregateRating) {
-    schema.aggregateRating = {
-      "@type": "AggregateRating",
-      ratingValue: aggregateRating.ratingValue,
-      reviewCount: aggregateRating.reviewCount,
-      bestRating: aggregateRating.bestRating || 5,
-      worstRating: aggregateRating.worstRating || 1,
-    };
-  }
-
   return schema;
 }
 
@@ -177,7 +160,6 @@ export function generateSoftwareApplicationSchema({
   datePublished,
   dateModified,
   image,
-  aggregateRating,
   features,
 }: {
   name: string;
@@ -190,12 +172,6 @@ export function generateSoftwareApplicationSchema({
   datePublished?: string;
   dateModified?: string;
   image?: string;
-  aggregateRating?: {
-    ratingValue: number;
-    reviewCount: number;
-    bestRating?: number;
-    worstRating?: number;
-  };
   features?: string[];
 }) {
   const schema: Record<string, unknown> = {
@@ -236,15 +212,6 @@ export function generateSoftwareApplicationSchema({
       url: image,
       width: 1200,
       height: 630,
-    };
-  }
-  if (aggregateRating) {
-    schema.aggregateRating = {
-      "@type": "AggregateRating",
-      ratingValue: aggregateRating.ratingValue,
-      reviewCount: aggregateRating.reviewCount,
-      bestRating: aggregateRating.bestRating || 5,
-      worstRating: aggregateRating.worstRating || 1,
     };
   }
   if (features && features.length > 0) {
@@ -311,27 +278,6 @@ export function generateArticleSchema({
   }
 
   return schema;
-}
-
-// Random rating generator for tools
-export function generateRandomRating(): {
-  ratingValue: number;
-  reviewCount: number;
-  bestRating: number;
-  worstRating: number;
-} {
-  // Generate ratings between 4.1 and 4.9 for realistic high ratings
-  const ratingValue = Number((Math.random() * 0.8 + 4.1).toFixed(1));
-
-  // Generate review counts between 50 and 500
-  const reviewCount = Math.floor(Math.random() * 450) + 50;
-
-  return {
-    ratingValue,
-    reviewCount,
-    bestRating: 5,
-    worstRating: 1,
-  };
 }
 
 /**

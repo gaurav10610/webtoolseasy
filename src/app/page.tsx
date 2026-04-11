@@ -462,15 +462,16 @@ export default async function Home({
 
       <div className="w-full py-2 md:py-4">
         <div className="flex flex-col gap-4 items-center w-full">
-          <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
+          <AppHeading heading="Free Online Tools — No Signup, No Upload, 100% Private" />
 
           <section className="app-shell-section w-full">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-3xl">
                 <AppText className="!text-base !text-[var(--mui-palette-text-secondary)]">
-                  Explore a wider, ad-free workspace built for developers,
-                  creators, and business users who want reliable browser-based
-                  utilities with a consistent enterprise-grade experience.
+                  115+ free online tools for developers, designers, and everyday
+                  tasks. Format JSON, compress images, edit PDFs, convert files,
+                  and more — everything runs in your browser with complete
+                  privacy.
                 </AppText>
               </div>
               <SocialShareButtons

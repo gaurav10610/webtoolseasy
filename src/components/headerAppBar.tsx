@@ -34,7 +34,7 @@ export default function HeaderAppBar({
                 WebToolsEasy
               </AppText>
               <AppText className="hidden !text-xs !text-[var(--mui-palette-text-secondary)] md:block">
-                Enterprise-grade privacy-first browser tools
+                Free browser tools — no signup, no upload
               </AppText>
             </div>
           </Link>
