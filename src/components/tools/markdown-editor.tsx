@@ -7,7 +7,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { TextField, Typography } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 export default function MarkdownEditor({
@@ -313,14 +313,7 @@ function hello() {
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Markdown Editor"
-        description="Online markdown editor with live preview. Create README files, documentation, and GitHub-flavored markdown with real-time preview."
-        exampleCode={initialValue}
-        exampleOutput="Live markdown preview with GitHub-flavored syntax support"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3 md:grid-cols-4">
         <div className="md:col-span-4">

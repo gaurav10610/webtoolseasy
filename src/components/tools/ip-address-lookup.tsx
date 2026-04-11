@@ -14,7 +14,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import RouterIcon from "@mui/icons-material/Router";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 
 interface IPInfo {
@@ -104,12 +104,7 @@ export default function IpAddressLookup({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="IP Address Lookup Tool"
-        description="Instantly find your public IP address and network information. View your IP, location, ISP, and connection details."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
         {loading && (

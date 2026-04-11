@@ -7,7 +7,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import {
@@ -323,14 +323,7 @@ export default function JsonFormatter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JSON Formatter & Validator"
-        description="Free online JSON formatter, validator and beautifier. Format, validate and beautify your JSON data with real-time error detection, stats, and proper indentation."
-        exampleCode={initialValue}
-        exampleOutput={JSON.stringify(JSON.parse(initialValue), null, 2)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Real-time Validation Status */}
       {toolState.code.trim().length > 0 && (

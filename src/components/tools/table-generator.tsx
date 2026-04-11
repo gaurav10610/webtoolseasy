@@ -21,7 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 type OutputFormat = "html" | "markdown" | "csv";
@@ -238,14 +238,7 @@ export default function TableGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Table Generator - Create Tables Online"
-        description="Generate HTML, Markdown, and CSV tables with visual editor. Add rows, columns, customize styling, and export instantly."
-        exampleCode="Visual table editor"
-        exampleOutput="HTML/Markdown/CSV output"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="space-y-6">
         {/* Settings */}

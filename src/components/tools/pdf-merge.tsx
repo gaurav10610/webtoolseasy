@@ -18,7 +18,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import AddIcon from "@mui/icons-material/Add";
 import { PDFDocument } from "pdf-lib";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
@@ -179,14 +179,7 @@ export default function PDFMerge({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF Merge"
-        description="Combine multiple PDF files into one document. Drag and drop to reorder before merging."
-        exampleCode="Upload 2 or more PDF files"
-        exampleOutput="Single merged PDF file"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         {/* File Upload */}
         {isEmpty(pdfFiles) && (
           <FileUploadWithDragDrop

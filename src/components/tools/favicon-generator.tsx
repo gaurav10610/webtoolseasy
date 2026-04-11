@@ -13,7 +13,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ImageIcon from "@mui/icons-material/Image";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { FILE_TYPE_PRESETS, FILE_SIZE_PRESETS } from "@/util/fileValidation";
@@ -162,14 +162,7 @@ export default function FaviconGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Favicon Generator - Create Favicon from Image"
-        description="Generate favicons in multiple sizes from any image. Create .ico and PNG favicons for your website. Free online favicon converter."
-        exampleCode="Upload your image"
-        exampleOutput="Favicon in multiple sizes"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <canvas ref={canvasRef} style={{ display: "none" }} />
 

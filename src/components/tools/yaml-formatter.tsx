@@ -5,7 +5,7 @@ import { Alert, TextField } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -236,14 +236,7 @@ properties:
         color: snackBarColor,
       }}
     >
-      <SEOContent
-        title="YAML Formatter & Validator"
-        description="Format, validate and convert YAML online. Beautify YAML, detect syntax errors, and convert to JSON in the browser."
-        exampleCode={initialValue}
-        exampleOutput={jsYamlDump(jsYamlLoad(initialValue))}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
         <TextField

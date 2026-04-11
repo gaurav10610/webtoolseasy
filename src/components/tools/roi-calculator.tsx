@@ -10,7 +10,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -142,12 +142,7 @@ export default function ROICalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="ROI Calculator - Return on Investment"
-        description="Calculate return on investment (ROI) instantly. Measure investment performance, profitability, and annual returns with our free ROI calculator."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Section */}
         <Card elevation={2}>
           <CardContent>

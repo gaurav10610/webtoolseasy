@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import CloseIcon from "@mui/icons-material/Close";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
@@ -120,14 +120,7 @@ export default function StringEscape({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="String Escape & Unescape"
-        description="Escape and unescape strings for JavaScript, HTML, URL and Base64 encoding online. Quick convert, copy or download results."
-        exampleCode={initialValue}
-        exampleOutput={escapeJs(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

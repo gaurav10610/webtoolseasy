@@ -8,7 +8,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -252,14 +252,7 @@ main().then(result => console.log("Final result:", result));`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JavaScript Compiler Online"
-        description="Free online JavaScript compiler with ES6+ support. Compile, run and test JavaScript code in browser with real-time execution and console output."
-        exampleCode={initialCode}
-        exampleOutput="🚀 JavaScript Compiler Demo\nHello, Developer! Welcome to JavaScript Compiler.\n📊 Array operations:\nNumbers: [1, 2, 3, 4, 5]\nDoubled: [2, 4, 6, 8, 10]\nSum: 30"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         leftPanel={

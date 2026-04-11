@@ -39,7 +39,7 @@ import initSqlJs, {
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -808,12 +808,7 @@ export default function SqlPracticeEditor({
           : undefined
       }
     >
-      <SEOContent
-        title="SQL Practice Editor"
-        description="Learn and practice SQL with our interactive online editor featuring sample databases"
-      />
-
-      <Box mb={2}>
+<Box mb={2}>
         <Typography variant="body2" color="text.secondary">
           💡 <strong>Tip:</strong> To execute only selected text, highlight the
           specific SQL query in the editor and click &quot;Execute

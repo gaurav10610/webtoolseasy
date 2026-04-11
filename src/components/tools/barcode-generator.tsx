@@ -16,7 +16,7 @@ import {
 import DownloadIcon from "@mui/icons-material/Download";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import QRCode from "qrcode";
 
@@ -271,14 +271,7 @@ export default function BarcodeGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Barcode Generator"
-        description="Create professional barcodes online. Generate Code128, EAN13, UPC-A, and Code39 barcodes instantly."
-        exampleCode="Enter data → Select format → Generate barcode → Download"
-        exampleOutput="High-quality barcode images ready for printing"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Error Display */}

@@ -13,7 +13,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 
 export default function UnixTimestampConverter({
@@ -156,12 +156,7 @@ export default function UnixTimestampConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="UNIX Timestamp Converter"
-        description="Convert between UNIX timestamps and human-readable dates. Supports seconds and milliseconds. Perfect for developers."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <Card className="border border-blue-200 bg-blue-50">
           <CardContent className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">

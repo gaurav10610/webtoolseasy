@@ -34,7 +34,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import DownloadIcon from "@mui/icons-material/Download";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 interface OCRProgress {
   status: string;
@@ -273,14 +273,7 @@ export default function ImageToTextConverter({
 
   return (
     <ToolLayout>
-      <SEOContent
-        title="Image to Text Converter (OCR)"
-        description="Free online OCR tool to extract text from images. Convert JPG, PNG, WebP images to editable text using advanced optical character recognition."
-        exampleCode="image.jpg"
-        exampleOutput="Extracted text content"
-      />
-
-      <div className="flex flex-col gap-4 w-full h-full">
+<div className="flex flex-col gap-4 w-full h-full">
         {/* Header Section */}
         <div className="flex justify-between items-center flex-wrap gap-2">
           <Typography variant="h4" component="h1" className="truncate">

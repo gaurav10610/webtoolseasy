@@ -15,10 +15,6 @@ export function AppHeading({
       <AppText component="h1" variant="h1" className="!mb-0">
         {heading}
       </AppText>
-      <AppText className="max-w-3xl !text-[var(--mui-palette-text-secondary)]">
-        Privacy-first browser tools with a cleaner workflow, stronger visual
-        consistency, and zero unnecessary redirects.
-      </AppText>
     </section>
   );
 }

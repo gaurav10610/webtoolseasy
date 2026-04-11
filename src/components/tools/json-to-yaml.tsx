@@ -6,7 +6,7 @@ import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -221,14 +221,7 @@ export default function JsonToYaml({
         color: snackBarColor,
       }}
     >
-      <SEOContent
-        title="JSON to YAML Converter"
-        description="Convert between JSON and YAML formats online. Free bidirectional converter with validation and formatting."
-        exampleCode='{"name": "John", "age": 30}'
-        exampleOutput="name: John\nage: 30"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

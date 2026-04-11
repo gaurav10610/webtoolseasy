@@ -25,7 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MicIcon from "@mui/icons-material/Mic";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 
@@ -670,14 +670,7 @@ export default function AudioRecorder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Audio Recorder"
-        description="Record high-quality audio from your microphone. Perfect for voice memos, podcasts, interviews, and audio content creation."
-        exampleCode="Select microphone → Start recording → Download audio"
-        exampleOutput="High-quality WebM audio files with Opus codec"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Browser Support Check */}

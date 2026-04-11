@@ -18,7 +18,6 @@ import { PDFDocument, rgb, StandardFonts, degrees } from "pdf-lib";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { FilePreview } from "../lib/filePreview";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 import { ToolComponentProps } from "@/types/component";
 import {
   FILE_TYPE_PRESETS,
@@ -810,14 +809,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   PDFViewer.displayName = "PDFViewer";
   return (
     <div className="flex flex-col w-full gap-4">
-      <SEOContent
-        title="PDF Editor - Merge, Split, Rotate & Annotate PDFs Online"
-        description="Professional PDF editor with merge, split, rotate and annotation features. Edit PDFs online with text annotations, page manipulation and file management tools."
-        exampleCode="Upload PDF files to merge, split, rotate pages or add text annotations"
-        exampleOutput="Processed PDF files with merged pages, split pages, rotated content or text annotations"
-      />
-
-      <SnackBarWithPosition
+<SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
         autoHideDuration={3000}

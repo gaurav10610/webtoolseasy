@@ -14,7 +14,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { v1 as generateUUID } from "uuid";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 export default function UUIDV1Generator({
   hostname,
@@ -102,14 +102,7 @@ export default function UUIDV1Generator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="UUID v1 Generator"
-        description="Generate random UUID v1 (Time-based UUID) online. Create single or bulk UUIDs for your applications."
-        exampleCode={initialValue}
-        exampleOutput={`Generated UUID v1: ${initialValue}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single UUID */}
         <div className="space-y-4">
           <div>

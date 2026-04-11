@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -184,12 +184,7 @@ export default function MortgageCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Mortgage Calculator - Home Loan EMI Calculator"
-        description="Calculate your mortgage EMI with our free home loan calculator. Get instant results with detailed payment breakdown and amortization schedule."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Section */}
         <Card elevation={2}>
           <CardContent>

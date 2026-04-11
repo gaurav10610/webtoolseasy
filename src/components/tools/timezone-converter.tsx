@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "@/components/lib/buttons";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -231,14 +231,7 @@ export default function TimezoneConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Timezone Converter - Convert time across zones"
-        description="Convert times between major world time zones. View current time across top global time zones with 12/24 hour toggle."
-        exampleCode="Asia/Kolkata"
-        exampleOutput="12:00 PM"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { html_beautify } from "js-beautify";
@@ -110,14 +110,7 @@ export default function HtmlFormatter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="HTML Formatter"
-        description="Free online HTML formatter and beautifier. Format and prettify HTML code with proper indentation."
-        exampleCode={initialValue}
-        exampleOutput={html_beautify(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

@@ -13,7 +13,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 interface RegexMatch {
@@ -205,14 +205,7 @@ Invalid emails: notanemail, @missing.com, test@`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Regex Tester"
-        description="Free online regular expression tester and debugger. Test and debug your regex patterns with real-time matching."
-        exampleCode={initialRegex}
-        exampleOutput={`Found 3 matches: support@example.com, sales@company.org, admin@website.net`}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="space-y-4">
         {/* Top Section - Regex and Test Text Side by Side */}

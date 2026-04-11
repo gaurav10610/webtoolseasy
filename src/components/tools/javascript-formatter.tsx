@@ -10,7 +10,7 @@ import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -133,14 +133,7 @@ if (value === 'webtoolseasy') {
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JavaScript Formatter"
-        description="Free online JavaScript formatter and beautifier. Format and prettify JavaScript code with proper indentation."
-        exampleCode={initialValue}
-        exampleOutput={js_beautify(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

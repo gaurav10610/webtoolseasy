@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -254,12 +254,7 @@ export default function SIPCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="SIP Calculator - Systematic Investment Plan"
-        description="Calculate your SIP returns with our free online calculator. Plan your mutual fund investments and see how your wealth grows over time."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Section */}
         <Card elevation={2}>
           <CardContent>

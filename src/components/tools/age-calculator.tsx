@@ -3,7 +3,7 @@
 import { TextField, Typography, Card, CardContent, Grid } from "@mui/material";
 import { useState, useCallback, useEffect } from "react";
 import CakeIcon from "@mui/icons-material/Cake";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -157,18 +157,7 @@ export default function AgeCalculator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Age Calculator"
-        description="Calculate your exact age from birthdate in years, months, days, and more. Find days until your next birthday."
-        exampleCode="Birthdate: January 1, 1990"
-        exampleOutput={
-          ageResult
-            ? `Age: ${ageResult.years} years, ${ageResult.months} months, ${ageResult.days} days`
-            : "Enter birthdate to calculate"
-        }
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
         {/* Input Section */}
         <Card className="border border-gray-200">
           <CardContent>

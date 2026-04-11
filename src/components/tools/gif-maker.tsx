@@ -16,7 +16,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import GifIcon from "@mui/icons-material/Gif";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 
@@ -541,14 +541,7 @@ export default function GIFMaker({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="GIF Maker"
-        description="Create animated GIFs from videos with custom frame rate, size, and duration. Pure browser-based — no uploads, no watermarks."
-        exampleCode="Upload video → Adjust settings → Create GIF → Download"
-        exampleOutput="High-quality animated GIF optimized for the web"
-      />
-
-      <input
+<input
         ref={fileInputRef}
         type="file"
         accept="video/*"

@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { CodeEditorLayout } from "../common/ToolLayout";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
@@ -150,14 +150,7 @@ export default function SqlFormatter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="SQL Formatter"
-        description="Beautify and format SQL queries for readability. Separate clauses and indent JOIN/ON blocks for easier inspection."
-        exampleCode={initialValue}
-        exampleOutput={simpleFormatSql(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

@@ -12,7 +12,7 @@ import {
   Divider,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
@@ -311,12 +311,7 @@ export default function UnitConverter({
           : undefined
       }
     >
-      <SEOContent
-        title="Unit Converter - Convert Measurements"
-        description="Free online unit converter for length, weight, temperature, area, volume, and speed. Instant conversions between metric and imperial units."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Category Tabs */}
         <Card elevation={2}>
           <CardContent sx={{ pb: 1 }}>

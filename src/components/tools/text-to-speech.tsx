@@ -23,7 +23,7 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import SpeedIcon from "@mui/icons-material/Speed";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { PaperWithChildren } from "../lib/papers";
 import { SelectWithLabel } from "../lib/select";
 
@@ -306,14 +306,7 @@ export default function TextToSpeech(): React.ReactElement {
         color: snackBar.color,
       }}
     >
-      <SEOContent
-        title="Text to Speech Converter"
-        description="Convert text to natural speech with adjustable voice, speed, pitch, and volume. Free online TTS tool."
-        exampleCode="Hello, welcome to our text to speech converter!"
-        exampleOutput="🔊 Spoken audio output"
-      />
-
-      {error && (
+{error && (
         <Alert severity="error" className="mb-4">
           {error}
         </Alert>

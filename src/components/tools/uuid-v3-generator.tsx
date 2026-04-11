@@ -15,7 +15,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { v3 as uuidv3 } from "uuid";
 
 // Standard UUID v3 namespaces (same as v5)
@@ -160,14 +160,7 @@ export default function UuidV3Generator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="UUID v3 Generator"
-        description="Generate name-based UUID v3 using MD5 hash. Create reproducible UUIDs for legacy systems with namespace and name combinations."
-        exampleCode={`Namespace: ${namespace}\nName: ${name}`}
-        exampleOutput={`Generated UUID v3: ${currentUuid}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Configuration & Generation */}
         <div className="space-y-4">
           {/* Namespace Selection */}

@@ -13,7 +13,7 @@ import {
   Grid,
 } from "@mui/material";
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 
 interface CalculationParams {
@@ -203,16 +203,7 @@ export default function CompoundInterestCalculator() {
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Compound Interest Calculator"
-        description="Calculate compound interest with different compounding frequencies. Free online tool for investment planning and financial calculations."
-        exampleCode="Principal: $1000, Rate: 6%, Tenure: 12 months, Quarterly"
-        exampleOutput={`Final Amount: $${amount.toFixed(
-          2,
-        )}, Interest: $${interest.toFixed(2)}`}
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
         {/* Input Section */}
         <Card className="p-4">
           <CardContent>

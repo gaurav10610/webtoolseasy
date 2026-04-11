@@ -13,7 +13,7 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 const LOREM_WORDS = [
@@ -250,12 +250,7 @@ export default function LoremIpsumGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Lorem Ipsum Generator"
-        description="Generate Lorem Ipsum placeholder text for your designs. Choose paragraphs, sentences, or words. Perfect for mockups and prototypes."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col md:flex-row gap-4 w-full">
           <TextField
             select

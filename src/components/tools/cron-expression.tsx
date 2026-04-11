@@ -3,7 +3,7 @@
 import { Typography, Card, CardContent, Chip } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
 import Cron from "react-cron-generator";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import { useToolState } from "@/hooks/useToolState";
 
@@ -149,14 +149,7 @@ export default function CronExpression() {
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Cron Expression Generator"
-        description="Generate cron expressions with visual builder. Easy-to-use cron job scheduler with human-readable descriptions."
-        exampleCode="0 0 12 * * ?"
-        exampleOutput="At 12:00 PM every day"
-      />
-
-      <div className="flex flex-col w-full items-center gap-6">
+<div className="flex flex-col w-full items-center gap-6">
         <div className="flex flex-col gap-4 w-full items-center justify-center">
           <Typography
             variant="h6"

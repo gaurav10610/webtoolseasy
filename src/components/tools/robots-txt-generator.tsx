@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -199,14 +199,7 @@ export default function RobotsTxtGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Robots.txt Generator"
-        description="Create robots.txt file for SEO. Control search engine crawlers with user-agents, allow/disallow rules, and sitemap references."
-        exampleCode="Configure rules → Generate → Upload to root"
-        exampleOutput="Valid robots.txt file ready to use"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       {/* Presets */}
       <Card>

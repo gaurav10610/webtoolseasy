@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import {
   Typography,
@@ -315,14 +315,7 @@ export default function ImageCompress({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Image Compressor"
-        description="Compress images online with adjustable quality settings. Reduce image file size while maintaining visual quality. Supports JPEG, PNG, and WebP formats."
-        exampleCode="Upload images and adjust compression level to optimize file size"
-        exampleOutput="Compressed images with reduced file size and preserved quality"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="w-full space-y-6">
         {/* File Upload */}

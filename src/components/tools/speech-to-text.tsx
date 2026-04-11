@@ -35,7 +35,7 @@ import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 interface SpeechRecognitionResult {
   transcript: string;
@@ -506,14 +506,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
 
   return (
     <ToolLayout>
-      <SEOContent
-        title="Speech to Text Converter"
-        description="Free online speech to text converter. Convert voice recordings to text with real-time transcription and multiple language support."
-        exampleCode="audio-recording.wav"
-        exampleOutput="Transcribed text content"
-      />
-
-      <div className="flex flex-col w-full gap-4">
+<div className="flex flex-col w-full gap-4">
         <SnackBarWithPosition
           message={snackBarMessage}
           open={isSnackBarOpen}

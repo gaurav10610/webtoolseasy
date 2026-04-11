@@ -6,7 +6,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 export default function GuidGenerator({
   hostname,
@@ -80,14 +80,7 @@ export default function GuidGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="GUID Generator"
-        description="Generate random GUID (Globally Unique Identifier) online. Create single or bulk GUIDs for your applications."
-        exampleCode={initialValue}
-        exampleOutput={`Generated GUID: ${initialValue}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single GUID */}
         <div className="space-y-4">
           <div>

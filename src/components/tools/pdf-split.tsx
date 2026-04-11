@@ -14,7 +14,7 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import DownloadIcon from "@mui/icons-material/Download";
 import { PDFDocument } from "pdf-lib";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
@@ -155,14 +155,7 @@ export default function PDFSplit({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF Split"
-        description="Extract specific pages from PDF files. Split PDF by page ranges."
-        exampleCode="Upload PDF and specify pages (e.g., 1-5, 10, 15-20)"
-        exampleOutput="New PDF with selected pages"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         {/* File Upload */}
         {!pdfFile && (
           <FileUploadWithDragDrop

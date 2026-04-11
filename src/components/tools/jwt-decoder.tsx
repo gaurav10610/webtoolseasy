@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { isNil } from "lodash-es";
@@ -181,18 +181,7 @@ export default function JwtDecoder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JWT Decoder"
-        description="Free online JWT token decoder. Decode and verify JSON Web Tokens with headers and payload visualization."
-        exampleCode={initialValue}
-        exampleOutput={JSON.stringify(
-          { Role: "Admin", Issuer: "Sample Issuer" },
-          null,
-          2,
-        )}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {tokenError && (
         <div className="flex flex-row gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mb-4">

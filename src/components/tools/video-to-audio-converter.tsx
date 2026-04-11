@@ -22,7 +22,7 @@ import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import AddIcon from "@mui/icons-material/Add";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
-import { ToolLayout, SEOContent } from "@/components/common/ToolLayout";
+import { ToolLayout } from "@/components/common/ToolLayout";
 import { formatBytes } from "@/util/commonUtils";
 
 // ---------------------------------------------------------------------------
@@ -615,14 +615,7 @@ export default function VideoToAudioConverter() {
         onClose: () => setSnackOpen(false),
       }}
     >
-      <SEOContent
-        title="Video to Audio Converter"
-        description="Extract audio from video files directly in your browser. Supports MP4, WebM, MOV and more. No upload — 100% private."
-        exampleCode="Upload video → Extract → Download WAV audio"
-        exampleOutput="WAV audio file extracted from the video"
-      />
-
-      {entries.length === 0 ? (
+{entries.length === 0 ? (
         <FileUploadWithDragDrop
           accept="video/*"
           multiple

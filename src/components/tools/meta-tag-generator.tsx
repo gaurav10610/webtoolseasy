@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -179,14 +179,7 @@ export default function MetaTagGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Meta Tag Generator"
-        description="Generate SEO-optimized meta tags including Open Graph and Twitter Card tags for better search rankings and social media sharing."
-        exampleCode="Fill in your page information → Generate tags → Copy to HTML"
-        exampleOutput="Complete HTML meta tags ready to use"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="flex flex-col md:flex-row gap-4">
         {/* Input Panel */}

@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { Typography } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "../../util/fileValidation";
@@ -88,14 +88,7 @@ export default function Base64Encode({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Base64 Encoder"
-        description="Free online base64 encoder. Convert any file to base64 encoding with data URI format."
-        exampleCode="File Upload"
-        exampleOutput="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQ..."
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col w-full gap-6">
         {/* Error message */}

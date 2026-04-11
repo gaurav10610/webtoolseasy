@@ -7,7 +7,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import CompressIcon from "@mui/icons-material/Compress";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
@@ -594,14 +594,7 @@ export default function VideoCompressor({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Video Compressor"
-        description="Compress video files to reduce size while maintaining quality. Support for all formats with adjustable compression levels and resolution."
-        exampleCode="Upload video → Select compression level → Compress → Download"
-        exampleOutput="Smaller MP4 video files optimized for sharing and storage"
-      />
-
-      <input
+<input
         ref={fileInputRef}
         type="file"
         accept="video/*"

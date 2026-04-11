@@ -7,7 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -206,14 +206,7 @@ Happy converting!`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Markdown to HTML Converter"
-        description="Convert Markdown syntax to clean HTML code. Real-time conversion with live preview. Perfect for bloggers and developers."
-        exampleCode="# Hello\n**Bold** and *italic*"
-        exampleOutput="<h1>Hello</h1>\n<p><strong>Bold</strong> and <em>italic</em></p>"
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
         <CodeEditorLayout

@@ -5,7 +5,7 @@ import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import dynamic from "next/dynamic";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { DiffEditorProps } from "../lib/editor";
 
@@ -138,14 +138,7 @@ New line added`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Text Compare Tool"
-        description="Free online text comparison tool. Compare two text documents side by side with highlighted differences and detailed statistics."
-        exampleCode={originalInitialText}
-        exampleOutput="Side-by-side text comparison with highlighted differences"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Text Compare Editor - full width */}
       <div className="w-full mb-6">

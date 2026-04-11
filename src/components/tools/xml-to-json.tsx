@@ -7,7 +7,7 @@ import { Code, ContentCopy } from "@mui/icons-material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -176,18 +176,7 @@ export default function XmlToJsonConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="XML to JSON Converter"
-        description="Convert XML data to JSON format online. Fast and reliable XML to JSON converter with customizable parsing options."
-        exampleCode={initialValue}
-        exampleOutput={JSON.stringify(
-          { customers: { customer: { "@_id": "101", n: "WebToolsEasy" } } },
-          null,
-          2,
-        )}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

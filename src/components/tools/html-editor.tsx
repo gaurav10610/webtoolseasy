@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -133,14 +133,7 @@ ${html}
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="HTML Editor"
-        description="Free online HTML editor with live preview. Write, edit and test your HTML code in real-time."
-        exampleCode={initialValue}
-        exampleOutput="Live HTML preview with interactive elements"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div
         className={`grid grid-cols-1 xl:grid-cols-3 gap-6 w-full ${

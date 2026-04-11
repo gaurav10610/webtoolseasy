@@ -10,7 +10,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -174,12 +174,7 @@ export default function RetirementCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Retirement Calculator - Financial Planning Tool"
-        description="Plan your retirement with our free calculator. Calculate how much you need to save for a comfortable retirement based on your age, savings, and contributions."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Section */}
         <Card elevation={2}>
           <CardContent>

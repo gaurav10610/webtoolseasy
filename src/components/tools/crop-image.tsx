@@ -34,7 +34,7 @@ import CropIcon from "@mui/icons-material/Crop";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import FlipIcon from "@mui/icons-material/Flip";
 import { BaseFileData } from "@/types/file";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 export default function CropImageOptimized() {
   const [fileList, setFileList] = useState<BaseFileData[]>([]);
@@ -716,14 +716,7 @@ export default function CropImageOptimized() {
 
   return (
     <ToolLayout>
-      <SEOContent
-        title="Image Crop Tool"
-        description="Free online image cropping tool. Crop images with precise control, aspect ratio options, and multiple output formats."
-        exampleCode="image.jpg"
-        exampleOutput="cropped-image.png"
-      />
-
-      <div className="flex flex-col w-full gap-3">
+<div className="flex flex-col w-full gap-3">
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
             <Typography variant="body2" className="text-red-800">

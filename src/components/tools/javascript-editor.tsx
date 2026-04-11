@@ -7,7 +7,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import {
@@ -239,14 +239,7 @@ export default function JavaScriptEditor({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JavaScript Editor"
-        description="Free online JavaScript editor with live preview. Write, edit and test your HTML with JavaScript code in real-time."
-        exampleCode={initialValue}
-        exampleOutput="Live HTML preview with interactive JavaScript elements"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
         <TextField

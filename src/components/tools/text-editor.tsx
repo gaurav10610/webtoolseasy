@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -142,14 +142,7 @@ Perfect for:
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Online Text Editor"
-        description="Free online text editor with word count, character count, and text statistics. Write, edit and format your text online."
-        exampleCode={initialValue}
-        exampleOutput={`Text Statistics: ${textStats.words} words, ${textStats.characters} characters`}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
       <input
         ref={fileInputRef}
         type="file"

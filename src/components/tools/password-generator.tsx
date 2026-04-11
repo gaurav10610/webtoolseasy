@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "../lib/buttons";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -193,14 +193,7 @@ export default function PasswordGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Password Generator"
-        description="Free secure password generator. Generate strong passwords with customizable options and bulk generation."
-        exampleCode="Generate"
-        exampleOutput="A#9mK$pL2@vX"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col gap-4 w-full">
         {/* Password Display */}

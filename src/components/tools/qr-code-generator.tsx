@@ -19,7 +19,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 function base64toBlob(base64Data: string, mimeType: string): Promise<Blob> {
@@ -242,14 +242,7 @@ Try these examples:
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="QR Code Generator"
-        description="Generate QR codes from text, URLs, and data. Free online QR code generator with download options in multiple formats."
-        exampleCode={initialValue}
-        exampleOutput="High-quality QR code with customizable size and format"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
         {/* Input Section */}

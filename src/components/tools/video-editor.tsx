@@ -39,7 +39,7 @@ import {
   getFFmpegFile,
 } from "@/service/ffmpegService";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 interface VideoClip {
   id: string;
@@ -802,14 +802,7 @@ export default function VideoEditor() {
 
   return (
     <ToolLayout>
-      <SEOContent
-        title="Video Editor Online"
-        description="Free online video editor with cutting, trimming, merging, and text overlay features. Edit videos in your browser without downloads."
-        exampleCode="video.mp4"
-        exampleOutput="edited-video.mp4"
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         {/* File Upload */}
         <FileUploadWithDragDrop
           accept="video/*"

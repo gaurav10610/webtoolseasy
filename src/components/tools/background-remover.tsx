@@ -7,7 +7,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
@@ -300,14 +300,7 @@ export default function BackgroundRemover({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Background Remover"
-        description="Remove image backgrounds automatically. Upload any image and get a transparent background PNG in seconds."
-        exampleCode="Upload image → Adjust settings → Remove background → Download PNG"
-        exampleOutput="High-quality PNG images with transparent backgrounds"
-      />
-
-      <canvas ref={canvasRef} className="hidden" />
+<canvas ref={canvasRef} className="hidden" />
 
       <ToolControls buttons={buttons} />
 

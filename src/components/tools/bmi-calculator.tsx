@@ -12,7 +12,7 @@ import {
   Grid,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
@@ -191,12 +191,7 @@ export default function BMICalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="BMI Calculator - Body Mass Index"
-        description="Calculate your BMI instantly with our free online calculator. Check if you're underweight, normal, overweight, or obese and get health recommendations."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Unit System Toggle */}
         <Card elevation={2}>
           <CardContent>

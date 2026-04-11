@@ -8,7 +8,7 @@ import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -111,14 +111,7 @@ export default function CssFormatter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="CSS Formatter"
-        description="Free online CSS formatter and beautifier. Format, beautify and clean up your CSS code with proper indentation."
-        exampleCode={initialValue}
-        exampleOutput={css_beautify(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

@@ -4,7 +4,7 @@ import { TextField, Typography, LinearProgress, Box } from "@mui/material";
 import { useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 const CHAR_LIMITS = [
@@ -206,14 +206,7 @@ export default function WordCounter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Word & Character Counter"
-        description="Free online word counter and character counter tool. Count words, characters, sentences, paragraphs, and check social media character limits. Works offline."
-        exampleCode={initialValue}
-        exampleOutput="Words: 7, Characters: 47, Sentences: 2"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-col gap-3">

@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import { jsPDF } from "jspdf";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 import { ToolComponentProps } from "@/types/component";
 import { componentConfig } from "@/data/tools/invoice-generator";
 
@@ -375,12 +374,7 @@ export default function InvoiceGenerator({
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title={componentConfig.pageTitle}
-        description="Create professional invoices with automatic calculations and PDF export"
-      />
-
-      {error && (
+{error && (
         <Alert severity="error" onClose={() => setError("")}>
           {error}
         </Alert>

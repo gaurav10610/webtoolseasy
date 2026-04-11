@@ -6,7 +6,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { v7 as uuidv7 } from "uuid";
 
 export default function UuidV7Generator({
@@ -90,16 +90,7 @@ export default function UuidV7Generator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="UUID v7 Generator"
-        description="Generate time-ordered UUID v7 with millisecond-precision timestamps. Perfect for database primary keys and distributed systems."
-        exampleCode="generateUuidV7()"
-        exampleOutput={`Generated UUID v7: ${
-          toolState.code
-        }\nTimestamp: ${extractTimestamp(toolState.code)}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single UUID */}
         <div className="space-y-4">
           <div>

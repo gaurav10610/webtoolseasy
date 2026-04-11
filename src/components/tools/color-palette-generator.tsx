@@ -5,7 +5,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
 import ImageIcon from "@mui/icons-material/Image";
 import { Typography, Tabs, Tab, Box, Card, CardContent } from "@mui/material";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 function hexToRgb(hex: string) {
@@ -219,14 +219,7 @@ export default function ColorPaletteGenerator() {
         autoHideDuration: 2000,
       }}
     >
-      <SEOContent
-        title="Color Palette Generator"
-        description="Generate harmonious color palettes online. Create complementary, triadic, analogous palettes and download SVG palettes."
-        exampleCode={"#3b82f6"}
-        exampleOutput={"A set of harmonious colors"}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={false} />
+<ToolControls buttons={buttons} isFullScreen={false} />
 
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">

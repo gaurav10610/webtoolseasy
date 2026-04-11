@@ -13,7 +13,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 export default function UuidV4Generator({
   hostname,
@@ -101,14 +101,7 @@ export default function UuidV4Generator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="UUID v4 Generator"
-        description="Generate random UUID v4 (Universally Unique Identifier) online. Create single or bulk UUIDs for your applications."
-        exampleCode={initialValue}
-        exampleOutput={`Generated UUID: ${initialValue}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single UUID */}
         <div className="space-y-4">
           <div>

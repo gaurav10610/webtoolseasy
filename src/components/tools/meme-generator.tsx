@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -217,14 +217,7 @@ export default function MemeGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Online Meme Generator"
-        description="Create custom memes with text overlay. Upload images and add funny captions with our free meme maker tool."
-        exampleCode="Upload image → Add text → Download meme"
-        exampleOutput="Professional memes with custom text"
-      />
-
-      <input
+<input
         ref={fileInputRef}
         type="file"
         accept="image/*"

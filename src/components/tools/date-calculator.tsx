@@ -11,7 +11,7 @@ import {
   Alert,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { ButtonWithHandler } from "../lib/buttons";
@@ -158,12 +158,7 @@ export default function DateCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Date Calculator"
-        description="Calculate date differences, add or subtract days, and count working days. Perfect for project planning and event management."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Tabs */}
         <Card elevation={2}>
           <Tabs

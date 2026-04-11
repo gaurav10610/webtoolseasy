@@ -35,7 +35,7 @@ import {
 } from "@mui/icons-material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 type Status = "default" | "success" | "error" | "running";
@@ -396,13 +396,7 @@ export default function TestHardware({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Hardware Tester"
-        description="Test your camera, microphone, speakers, and other device hardware directly in your browser."
-        exampleCode={""}
-        exampleOutput={""}
-      />
-      <div className="mt-6 grid grid-cols-1 gap-6">
+<div className="mt-6 grid grid-cols-1 gap-6">
         <TestCard title="Hardware Benchmark Scores" status="success">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {benchmarkMetrics.map((metric) => (

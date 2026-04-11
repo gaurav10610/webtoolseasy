@@ -13,7 +13,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 
 interface ColorFormats {
@@ -299,12 +299,7 @@ export default function ColorConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Color Converter Tool"
-        description="Convert colors between HEX, RGB, HSL, and CMYK formats. Live color preview with instant conversion and RGB sliders."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col md:flex-row gap-4 items-start">
           <TextField
             label="Enter Color (HEX, RGB)"

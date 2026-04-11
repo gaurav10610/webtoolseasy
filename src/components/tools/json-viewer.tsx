@@ -18,7 +18,7 @@ import DataObjectIcon from "@mui/icons-material/DataObject";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -400,14 +400,7 @@ export default function JsonViewer({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JSON Viewer Online"
-        description="Free online JSON viewer with tree structure display. View, validate and analyze JSON data with expand/collapse features and search functionality."
-        exampleCode={initialJson}
-        exampleOutput="Tree structure view with expandable nodes and JSON statistics"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Row 1: JSON Input Editor */}
       <div className="mb-6">

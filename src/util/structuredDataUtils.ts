@@ -1,12 +1,22 @@
 import { apps } from "@/data/apps";
 import { categoryConfigs } from "@/data/categories";
-import { ApplicationIds } from "@/types/config";
+import { AppCategory, ApplicationIds } from "@/types/config";
 import { getToolRating } from "./ratingUtils";
 
 export interface ToolFAQ {
   question: string;
   answer: string;
 }
+
+const categoryToApplicationCategory: Record<string, string> = {
+  [AppCategory.PROGRAMMING]: "DeveloperApplication",
+  [AppCategory.ONLINE_EDITORS]: "DeveloperApplication",
+  [AppCategory.MEDIA]: "MultimediaApplication",
+  [AppCategory.FINANCE]: "FinanceApplication",
+  [AppCategory.TEXT]: "UtilitiesApplication",
+  [AppCategory.SEO]: "DeveloperApplication",
+  [AppCategory.MISCELLANEOUS]: "UtilitiesApplication",
+};
 
 export function createToolStructuredData({
   pageUrl,
@@ -43,7 +53,10 @@ export function createToolStructuredData({
       name: pageTitle,
       description: mainHeading,
       url: toolUrl,
-      applicationCategory: "Productivity",
+      applicationCategory:
+        (currentAppConfig
+          ? categoryToApplicationCategory[currentAppConfig.category]
+          : undefined) ?? "UtilitiesApplication",
       operatingSystem: "Any",
       browserRequirements: "Any modern web browser",
       keywords: keywords.join(", "),

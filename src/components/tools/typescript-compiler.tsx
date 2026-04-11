@@ -8,7 +8,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -393,14 +393,7 @@ console.log("✅ TypeScript compiled and executed successfully!");`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Online TypeScript Compiler"
-        description="Free online TypeScript compiler to write, compile and run TypeScript code in your browser. Full type checking and ES6+ support."
-        exampleCode={initialCode}
-        exampleOutput="🚀 TypeScript Compiler Demo\nHello, Developer! You are 25 years old.\n📊 Generics: Hello TypeScript!\n🧭 Direction: UP\n🧮 Calculator: 45\n📍 Coordinates: [10, 20]\n✅ TypeScript compiled and executed successfully!"
-      />
-
-      {isLoading && (
+{isLoading && (
         <Box className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <Typography variant="h6" className="text-gray-800">
             Loading TypeScript Compiler...

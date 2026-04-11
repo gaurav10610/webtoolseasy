@@ -26,7 +26,7 @@ import {
   getDownloadExtensionFromMimeType,
   getPreferredRecordingMimeInfo,
 } from "@/util/screenRecorderUtils";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 
@@ -556,14 +556,7 @@ export default function WebcamRecorder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Webcam Recorder"
-        description="Record high-quality video and audio from your webcam. Perfect for creating video messages, vlogs, and video content."
-        exampleCode="Select camera → Start recording → Download video"
-        exampleOutput="High-quality WebM video files with webcam footage and audio"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Browser Support Check */}

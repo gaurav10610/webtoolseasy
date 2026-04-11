@@ -20,7 +20,7 @@ import {
   Download as DownloadIcon,
   Compress as CompressIcon,
 } from "@mui/icons-material";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { PDFDocument } from "pdf-lib";
 import { pdfjs } from "react-pdf";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
@@ -212,14 +212,7 @@ export default function PDFCompress({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF Compress"
-        description="Reduce PDF file size by optimizing content and removing redundant data. Choose compression level."
-        exampleCode="Upload a PDF file"
-        exampleOutput="Smaller, optimized PDF"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         {/* File Upload */}
         {!pdfFile && (
           <FileUploadWithDragDrop

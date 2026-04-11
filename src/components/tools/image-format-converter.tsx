@@ -18,7 +18,7 @@ import {
   Alert,
 } from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import {
   ToolControls,
   createCommonButtons,
@@ -693,10 +693,6 @@ export default function ImageFormatConverter({
       )}
 
       {/* SEO Content */}
-      <SEOContent
-        title="Image Format Converter"
-        description="Convert images between different formats including JPG, PNG, WebP, GIF, BMP, and ICO. Free online tool for batch image conversion with quality adjustment."
-      />
-    </ToolLayout>
+</ToolLayout>
   );
 }

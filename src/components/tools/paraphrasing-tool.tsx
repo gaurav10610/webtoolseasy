@@ -18,7 +18,6 @@ import {
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 import { ToolComponentProps } from "@/types/component";
 import { componentConfig } from "@/data/tools/paraphrasing-tool";
 
@@ -239,12 +238,7 @@ export default function ParaphrasingTool({
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title={componentConfig.pageTitle}
-        description="Paraphrase and rewrite text with multiple modes"
-      />
-
-      {error && (
+{error && (
         <Alert severity="error" onClose={() => setError("")}>
           {error}
         </Alert>

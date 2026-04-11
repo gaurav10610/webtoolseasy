@@ -33,7 +33,7 @@ import {
   getVideoConstraintsForQuality,
   RecordingQuality,
 } from "@/util/screenRecorderUtils";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 
@@ -661,14 +661,7 @@ export default function ScreenRecorder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Screen Recorder"
-        description="Record your screen, camera, and audio online. Capture presentations, tutorials, demos, or walkthroughs with a native in-browser recording pipeline."
-        exampleCode="Configure sources → Start recording → Pause/resume as needed → Download video"
-        exampleOutput="Single-track WebM/MP4 recording with camera overlay and synchronized audio"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="w-full space-y-6">
         {savedRecordings.length > 0 && (

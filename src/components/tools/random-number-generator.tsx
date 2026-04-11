@@ -12,7 +12,7 @@ import {
   Divider,
 } from "@mui/material";
 import { useState, useCallback } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { ButtonWithHandler } from "../lib/buttons";
@@ -101,12 +101,7 @@ export default function RandomNumberGenerator({
           : undefined
       }
     >
-      <SEOContent
-        title="Random Number Generator"
-        description="Generate random numbers instantly with customizable min/max range, quantity, and uniqueness options. Perfect for lottery, gaming, and more."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Configuration Card */}
         <Card elevation={2}>
           <CardContent>

@@ -19,7 +19,7 @@ import {
 import { useState, useCallback } from "react";
 import DownloadIcon from "@mui/icons-material/Download";
 import imageCompression from "browser-image-compression";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
@@ -285,14 +285,7 @@ export default function ImageResizer({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Image Resizer"
-        description="Resize and compress images online for free. Support for JPG, PNG, WebP with client-side processing."
-        exampleCode="Upload any image file"
-        exampleOutput="Resized and optimized image"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
         {error && (
           <Alert severity="error" onClose={() => setError("")}>
             {error}

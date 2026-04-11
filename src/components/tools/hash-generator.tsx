@@ -19,7 +19,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DownloadIcon from "@mui/icons-material/Download";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -460,14 +460,7 @@ export default function HashGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Hash Generator"
-        description="Generate MD5, SHA-1, SHA-256, and SHA-512 hashes for any text or file instantly in your browser. No server upload needed."
-        exampleCode="hello world"
-        exampleOutput="MD5: 5eb63bbbe01eeed093cb22bb8f5acdc3"
-      />
-
-      <input
+<input
         ref={fileInputRef}
         type="file"
         className="hidden"

@@ -21,7 +21,7 @@ import {
   Download as DownloadIcon,
   Image as ImageIcon,
 } from "@mui/icons-material";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { Document, pdfjs } from "react-pdf";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
@@ -239,14 +239,7 @@ export default function PdfToImages({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF to Images"
-        description="Convert PDF pages to high-quality PNG or JPG images. Customize quality and resolution."
-        exampleCode="Upload a PDF file"
-        exampleOutput="PNG or JPG images for each page"
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* File Upload */}
         {!pdfFile && (
           <FileUploadWithDragDrop

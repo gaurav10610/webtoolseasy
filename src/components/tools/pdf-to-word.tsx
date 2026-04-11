@@ -15,7 +15,7 @@ import { PDFDocument } from "pdf-lib";
 import { pdfjs } from "react-pdf";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
@@ -171,14 +171,7 @@ export default function PDFToWord({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF to Word Converter"
-        description="Convert PDF files to editable Word documents. Upload your PDF and extract text content for editing."
-        exampleCode="Upload PDF → Extract text → Download as document"
-        exampleOutput="Editable text document with PDF content"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Error Display */}

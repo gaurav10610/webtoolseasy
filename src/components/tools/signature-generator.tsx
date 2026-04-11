@@ -24,7 +24,6 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import UploadIcon from "@mui/icons-material/Upload";
 import { ToolComponentProps } from "@/types/component";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 
 export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -272,12 +271,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title="Free Signature Generator - Create Digital Signatures Online"
-        description="Create professional digital signatures online. Draw, type, or upload your signature with transparent background."
-      />
-
-      <SnackBarWithPosition
+<SnackBarWithPosition
         open={isSnackBarOpen}
         message={snackBarMessage}
         handleClose={() => setIsSnackBarOpen(false)}

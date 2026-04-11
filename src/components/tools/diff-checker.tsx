@@ -6,7 +6,7 @@ import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import dynamic from "next/dynamic";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { DiffEditorProps } from "../lib/editor";
 
@@ -225,14 +225,7 @@ export default function DiffChecker({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Diff Checker Tool"
-        description="Compare two text blocks or code files and see differences highlighted. Perfect for code review, debugging, and document comparison."
-        exampleCode="Original text vs Modified text"
-        exampleOutput="Visual diff with additions and deletions highlighted"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Statistics Card */}
       <Card>

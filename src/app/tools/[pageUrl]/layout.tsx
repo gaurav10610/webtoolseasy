@@ -291,39 +291,19 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
                       size="small"
                     />
                     <AppChip
-                      label="Left browse sidebar"
+                      label="No signup required"
                       color="primary"
                       variant="outlined"
                       size="small"
                     />
-                    <AppChip
-                      label="SEO-friendly content"
-                      color="secondary"
-                      variant="outlined"
-                      size="small"
-                    />
                   </div>
-                  <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
-                    Browse related workflows from the left rail while keeping
-                    the live tool workspace, current URL, and crawlable content
-                    intact.
-                  </AppText>
                 </div>
 
-                <div className="w-full lg:max-w-[340px]">
-                  <div className="rounded-[18px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-default)]/70 p-4">
-                    <AppText component="h2" variant="h4" className="!mb-2">
-                      Share or bookmark this tool
-                    </AppText>
-                    <AppText className="!mb-4 !text-sm !text-[var(--mui-palette-text-secondary)]">
-                      Keep the current URL unchanged and share it directly with
-                      teammates or users.
-                    </AppText>
-                    <SocialShareButtons
-                      pageUrl={toolUrl}
-                      heading={toolConfigData.pageTitle}
-                    />
-                  </div>
+                <div className="flex-shrink-0">
+                  <SocialShareButtons
+                    pageUrl={toolUrl}
+                    heading={toolConfigData.pageTitle}
+                  />
                 </div>
               </div>
 

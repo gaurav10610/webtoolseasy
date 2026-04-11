@@ -20,7 +20,7 @@ import {
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -187,14 +187,7 @@ export default function LoanEmiCalculator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Loan EMI Calculator"
-        description="Calculate monthly loan payments (EMI) with detailed amortization schedule. Perfect for home loans, car loans, and personal loans."
-        exampleCode="Loan: $500,000, Rate: 8.5%, Tenure: 20 years"
-        exampleOutput={`EMI: ${formatCurrency(calculateEMI.emi)}/month`}
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
         {/* Input Section */}
         <Card className="border border-gray-200">
           <CardContent>

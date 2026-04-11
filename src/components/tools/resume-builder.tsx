@@ -23,7 +23,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import { jsPDF } from "jspdf";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 interface Experience {
@@ -535,14 +535,7 @@ export default function ResumeBuilder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Resume Builder - Create Professional Resume"
-        description="Build your professional resume online for free. Choose from modern templates, add your experience, education, and skills. Download as PDF instantly."
-        exampleCode="Create ATS-friendly resume"
-        exampleOutput="Professional PDF resume"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="space-y-6">
         {/* Template Selection */}
