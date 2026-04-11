@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { robotoFont } from "@/design";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";

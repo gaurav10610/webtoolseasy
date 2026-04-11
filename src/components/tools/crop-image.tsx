@@ -366,7 +366,7 @@ export default function CropImageOptimized() {
         callback,
       });
     },
-    [],
+    [croppedImage],
   );
 
   const DownloadImageButtons = useCallback(() => {
@@ -716,7 +716,7 @@ export default function CropImageOptimized() {
 
   return (
     <ToolLayout>
-<div className="flex flex-col w-full gap-3">
+      <div className="flex flex-col w-full gap-3">
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
             <Typography variant="body2" className="text-red-800">

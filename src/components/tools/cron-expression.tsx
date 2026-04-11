@@ -63,7 +63,7 @@ function getNextCronOccurrences(cronStr: string, count = 8): Date[] {
   const results: Date[] = [];
   const now = new Date();
   // Start search 1 second ahead
-  let cursor = new Date(now.getTime() + 1000);
+  const cursor = new Date(now.getTime() + 1000);
   cursor.setMilliseconds(0);
 
   let limit = 0;
@@ -149,7 +149,7 @@ export default function CronExpression() {
         onClose: toolState.snackBar.close,
       }}
     >
-<div className="flex flex-col w-full items-center gap-6">
+      <div className="flex flex-col w-full items-center gap-6">
         <div className="flex flex-col gap-4 w-full items-center justify-center">
           <Typography
             variant="h6"

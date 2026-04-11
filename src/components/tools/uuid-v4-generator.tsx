@@ -91,7 +91,7 @@ export default function UuidV4Generator({
     toolState.actions.showMessage(
       `${uuidList.length} UUIDs downloaded successfully!`,
     );
-  }, [uuidList, toolState.actions]);
+  }, [uuidList, applyFormat, toolState.actions]);
 
   return (
     <ToolLayout
@@ -101,7 +101,7 @@ export default function UuidV4Generator({
         onClose: toolState.snackBar.close,
       }}
     >
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single UUID */}
         <div className="space-y-4">
           <div>
