@@ -22,9 +22,9 @@ export const ToolLayout = memo(function ToolLayout({
 }: ToolLayoutProps) {
   return (
     <div
-      className={`flex flex-col gap-4 w-full ${
+      className={`flex w-full min-h-0 flex-col gap-4 ${
         isFullScreen
-          ? "fixed inset-0 z-[1400] h-full overflow-auto bg-[var(--mui-palette-background-default)] p-4 md:p-6"
+          ? "fixed inset-0 z-[1400] h-dvh min-h-dvh overflow-auto overscroll-contain bg-[var(--mui-palette-background-default)] p-4 md:p-6"
           : ""
       } ${className}`}
     >
@@ -56,18 +56,22 @@ export const CodeEditorLayout = memo(function CodeEditorLayout({
   className = "",
 }: CodeEditorLayoutProps) {
   const containerHeight = isFullScreen
-    ? "h-full"
+    ? "flex-1 min-h-[60vh] md:min-h-0"
     : "md:h-[68vh] md:min-h-[420px]";
 
   return (
     <div
-      className={`flex flex-col w-full md:flex-row gap-4 ${containerHeight} ${className}`}
+      className={`flex min-h-0 w-full flex-col gap-4 md:flex-row ${containerHeight} ${className}`}
     >
       {leftPanel && (
-        <div className="w-full md:w-1/2 md:flex-1 md:h-full">{leftPanel}</div>
+        <div className="flex min-h-[320px] w-full flex-col md:h-full md:min-h-0 md:w-1/2 md:flex-1">
+          {leftPanel}
+        </div>
       )}
       {rightPanel && (
-        <div className="w-full md:w-1/2 md:flex-1 md:h-full">{rightPanel}</div>
+        <div className="flex min-h-[320px] w-full flex-col md:h-full md:min-h-0 md:w-1/2 md:flex-1">
+          {rightPanel}
+        </div>
       )}
     </div>
   );

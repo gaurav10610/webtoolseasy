@@ -1,6 +1,6 @@
 "use client";
 
-import { set as idbSet, keys as idbKeys, get as idbGet } from "idb-keyval";
+import { idbSet, idbGet, idbDel, idbKeys } from "@/util/nativeIdb";
 
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import {
@@ -9,11 +9,16 @@ import {
   CardContent,
   Alert,
   LinearProgress,
+  Button,
+  Chip,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import PauseIcon from "@mui/icons-material/Pause";
 import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MicIcon from "@mui/icons-material/Mic";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -33,6 +38,11 @@ interface AudioDevice {
   label: string;
 }
 
+interface SavedRecording {
+  key: string;
+  blob: Blob;
+}
+
 export default function AudioRecorder({
   hostname,
   queryParams,
@@ -43,14 +53,11 @@ export default function AudioRecorder({
   });
 
   const [recordingState, setRecordingState] = useState<RecordingState>(
-    RecordingState.IDLE
+    RecordingState.IDLE,
   );
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  // Saved recordings tracked in IndexedDB - UI implementation pending
-  // const [savedRecordings, setSavedRecordings] = useState<
-  //   { key: string; blob: Blob }[]
-  // >([]);
+  const [savedRecordings, setSavedRecordings] = useState<SavedRecording[]>([]);
   const [error, setError] = useState<string>("");
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>("");
@@ -69,44 +76,45 @@ export default function AudioRecorder({
   useEffect(() => {
     (async () => {
       const allKeys = await idbKeys();
-      // Load recordings into IndexedDB for persistence
+      const recordings: SavedRecording[] = [];
+
       for (const key of allKeys) {
-        if (String(key).startsWith("audio-recording-")) {
-          const blob = await idbGet(key);
-          if (blob instanceof Blob) {
-            // Recording exists in IndexedDB
-            console.log(`Loaded recording: ${key}`);
-          }
+        if (!key.startsWith("audio-recording-")) continue;
+        const blob = await idbGet(key);
+        if (blob instanceof Blob) {
+          recordings.push({ key, blob });
         }
       }
+
+      recordings.sort((a, b) => b.key.localeCompare(a.key));
+      setSavedRecordings(recordings);
     })();
   }, []);
 
-  // Download a saved recording - UI implementation pending
-  // const downloadSavedRecording = useCallback(
-  //   (key: string, blob: Blob) => {
-  //     const url = URL.createObjectURL(blob);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = `${key}.webm`;
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //     URL.revokeObjectURL(url);
-  //     toolState.actions.showMessage("Recording downloaded successfully!");
-  //   },
-  //   [toolState.actions]
-  // );
+  const downloadSavedRecording = useCallback(
+    (key: string, blob: Blob) => {
+      const ext = blob.type.includes("mp4") ? "mp4" : "webm";
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = key.includes(".") ? key : `${key}.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toolState.actions.showMessage("Recording downloaded!");
+    },
+    [toolState.actions],
+  );
 
-  // Delete a saved recording - UI implementation pending
-  // const deleteSavedRecording = useCallback(
-  //   async (key: string) => {
-  //     await idbDel(key);
-  //     setSavedRecordings((prev) => prev.filter((rec) => rec.key !== key));
-  //     toolState.actions.showMessage("Recording deleted.");
-  //   },
-  //   [toolState.actions]
-  // );
+  const deleteSavedRecording = useCallback(
+    async (key: string) => {
+      await idbDel(key);
+      setSavedRecordings((prev) => prev.filter((r) => r.key !== key));
+      toolState.actions.showMessage("Recording deleted.");
+    },
+    [toolState.actions],
+  );
 
   // Get available audio devices
   useEffect(() => {
@@ -248,9 +256,9 @@ export default function AudioRecorder({
         cleanupStream();
         stopTimer();
         // Save to IndexedDB for persistence
-        const key = `audio-recording-${Date.now()}`;
+        const key = `audio-recording-${Date.now()}.webm`;
         await idbSet(key, blob);
-        console.log(`Saved recording to IndexedDB: ${key}`);
+        setSavedRecordings((prev) => [{ key, blob }, ...prev]);
         toolState.actions.showMessage("Recording completed and saved!");
       };
 
@@ -626,6 +634,51 @@ export default function AudioRecorder({
             </div>
           </CardContent>
         </Card>
+
+        {/* Saved Recordings */}
+        {savedRecordings.length > 0 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" className="mb-2">
+                Saved Recordings
+              </Typography>
+              <div className="space-y-2">
+                {savedRecordings.map((rec) => (
+                  <div
+                    key={rec.key}
+                    className="flex flex-wrap items-center gap-2 rounded bg-gray-50 dark:bg-gray-800 p-2"
+                  >
+                    <span className="flex-1 truncate text-sm">{rec.key}</span>
+                    <Chip
+                      label={`${(rec.blob.size / 1024).toFixed(0)} KB`}
+                      size="small"
+                      variant="outlined"
+                    />
+                    <Tooltip title="Download">
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          downloadSavedRecording(rec.key, rec.blob)
+                        }
+                      >
+                        <DownloadIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => deleteSavedRecording(rec.key)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </ToolLayout>
   );

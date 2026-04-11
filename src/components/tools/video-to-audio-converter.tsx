@@ -1,498 +1,404 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, memo, useRef } from "react";
-import { ConversionState, VideoFileData } from "@/types/file";
-import AddIcon from "@mui/icons-material/Add";
-import DownloadIcon from "@mui/icons-material/Download";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import { ButtonWithHandler } from "@/components/lib/buttons";
-import { CircularProgressWithLabel } from "@/components/lib/progress";
-import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
-import { PaperWithChildren } from "@/components/lib/papers";
-import { SelectWithLabel } from "@/components/lib/select";
-import { ToolLayout, SEOContent } from "@/components/common/ToolLayout";
-import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
-import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
-import { FFmpegFormat } from "@/types/ffmpeg";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
-  getFileFormatId,
-  getOutputFileName,
-  getMimeType,
-  getEligibleFormatIds,
-} from "@/util/videoConverterUtils";
-import { formatBytes, getFormattedFileName } from "@/util/commonUtils";
-import { CircularProgress, SelectChangeEvent, Typography } from "@mui/material";
-import { isEmpty, find, isNil, cloneDeep, includes } from "lodash-es";
+  Typography,
+  Button,
+  LinearProgress,
+  Alert,
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AudiotrackIcon from "@mui/icons-material/Audiotrack";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import AddIcon from "@mui/icons-material/Add";
+import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
+import { ToolLayout, SEOContent } from "@/components/common/ToolLayout";
+import { formatBytes } from "@/util/commonUtils";
 
-interface VideoToAudioConverterState {
-  fileList: VideoFileData[];
-  error: string;
-  snackBar: {
-    open: boolean;
-    message: string;
-    color: "success" | "info" | "warning" | "error";
+// ---------------------------------------------------------------------------
+// WAV encoder: converts an AudioBuffer to a WAV ArrayBuffer (16-bit PCM)
+// ---------------------------------------------------------------------------
+function audioBufferToWav(buffer: AudioBuffer): ArrayBuffer {
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const numFrames = buffer.length;
+  const bitsPerSample = 16;
+  const bytesPerSample = bitsPerSample / 8;
+  const dataLength = numFrames * numChannels * bytesPerSample;
+  const wav = new ArrayBuffer(44 + dataLength);
+  const view = new DataView(wav);
+
+  const ws = (offset: number, s: string) => {
+    for (let i = 0; i < s.length; i++) view.setUint8(offset + i, s.charCodeAt(i));
   };
+
+  ws(0, "RIFF");
+  view.setUint32(4, 36 + dataLength, true);
+  ws(8, "WAVE");
+  ws(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); // PCM
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * numChannels * bytesPerSample, true);
+  view.setUint16(32, numChannels * bytesPerSample, true);
+  view.setUint16(34, bitsPerSample, true);
+  ws(36, "data");
+  view.setUint32(40, dataLength, true);
+
+  let offset = 44;
+  for (let i = 0; i < numFrames; i++) {
+    for (let ch = 0; ch < numChannels; ch++) {
+      const s = buffer.getChannelData(ch)[i];
+      const clamped = Math.max(-1, Math.min(1, s));
+      view.setInt16(offset, clamped < 0 ? clamped * 32768 : clamped * 32767, true);
+      offset += 2;
+    }
+  }
+  return wav;
 }
 
-// Memoized Video File Component
-const VideoFile = memo(function VideoFile({
-  videoFileData,
-  onTargetFormatChange,
-  onVideoConvert,
-  onDownload,
-}: {
-  videoFileData: VideoFileData;
-  onTargetFormatChange: (formatId: string, fileId: string) => void;
-  onVideoConvert: (fileId: string) => void;
-  onDownload: (fileId: string) => void;
-}) {
-  const eligibleFormats = useMemo(
-    () => getEligibleFormatIds(videoFileData.originalFile.name, "Audio")!,
-    [videoFileData.originalFile.name]
-  );
+// ---------------------------------------------------------------------------
+// Fast path: AudioContext.decodeAudioData → WAV (no real-time playback needed)
+// ---------------------------------------------------------------------------
+async function extractAudioFast(
+  file: File,
+): Promise<{ blob: Blob; ext: string }> {
+  const arrayBuffer = await file.arrayBuffer();
+  const audioCtx = new AudioContext();
+  try {
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    const wavBuffer = audioBufferToWav(audioBuffer);
+    return { blob: new Blob([wavBuffer], { type: "audio/wav" }), ext: "wav" };
+  } finally {
+    await audioCtx.close();
+  }
+}
 
-  const selectOptions = useMemo(
-    () =>
-      eligibleFormats.map((formatId) => {
-        const format = FFMPEG_FORMATS.get(formatId) as FFmpegFormat;
-        return {
-          key: String(formatId),
-          value: String(formatId),
-          label: format.displayName,
-        };
-      }),
-    [eligibleFormats]
-  );
+// ---------------------------------------------------------------------------
+// Realtime fallback: play video silently and capture audio via MediaRecorder
+// ---------------------------------------------------------------------------
+async function extractAudioRealtime(
+  file: File,
+  onProgress: (pct: number) => void,
+  signal: AbortSignal,
+): Promise<{ blob: Blob; ext: string }> {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement("video");
+    const objectUrl = URL.createObjectURL(file);
+    video.src = objectUrl;
+    video.preload = "metadata";
 
-  const currentConversionData =
-    videoFileData.convertedData[videoFileData.selectedTargetFormatId];
-  const isProcessing = includes(
-    [
-      ConversionState.INITIALISING_FFMPEG,
-      ConversionState.FILE_LOADING,
-      ConversionState.IN_PROGRESS,
-      ConversionState.FAILED,
-      ConversionState.FILE_READING,
-    ],
-    currentConversionData.conversionState
-  );
+    const cleanup = () => {
+      URL.revokeObjectURL(objectUrl);
+      video.src = "";
+    };
 
-  const handleFormatChange = useCallback(
-    (event: SelectChangeEvent<string>) => {
-      onTargetFormatChange(event.target.value, videoFileData.id);
-    },
-    [onTargetFormatChange, videoFileData.id]
-  );
-
-  const handleConvert = useCallback(() => {
-    onVideoConvert(videoFileData.id);
-  }, [onVideoConvert, videoFileData.id]);
-
-  const handleDownload = useCallback(() => {
-    onDownload(videoFileData.id);
-  }, [onDownload, videoFileData.id]);
-
-  return (
-    <PaperWithChildren
-      className="flex flex-col gap-3 w-full p-3 md:gap-1 md:items-start md:flex-row"
-      variant="elevation"
-    >
-      <div className="flex flex-row gap-2 w-full md:items-center">
-        <VideoLibraryIcon fontSize="large" color="warning" />
-        <div className="flex flex-col gap-1 flex-grow">
-          <Typography variant="body2" color="primary">
-            {videoFileData.originalFile.name}
-          </Typography>
-          <Typography variant="body2" color="secondary">
-            {formatBytes(videoFileData.originalFile.size)}
-          </Typography>
-          {isProcessing && (
-            <div className="flex flex-row gap-2 items-center">
-              <Typography variant="caption" color="textPrimary">
-                State:
-              </Typography>
-              <Typography
-                variant="caption"
-                color="secondary"
-                fontStyle="italic"
-              >
-                {currentConversionData.conversionState}
-              </Typography>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-row gap-2 items-center">
-        <SelectWithLabel
-          selectLabel="Output Format"
-          options={selectOptions}
-          value={String(videoFileData.selectedTargetFormatId)}
-          onChange={handleFormatChange}
-          className="w-[10rem]"
-        />
-        {currentConversionData.conversionState ===
-          ConversionState.NOT_CONVERTED && (
-          <ButtonWithHandler
-            buttonText="Convert"
-            size="medium"
-            onClick={handleConvert}
-            endIcon={<PlayArrowIcon />}
-          />
-        )}
-        {includes(
-          [ConversionState.INITIALISING_FFMPEG, ConversionState.FILE_LOADING],
-          currentConversionData.conversionState
-        ) && <CircularProgress size={30} />}
-        {currentConversionData.conversionState ===
-          ConversionState.IN_PROGRESS && (
-          <CircularProgressWithLabel
-            value={currentConversionData.conversionProgress}
-            color="success"
-          />
-        )}
-        {currentConversionData.data && (
-          <ButtonWithHandler
-            buttonText="Download"
-            size="medium"
-            variant="outlined"
-            onClick={handleDownload}
-            startIcon={<DownloadIcon />}
-            color="success"
-          />
-        )}
-      </div>
-    </PaperWithChildren>
-  );
-});
-
-// Memoized Video Files List Component
-const VideoFilesList = memo(function VideoFilesList({
-  fileList,
-  onTargetFormatChange,
-  onVideoConvert,
-  onDownload,
-}: {
-  fileList: VideoFileData[];
-  onTargetFormatChange: (formatId: string, fileId: string) => void;
-  onVideoConvert: (fileId: string) => void;
-  onDownload: (fileId: string) => void;
-}) {
-  return (
-    <div className="flex flex-col w-full gap-3">
-      {fileList.map((videoFileData) => (
-        <VideoFile
-          key={videoFileData.id}
-          videoFileData={videoFileData}
-          onTargetFormatChange={onTargetFormatChange}
-          onVideoConvert={onVideoConvert}
-          onDownload={onDownload}
-        />
-      ))}
-    </div>
-  );
-});
-
-export default function VideoToAudioConverter() {
-  const addMoreInputRef = useRef<HTMLInputElement>(null);
-
-  const [state, setState] = useState<VideoToAudioConverterState>({
-    fileList: [],
-    error: "",
-    snackBar: {
-      open: false,
-      message: "",
-      color: "success",
-    },
-  });
-
-  const showMessage = useCallback(
-    (message: string, color: "success" | "error" = "success") => {
-      setState((prev) => ({
-        ...prev,
-        snackBar: { open: true, message, color },
-      }));
-    },
-    []
-  );
-
-  const handleSnackBarClose = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      snackBar: { ...prev.snackBar, open: false },
-    }));
-  }, []);
-
-  const handleFileSelect = useCallback((files: FileList) => {
-    const newFiles = Array.from(files).map((file) => {
-      const fileExtension = file.name.split(".").pop()?.toLowerCase();
-      const formatId = getFileFormatId(fileExtension!);
-      const defaultTargetFormatId = getEligibleFormatIds(
-        file.name,
-        "Audio"
-      )![0];
-      const formattedFileName = getFormattedFileName(file.name);
-      const outputFileName = getOutputFileName({
-        fileName: formattedFileName,
-        targetFormatid: defaultTargetFormatId,
-      });
-
-      const videoFileData: VideoFileData = {
-        id: crypto.randomUUID(),
-        originalFile: file,
-        formattedFileName,
-        convertedData: {
-          [defaultTargetFormatId]: {
-            formatId: defaultTargetFormatId,
-            isConverted: false,
-            formatName: FFMPEG_FORMATS.get(defaultTargetFormatId)!.displayName,
-            conversionProgress: 0,
-            conversionState: ConversionState.NOT_CONVERTED,
-            outputFileName,
-          },
-        },
-        formatName: FFMPEG_FORMATS.get(formatId)!.displayName,
-        formatId,
-        selectedTargetFormatId: defaultTargetFormatId,
-      };
-      return videoFileData;
+    signal.addEventListener("abort", () => {
+      video.pause();
+      cleanup();
+      reject(new DOMException("Aborted", "AbortError"));
     });
 
-    setState((prev) => ({
-      ...prev,
-      fileList: [...prev.fileList, ...newFiles],
-      error: "",
+    video.onloadedmetadata = () => {
+      const audioCtx = new AudioContext();
+      const source = audioCtx.createMediaElementSource(video);
+      const dest = audioCtx.createMediaStreamDestination();
+      source.connect(dest);
+
+      const mimeType =
+        ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/mp4"]
+          .find((m) => MediaRecorder.isTypeSupported(m)) ?? "audio/webm";
+      const ext = mimeType.includes("ogg")
+        ? "ogg"
+        : mimeType.includes("mp4")
+          ? "m4a"
+          : "webm";
+
+      const rec = new MediaRecorder(dest.stream, { mimeType });
+      const chunks: Blob[] = [];
+      rec.ondataavailable = (e) => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
+      rec.onstop = () => {
+        audioCtx.close();
+        cleanup();
+        resolve({ blob: new Blob(chunks, { type: mimeType }), ext });
+      };
+
+      rec.start(500);
+
+      video.ontimeupdate = () => {
+        if (video.duration > 0) {
+          onProgress(Math.round((video.currentTime / video.duration) * 100));
+        }
+      };
+
+      video.onended = () => {
+        if (rec.state === "recording") rec.stop();
+      };
+
+      video.onerror = () => {
+        if (rec.state === "recording") rec.stop();
+        cleanup();
+        reject(new Error("Video playback error"));
+      };
+
+      // Mute speakers — audio routed to AudioContext only
+      video.muted = true;
+      video.play().catch(reject);
+    };
+
+    video.onerror = () => {
+      cleanup();
+      reject(new Error("Failed to load video file"));
+    };
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+interface AudioEntry {
+  id: string;
+  file: File;
+  status: "idle" | "processing" | "done" | "error";
+  progress: number;
+  resultBlob?: Blob;
+  resultExt?: string;
+  error?: string;
+}
+
+export default function VideoToAudioConverter() {
+  const [entries, setEntries] = useState<AudioEntry[]>([]);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMsg, setSnackMsg] = useState("");
+  const abortRefs = useRef<Map<string, AbortController>>(new Map());
+
+  const showMsg = useCallback((msg: string) => {
+    setSnackMsg(msg);
+    setSnackOpen(true);
+  }, []);
+
+  useEffect(() => {
+    const refs = abortRefs.current;
+    return () => {
+      refs.forEach((c) => c.abort());
+    };
+  }, []);
+
+  const handleFileSelect = useCallback((fileList: FileList) => {
+    const fresh: AudioEntry[] = Array.from(fileList).map((f) => ({
+      id: crypto.randomUUID(),
+      file: f,
+      status: "idle" as const,
+      progress: 0,
     }));
+    setEntries((prev) => [...prev, ...fresh]);
   }, []);
 
-  const handleError = useCallback((errorMessage: string) => {
-    setState((prev) => ({ ...prev, error: errorMessage }));
-  }, []);
+  const openFilePicker = useCallback(() => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "video/*";
+    input.multiple = true;
+    input.onchange = (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.files) handleFileSelect(el.files);
+    };
+    input.click();
+  }, [handleFileSelect]);
 
-  const onTargetFormatChange = useCallback(
-    (selectedFormatId: string, fileId: string) => {
-      setState((prev) => ({
-        ...prev,
-        fileList: prev.fileList.map((fileData) => {
-          if (fileData.id === fileId) {
-            if (isNil(fileData.convertedData[Number(selectedFormatId)])) {
-              return {
-                ...fileData,
-                selectedTargetFormatId: Number(selectedFormatId),
-                convertedData: {
-                  ...fileData.convertedData,
-                  [Number(selectedFormatId)]: {
-                    formatId: Number(selectedFormatId),
-                    isConverted: false,
-                    formatName: FFMPEG_FORMATS.get(Number(selectedFormatId))!
-                      .displayName,
-                    conversionState: ConversionState.NOT_CONVERTED,
-                    conversionProgress: 0,
-                    outputFileName: getOutputFileName({
-                      fileName: fileData.formattedFileName,
-                      targetFormatid: Number(selectedFormatId),
-                    }),
-                  },
-                },
-              };
-            }
-            return {
-              ...fileData,
-              selectedTargetFormatId: Number(selectedFormatId),
-            };
-          }
-          return fileData;
-        }),
-      }));
-    },
-    []
-  );
+  const convert = useCallback(async (id: string) => {
+    const ac = new AbortController();
+    abortRefs.current.set(id, ac);
 
-  const onVideoConvert = useCallback(
-    async (fileId: string) => {
-      const videoFileData = find(state.fileList, (file) => file.id === fileId);
-      if (isEmpty(videoFileData)) return;
+    setEntries((prev) =>
+      prev.map((e) =>
+        e.id === id ? { ...e, status: "processing", progress: 0, error: undefined } : e,
+      ),
+    );
 
-      // Debug logging for WebM files
-      if (videoFileData!.originalFile.name.toLowerCase().includes("webm")) {
-        console.log("🔍 WebM Debug Info:", {
-          fileName: videoFileData!.originalFile.name,
-          fileFormatId: videoFileData!.formatId,
-          targetFormatId: videoFileData!.selectedTargetFormatId,
-          formatName: videoFileData!.formatName,
-        });
-      }
+    try {
+      const entry = entries.find((e) => e.id === id);
+      if (!entry) return;
+
+      let result: { blob: Blob; ext: string };
 
       try {
-        // Dynamically import FFmpeg service when needed for lazy loading
-        const { transcodeVideo } = await import("@/service/ffmpegService");
-
-        transcodeVideo({
-          videoFileData: cloneDeep(videoFileData!),
-          setFileList: (updateFn) => {
-            setState((prev) => ({
-              ...prev,
-              fileList:
-                typeof updateFn === "function"
-                  ? updateFn(prev.fileList)
-                  : updateFn,
-            }));
-          },
-          setIsSnackBarOpen: (open) => {
-            setState((prev) => ({
-              ...prev,
-              snackBar: {
-                ...prev.snackBar,
-                open:
-                  typeof open === "function" ? open(prev.snackBar.open) : open,
-              },
-            }));
-          },
-          setSnackBarMessage: (message) => {
-            setState((prev) => ({
-              ...prev,
-              snackBar: {
-                ...prev.snackBar,
-                message:
-                  typeof message === "function"
-                    ? message(prev.snackBar.message)
-                    : message,
-              },
-            }));
-          },
-          setSnackBarColor: (color) => {
-            setState((prev) => ({
-              ...prev,
-              snackBar: {
-                ...prev.snackBar,
-                color:
-                  typeof color === "function"
-                    ? color(prev.snackBar.color)
-                    : color,
-              },
-            }));
-          },
-        });
+        // Fast path — works for MP4, WebM and most browser-decodable formats
+        result = await extractAudioFast(entry.file);
+        setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, progress: 100 } : e)));
       } catch {
-        showMessage("Failed to load video processing library", "error");
+        // Fallback: real-time capture for formats decodeAudioData can't handle
+        result = await extractAudioRealtime(
+          entry.file,
+          (pct) =>
+            setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, progress: pct } : e))),
+          ac.signal,
+        );
       }
-    },
-    [state.fileList, showMessage]
-  );
 
-  const downloadConvertedFile = useCallback(
-    (fileId: string) => {
-      const videoFileData = find(state.fileList, (file) => file.id === fileId);
-      if (!videoFileData) return;
-
-      const element = document.createElement("a");
-      const file = new Blob(
-        [
-          videoFileData.convertedData[videoFileData.selectedTargetFormatId]!
-            .data! as unknown as ArrayBuffer,
-        ],
-        { type: getMimeType(videoFileData.selectedTargetFormatId) }
+      setEntries((prev) =>
+        prev.map((e) =>
+          e.id === id
+            ? { ...e, status: "done", progress: 100, resultBlob: result.blob, resultExt: result.ext }
+            : e,
+        ),
       );
+      showMsg("Audio extracted successfully!");
+    } catch (err) {
+      if ((err as DOMException).name === "AbortError") return;
+      const msg = err instanceof Error ? err.message : "Extraction failed";
+      setEntries((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, status: "error", error: msg } : e)),
+      );
+      showMsg("Extraction failed");
+    } finally {
+      abortRefs.current.delete(id);
+    }
+  }, [entries, showMsg]);
 
-      element.href = URL.createObjectURL(file);
-      element.download =
-        videoFileData.convertedData[
-          videoFileData.selectedTargetFormatId
-        ].outputFileName;
-
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-      URL.revokeObjectURL(element.href);
-    },
-    [state.fileList]
-  );
-
-  const handleAddMoreVideos = useCallback(() => {
-    addMoreInputRef.current?.click();
+  const download = useCallback((entry: AudioEntry) => {
+    if (!entry.resultBlob) return;
+    const url = URL.createObjectURL(entry.resultBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${entry.file.name.replace(/\.[^.]+$/, "")}-audio.${entry.resultExt ?? "wav"}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }, []);
 
-  const handleAdditionalFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (files) {
-        handleFileSelect(files);
-        // Reset input so same files can be added again
-        e.target.value = "";
-      }
-    },
-    [handleFileSelect]
-  );
+  const removeEntry = useCallback((id: string) => {
+    abortRefs.current.get(id)?.abort();
+    setEntries((prev) => prev.filter((e) => e.id !== id));
+  }, []);
+
+  const convertAll = useCallback(() => {
+    entries
+      .filter((e) => e.status === "idle" || e.status === "error")
+      .forEach((e) => convert(e.id));
+  }, [entries, convert]);
+
+  const hasConvertible = entries.some((e) => e.status === "idle" || e.status === "error");
 
   return (
     <ToolLayout
-      snackBar={{
-        open: state.snackBar.open,
-        message: state.snackBar.message,
-        onClose: handleSnackBarClose,
-      }}
+      snackBar={{ open: snackOpen, message: snackMsg, onClose: () => setSnackOpen(false) }}
     >
       <SEOContent
         title="Video to Audio Converter"
-        description="Free online video to audio converter. Extract audio from video files and convert to MP3, WAV, AAC, and other formats."
-        exampleCode="video.mp4"
-        exampleOutput="audio.mp3"
+        description="Extract audio from video files directly in your browser. Supports MP4, WebM, MOV and more. No upload — 100% private."
+        exampleCode="Upload video → Extract → Download WAV audio"
+        exampleOutput="WAV audio file extracted from the video"
       />
 
-      {/* Error message */}
-      {state.error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <Typography variant="body2" className="text-red-800">
-            {state.error}
-          </Typography>
-        </div>
-      )}
-
-      {/* File Upload */}
-      {isEmpty(state.fileList) && (
+      {entries.length === 0 ? (
         <FileUploadWithDragDrop
           accept="video/*"
-          multiple={true}
-          allowedTypes={FILE_TYPE_PRESETS.VIDEOS}
-          maxSize={FILE_SIZE_PRESETS.HUGE}
+          multiple
           onFileSelect={handleFileSelect}
-          onError={handleError}
-          title="Upload Videos to Convert to Audio"
-          subtitle="Drag and drop your video files here or click to browse"
-          supportText="Supports MP4, WebM, AVI, MOV formats up to 100MB each"
+          title="Upload Videos to Extract Audio"
+          subtitle="Drag and drop video files here or click to browse"
+          supportText="MP4, WebM, MOV, AVI and more — processed 100% in your browser"
         />
-      )}
-
-      {/* Add More Videos Button */}
-      {!isEmpty(state.fileList) && (
-        <>
-          <input
-            ref={addMoreInputRef}
-            type="file"
-            accept="video/*"
-            multiple
-            style={{ display: "none" }}
-            onChange={handleAdditionalFileSelect}
-          />
-          <div className="w-full flex flex-row justify-end mb-3">
-            <ButtonWithHandler
-              buttonText="Add More Videos"
-              onClick={handleAddMoreVideos}
-              size="small"
-              startIcon={<AddIcon />}
-            />
+      ) : (
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-2 justify-between items-center">
+            <Typography variant="h6">
+              {entries.length} file{entries.length !== 1 ? "s" : ""}
+            </Typography>
+            <div className="flex gap-2">
+              {hasConvertible && (
+                <Button variant="contained" startIcon={<AudiotrackIcon />} onClick={convertAll}>
+                  Convert All
+                </Button>
+              )}
+              <Button variant="outlined" startIcon={<AddIcon />} onClick={openFilePicker}>
+                Add More
+              </Button>
+            </div>
           </div>
-        </>
-      )}
 
-      {/* Video Files List */}
-      {!isEmpty(state.fileList) && (
-        <VideoFilesList
-          fileList={state.fileList}
-          onTargetFormatChange={onTargetFormatChange}
-          onVideoConvert={onVideoConvert}
-          onDownload={downloadConvertedFile}
-        />
+          {entries.map((entry) => (
+            <Card key={entry.id} variant="outlined">
+              <CardContent className="space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <VideoLibraryIcon color="warning" />
+                    <div className="min-w-0">
+                      <Typography variant="body2" className="font-medium truncate">
+                        {entry.file.name}
+                      </Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        {formatBytes(entry.file.size)}
+                      </Typography>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1 shrink-0">
+                    {entry.status === "done" && (
+                      <Chip
+                        label={`.${entry.resultExt?.toUpperCase() ?? "WAV"}`}
+                        color="success"
+                        size="small"
+                      />
+                    )}
+                    {(entry.status === "idle" || entry.status === "error") && (
+                      <Button
+                        size="small"
+                        variant="contained"
+                        startIcon={<AudiotrackIcon />}
+                        onClick={() => convert(entry.id)}
+                        color={entry.status === "error" ? "error" : "primary"}
+                      >
+                        {entry.status === "error" ? "Retry" : "Extract"}
+                      </Button>
+                    )}
+                    {entry.status === "done" && (
+                      <Tooltip title="Download audio">
+                        <IconButton size="small" color="success" onClick={() => download(entry)}>
+                          <DownloadIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    <Tooltip title="Remove">
+                      <IconButton size="small" onClick={() => removeEntry(entry.id)}>
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </div>
+
+                {entry.status === "processing" && (
+                  <div>
+                    <LinearProgress
+                      variant={entry.progress > 0 ? "determinate" : "indeterminate"}
+                      value={entry.progress}
+                    />
+                    <Typography variant="caption" color="textSecondary">
+                      {entry.progress > 0 ? `${entry.progress}%` : "Extracting audio..."}
+                    </Typography>
+                  </div>
+                )}
+
+                {entry.status === "error" && (
+                  <Alert severity="error" sx={{ py: 0 }}>
+                    {entry.error}
+                  </Alert>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       )}
     </ToolLayout>
   );

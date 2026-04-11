@@ -1,7 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useMemo } from "react";
-import { TextField, Typography } from "@mui/material";
+import { useEffect, useRef, useCallback, useMemo, useState } from "react";
+import {
+  TextField,
+  Typography,
+  Slider,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { toCanvas, toString, toDataURL, QRCodeToDataURLOptions } from "qrcode";
 import DownloadIcon from "@mui/icons-material/Download";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -48,17 +56,22 @@ Try these examples:
   });
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [darkColor, setDarkColor] = useState("#000000");
+  const [lightColor, setLightColor] = useState("#FFFFFF");
+  const [qrSize, setQrSize] = useState(300);
+  const [errLevel, setErrLevel] = useState<"L" | "M" | "Q" | "H">("M");
 
   const generateQrCode = useCallback(async () => {
     const canvas = canvasRef.current;
     if (canvas && toolState.code) {
       try {
         await toCanvas(canvas, toolState.code, {
-          width: 300,
+          width: qrSize,
           margin: 2,
+          errorCorrectionLevel: errLevel,
           color: {
-            dark: "#000000",
-            light: "#FFFFFF",
+            dark: darkColor,
+            light: lightColor,
           },
         });
       } catch (error) {
@@ -66,7 +79,14 @@ Try these examples:
         toolState.actions.showMessage("Error generating QR code");
       }
     }
-  }, [toolState.code, toolState.actions]);
+  }, [
+    toolState.code,
+    toolState.actions,
+    darkColor,
+    lightColor,
+    qrSize,
+    errLevel,
+  ]);
 
   useEffect(() => {
     generateQrCode();
@@ -88,8 +108,10 @@ Try these examples:
         const mimeType = `image/${imageType}`;
         const options: QRCodeToDataURLOptions = {
           type: mimeType as "image/jpeg" | "image/webp" | "image/png",
-          width: 512,
+          width: Math.max(qrSize, 512),
           margin: 2,
+          errorCorrectionLevel: errLevel,
+          color: { dark: darkColor, light: lightColor },
         };
 
         const dataUrl = await toDataURL(toolState.code, options);
@@ -104,14 +126,34 @@ Try these examples:
         document.body.removeChild(a);
 
         toolState.actions.showMessage(
-          `QR code downloaded as ${imageType.toUpperCase()}`
+          `QR code downloaded as ${imageType.toUpperCase()}`,
         );
       } catch {
         toolState.actions.showMessage(`Failed to download ${imageType} image`);
       }
     },
-    [toolState]
+    [toolState, darkColor, lightColor, qrSize, errLevel],
   );
+
+  const downloadSvg = useCallback(async () => {
+    try {
+      const svgString = await toString(toolState.code, {
+        type: "svg",
+        errorCorrectionLevel: errLevel,
+        color: { dark: darkColor, light: lightColor },
+      });
+      const blob = new Blob([svgString], { type: "image/svg+xml" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "qr-code-webtoolseasy.svg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toolState.actions.showMessage("SVG downloaded!");
+    } catch {
+      toolState.actions.showMessage("Failed to download SVG");
+    }
+  }, [toolState, darkColor, lightColor, errLevel]);
 
   // Button configuration
   const buttons = useMemo(
@@ -121,6 +163,13 @@ Try these examples:
         text: "Copy SVG",
         onClick: copySvg,
         icon: <ContentCopyIcon />,
+      },
+      {
+        type: "custom" as const,
+        text: "SVG",
+        onClick: downloadSvg,
+        icon: <DownloadIcon />,
+        variant: "outlined" as const,
       },
       {
         type: "custom" as const,
@@ -147,7 +196,7 @@ Try these examples:
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
       }),
     ],
-    [copySvg, downloadImage, toolState]
+    [copySvg, downloadSvg, downloadImage, toolState],
   );
 
   return (
@@ -179,13 +228,86 @@ Try these examples:
           </Typography>
           <TextField
             multiline
-            rows={12}
+            rows={8}
             value={toolState.code}
             onChange={(e) => toolState.setCode(e.target.value)}
             placeholder="Enter text, URL, or data to generate QR code..."
             className="w-full"
             variant="outlined"
           />
+
+          {/* Customisation */}
+          <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg space-y-4">
+            <Typography variant="body2" className="font-medium">
+              ✨ Customise
+            </Typography>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Typography variant="caption" color="textSecondary">
+                  Foreground
+                </Typography>
+                <div className="flex items-center gap-2 mt-1">
+                  <input
+                    type="color"
+                    value={darkColor}
+                    onChange={(e) => setDarkColor(e.target.value)}
+                    className="w-8 h-8 rounded cursor-pointer border border-gray-300"
+                  />
+                  <Typography variant="caption">{darkColor}</Typography>
+                </div>
+              </div>
+              <div>
+                <Typography variant="caption" color="textSecondary">
+                  Background
+                </Typography>
+                <div className="flex items-center gap-2 mt-1">
+                  <input
+                    type="color"
+                    value={lightColor}
+                    onChange={(e) => setLightColor(e.target.value)}
+                    className="w-8 h-8 rounded cursor-pointer border border-gray-300"
+                  />
+                  <Typography variant="caption">{lightColor}</Typography>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <Typography variant="caption" color="textSecondary">
+                Size: {qrSize}px
+              </Typography>
+              <Slider
+                value={qrSize}
+                onChange={(_, v) => setQrSize(v as number)}
+                min={100}
+                max={600}
+                step={50}
+                size="small"
+                marks={[
+                  { value: 200, label: "200" },
+                  { value: 400, label: "400" },
+                  { value: 600, label: "600" },
+                ]}
+              />
+            </div>
+
+            <FormControl size="small" fullWidth>
+              <InputLabel>Error Correction</InputLabel>
+              <Select
+                value={errLevel}
+                label="Error Correction"
+                onChange={(e) =>
+                  setErrLevel(e.target.value as "L" | "M" | "Q" | "H")
+                }
+              >
+                <MenuItem value="L">L — Low (7%)</MenuItem>
+                <MenuItem value="M">M — Medium (15%) — recommended</MenuItem>
+                <MenuItem value="Q">Q — Quartile (25%)</MenuItem>
+                <MenuItem value="H">H — High (30%)</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
 
           {/* Examples */}
           <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">

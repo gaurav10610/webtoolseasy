@@ -6,7 +6,17 @@ import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
-import { Typography, Slider, LinearProgress, Box, Button } from "@mui/material";
+import {
+  Typography,
+  Slider,
+  LinearProgress,
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import CompressIcon from "@mui/icons-material/Compress";
 import DownloadIcon from "@mui/icons-material/Download";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -45,10 +55,11 @@ export default function ImageCompress({
   const [images, setImages] = useState<CompressedImage[]>([]);
   const [selectedImageId, setSelectedImageId] = useState<string>("");
   const [compressionLevel, setCompressionLevel] = useState(50);
+  const [outputFormat, setOutputFormat] = useState("jpeg");
 
   const selectedImage = useMemo(
     () => images.find((img) => img.id === selectedImageId),
-    [images, selectedImageId]
+    [images, selectedImageId],
   );
 
   const handleFileSelect = useCallback(
@@ -67,10 +78,10 @@ export default function ImageCompress({
         setSelectedImageId(newImages[0].id);
       }
       toolState.actions.showMessage(
-        `${newImages.length} image(s) uploaded successfully!`
+        `${newImages.length} image(s) uploaded successfully!`,
       );
     },
-    [selectedImageId, compressionLevel, toolState.actions]
+    [selectedImageId, compressionLevel, toolState.actions],
   );
 
   const compressImage = useCallback(
@@ -99,7 +110,11 @@ export default function ImageCompress({
             (1024 * 1024),
           maxWidthOrHeight: 1920,
           useWebWorker: true,
-          fileType: "image/jpeg", // Default to JPEG for compression
+          fileType: `image/${outputFormat}` as
+            | "image/jpeg"
+            | "image/png"
+            | "image/webp"
+            | "image/bmp",
           onProgress: (progress: number) => {
             setImages((prev) => {
               const updated = [...prev];
@@ -117,7 +132,7 @@ export default function ImageCompress({
 
         const compressedFile = await imageCompression(
           image.originalFile,
-          options
+          options,
         );
 
         setImages((prev) => {
@@ -153,7 +168,7 @@ export default function ImageCompress({
         toolState.actions.showMessage("Compression failed. Please try again.");
       }
     },
-    [images, compressionLevel, toolState.actions]
+    [images, compressionLevel, outputFormat, toolState.actions],
   );
 
   const downloadImage = useCallback(
@@ -173,7 +188,7 @@ export default function ImageCompress({
 
       toolState.actions.showMessage("Image downloaded successfully!");
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const removeImage = useCallback(
@@ -182,11 +197,11 @@ export default function ImageCompress({
       if (selectedImageId === imageId) {
         const remainingImages = images.filter((img) => img.id !== imageId);
         setSelectedImageId(
-          remainingImages.length > 0 ? remainingImages[0].id : ""
+          remainingImages.length > 0 ? remainingImages[0].id : "",
         );
       }
     },
-    [images, selectedImageId]
+    [images, selectedImageId],
   );
 
   const applySettingsAndCompress = useCallback(() => {
@@ -199,7 +214,7 @@ export default function ImageCompress({
         compressionProgress: 0,
         error: undefined,
         compressionRatio: compressionLevel,
-      }))
+      })),
     );
 
     // Start compressing all images
@@ -209,16 +224,16 @@ export default function ImageCompress({
     }, 100);
 
     toolState.actions.showMessage(
-      "Applying settings and starting compression..."
+      "Applying settings and starting compression...",
     );
   }, [images, compressionLevel, compressImage, toolState.actions]);
 
   const downloadAllCompressed = useCallback(() => {
     const compressedImages = images.filter(
-      (img) => img.isCompressed && img.compressedFile
+      (img) => img.isCompressed && img.compressedFile,
     );
-    compressedImages.forEach((img) => downloadImage(img, "jpeg"));
-  }, [images, downloadImage]);
+    compressedImages.forEach((img) => downloadImage(img, outputFormat));
+  }, [images, downloadImage, outputFormat]);
 
   // Button configuration
   const buttons = useMemo(() => [], []);
@@ -283,6 +298,22 @@ export default function ImageCompress({
             </Typography>
 
             <div className="grid grid-cols-1 gap-4">
+              {/* Output Format */}
+              <FormControl size="small" sx={{ minWidth: 160 }}>
+                <InputLabel>Output Format</InputLabel>
+                <Select
+                  value={outputFormat}
+                  label="Output Format"
+                  onChange={(e) => setOutputFormat(e.target.value)}
+                >
+                  {OUTPUT_FORMATS.map((f) => (
+                    <MenuItem key={f.value} value={f.value}>
+                      {f.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
               {/* Compression Level */}
               <div>
                 <Typography variant="body2" className="mb-2">
@@ -405,7 +436,7 @@ export default function ImageCompress({
                               (1 -
                                 image.compressedFile.size /
                                   image.originalFile.size) *
-                                100
+                                100,
                             )}
                             %
                           </span>

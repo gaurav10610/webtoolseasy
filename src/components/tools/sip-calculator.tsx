@@ -8,7 +8,7 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
@@ -37,7 +37,7 @@ export default function SIPCalculator({
     (
       monthlyAmount: number,
       annualRate: number,
-      years: number
+      years: number,
     ): SIPCalculation => {
       // Monthly interest rate
       const monthlyRate = annualRate / 12 / 100;
@@ -65,13 +65,61 @@ export default function SIPCalculator({
         totalValue: Math.round(futureValue),
       };
     },
-    []
+    [],
   );
 
   const sipResults = useMemo(
     () => calculateSIP(monthlyInvestment, expectedReturnRate, timePeriodYears),
-    [monthlyInvestment, expectedReturnRate, timePeriodYears, calculateSIP]
+    [monthlyInvestment, expectedReturnRate, timePeriodYears, calculateSIP],
   );
+
+  const donutRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = donutRef.current;
+    if (!canvas || sipResults.totalValue <= 0) return;
+    const ctx = canvas.getContext("2d")!;
+    const W = canvas.width,
+      H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2,
+      cy = H / 2;
+    const radius = Math.min(cx, cy) - 8;
+    const inner = radius * 0.58;
+    const total = sipResults.totalValue;
+    const investedFrac = sipResults.totalInvestment / total;
+    const start = -Math.PI / 2;
+    const mid = start + investedFrac * 2 * Math.PI;
+
+    // Investment slice (blue)
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, mid);
+    ctx.closePath();
+    ctx.fillStyle = "#3b82f6";
+    ctx.fill();
+
+    // Returns slice (green)
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, mid, start + 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = "#22c55e";
+    ctx.fill();
+
+    // Donut hole
+    ctx.beginPath();
+    ctx.arc(cx, cy, inner, 0, 2 * Math.PI);
+    ctx.fillStyle = "#f9fafb";
+    ctx.fill();
+
+    ctx.fillStyle = "#374151";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(`${(investedFrac * 100).toFixed(0)}% Inv`, cx, cy - 7);
+    ctx.fillText(`${((1 - investedFrac) * 100).toFixed(0)}% Ret`, cx, cy + 9);
+  }, [sipResults]);
 
   const handleMonthlyInvestmentChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +128,7 @@ export default function SIPCalculator({
         setMonthlyInvestment(value);
       }
     },
-    []
+    [],
   );
 
   const handleReturnRateChange = useCallback(
@@ -90,7 +138,7 @@ export default function SIPCalculator({
         setExpectedReturnRate(value);
       }
     },
-    []
+    [],
   );
 
   const handleTimePeriodChange = useCallback(
@@ -100,7 +148,7 @@ export default function SIPCalculator({
         setTimePeriodYears(value);
       }
     },
-    []
+    [],
   );
 
   const formatCurrency = (value: number): string => {
@@ -255,13 +303,31 @@ export default function SIPCalculator({
         {/* Info Card */}
         <Card elevation={1} sx={{ bgcolor: "info.light" }}>
           <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              <strong>Note:</strong> This calculator provides estimates based on
-              the expected rate of return. Actual returns may vary depending on
-              market conditions and fund performance. SIP investments in mutual
-              funds are subject to market risks. Please read all scheme-related
-              documents carefully before investing.
-            </Typography>
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <div className="flex-1">
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Note:</strong> This calculator provides estimates
+                  based on the expected rate of return. Actual returns may vary
+                  depending on market conditions and fund performance. SIP
+                  investments in mutual funds are subject to market risks.
+                  Please read all scheme-related documents carefully before
+                  investing.
+                </Typography>
+              </div>
+              <div className="flex flex-col items-center">
+                <canvas ref={donutRef} width={140} height={140} />
+                <div className="flex gap-3 mt-1">
+                  <span className="flex items-center gap-1 text-xs">
+                    <span className="inline-block w-3 h-3 rounded-sm bg-blue-500" />{" "}
+                    Invested
+                  </span>
+                  <span className="flex items-center gap-1 text-xs">
+                    <span className="inline-block w-3 h-3 rounded-sm bg-green-500" />{" "}
+                    Returns
+                  </span>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

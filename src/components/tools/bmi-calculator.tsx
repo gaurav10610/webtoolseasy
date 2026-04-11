@@ -121,7 +121,7 @@ export default function BMICalculator({
         recommendation,
       };
     },
-    []
+    [],
   );
 
   const bmiResult = useMemo(() => {
@@ -152,7 +152,7 @@ export default function BMICalculator({
         setUnitSystem(newSystem);
       }
     },
-    []
+    [],
   );
 
   return (
@@ -273,10 +273,10 @@ export default function BMICalculator({
                   bmiResult.categoryColor === "success"
                     ? "success.main"
                     : bmiResult.categoryColor === "warning"
-                    ? "warning.main"
-                    : bmiResult.categoryColor === "error"
-                    ? "error.main"
-                    : "info.main",
+                      ? "warning.main"
+                      : bmiResult.categoryColor === "error"
+                        ? "error.main"
+                        : "info.main",
                 color: "white",
               }}
             >
@@ -315,10 +315,10 @@ export default function BMICalculator({
                 bmiResult.categoryColor === "success"
                   ? "success"
                   : bmiResult.categoryColor === "warning"
-                  ? "warning"
-                  : bmiResult.categoryColor === "error"
-                  ? "error"
-                  : "info"
+                    ? "warning"
+                    : bmiResult.categoryColor === "error"
+                      ? "error"
+                      : "info"
               }
               icon={false}
             >
@@ -329,6 +329,117 @@ export default function BMICalculator({
                 {bmiResult.recommendation}
               </Typography>
             </Alert>
+
+            {/* BMI Visual Gauge */}
+            <Card elevation={1} sx={{ bgcolor: "grey.50" }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  BMI Scale
+                </Typography>
+                {(() => {
+                  const minB = 15,
+                    maxB = 40;
+                  const pct = (v: number) =>
+                    Math.max(
+                      0,
+                      Math.min(100, ((v - minB) / (maxB - minB)) * 100),
+                    );
+                  const markerPct = pct(bmiResult.bmi);
+                  const bands = [
+                    {
+                      from: 15,
+                      to: 18.5,
+                      color: "#60a5fa",
+                      label: "Underweight",
+                    },
+                    { from: 18.5, to: 25, color: "#4ade80", label: "Normal" },
+                    { from: 25, to: 30, color: "#facc15", label: "Overweight" },
+                    { from: 30, to: 40, color: "#f87171", label: "Obese" },
+                  ];
+                  return (
+                    <div className="relative w-full" style={{ height: 56 }}>
+                      {/* Color bands */}
+                      <div
+                        className="w-full rounded-lg overflow-hidden flex"
+                        style={{ height: 24 }}
+                      >
+                        {bands.map((b) => (
+                          <div
+                            key={b.label}
+                            style={{
+                              width: `${pct(b.to) - pct(b.from)}%`,
+                              backgroundColor: b.color,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      {/* Marker */}
+                      <div
+                        className="absolute"
+                        style={{
+                          left: `${markerPct}%`,
+                          top: 0,
+                          transform: "translateX(-50%)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 3,
+                            height: 24,
+                            backgroundColor: "#1e293b",
+                            margin: "0 auto",
+                          }}
+                        />
+                        <div
+                          className="text-xs font-bold text-center whitespace-nowrap"
+                          style={{
+                            transform: "translateX(-50%)",
+                            marginLeft: "50%",
+                            backgroundColor: "#1e293b",
+                            color: "white",
+                            borderRadius: 3,
+                            padding: "1px 4px",
+                            marginTop: 2,
+                          }}
+                        >
+                          {bmiResult.bmi}
+                        </div>
+                      </div>
+                      {/* Scale labels */}
+                      <div
+                        className="flex justify-between text-xs text-gray-500 mt-1"
+                        style={{ paddingTop: 28 }}
+                      >
+                        <span>15</span>
+                        <span>18.5</span>
+                        <span>25</span>
+                        <span>30</span>
+                        <span>40</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {[
+                    { color: "#60a5fa", label: "Underweight <18.5" },
+                    { color: "#4ade80", label: "Normal 18.5–25" },
+                    { color: "#facc15", label: "Overweight 25–30" },
+                    { color: "#f87171", label: "Obese ≥30" },
+                  ].map(({ color, label }) => (
+                    <span
+                      key={label}
+                      className="flex items-center gap-1 text-xs"
+                    >
+                      <span
+                        className="inline-block w-3 h-3 rounded-sm"
+                        style={{ backgroundColor: color }}
+                      />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
             {/* BMI Chart Reference */}
             <Card elevation={1} sx={{ bgcolor: "grey.50" }}>

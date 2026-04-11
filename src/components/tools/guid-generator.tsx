@@ -7,14 +7,14 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { Guid } from "guid-ts";
 
 export default function GuidGenerator({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
   const generateGUID = useCallback(() => {
-    return Guid.newGuid().toString();
+    // Use native crypto.randomUUID() – available in all modern browsers and Node 14.17+
+    return crypto.randomUUID();
   }, []);
 
   const initialValue = generateGUID();

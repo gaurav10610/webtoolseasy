@@ -1,18 +1,75 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { Checkbox, TextField, Typography } from "@mui/material";
+import {
+  Checkbox,
+  TextField,
+  Typography,
+  Chip,
+  LinearProgress,
+} from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "../lib/buttons";
-import passwordGenerator from "generate-password-ts";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import LoopIcon from "@mui/icons-material/Loop";
 import DownloadIcon from "@mui/icons-material/Download";
-import { isEmpty, map } from "lodash-es";
+import { map } from "lodash-es";
+
+// Native crypto-based password generator – no external dependency needed.
+function nativeGeneratePassword(opts: {
+  length: number;
+  numbers: boolean;
+  symbols: boolean;
+  lowercase: boolean;
+  uppercase: boolean;
+  exclude: string;
+}): string {
+  let charset = "";
+  if (opts.lowercase) charset += "abcdefghjkmnpqrstuvwxyz"; // skip similar chars i,l,o
+  if (opts.uppercase) charset += "ABCDEFGHJKLMNPQRSTUVWXYZ"; // skip I,O
+  if (opts.numbers) charset += "23456789"; // skip 0,1
+  if (opts.symbols) charset += "!@#$%^&*()-_=+[]{}|;:,.<>?";
+
+  // Remove excluded characters
+  if (opts.exclude) {
+    charset = charset
+      .split("")
+      .filter((c) => !opts.exclude.includes(c))
+      .join("");
+  }
+
+  if (!charset) return "";
+
+  const arr = new Uint32Array(opts.length);
+  crypto.getRandomValues(arr);
+  return Array.from(arr)
+    .map((n) => charset[n % charset.length])
+    .join("");
+}
+
+// Password strength calculation using entropy bits
+function getPasswordStrength(password: string): {
+  score: 0 | 1 | 2 | 3 | 4;
+  label: string;
+  color: "error" | "warning" | "info" | "success";
+  bits: number;
+} {
+  if (!password) return { score: 0, label: "None", color: "error", bits: 0 };
+  let charset = 0;
+  if (/[a-z]/.test(password)) charset += 26;
+  if (/[A-Z]/.test(password)) charset += 26;
+  if (/[0-9]/.test(password)) charset += 10;
+  if (/[^a-zA-Z0-9]/.test(password)) charset += 32;
+  const bits = Math.floor(password.length * Math.log2(charset || 1));
+  if (bits < 40) return { score: 1, label: "Weak", color: "error", bits };
+  if (bits < 60) return { score: 2, label: "Fair", color: "warning", bits };
+  if (bits < 80) return { score: 3, label: "Strong", color: "info", bits };
+  return { score: 4, label: "Very Strong", color: "success", bits };
+}
 
 interface PasswordOptions {
   passwordLength: number;
@@ -42,13 +99,12 @@ export default function PasswordGenerator({
   const [bulkPasswordsCount, setBulkPasswordsCount] = useState<number>(5);
 
   const generateRandomPassword = useCallback((opts: PasswordOptions) => {
-    return passwordGenerator.generate({
+    return nativeGeneratePassword({
       length: opts.passwordLength,
       numbers: opts.isNumbersIncluded,
       symbols: opts.isSymbolsIncluded,
       lowercase: opts.isLowercaseIncluded,
       uppercase: opts.isUppercaseIncluded,
-      excludeSimilarCharacters: true,
       exclude: opts.excludedCharacters,
     });
   }, []);
@@ -60,6 +116,11 @@ export default function PasswordGenerator({
     queryParams,
     initialValue: generateInitialPassword(),
   });
+
+  const strength = useMemo(
+    () => getPasswordStrength(toolState.code),
+    [toolState.code],
+  );
 
   const encryptPassword = useCallback((password: string) => {
     return password
@@ -87,7 +148,7 @@ export default function PasswordGenerator({
 
   const generateBulkPasswords = useCallback(() => {
     const passwords = Array.from({ length: bulkPasswordsCount }, () =>
-      generateRandomPassword(options)
+      generateRandomPassword(options),
     );
     setBulkPasswords(passwords);
     toolState.actions.showMessage(`Generated ${bulkPasswordsCount} passwords!`);
@@ -108,7 +169,7 @@ export default function PasswordGenerator({
     (key: keyof PasswordOptions, value: string | number | boolean) => {
       setOptions((prev) => ({ ...prev, [key]: value }));
     },
-    []
+    [],
   );
 
   // Button configuration
@@ -120,7 +181,7 @@ export default function PasswordGenerator({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyPassword, toolState]
+    [copyPassword, toolState],
   );
 
   return (
@@ -168,6 +229,30 @@ export default function PasswordGenerator({
               )}
             </div>
           </div>
+
+          {/* Password Strength Meter */}
+          <div className="w-full max-w-sm space-y-1">
+            <div className="flex justify-between items-center">
+              <Typography variant="caption">Strength</Typography>
+              <div className="flex items-center gap-2">
+                <Chip
+                  label={strength.label}
+                  size="small"
+                  color={strength.color}
+                />
+                <Typography variant="caption" color="text.secondary">
+                  {strength.bits} bits entropy
+                </Typography>
+              </div>
+            </div>
+            <LinearProgress
+              variant="determinate"
+              value={(strength.score / 4) * 100}
+              color={strength.color}
+              className="rounded"
+            />
+          </div>
+
           <ButtonWithHandler
             buttonText="Generate New Password"
             startIcon={<LoopIcon />}
@@ -242,7 +327,7 @@ export default function PasswordGenerator({
                 onClick={generateBulkPasswords}
                 startIcon={<LoopIcon />}
               />
-              {!isEmpty(bulkPasswords) && (
+              {bulkPasswords.length > 0 && (
                 <ButtonWithHandler
                   buttonText="Download Passwords"
                   variant="outlined"
@@ -253,7 +338,7 @@ export default function PasswordGenerator({
             </div>
           </div>
 
-          {!isEmpty(bulkPasswords) && (
+          {bulkPasswords.length > 0 && (
             <div className="max-h-60 overflow-y-auto p-2 border rounded bg-gray-50">
               {map(bulkPasswords, (password, index) => (
                 <Typography

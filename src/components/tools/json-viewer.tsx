@@ -370,7 +370,9 @@ export default function JsonViewer({
           codeEditorProps={editorProps}
           themeOption="vs-dark"
           className={
-            toolState.isFullScreen ? "h-[40vh]" : "h-[35vh] min-h-[280px]"
+            toolState.isFullScreen
+              ? "h-full min-h-[320px]"
+              : "h-[35vh] min-h-[280px]"
           }
         />
       </div>
@@ -409,7 +411,9 @@ export default function JsonViewer({
           {/* Tree View */}
           <div
             className={`border border-gray-300 rounded p-2 overflow-auto bg-white ${
-              toolState.isFullScreen ? "h-[45vh]" : "h-[40vh] min-h-[300px]"
+              toolState.isFullScreen
+                ? "h-[calc(100dvh-22rem)] min-h-[320px]"
+                : "h-[40vh] min-h-[300px]"
             }`}
           >
             {jsonTree.length > 0 ? (

@@ -10,9 +10,6 @@ import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
-import { createFFmpegInstance } from "@/service/ffmpegService";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { fetchFile } from "@ffmpeg/util";
 
 enum ProcessingState {
   IDLE = "idle",
@@ -44,7 +41,7 @@ export default function VideoCompressor({
   });
 
   const [processingState, setProcessingState] = useState<ProcessingState>(
-    ProcessingState.IDLE
+    ProcessingState.IDLE,
   );
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -61,7 +58,8 @@ export default function VideoCompressor({
     bitrate: 1500,
   });
 
-  const ffmpegRef = useRef<FFmpeg | null>(null);
+  const [compressedExtension, setCompressedExtension] = useState("mp4");
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -100,99 +98,135 @@ export default function VideoCompressor({
       setCompressedSize(0);
       toolState.actions.showMessage("Video loaded successfully");
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
-  // Compress video
+  // Compress video using Canvas + MediaRecorder (no FFmpeg/WASM)
   const compressVideo = useCallback(async () => {
-    if (!videoFile) {
+    if (!videoFile || !videoRef.current) {
       toolState.actions.showMessage("Please upload a video first");
       return;
     }
 
+    const video = videoRef.current;
+
     try {
-      setProcessingState(ProcessingState.LOADING);
-      setError("");
-      setProgress("Initializing FFmpeg...");
-
-      // Initialize FFmpeg if not already done
-      if (!ffmpegRef.current) {
-        const ffmpeg = await createFFmpegInstance();
-        ffmpegRef.current = ffmpeg;
-
-        ffmpeg.on("progress", ({ progress: p }) => {
-          setProgress(`Compressing: ${Math.round(p * 100)}%`);
-        });
-      }
-
       setProcessingState(ProcessingState.PROCESSING);
-      setProgress("Loading video...");
+      setError("");
+      setProgress("Preparing...");
 
-      const ffmpeg = ffmpegRef.current;
-      const inputFileName = "input.mp4";
-      const outputFileName = "output.mp4";
+      // Determine output dimensions
+      const srcW = video.videoWidth || 1280;
+      const srcH = video.videoHeight || 720;
+      const outW =
+        settings.resolution === "original"
+          ? srcW
+          : parseInt(settings.resolution, 10);
+      const outH =
+        settings.resolution === "original"
+          ? srcH
+          : Math.round((outW / srcW) * srcH);
 
-      // Write input file
-      await ffmpeg.writeFile(inputFileName, await fetchFile(videoFile));
-      setProgress("Compressing video...");
+      const canvas = document.createElement("canvas");
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext("2d")!;
 
-      // Build FFmpeg command based on settings
-      const command = ["-i", inputFileName];
+      // Canvas stream for video frames
+      const canvasStream = canvas.captureStream(30);
 
-      // Resolution
-      if (settings.resolution !== "original") {
-        command.push("-vf", `scale=${settings.resolution}:-2`);
+      // Capture audio from the video element
+      const rawStream = (
+        video as HTMLVideoElement & { captureStream?: () => MediaStream }
+      ).captureStream?.();
+      if (rawStream) {
+        rawStream
+          .getAudioTracks()
+          .forEach((t) => canvasStream.addTrack(t.clone()));
       }
 
-      // Video codec and bitrate
-      command.push(
-        "-c:v",
-        "libx264",
-        "-b:v",
-        `${settings.bitrate}k`,
-        "-preset",
-        "fast"
-      );
+      // Choose supported MIME type – prefer MP4 for seekability
+      const mimeType =
+        ["video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find((m) =>
+          MediaRecorder.isTypeSupported(m),
+        ) ?? "video/webm";
+      const extension = mimeType.startsWith("video/mp4") ? "mp4" : "webm";
+      setCompressedExtension(extension);
 
-      // Audio compression
-      command.push("-c:a", "aac", "-b:a", "128k");
-
-      command.push(outputFileName);
-
-      await ffmpeg.exec(command);
-      setProgress("Finalizing...");
-
-      // Read output file
-      const data = await ffmpeg.readFile(outputFileName);
-      const blob = new Blob([data as unknown as ArrayBuffer], {
-        type: "video/mp4",
+      const recorder = new MediaRecorder(canvasStream, {
+        mimeType,
+        videoBitsPerSecond: settings.bitrate * 1000,
+        audioBitsPerSecond: 128_000,
       });
-      const url = URL.createObjectURL(blob);
+      mediaRecorderRef.current = recorder;
+
+      const chunks: Blob[] = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
+
+      const completionPromise = new Promise<Blob>((resolve) => {
+        recorder.onstop = () => resolve(new Blob(chunks, { type: mimeType }));
+      });
+
+      recorder.start(500);
+
+      // Mute the element itself so we don't double-play audio through speakers
+      video.muted = true;
+      video.currentTime = 0;
+      await new Promise<void>((resolve) => {
+        if (video.readyState >= 3) {
+          resolve();
+          return;
+        }
+        video.oncanplay = () => resolve();
+      });
+
+      let animFrameId: number;
+      const drawFrame = () => {
+        if (!video.ended) {
+          ctx.drawImage(video, 0, 0, outW, outH);
+          if (video.duration > 0) {
+            setProgress(
+              `Compressing: ${Math.round((video.currentTime / video.duration) * 100)}%`,
+            );
+          }
+          animFrameId = requestAnimationFrame(drawFrame);
+        }
+      };
+
+      video.onended = () => {
+        ctx.drawImage(video, 0, 0, outW, outH);
+        cancelAnimationFrame(animFrameId);
+        if (recorder.state === "recording") recorder.stop();
+      };
+
+      animFrameId = requestAnimationFrame(drawFrame);
+      await video.play();
+
+      const blob = await completionPromise;
+
+      // Restore video element
+      video.muted = false;
 
       setCompressedBlob(blob);
       setCompressedSize(blob.size);
+      const url = URL.createObjectURL(blob);
       setCompressedUrl(url);
       setProcessingState(ProcessingState.COMPLETED);
       setProgress("");
 
       const reduction = ((1 - blob.size / originalSize) * 100).toFixed(1);
       toolState.actions.showMessage(
-        `Video compressed! Size reduced by ${reduction}%`
+        `Video compressed! Size reduced by ${reduction}%`,
       );
-
-      // Cleanup FFmpeg files
-      try {
-        await ffmpeg.deleteFile(inputFileName);
-        await ffmpeg.deleteFile(outputFileName);
-      } catch (cleanupErr) {
-        console.warn("FFmpeg cleanup warning:", cleanupErr);
-      }
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to compress video";
       setError(errorMessage);
       setProcessingState(ProcessingState.IDLE);
       setProgress("");
+      if (videoRef.current) videoRef.current.muted = false;
       toolState.actions.showMessage("Failed to compress video");
     }
   }, [videoFile, settings, originalSize, toolState.actions]);
@@ -206,13 +240,13 @@ export default function VideoCompressor({
 
     const link = document.createElement("a");
     link.href = compressedUrl;
-    link.download = `compressed-${Date.now()}.mp4`;
+    link.download = `compressed-${Date.now()}.${compressedExtension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
     toolState.actions.showMessage("Video downloaded successfully!");
-  }, [compressedBlob, compressedUrl, toolState.actions]);
+  }, [compressedBlob, compressedUrl, compressedExtension, toolState.actions]);
 
   // Reset
   const reset = useCallback(() => {
@@ -242,10 +276,8 @@ export default function VideoCompressor({
     return () => {
       if (videoUrl) URL.revokeObjectURL(videoUrl);
       if (compressedUrl) URL.revokeObjectURL(compressedUrl);
-      // Cleanup FFmpeg instance
-      if (ffmpegRef.current) {
-        ffmpegRef.current.terminate();
-        ffmpegRef.current = null;
+      if (mediaRecorderRef.current?.state === "recording") {
+        mediaRecorderRef.current.stop();
       }
     };
   }, [videoUrl, compressedUrl]);
@@ -262,7 +294,7 @@ export default function VideoCompressor({
             : prev.bitrate,
       }));
     },
-    [getBitrateForLevel]
+    [getBitrateForLevel],
   );
 
   // Format file size
@@ -545,7 +577,11 @@ export default function VideoCompressor({
                 3. Optionally reduce resolution to compress further
               </Typography>
               <Typography variant="body2" component="div">
-                4. For precise control, use Custom mode and set bitrate
+                4. For precise control, use Custom mode and set bitrate manually
+              </Typography>
+              <Typography variant="body2" component="div">
+                Note: Compression runs in real-time using your browser&apos;s
+                native encoder — no files are uploaded to any server.
               </Typography>
               <Typography variant="body2" component="div">
                 5. Click &quot;Compress Video&quot; and wait for processing

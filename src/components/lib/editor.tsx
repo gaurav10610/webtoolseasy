@@ -1,4 +1,5 @@
 import Editor, { DiffEditor as MonacoDiffEditor } from "@monaco-editor/react";
+import { useCallback, useEffect, useRef } from "react";
 import { editor } from "monaco-editor";
 
 export interface DiffEditorProps {
@@ -29,6 +30,59 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
   handleEditorDidMount,
   className = "w-full h-full",
 }) => {
+  const editorContainerRef = useRef<HTMLDivElement | null>(null);
+  const editorInstanceRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+
+  const triggerLayout = useCallback(() => {
+    if (!editorInstanceRef.current) {
+      return;
+    }
+
+    // Pass explicit pixel dimensions to Monaco so it correctly fills its container
+    // even when the container's height is determined via CSS flexbox (flex-1 / h-full).
+    // A plain layout() call can mis-report height when the parent uses flex sizing.
+    const doLayout = () => {
+      const container = editorContainerRef.current;
+      const editorInstance = editorInstanceRef.current;
+      if (!container || !editorInstance) return;
+      const { offsetWidth, offsetHeight } = container;
+      if (offsetWidth > 0 && offsetHeight > 0) {
+        editorInstance.layout({ width: offsetWidth, height: offsetHeight });
+      } else {
+        editorInstance.layout();
+      }
+    };
+
+    requestAnimationFrame(() => {
+      doLayout();
+      // Second pass after a short delay handles fullscreen/animation transitions
+      // where the container size is still animating when the first rAF fires.
+      setTimeout(doLayout, 100);
+    });
+  }, []);
+
+  useEffect(() => {
+    const container = editorContainerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(() => triggerLayout())
+        : null;
+
+    resizeObserver?.observe(container);
+    window.addEventListener("resize", triggerLayout);
+    document.addEventListener("fullscreenchange", triggerLayout);
+
+    return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", triggerLayout);
+      document.removeEventListener("fullscreenchange", triggerLayout);
+    };
+  }, [triggerLayout]);
+
   const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     selectOnLineNumbers: true,
     fontSize: 16,
@@ -37,8 +91,17 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
     scrollBeyondLastLine: false,
   };
 
+  const handleMount = useCallback(
+    (mountedEditor: editor.IStandaloneCodeEditor | null) => {
+      editorInstanceRef.current = mountedEditor;
+      triggerLayout();
+      handleEditorDidMount?.(mountedEditor);
+    },
+    [handleEditorDidMount, triggerLayout],
+  );
+
   return (
-    <div className={className}>
+    <div ref={editorContainerRef} className={`min-h-0 ${className}`}>
       <Editor
         width="100%"
         height="100%"
@@ -54,7 +117,7 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
             onChange(value ? (value as string) : "");
           },
         })}
-        {...(handleEditorDidMount && { onMount: handleEditorDidMount })}
+        onMount={handleMount}
       />
     </div>
   );
@@ -79,7 +142,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
     };
 
   return (
-    <div className="w-full h-full min-h-[320px] border-2 border-gray-300">
+    <div className="w-full h-full min-h-[320px] overflow-hidden border-2 border-gray-300">
       <MonacoDiffEditor
         width="100%"
         height="100%"

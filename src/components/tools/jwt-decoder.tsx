@@ -32,7 +32,7 @@ export default function JwtDecoder({
         decodedTokenHeaders: JSON.stringify(
           decodeProtectedHeader(token),
           null,
-          2
+          2,
         ),
       };
     } catch (error) {
@@ -42,14 +42,14 @@ export default function JwtDecoder({
 
   const { decodedToken, decodedTokenHeaders, error } = useMemo(
     () => decodeJwtToken(toolState.code),
-    [decodeJwtToken, toolState.code]
+    [decodeJwtToken, toolState.code],
   );
 
   const [decodedJwtToken, setDecodedToken] = useState<string>(
-    isNil(error) ? decodedToken! : ""
+    isNil(error) ? decodedToken! : "",
   );
   const [decodedJwtTokenHeaders, setDecodedTokenHeaders] = useState<string>(
-    isNil(error) ? decodedTokenHeaders! : ""
+    isNil(error) ? decodedTokenHeaders! : "",
   );
 
   const tokenError = !isNil(error);
@@ -62,7 +62,7 @@ export default function JwtDecoder({
       setDecodedToken(isNil(error) ? decodedToken! : "");
       setDecodedTokenHeaders(isNil(error) ? decodedTokenHeaders! : "");
     },
-    [toolState, decodeJwtToken]
+    [toolState, decodeJwtToken],
   );
 
   const copyDecodedToken = useCallback(() => {
@@ -108,7 +108,7 @@ export default function JwtDecoder({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyDecodedToken, toolState]
+    [copyDecodedToken, toolState],
   );
 
   return (
@@ -127,7 +127,7 @@ export default function JwtDecoder({
         exampleOutput={JSON.stringify(
           { Role: "Admin", Issuer: "Sample Issuer" },
           null,
-          2
+          2,
         )}
       />
 
@@ -149,7 +149,9 @@ export default function JwtDecoder({
           themeOption="vs-dark"
           editorHeading="JWT Token"
           className={
-            toolState.isFullScreen ? "h-[40vh]" : "h-[35vh] min-h-[280px]"
+            toolState.isFullScreen
+              ? "h-full min-h-[320px]"
+              : "h-[35vh] min-h-[280px]"
           }
         />
       </div>

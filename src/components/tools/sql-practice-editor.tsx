@@ -21,10 +21,12 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
+  Button,
   Tooltip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DownloadIcon from "@mui/icons-material/Download";
 import StorageIcon from "@mui/icons-material/Storage";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -500,6 +502,29 @@ export default function SqlPracticeEditor({
     </Accordion>
   );
 
+  const downloadResultCsv = useCallback(
+    (result: QueryExecResult, index: number) => {
+      const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
+      const header = result.columns.map(escape).join(",");
+      const body = result.values
+        .map((row) =>
+          row
+            .map((cell) => escape(cell === null ? "" : String(cell)))
+            .join(","),
+        )
+        .join("\n");
+      const csv = `${header}\n${body}`;
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `query-result-${index + 1}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+    [],
+  );
+
   const renderQueryResults = () => {
     if (isLoading) {
       return (
@@ -584,14 +609,25 @@ export default function SqlPracticeEditor({
 
         {queryResult.map((result, index) => (
           <Box key={index} className="mb-6">
-            {queryResult.length > 1 && (
-              <Typography
-                variant="subtitle1"
-                className="mb-4 font-semibold text-blue-600 flex items-center gap-2"
+            <Box className="flex items-center justify-between mb-2">
+              {queryResult.length > 1 && (
+                <Typography
+                  variant="subtitle1"
+                  className="font-semibold text-blue-600 flex items-center gap-2"
+                >
+                  🔢 Result Set {index + 1}
+                </Typography>
+              )}
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                onClick={() => downloadResultCsv(result, index)}
+                sx={{ ml: "auto" }}
               >
-                🔢 Result Set {index + 1}
-              </Typography>
-            )}
+                Download CSV
+              </Button>
+            </Box>
             {result.columns.length > 4 && (
               <Typography
                 variant="caption"
