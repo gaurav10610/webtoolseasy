@@ -226,6 +226,31 @@ function hello() {
     [markdownContent, toolState],
   );
 
+  const handleImageDrop = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const file = event.dataTransfer.files?.[0];
+      if (!file || !file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imageMarkdown = `\n![${file.name}](${reader.result as string})\n`;
+        const updated = `${markdownContent || ""}${imageMarkdown}`;
+        setMarkdownContent(updated);
+        toolState.setCode(updated);
+        toolState.actions.showMessage("Image dropped into markdown!");
+      };
+      reader.readAsDataURL(file);
+    },
+    [markdownContent, toolState],
+  );
+
+  const handleDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+    },
+    [],
+  );
+
   // Button configuration
   const buttons = useMemo(
     () => [
@@ -340,6 +365,8 @@ function hello() {
       />
 
       <div
+        onDrop={handleImageDrop}
+        onDragOver={handleDragOver}
         className={`w-full h-[50vh] md:h-[65vh] min-h-[250px] md:min-h-[320px] ${
           toolState.isFullScreen ? "md:h-full" : ""
         }`}

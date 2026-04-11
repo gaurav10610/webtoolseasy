@@ -14,7 +14,7 @@ import {
   InputAdornment,
   Slider,
 } from "@mui/material";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
@@ -52,6 +52,7 @@ export default function SalaryCalculator({
   const [hoursPerWeek, setHoursPerWeek] = useState<number>(40);
   const [taxRate, setTaxRate] = useState<number>(20);
   const [result, setResult] = useState<SalaryResult | null>(null);
+  const pieRef = useRef<HTMLCanvasElement>(null);
 
   const toolState = useToolState({
     hostname: hostname || "",
@@ -146,6 +147,52 @@ export default function SalaryCalculator({
     setTaxRate(20);
     setResult(null);
   }, []);
+
+  // Draw pie chart when result changes
+  useEffect(() => {
+    const canvas = pieRef.current;
+    if (!canvas || !result) return;
+    const ctx = canvas.getContext("2d")!;
+    const W = canvas.width,
+      H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2,
+      cy = H / 2;
+    const radius = Math.min(cx, cy) - 8;
+    const inner = radius * 0.55;
+    const takeHomeFrac = 1 - result.effectiveTaxRate / 100;
+    const start = -Math.PI / 2;
+    const mid = start + takeHomeFrac * 2 * Math.PI;
+
+    // Take-home slice (green)
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, mid);
+    ctx.closePath();
+    ctx.fillStyle = "#4ade80";
+    ctx.fill();
+
+    // Tax slice (red)
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, mid, start + 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = "#f87171";
+    ctx.fill();
+
+    // Donut hole
+    ctx.beginPath();
+    ctx.arc(cx, cy, inner, 0, 2 * Math.PI);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    ctx.fillStyle = "#374151";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(`${(takeHomeFrac * 100).toFixed(0)}% Net`, cx, cy - 7);
+    ctx.fillText(`${result.effectiveTaxRate.toFixed(0)}% Tax`, cx, cy + 9);
+  }, [result]);
 
   const payPeriodLabels = {
     hourly: "Hourly",
@@ -440,43 +487,60 @@ export default function SalaryCalculator({
                 <Typography variant="h6" gutterBottom>
                   Salary Breakdown
                 </Typography>
-                {[
-                  {
-                    label: "Take-Home Pay",
-                    value: result.afterTaxAnnual,
-                    color: "#4ade80",
-                    pct: (1 - result.effectiveTaxRate / 100) * 100,
-                  },
-                  {
-                    label: "Tax Deduction",
-                    value: result.annual - result.afterTaxAnnual,
-                    color: "#f87171",
-                    pct: result.effectiveTaxRate,
-                  },
-                ].map(({ label, value, color, pct }) => (
-                  <div key={label} className="mb-3">
-                    <div className="flex justify-between mb-1">
-                      <Typography variant="body2">{label}</Typography>
-                      <Typography variant="body2" fontWeight="bold">
-                        {formatLargeCurrency(value)} ({pct.toFixed(1)}%)
-                      </Typography>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-4">
-                      <div
-                        className="h-4 rounded-full transition-all duration-500"
-                        style={{ width: `${pct}%`, backgroundColor: color }}
-                      />
+                <div className="flex flex-col md:flex-row items-center gap-4">
+                  <div className="flex flex-col items-center">
+                    <canvas ref={pieRef} width={160} height={160} />
+                    <div className="flex gap-3 mt-2">
+                      <span className="flex items-center gap-1 text-xs">
+                        <span className="inline-block w-3 h-3 rounded-sm bg-green-400" />{" "}
+                        Take-Home
+                      </span>
+                      <span className="flex items-center gap-1 text-xs">
+                        <span className="inline-block w-3 h-3 rounded-sm bg-red-400" />{" "}
+                        Tax
+                      </span>
                     </div>
                   </div>
-                ))}
-                <Divider sx={{ my: 2 }} />
-                <div className="flex justify-between">
-                  <Typography variant="body2" fontWeight="bold">
-                    Gross Annual
-                  </Typography>
-                  <Typography variant="body2" fontWeight="bold">
-                    {formatLargeCurrency(result.annual)}
-                  </Typography>
+                  <div className="flex-1 space-y-3">
+                    {[
+                      {
+                        label: "Take-Home Pay",
+                        value: result.afterTaxAnnual,
+                        color: "#4ade80",
+                        pct: (1 - result.effectiveTaxRate / 100) * 100,
+                      },
+                      {
+                        label: "Tax Deduction",
+                        value: result.annual - result.afterTaxAnnual,
+                        color: "#f87171",
+                        pct: result.effectiveTaxRate,
+                      },
+                    ].map(({ label, value, color, pct }) => (
+                      <div key={label}>
+                        <div className="flex justify-between mb-1">
+                          <Typography variant="body2">{label}</Typography>
+                          <Typography variant="body2" fontWeight="bold">
+                            {formatLargeCurrency(value)} ({pct.toFixed(1)}%)
+                          </Typography>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-4">
+                          <div
+                            className="h-4 rounded-full transition-all duration-500"
+                            style={{ width: `${pct}%`, backgroundColor: color }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                    <Divider sx={{ my: 1 }} />
+                    <div className="flex justify-between">
+                      <Typography variant="body2" fontWeight="bold">
+                        Gross Annual
+                      </Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        {formatLargeCurrency(result.annual)}
+                      </Typography>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>

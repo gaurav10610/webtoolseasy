@@ -11,6 +11,7 @@ import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
+import { buildWebM, type MuxChunk } from "@/lib/webmMuxer";
 
 enum ProcessingState {
   IDLE = "idle",
@@ -64,6 +65,9 @@ export default function VideoCompressor({
   });
 
   const [compressedExtension, setCompressedExtension] = useState("mp4");
+  const [encodingEngine, setEncodingEngine] = useState<
+    "webcodecs" | "mediarecorder" | ""
+  >("");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -125,6 +129,7 @@ export default function VideoCompressor({
       setProgress("Preparing...");
       setProgressPercent(0);
       setEtaSeconds(null);
+      setEncodingEngine("");
       processingStartedAtRef.current = Date.now();
 
       const fullDuration = video.duration || videoDuration || 0;
@@ -158,6 +163,207 @@ export default function VideoCompressor({
       canvas.height = outH;
       const ctx = canvas.getContext("2d")!;
 
+      // Helper: update progress UI
+      const updateProgressUI = (
+        currentTime: number,
+        start: number,
+        duration: number,
+      ) => {
+        const pct = Math.min(
+          100,
+          Math.max(0, ((currentTime - start) / duration) * 100),
+        );
+        const rounded = Math.round(pct);
+        setProgress(`Compressing: ${rounded}%`);
+        setProgressPercent(rounded);
+        if (processingStartedAtRef.current && rounded > 0) {
+          const elapsed = (Date.now() - processingStartedAtRef.current) / 1000;
+          setEtaSeconds(
+            Math.max(0, Math.round((elapsed / rounded) * (100 - rounded))),
+          );
+        }
+      };
+
+      // Helper: seek video to start position and wait
+      const seekToStart = async () => {
+        video.muted = true;
+        await new Promise<void>((resolve) => {
+          if (video.readyState >= 3) {
+            resolve();
+            return;
+          }
+          video.oncanplay = () => resolve();
+        });
+        await new Promise<void>((resolve) => {
+          video.addEventListener("seeked", () => resolve(), { once: true });
+          video.currentTime = effectiveStart;
+          if (Math.abs(video.currentTime - effectiveStart) < 0.05) {
+            resolve();
+          }
+        });
+      };
+
+      // Helper: finalise result
+      const finalise = (blob: Blob, ext: string) => {
+        setCompressedExtension(ext);
+        setCompressedBlob(blob);
+        setCompressedSize(blob.size);
+        const url = URL.createObjectURL(blob);
+        setCompressedUrl(url);
+        setProcessingState(ProcessingState.COMPLETED);
+        setProgress("");
+        setProgressPercent(100);
+        setEtaSeconds(0);
+        video.muted = false;
+        const reduction = ((1 - blob.size / originalSize) * 100).toFixed(1);
+        toolState.actions.showMessage(
+          `Video compressed! Size reduced by ${reduction}%`,
+        );
+      };
+
+      /* ---- Try WebCodecs (VideoEncoder + VideoFrame) first ---- */
+      const hasWebCodecs =
+        typeof VideoEncoder !== "undefined" &&
+        typeof VideoFrame !== "undefined";
+
+      if (hasWebCodecs) {
+        // Pick a supported codec – prefer VP9, fall back to VP8
+        let codec = "vp09.00.10.08"; // VP9 profile 0, level 1
+        let codecId = "V_VP9";
+        const vp9Config: VideoEncoderConfig = {
+          codec,
+          width: outW,
+          height: outH,
+          bitrate: settings.bitrate * 1000,
+          framerate: 30,
+        };
+        const vp9Ok = await VideoEncoder.isConfigSupported(vp9Config);
+        if (!vp9Ok.supported) {
+          codec = "vp8";
+          codecId = "V_VP8";
+          const vp8Config: VideoEncoderConfig = {
+            codec,
+            width: outW,
+            height: outH,
+            bitrate: settings.bitrate * 1000,
+            framerate: 30,
+          };
+          const vp8Ok = await VideoEncoder.isConfigSupported(vp8Config);
+          if (!vp8Ok.supported) {
+            // Neither VP9 nor VP8 supported – fall through to MediaRecorder
+            throw new Error("WebCodecs: no supported codec");
+          }
+        }
+
+        try {
+          setEncodingEngine("webcodecs");
+          const encodedChunks: MuxChunk[] = [];
+          let encoderError: Error | null = null;
+
+          const encoder = new VideoEncoder({
+            output: (chunk, meta) => {
+              const buf = new Uint8Array(chunk.byteLength);
+              chunk.copyTo(buf);
+              encodedChunks.push({
+                data: buf,
+                timestampUs: chunk.timestamp,
+                isKey:
+                  meta?.decoderConfig !== undefined || chunk.type === "key",
+              });
+            },
+            error: (e) => {
+              encoderError = e;
+            },
+          });
+
+          encoder.configure({
+            codec,
+            width: outW,
+            height: outH,
+            bitrate: settings.bitrate * 1000,
+            framerate: 30,
+          });
+
+          await seekToStart();
+
+          // Play video and encode frames via Canvas → VideoFrame → VideoEncoder
+          let frameCount = 0;
+          await new Promise<void>((resolve, reject) => {
+            let animId: number;
+            const draw = () => {
+              if (encoderError) {
+                cancelAnimationFrame(animId);
+                reject(encoderError);
+                return;
+              }
+              const reachedEnd = video.currentTime >= effectiveEnd;
+              if (!video.ended && !reachedEnd) {
+                ctx.drawImage(video, 0, 0, outW, outH);
+                const frame = new VideoFrame(canvas, {
+                  timestamp: Math.round(
+                    (video.currentTime - effectiveStart) * 1_000_000,
+                  ),
+                });
+                const needKey = frameCount % 150 === 0; // keyframe every ~5s
+                encoder.encode(frame, { keyFrame: needKey });
+                frame.close();
+                frameCount++;
+                updateProgressUI(
+                  video.currentTime,
+                  effectiveStart,
+                  segmentDuration,
+                );
+                animId = requestAnimationFrame(draw);
+              } else {
+                ctx.drawImage(video, 0, 0, outW, outH);
+                const frame = new VideoFrame(canvas, {
+                  timestamp: Math.round(
+                    (video.currentTime - effectiveStart) * 1_000_000,
+                  ),
+                });
+                encoder.encode(frame, { keyFrame: false });
+                frame.close();
+                cancelAnimationFrame(animId);
+                video.pause();
+                resolve();
+              }
+            };
+
+            video.onended = () => {
+              cancelAnimationFrame(animId);
+              video.pause();
+              resolve();
+            };
+
+            animId = requestAnimationFrame(draw);
+            video.play().catch(reject);
+          });
+
+          await encoder.flush();
+          encoder.close();
+
+          if (encoderError) throw encoderError;
+
+          setProgress("Muxing WebM...");
+          const blob = buildWebM({
+            width: outW,
+            height: outH,
+            durationMs: Math.round(segmentDuration * 1000),
+            codecId,
+            chunks: encodedChunks,
+          });
+
+          finalise(blob, "webm");
+          return; // Success – skip MediaRecorder path
+        } catch {
+          // WebCodecs encoding failed – fall through to MediaRecorder
+          setEncodingEngine("");
+        }
+      }
+
+      /* ---- Fallback: Canvas + MediaRecorder ---- */
+      setEncodingEngine("mediarecorder");
+
       // Canvas stream for video frames
       const canvasStream = canvas.captureStream(30);
 
@@ -177,7 +383,6 @@ export default function VideoCompressor({
           MediaRecorder.isTypeSupported(m),
         ) ?? "video/webm";
       const extension = mimeType.startsWith("video/mp4") ? "mp4" : "webm";
-      setCompressedExtension(extension);
 
       const recorder = new MediaRecorder(canvasStream, {
         mimeType,
@@ -197,52 +402,14 @@ export default function VideoCompressor({
 
       recorder.start(500);
 
-      // Mute the element itself so we don't double-play audio through speakers
-      video.muted = true;
-      await new Promise<void>((resolve) => {
-        if (video.readyState >= 3) {
-          resolve();
-          return;
-        }
-        video.oncanplay = () => resolve();
-      });
-
-      await new Promise<void>((resolve) => {
-        const handleSeeked = () => resolve();
-        video.addEventListener("seeked", handleSeeked, { once: true });
-        video.currentTime = effectiveStart;
-        if (Math.abs(video.currentTime - effectiveStart) < 0.05) {
-          resolve();
-        }
-      });
+      await seekToStart();
 
       let animFrameId: number;
       const drawFrame = () => {
         const reachedTrimEnd = video.currentTime >= effectiveEnd;
         if (!video.ended && !reachedTrimEnd) {
           ctx.drawImage(video, 0, 0, outW, outH);
-          const segmentProgress = Math.min(
-            100,
-            Math.max(
-              0,
-              ((video.currentTime - effectiveStart) / segmentDuration) * 100,
-            ),
-          );
-          const roundedProgress = Math.round(segmentProgress);
-          setProgress(`Compressing: ${roundedProgress}%`);
-          setProgressPercent(roundedProgress);
-          if (processingStartedAtRef.current && roundedProgress > 0) {
-            const elapsed =
-              (Date.now() - processingStartedAtRef.current) / 1000;
-            setEtaSeconds(
-              Math.max(
-                0,
-                Math.round(
-                  (elapsed / roundedProgress) * (100 - roundedProgress),
-                ),
-              ),
-            );
-          }
+          updateProgressUI(video.currentTime, effectiveStart, segmentDuration);
           animFrameId = requestAnimationFrame(drawFrame);
         } else {
           ctx.drawImage(video, 0, 0, outW, outH);
@@ -261,23 +428,7 @@ export default function VideoCompressor({
       await video.play();
 
       const blob = await completionPromise;
-
-      // Restore video element
-      video.muted = false;
-
-      setCompressedBlob(blob);
-      setCompressedSize(blob.size);
-      const url = URL.createObjectURL(blob);
-      setCompressedUrl(url);
-      setProcessingState(ProcessingState.COMPLETED);
-      setProgress("");
-      setProgressPercent(100);
-      setEtaSeconds(0);
-
-      const reduction = ((1 - blob.size / originalSize) * 100).toFixed(1);
-      toolState.actions.showMessage(
-        `Video compressed! Size reduced by ${reduction}%`,
-      );
+      finalise(blob, extension);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to compress video";
@@ -489,6 +640,18 @@ export default function VideoCompressor({
             {progressPercent > 0 && etaSeconds !== null
               ? ` • ETA ~${etaSeconds}s`
               : ""}
+            {encodingEngine && (
+              <Typography
+                variant="caption"
+                component="span"
+                sx={{ ml: 1, opacity: 0.8 }}
+              >
+                Engine:{" "}
+                {encodingEngine === "webcodecs"
+                  ? "WebCodecs (hardware-accelerated)"
+                  : "MediaRecorder"}
+              </Typography>
+            )}
           </Alert>
         )}
 

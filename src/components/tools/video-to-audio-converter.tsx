@@ -74,6 +74,119 @@ function audioBufferToWav(buffer: AudioBuffer): ArrayBuffer {
 }
 
 // ---------------------------------------------------------------------------
+// WebCodecs path: AudioContext.decodeAudioData → AudioEncoder (Opus) → WebM
+// Uses the WebCodecs AudioEncoder API for hardware-accelerated encoding when
+// available, otherwise falls back to the MediaRecorder or FFmpeg paths.
+// ---------------------------------------------------------------------------
+async function encodeAudioWithWebCodecs(
+  file: File,
+  onProgress: (pct: number) => void,
+): Promise<{ blob: Blob; ext: string } | null> {
+  if (typeof AudioEncoder === "undefined" || typeof AudioData === "undefined") {
+    return null; // WebCodecs AudioEncoder not available
+  }
+
+  try {
+    const config: AudioEncoderConfig = {
+      codec: "opus",
+      sampleRate: 48000,
+      numberOfChannels: 2,
+      bitrate: 128_000,
+    };
+    const supported = await AudioEncoder.isConfigSupported(config);
+    if (!supported.supported) return null;
+
+    const arrayBuffer = await file.arrayBuffer();
+    const audioCtx = new AudioContext({ sampleRate: 48000 });
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    await audioCtx.close();
+
+    onProgress(30);
+
+    // Collect encoded Opus packets
+    const packets: { data: Uint8Array; timestamp: number }[] = [];
+    let encodeError: Error | null = null;
+
+    const encoder = new AudioEncoder({
+      output: (chunk) => {
+        const buf = new Uint8Array(chunk.byteLength);
+        chunk.copyTo(buf);
+        packets.push({ data: buf, timestamp: chunk.timestamp });
+      },
+      error: (e) => {
+        encodeError = e;
+      },
+    });
+
+    encoder.configure(config);
+
+    // Feed decoded audio samples in chunks of 960 frames (20ms at 48kHz, the Opus default)
+    const chunkSize = 960;
+    const numChannels = Math.min(audioBuffer.numberOfChannels, 2);
+    const sampleRate = audioBuffer.sampleRate;
+    const totalFrames = audioBuffer.length;
+    const channelData: Float32Array[] = [];
+    for (let ch = 0; ch < numChannels; ch++) {
+      channelData.push(audioBuffer.getChannelData(ch));
+    }
+
+    for (let offset = 0; offset < totalFrames; offset += chunkSize) {
+      if (encodeError) throw encodeError;
+      const frames = Math.min(chunkSize, totalFrames - offset);
+      const interleaved = new Float32Array(frames * numChannels);
+      for (let i = 0; i < frames; i++) {
+        for (let ch = 0; ch < numChannels; ch++) {
+          interleaved[i * numChannels + ch] = channelData[ch][offset + i];
+        }
+      }
+      const audioData = new AudioData({
+        format: "f32-planar" as AudioSampleFormat,
+        sampleRate,
+        numberOfFrames: frames,
+        numberOfChannels: numChannels,
+        timestamp: Math.round((offset / sampleRate) * 1_000_000),
+        data: interleaved,
+      });
+      encoder.encode(audioData);
+      audioData.close();
+      onProgress(30 + Math.round((offset / totalFrames) * 60));
+    }
+
+    await encoder.flush();
+    encoder.close();
+
+    if (encodeError) throw encodeError;
+    onProgress(95);
+
+    // Wrap Opus packets into an OGG/Opus container using a minimal builder
+    // For simplicity we produce a WebM-audio container via the same muxer pattern
+    // Most players handle Opus-in-WebM natively
+    const { buildWebM } = await import("@/lib/webmMuxer");
+    const durationMs = Math.round(
+      (audioBuffer.length / audioBuffer.sampleRate) * 1000,
+    );
+    const blob = buildWebM({
+      width: 0,
+      height: 0,
+      durationMs,
+      codecId: "A_OPUS",
+      chunks: packets.map((p) => ({
+        data: p.data,
+        timestampUs: p.timestamp,
+        isKey: true,
+      })),
+    });
+
+    onProgress(100);
+    return { blob: new Blob([blob], { type: "audio/webm" }), ext: "webm" };
+  } catch {
+    return null; // Encoding failed, caller should fall back
+  }
+}
+
+type EncodingEngine = "webcodecs" | "webaudio" | "mediarecorder" | "ffmpeg";
+
+// ---------------------------------------------------------------------------
 // Fast path: AudioContext.decodeAudioData → WAV (no real-time playback needed)
 // ---------------------------------------------------------------------------
 async function extractAudioFast(
@@ -273,6 +386,7 @@ interface AudioEntry {
   etaSeconds?: number;
   resultBlob?: Blob;
   resultExt?: string;
+  engine?: EncodingEngine;
   error?: string;
 }
 
@@ -350,6 +464,7 @@ export default function VideoToAudioConverter() {
         if (!entry) return;
 
         let result: { blob: Blob; ext: string };
+        let engine: EncodingEngine = "webaudio";
 
         const updateProgress = (pct: number) => {
           setEntries((prev) =>
@@ -370,6 +485,7 @@ export default function VideoToAudioConverter() {
         if (audioFormat === "wav") {
           try {
             result = await extractAudioFast(entry.file);
+            engine = "webaudio";
           } catch {
             result = await extractAudioRealtime(
               entry.file,
@@ -381,19 +497,31 @@ export default function VideoToAudioConverter() {
                 ext: "wav",
               },
             );
+            engine = "mediarecorder";
           }
           updateProgress(100);
         } else if (audioFormat === "ogg") {
-          result = await extractAudioRealtime(
+          // Try WebCodecs AudioEncoder for Opus first
+          const webCodecsResult = await encodeAudioWithWebCodecs(
             entry.file,
             updateProgress,
-            ac.signal,
-            {
-              preferredMimeType: "audio/ogg;codecs=opus",
-              audioBitsPerSecond: parseInt(bitrate, 10) * 1000,
-              ext: "ogg",
-            },
           );
+          if (webCodecsResult) {
+            result = webCodecsResult;
+            engine = "webcodecs";
+          } else {
+            result = await extractAudioRealtime(
+              entry.file,
+              updateProgress,
+              ac.signal,
+              {
+                preferredMimeType: "audio/ogg;codecs=opus",
+                audioBitsPerSecond: parseInt(bitrate, 10) * 1000,
+                ext: "ogg",
+              },
+            );
+            engine = "mediarecorder";
+          }
         } else if (
           audioFormat === "mp3" ||
           audioFormat === "flac" ||
@@ -405,6 +533,7 @@ export default function VideoToAudioConverter() {
             bitrate,
             updateProgress,
           );
+          engine = "ffmpeg";
           updateProgress(100);
         } else {
           result = await extractAudioRealtime(
@@ -417,6 +546,7 @@ export default function VideoToAudioConverter() {
               ext: "m4a",
             },
           );
+          engine = "mediarecorder";
         }
 
         setEntries((prev) =>
@@ -428,6 +558,7 @@ export default function VideoToAudioConverter() {
                   progress: 100,
                   resultBlob: result.blob,
                   resultExt: result.ext,
+                  engine,
                 }
               : e,
           ),
@@ -582,6 +713,21 @@ export default function VideoToAudioConverter() {
                       <Chip
                         label={`.${entry.resultExt?.toUpperCase() ?? "WAV"}`}
                         color="success"
+                        size="small"
+                      />
+                    )}
+                    {entry.status === "done" && entry.engine && (
+                      <Chip
+                        label={
+                          entry.engine === "webcodecs"
+                            ? "WebCodecs"
+                            : entry.engine === "webaudio"
+                              ? "Web Audio"
+                              : entry.engine === "ffmpeg"
+                                ? "FFmpeg"
+                                : "MediaRecorder"
+                        }
+                        variant="outlined"
                         size="small"
                       />
                     )}

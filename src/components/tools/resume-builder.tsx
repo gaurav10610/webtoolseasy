@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -116,6 +116,65 @@ export default function ResumeBuilder({
   });
 
   const [skillInput, setSkillInput] = useState("");
+
+  const loadSampleTemplate = useCallback(() => {
+    setResumeData({
+      fullName: "Jane Smith",
+      email: "jane.smith@email.com",
+      phone: "+1 (555) 123-4567",
+      location: "San Francisco, CA",
+      linkedin: "linkedin.com/in/janesmith",
+      website: "janesmith.dev",
+      summary:
+        "Full-stack software engineer with 5+ years of experience building scalable web applications. Proficient in React, Node.js, and cloud infrastructure. Passionate about clean code and user-centric design.",
+      experiences: [
+        {
+          id: 1,
+          jobTitle: "Senior Software Engineer",
+          company: "Tech Corp",
+          location: "San Francisco, CA",
+          startDate: "2022-01",
+          endDate: "",
+          currentJob: true,
+          description:
+            "Led a team of 4 engineers to redesign the customer dashboard, improving page load times by 40%. Built microservices with Node.js and deployed on AWS ECS.",
+        },
+        {
+          id: 2,
+          jobTitle: "Software Engineer",
+          company: "StartupXYZ",
+          location: "Remote",
+          startDate: "2019-06",
+          endDate: "2021-12",
+          currentJob: false,
+          description:
+            "Developed React-based SPA serving 50K+ users. Integrated Stripe payments and built a real-time notification system using WebSockets.",
+        },
+      ],
+      education: [
+        {
+          id: 1,
+          degree: "B.S. Computer Science",
+          institution: "University of California, Berkeley",
+          location: "Berkeley, CA",
+          graduationYear: "2019",
+          gpa: "3.8",
+        },
+      ],
+      skills: [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Python",
+        "AWS",
+        "PostgreSQL",
+        "Docker",
+        "GraphQL",
+      ],
+      template: "modern",
+    });
+    toolState.actions.showMessage("Sample resume template loaded!");
+  }, [toolState.actions]);
 
   const handleInputChange = (field: keyof ResumeData, value: string) => {
     setResumeData((prev) => ({ ...prev, [field]: value }));
@@ -449,6 +508,12 @@ export default function ResumeBuilder({
       onClick: generatePDF,
       icon: <DownloadIcon />,
       variant: "contained" as const,
+    },
+    {
+      type: "custom" as const,
+      text: "Load Example",
+      onClick: loadSampleTemplate,
+      variant: "outlined" as const,
     },
     {
       type: "custom" as const,

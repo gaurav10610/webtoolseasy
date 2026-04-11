@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Alert from "@mui/material/Alert";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import TablePagination from "@mui/material/TablePagination";
+import TextField from "@mui/material/TextField";
 import isEmpty from "lodash-es/isEmpty";
 import map from "lodash-es/map";
 import { ReactNode, useState, useMemo } from "react";
@@ -96,10 +97,19 @@ export function CsvDataTable({
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [filterText, setFilterText] = useState("");
+
+  const filteredRows = useMemo(() => {
+    if (!filterText.trim()) return rows;
+    const lower = filterText.toLowerCase();
+    return rows.filter((row) =>
+      row.some((cell) => (cell ?? "").toLowerCase().includes(lower)),
+    );
+  }, [rows, filterText]);
 
   const sortedRows = useMemo(() => {
-    if (sortCol === null) return rows;
-    return [...rows].sort((a, b) => {
+    if (sortCol === null) return filteredRows;
+    return [...filteredRows].sort((a, b) => {
       const av = a[sortCol] ?? "";
       const bv = b[sortCol] ?? "";
       const numA = parseFloat(av),
@@ -108,7 +118,7 @@ export function CsvDataTable({
       const cmp = isNum ? numA - numB : av.localeCompare(bv);
       return sortDir === "asc" ? cmp : -cmp;
     });
-  }, [rows, sortCol, sortDir]);
+  }, [filteredRows, sortCol, sortDir]);
 
   const pageRows = useMemo(
     () =>
@@ -130,6 +140,17 @@ export function CsvDataTable({
 
   return (
     <div className={className}>
+      <TextField
+        size="small"
+        placeholder="Filter rows..."
+        value={filterText}
+        onChange={(e) => {
+          setFilterText(e.target.value);
+          setPage(0);
+        }}
+        fullWidth
+        sx={{ mb: 1 }}
+      />
       <div style={{ maxHeight, overflow: "auto" }}>
         <TableContainer component={Paper}>
           <Table stickyHeader={stickyHeader} size="small">

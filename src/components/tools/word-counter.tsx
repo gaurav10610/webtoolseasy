@@ -175,6 +175,10 @@ export default function WordCounter({
       lines,
       readingTime: readingTimeMinutes,
       speakingTime: speakingTimeMinutes,
+      avgSentenceLength:
+        sentences.length > 0
+          ? +(words.length / sentences.length).toFixed(1)
+          : 0,
       flesch,
       topKeywords,
     };
@@ -327,6 +331,18 @@ export default function WordCounter({
               className="!text-center"
             >
               Min Speak
+            </Typography>
+          </div>
+          <div className="flex flex-col items-center p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <Typography variant="h4" className="!font-bold !text-cyan-600">
+              {stats.avgSentenceLength}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className="!text-center"
+            >
+              Avg Sent Len
             </Typography>
           </div>
         </div>

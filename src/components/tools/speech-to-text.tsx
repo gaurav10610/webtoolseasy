@@ -135,10 +135,15 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
   const [isSupported, setIsSupported] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [results, setResults] = useState<SpeechRecognitionResult[]>([]);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioMimeType, setAudioMimeType] = useState<string>("audio/webm");
 
   // Refs
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const recordedChunksRef = useRef<BlobPart[]>([]);
 
   // Snackbar handler
   const handleSnackBarClose = () => setIsSnackBarOpen(false);
@@ -148,6 +153,85 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     setIsSnackBarOpen(true);
   };
 
+  const getBestAudioMimeType = useCallback(() => {
+    if (typeof MediaRecorder === "undefined") {
+      return "";
+    }
+
+    const candidates = [
+      "audio/webm;codecs=opus",
+      "audio/webm",
+      "audio/mp4",
+      "audio/ogg;codecs=opus",
+      "audio/ogg",
+    ];
+
+    return candidates.find((mime) => MediaRecorder.isTypeSupported(mime)) || "";
+  }, []);
+
+  const startAudioRecording = useCallback(async () => {
+    if (
+      typeof navigator === "undefined" ||
+      !navigator.mediaDevices?.getUserMedia ||
+      typeof MediaRecorder === "undefined"
+    ) {
+      setError("Audio recording download is not supported in this browser.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mimeType = getBestAudioMimeType();
+      const recorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+
+      recordedChunksRef.current = [];
+      mediaRecorderRef.current = recorder;
+      mediaStreamRef.current = stream;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        if (recordedChunksRef.current.length > 0) {
+          const blob = new Blob(recordedChunksRef.current, {
+            type: mimeType || "audio/webm",
+          });
+          setAudioBlob(blob);
+          setAudioMimeType(blob.type || mimeType || "audio/webm");
+          showMessage("Audio recording is ready to download");
+        }
+
+        if (mediaStreamRef.current) {
+          mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+          mediaStreamRef.current = null;
+        }
+      };
+
+      recorder.start(250);
+      setAudioBlob(null);
+      setError("");
+    } catch {
+      setError(
+        "Unable to access microphone for audio recording. Please check permissions.",
+      );
+    }
+  }, [getBestAudioMimeType]);
+
+  const stopAudioRecording = useCallback(() => {
+    const recorder = mediaRecorderRef.current;
+    if (recorder && recorder.state !== "inactive") {
+      recorder.stop();
+    } else if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
+    }
+  }, []);
+
   // Check browser support
   useEffect(() => {
     const SpeechRecognition =
@@ -156,7 +240,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
       setIsSupported(true);
     } else {
       setError(
-        "Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari."
+        "Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.",
       );
     }
   }, []);
@@ -179,6 +263,12 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
       }
     };
   }, [isRecording, isPaused]);
+
+  useEffect(() => {
+    return () => {
+      stopAudioRecording();
+    };
+  }, [stopAudioRecording]);
 
   // Initialize speech recognition
   const initializeRecognition = useCallback(() => {
@@ -252,7 +342,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
   }, [language, continuous, interimResults]);
 
   // Start recording
-  const startRecording = useCallback(() => {
+  const startRecording = useCallback(async () => {
     if (!isSupported) {
       setError("Speech recognition not supported");
       return;
@@ -261,17 +351,19 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     const recognition = initializeRecognition();
     if (recognition) {
       recognitionRef.current = recognition;
+      await startAudioRecording();
       recognition.start();
       setRecordingTime(0);
     }
-  }, [isSupported, initializeRecognition]);
+  }, [isSupported, initializeRecognition, startAudioRecording]);
 
   // Stop recording
   const stopRecording = useCallback(() => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
     }
-  }, []);
+    stopAudioRecording();
+  }, [stopAudioRecording]);
 
   // Pause/Resume recording
   const togglePause = useCallback(() => {
@@ -280,11 +372,17 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
       if (recognitionRef.current) {
         recognitionRef.current.start();
       }
+      if (mediaRecorderRef.current?.state === "paused") {
+        mediaRecorderRef.current.resume();
+      }
       setIsPaused(false);
     } else {
       // Pause recording
       if (recognitionRef.current) {
         recognitionRef.current.stop();
+      }
+      if (mediaRecorderRef.current?.state === "recording") {
+        mediaRecorderRef.current.pause();
       }
       setIsPaused(true);
     }
@@ -298,6 +396,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     setResults([]);
     setConfidence(null);
     setIsEditMode(false);
+    setAudioBlob(null);
     showMessage("Transcript cleared");
   }, []);
 
@@ -332,7 +431,7 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       setEditableTranscript(event.target.value);
     },
-    []
+    [],
   );
 
   // Copy to clipboard
@@ -374,6 +473,29 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
     URL.revokeObjectURL(url);
     showMessage("Transcript downloaded");
   }, [transcript, interimTranscript, isEditMode, editableTranscript]);
+
+  const downloadRecordedAudio = useCallback(() => {
+    if (!audioBlob) {
+      showMessage("No recorded audio available to download");
+      return;
+    }
+
+    const extension = audioMimeType.includes("mp4")
+      ? "m4a"
+      : audioMimeType.includes("ogg")
+        ? "ogg"
+        : "webm";
+
+    const url = URL.createObjectURL(audioBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `speech-recording-${
+      new Date().toISOString().split("T")[0]
+    }.${extension}`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showMessage("Recorded audio downloaded");
+  }, [audioBlob, audioMimeType]);
 
   // Format recording time
   const formatTime = (seconds: number) => {
@@ -519,7 +641,17 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
                 variant="outlined"
                 color="success"
               >
-                Download
+                Download Text
+              </Button>
+
+              <Button
+                startIcon={<DownloadIcon />}
+                onClick={downloadRecordedAudio}
+                disabled={!audioBlob}
+                variant="outlined"
+                color="secondary"
+              >
+                Download Audio
               </Button>
             </div>
 
@@ -594,8 +726,8 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
                     confidence > 0.8
                       ? "success"
                       : confidence > 0.6
-                      ? "warning"
-                      : "error"
+                        ? "warning"
+                        : "error"
                   }
                 />
               </div>
@@ -710,8 +842,8 @@ export default function SpeechToText({}: Readonly<ToolComponentProps>) {
                           result.confidence > 0.8
                             ? "success"
                             : result.confidence > 0.6
-                            ? "warning"
-                            : "error"
+                              ? "warning"
+                              : "error"
                         }
                       />
                     </div>

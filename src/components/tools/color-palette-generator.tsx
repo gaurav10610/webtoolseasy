@@ -169,11 +169,13 @@ export default function ColorPaletteGenerator() {
 
   const exportText = useMemo(() => {
     const colors =
-      exportTab === 2 && extractedColors.length ? extractedColors : palette;
+      exportTab === 3 && extractedColors.length ? extractedColors : palette;
     if (exportTab === 0)
       return `:root {\n${colors.map((c, i) => `  --color-${i}: ${c};`).join("\n")}\n}`;
     if (exportTab === 1)
       return `// tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n${colors.map((c, i) => `        color${i}: "${c}",`).join("\n")}\n      },\n    },\n  },\n};`;
+    if (exportTab === 2)
+      return colors.map((c, i) => `$color-${i}: ${c};`).join("\n");
     return colors.map((c, i) => `$color-${i}: ${c};`).join("\n");
   }, [palette, extractedColors, exportTab]);
 
@@ -418,6 +420,7 @@ export default function ColorPaletteGenerator() {
               <Tabs value={exportTab} onChange={(_e, v) => setExportTab(v)}>
                 <Tab label="CSS Variables" />
                 <Tab label="Tailwind" />
+                <Tab label="Sass" />
                 {extractedColors.length > 0 && <Tab label="Extracted" />}
               </Tabs>
             </Box>
