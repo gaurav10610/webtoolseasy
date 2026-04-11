@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { SnackBarWithPosition } from "../lib/snackBar";
 
 interface ToolLayoutProps {
@@ -20,6 +20,16 @@ export const ToolLayout = memo(function ToolLayout({
   snackBar,
   className = "",
 }: ToolLayoutProps) {
+  const [feedback, setFeedback] = useState<"helpful" | "needs-work" | null>(
+    null,
+  );
+
+  const shortcutItems = [
+    { key: "⌘/Ctrl + Enter", label: "Run, generate, or preview" },
+    { key: "⌘/Ctrl + S", label: "Format or save where supported" },
+    { key: "Esc", label: "Exit fullscreen panels" },
+  ] as const;
+
   return (
     <div
       className={`flex w-full min-h-0 flex-col gap-4 ${
@@ -38,6 +48,55 @@ export const ToolLayout = memo(function ToolLayout({
         />
       )}
       {children}
+
+      <div className="rounded-lg border border-slate-200 bg-slate-50/90 p-3 text-sm text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-200">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="font-semibold">Tool feedback & shortcuts</p>
+            <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+              Quick controls are available on most editors and generators.
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {shortcutItems.map((item) => (
+                <span
+                  key={item.key}
+                  className="rounded-full border border-slate-200 bg-white px-2 py-1 text-xs dark:border-slate-600 dark:bg-slate-800"
+                >
+                  <strong>{item.key}</strong> — {item.label}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
+              Was this tool helpful?
+            </span>
+            <button
+              type="button"
+              onClick={() => setFeedback("helpful")}
+              className={`rounded-md border px-3 py-1 text-xs transition ${
+                feedback === "helpful"
+                  ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+                  : "border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800"
+              }`}
+            >
+              👍 Helpful
+            </button>
+            <button
+              type="button"
+              onClick={() => setFeedback("needs-work")}
+              className={`rounded-md border px-3 py-1 text-xs transition ${
+                feedback === "needs-work"
+                  ? "border-amber-500 bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+                  : "border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800"
+              }`}
+            >
+              👎 Needs work
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 });

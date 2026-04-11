@@ -44,7 +44,7 @@ export default function RetirementCalculator({
       retirementAge: number,
       currentSavings: number,
       monthlyContribution: number,
-      annualReturnRate: number
+      annualReturnRate: number,
     ): RetirementCalculation => {
       const yearsUntilRetirement = retirementAge - currentAge;
       const months = yearsUntilRetirement * 12;
@@ -81,7 +81,7 @@ export default function RetirementCalculator({
         yearsUntilRetirement,
       };
     },
-    []
+    [],
   );
 
   const retirementResults = useMemo(
@@ -91,7 +91,7 @@ export default function RetirementCalculator({
         retirementAge,
         currentSavings,
         monthlyContribution,
-        expectedReturnRate
+        expectedReturnRate,
       ),
     [
       currentAge,
@@ -100,7 +100,7 @@ export default function RetirementCalculator({
       monthlyContribution,
       expectedReturnRate,
       calculateRetirement,
-    ]
+    ],
   );
 
   const handleCurrentAgeChange = useCallback(
@@ -110,7 +110,7 @@ export default function RetirementCalculator({
         setCurrentAge(value);
       }
     },
-    []
+    [],
   );
 
   const handleRetirementAgeChange = useCallback(
@@ -120,7 +120,7 @@ export default function RetirementCalculator({
         setRetirementAge(value);
       }
     },
-    []
+    [],
   );
 
   const handleCurrentSavingsChange = useCallback(
@@ -130,7 +130,7 @@ export default function RetirementCalculator({
         setCurrentSavings(value);
       }
     },
-    []
+    [],
   );
 
   const handleMonthlyContributionChange = useCallback(
@@ -140,7 +140,7 @@ export default function RetirementCalculator({
         setMonthlyContribution(value);
       }
     },
-    []
+    [],
   );
 
   const handleReturnRateChange = useCallback(
@@ -150,7 +150,7 @@ export default function RetirementCalculator({
         setExpectedReturnRate(value);
       }
     },
-    []
+    [],
   );
 
   const formatCurrency = (value: number): string => {
@@ -311,7 +311,7 @@ export default function RetirementCalculator({
                         </Typography>
                         <Typography variant="h6" fontWeight="bold">
                           {formatCurrency(
-                            retirementResults.monthlyIncomeAt4Percent
+                            retirementResults.monthlyIncomeAt4Percent,
                           )}
                         </Typography>
                         <Typography variant="caption" sx={{ opacity: 0.8 }}>
@@ -347,7 +347,10 @@ export default function RetirementCalculator({
                   },
                   {
                     label: "Future Contributions",
-                    value: monthlyContribution * retirementResults.yearsUntilRetirement * 12,
+                    value:
+                      monthlyContribution *
+                      retirementResults.yearsUntilRetirement *
+                      12,
                     color: "#34d399",
                   },
                   {
@@ -356,9 +359,10 @@ export default function RetirementCalculator({
                     color: "#f59e0b",
                   },
                 ].map(({ label, value, color }) => {
-                  const pct = retirementResults.totalSavings > 0
-                    ? (value / retirementResults.totalSavings) * 100
-                    : 0;
+                  const pct =
+                    retirementResults.totalSavings > 0
+                      ? (value / retirementResults.totalSavings) * 100
+                      : 0;
                   return (
                     <div key={label} className="mb-3">
                       <div className="flex justify-between mb-1">
@@ -378,8 +382,12 @@ export default function RetirementCalculator({
                 })}
                 <Divider sx={{ my: 2 }} />
                 <div className="flex justify-between">
-                  <Typography variant="body2" fontWeight="bold">Total Corpus at Retirement</Typography>
-                  <Typography variant="body2" fontWeight="bold">{formatCurrency(retirementResults.totalSavings)}</Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    Total Corpus at Retirement
+                  </Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatCurrency(retirementResults.totalSavings)}
+                  </Typography>
                 </div>
               </CardContent>
             </Card>

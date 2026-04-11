@@ -18,6 +18,7 @@ import {
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import StopIcon from "@mui/icons-material/Stop";
+import DownloadIcon from "@mui/icons-material/Download";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import SpeedIcon from "@mui/icons-material/Speed";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
@@ -34,7 +35,7 @@ interface Voice {
 
 export default function TextToSpeech(): React.ReactElement {
   const [text, setText] = useState(
-    "Welcome to our Text to Speech converter. Type or paste your text here to hear it spoken aloud with natural voice synthesis."
+    "Welcome to our Text to Speech converter. Type or paste your text here to hear it spoken aloud with natural voice synthesis.",
   );
   const [voices, setVoices] = useState<Voice[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string>("");
@@ -43,6 +44,7 @@ export default function TextToSpeech(): React.ReactElement {
   const [volume, setVolume] = useState<number>(1.0);
   const [speaking, setSpeaking] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
   const [error, setError] = useState<string>("");
   const [snackBar, setSnackBar] = useState({
     open: false,
@@ -84,7 +86,7 @@ export default function TextToSpeech(): React.ReactElement {
   useEffect(() => {
     if (!window.speechSynthesis) {
       setError(
-        "Your browser does not support Text to Speech. Please use a modern browser like Chrome, Edge, or Safari."
+        "Your browser does not support Text to Speech. Please use a modern browser like Chrome, Edge, or Safari.",
       );
     }
   }, []);
@@ -158,6 +160,125 @@ export default function TextToSpeech(): React.ReactElement {
     setPaused(false);
   }, []);
 
+  const handleDownloadAudio = useCallback(async () => {
+    if (!text.trim()) {
+      setSnackBar({
+        open: true,
+        message: "Please enter some text before downloading audio",
+        color: "warning",
+      });
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      setSnackBar({
+        open: true,
+        message:
+          "Audio download requires tab capture support in a modern Chromium browser.",
+        color: "error",
+      });
+      return;
+    }
+
+    setIsDownloadingAudio(true);
+    window.speechSynthesis.cancel();
+
+    try {
+      const displayStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true,
+      });
+      const audioTracks = displayStream.getAudioTracks();
+
+      if (audioTracks.length === 0) {
+        displayStream.getTracks().forEach((track) => track.stop());
+        throw new Error(
+          "No tab audio was shared. Choose this tab and enable “Share tab audio”.",
+        );
+      }
+
+      const mimeType =
+        ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/webm"].find(
+          (type) => MediaRecorder.isTypeSupported(type),
+        ) ?? "audio/webm";
+      const extension = mimeType.includes("ogg") ? "ogg" : "webm";
+      const audioOnlyStream = new MediaStream(audioTracks);
+      const recorder = new MediaRecorder(audioOnlyStream, { mimeType });
+      const chunks: Blob[] = [];
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+
+      const voice = voices.find((v) => v.voice.name === selectedVoice)?.voice;
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (voice) utterance.voice = voice;
+      utterance.rate = rate;
+      utterance.pitch = pitch;
+      utterance.volume = volume;
+
+      const finishRecording = () => {
+        if (recorder.state !== "inactive") {
+          recorder.stop();
+        }
+        displayStream.getTracks().forEach((track) => track.stop());
+      };
+
+      utterance.onstart = () => {
+        setSpeaking(true);
+        setPaused(false);
+      };
+      utterance.onend = () => {
+        setSpeaking(false);
+        setPaused(false);
+        finishRecording();
+      };
+      utterance.onerror = (event) => {
+        setSpeaking(false);
+        setPaused(false);
+        finishRecording();
+        setSnackBar({
+          open: true,
+          message: `Speech error: ${event.error}`,
+          color: "error",
+        });
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `tts-audio-${new Date().toISOString().slice(0, 10)}.${extension}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setIsDownloadingAudio(false);
+        setSnackBar({
+          open: true,
+          message: "Speech audio downloaded successfully!",
+          color: "success",
+        });
+      };
+
+      recorder.start();
+      window.speechSynthesis.speak(utterance);
+    } catch (downloadError) {
+      setIsDownloadingAudio(false);
+      setSnackBar({
+        open: true,
+        message:
+          downloadError instanceof Error
+            ? downloadError.message
+            : "Unable to record speech audio for download.",
+        color: "error",
+      });
+    }
+  }, [rate, selectedVoice, text, voices, pitch, volume]);
+
   const handleVoiceChange = useCallback((event: SelectChangeEvent<string>) => {
     setSelectedVoice(event.target.value);
   }, []);
@@ -173,7 +294,7 @@ export default function TextToSpeech(): React.ReactElement {
         value: v.voice.name,
         label: `${v.name} (${v.lang})`,
       })),
-    [voices]
+    [voices],
   );
 
   return (
@@ -366,6 +487,17 @@ export default function TextToSpeech(): React.ReactElement {
               Stop
             </Button>
           )}
+
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="large"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadAudio}
+            disabled={!text.trim() || !!error || isDownloadingAudio}
+          >
+            {isDownloadingAudio ? "Preparing..." : "Download Audio"}
+          </Button>
         </div>
 
         {speaking && (
@@ -383,7 +515,9 @@ export default function TextToSpeech(): React.ReactElement {
           <strong>Tip:</strong> This tool uses your browser&apos;s built-in
           speech synthesis. Voice quality and selection vary by browser and OS.
           Chrome and Edge typically offer the best voices. All processing
-          happens locally in your browser for complete privacy.
+          happens locally in your browser for complete privacy. To export audio,
+          choose this tab and enable <strong>Share tab audio</strong> when the
+          browser prompts for capture permission.
         </Typography>
       </Alert>
     </ToolLayout>

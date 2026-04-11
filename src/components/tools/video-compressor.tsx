@@ -10,6 +10,7 @@ import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
+import { FileUploadWithDragDrop } from "../lib/fileUpload";
 
 enum ProcessingState {
   IDLE = "idle",
@@ -49,9 +50,13 @@ export default function VideoCompressor({
   const [compressedUrl, setCompressedUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [progress, setProgress] = useState<string>("");
+  const [progressPercent, setProgressPercent] = useState<number>(0);
+  const [etaSeconds, setEtaSeconds] = useState<number | null>(null);
   const [originalSize, setOriginalSize] = useState<number>(0);
   const [compressedSize, setCompressedSize] = useState<number>(0);
-
+  const [videoDuration, setVideoDuration] = useState<number>(0);
+  const [trimStart, setTrimStart] = useState<number>(0);
+  const [trimEnd, setTrimEnd] = useState<number>(0);
   const [settings, setSettings] = useState<CompressionSettings>({
     level: CompressionLevel.MEDIUM,
     resolution: "original",
@@ -62,6 +67,7 @@ export default function VideoCompressor({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const processingStartedAtRef = useRef<number | null>(null);
 
   // Get bitrate based on compression level
   const getBitrateForLevel = useCallback((level: CompressionLevel): number => {
@@ -96,6 +102,9 @@ export default function VideoCompressor({
       setCompressedBlob(null);
       setCompressedUrl("");
       setCompressedSize(0);
+      setVideoDuration(0);
+      setTrimStart(0);
+      setTrimEnd(0);
       toolState.actions.showMessage("Video loaded successfully");
     },
     [toolState.actions],
@@ -114,6 +123,23 @@ export default function VideoCompressor({
       setProcessingState(ProcessingState.PROCESSING);
       setError("");
       setProgress("Preparing...");
+      setProgressPercent(0);
+      setEtaSeconds(null);
+      processingStartedAtRef.current = Date.now();
+
+      const fullDuration = video.duration || videoDuration || 0;
+      const effectiveStart = Math.max(
+        0,
+        Math.min(trimStart, fullDuration || trimStart),
+      );
+      const effectiveEnd = Math.max(
+        effectiveStart + 0.1,
+        Math.min(
+          trimEnd || fullDuration || effectiveStart + 0.1,
+          fullDuration || trimEnd || effectiveStart + 0.1,
+        ),
+      );
+      const segmentDuration = Math.max(0.1, effectiveEnd - effectiveStart);
 
       // Determine output dimensions
       const srcW = video.videoWidth || 1280;
@@ -173,7 +199,6 @@ export default function VideoCompressor({
 
       // Mute the element itself so we don't double-play audio through speakers
       video.muted = true;
-      video.currentTime = 0;
       await new Promise<void>((resolve) => {
         if (video.readyState >= 3) {
           resolve();
@@ -182,21 +207,52 @@ export default function VideoCompressor({
         video.oncanplay = () => resolve();
       });
 
+      await new Promise<void>((resolve) => {
+        const handleSeeked = () => resolve();
+        video.addEventListener("seeked", handleSeeked, { once: true });
+        video.currentTime = effectiveStart;
+        if (Math.abs(video.currentTime - effectiveStart) < 0.05) {
+          resolve();
+        }
+      });
+
       let animFrameId: number;
       const drawFrame = () => {
-        if (!video.ended) {
+        const reachedTrimEnd = video.currentTime >= effectiveEnd;
+        if (!video.ended && !reachedTrimEnd) {
           ctx.drawImage(video, 0, 0, outW, outH);
-          if (video.duration > 0) {
-            setProgress(
-              `Compressing: ${Math.round((video.currentTime / video.duration) * 100)}%`,
+          const segmentProgress = Math.min(
+            100,
+            Math.max(
+              0,
+              ((video.currentTime - effectiveStart) / segmentDuration) * 100,
+            ),
+          );
+          const roundedProgress = Math.round(segmentProgress);
+          setProgress(`Compressing: ${roundedProgress}%`);
+          setProgressPercent(roundedProgress);
+          if (processingStartedAtRef.current && roundedProgress > 0) {
+            const elapsed =
+              (Date.now() - processingStartedAtRef.current) / 1000;
+            setEtaSeconds(
+              Math.max(
+                0,
+                Math.round(
+                  (elapsed / roundedProgress) * (100 - roundedProgress),
+                ),
+              ),
             );
           }
           animFrameId = requestAnimationFrame(drawFrame);
+        } else {
+          ctx.drawImage(video, 0, 0, outW, outH);
+          cancelAnimationFrame(animFrameId);
+          video.pause();
+          if (recorder.state === "recording") recorder.stop();
         }
       };
 
       video.onended = () => {
-        ctx.drawImage(video, 0, 0, outW, outH);
         cancelAnimationFrame(animFrameId);
         if (recorder.state === "recording") recorder.stop();
       };
@@ -215,6 +271,8 @@ export default function VideoCompressor({
       setCompressedUrl(url);
       setProcessingState(ProcessingState.COMPLETED);
       setProgress("");
+      setProgressPercent(100);
+      setEtaSeconds(0);
 
       const reduction = ((1 - blob.size / originalSize) * 100).toFixed(1);
       toolState.actions.showMessage(
@@ -226,6 +284,8 @@ export default function VideoCompressor({
       setError(errorMessage);
       setProcessingState(ProcessingState.IDLE);
       setProgress("");
+      setProgressPercent(0);
+      setEtaSeconds(null);
       if (videoRef.current) videoRef.current.muted = false;
       toolState.actions.showMessage("Failed to compress video");
     }
@@ -259,8 +319,13 @@ export default function VideoCompressor({
     setProcessingState(ProcessingState.IDLE);
     setError("");
     setProgress("");
+    setProgressPercent(0);
+    setEtaSeconds(null);
     setOriginalSize(0);
     setCompressedSize(0);
+    setVideoDuration(0);
+    setTrimStart(0);
+    setTrimEnd(0);
     setSettings({
       level: CompressionLevel.MEDIUM,
       resolution: "original",
@@ -396,6 +461,20 @@ export default function VideoCompressor({
       <ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
+        {!videoFile && processingState === ProcessingState.IDLE && (
+          <FileUploadWithDragDrop
+            accept="video/*"
+            multiple={false}
+            onFileSelect={(files) =>
+              handleFileUpload({
+                target: { files },
+              } as React.ChangeEvent<HTMLInputElement>)
+            }
+            title="Upload Video to Compress"
+            subtitle="Drag and drop your video here or click to browse"
+            supportText="MP4, WebM, MOV and more — processed locally in your browser"
+          />
+        )}
         {/* Error Display */}
         {error && (
           <Alert severity="error" onClose={() => setError("")}>
@@ -404,7 +483,14 @@ export default function VideoCompressor({
         )}
 
         {/* Progress Display */}
-        {progress && <Alert severity="info">{progress}</Alert>}
+        {progress && (
+          <Alert severity="info">
+            {progress}
+            {progressPercent > 0 && etaSeconds !== null
+              ? ` • ETA ~${etaSeconds}s`
+              : ""}
+          </Alert>
+        )}
 
         {/* File Size Comparison */}
         {originalSize > 0 && (
@@ -522,6 +608,53 @@ export default function VideoCompressor({
                     helperText="Lower bitrate = smaller file, but lower quality"
                   />
                 )}
+
+                {videoFile && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <TextField
+                      label="Trim Start (seconds)"
+                      type="number"
+                      value={trimStart}
+                      onChange={(e) =>
+                        setTrimStart(
+                          Math.max(0, parseFloat(e.target.value) || 0),
+                        )
+                      }
+                      inputProps={{
+                        min: 0,
+                        max: Math.max(0, videoDuration),
+                        step: 0.1,
+                      }}
+                      size="small"
+                      fullWidth
+                    />
+                    <TextField
+                      label="Trim End (seconds)"
+                      type="number"
+                      value={trimEnd || videoDuration}
+                      onChange={(e) =>
+                        setTrimEnd(
+                          Math.max(
+                            trimStart,
+                            parseFloat(e.target.value) || videoDuration,
+                          ),
+                        )
+                      }
+                      inputProps={{
+                        min: 0,
+                        max: Math.max(0, videoDuration),
+                        step: 0.1,
+                      }}
+                      size="small"
+                      fullWidth
+                      helperText={
+                        videoDuration > 0
+                          ? `Full duration: ${videoDuration.toFixed(1)}s`
+                          : "Load video metadata to enable trimming"
+                      }
+                    />
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -538,8 +671,23 @@ export default function VideoCompressor({
                 ref={videoRef}
                 src={videoUrl}
                 controls
+                onLoadedMetadata={(e) => {
+                  const duration = e.currentTarget.duration || 0;
+                  setVideoDuration(duration);
+                  setTrimEnd(duration);
+                }}
                 className="w-full rounded-lg"
               />
+              {videoDuration > 0 && (
+                <Typography variant="body2" className="mt-2 text-gray-600">
+                  Clip range: {trimStart.toFixed(1)}s →{" "}
+                  {(trimEnd || videoDuration).toFixed(1)}s (
+                  {Math.max(0, (trimEnd || videoDuration) - trimStart).toFixed(
+                    1,
+                  )}
+                  s)
+                </Typography>
+              )}
             </CardContent>
           </Card>
         )}

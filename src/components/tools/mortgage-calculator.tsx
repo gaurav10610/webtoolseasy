@@ -62,7 +62,7 @@ export default function MortgageCalculator({
       homePrice: number,
       downPayment: number,
       annualInterestRate: number,
-      years: number
+      years: number,
     ): MortgageCalculation => {
       const loanAmount = homePrice - downPayment;
       const monthlyInterestRate = annualInterestRate / 12 / 100;
@@ -90,13 +90,13 @@ export default function MortgageCalculator({
         interestPercentage: (totalInterest / totalAmount) * 100,
       };
     },
-    []
+    [],
   );
 
   const mortgageResults = useMemo(
     () =>
       calculateMortgage(homePrice, downPayment, interestRate, loanTermYears),
-    [homePrice, downPayment, interestRate, loanTermYears, calculateMortgage]
+    [homePrice, downPayment, interestRate, loanTermYears, calculateMortgage],
   );
 
   const amortizationSchedule = useMemo((): AmortizationEntry[] => {
@@ -114,7 +114,13 @@ export default function MortgageCalculator({
       schedule.push({ month: m, emi, principal, interest, balance });
     }
     return schedule;
-  }, [homePrice, downPayment, interestRate, loanTermYears, mortgageResults.monthlyEMI]);
+  }, [
+    homePrice,
+    downPayment,
+    interestRate,
+    loanTermYears,
+    mortgageResults.monthlyEMI,
+  ]);
 
   const handleHomePriceChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +129,7 @@ export default function MortgageCalculator({
         setHomePrice(value);
       }
     },
-    []
+    [],
   );
 
   const handleDownPaymentChange = useCallback(
@@ -133,7 +139,7 @@ export default function MortgageCalculator({
         setDownPayment(value);
       }
     },
-    []
+    [],
   );
 
   const handleInterestRateChange = useCallback(
@@ -143,7 +149,7 @@ export default function MortgageCalculator({
         setInterestRate(value);
       }
     },
-    []
+    [],
   );
 
   const handleLoanTermChange = useCallback(
@@ -153,7 +159,7 @@ export default function MortgageCalculator({
         setLoanTermYears(value);
       }
     },
-    []
+    [],
   );
 
   const formatCurrency = (value: number): string => {
@@ -402,7 +408,7 @@ export default function MortgageCalculator({
                     </Typography>
                     <Typography variant="body1" fontWeight="bold">
                       {formatCurrency(
-                        mortgageResults.totalAmount + downPayment
+                        mortgageResults.totalAmount + downPayment,
                       )}
                     </Typography>
                   </Grid>
@@ -431,10 +437,21 @@ export default function MortgageCalculator({
                         {amortizationSchedule.map((row) => (
                           <TableRow key={row.month} hover>
                             <TableCell>{row.month}</TableCell>
-                            <TableCell align="right">{formatCurrency(row.emi)}</TableCell>
-                            <TableCell align="right">{formatCurrency(row.principal)}</TableCell>
-                            <TableCell align="right" sx={{ color: "error.main" }}>{formatCurrency(row.interest)}</TableCell>
-                            <TableCell align="right">{formatCurrency(row.balance)}</TableCell>
+                            <TableCell align="right">
+                              {formatCurrency(row.emi)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {formatCurrency(row.principal)}
+                            </TableCell>
+                            <TableCell
+                              align="right"
+                              sx={{ color: "error.main" }}
+                            >
+                              {formatCurrency(row.interest)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {formatCurrency(row.balance)}
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

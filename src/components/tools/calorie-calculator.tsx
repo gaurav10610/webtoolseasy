@@ -461,30 +461,98 @@ export default function CalorieCalculator({
                   Food Suggestions
                 </Typography>
                 {(() => {
-                  const suggestions: Record<string, { protein: string[]; carbs: string[]; fats: string[] }> = {
+                  const suggestions: Record<
+                    string,
+                    { protein: string[]; carbs: string[]; fats: string[] }
+                  > = {
                     loss: {
-                      protein: ["Grilled chicken breast", "Egg whites", "Tofu", "Low-fat Greek yogurt", "Tuna"],
-                      carbs: ["Brown rice (small portion)", "Sweet potato", "Oats", "Quinoa", "Vegetables"],
-                      fats: ["Avocado (½)", "Almonds (small handful)", "Olive oil (1 tbsp)", "Chia seeds"],
+                      protein: [
+                        "Grilled chicken breast",
+                        "Egg whites",
+                        "Tofu",
+                        "Low-fat Greek yogurt",
+                        "Tuna",
+                      ],
+                      carbs: [
+                        "Brown rice (small portion)",
+                        "Sweet potato",
+                        "Oats",
+                        "Quinoa",
+                        "Vegetables",
+                      ],
+                      fats: [
+                        "Avocado (½)",
+                        "Almonds (small handful)",
+                        "Olive oil (1 tbsp)",
+                        "Chia seeds",
+                      ],
                     },
                     maintain: {
-                      protein: ["Chicken breast", "Eggs", "Lentils", "Cottage cheese", "Salmon"],
-                      carbs: ["Brown rice", "Whole wheat bread", "Oats", "Fruits", "Sweet potato"],
-                      fats: ["Avocado", "Mixed nuts", "Olive oil", "Fatty fish", "Peanut butter"],
+                      protein: [
+                        "Chicken breast",
+                        "Eggs",
+                        "Lentils",
+                        "Cottage cheese",
+                        "Salmon",
+                      ],
+                      carbs: [
+                        "Brown rice",
+                        "Whole wheat bread",
+                        "Oats",
+                        "Fruits",
+                        "Sweet potato",
+                      ],
+                      fats: [
+                        "Avocado",
+                        "Mixed nuts",
+                        "Olive oil",
+                        "Fatty fish",
+                        "Peanut butter",
+                      ],
                     },
                     gain: {
-                      protein: ["Chicken thighs", "Beef", "Whole eggs", "Protein shakes", "Paneer"],
-                      carbs: ["White rice", "Whole wheat pasta", "Banana", "Whole grain bread", "Oats"],
-                      fats: ["Peanut butter", "Full-fat dairy", "Nuts & seeds", "Coconut milk", "Olive oil"],
+                      protein: [
+                        "Chicken thighs",
+                        "Beef",
+                        "Whole eggs",
+                        "Protein shakes",
+                        "Paneer",
+                      ],
+                      carbs: [
+                        "White rice",
+                        "Whole wheat pasta",
+                        "Banana",
+                        "Whole grain bread",
+                        "Oats",
+                      ],
+                      fats: [
+                        "Peanut butter",
+                        "Full-fat dairy",
+                        "Nuts & seeds",
+                        "Coconut milk",
+                        "Olive oil",
+                      ],
                     },
                   };
                   const s = suggestions[goal] || suggestions.maintain;
                   return (
                     <div className="grid grid-cols-3 gap-4">
                       {[
-                        { label: "Protein Sources", items: s.protein, color: "#f87171" },
-                        { label: "Carb Sources", items: s.carbs, color: "#60a5fa" },
-                        { label: "Healthy Fats", items: s.fats, color: "#fbbf24" },
+                        {
+                          label: "Protein Sources",
+                          items: s.protein,
+                          color: "#f87171",
+                        },
+                        {
+                          label: "Carb Sources",
+                          items: s.carbs,
+                          color: "#60a5fa",
+                        },
+                        {
+                          label: "Healthy Fats",
+                          items: s.fats,
+                          color: "#fbbf24",
+                        },
                       ].map(({ label, items, color }) => (
                         <div key={label}>
                           <Typography variant="subtitle2" sx={{ color, mb: 1 }}>

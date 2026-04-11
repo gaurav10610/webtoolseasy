@@ -48,12 +48,12 @@ export default function FaviconGenerator({
       };
       reader.readAsDataURL(file);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleSizeChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newSizes: FaviconSize[]
+    newSizes: FaviconSize[],
   ) => {
     if (newSizes.length > 0) {
       setSelectedSizes(newSizes);
@@ -82,7 +82,7 @@ export default function FaviconGenerator({
         img.src = uploadedImage;
       });
     },
-    [uploadedImage]
+    [uploadedImage],
   );
 
   const downloadFavicon = useCallback(
@@ -105,7 +105,7 @@ export default function FaviconGenerator({
         toolState.actions.showMessage("Error downloading favicon");
       }
     },
-    [generateFavicon, toolState.actions]
+    [generateFavicon, toolState.actions],
   );
 
   const downloadAllSizes = useCallback(async () => {

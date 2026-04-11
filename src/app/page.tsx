@@ -2,6 +2,7 @@ import { AppHeading } from "@/components/commonComponents";
 import { apps } from "@/data/apps";
 import { AppNavigationConfig, AppCategory } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
+import { LazyOnView } from "@/components/common/LazyOnView";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { groupBy, map, values, filter, includes, toLower } from "lodash-es";
@@ -275,18 +276,20 @@ function PopularToolsSection({
           }
         >
           {featuredTools.map((config, index) => (
-            <div
+            <LazyOnView
               key={config.applicationId}
               className="w-full"
-              style={{ animationDelay: `${index * 150}ms` }}
+              minHeight={isMobile ? 180 : 220}
             >
-              <AppHomeCard
-                config={config}
-                className={`w-full h-full ${
-                  isMobile ? "p-3" : "p-4"
-                } hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-purple-200 bg-white`}
-              />
-            </div>
+              <div style={{ animationDelay: `${index * 150}ms` }}>
+                <AppHomeCard
+                  config={config}
+                  className={`w-full h-full ${
+                    isMobile ? "p-3" : "p-4"
+                  } hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-purple-200 bg-white dark:border-purple-700 dark:bg-slate-900`}
+                />
+              </div>
+            </LazyOnView>
           ))}
         </Suspense>
       </div>
@@ -308,7 +311,7 @@ function SectionAppList({
   return (
     <section className="flex flex-col gap-4 w-full">
       {showCategoryTitle && (
-        <header className="flex items-center gap-3 pb-2 border-b border-gray-200">
+        <header className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-slate-700">
           <AppText
             variant="h2"
             className="!text-xl md:!text-2xl !font-medium !text-gray-800"
@@ -340,18 +343,23 @@ function SectionAppList({
         >
           {map(configs, (config, index) => {
             return (
-              <article
+              <LazyOnView
                 key={config.applicationId}
                 className="w-full"
-                style={{
-                  animationDelay: `${index * 100}ms`,
-                }}
+                minHeight={200}
               >
-                <AppHomeCard
-                  config={config}
-                  className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100"
-                />
-              </article>
+                <article
+                  className="w-full"
+                  style={{
+                    animationDelay: `${index * 100}ms`,
+                  }}
+                >
+                  <AppHomeCard
+                    config={config}
+                    className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-slate-700 dark:bg-slate-900"
+                  />
+                </article>
+              </LazyOnView>
             );
           })}
           {map(new Array(emptyColumns), (_, idx) => {

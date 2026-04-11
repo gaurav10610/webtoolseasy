@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { Alert, TextField } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
@@ -47,6 +48,89 @@ export default function YamlFormatter({
       return "";
     }
   });
+  const [schemaText, setSchemaText] = useState(`type: object
+required:
+  - name
+  - age
+properties:
+  name:
+    type: string
+  age:
+    type: number
+  skills:
+    type: array`);
+  const [schemaIssues, setSchemaIssues] = useState<string[]>([]);
+  const [schemaChecked, setSchemaChecked] = useState(false);
+
+  const getValueType = useCallback((value: unknown): string => {
+    if (Array.isArray(value)) return "array";
+    if (value === null) return "null";
+    return typeof value;
+  }, []);
+
+  const validateSchemaObject = useCallback(
+    (value: unknown, schema: Record<string, unknown>, path = "root") => {
+      const issues: string[] = [];
+      const expectedType = schema.type as string | undefined;
+      const actualType = getValueType(value);
+
+      if (expectedType && actualType !== expectedType) {
+        issues.push(
+          `${path} should be ${expectedType}, received ${actualType}.`,
+        );
+        return issues;
+      }
+
+      if (
+        Array.isArray(schema.required) &&
+        value &&
+        typeof value === "object" &&
+        !Array.isArray(value)
+      ) {
+        for (const key of schema.required as string[]) {
+          if (!(key in (value as Record<string, unknown>))) {
+            issues.push(`${path}.${key} is required.`);
+          }
+        }
+      }
+
+      if (
+        schema.properties &&
+        value &&
+        typeof value === "object" &&
+        !Array.isArray(value)
+      ) {
+        Object.entries(
+          schema.properties as Record<string, Record<string, unknown>>,
+        ).forEach(([key, childSchema]) => {
+          if (key in (value as Record<string, unknown>)) {
+            issues.push(
+              ...validateSchemaObject(
+                (value as Record<string, unknown>)[key],
+                childSchema,
+                `${path}.${key}`,
+              ),
+            );
+          }
+        });
+      }
+
+      if (schema.items && Array.isArray(value)) {
+        value.forEach((item, index) => {
+          issues.push(
+            ...validateSchemaObject(
+              item,
+              schema.items as Record<string, unknown>,
+              `${path}[${index}]`,
+            ),
+          );
+        });
+      }
+
+      return issues;
+    },
+    [getValueType],
+  );
 
   const formatYaml = useCallback(() => {
     try {
@@ -75,6 +159,28 @@ export default function YamlFormatter({
     }
   }, [toolState]);
 
+  const validateSchemaCheck = useCallback(() => {
+    try {
+      const parsedYaml = jsYamlLoad(toolState.code);
+      const parsedSchema = jsYamlLoad(schemaText) as Record<string, unknown>;
+      const issues = validateSchemaObject(parsedYaml, parsedSchema);
+      setSchemaIssues(issues);
+      setSchemaChecked(true);
+      toolState.actions.showMessage(
+        issues.length === 0
+          ? "Schema check passed successfully!"
+          : `Schema check found ${issues.length} issue(s).`,
+      );
+      setSnackBarColor(issues.length === 0 ? "success" : "warning");
+    } catch (e) {
+      const msg = (e as Error)?.message || "Invalid schema definition";
+      setSchemaIssues([msg]);
+      setSchemaChecked(true);
+      toolState.actions.showMessage(msg);
+      setSnackBarColor("error");
+    }
+  }, [schemaText, toolState, validateSchemaObject]);
+
   const copyFormatted = useCallback(() => {
     toolState.actions.copyText(
       formattedCode,
@@ -101,6 +207,11 @@ export default function YamlFormatter({
     () => [
       { type: "custom" as const, text: "Format YAML", onClick: formatYaml },
       { type: "custom" as const, text: "Validate YAML", onClick: validateYaml },
+      {
+        type: "custom" as const,
+        text: "Schema Check",
+        onClick: validateSchemaCheck,
+      },
 
       {
         type: "custom" as const,
@@ -112,7 +223,7 @@ export default function YamlFormatter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatYaml, validateYaml, copyFormatted, toolState],
+    [formatYaml, validateYaml, validateSchemaCheck, copyFormatted, toolState],
   );
 
   return (
@@ -133,6 +244,30 @@ export default function YamlFormatter({
       />
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+        <TextField
+          label="Optional schema (YAML or JSON)"
+          multiline
+          minRows={6}
+          fullWidth
+          value={schemaText}
+          onChange={(event) => {
+            setSchemaText(event.target.value);
+            setSchemaChecked(false);
+          }}
+        />
+        {schemaChecked && (
+          <Alert
+            severity={schemaIssues.length === 0 ? "success" : "warning"}
+            className="mt-3"
+          >
+            {schemaIssues.length === 0
+              ? "Schema check passed — the YAML matches the supplied structure."
+              : schemaIssues.join(" ")}
+          </Alert>
+        )}
+      </div>
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

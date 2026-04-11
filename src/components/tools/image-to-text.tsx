@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { ToolComponentProps } from "@/types/component";
-import { Typography, Card, CardContent, Alert, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import {
+  Typography,
+  Card,
+  CardContent,
+  Alert,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import {
   FILE_TYPE_PRESETS,
@@ -41,7 +51,7 @@ export default function ImageToTextConverter({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [extractedText, setExtractedText] = useState<string>(
-    textQueryParam ? decodeText(textQueryParam) : ""
+    textQueryParam ? decodeText(textQueryParam) : "",
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [ocrProgress, setOcrProgress] = useState<OCRProgress>({
@@ -155,7 +165,7 @@ export default function ImageToTextConverter({
     try {
       const compressedData = await compressStringToBase64(extractedText);
       const url = `${hostname}${currentPath}?content=${encodeText(
-        compressedData
+        compressedData,
       )}`;
       copyToClipboard(url);
       setSnackBarMessage("Shareable link copied to clipboard!");

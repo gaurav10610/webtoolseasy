@@ -51,12 +51,42 @@ interface RecordingConfig {
   includeCamera: boolean;
   includeMicrophone: boolean;
   includeSystemAudio: boolean;
+  audioOnly: boolean;
   quality: RecordingQuality;
 }
 
 interface SavedRecording {
   key: string;
   blob: Blob;
+}
+
+function RecordingThumbnail({ blob }: Readonly<{ blob: Blob }>) {
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    if (blob.type.startsWith("audio/")) return;
+    const objectUrl = URL.createObjectURL(blob);
+    setUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [blob]);
+
+  if (blob.type.startsWith("audio/")) {
+    return (
+      <div className="flex h-14 w-24 items-center justify-center rounded bg-slate-100 text-xs font-medium text-slate-700">
+        Audio only
+      </div>
+    );
+  }
+
+  return (
+    <video
+      src={url}
+      className="h-14 w-24 rounded bg-slate-950 object-cover"
+      muted
+      playsInline
+      preload="metadata"
+    />
+  );
 }
 
 export default function ScreenRecorder({
@@ -68,7 +98,6 @@ export default function ScreenRecorder({
     queryParams,
   });
 
-  const supportedMimeInfo = useMemo(() => getPreferredRecordingMimeInfo(), []);
   const [recordingState, setRecordingState] = useState<RecordingState>(
     RecordingState.IDLE,
   );
@@ -77,8 +106,17 @@ export default function ScreenRecorder({
     includeCamera: false,
     includeMicrophone: false,
     includeSystemAudio: false,
+    audioOnly: false,
     quality: "1080p",
   });
+  const supportedMimeInfo = useMemo(
+    () =>
+      getPreferredRecordingMimeInfo({
+        audioOnly: recordingConfig.audioOnly,
+      }),
+    [recordingConfig.audioOnly],
+  );
+
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
   const [savedRecordings, setSavedRecordings] = useState<SavedRecording[]>([]);
@@ -286,9 +324,10 @@ export default function ScreenRecorder({
       chunksRef.current = [];
       setRecordingTime(0);
 
-      const screenStream = recordingConfig.includeScreen
-        ? await getScreenStream()
-        : undefined;
+      const screenStream =
+        !recordingConfig.audioOnly && recordingConfig.includeScreen
+          ? await getScreenStream()
+          : undefined;
       const userMediaStream =
         recordingConfig.includeCamera || recordingConfig.includeMicrophone
           ? await getUserMediaStream()
@@ -323,22 +362,36 @@ export default function ScreenRecorder({
         includeSystemAudio: recordingConfig.includeSystemAudio,
         includeMicrophoneAudio: recordingConfig.includeMicrophone,
         frameRate: 30,
+        audioOnly: recordingConfig.audioOnly,
       });
 
       compositionCleanupRef.current = composedSession.cleanup;
 
       if (previewVideoRef.current) {
-        previewVideoRef.current.srcObject = composedSession.stream;
+        previewVideoRef.current.srcObject =
+          composedSession.stream.getVideoTracks().length > 0
+            ? composedSession.stream
+            : null;
         previewVideoRef.current.muted = true;
-        await previewVideoRef.current.play().catch(() => undefined);
+        if (composedSession.stream.getVideoTracks().length > 0) {
+          await previewVideoRef.current.play().catch(() => undefined);
+        }
       }
 
-      const mimeInfo = getPreferredRecordingMimeInfo();
+      const mimeInfo = getPreferredRecordingMimeInfo({
+        audioOnly: recordingConfig.audioOnly,
+      });
       setRecordingMimeType(mimeInfo.mimeType);
 
       const mediaRecorder = new MediaRecorder(composedSession.stream, {
         mimeType: mimeInfo.mimeType,
-        videoBitsPerSecond: getRecommendedVideoBitrate(recordingConfig.quality),
+        ...(!recordingConfig.audioOnly
+          ? {
+              videoBitsPerSecond: getRecommendedVideoBitrate(
+                recordingConfig.quality,
+              ),
+            }
+          : {}),
         ...(recordingConfig.includeMicrophone ||
         recordingConfig.includeSystemAudio
           ? { audioBitsPerSecond: 192_000 }
@@ -411,7 +464,9 @@ export default function ScreenRecorder({
       }, 1000);
 
       toolState.actions.showMessage(
-        `Recording started in ${recordingConfig.quality} (${mimeInfo.extension.toUpperCase()}).`,
+        recordingConfig.audioOnly
+          ? `Audio-only recording started (${mimeInfo.extension.toUpperCase()}).`
+          : `Recording started in ${recordingConfig.quality} (${mimeInfo.extension.toUpperCase()}).`,
       );
     } catch (startError) {
       console.error("Failed to start recording:", startError);
@@ -628,6 +683,7 @@ export default function ScreenRecorder({
                     key={rec.key}
                     className="flex flex-wrap items-center gap-2 rounded bg-gray-50 p-2"
                   >
+                    <RecordingThumbnail blob={rec.blob} />
                     <span className="flex-1 truncate text-sm">{rec.key}</span>
                     <Button
                       size="small"
@@ -687,7 +743,10 @@ export default function ScreenRecorder({
                         includeScreen: event.target.checked,
                       }))
                     }
-                    disabled={recordingState !== RecordingState.IDLE}
+                    disabled={
+                      recordingState !== RecordingState.IDLE ||
+                      recordingConfig.audioOnly
+                    }
                     icon={<ScreenShareIcon />}
                     checkedIcon={<ScreenShareIcon />}
                   />
@@ -705,7 +764,10 @@ export default function ScreenRecorder({
                         includeCamera: event.target.checked,
                       }))
                     }
-                    disabled={recordingState !== RecordingState.IDLE}
+                    disabled={
+                      recordingState !== RecordingState.IDLE ||
+                      recordingConfig.audioOnly
+                    }
                     icon={<VideocamIcon />}
                     checkedIcon={<VideocamIcon />}
                   />
@@ -749,6 +811,33 @@ export default function ScreenRecorder({
                 label="System Audio"
               />
 
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={recordingConfig.audioOnly}
+                    onChange={(event) =>
+                      setRecordingConfig((prev) => ({
+                        ...prev,
+                        audioOnly: event.target.checked,
+                        includeScreen: event.target.checked
+                          ? false
+                          : prev.includeScreen,
+                        includeCamera: event.target.checked
+                          ? false
+                          : prev.includeCamera,
+                        includeMicrophone: event.target.checked
+                          ? true
+                          : prev.includeMicrophone,
+                      }))
+                    }
+                    disabled={recordingState !== RecordingState.IDLE}
+                    icon={<MicIcon />}
+                    checkedIcon={<MicIcon />}
+                  />
+                }
+                label="Audio-only Mode"
+              />
+
               <SelectWithLabel
                 selectLabel="Quality Preset"
                 value={recordingConfig.quality}
@@ -777,6 +866,9 @@ export default function ScreenRecorder({
 
             <div className="mt-4 flex flex-wrap gap-2">
               <Chip label={`${recordingConfig.quality} preset`} size="small" />
+              {recordingConfig.audioOnly && (
+                <Chip label="Audio-only mode" size="small" color="secondary" />
+              )}
               <Chip
                 label={`${supportedMimeInfo.extension.toUpperCase()} export`}
                 size="small"
@@ -815,15 +907,29 @@ export default function ScreenRecorder({
                 className="h-full w-full object-contain"
               />
 
-              {recordingState === RecordingState.IDLE && !previewUrl && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center text-white/85">
-                  <Typography variant="h6">Ready to record</Typography>
-                  <Typography variant="body2">
-                    Start a capture to preview your screen, camera overlay, and
-                    final in-browser output before download.
-                  </Typography>
+              {recordingConfig.audioOnly && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-950/85 text-white">
+                  <div className="text-center">
+                    <MicIcon sx={{ fontSize: 40, mb: 1 }} />
+                    <Typography variant="h6">Audio-only mode</Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                      Recording microphone / system sound without screen video
+                    </Typography>
+                  </div>
                 </div>
               )}
+
+              {recordingState === RecordingState.IDLE &&
+                !previewUrl &&
+                !recordingConfig.audioOnly && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center text-white/85">
+                    <Typography variant="h6">Ready to record</Typography>
+                    <Typography variant="body2">
+                      Start a capture to preview your screen, camera overlay,
+                      and final in-browser output before download.
+                    </Typography>
+                  </div>
+                )}
 
               {(recordingState === RecordingState.RECORDING ||
                 recordingState === RecordingState.PAUSED) && (

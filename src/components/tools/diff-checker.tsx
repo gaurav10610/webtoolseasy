@@ -23,7 +23,7 @@ const DiffEditorsWithHeader = dynamic(
         <div className="text-gray-500">Loading diff editor...</div>
       </div>
     ),
-  }
+  },
 );
 
 export default function DiffChecker({
@@ -37,7 +37,7 @@ export default function DiffChecker({
     total += item.price;
   }
   return total;
-}`
+}`,
   );
 
   const [modifiedText, setModifiedText] = useState(
@@ -47,7 +47,7 @@ export default function DiffChecker({
     total += item.price * item.quantity;
   }
   return total;
-}`
+}`,
   );
 
   const toolState = useToolState({
@@ -66,14 +66,14 @@ export default function DiffChecker({
   const copyOriginal = useCallback(() => {
     toolState.actions.copyText(
       originalText,
-      "Original text copied to clipboard!"
+      "Original text copied to clipboard!",
     );
   }, [originalText, toolState.actions]);
 
   const copyModified = useCallback(() => {
     toolState.actions.copyText(
       modifiedText,
-      "Modified text copied to clipboard!"
+      "Modified text copied to clipboard!",
     );
   }, [modifiedText, toolState.actions]);
 
@@ -156,9 +156,7 @@ export default function DiffChecker({
     const origFreq = countWords(originalText);
     const modFreq = countWords(modifiedText);
     const topN = (freq: Map<string, number>, n = 8) =>
-      [...freq.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, n);
+      [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, n);
     return {
       original: topN(origFreq),
       modified: topN(modFreq),
@@ -215,7 +213,7 @@ export default function DiffChecker({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [swapTexts, copyOriginal, copyModified, copyDiff, clearAll, toolState]
+    [swapTexts, copyOriginal, copyModified, copyDiff, clearAll, toolState],
   );
 
   return (

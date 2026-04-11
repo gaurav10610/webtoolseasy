@@ -123,14 +123,14 @@ Perfect for:
         onCopy: () =>
           toolState.actions.copyText(
             toolState.code,
-            "Text copied to clipboard!"
+            "Text copied to clipboard!",
           ),
         onDownload: downloadText,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [importText, clearText, downloadText, toolState]
+    [importText, clearText, downloadText, toolState],
   );
 
   return (

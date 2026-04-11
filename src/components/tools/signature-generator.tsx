@@ -93,7 +93,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
     (
       e:
         | React.MouseEvent<HTMLCanvasElement>
-        | React.TouchEvent<HTMLCanvasElement>
+        | React.TouchEvent<HTMLCanvasElement>,
     ) => {
       if (activeTab !== 0) return;
       setIsDrawing(true);
@@ -119,14 +119,14 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
     },
-    [activeTab, penColor, penSize]
+    [activeTab, penColor, penSize],
   );
 
   const draw = useCallback(
     (
       e:
         | React.MouseEvent<HTMLCanvasElement>
-        | React.TouchEvent<HTMLCanvasElement>
+        | React.TouchEvent<HTMLCanvasElement>,
     ) => {
       if (!isDrawing || activeTab !== 0) return;
 
@@ -147,7 +147,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
       ctx.lineTo(x, y);
       ctx.stroke();
     },
-    [isDrawing, activeTab]
+    [isDrawing, activeTab],
   );
 
   const stopDrawing = useCallback(() => {
@@ -190,7 +190,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
           // Scale image to fit canvas
           const scale = Math.min(
             canvas.width / img.width,
-            canvas.height / img.height
+            canvas.height / img.height,
           );
           const x = (canvas.width - img.width * scale) / 2;
           const y = (canvas.height - img.height * scale) / 2;
@@ -202,7 +202,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
       };
       reader.readAsDataURL(file);
     },
-    []
+    [],
   );
 
   const downloadSignature = useCallback(() => {
@@ -251,7 +251,10 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
     if (!ctx) return;
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const isEmpty = !imageData.data.some((v, i) => i % 4 === 3 && v !== 0);
-    if (isEmpty) { showMessage("Please create a signature first"); return; }
+    if (isEmpty) {
+      showMessage("Please create a signature first");
+      return;
+    }
     // Embed canvas as base64 PNG inside SVG
     const dataURL = canvas.toDataURL("image/png");
     const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}"><image href="${dataURL}" width="${canvas.width}" height="${canvas.height}"/></svg>`;

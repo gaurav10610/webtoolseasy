@@ -11,6 +11,10 @@ import {
   FormControlLabel,
   Slider,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useState, useCallback } from "react";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -44,6 +48,11 @@ export default function ImageResizer({
   const [targetWidth, setTargetWidth] = useState<number>(800);
   const [targetHeight, setTargetHeight] = useState<number>(600);
   const [maintainRatio, setMaintainRatio] = useState<boolean>(true);
+  const [smartResize, setSmartResize] = useState<boolean>(true);
+  const [preventUpscale, setPreventUpscale] = useState<boolean>(true);
+  const [outputFormat, setOutputFormat] = useState<"jpeg" | "png" | "webp">(
+    "png",
+  );
   const [quality, setQuality] = useState<number>(90);
   const [processing, setProcessing] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -77,7 +86,7 @@ export default function ImageResizer({
       setError(errorMessage);
       toolState.actions.showMessage(errorMessage);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleFileSelect = useCallback(
@@ -102,7 +111,7 @@ export default function ImageResizer({
         handleError("Failed to load image. Please try another file.");
       }
     },
-    [loadImageInfo, toolState.actions, handleError]
+    [loadImageInfo, toolState.actions, handleError],
   );
 
   const handleWidthChange = useCallback(
@@ -115,7 +124,7 @@ export default function ImageResizer({
         setTargetHeight(Math.round(width * ratio));
       }
     },
-    [maintainRatio, originalImage]
+    [maintainRatio, originalImage],
   );
 
   const handleHeightChange = useCallback(
@@ -128,11 +137,32 @@ export default function ImageResizer({
         setTargetWidth(Math.round(height * ratio));
       }
     },
-    [maintainRatio, originalImage]
+    [maintainRatio, originalImage],
   );
 
+  const getSmartDimensions = useCallback(() => {
+    if (!originalImage || !smartResize) {
+      return { width: targetWidth, height: targetHeight };
+    }
+
+    const widthRatio = targetWidth / originalImage.width;
+    const heightRatio = targetHeight / originalImage.height;
+    const rawScale = Math.min(widthRatio, heightRatio);
+    const safeScale = preventUpscale ? Math.min(rawScale, 1) : rawScale;
+
+    return {
+      width: Math.max(1, Math.round(originalImage.width * safeScale)),
+      height: Math.max(1, Math.round(originalImage.height * safeScale)),
+    };
+  }, [originalImage, preventUpscale, smartResize, targetHeight, targetWidth]);
+
   const createImageBlob = useCallback(
-    (file: File, width: number, height: number): Promise<Blob> => {
+    (
+      file: File,
+      width: number,
+      height: number,
+      mimeType: string,
+    ): Promise<Blob> => {
       return new Promise((resolve, reject) => {
         const img = new Image();
         const canvas = document.createElement("canvas");
@@ -151,8 +181,8 @@ export default function ImageResizer({
                 reject(new Error("Failed to create blob"));
               }
             },
-            file.type,
-            quality / 100
+            mimeType,
+            quality / 100,
           );
         };
 
@@ -160,8 +190,15 @@ export default function ImageResizer({
         img.src = URL.createObjectURL(file);
       });
     },
-    [quality]
+    [quality],
   );
+
+  const outputMimeType =
+    outputFormat === "jpeg"
+      ? "image/jpeg"
+      : outputFormat === "webp"
+        ? "image/webp"
+        : "image/png";
 
   const handleResize = useCallback(async () => {
     if (!originalImage) return;
@@ -170,28 +207,36 @@ export default function ImageResizer({
       setProcessing(true);
       setError("");
 
+      const { width: finalWidth, height: finalHeight } = getSmartDimensions();
       const options = {
-        maxWidthOrHeight: Math.max(targetWidth, targetHeight),
+        maxWidthOrHeight: Math.max(finalWidth, finalHeight),
         useWebWorker: true,
         maxSizeMB: 10,
         initialQuality: quality / 100,
+        fileType: outputMimeType,
       };
 
       const compressedFile = await imageCompression(
         originalImage.file,
-        options
+        options,
       );
 
       // Create a new image with exact dimensions
       const resizedBlob = await createImageBlob(
         compressedFile,
-        targetWidth,
-        targetHeight
+        finalWidth,
+        finalHeight,
+        outputMimeType,
       );
 
-      const resizedFile = new File([resizedBlob], originalImage.file.name, {
-        type: originalImage.file.type,
-      });
+      const baseName = originalImage.file.name.replace(/\.[^.]+$/, "");
+      const resizedFile = new File(
+        [resizedBlob],
+        `${baseName}.${outputFormat === "jpeg" ? "jpg" : outputFormat}`,
+        {
+          type: outputMimeType,
+        },
+      );
 
       const resizedInfo = await loadImageInfo(resizedFile);
       setResizedImage(resizedInfo);
@@ -205,8 +250,11 @@ export default function ImageResizer({
     targetWidth,
     targetHeight,
     quality,
+    outputFormat,
+    outputMimeType,
     loadImageInfo,
     createImageBlob,
+    getSmartDimensions,
   ]);
 
   const handleDownload = useCallback(() => {
@@ -214,9 +262,14 @@ export default function ImageResizer({
 
     const link = document.createElement("a");
     link.href = resizedImage.preview;
-    link.download = `resized_${originalImage?.file.name || "image"}`;
+    const extension = outputFormat === "jpeg" ? "jpg" : outputFormat;
+    const baseName = (originalImage?.file.name || "image").replace(
+      /\.[^.]+$/,
+      "",
+    );
+    link.download = `resized_${baseName}.${extension}`;
     link.click();
-  }, [resizedImage, originalImage]);
+  }, [resizedImage, originalImage, outputFormat]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
@@ -262,7 +315,7 @@ export default function ImageResizer({
         )}
 
         {originalImage && (
-          <Card className="border border-gray-200">
+          <Card className="tool-surface">
             <CardContent>
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                 <Typography variant="body2" className="text-gray-700">
@@ -284,7 +337,7 @@ export default function ImageResizer({
         {originalImage && (
           <>
             {/* Settings Section */}
-            <Card className="border border-gray-200">
+            <Card className="tool-surface">
               <CardContent>
                 <Typography variant="h6" className="mb-3 text-gray-800">
                   Resize Settings
@@ -315,16 +368,57 @@ export default function ImageResizer({
                     />
                   </Grid>
 
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel>Output Format</InputLabel>
+                      <Select
+                        value={outputFormat}
+                        label="Output Format"
+                        onChange={(event) =>
+                          setOutputFormat(
+                            event.target.value as "jpeg" | "png" | "webp",
+                          )
+                        }
+                      >
+                        <MenuItem value="png">PNG</MenuItem>
+                        <MenuItem value="jpeg">JPEG</MenuItem>
+                        <MenuItem value="webp">WebP</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
                   <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={maintainRatio}
-                          onChange={(e) => setMaintainRatio(e.target.checked)}
-                        />
-                      }
-                      label="Maintain Aspect Ratio"
-                    />
+                    <div className="flex flex-col gap-1">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={maintainRatio}
+                            onChange={(e) => setMaintainRatio(e.target.checked)}
+                          />
+                        }
+                        label="Maintain Aspect Ratio"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={smartResize}
+                            onChange={(e) => setSmartResize(e.target.checked)}
+                          />
+                        }
+                        label="Smart Resize (fit within target box)"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={preventUpscale}
+                            onChange={(e) =>
+                              setPreventUpscale(e.target.checked)
+                            }
+                          />
+                        }
+                        label="Prevent Upscaling"
+                      />
+                    </div>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -359,7 +453,7 @@ export default function ImageResizer({
             {/* Preview Section */}
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
-                <Card className="border border-gray-200 h-full">
+                <Card className="tool-surface h-full">
                   <CardContent>
                     <Typography variant="h6" className="mb-3 text-gray-800">
                       Original

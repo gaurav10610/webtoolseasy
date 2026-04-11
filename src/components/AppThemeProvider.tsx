@@ -47,6 +47,16 @@ export function AppThemeProvider({
     window.localStorage.setItem(themeStorageKey, preference);
   }, [isReady, preference]);
 
+  useEffect(() => {
+    if (!("serviceWorker" in navigator)) {
+      return;
+    }
+
+    navigator.serviceWorker.register("/sw.js").catch((error) => {
+      console.error("Service worker registration failed:", error);
+    });
+  }, []);
+
   const resolvedMode = !isReady
     ? "light"
     : preference === "system"

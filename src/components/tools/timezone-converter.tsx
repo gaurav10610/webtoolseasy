@@ -126,7 +126,7 @@ export default function TimezoneConverter({
 
   // output timezones selected (multi) - default to TOP_TIMEZONES
   const [outputTzs, setOutputTzs] = useState<string[]>(() =>
-    TOP_TIMEZONES.slice()
+    TOP_TIMEZONES.slice(),
   );
 
   // output date-only (kept in sync with input date by default)
@@ -142,12 +142,12 @@ export default function TimezoneConverter({
   const toDateInputValue = useCallback(
     (d: Date) =>
       `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
-    [pad]
+    [pad],
   );
 
   const toTimeInputValue = useCallback(
     (d: Date) => `${pad(d.getHours())}:${pad(d.getMinutes())}`,
-    [pad]
+    [pad],
   );
 
   // Sync local inputs from toolState.code when it changes (e.g., from share links)
@@ -365,8 +365,8 @@ export default function TimezoneConverter({
               {parsedInput === null
                 ? `Showing current time in ${inputTz}`
                 : parsedInput.valid && parsedInput.date
-                ? `Showing converted time for ${parsedInput.date.toISOString()} (interpreted in ${inputTz})`
-                : `Invalid timestamp, showing current time in ${inputTz} instead`}
+                  ? `Showing converted time for ${parsedInput.date.toISOString()} (interpreted in ${inputTz})`
+                  : `Invalid timestamp, showing current time in ${inputTz} instead`}
             </div>
 
             {/* First row: input and primary output date-only display */}
@@ -395,7 +395,9 @@ export default function TimezoneConverter({
                   <div className="font-medium flex items-center gap-2">
                     {tz.replace("_/", "/").replace(/_/g, " ")}
                     {isDST(baseDate, tz) && (
-                      <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-semibold border border-amber-300">DST</span>
+                      <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-semibold border border-amber-300">
+                        DST
+                      </span>
                     )}
                   </div>
                   <div className="text-right text-lg font-mono">

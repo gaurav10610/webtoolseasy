@@ -198,6 +198,45 @@ export default function IpAddressLookup({
               </Card>
             )}
 
+            {ipInfo.loc && (
+              <Card className="border border-gray-200 md:col-span-2">
+                <CardContent className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <LocationOnIcon color="primary" />
+                    <Typography variant="h6" className="text-lg font-semibold">
+                      Coordinates & Map
+                    </Typography>
+                  </div>
+                  <TextField
+                    value={ipInfo.loc}
+                    fullWidth
+                    slotProps={{
+                      input: {
+                        readOnly: true,
+                      },
+                    }}
+                  />
+                  <div className="overflow-hidden rounded-lg border border-gray-200 bg-slate-50">
+                    <iframe
+                      title="Approximate IP location map"
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(ipInfo.loc)}&z=10&output=embed`}
+                      className="h-64 w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps?q=${encodeURIComponent(ipInfo.loc)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    Open in Google Maps
+                  </a>
+                </CardContent>
+              </Card>
+            )}
+
             {ipInfo.timezone && (
               <Card className="border border-gray-200">
                 <CardContent className="flex flex-col gap-3">

@@ -231,18 +231,40 @@ export async function createComposedRecordingStream({
   includeSystemAudio,
   includeMicrophoneAudio,
   frameRate = 30,
+  audioOnly = false,
 }: Readonly<{
   screenStream?: MediaStream;
   webcamStream?: MediaStream;
   includeSystemAudio: boolean;
   includeMicrophoneAudio: boolean;
   frameRate?: number;
+  audioOnly?: boolean;
 }>): Promise<ComposedRecordingStreamResult> {
   const hasScreenVideo = Boolean(screenStream?.getVideoTracks().length);
   const hasWebcamVideo = Boolean(webcamStream?.getVideoTracks().length);
 
+  const { track: mixedAudioTrack, cleanup: cleanupAudio } =
+    buildMixedAudioTrack({
+      screenStream,
+      webcamStream,
+      includeSystemAudio,
+      includeMicrophoneAudio,
+    });
+
   if (!hasScreenVideo && !hasWebcamVideo) {
-    throw new Error("Select Screen Capture or Camera to create a recording.");
+    if (audioOnly && mixedAudioTrack) {
+      return {
+        stream: new MediaStream([mixedAudioTrack]),
+        cleanup: () => {
+          cleanupAudio();
+        },
+      };
+    }
+    throw new Error(
+      audioOnly
+        ? "Enable microphone or system audio for audio-only recording."
+        : "Select Screen Capture or Camera to create a recording.",
+    );
   }
 
   const { width, height } = getCanvasDimensions({ screenStream, webcamStream });
@@ -333,14 +355,6 @@ export async function createComposedRecordingStream({
   if (composedVideoTrack) {
     outputStream.addTrack(composedVideoTrack);
   }
-
-  const { track: mixedAudioTrack, cleanup: cleanupAudio } =
-    buildMixedAudioTrack({
-      screenStream,
-      webcamStream,
-      includeSystemAudio,
-      includeMicrophoneAudio,
-    });
 
   if (mixedAudioTrack) {
     outputStream.addTrack(mixedAudioTrack);

@@ -43,6 +43,14 @@ const OUTPUT_FORMATS = [
   { value: "ico", label: "ICO" },
 ];
 
+const FORMAT_MIME_TYPES: Record<string, string> = {
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  bmp: "image/bmp",
+  ico: "image/x-icon",
+};
+
 export default function ImageCompress({
   hostname,
   queryParams,
@@ -56,10 +64,63 @@ export default function ImageCompress({
   const [selectedImageId, setSelectedImageId] = useState<string>("");
   const [compressionLevel, setCompressionLevel] = useState(50);
   const [outputFormat, setOutputFormat] = useState("jpeg");
+  const [comparePosition, setComparePosition] = useState(50);
 
   const selectedImage = useMemo(
     () => images.find((img) => img.id === selectedImageId),
     [images, selectedImageId],
+  );
+
+  const processWithNativeCanvas = useCallback(
+    async (sourceFile: File | Blob): Promise<Blob> => {
+      const mimeType = FORMAT_MIME_TYPES[outputFormat] || "image/jpeg";
+      const qualityRatio = Math.max(0.1, (100 - compressionLevel) / 100);
+
+      return await new Promise((resolve, reject) => {
+        const image = new Image();
+        const objectUrl = URL.createObjectURL(sourceFile);
+
+        image.onload = () => {
+          const canvas = document.createElement("canvas");
+          const maxDimension = 1920;
+          const scale = Math.min(
+            1,
+            maxDimension / image.width,
+            maxDimension / image.height,
+          );
+          canvas.width = Math.max(1, Math.round(image.width * scale));
+          canvas.height = Math.max(1, Math.round(image.height * scale));
+          const ctx = canvas.getContext("2d");
+
+          if (!ctx) {
+            URL.revokeObjectURL(objectUrl);
+            reject(new Error("Canvas export is not supported."));
+            return;
+          }
+
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(
+            (blob) => {
+              URL.revokeObjectURL(objectUrl);
+              if (blob) resolve(blob);
+              else reject(new Error("Native format export failed."));
+            },
+            mimeType,
+            qualityRatio,
+          );
+        };
+
+        image.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error("Failed to process image via Canvas."));
+        };
+
+        image.src = objectUrl;
+      });
+    },
+    [compressionLevel, outputFormat],
   );
 
   const handleFileSelect = useCallback(
@@ -130,10 +191,12 @@ export default function ImageCompress({
           },
         };
 
-        const compressedFile = await imageCompression(
+        const workerCompressedFile = await imageCompression(
           image.originalFile,
           options,
         );
+        const compressedFile =
+          await processWithNativeCanvas(workerCompressedFile);
 
         setImages((prev) => {
           const updated = [...prev];
@@ -168,7 +231,13 @@ export default function ImageCompress({
         toolState.actions.showMessage("Compression failed. Please try again.");
       }
     },
-    [images, compressionLevel, outputFormat, toolState.actions],
+    [
+      images,
+      compressionLevel,
+      outputFormat,
+      processWithNativeCanvas,
+      toolState.actions,
+    ],
   );
 
   const downloadImage = useCallback(
@@ -292,7 +361,7 @@ export default function ImageCompress({
 
         {/* Compression Settings */}
         {images.length > 0 && (
-          <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+          <div className="tool-surface p-4 rounded-lg space-y-4">
             <Typography variant="h6" className="flex items-center gap-2">
               <SettingsIcon /> Compression Settings
             </Typography>
@@ -383,19 +452,27 @@ export default function ImageCompress({
           <div className="space-y-4">
             <Typography variant="h6">Images ({images.length})</Typography>
 
+            <Typography
+              variant="caption"
+              className="block text-slate-600 dark:text-slate-300"
+            >
+              Compression uses a Web Worker for speed and a native Canvas export
+              pass for accurate output-format control.
+            </Typography>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {images.map((image) => (
                 <div
                   key={image.id}
                   className={`border rounded-lg p-4 cursor-pointer transition-all ${
                     selectedImageId === image.id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30"
+                      : "border-gray-200 dark:border-slate-700"
                   }`}
                   onClick={() => setSelectedImageId(image.id)}
                 >
                   {/* Image Preview */}
-                  <div className="aspect-square mb-3 rounded overflow-hidden bg-gray-100">
+                  <div className="aspect-square mb-3 rounded overflow-hidden bg-gray-100 dark:bg-slate-800">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={URL.createObjectURL(image.originalFile)}
@@ -519,6 +596,77 @@ export default function ImageCompress({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Side-by-side Comparison */}
+        {selectedImage?.compressedFile && (
+          <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-4">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <Typography variant="h6">Before / After Comparison</Typography>
+              <Typography variant="body2" className="text-gray-600">
+                Drag the slider to compare the original and compressed result.
+              </Typography>
+            </div>
+
+            <div
+              className="relative w-full overflow-hidden rounded-lg border bg-gray-100"
+              style={{ aspectRatio: "16 / 10" }}
+            >
+              {/* Original */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={URL.createObjectURL(selectedImage.originalFile)}
+                alt={`${selectedImage.originalFile.name} original preview`}
+                className="absolute inset-0 h-full w-full object-contain"
+              />
+
+              {/* Compressed overlay */}
+              <div
+                className="absolute inset-0 overflow-hidden border-l-2 border-white"
+                style={{
+                  left: `${comparePosition}%`,
+                  width: `${100 - comparePosition}%`,
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={URL.createObjectURL(selectedImage.compressedFile)}
+                  alt={`${selectedImage.originalFile.name} compressed preview`}
+                  className="absolute inset-0 h-full w-full object-contain"
+                  style={{
+                    left: `-${comparePosition}%`,
+                    width: "100vw",
+                    maxWidth: "none",
+                  }}
+                />
+              </div>
+
+              <div
+                className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+                style={{ left: `${comparePosition}%` }}
+              />
+              <div className="absolute left-3 top-3 rounded bg-black/60 px-2 py-1 text-xs text-white">
+                Original
+              </div>
+              <div className="absolute right-3 top-3 rounded bg-green-700/80 px-2 py-1 text-xs text-white">
+                Compressed
+              </div>
+            </div>
+
+            <div>
+              <Typography variant="body2" className="mb-2">
+                Comparison Position: {comparePosition}%
+              </Typography>
+              <Slider
+                value={comparePosition}
+                onChange={(_, value) => setComparePosition(value as number)}
+                min={0}
+                max={100}
+                step={1}
+                valueLabelDisplay="auto"
+              />
             </div>
           </div>
         )}

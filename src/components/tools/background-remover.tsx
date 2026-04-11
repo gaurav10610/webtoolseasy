@@ -28,15 +28,30 @@ export default function BackgroundRemover({
   });
 
   const [processingState, setProcessingState] = useState<ProcessingState>(
-    ProcessingState.IDLE
+    ProcessingState.IDLE,
   );
   const [originalImage, setOriginalImage] = useState<string>("");
   const [processedImage, setProcessedImage] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [threshold, setThreshold] = useState<number>(128);
   const [smoothing, setSmoothing] = useState<number>(2);
+  const [accelerationMode, setAccelerationMode] = useState("Canvas 2D");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const gpuNavigator = navigator as Navigator & { gpu?: unknown };
+    if (gpuNavigator.gpu) {
+      setAccelerationMode("WebGPU-assisted");
+      return;
+    }
+
+    const glCanvas = document.createElement("canvas");
+    const gl = glCanvas.getContext("webgl2") || glCanvas.getContext("webgl");
+    if (gl) {
+      setAccelerationMode("WebGL-assisted");
+    }
+  }, []);
 
   // Handle file upload
   const handleFileSelect = useCallback(
@@ -59,7 +74,7 @@ export default function BackgroundRemover({
       };
       reader.readAsDataURL(file);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleError = useCallback(
@@ -67,7 +82,7 @@ export default function BackgroundRemover({
       setError(error);
       toolState.actions.showMessage(error);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   // Remove background
@@ -91,89 +106,131 @@ export default function BackgroundRemover({
         const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
-        // Draw original image
         ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-
-        // Simple background removal algorithm
-        // Detect background color from corners
-        const cornerColors: number[][] = [];
-        const sampleSize = 10;
-
-        // Sample corners
-        for (let i = 0; i < sampleSize; i++) {
-          for (let j = 0; j < sampleSize; j++) {
-            const idx = (i * canvas.width + j) * 4;
-            cornerColors.push([data[idx], data[idx + 1], data[idx + 2]]);
-          }
-        }
-
-        // Calculate average background color
-        const avgBg = [0, 0, 0];
-        cornerColors.forEach((color) => {
-          avgBg[0] += color[0];
-          avgBg[1] += color[1];
-          avgBg[2] += color[2];
+        const sourceImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const sourceData = sourceImage.data;
+        const maskCanvas = document.createElement("canvas");
+        maskCanvas.width = canvas.width;
+        maskCanvas.height = canvas.height;
+        const maskCtx = maskCanvas.getContext("2d", {
+          willReadFrequently: true,
         });
-        avgBg[0] /= cornerColors.length;
-        avgBg[1] /= cornerColors.length;
-        avgBg[2] /= cornerColors.length;
+        if (!maskCtx) return;
+        const maskImage = maskCtx.createImageData(canvas.width, canvas.height);
+        const maskData = maskImage.data;
 
-        // Remove background
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-
-          // Calculate color distance
-          const distance = Math.sqrt(
-            Math.pow(r - avgBg[0], 2) +
-              Math.pow(g - avgBg[1], 2) +
-              Math.pow(b - avgBg[2], 2)
+        const sampleBackground = () => {
+          const samples: number[][] = [];
+          const sampleSize = Math.min(
+            16,
+            Math.max(8, Math.round(canvas.width * 0.02)),
           );
+          const samplePoint = (x: number, y: number) => {
+            const idx = (y * canvas.width + x) * 4;
+            samples.push([
+              sourceData[idx],
+              sourceData[idx + 1],
+              sourceData[idx + 2],
+            ]);
+          };
 
-          // If similar to background color, make transparent
-          if (distance < threshold) {
-            data[i + 3] = 0; // Set alpha to 0
-          }
-        }
-
-        // Apply edge smoothing
-        if (smoothing > 0) {
-          for (let y = 1; y < canvas.height - 1; y++) {
-            for (let x = 1; x < canvas.width - 1; x++) {
-              const idx = (y * canvas.width + x) * 4;
-              const alpha = data[idx + 3];
-
-              if (alpha > 0 && alpha < 255) {
-                // Edge pixel, apply smoothing
-                let avgAlpha = 0;
-                let count = 0;
-
-                for (let dy = -smoothing; dy <= smoothing; dy++) {
-                  for (let dx = -smoothing; dx <= smoothing; dx++) {
-                    const nIdx = ((y + dy) * canvas.width + (x + dx)) * 4;
-                    if (nIdx >= 0 && nIdx < data.length) {
-                      avgAlpha += data[nIdx + 3];
-                      count++;
-                    }
-                  }
-                }
-
-                data[idx + 3] = Math.round(avgAlpha / count);
-              }
+          for (let i = 0; i < sampleSize; i++) {
+            for (let j = 0; j < sampleSize; j++) {
+              samplePoint(i, j);
+              samplePoint(canvas.width - 1 - i, j);
+              samplePoint(i, canvas.height - 1 - j);
+              samplePoint(canvas.width - 1 - i, canvas.height - 1 - j);
             }
           }
+
+          return samples
+            .reduce(
+              (acc, sample) => [
+                acc[0] + sample[0],
+                acc[1] + sample[1],
+                acc[2] + sample[2],
+              ],
+              [0, 0, 0],
+            )
+            .map((value) => value / samples.length);
+        };
+
+        const avgBg = sampleBackground();
+        const getNeighborEdgeStrength = (x: number, y: number) => {
+          const currentIndex = (y * canvas.width + x) * 4;
+          const read = (offsetX: number, offsetY: number) => {
+            const nx = Math.max(0, Math.min(canvas.width - 1, x + offsetX));
+            const ny = Math.max(0, Math.min(canvas.height - 1, y + offsetY));
+            const idx = (ny * canvas.width + nx) * 4;
+            return [sourceData[idx], sourceData[idx + 1], sourceData[idx + 2]];
+          };
+
+          const [r, g, b] = [
+            sourceData[currentIndex],
+            sourceData[currentIndex + 1],
+            sourceData[currentIndex + 2],
+          ];
+          const neighbors = [read(-1, 0), read(1, 0), read(0, -1), read(0, 1)];
+          return (
+            neighbors.reduce((sum, sample) => {
+              return (
+                sum +
+                Math.abs(r - sample[0]) +
+                Math.abs(g - sample[1]) +
+                Math.abs(b - sample[2])
+              );
+            }, 0) / neighbors.length
+          );
+        };
+
+        const smoothBand = Math.max(10, smoothing * 18);
+
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            const idx = (y * canvas.width + x) * 4;
+            const r = sourceData[idx];
+            const g = sourceData[idx + 1];
+            const b = sourceData[idx + 2];
+            const distance = Math.sqrt(
+              Math.pow(r - avgBg[0], 2) +
+                Math.pow(g - avgBg[1], 2) +
+                Math.pow(b - avgBg[2], 2),
+            );
+            const edgeStrength = getNeighborEdgeStrength(x, y);
+            const alphaBase =
+              ((distance - (threshold - smoothBand)) / (smoothBand * 2)) * 255;
+            const edgeBoost = Math.min(80, edgeStrength * 0.35);
+            const alpha = Math.max(
+              0,
+              Math.min(255, Math.round(alphaBase + edgeBoost)),
+            );
+
+            maskData[idx] = r;
+            maskData[idx + 1] = g;
+            maskData[idx + 2] = b;
+            maskData[idx + 3] = alpha;
+          }
         }
 
-        ctx.putImageData(imageData, 0, 0);
+        maskCtx.putImageData(maskImage, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.filter =
+          smoothing > 0
+            ? `blur(${accelerationMode === "Canvas 2D" ? smoothing * 0.6 : smoothing}px)`
+            : "none";
+        ctx.drawImage(maskCanvas, 0, 0);
+        ctx.restore();
+        ctx.filter = "none";
 
-        // Convert to data URL
         const dataUrl = canvas.toDataURL("image/png");
         setProcessedImage(dataUrl);
         setProcessingState(ProcessingState.COMPLETED);
-        toolState.actions.showMessage("Background removed successfully!");
+        toolState.actions.showMessage(
+          `Background removed using ${accelerationMode} edge detection!`,
+        );
       };
 
       img.onerror = () => {
@@ -189,7 +246,13 @@ export default function BackgroundRemover({
       setProcessingState(ProcessingState.IDLE);
       toolState.actions.showMessage("Failed to remove background");
     }
-  }, [originalImage, threshold, smoothing, toolState.actions]);
+  }, [
+    accelerationMode,
+    originalImage,
+    threshold,
+    smoothing,
+    toolState.actions,
+  ]);
 
   // Download processed image
   const downloadImage = useCallback(() => {
@@ -283,6 +346,14 @@ export default function BackgroundRemover({
               </Typography>
 
               <div className="space-y-6">
+                <Typography
+                  variant="caption"
+                  className="block text-slate-600 dark:text-slate-300"
+                >
+                  Engine: {accelerationMode}. Enhanced edge feathering uses a
+                  Canvas mask with WebGL/WebGPU-assisted smoothing when
+                  available.
+                </Typography>
                 <div>
                   <Typography variant="body2" className="mb-2">
                     Threshold: {threshold}

@@ -10,7 +10,13 @@ import { useEditorConfig } from "@/hooks/useEditorConfig";
 import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import { Typography, Chip, IconButton, Tooltip } from "@mui/material";
+import {
+  Typography,
+  Chip,
+  IconButton,
+  Tooltip,
+  TextField,
+} from "@mui/material";
 
 export default function JavaScriptEditor({
   hostname,
@@ -129,6 +135,7 @@ export default function JavaScriptEditor({
   });
 
   const [previewHtml, setPreviewHtml] = useState("");
+  const [npmPackages, setNpmPackages] = useState("lodash, dayjs");
   const [consoleLogs, setConsoleLogs] = useState<
     { level: string; text: string; id: number }[]
   >([]);
@@ -137,19 +144,41 @@ export default function JavaScriptEditor({
 
   const consoleOverride = `<script>(function(){var L=['log','warn','error','info'];L.forEach(function(l){var o=console[l].bind(console);console[l]=function(){var a=Array.prototype.slice.call(arguments);o.apply(console,a);try{window.parent.postMessage({__cc:true,level:l,args:a.map(function(x){try{return typeof x==='object'&&x!==null?JSON.stringify(x,null,2):String(x);}catch(e){return String(x);}})},\'*\');}catch(e){}};});})();<\/script>`;
 
+  const buildImportMap = useCallback((packages: string) => {
+    const imports = packages
+      .split(",")
+      .map((entry) => entry.trim())
+      .filter(Boolean)
+      .reduce<Record<string, string>>((accumulator, entry) => {
+        const [name, customUrl] = entry.split("=").map((item) => item.trim());
+        accumulator[name] = customUrl || `https://esm.sh/${name}`;
+        return accumulator;
+      }, {});
+
+    return Object.keys(imports).length > 0
+      ? `<script type="importmap">${JSON.stringify({ imports }, null, 2)}<\/script>`
+      : "";
+  }, []);
+
   const buildPreviewHtml = useCallback(
     (html: string) => {
-      if (html.includes("<head>"))
-        return html.replace("<head>", "<head>" + consoleOverride);
-      return consoleOverride + html;
+      const importMap = buildImportMap(npmPackages);
+      if (html.includes("<head>")) {
+        return html.replace("<head>", `<head>${consoleOverride}${importMap}`);
+      }
+      return `${consoleOverride}${importMap}${html}`;
     },
-    [consoleOverride],
+    [buildImportMap, consoleOverride, npmPackages],
   );
 
   // Initialize preview on component mount
   useEffect(() => {
     setPreviewHtml(buildPreviewHtml(initialValue));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setPreviewHtml(buildPreviewHtml(toolState.code || initialValue));
+  }, [buildPreviewHtml, toolState.code]);
 
   // Listen for console messages from iframe
   useEffect(() => {
@@ -218,6 +247,17 @@ export default function JavaScriptEditor({
       />
 
       <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+        <TextField
+          fullWidth
+          size="small"
+          label="NPM CDN imports (comma separated or name=url)"
+          value={npmPackages}
+          onChange={(event) => setNpmPackages(event.target.value)}
+          helperText="Use this with <script type='module'> imports, e.g. import _ from 'lodash'"
+        />
+      </div>
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

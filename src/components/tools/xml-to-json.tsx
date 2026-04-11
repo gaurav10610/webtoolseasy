@@ -58,7 +58,7 @@ export default function XmlToJsonConverter({
         [propertyName]: propertyValue,
       }));
     },
-    []
+    [],
   );
 
   const convertXml = useCallback(() => {
@@ -113,15 +113,27 @@ export default function XmlToJsonConverter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [convertXml, copyJsonData, toolState]
+    [convertXml, copyJsonData, toolState],
   );
 
-  const renderTree = (value: unknown, keyName = "root", depth = 0): React.ReactNode => {
+  const renderTree = (
+    value: unknown,
+    keyName = "root",
+    depth = 0,
+  ): React.ReactNode => {
     const indent = depth * 16;
     if (value === null || typeof value !== "object") {
       return (
-        <div key={`${keyName}-${depth}`} style={{ marginLeft: indent }} className="py-0.5">
-          <Typography variant="body2" component="span" sx={{ fontFamily: "monospace" }}>
+        <div
+          key={`${keyName}-${depth}`}
+          style={{ marginLeft: indent }}
+          className="py-0.5"
+        >
+          <Typography
+            variant="body2"
+            component="span"
+            sx={{ fontFamily: "monospace" }}
+          >
             <strong>{keyName}:</strong> {String(value)}
           </Typography>
         </div>
@@ -130,7 +142,10 @@ export default function XmlToJsonConverter({
     if (Array.isArray(value)) {
       return (
         <div key={`${keyName}-${depth}`} style={{ marginLeft: indent }}>
-          <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 700 }}>
+          <Typography
+            variant="body2"
+            sx={{ fontFamily: "monospace", fontWeight: 700 }}
+          >
             {keyName}: [ ] ({value.length})
           </Typography>
           {value.map((item, i) => renderTree(item, `[${i}]`, depth + 1))}
@@ -139,10 +154,15 @@ export default function XmlToJsonConverter({
     }
     return (
       <div key={`${keyName}-${depth}`} style={{ marginLeft: indent }}>
-        <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 700 }}>
-          {keyName}: {'{ }'}
+        <Typography
+          variant="body2"
+          sx={{ fontFamily: "monospace", fontWeight: 700 }}
+        >
+          {keyName}: {"{ }"}
         </Typography>
-        {Object.entries(value as Record<string, unknown>).map(([k, v]) => renderTree(v, k, depth + 1))}
+        {Object.entries(value as Record<string, unknown>).map(([k, v]) =>
+          renderTree(v, k, depth + 1),
+        )}
       </div>
     );
   };
@@ -163,7 +183,7 @@ export default function XmlToJsonConverter({
         exampleOutput={JSON.stringify(
           { customers: { customer: { "@_id": "101", n: "WebToolsEasy" } } },
           null,
-          2
+          2,
         )}
       />
 
@@ -206,7 +226,11 @@ export default function XmlToJsonConverter({
                   const parsed = JSON.parse(convertedJson);
                   return renderTree(parsed);
                 } catch {
-                  return <Typography variant="body2">Unable to render tree.</Typography>;
+                  return (
+                    <Typography variant="body2">
+                      Unable to render tree.
+                    </Typography>
+                  );
                 }
               })()}
             </div>

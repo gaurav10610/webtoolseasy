@@ -441,8 +441,18 @@ export default function SalaryCalculator({
                   Salary Breakdown
                 </Typography>
                 {[
-                  { label: "Take-Home Pay", value: result.afterTaxAnnual, color: "#4ade80", pct: (1 - result.effectiveTaxRate / 100) * 100 },
-                  { label: "Tax Deduction", value: result.annual - result.afterTaxAnnual, color: "#f87171", pct: result.effectiveTaxRate },
+                  {
+                    label: "Take-Home Pay",
+                    value: result.afterTaxAnnual,
+                    color: "#4ade80",
+                    pct: (1 - result.effectiveTaxRate / 100) * 100,
+                  },
+                  {
+                    label: "Tax Deduction",
+                    value: result.annual - result.afterTaxAnnual,
+                    color: "#f87171",
+                    pct: result.effectiveTaxRate,
+                  },
                 ].map(({ label, value, color, pct }) => (
                   <div key={label} className="mb-3">
                     <div className="flex justify-between mb-1">
@@ -461,8 +471,12 @@ export default function SalaryCalculator({
                 ))}
                 <Divider sx={{ my: 2 }} />
                 <div className="flex justify-between">
-                  <Typography variant="body2" fontWeight="bold">Gross Annual</Typography>
-                  <Typography variant="body2" fontWeight="bold">{formatLargeCurrency(result.annual)}</Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    Gross Annual
+                  </Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatLargeCurrency(result.annual)}
+                  </Typography>
                 </div>
               </CardContent>
             </Card>

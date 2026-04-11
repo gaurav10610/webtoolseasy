@@ -127,6 +127,15 @@ const sampleTables = {
   },
 };
 
+const DEFAULT_SQL =
+  "-- Welcome to SQL Practice Editor!\n-- Try running: SELECT * FROM employees LIMIT 10;\n\nSELECT * FROM employees LIMIT 10;";
+
+interface QueryTab {
+  id: string;
+  title: string;
+  query: string;
+}
+
 const sqlExamples = [
   {
     title: "Basic SELECT",
@@ -171,9 +180,19 @@ WHERE salary > (SELECT AVG(salary) FROM employees);`,
 export default function SqlPracticeEditor({
   hostname,
 }: Readonly<ToolComponentProps>) {
-  const [sqlCode, setSqlCode] = useState(
-    "-- Welcome to SQL Practice Editor!\n-- Try running: SELECT * FROM employees LIMIT 10;\n\nSELECT * FROM employees LIMIT 10;",
+  const [queryTabs, setQueryTabs] = useState<QueryTab[]>([
+    {
+      id: "query-1",
+      title: "Query 1",
+      query: DEFAULT_SQL,
+    },
+  ]);
+  const [activeTabId, setActiveTabId] = useState("query-1");
+  const activeTab = useMemo(
+    () => queryTabs.find((tab) => tab.id === activeTabId) ?? queryTabs[0],
+    [queryTabs, activeTabId],
   );
+  const sqlCode = activeTab?.query ?? "";
   const [queryResult, setQueryResult] = useState<QueryExecResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -185,7 +204,11 @@ export default function SqlPracticeEditor({
     language: "sql",
     value: sqlCode,
     onChange: (value) => {
-      setSqlCode(value || "");
+      setQueryTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === activeTabId ? { ...tab, query: value || "" } : tab,
+        ),
+      );
     },
     className: "h-full",
   });
@@ -342,13 +365,50 @@ export default function SqlPracticeEditor({
     }
   }, [database, sqlCode]);
 
-  const loadExample = useCallback((example: (typeof sqlExamples)[0]) => {
-    setSqlCode(example.query);
-    // Auto-clear previous results when loading a new example
+  const addQueryTab = useCallback(() => {
+    const newTab: QueryTab = {
+      id: crypto.randomUUID(),
+      title: `Query ${queryTabs.length + 1}`,
+      query: "SELECT * FROM employees LIMIT 5;",
+    };
+
+    setQueryTabs((prev) => [...prev, newTab]);
+    setActiveTabId(newTab.id);
     setQueryResult([]);
     setError(null);
     setExecutionTime(null);
-  }, []);
+  }, [queryTabs.length]);
+
+  const closeQueryTab = useCallback(
+    (id: string) => {
+      if (queryTabs.length === 1) return;
+
+      const fallbackTab = queryTabs.find((tab) => tab.id !== id);
+      setQueryTabs((prev) => prev.filter((tab) => tab.id !== id));
+
+      if (activeTabId === id && fallbackTab) {
+        setActiveTabId(fallbackTab.id);
+      }
+    },
+    [activeTabId, queryTabs],
+  );
+
+  const loadExample = useCallback(
+    (example: (typeof sqlExamples)[0]) => {
+      setQueryTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === activeTabId
+            ? { ...tab, title: example.title, query: example.query }
+            : tab,
+        ),
+      );
+      // Auto-clear previous results when loading a new example
+      setQueryResult([]);
+      setError(null);
+      setExecutionTime(null);
+    },
+    [activeTabId],
+  );
 
   const copyToClipboard = useCallback(
     async (text: string) => {
@@ -762,6 +822,39 @@ export default function SqlPracticeEditor({
           semicolons. Previous results are automatically cleared when running
           new queries.
         </Typography>
+      </Box>
+
+      <Box mb={2}>
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2">
+          {queryTabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTabId(tab.id)}
+              className={`flex items-center gap-2 rounded-md border px-3 py-1 text-sm transition ${
+                activeTabId === tab.id
+                  ? "border-blue-500 bg-blue-100 text-blue-800"
+                  : "border-gray-300 bg-white text-slate-700 hover:bg-slate-100"
+              }`}
+            >
+              <span>{tab.title}</span>
+              {queryTabs.length > 1 && (
+                <span
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    closeQueryTab(tab.id);
+                  }}
+                  className="font-bold text-slate-500 hover:text-red-600"
+                >
+                  ×
+                </span>
+              )}
+            </button>
+          ))}
+          <Button size="small" variant="outlined" onClick={addQueryTab}>
+            New Tab
+          </Button>
+        </div>
       </Box>
 
       {/* SQL Query Editor and Query Results in Single Column Layout */}

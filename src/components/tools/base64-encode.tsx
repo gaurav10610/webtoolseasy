@@ -38,7 +38,7 @@ export default function Base64Encode({
         toolState.actions.showMessage("Error reading file");
       };
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleError = useCallback(
@@ -46,7 +46,7 @@ export default function Base64Encode({
       setError(errorMessage);
       toolState.actions.showMessage(errorMessage);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const copyBase64Data = useCallback(() => {
@@ -76,7 +76,7 @@ export default function Base64Encode({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyBase64Data, toolState, base64Data]
+    [copyBase64Data, toolState, base64Data],
   );
 
   return (

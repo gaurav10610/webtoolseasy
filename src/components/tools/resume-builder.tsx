@@ -132,12 +132,12 @@ export default function ResumeBuilder({
   const handleExperienceChange = (
     id: number,
     field: keyof Experience,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     setResumeData((prev) => ({
       ...prev,
       experiences: prev.experiences.map((exp) =>
-        exp.id === id ? { ...exp, [field]: value } : exp
+        exp.id === id ? { ...exp, [field]: value } : exp,
       ),
     }));
   };
@@ -177,12 +177,12 @@ export default function ResumeBuilder({
   const handleEducationChange = (
     id: number,
     field: keyof Education,
-    value: string
+    value: string,
   ) => {
     setResumeData((prev) => ({
       ...prev,
       education: prev.education.map((edu) =>
-        edu.id === id ? { ...edu, [field]: value } : edu
+        edu.id === id ? { ...edu, [field]: value } : edu,
       ),
     }));
   };
@@ -208,7 +208,7 @@ export default function ResumeBuilder({
   const removeEducation = (id: number) => {
     if (resumeData.education.length === 1) {
       toolState.actions.showMessage(
-        "Resume must have at least one education entry"
+        "Resume must have at least one education entry",
       );
       return;
     }
@@ -250,7 +250,7 @@ export default function ResumeBuilder({
         x: number,
         y: number,
         maxWidth: number,
-        lineHeight: number = 6
+        lineHeight: number = 6,
       ): number => {
         const lines = pdf.splitTextToSize(text, maxWidth);
         pdf.text(lines, x, y);
@@ -334,7 +334,7 @@ export default function ResumeBuilder({
                 exp.description,
                 margin,
                 yPos,
-                contentWidth
+                contentWidth,
               );
             }
             yPos += 6;
@@ -501,6 +501,128 @@ export default function ResumeBuilder({
           </CardContent>
         </Card>
 
+        {/* Resume Preview */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="mb-4">
+              Live Resume Preview
+            </Typography>
+            {(() => {
+              const styles =
+                resumeData.template === "creative"
+                  ? {
+                      headerBg: "#7c3aed",
+                      accent: "#7c3aed",
+                      cardBg: "#faf5ff",
+                    }
+                  : resumeData.template === "classic"
+                    ? {
+                        headerBg: "#0f172a",
+                        accent: "#0f172a",
+                        cardBg: "#f8fafc",
+                      }
+                    : {
+                        headerBg: "#2563eb",
+                        accent: "#2563eb",
+                        cardBg: "#eff6ff",
+                      };
+
+              return (
+                <div
+                  className="rounded-lg border overflow-hidden"
+                  style={{
+                    borderColor: styles.accent,
+                    backgroundColor: styles.cardBg,
+                  }}
+                >
+                  <div
+                    className="px-4 py-4 text-white"
+                    style={{ backgroundColor: styles.headerBg }}
+                  >
+                    <Typography variant="h5" fontWeight="bold">
+                      {resumeData.fullName || "Your Name"}
+                    </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      {[
+                        resumeData.email || "email@example.com",
+                        resumeData.phone,
+                        resumeData.location,
+                      ]
+                        .filter(Boolean)
+                        .join(" • ")}
+                    </Typography>
+                  </div>
+                  <div className="p-4 space-y-4">
+                    <div>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ color: styles.accent, fontWeight: 700 }}
+                      >
+                        Professional Summary
+                      </Typography>
+                      <Typography variant="body2">
+                        {resumeData.summary ||
+                          "Add a short summary to preview your resume here."}
+                      </Typography>
+                    </div>
+                    <div>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ color: styles.accent, fontWeight: 700 }}
+                      >
+                        Experience
+                      </Typography>
+                      {resumeData.experiences.slice(0, 2).map((exp) => (
+                        <div key={exp.id} className="mb-2">
+                          <Typography variant="body2" fontWeight="bold">
+                            {exp.jobTitle || "Job Title"}{" "}
+                            {exp.company ? `— ${exp.company}` : ""}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {[
+                              exp.location,
+                              exp.startDate,
+                              exp.currentJob ? "Present" : exp.endDate,
+                            ]
+                              .filter(Boolean)
+                              .join(" • ")}
+                          </Typography>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ color: styles.accent, fontWeight: 700 }}
+                      >
+                        Skills
+                      </Typography>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {(resumeData.skills.length
+                          ? resumeData.skills
+                          : ["JavaScript", "Communication", "Problem Solving"]
+                        )
+                          .slice(0, 8)
+                          .map((skill) => (
+                            <Chip
+                              key={skill}
+                              label={skill}
+                              size="small"
+                              sx={{
+                                bgcolor: `${styles.accent}15`,
+                                color: styles.accent,
+                              }}
+                            />
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </CardContent>
+        </Card>
+
         {/* Personal Information */}
         <Card>
           <CardContent>
@@ -634,7 +756,7 @@ export default function ResumeBuilder({
                       handleExperienceChange(
                         exp.id,
                         "startDate",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                     fullWidth
@@ -660,7 +782,7 @@ export default function ResumeBuilder({
                           handleExperienceChange(
                             exp.id,
                             "currentJob",
-                            e.target.checked
+                            e.target.checked,
                           )
                         }
                         className="w-4 h-4"
@@ -677,7 +799,7 @@ export default function ResumeBuilder({
                     handleExperienceChange(
                       exp.id,
                       "description",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                   fullWidth
@@ -739,7 +861,7 @@ export default function ResumeBuilder({
                       handleEducationChange(
                         edu.id,
                         "institution",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                     fullWidth
@@ -759,7 +881,7 @@ export default function ResumeBuilder({
                       handleEducationChange(
                         edu.id,
                         "graduationYear",
-                        e.target.value
+                        e.target.value,
                       )
                     }
                     fullWidth

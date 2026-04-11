@@ -93,7 +93,7 @@ export default function BarcodeGenerator({
       ctx.textAlign = "center";
       ctx.fillText(data, canvas.width / 2, barHeight + margin + 20);
     },
-    []
+    [],
   );
 
   // Generate EAN13 barcode
@@ -169,7 +169,7 @@ export default function BarcodeGenerator({
       ctx.textAlign = "center";
       ctx.fillText(paddedData, canvas.width / 2, barHeight + margin + 20);
     },
-    []
+    [],
   );
 
   // Generate barcode
@@ -258,7 +258,7 @@ export default function BarcodeGenerator({
         });
       }
     },
-    [barcodeType, toolState.actions]
+    [barcodeType, toolState.actions],
   );
 
   const buttons = createCommonButtons({});
@@ -327,10 +327,10 @@ export default function BarcodeGenerator({
                   barcodeType === "code128"
                     ? "Supports letters, numbers, and special characters (1-50 chars)"
                     : barcodeType === "ean13"
-                    ? "Enter 13 numeric digits (will auto-pad if shorter)"
-                    : barcodeType === "upca"
-                    ? "Enter 12 numeric digits (will auto-pad if shorter)"
-                    : "Uppercase letters and numbers only (1-40 chars)"
+                      ? "Enter 13 numeric digits (will auto-pad if shorter)"
+                      : barcodeType === "upca"
+                        ? "Enter 12 numeric digits (will auto-pad if shorter)"
+                        : "Uppercase letters and numbers only (1-40 chars)"
                 }
               />
             </div>

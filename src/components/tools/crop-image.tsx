@@ -59,6 +59,7 @@ export default function CropImageOptimized() {
   const [error, setError] = useState("");
   const [flipH, setFlipH] = useState(false);
   const [flipV, setFlipV] = useState(false);
+  const [rotation, setRotation] = useState(0);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const addMoreInputRef = useRef<HTMLInputElement>(null);
@@ -74,7 +75,7 @@ export default function CropImageOptimized() {
       { key: "2:1", value: "2", label: "2:1 (Panoramic)" },
       { key: "9:16", value: "0.5625", label: "9:16 (Portrait)" },
     ],
-    []
+    [],
   );
 
   const formatOptions = useMemo(
@@ -84,7 +85,7 @@ export default function CropImageOptimized() {
           {toUpper(item)}
         </MenuItem>
       )),
-    [formatList]
+    [formatList],
   );
 
   const selectedFileUrl = useMemo(() => {
@@ -123,6 +124,7 @@ export default function CropImageOptimized() {
       height: 50,
     });
     setAspectRatio(undefined);
+    setRotation(0);
   }, [cropUnit]);
 
   const handleAspectRatioChange = useCallback(
@@ -139,7 +141,7 @@ export default function CropImageOptimized() {
         }));
       }
     },
-    []
+    [],
   );
 
   const handleCropUnitChange = useCallback(
@@ -151,7 +153,7 @@ export default function CropImageOptimized() {
         unit: newUnit,
       }));
     },
-    []
+    [],
   );
 
   const handleImageLoad = useCallback(
@@ -162,14 +164,14 @@ export default function CropImageOptimized() {
         height: img.naturalHeight,
       });
     },
-    []
+    [],
   );
 
   const handleImageFormatChange = useCallback(
     (event: SelectChangeEvent<string>) => {
       setImageFormat(event.target.value);
     },
-    []
+    [],
   );
 
   // Optimized crop handlers with debouncing effect
@@ -193,25 +195,25 @@ export default function CropImageOptimized() {
         updateCrop({ [field]: value });
       }
     },
-    [aspectRatio, updateCrop]
+    [aspectRatio, updateCrop],
   );
 
   // Individual optimized handlers for each control
   const handleXChange = useCallback(
     (value: number) => handleSliderChange("x", value),
-    [handleSliderChange]
+    [handleSliderChange],
   );
   const handleYChange = useCallback(
     (value: number) => handleSliderChange("y", value),
-    [handleSliderChange]
+    [handleSliderChange],
   );
   const handleWidthChange = useCallback(
     (value: number) => handleSliderChange("width", value),
-    [handleSliderChange]
+    [handleSliderChange],
   );
   const handleHeightChange = useCallback(
     (value: number) => handleSliderChange("height", value),
-    [handleSliderChange]
+    [handleSliderChange],
   );
 
   // Optimized text field handlers - direct implementations to prevent lag
@@ -221,7 +223,7 @@ export default function CropImageOptimized() {
       if (isNaN(value)) return;
       updateCrop({ x: value });
     },
-    [updateCrop]
+    [updateCrop],
   );
 
   const handleYTextChange = useCallback(
@@ -230,7 +232,7 @@ export default function CropImageOptimized() {
       if (isNaN(value)) return;
       updateCrop({ y: value });
     },
-    [updateCrop]
+    [updateCrop],
   );
 
   const handleWidthTextChange = useCallback(
@@ -247,7 +249,7 @@ export default function CropImageOptimized() {
         updateCrop({ width: value });
       }
     },
-    [aspectRatio, updateCrop]
+    [aspectRatio, updateCrop],
   );
 
   const handleHeightTextChange = useCallback(
@@ -264,7 +266,7 @@ export default function CropImageOptimized() {
         updateCrop({ height: value });
       }
     },
-    [aspectRatio, updateCrop]
+    [aspectRatio, updateCrop],
   );
 
   const croppedImage = ({
@@ -283,7 +285,7 @@ export default function CropImageOptimized() {
 
     image.onload = () => {
       const previewImage = document.getElementById(
-        "image-cropper-preview"
+        "image-cropper-preview",
       ) as HTMLImageElement;
       if (!previewImage) {
         return;
@@ -303,20 +305,19 @@ export default function CropImageOptimized() {
 
       if (ctx) {
         ctx.save();
-        if (flipH || flipV) {
-          ctx.translate(flipH ? cropWidth : 0, flipV ? cropHeight : 0);
-          ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
-        }
+        ctx.translate(cropWidth / 2, cropHeight / 2);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
         ctx.drawImage(
           image,
           cropX,
           cropY,
           cropWidth,
           cropHeight,
-          0,
-          0,
+          -cropWidth / 2,
+          -cropHeight / 2,
           cropWidth,
-          cropHeight
+          cropHeight,
         );
         ctx.restore();
 
@@ -339,7 +340,7 @@ export default function CropImageOptimized() {
       document.body.removeChild(element);
       URL.revokeObjectURL(element.href);
     },
-    [imageFormat]
+    [imageFormat],
   );
 
   const downloadImage = useCallback(
@@ -365,7 +366,7 @@ export default function CropImageOptimized() {
         callback,
       });
     },
-    []
+    [],
   );
 
   const DownloadImageButtons = useCallback(() => {
@@ -588,6 +589,25 @@ export default function CropImageOptimized() {
             </Grid>
 
             <Grid item xs={12}>
+              <Typography variant="subtitle2" className="mb-2">
+                Straighten
+              </Typography>
+              <Box>
+                <Typography variant="caption" className="block mb-1">
+                  Rotation: {rotation}°
+                </Typography>
+                <Slider
+                  value={rotation}
+                  onChange={(_, value) => setRotation(value as number)}
+                  min={-45}
+                  max={45}
+                  step={1}
+                  valueLabelDisplay="auto"
+                />
+              </Box>
+            </Grid>
+
+            <Grid item xs={12}>
               <div className="flex gap-2 justify-end">
                 <ButtonWithHandler
                   buttonText={`Flip H${flipH ? " ✓" : ""}`}
@@ -640,8 +660,10 @@ export default function CropImageOptimized() {
     resetCrop,
     flipH,
     flipV,
+    rotation,
     setFlipH,
     setFlipV,
+    setRotation,
   ]);
 
   const selectImageHandler = useCallback(
@@ -649,7 +671,7 @@ export default function CropImageOptimized() {
       const foundFile = find(fileList, { id });
       setSelectedFile(foundFile || null);
     },
-    [fileList]
+    [fileList],
   );
 
   const handleCropChange = useCallback((c: PixelCrop) => {
@@ -676,7 +698,7 @@ export default function CropImageOptimized() {
         e.target.value = "";
       }
     },
-    [handleFileSelect]
+    [handleFileSelect],
   );
 
   const handleFileRemove = useCallback(
@@ -689,7 +711,7 @@ export default function CropImageOptimized() {
         return newFileList;
       });
     },
-    [selectedFile?.id]
+    [selectedFile?.id],
   );
 
   return (
@@ -789,7 +811,7 @@ export default function CropImageOptimized() {
               className="h-full w-full object-cover"
               onLoad={handleImageLoad}
               style={{
-                transform: `scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
+                transform: `rotate(${rotation}deg) scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
               }}
             />
           </ReactCrop>

@@ -9,7 +9,14 @@ import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { isNil } from "lodash-es";
 import { decodeJwt, decodeProtectedHeader } from "jose";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Alert,
+} from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
@@ -53,6 +60,60 @@ export default function JwtDecoder({
   );
 
   const tokenError = !isNil(error);
+  const [signHeader, setSignHeader] = useState(
+    '{\n  "alg": "HS256",\n  "typ": "JWT"\n}',
+  );
+  const [signPayload, setSignPayload] = useState(
+    decodedJwtToken ||
+      '{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "admin": true\n}',
+  );
+  const [signSecret, setSignSecret] = useState("my-secret-key");
+
+  const signJwtToken = useCallback(async () => {
+    try {
+      const encoder = new TextEncoder();
+      const header = JSON.parse(signHeader);
+      const payload = JSON.parse(signPayload);
+
+      const toBase64Url = (obj: unknown) =>
+        btoa(unescape(encodeURIComponent(JSON.stringify(obj))))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/g, "");
+
+      const headerPart = toBase64Url(header);
+      const payloadPart = toBase64Url(payload);
+      const signingInput = `${headerPart}.${payloadPart}`;
+
+      const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(signSecret),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["sign"],
+      );
+      const signature = await crypto.subtle.sign(
+        "HMAC",
+        key,
+        encoder.encode(signingInput),
+      );
+      const signatureBytes = new Uint8Array(signature);
+      const signaturePart = btoa(String.fromCharCode(...signatureBytes))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/g, "");
+
+      const token = `${signingInput}.${signaturePart}`;
+      toolState.setCode(token);
+      setDecodedToken(JSON.stringify(payload, null, 2));
+      setDecodedTokenHeaders(JSON.stringify(header, null, 2));
+      toolState.actions.showMessage("JWT signed successfully!");
+    } catch (err) {
+      toolState.actions.showMessage(
+        err instanceof Error ? err.message : "JWT signing failed",
+      );
+    }
+  }, [signHeader, signPayload, signSecret, toolState]);
 
   const onRawCodeChange = useCallback(
     (value: string) => {
@@ -155,6 +216,47 @@ export default function JwtDecoder({
           }
         />
       </div>
+
+      {/* JWT Sign / Encode */}
+      <Card className="mb-6 w-full">
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Sign / Encode JWT (HS256)
+          </Typography>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+            <TextField
+              label="Header JSON"
+              multiline
+              minRows={5}
+              value={signHeader}
+              onChange={(e) => setSignHeader(e.target.value)}
+              slotProps={{ input: { sx: { fontFamily: "monospace" } } }}
+            />
+            <TextField
+              label="Payload JSON"
+              multiline
+              minRows={5}
+              value={signPayload}
+              onChange={(e) => setSignPayload(e.target.value)}
+              slotProps={{ input: { sx: { fontFamily: "monospace" } } }}
+            />
+          </div>
+          <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
+            <TextField
+              label="Secret Key"
+              value={signSecret}
+              onChange={(e) => setSignSecret(e.target.value)}
+              fullWidth
+            />
+            <Button variant="contained" onClick={() => void signJwtToken()}>
+              Generate HS256 JWT
+            </Button>
+          </div>
+          <Alert severity="info" sx={{ mt: 2 }}>
+            This encoder signs tokens locally in your browser using HMAC-SHA256.
+          </Alert>
+        </CardContent>
+      </Card>
 
       {/* Row 2: Headers and Token Data Editors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">

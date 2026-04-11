@@ -8,6 +8,15 @@ import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { html_beautify } from "js-beautify";
+import { format as prettierFormat } from "prettier/standalone";
+import * as prettierHtml from "prettier/plugins/html";
+
+const formatHtmlWithPrettier = async (code: string) => {
+  return await prettierFormat(code, {
+    parser: "html",
+    plugins: [prettierHtml],
+  });
+};
 
 export default function HtmlFormatter({
   hostname,
@@ -29,14 +38,24 @@ export default function HtmlFormatter({
     }
   });
 
-  const formatHtml = useCallback(() => {
+  const formatHtml = useCallback(async () => {
     try {
-      const formatted = html_beautify(toolState.code);
+      const formatted = await formatHtmlWithPrettier(toolState.code);
       setFormattedCode(formatted);
-      toolState.actions.showMessage("HTML formatted successfully!");
+      toolState.actions.showMessage(
+        "HTML formatted with Prettier successfully!",
+      );
     } catch (error) {
-      toolState.actions.showMessage(`Error: ${error}`);
-      setFormattedCode("Invalid HTML");
+      try {
+        const fallback = html_beautify(toolState.code);
+        setFormattedCode(fallback);
+        toolState.actions.showMessage(
+          "Prettier fallback applied with beautify.",
+        );
+      } catch {
+        toolState.actions.showMessage(`Error: ${error}`);
+        setFormattedCode("Invalid HTML");
+      }
     }
   }, [toolState]);
 
@@ -79,7 +98,7 @@ export default function HtmlFormatter({
         onClick: toolState.toggleFullScreen,
       },
     ],
-    [formatHtml, copyFormattedCode, toolState]
+    [formatHtml, copyFormattedCode, toolState],
   );
 
   return (

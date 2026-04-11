@@ -10,7 +10,16 @@ import { useEditorConfig } from "@/hooks/useEditorConfig";
 import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import { Alert, Chip, Typography, Card, CardContent, TextField, Button, Collapse } from "@mui/material";
+import {
+  Alert,
+  Chip,
+  Typography,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Collapse,
+} from "@mui/material";
 import SchemaIcon from "@mui/icons-material/Schema";
 
 interface ValidationResult {
@@ -108,7 +117,10 @@ export default function JsonFormatter({
   });
   const [schemaInput, setSchemaInput] = useState("");
   const [showSchemaPanel, setShowSchemaPanel] = useState(false);
-  const [schemaValidationResult, setSchemaValidationResult] = useState<{ valid: boolean; errors: string[] } | null>(null);
+  const [schemaValidationResult, setSchemaValidationResult] = useState<{
+    valid: boolean;
+    errors: string[];
+  } | null>(null);
 
   // Real-time validation
   const validation = useMemo(
@@ -195,44 +207,98 @@ export default function JsonFormatter({
   );
 
   // Simple JSON Schema validator (subset: type, required, properties, items, minLength, maxLength, minimum, maximum)
-  const validateAgainstSchema = useCallback((data: unknown, schema: Record<string, unknown>, path = "#"): string[] => {
-    const errors: string[] = [];
-    if (schema.type) {
-      const expected = schema.type as string;
-      const actual = Array.isArray(data) ? "array" : data === null ? "null" : typeof data;
-      if (actual !== expected) errors.push(`${path}: expected type "${expected}", got "${actual}"`);
-    }
-    if (Array.isArray(schema.required) && data !== null && typeof data === "object" && !Array.isArray(data)) {
-      for (const field of schema.required as string[]) {
-        if (!Object.prototype.hasOwnProperty.call(data, field)) {
-          errors.push(`${path}: missing required field "${field}"`);
+  const validateAgainstSchema = useCallback(
+    (data: unknown, schema: Record<string, unknown>, path = "#"): string[] => {
+      const errors: string[] = [];
+      if (schema.type) {
+        const expected = schema.type as string;
+        const actual = Array.isArray(data)
+          ? "array"
+          : data === null
+            ? "null"
+            : typeof data;
+        if (actual !== expected)
+          errors.push(`${path}: expected type "${expected}", got "${actual}"`);
+      }
+      if (
+        Array.isArray(schema.required) &&
+        data !== null &&
+        typeof data === "object" &&
+        !Array.isArray(data)
+      ) {
+        for (const field of schema.required as string[]) {
+          if (!Object.prototype.hasOwnProperty.call(data, field)) {
+            errors.push(`${path}: missing required field "${field}"`);
+          }
         }
       }
-    }
-    if (schema.properties && data !== null && typeof data === "object" && !Array.isArray(data)) {
-      for (const [key, subSchema] of Object.entries(schema.properties as Record<string, Record<string, unknown>>)) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-          errors.push(...validateAgainstSchema((data as Record<string, unknown>)[key], subSchema, `${path}.${key}`));
+      if (
+        schema.properties &&
+        data !== null &&
+        typeof data === "object" &&
+        !Array.isArray(data)
+      ) {
+        for (const [key, subSchema] of Object.entries(
+          schema.properties as Record<string, Record<string, unknown>>,
+        )) {
+          if (Object.prototype.hasOwnProperty.call(data, key)) {
+            errors.push(
+              ...validateAgainstSchema(
+                (data as Record<string, unknown>)[key],
+                subSchema,
+                `${path}.${key}`,
+              ),
+            );
+          }
         }
       }
-    }
-    if (schema.items && Array.isArray(data)) {
-      data.forEach((item, i) => errors.push(...validateAgainstSchema(item, schema.items as Record<string, unknown>, `${path}[${i}]`)));
-    }
-    if (typeof schema.minLength === "number" && typeof data === "string" && data.length < schema.minLength) {
-      errors.push(`${path}: string length ${data.length} < minLength ${schema.minLength}`);
-    }
-    if (typeof schema.maxLength === "number" && typeof data === "string" && data.length > schema.maxLength) {
-      errors.push(`${path}: string length ${data.length} > maxLength ${schema.maxLength}`);
-    }
-    if (typeof schema.minimum === "number" && typeof data === "number" && data < schema.minimum) {
-      errors.push(`${path}: value ${data} < minimum ${schema.minimum}`);
-    }
-    if (typeof schema.maximum === "number" && typeof data === "number" && data > schema.maximum) {
-      errors.push(`${path}: value ${data} > maximum ${schema.maximum}`);
-    }
-    return errors;
-  }, []);
+      if (schema.items && Array.isArray(data)) {
+        data.forEach((item, i) =>
+          errors.push(
+            ...validateAgainstSchema(
+              item,
+              schema.items as Record<string, unknown>,
+              `${path}[${i}]`,
+            ),
+          ),
+        );
+      }
+      if (
+        typeof schema.minLength === "number" &&
+        typeof data === "string" &&
+        data.length < schema.minLength
+      ) {
+        errors.push(
+          `${path}: string length ${data.length} < minLength ${schema.minLength}`,
+        );
+      }
+      if (
+        typeof schema.maxLength === "number" &&
+        typeof data === "string" &&
+        data.length > schema.maxLength
+      ) {
+        errors.push(
+          `${path}: string length ${data.length} > maxLength ${schema.maxLength}`,
+        );
+      }
+      if (
+        typeof schema.minimum === "number" &&
+        typeof data === "number" &&
+        data < schema.minimum
+      ) {
+        errors.push(`${path}: value ${data} < minimum ${schema.minimum}`);
+      }
+      if (
+        typeof schema.maximum === "number" &&
+        typeof data === "number" &&
+        data > schema.maximum
+      ) {
+        errors.push(`${path}: value ${data} > maximum ${schema.maximum}`);
+      }
+      return errors;
+    },
+    [],
+  );
 
   const runSchemaValidation = useCallback(() => {
     try {
@@ -241,7 +307,10 @@ export default function JsonFormatter({
       const errors = validateAgainstSchema(data, schema);
       setSchemaValidationResult({ valid: errors.length === 0, errors });
     } catch (e) {
-      setSchemaValidationResult({ valid: false, errors: [e instanceof Error ? e.message : "Parse error"] });
+      setSchemaValidationResult({
+        valid: false,
+        errors: [e instanceof Error ? e.message : "Parse error"],
+      });
     }
   }, [toolState.code, schemaInput, validateAgainstSchema]);
 
@@ -324,9 +393,15 @@ export default function JsonFormatter({
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <SchemaIcon color="primary" fontSize="small" />
-              <Typography variant="subtitle2">JSON Schema Validation</Typography>
+              <Typography variant="subtitle2">
+                JSON Schema Validation
+              </Typography>
             </div>
-            <Button size="small" variant="outlined" onClick={() => setShowSchemaPanel((v) => !v)}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => setShowSchemaPanel((v) => !v)}
+            >
               {showSchemaPanel ? "Hide" : "Show"} Schema Validator
             </Button>
           </div>
@@ -337,25 +412,42 @@ export default function JsonFormatter({
                 rows={4}
                 fullWidth
                 size="small"
-                placeholder={'{"type":"object","required":["name"],"properties":{"name":{"type":"string"},"age":{"type":"number","minimum":0}}}'}
+                placeholder={
+                  '{"type":"object","required":["name"],"properties":{"name":{"type":"string"},"age":{"type":"number","minimum":0}}}'
+                }
                 label="JSON Schema"
                 value={schemaInput}
                 onChange={(e) => setSchemaInput(e.target.value)}
-                slotProps={{ input: { sx: { fontFamily: "monospace", fontSize: 12 } } }}
+                slotProps={{
+                  input: { sx: { fontFamily: "monospace", fontSize: 12 } },
+                }}
               />
-              <Button variant="contained" size="small" disabled={!schemaInput.trim() || !validation.isValid} onClick={runSchemaValidation}>
+              <Button
+                variant="contained"
+                size="small"
+                disabled={!schemaInput.trim() || !validation.isValid}
+                onClick={runSchemaValidation}
+              >
                 Validate Against Schema
               </Button>
               {schemaValidationResult && (
-                <Alert severity={schemaValidationResult.valid ? "success" : "error"}>
+                <Alert
+                  severity={schemaValidationResult.valid ? "success" : "error"}
+                >
                   {schemaValidationResult.valid ? (
-                    <Typography variant="body2">JSON is <strong>valid</strong> against the schema.</Typography>
+                    <Typography variant="body2">
+                      JSON is <strong>valid</strong> against the schema.
+                    </Typography>
                   ) : (
                     <div>
-                      <Typography variant="body2" fontWeight="bold">Schema Errors ({schemaValidationResult.errors.length}):</Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        Schema Errors ({schemaValidationResult.errors.length}):
+                      </Typography>
                       <ul className="list-disc list-inside mt-1">
                         {schemaValidationResult.errors.map((e, i) => (
-                          <li key={i}><Typography variant="caption">{e}</Typography></li>
+                          <li key={i}>
+                            <Typography variant="caption">{e}</Typography>
+                          </li>
                         ))}
                       </ul>
                     </div>

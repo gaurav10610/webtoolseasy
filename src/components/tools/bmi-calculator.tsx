@@ -297,7 +297,11 @@ export default function BMICalculator({
                 variant="outlined"
               />
               <div>
-                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mb: 0.5, display: "block" }}
+                >
                   Sex (for body fat estimation)
                 </Typography>
                 <ToggleButtonGroup
@@ -393,7 +397,11 @@ export default function BMICalculator({
                     <Typography variant="h4" fontWeight="bold" color="primary">
                       {bodyFat.bfp}%
                     </Typography>
-                    <Chip label={bodyFat.category} color="primary" variant="outlined" />
+                    <Chip
+                      label={bodyFat.category}
+                      color="primary"
+                      variant="outlined"
+                    />
                   </div>
                   <div className="mt-3 w-full bg-gray-200 rounded-full h-3">
                     <div
@@ -401,7 +409,8 @@ export default function BMICalculator({
                       style={{
                         width: `${Math.min(100, bodyFat.bfp * 1.5)}%`,
                         backgroundColor:
-                          bodyFat.category === "Athletic" || bodyFat.category === "Fitness"
+                          bodyFat.category === "Athletic" ||
+                          bodyFat.category === "Fitness"
                             ? "#4ade80"
                             : bodyFat.category === "Average"
                               ? "#facc15"
@@ -411,8 +420,13 @@ export default function BMICalculator({
                       }}
                     />
                   </div>
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-                    Estimated using age ({age} yrs) and sex. This is an approximation — not a medical measurement.
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mt: 1, display: "block" }}
+                  >
+                    Estimated using age ({age} yrs) and sex. This is an
+                    approximation — not a medical measurement.
                   </Typography>
                 </CardContent>
               </Card>
