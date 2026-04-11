@@ -14,7 +14,7 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -160,14 +160,7 @@ export default function PercentageCalculator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Percentage Calculator"
-        description="Calculate percentages, percentage increase, decrease, and difference. Free online percentage calculator with instant results."
-        exampleCode="20% of 100"
-        exampleOutput="20"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         <Card className="border border-gray-200">
           <CardContent>
             <Tabs

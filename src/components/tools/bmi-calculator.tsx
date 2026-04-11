@@ -12,7 +12,7 @@ import {
   Grid,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
@@ -44,6 +44,8 @@ export default function BMICalculator({
   const [weightLbs, setWeightLbs] = useState<number>(154);
   const [heightFt, setHeightFt] = useState<number>(5);
   const [heightIn, setHeightIn] = useState<number>(7);
+  const [age, setAge] = useState<number>(30);
+  const [sex, setSex] = useState<"male" | "female">("male");
 
   const toolState = useToolState({
     hostname: hostname || "",
@@ -121,7 +123,7 @@ export default function BMICalculator({
         recommendation,
       };
     },
-    []
+    [],
   );
 
   const bmiResult = useMemo(() => {
@@ -152,8 +154,31 @@ export default function BMICalculator({
         setUnitSystem(newSystem);
       }
     },
-    []
+    [],
   );
+
+  // Deurenberg formula: BFP = (1.20 × BMI) + (0.23 × age) − (10.8 × sex) − 5.4
+  const bodyFat = useMemo(() => {
+    if (!bmiResult || age <= 0) return null;
+    const sexFactor = sex === "male" ? 1 : 0;
+    const bfp = 1.2 * bmiResult.bmi + 0.23 * age - 10.8 * sexFactor - 5.4;
+    const clamped = Math.max(0, Math.min(70, bfp));
+    let category: string;
+    if (sex === "male") {
+      if (clamped < 6) category = "Essential Fat";
+      else if (clamped < 14) category = "Athletic";
+      else if (clamped < 18) category = "Fitness";
+      else if (clamped < 25) category = "Average";
+      else category = "Obese";
+    } else {
+      if (clamped < 14) category = "Essential Fat";
+      else if (clamped < 21) category = "Athletic";
+      else if (clamped < 25) category = "Fitness";
+      else if (clamped < 32) category = "Average";
+      else category = "Obese";
+    }
+    return { bfp: parseFloat(clamped.toFixed(1)), category };
+  }, [bmiResult, age, sex]);
 
   return (
     <ToolLayout
@@ -166,12 +191,7 @@ export default function BMICalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="BMI Calculator - Body Mass Index"
-        description="Calculate your BMI instantly with our free online calculator. Check if you're underweight, normal, overweight, or obese and get health recommendations."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Unit System Toggle */}
         <Card elevation={2}>
           <CardContent>
@@ -260,6 +280,37 @@ export default function BMICalculator({
                 </Grid>
               </div>
             )}
+            {/* Age & Sex for Body Fat Estimation */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <TextField
+                fullWidth
+                label="Age (years)"
+                type="number"
+                value={age}
+                onChange={(e) => setAge(Number(e.target.value))}
+                inputProps={{ min: 1, max: 120 }}
+                variant="outlined"
+              />
+              <div>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mb: 0.5, display: "block" }}
+                >
+                  Sex (for body fat estimation)
+                </Typography>
+                <ToggleButtonGroup
+                  value={sex}
+                  exclusive
+                  onChange={(_e, v) => v && setSex(v)}
+                  size="small"
+                  fullWidth
+                >
+                  <ToggleButton value="male">Male</ToggleButton>
+                  <ToggleButton value="female">Female</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -273,10 +324,10 @@ export default function BMICalculator({
                   bmiResult.categoryColor === "success"
                     ? "success.main"
                     : bmiResult.categoryColor === "warning"
-                    ? "warning.main"
-                    : bmiResult.categoryColor === "error"
-                    ? "error.main"
-                    : "info.main",
+                      ? "warning.main"
+                      : bmiResult.categoryColor === "error"
+                        ? "error.main"
+                        : "info.main",
                 color: "white",
               }}
             >
@@ -315,10 +366,10 @@ export default function BMICalculator({
                 bmiResult.categoryColor === "success"
                   ? "success"
                   : bmiResult.categoryColor === "warning"
-                  ? "warning"
-                  : bmiResult.categoryColor === "error"
-                  ? "error"
-                  : "info"
+                    ? "warning"
+                    : bmiResult.categoryColor === "error"
+                      ? "error"
+                      : "info"
               }
               icon={false}
             >
@@ -329,6 +380,163 @@ export default function BMICalculator({
                 {bmiResult.recommendation}
               </Typography>
             </Alert>
+
+            {/* Body Fat Estimation */}
+            {bodyFat && (
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Estimated Body Fat (Deurenberg Formula)
+                  </Typography>
+                  <div className="flex items-center gap-4">
+                    <Typography variant="h4" fontWeight="bold" color="primary">
+                      {bodyFat.bfp}%
+                    </Typography>
+                    <Chip
+                      label={bodyFat.category}
+                      color="primary"
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="mt-3 w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className="h-3 rounded-full"
+                      style={{
+                        width: `${Math.min(100, bodyFat.bfp * 1.5)}%`,
+                        backgroundColor:
+                          bodyFat.category === "Athletic" ||
+                          bodyFat.category === "Fitness"
+                            ? "#4ade80"
+                            : bodyFat.category === "Average"
+                              ? "#facc15"
+                              : bodyFat.category === "Obese"
+                                ? "#f87171"
+                                : "#60a5fa",
+                      }}
+                    />
+                  </div>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mt: 1, display: "block" }}
+                  >
+                    Estimated using age ({age} yrs) and sex. This is an
+                    approximation — not a medical measurement.
+                  </Typography>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* BMI Visual Gauge */}
+            <Card elevation={1} sx={{ bgcolor: "grey.50" }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  BMI Scale
+                </Typography>
+                {(() => {
+                  const minB = 15,
+                    maxB = 40;
+                  const pct = (v: number) =>
+                    Math.max(
+                      0,
+                      Math.min(100, ((v - minB) / (maxB - minB)) * 100),
+                    );
+                  const markerPct = pct(bmiResult.bmi);
+                  const bands = [
+                    {
+                      from: 15,
+                      to: 18.5,
+                      color: "#60a5fa",
+                      label: "Underweight",
+                    },
+                    { from: 18.5, to: 25, color: "#4ade80", label: "Normal" },
+                    { from: 25, to: 30, color: "#facc15", label: "Overweight" },
+                    { from: 30, to: 40, color: "#f87171", label: "Obese" },
+                  ];
+                  return (
+                    <div className="relative w-full" style={{ height: 56 }}>
+                      {/* Color bands */}
+                      <div
+                        className="w-full rounded-lg overflow-hidden flex"
+                        style={{ height: 24 }}
+                      >
+                        {bands.map((b) => (
+                          <div
+                            key={b.label}
+                            style={{
+                              width: `${pct(b.to) - pct(b.from)}%`,
+                              backgroundColor: b.color,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      {/* Marker */}
+                      <div
+                        className="absolute"
+                        style={{
+                          left: `${markerPct}%`,
+                          top: 0,
+                          transform: "translateX(-50%)",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 3,
+                            height: 24,
+                            backgroundColor: "#1e293b",
+                            margin: "0 auto",
+                          }}
+                        />
+                        <div
+                          className="text-xs font-bold text-center whitespace-nowrap"
+                          style={{
+                            transform: "translateX(-50%)",
+                            marginLeft: "50%",
+                            backgroundColor: "#1e293b",
+                            color: "white",
+                            borderRadius: 3,
+                            padding: "1px 4px",
+                            marginTop: 2,
+                          }}
+                        >
+                          {bmiResult.bmi}
+                        </div>
+                      </div>
+                      {/* Scale labels */}
+                      <div
+                        className="flex justify-between text-xs text-gray-500 mt-1"
+                        style={{ paddingTop: 28 }}
+                      >
+                        <span>15</span>
+                        <span>18.5</span>
+                        <span>25</span>
+                        <span>30</span>
+                        <span>40</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {[
+                    { color: "#60a5fa", label: "Underweight <18.5" },
+                    { color: "#4ade80", label: "Normal 18.5–25" },
+                    { color: "#facc15", label: "Overweight 25–30" },
+                    { color: "#f87171", label: "Obese ≥30" },
+                  ].map(({ color, label }) => (
+                    <span
+                      key={label}
+                      className="flex items-center gap-1 text-xs"
+                    >
+                      <span
+                        className="inline-block w-3 h-3 rounded-sm"
+                        style={{ backgroundColor: color }}
+                      />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
             {/* BMI Chart Reference */}
             <Card elevation={1} sx={{ bgcolor: "grey.50" }}>

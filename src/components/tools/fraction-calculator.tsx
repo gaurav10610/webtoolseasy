@@ -11,7 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 import { useState, useCallback } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -268,12 +268,7 @@ export default function FractionCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Fraction Calculator"
-        description="Add, subtract, multiply, and divide fractions with automatic simplification and step-by-step solutions."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Operation Selection */}
         <Card elevation={2}>
           <CardContent>

@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { jsPDF } from "jspdf";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
@@ -179,14 +179,7 @@ export default function WordToPDF({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Word to PDF Converter"
-        description="Convert Word documents to PDF format. Upload your DOCX or DOC file and get a professional PDF."
-        exampleCode="Upload Word → Convert → Download PDF"
-        exampleOutput="Professional PDF document from Word file"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Error Display */}

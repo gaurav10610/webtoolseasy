@@ -13,12 +13,12 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ImageIcon from "@mui/icons-material/Image";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { FILE_TYPE_PRESETS, FILE_SIZE_PRESETS } from "@/util/fileValidation";
 
-type FaviconSize = 16 | 32 | 48 | 64;
+type FaviconSize = 16 | 32 | 48 | 64 | 128 | 256;
 
 export default function FaviconGenerator({
   hostname,
@@ -32,7 +32,7 @@ export default function FaviconGenerator({
 
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [selectedSizes, setSelectedSizes] = useState<FaviconSize[]>([
-    16, 32, 48,
+    16, 32, 48, 64,
   ]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -48,12 +48,12 @@ export default function FaviconGenerator({
       };
       reader.readAsDataURL(file);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleSizeChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newSizes: FaviconSize[]
+    newSizes: FaviconSize[],
   ) => {
     if (newSizes.length > 0) {
       setSelectedSizes(newSizes);
@@ -82,7 +82,7 @@ export default function FaviconGenerator({
         img.src = uploadedImage;
       });
     },
-    [uploadedImage]
+    [uploadedImage],
   );
 
   const downloadFavicon = useCallback(
@@ -105,7 +105,7 @@ export default function FaviconGenerator({
         toolState.actions.showMessage("Error downloading favicon");
       }
     },
-    [generateFavicon, toolState.actions]
+    [generateFavicon, toolState.actions],
   );
 
   const downloadAllSizes = useCallback(async () => {
@@ -162,14 +162,7 @@ export default function FaviconGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Favicon Generator - Create Favicon from Image"
-        description="Generate favicons in multiple sizes from any image. Create .ico and PNG favicons for your website. Free online favicon converter."
-        exampleCode="Upload your image"
-        exampleOutput="Favicon in multiple sizes"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <canvas ref={canvasRef} style={{ display: "none" }} />
 
@@ -219,6 +212,12 @@ export default function FaviconGenerator({
                 <ToggleButton value={64} aria-label="64x64">
                   64x64
                 </ToggleButton>
+                <ToggleButton value={128} aria-label="128x128">
+                  128x128
+                </ToggleButton>
+                <ToggleButton value={256} aria-label="256x256">
+                  256x256
+                </ToggleButton>
               </ToggleButtonGroup>
               <Alert severity="info" className="mt-4">
                 Select multiple sizes for comprehensive browser support. Most
@@ -237,7 +236,7 @@ export default function FaviconGenerator({
               </Typography>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {([16, 32, 48, 64] as FaviconSize[]).map((size) => (
+                {([16, 32, 48, 64, 128, 256] as FaviconSize[]).map((size) => (
                   <div key={size} className="flex flex-col items-center gap-3">
                     <div
                       className="border-2 border-gray-300 rounded-lg p-4 bg-white flex items-center justify-center"

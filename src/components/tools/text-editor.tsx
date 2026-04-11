@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -59,6 +59,27 @@ Perfect for:
     };
   }, [toolState.code]);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const importText = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const handleFileImport = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        toolState.setCode(ev.target?.result as string);
+        toolState.actions.showMessage("File imported successfully!");
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    },
+    [toolState],
+  );
+
   const clearText = useCallback(() => {
     toolState.setCode("");
     toolState.actions.showMessage("Text cleared!");
@@ -89,6 +110,11 @@ Perfect for:
     () => [
       {
         type: "custom" as const,
+        text: "Import .txt",
+        onClick: importText,
+      },
+      {
+        type: "custom" as const,
         text: "Clear Text",
         onClick: clearText,
         color: "error" as const,
@@ -97,14 +123,14 @@ Perfect for:
         onCopy: () =>
           toolState.actions.copyText(
             toolState.code,
-            "Text copied to clipboard!"
+            "Text copied to clipboard!",
           ),
         onDownload: downloadText,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [clearText, downloadText, toolState]
+    [importText, clearText, downloadText, toolState],
   );
 
   return (
@@ -116,14 +142,14 @@ Perfect for:
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Online Text Editor"
-        description="Free online text editor with word count, character count, and text statistics. Write, edit and format your text online."
-        exampleCode={initialValue}
-        exampleOutput={`Text Statistics: ${textStats.words} words, ${textStats.characters} characters`}
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".txt,text/plain"
+        className="hidden"
+        onChange={handleFileImport}
       />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Editor */}
       <div className="mb-6">

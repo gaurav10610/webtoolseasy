@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback, useRef } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import ImageIcon from "@mui/icons-material/Image";
+import { Typography, Tabs, Tab, Box, Card, CardContent } from "@mui/material";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 function hexToRgb(hex: string) {
@@ -78,7 +80,7 @@ function rotateHue(hex: string, deg: number) {
   return rgbToHex(
     Math.round(r1 * 255),
     Math.round(g1 * 255),
-    Math.round(b1 * 255)
+    Math.round(b1 * 255),
   );
 }
 
@@ -89,6 +91,10 @@ export default function ColorPaletteGenerator() {
   const [mode, setMode] = useState<string>("analogous");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState<boolean>(false);
   const [snackBarMessage, setSnackBarMessage] = useState<string>("");
+  const [extractedColors, setExtractedColors] = useState<string[]>([]);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [exportTab, setExportTab] = useState(0);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleSnackBarClose = () => setIsSnackBarOpen(false);
 
@@ -121,13 +127,65 @@ export default function ColorPaletteGenerator() {
     setIsSnackBarOpen(true);
   };
 
+  const extractColorsFromImage = useCallback((file: File) => {
+    const url = URL.createObjectURL(file);
+    setImagePreview(url);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 100;
+      canvas.height = 100;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, 100, 100);
+      const data = ctx.getImageData(0, 0, 100, 100).data;
+      const freq: Record<string, number> = {};
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i + 3] < 128) continue; // skip transparent
+        const r = Math.round(data[i] / 32) * 32;
+        const g = Math.round(data[i + 1] / 32) * 32;
+        const b = Math.round(data[i + 2] / 32) * 32;
+        const hex = rgbToHex(
+          Math.min(255, r),
+          Math.min(255, g),
+          Math.min(255, b),
+        );
+        freq[hex] = (freq[hex] || 0) + 1;
+      }
+      const sorted = Object.entries(freq)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
+      setExtractedColors(sorted.map(([hex]) => hex));
+    };
+    img.src = url;
+  }, []);
+
+  const handleImageInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) extractColorsFromImage(file);
+    },
+    [extractColorsFromImage],
+  );
+
+  const exportText = useMemo(() => {
+    const colors =
+      exportTab === 3 && extractedColors.length ? extractedColors : palette;
+    if (exportTab === 0)
+      return `:root {\n${colors.map((c, i) => `  --color-${i}: ${c};`).join("\n")}\n}`;
+    if (exportTab === 1)
+      return `// tailwind.config.js\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n${colors.map((c, i) => `        color${i}: "${c}",`).join("\n")}\n      },\n    },\n  },\n};`;
+    if (exportTab === 2)
+      return colors.map((c, i) => `$color-${i}: ${c};`).join("\n");
+    return colors.map((c, i) => `$color-${i}: ${c};`).join("\n");
+  }, [palette, extractedColors, exportTab]);
+
   const downloadPalette = () => {
     const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${
       palette.length * 100
     }' height='100'>${palette
       .map(
         (c, i) =>
-          `<rect x='${i * 100}' y='0' width='100' height='100' fill='${c}'/>`
+          `<rect x='${i * 100}' y='0' width='100' height='100' fill='${c}'/>`,
       )
       .join("")}</svg>`;
     const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
@@ -147,18 +205,6 @@ export default function ColorPaletteGenerator() {
       icon: <DownloadIcon />,
       variant: "outlined" as const,
     },
-    {
-      type: "custom" as const,
-      text: "Copy CSS",
-      onClick: () => {
-        const css = palette.map((c, i) => `--color-${i}: ${c};`).join("\n");
-        navigator.clipboard.writeText(css);
-        setSnackBarMessage("CSS variables copied");
-        setIsSnackBarOpen(true);
-      },
-      icon: <ContentCopyIcon />,
-      variant: "outlined" as const,
-    },
     ...createCommonButtons({
       onCopy: () => copyToClipboard(color),
     }),
@@ -173,14 +219,7 @@ export default function ColorPaletteGenerator() {
         autoHideDuration: 2000,
       }}
     >
-      <SEOContent
-        title="Color Palette Generator"
-        description="Generate harmonious color palettes online. Create complementary, triadic, analogous palettes and download SVG palettes."
-        exampleCode={"#3b82f6"}
-        exampleOutput={"A set of harmonious colors"}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={false} />
+<ToolControls buttons={buttons} isFullScreen={false} />
 
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
@@ -308,6 +347,87 @@ export default function ColorPaletteGenerator() {
             </div>
           </div>
         </div>
+
+        {/* Extract from Image */}
+        <Card className="mt-4">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Extract Colors from Image
+            </Typography>
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <input
+                type="file"
+                accept="image/*"
+                ref={imageInputRef}
+                onChange={handleImageInput}
+                className="hidden"
+              />
+              <button
+                className="flex items-center gap-2 px-3 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700 cursor-pointer"
+                onClick={() => imageInputRef.current?.click()}
+              >
+                <ImageIcon fontSize="small" /> Upload Image
+              </button>
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="preview"
+                  className="h-12 w-12 rounded object-cover border"
+                />
+              )}
+            </div>
+            {extractedColors.length > 0 && (
+              <div>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  Click a color to set it as the base color:
+                </Typography>
+                <div className="flex flex-wrap gap-2">
+                  {extractedColors.map((c) => (
+                    <div
+                      key={c}
+                      className="flex flex-col items-center gap-1 cursor-pointer group"
+                      onClick={() => setColor(c)}
+                    >
+                      <div
+                        className="w-10 h-10 rounded border-2 border-transparent group-hover:border-blue-500 transition-all"
+                        style={{ backgroundColor: c }}
+                      />
+                      <span className="text-xs font-mono">
+                        {c.toUpperCase()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Export Section */}
+        <Card className="mt-4">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Export Palette
+            </Typography>
+            <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
+              <Tabs value={exportTab} onChange={(_e, v) => setExportTab(v)}>
+                <Tab label="CSS Variables" />
+                <Tab label="Tailwind" />
+                <Tab label="Sass" />
+                {extractedColors.length > 0 && <Tab label="Extracted" />}
+              </Tabs>
+            </Box>
+            <pre className="bg-gray-900 text-green-300 rounded p-3 text-xs overflow-auto max-h-40 font-mono">
+              {exportText}
+            </pre>
+            <button
+              className="mt-2 flex items-center gap-2 px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer"
+              onClick={() => copyToClipboard(exportText)}
+            >
+              <ContentCopyIcon fontSize="small" /> Copy Export
+            </button>
+          </CardContent>
+        </Card>
       </div>
     </ToolLayout>
   );

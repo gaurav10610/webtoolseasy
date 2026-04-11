@@ -13,7 +13,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useState, useCallback } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { ButtonWithHandler } from "../lib/buttons";
@@ -131,12 +131,7 @@ export default function TipCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Tip Calculator"
-        description="Calculate tips and split bills easily. Choose tip percentage, see total with tip, and divide costs among multiple people."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Card */}
         <Card elevation={2}>
           <CardContent>

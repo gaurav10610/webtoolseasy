@@ -1,6 +1,6 @@
 "use client";
 
-import { set as idbSet, keys as idbKeys, get as idbGet } from "idb-keyval";
+import { idbSet, idbGet, idbDel, idbKeys } from "@/util/nativeIdb";
 
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import {
@@ -9,15 +9,23 @@ import {
   CardContent,
   Alert,
   LinearProgress,
+  Button,
+  Slider,
+  Chip,
+  IconButton,
+  Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import PauseIcon from "@mui/icons-material/Pause";
 import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MicIcon from "@mui/icons-material/Mic";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 
@@ -33,6 +41,11 @@ interface AudioDevice {
   label: string;
 }
 
+interface SavedRecording {
+  key: string;
+  blob: Blob;
+}
+
 export default function AudioRecorder({
   hostname,
   queryParams,
@@ -43,18 +56,21 @@ export default function AudioRecorder({
   });
 
   const [recordingState, setRecordingState] = useState<RecordingState>(
-    RecordingState.IDLE
+    RecordingState.IDLE,
   );
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  // Saved recordings tracked in IndexedDB - UI implementation pending
-  // const [savedRecordings, setSavedRecordings] = useState<
-  //   { key: string; blob: Blob }[]
-  // >([]);
+  const [savedRecordings, setSavedRecordings] = useState<SavedRecording[]>([]);
   const [error, setError] = useState<string>("");
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [audioLevel, setAudioLevel] = useState<number>(0);
+  const [audioFormat, setAudioFormat] = useState<string>(
+    "audio/webm;codecs=opus",
+  );
+  const [audioDuration, setAudioDuration] = useState(0);
+  const [trimStart, setTrimStart] = useState(0);
+  const [trimEnd, setTrimEnd] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -64,49 +80,52 @@ export default function AudioRecorder({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const waveformRef = useRef<HTMLCanvasElement | null>(null);
+  const waveformFrameRef = useRef<number | null>(null);
 
   // Load saved recordings from IndexedDB on mount
   useEffect(() => {
     (async () => {
       const allKeys = await idbKeys();
-      // Load recordings into IndexedDB for persistence
+      const recordings: SavedRecording[] = [];
+
       for (const key of allKeys) {
-        if (String(key).startsWith("audio-recording-")) {
-          const blob = await idbGet(key);
-          if (blob instanceof Blob) {
-            // Recording exists in IndexedDB
-            console.log(`Loaded recording: ${key}`);
-          }
+        if (!key.startsWith("audio-recording-")) continue;
+        const blob = await idbGet(key);
+        if (blob instanceof Blob) {
+          recordings.push({ key, blob });
         }
       }
+
+      recordings.sort((a, b) => b.key.localeCompare(a.key));
+      setSavedRecordings(recordings);
     })();
   }, []);
 
-  // Download a saved recording - UI implementation pending
-  // const downloadSavedRecording = useCallback(
-  //   (key: string, blob: Blob) => {
-  //     const url = URL.createObjectURL(blob);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = `${key}.webm`;
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //     URL.revokeObjectURL(url);
-  //     toolState.actions.showMessage("Recording downloaded successfully!");
-  //   },
-  //   [toolState.actions]
-  // );
+  const downloadSavedRecording = useCallback(
+    (key: string, blob: Blob) => {
+      const ext = blob.type.includes("mp4") ? "mp4" : "webm";
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = key.includes(".") ? key : `${key}.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toolState.actions.showMessage("Recording downloaded!");
+    },
+    [toolState.actions],
+  );
 
-  // Delete a saved recording - UI implementation pending
-  // const deleteSavedRecording = useCallback(
-  //   async (key: string) => {
-  //     await idbDel(key);
-  //     setSavedRecordings((prev) => prev.filter((rec) => rec.key !== key));
-  //     toolState.actions.showMessage("Recording deleted.");
-  //   },
-  //   [toolState.actions]
-  // );
+  const deleteSavedRecording = useCallback(
+    async (key: string) => {
+      await idbDel(key);
+      setSavedRecordings((prev) => prev.filter((r) => r.key !== key));
+      toolState.actions.showMessage("Recording deleted.");
+    },
+    [toolState.actions],
+  );
 
   // Get available audio devices
   useEffect(() => {
@@ -148,6 +167,93 @@ export default function AudioRecorder({
       .padStart(2, "0")}`;
   }, []);
 
+  const audioBufferToWavBlob = useCallback((audioBuffer: AudioBuffer) => {
+    const numberOfChannels = audioBuffer.numberOfChannels;
+    const sampleRate = audioBuffer.sampleRate;
+    const bitDepth = 16;
+    const blockAlign = (numberOfChannels * bitDepth) / 8;
+    const byteRate = sampleRate * blockAlign;
+    const dataSize = audioBuffer.length * blockAlign;
+    const arrayBuffer = new ArrayBuffer(44 + dataSize);
+    const view = new DataView(arrayBuffer);
+
+    const writeString = (offset: number, value: string) => {
+      for (let i = 0; i < value.length; i++) {
+        view.setUint8(offset + i, value.charCodeAt(i));
+      }
+    };
+
+    writeString(0, "RIFF");
+    view.setUint32(4, 36 + dataSize, true);
+    writeString(8, "WAVE");
+    writeString(12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, numberOfChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bitDepth, true);
+    writeString(36, "data");
+    view.setUint32(40, dataSize, true);
+
+    let offset = 44;
+    for (let i = 0; i < audioBuffer.length; i++) {
+      for (let channel = 0; channel < numberOfChannels; channel++) {
+        const sample = Math.max(
+          -1,
+          Math.min(1, audioBuffer.getChannelData(channel)[i]),
+        );
+        view.setInt16(
+          offset,
+          sample < 0 ? sample * 0x8000 : sample * 0x7fff,
+          true,
+        );
+        offset += 2;
+      }
+    }
+
+    return new Blob([arrayBuffer], { type: "audio/wav" });
+  }, []);
+
+  const trimAudioBlob = useCallback(
+    async (blob: Blob, startTime: number, endTime: number) => {
+      const context = new AudioContext();
+
+      try {
+        const arrayBuffer = await blob.arrayBuffer();
+        const decoded = await context.decodeAudioData(arrayBuffer.slice(0));
+        const safeStart = Math.max(0, Math.min(startTime, decoded.duration));
+        const safeEnd = Math.max(
+          safeStart + 0.1,
+          Math.min(endTime, decoded.duration),
+        );
+        const startOffset = Math.floor(safeStart * decoded.sampleRate);
+        const frameCount = Math.max(
+          1,
+          Math.floor((safeEnd - safeStart) * decoded.sampleRate),
+        );
+        const trimmed = context.createBuffer(
+          decoded.numberOfChannels,
+          frameCount,
+          decoded.sampleRate,
+        );
+
+        for (let channel = 0; channel < decoded.numberOfChannels; channel++) {
+          const segment = decoded
+            .getChannelData(channel)
+            .slice(startOffset, startOffset + frameCount);
+          trimmed.copyToChannel(segment, channel, 0);
+        }
+
+        return audioBufferToWavBlob(trimmed);
+      } finally {
+        void context.close();
+      }
+    },
+    [audioBufferToWavBlob],
+  );
+
   // Start timer
   const startTimer = useCallback(() => {
     setRecordingTime(0);
@@ -171,25 +277,52 @@ export default function AudioRecorder({
       const analyser = audioContext.createAnalyser();
       const source = audioContext.createMediaStreamSource(stream);
 
-      analyser.fftSize = 256;
+      analyser.fftSize = 2048;
       source.connect(analyser);
 
       audioContextRef.current = audioContext;
       analyserRef.current = analyser;
 
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      const freqData = new Uint8Array(analyser.frequencyBinCount);
 
       const updateLevel = () => {
         if (analyserRef.current) {
-          analyserRef.current.getByteFrequencyData(dataArray);
-          const average =
-            dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+          analyserRef.current.getByteFrequencyData(freqData);
+          const average = freqData.reduce((a, b) => a + b, 0) / freqData.length;
           setAudioLevel((average / 255) * 100);
           animationFrameRef.current = requestAnimationFrame(updateLevel);
         }
       };
-
       updateLevel();
+
+      // Waveform drawing
+      const waveData = new Uint8Array(analyser.fftSize);
+      const drawWaveform = () => {
+        const canvas = waveformRef.current;
+        if (!canvas || !analyserRef.current) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        analyserRef.current.getByteTimeDomainData(waveData);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#111827";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#22d3ee";
+        ctx.beginPath();
+        const sliceWidth = canvas.width / waveData.length;
+        let x = 0;
+        for (let i = 0; i < waveData.length; i++) {
+          const v = waveData[i] / 128.0;
+          const y = (v * canvas.height) / 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+        waveformFrameRef.current = requestAnimationFrame(drawWaveform);
+      };
+      drawWaveform();
     } catch (err) {
       console.error("Error setting up audio visualization:", err);
     }
@@ -200,6 +333,10 @@ export default function AudioRecorder({
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
+    }
+    if (waveformFrameRef.current) {
+      cancelAnimationFrame(waveformFrameRef.current);
+      waveformFrameRef.current = null;
     }
     if (audioContextRef.current) {
       audioContextRef.current.close();
@@ -232,7 +369,7 @@ export default function AudioRecorder({
       setupAudioVisualization(stream);
 
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: "audio/webm;codecs=opus",
+        mimeType: audioFormat,
       });
 
       mediaRecorder.ondataavailable = (event) => {
@@ -241,16 +378,18 @@ export default function AudioRecorder({
         }
       };
 
+      const formatExt = audioFormat.includes("ogg") ? "ogg" : "webm";
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const baseType = audioFormat.split(";")[0];
+        const blob = new Blob(chunksRef.current, { type: baseType });
         setRecordedBlob(blob);
         setRecordingState(RecordingState.COMPLETED);
         cleanupStream();
         stopTimer();
         // Save to IndexedDB for persistence
-        const key = `audio-recording-${Date.now()}`;
+        const key = `audio-recording-${Date.now()}.${formatExt}`;
         await idbSet(key, blob);
-        console.log(`Saved recording to IndexedDB: ${key}`);
+        setSavedRecordings((prev) => [{ key, blob }, ...prev]);
         toolState.actions.showMessage("Recording completed and saved!");
       };
 
@@ -277,6 +416,7 @@ export default function AudioRecorder({
     }
   }, [
     selectedDevice,
+    audioFormat,
     setupAudioVisualization,
     startTimer,
     stopTimer,
@@ -331,23 +471,64 @@ export default function AudioRecorder({
   }, [recordingState, cleanupStream]);
 
   // Download recording
-  const downloadRecording = useCallback(() => {
+  const downloadRecording = useCallback(async () => {
     if (!recordedBlob) {
       toolState.actions.showMessage("No recording to download");
       return;
     }
 
-    const url = URL.createObjectURL(recordedBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `audio-recording-${Date.now()}.webm`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    try {
+      const shouldTrim =
+        audioDuration > 0 &&
+        (trimStart > 0 || (trimEnd > 0 && trimEnd < audioDuration - 0.05));
 
-    toolState.actions.showMessage("Recording downloaded successfully!");
-  }, [recordedBlob, toolState.actions]);
+      const blobToDownload = shouldTrim
+        ? await trimAudioBlob(recordedBlob, trimStart, trimEnd || audioDuration)
+        : recordedBlob;
+      const ext = shouldTrim
+        ? "wav"
+        : recordedBlob.type.includes("ogg")
+          ? "ogg"
+          : "webm";
+
+      const url = URL.createObjectURL(blobToDownload);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `audio-recording-${Date.now()}.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toolState.actions.showMessage(
+        shouldTrim
+          ? "Trimmed recording downloaded successfully!"
+          : "Recording downloaded successfully!",
+      );
+    } catch (error) {
+      console.error(error);
+      toolState.actions.showMessage(
+        "Unable to trim this recording in your browser. Downloading full clip instead.",
+      );
+
+      const ext = recordedBlob.type.includes("ogg") ? "ogg" : "webm";
+      const url = URL.createObjectURL(recordedBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `audio-recording-${Date.now()}.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  }, [
+    audioDuration,
+    recordedBlob,
+    toolState.actions,
+    trimAudioBlob,
+    trimEnd,
+    trimStart,
+  ]);
 
   // Reset recording
   const resetRecording = useCallback(() => {
@@ -356,6 +537,9 @@ export default function AudioRecorder({
     setRecordingState(RecordingState.IDLE);
     setRecordedBlob(null);
     setRecordingTime(0);
+    setAudioDuration(0);
+    setTrimStart(0);
+    setTrimEnd(0);
     setError("");
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current = null;
@@ -383,6 +567,12 @@ export default function AudioRecorder({
     if (recordedBlob && audioRef.current) {
       const url = URL.createObjectURL(recordedBlob);
       audioRef.current.src = url;
+      audioRef.current.onloadedmetadata = () => {
+        const duration = audioRef.current?.duration || 0;
+        setAudioDuration(duration);
+        setTrimStart(0);
+        setTrimEnd(duration);
+      };
       return () => URL.revokeObjectURL(url);
     }
   }, [recordedBlob]);
@@ -480,14 +670,7 @@ export default function AudioRecorder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Audio Recorder"
-        description="Record high-quality audio from your microphone. Perfect for voice memos, podcasts, interviews, and audio content creation."
-        exampleCode="Select microphone → Start recording → Download audio"
-        exampleOutput="High-quality WebM audio files with Opus codec"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Browser Support Check */}
@@ -523,6 +706,28 @@ export default function AudioRecorder({
                   label: device.label,
                 }))}
               />
+
+              <div className="mt-4">
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Output Format
+                </Typography>
+                <ToggleButtonGroup
+                  value={audioFormat}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v !== null) setAudioFormat(v);
+                  }}
+                  size="small"
+                >
+                  <ToggleButton value="audio/webm;codecs=opus">
+                    WebM (Opus)
+                  </ToggleButton>
+                  <ToggleButton value="audio/ogg;codecs=opus">
+                    OGG (Opus)
+                  </ToggleButton>
+                  <ToggleButton value="audio/webm">WebM</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -572,6 +777,15 @@ export default function AudioRecorder({
                     value={audioLevel}
                     className="h-2 rounded"
                   />
+                  {/* Waveform */}
+                  <div className="mt-3 rounded overflow-hidden">
+                    <canvas
+                      ref={waveformRef}
+                      width={600}
+                      height={80}
+                      className="w-full rounded"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -588,6 +802,58 @@ export default function AudioRecorder({
                       Preview:
                     </Typography>
                     <audio ref={audioRef} controls className="w-full" />
+                  </div>
+
+                  <div className="mt-4 rounded-lg border border-slate-200 p-3">
+                    <Typography variant="subtitle2" className="mb-2">
+                      Trim markers before download
+                    </Typography>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div>
+                        <Typography variant="caption" className="mb-1 block">
+                          Start: {trimStart.toFixed(1)}s
+                        </Typography>
+                        <Slider
+                          value={trimStart}
+                          onChange={(_, value) =>
+                            setTrimStart(
+                              Math.min(
+                                value as number,
+                                Math.max(trimEnd - 0.1, 0),
+                              ),
+                            )
+                          }
+                          min={0}
+                          max={Math.max(audioDuration, 0.1)}
+                          step={0.1}
+                          valueLabelDisplay="auto"
+                        />
+                      </div>
+                      <div>
+                        <Typography variant="caption" className="mb-1 block">
+                          End: {trimEnd.toFixed(1)}s
+                        </Typography>
+                        <Slider
+                          value={trimEnd}
+                          onChange={(_, value) =>
+                            setTrimEnd(
+                              Math.max(
+                                value as number,
+                                Math.min(trimStart + 0.1, audioDuration),
+                              ),
+                            )
+                          }
+                          min={0}
+                          max={Math.max(audioDuration, 0.1)}
+                          step={0.1}
+                          valueLabelDisplay="auto"
+                        />
+                      </div>
+                    </div>
+                    <Typography variant="caption" color="text.secondary">
+                      If you adjust the markers, the download will export a
+                      trimmed WAV clip for easier sharing.
+                    </Typography>
                   </div>
                 </div>
               )}
@@ -626,6 +892,51 @@ export default function AudioRecorder({
             </div>
           </CardContent>
         </Card>
+
+        {/* Saved Recordings */}
+        {savedRecordings.length > 0 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" className="mb-2">
+                Saved Recordings
+              </Typography>
+              <div className="space-y-2">
+                {savedRecordings.map((rec) => (
+                  <div
+                    key={rec.key}
+                    className="flex flex-wrap items-center gap-2 rounded bg-gray-50 dark:bg-gray-800 p-2"
+                  >
+                    <span className="flex-1 truncate text-sm">{rec.key}</span>
+                    <Chip
+                      label={`${(rec.blob.size / 1024).toFixed(0)} KB`}
+                      size="small"
+                      variant="outlined"
+                    />
+                    <Tooltip title="Download">
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          downloadSavedRecording(rec.key, rec.blob)
+                        }
+                      >
+                        <DownloadIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => deleteSavedRecording(rec.key)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </ToolLayout>
   );

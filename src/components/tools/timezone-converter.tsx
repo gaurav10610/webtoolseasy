@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "@/components/lib/buttons";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -73,6 +73,33 @@ function formatTime(date: Date, tz: string, use24: boolean) {
   }
 }
 
+function isDST(date: Date, tz: string): boolean {
+  try {
+    // Compare UTC offset in Jan vs Jul to detect DST
+    const jan = new Date(date.getFullYear(), 0, 1);
+    const jul = new Date(date.getFullYear(), 6, 1);
+    const getOffset = (d: Date) => {
+      const s = new Intl.DateTimeFormat("en", {
+        timeZone: tz,
+        hour: "numeric",
+        timeZoneName: "shortOffset",
+      }).formatToParts(d);
+      const tzPart = s.find((p) => p.type === "timeZoneName")?.value ?? "";
+      const m = tzPart.match(/([+-])(\d+)(?::(\d+))?/);
+      if (!m) return 0;
+      const sign = m[1] === "+" ? 1 : -1;
+      return sign * (parseInt(m[2]) * 60 + parseInt(m[3] ?? "0"));
+    };
+    const janOffset = getOffset(jan);
+    const julOffset = getOffset(jul);
+    const curOffset = getOffset(date);
+    if (janOffset === julOffset) return false; // No DST in this timezone
+    return curOffset === Math.max(janOffset, julOffset);
+  } catch {
+    return false;
+  }
+}
+
 export default function TimezoneConverter({
   hostname,
   queryParams,
@@ -99,7 +126,7 @@ export default function TimezoneConverter({
 
   // output timezones selected (multi) - default to TOP_TIMEZONES
   const [outputTzs, setOutputTzs] = useState<string[]>(() =>
-    TOP_TIMEZONES.slice()
+    TOP_TIMEZONES.slice(),
   );
 
   // output date-only (kept in sync with input date by default)
@@ -115,12 +142,12 @@ export default function TimezoneConverter({
   const toDateInputValue = useCallback(
     (d: Date) =>
       `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
-    [pad]
+    [pad],
   );
 
   const toTimeInputValue = useCallback(
     (d: Date) => `${pad(d.getHours())}:${pad(d.getMinutes())}`,
-    [pad]
+    [pad],
   );
 
   // Sync local inputs from toolState.code when it changes (e.g., from share links)
@@ -204,14 +231,7 @@ export default function TimezoneConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Timezone Converter - Convert time across zones"
-        description="Convert times between major world time zones. View current time across top global time zones with 12/24 hour toggle."
-        exampleCode="Asia/Kolkata"
-        exampleOutput="12:00 PM"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -338,8 +358,8 @@ export default function TimezoneConverter({
               {parsedInput === null
                 ? `Showing current time in ${inputTz}`
                 : parsedInput.valid && parsedInput.date
-                ? `Showing converted time for ${parsedInput.date.toISOString()} (interpreted in ${inputTz})`
-                : `Invalid timestamp, showing current time in ${inputTz} instead`}
+                  ? `Showing converted time for ${parsedInput.date.toISOString()} (interpreted in ${inputTz})`
+                  : `Invalid timestamp, showing current time in ${inputTz} instead`}
             </div>
 
             {/* First row: input and primary output date-only display */}
@@ -365,8 +385,13 @@ export default function TimezoneConverter({
                   key={tz}
                   className="flex items-center justify-between p-2 border rounded"
                 >
-                  <div className="font-medium">
+                  <div className="font-medium flex items-center gap-2">
                     {tz.replace("_/", "/").replace(/_/g, " ")}
+                    {isDST(baseDate, tz) && (
+                      <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-semibold border border-amber-300">
+                        DST
+                      </span>
+                    )}
                   </div>
                   <div className="text-right text-lg font-mono">
                     {formatTime(baseDate, tz, use24)}

@@ -2,13 +2,22 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { css_beautify } from "js-beautify";
+import { format as prettierFormat } from "prettier/standalone";
+import * as prettierPostcss from "prettier/plugins/postcss";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+
+const formatCssWithPrettier = async (code: string) => {
+  return await prettierFormat(code, {
+    parser: "css",
+    plugins: [prettierPostcss],
+  });
+};
 
 export default function CssFormatter({
   hostname,
@@ -30,21 +39,31 @@ export default function CssFormatter({
     }
   });
 
-  const formatCss = useCallback(() => {
+  const formatCss = useCallback(async () => {
     try {
-      const formatted = css_beautify(toolState.code);
+      const formatted = await formatCssWithPrettier(toolState.code);
       setFormattedCode(formatted);
-      toolState.actions.showMessage("CSS formatted successfully!");
+      toolState.actions.showMessage(
+        "CSS formatted with Prettier successfully!",
+      );
     } catch (error) {
-      toolState.actions.showMessage(`Error: ${error}`);
-      setFormattedCode("Invalid CSS");
+      try {
+        const fallback = css_beautify(toolState.code);
+        setFormattedCode(fallback);
+        toolState.actions.showMessage(
+          "Prettier fallback applied with beautify.",
+        );
+      } catch {
+        toolState.actions.showMessage(`Error: ${error}`);
+        setFormattedCode("Invalid CSS");
+      }
     }
   }, [toolState]);
 
   const copyFormattedCode = useCallback(() => {
     toolState.actions.copyText(
       formattedCode,
-      "Formatted CSS copied to clipboard!"
+      "Formatted CSS copied to clipboard!",
     );
   }, [formattedCode, toolState.actions]);
 
@@ -80,7 +99,7 @@ export default function CssFormatter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatCss, copyFormattedCode, toolState]
+    [formatCss, copyFormattedCode, toolState],
   );
 
   return (
@@ -92,14 +111,7 @@ export default function CssFormatter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="CSS Formatter"
-        description="Free online CSS formatter and beautifier. Format, beautify and clean up your CSS code with proper indentation."
-        exampleCode={initialValue}
-        exampleOutput={css_beautify(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

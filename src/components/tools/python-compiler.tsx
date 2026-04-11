@@ -8,7 +8,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -198,14 +198,7 @@ captured_output.getvalue()
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Online Python Compiler"
-        description="Free online Python compiler to write and run Python code in your browser. No installation needed."
-        exampleCode={initialValue}
-        exampleOutput="Hello, World!\nThis is Online Python Compiler (Interpreter) Offered by WebToolsEasy"
-      />
-
-      {pyodideLoading && (
+{pyodideLoading && (
         <Box className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <Typography variant="h6" className="text-gray-800">
             Loading Python environment...

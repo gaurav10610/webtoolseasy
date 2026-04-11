@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -176,14 +176,7 @@ export default function CountdownTimer({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Countdown Timer Online"
-        description="Set custom countdown timer with alarm for cooking, workouts, studying, or any timed activity. Preset options available for quick setup."
-        exampleCode="Set time → Start → Get alert"
-        exampleOutput="Visual and audio notification when time expires"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       {/* Quick Presets */}
       <Card>

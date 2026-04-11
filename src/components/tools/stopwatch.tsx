@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Typography, Card, CardContent, IconButton, Chip } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -120,14 +120,7 @@ export default function Stopwatch({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Online Stopwatch"
-        description="Precise digital stopwatch with lap timer. Start, stop, and record split times for sports, workouts, cooking, or any timing needs."
-        exampleCode="Start → Record Laps → Stop"
-        exampleOutput="Accurate time measurement with lap tracking"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <Card>
         <CardContent className="flex flex-col items-center gap-6 py-8">

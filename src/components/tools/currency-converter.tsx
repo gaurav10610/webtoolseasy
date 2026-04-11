@@ -14,7 +14,7 @@ import {
 import { useState, useCallback, useEffect } from "react";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -46,6 +46,14 @@ interface ExchangeRates {
   [key: string]: number;
 }
 
+interface CachedExchangeRatePayload {
+  rates: ExchangeRates;
+  updatedAtMs: number;
+  cachedAtMs: number;
+}
+
+const RATE_CACHE_TTL_MS = 1000 * 60 * 60 * 12;
+
 export default function CurrencyConverter({
   hostname,
   queryParams,
@@ -62,18 +70,49 @@ export default function CurrencyConverter({
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [warning, setWarning] = useState<string>("");
   const [lastUpdate, setLastUpdate] = useState<string>("");
+  const [rateSource, setRateSource] = useState<"live" | "cached" | "none">(
+    "none",
+  );
 
   // Fetch exchange rates
   useEffect(() => {
+    const cacheKey = `currency-rates:${fromCurrency}`;
+
+    const readCache = (): CachedExchangeRatePayload | null => {
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (!cached) return null;
+        const parsed = JSON.parse(cached) as CachedExchangeRatePayload;
+        if (!parsed?.rates || typeof parsed.updatedAtMs !== "number") {
+          return null;
+        }
+        return parsed;
+      } catch {
+        return null;
+      }
+    };
+
+    const writeCache = (payload: CachedExchangeRatePayload) => {
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify(payload));
+      } catch {
+        // Ignore quota/security errors and continue with live data.
+      }
+    };
+
     const fetchRates = async () => {
       try {
         setLoading(true);
         setError("");
+        setWarning("");
+
+        const cachedPayload = readCache();
 
         // Using exchangerate-api.com free tier (no auth required)
         const response = await fetch(
-          `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`
+          `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`,
         );
 
         if (!response.ok) {
@@ -83,9 +122,32 @@ export default function CurrencyConverter({
         const data = await response.json();
         setExchangeRates(data.rates);
         setLastUpdate(new Date(data.time_last_updated * 1000).toLocaleString());
+        setRateSource("live");
+        writeCache({
+          rates: data.rates,
+          updatedAtMs: data.time_last_updated * 1000,
+          cachedAtMs: Date.now(),
+        });
         setLoading(false);
       } catch {
-        setError("Unable to fetch exchange rates. Please try again.");
+        const cachedPayload = readCache();
+        const isFreshCache =
+          cachedPayload &&
+          Date.now() - cachedPayload.cachedAtMs <= RATE_CACHE_TTL_MS;
+
+        if (cachedPayload && isFreshCache) {
+          setExchangeRates(cachedPayload.rates);
+          setLastUpdate(new Date(cachedPayload.updatedAtMs).toLocaleString());
+          setRateSource("cached");
+          setWarning(
+            "Live rates are unavailable right now. Showing recently cached rates instead.",
+          );
+        } else {
+          setError(
+            "Unable to fetch exchange rates and no recent cache is available. Please try again.",
+          );
+          setRateSource("none");
+        }
         setLoading(false);
       }
     };
@@ -98,21 +160,21 @@ export default function CurrencyConverter({
       const value = Number(event.target.value);
       setAmount(value >= 0 ? value : 0);
     },
-    []
+    [],
   );
 
   const handleFromCurrencyChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setFromCurrency(event.target.value);
     },
-    []
+    [],
   );
 
   const handleToCurrencyChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setToCurrency(event.target.value);
     },
-    []
+    [],
   );
 
   const handleSwap = useCallback(() => {
@@ -139,17 +201,16 @@ export default function CurrencyConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Currency Converter"
-        description="Convert between 150+ currencies with live exchange rates. Perfect for travelers and international transactions."
-        exampleCode={`${amount} ${fromCurrency}`}
-        exampleOutput={`${convertedAmount.toFixed(2)} ${toCurrency}`}
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         {error && (
           <Alert severity="error" onClose={() => setError("")}>
             {error}
+          </Alert>
+        )}
+
+        {warning && (
+          <Alert severity="warning" onClose={() => setWarning("")}>
+            {warning}
           </Alert>
         )}
 
@@ -286,6 +347,13 @@ export default function CurrencyConverter({
                   className="text-gray-500 mt-2 block"
                 >
                   Last updated: {lastUpdate}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  className="text-gray-500 mt-1 block"
+                >
+                  Source:{" "}
+                  {rateSource === "live" ? "Live rates" : "Cached fallback"}
                 </Typography>
               </CardContent>
             </Card>

@@ -1,11 +1,19 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { TextField, MenuItem, FormControlLabel, Checkbox } from "@mui/material";
+import {
+  TextField,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  Card,
+  CardContent,
+} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 const LOREM_WORDS = [
@@ -123,7 +131,7 @@ export default function LoremIpsumGenerator({
 
   const [count, setCount] = useState<number>(3);
   const [type, setType] = useState<"paragraphs" | "words" | "sentences">(
-    "paragraphs"
+    "paragraphs",
   );
   const [startWithLorem, setStartWithLorem] = useState<boolean>(true);
 
@@ -145,7 +153,7 @@ export default function LoremIpsumGenerator({
 
       return words.join(" ") + ".";
     },
-    [generateWord]
+    [generateWord],
   );
 
   const generateParagraph = useCallback(
@@ -163,7 +171,7 @@ export default function LoremIpsumGenerator({
 
       return sentences.join(" ");
     },
-    [generateSentence]
+    [generateSentence],
   );
 
   const generateText = useCallback(() => {
@@ -242,12 +250,7 @@ export default function LoremIpsumGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Lorem Ipsum Generator"
-        description="Generate Lorem Ipsum placeholder text for your designs. Choose paragraphs, sentences, or words. Perfect for mockups and prototypes."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col md:flex-row gap-4 w-full">
           <TextField
             select
@@ -268,7 +271,7 @@ export default function LoremIpsumGenerator({
             value={count}
             onChange={(e) =>
               setCount(
-                Math.max(1, Math.min(100, parseInt(e.target.value) || 1))
+                Math.max(1, Math.min(100, parseInt(e.target.value) || 1)),
               )
             }
             size="small"
@@ -289,6 +292,25 @@ export default function LoremIpsumGenerator({
         </div>
 
         <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+
+        <Card variant="outlined" className="border-slate-200 bg-slate-50">
+          <CardContent>
+            <Typography variant="h6" className="mb-2">
+              Pronunciation & quick meaning guide
+            </Typography>
+            <Typography variant="body2" className="mb-2 text-slate-700">
+              <strong>Lorem ipsum</strong> is usually pronounced{" "}
+              <em>LOH-rem IP-sum</em>. It is pseudo-Latin placeholder text used
+              in layouts to preview spacing, hierarchy, and visual rhythm before
+              final copy is ready.
+            </Typography>
+            <Typography variant="body2" className="text-slate-700">
+              Common word hints: <strong>dolor</strong> = pain,{" "}
+              <strong>sit amet</strong> = roughly “be seated / concerning”, and
+              <strong> consectetur</strong> = connected or joined together.
+            </Typography>
+          </CardContent>
+        </Card>
 
         <div className="w-full">
           <TextField

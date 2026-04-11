@@ -21,34 +21,27 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
+  Button,
   Tooltip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DownloadIcon from "@mui/icons-material/Download";
 import StorageIcon from "@mui/icons-material/Storage";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SchemaIcon from "@mui/icons-material/Schema";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import initSqlJs, {
+  type Database as SqlDatabase,
+  type QueryExecResult,
+} from "sql.js";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-
-// SQL.js types - simplified
-interface Database {
-  exec(sql: string): ExecResult[];
-  run(sql: string, params?: unknown[]): void;
-  export(): Uint8Array;
-  close(): void;
-}
-
-interface ExecResult {
-  columns: string[];
-  values: unknown[][];
-}
 
 // Sample data for the database
 const sampleTables = {
@@ -134,6 +127,15 @@ const sampleTables = {
   },
 };
 
+const DEFAULT_SQL =
+  "-- Welcome to SQL Practice Editor!\n-- Try running: SELECT * FROM employees LIMIT 10;\n\nSELECT * FROM employees LIMIT 10;";
+
+interface QueryTab {
+  id: string;
+  title: string;
+  query: string;
+}
+
 const sqlExamples = [
   {
     title: "Basic SELECT",
@@ -178,21 +180,35 @@ WHERE salary > (SELECT AVG(salary) FROM employees);`,
 export default function SqlPracticeEditor({
   hostname,
 }: Readonly<ToolComponentProps>) {
-  const [sqlCode, setSqlCode] = useState(
-    "-- Welcome to SQL Practice Editor!\n-- Try running: SELECT * FROM employees LIMIT 10;\n\nSELECT * FROM employees LIMIT 10;"
+  const [queryTabs, setQueryTabs] = useState<QueryTab[]>([
+    {
+      id: "query-1",
+      title: "Query 1",
+      query: DEFAULT_SQL,
+    },
+  ]);
+  const [activeTabId, setActiveTabId] = useState("query-1");
+  const activeTab = useMemo(
+    () => queryTabs.find((tab) => tab.id === activeTabId) ?? queryTabs[0],
+    [queryTabs, activeTabId],
   );
-  const [queryResult, setQueryResult] = useState<ExecResult[]>([]);
+  const sqlCode = activeTab?.query ?? "";
+  const [queryResult, setQueryResult] = useState<QueryExecResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [executionTime, setExecutionTime] = useState<number | null>(null);
-  const [database, setDatabase] = useState<Database | null>(null);
+  const [database, setDatabase] = useState<SqlDatabase | null>(null);
   const [sqlLoaded, setSqlLoaded] = useState(false);
 
   const editorConfig = useEditorConfig({
     language: "sql",
     value: sqlCode,
     onChange: (value) => {
-      setSqlCode(value || "");
+      setQueryTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === activeTabId ? { ...tab, query: value || "" } : tab,
+        ),
+      );
     },
     className: "h-full",
   });
@@ -207,30 +223,13 @@ export default function SqlPracticeEditor({
     const loadSqlJs = async () => {
       try {
         setIsLoading(true);
-        // Load SQL.js from CDN
-        const sqlPromise = new Promise<unknown>((resolve, reject) => {
-          const script = document.createElement("script");
-          script.src =
-            "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js";
-          script.onload = () => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (window as any)
-              .initSqlJs({
-                locateFile: (file: string) =>
-                  `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`,
-              })
-              .then(resolve)
-              .catch(reject);
-          };
-          script.onerror = reject;
-          document.head.appendChild(script);
+
+        const SQL = await initSqlJs({
+          locateFile: () => "/vendor/sql/sql-wasm.wasm",
         });
 
-        const SQL = await sqlPromise;
-
         // Create database and populate with sample data
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const db = new (SQL as any).Database();
+        const db = new SQL.Database();
 
         // Create tables and insert sample data
         Object.values(sampleTables).forEach((table) => {
@@ -253,7 +252,7 @@ export default function SqlPracticeEditor({
         setError(
           `Failed to load SQL.js: ${
             err instanceof Error ? err.message : "Unknown error"
-          }`
+          }`,
         );
       } finally {
         setIsLoading(false);
@@ -329,7 +328,7 @@ export default function SqlPracticeEditor({
         return;
       }
 
-      const allResults: ExecResult[] = [];
+      const allResults: QueryExecResult[] = [];
       let hasErrors = false;
 
       // Execute each query sequentially
@@ -341,7 +340,7 @@ export default function SqlPracticeEditor({
           setError(
             `Error in query ${i + 1}: ${
               err instanceof Error ? err.message : "Unknown error"
-            }`
+            }`,
           );
           hasErrors = true;
           break;
@@ -355,7 +354,7 @@ export default function SqlPracticeEditor({
 
         if (allResults.length === 0) {
           setError(
-            "All queries executed successfully but returned no results."
+            "All queries executed successfully but returned no results.",
           );
         }
       }
@@ -366,19 +365,56 @@ export default function SqlPracticeEditor({
     }
   }, [database, sqlCode]);
 
-  const loadExample = useCallback((example: (typeof sqlExamples)[0]) => {
-    setSqlCode(example.query);
-    // Auto-clear previous results when loading a new example
+  const addQueryTab = useCallback(() => {
+    const newTab: QueryTab = {
+      id: crypto.randomUUID(),
+      title: `Query ${queryTabs.length + 1}`,
+      query: "SELECT * FROM employees LIMIT 5;",
+    };
+
+    setQueryTabs((prev) => [...prev, newTab]);
+    setActiveTabId(newTab.id);
     setQueryResult([]);
     setError(null);
     setExecutionTime(null);
-  }, []);
+  }, [queryTabs.length]);
+
+  const closeQueryTab = useCallback(
+    (id: string) => {
+      if (queryTabs.length === 1) return;
+
+      const fallbackTab = queryTabs.find((tab) => tab.id !== id);
+      setQueryTabs((prev) => prev.filter((tab) => tab.id !== id));
+
+      if (activeTabId === id && fallbackTab) {
+        setActiveTabId(fallbackTab.id);
+      }
+    },
+    [activeTabId, queryTabs],
+  );
+
+  const loadExample = useCallback(
+    (example: (typeof sqlExamples)[0]) => {
+      setQueryTabs((prev) =>
+        prev.map((tab) =>
+          tab.id === activeTabId
+            ? { ...tab, title: example.title, query: example.query }
+            : tab,
+        ),
+      );
+      // Auto-clear previous results when loading a new example
+      setQueryResult([]);
+      setError(null);
+      setExecutionTime(null);
+    },
+    [activeTabId],
+  );
 
   const copyToClipboard = useCallback(
     async (text: string) => {
       actions.copyText(text, `Copied: ${text}`);
     },
-    [actions]
+    [actions],
   );
 
   const commonButtons = useMemo(
@@ -390,7 +426,7 @@ export default function SqlPracticeEditor({
           actions.copyShareableLink(sqlCode, "Share link copied!"),
         onFullScreen: toggleFullScreen,
       }),
-    [sqlCode, actions, toggleFullScreen]
+    [sqlCode, actions, toggleFullScreen],
   );
 
   const controls = useMemo(
@@ -421,7 +457,7 @@ export default function SqlPracticeEditor({
       sqlLoaded,
       isLoading,
       commonButtons,
-    ]
+    ],
   );
 
   const renderTableSchema = () => (
@@ -526,6 +562,29 @@ export default function SqlPracticeEditor({
     </Accordion>
   );
 
+  const downloadResultCsv = useCallback(
+    (result: QueryExecResult, index: number) => {
+      const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
+      const header = result.columns.map(escape).join(",");
+      const body = result.values
+        .map((row) =>
+          row
+            .map((cell) => escape(cell === null ? "" : String(cell)))
+            .join(","),
+        )
+        .join("\n");
+      const csv = `${header}\n${body}`;
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `query-result-${index + 1}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+    [],
+  );
+
   const renderQueryResults = () => {
     if (isLoading) {
       return (
@@ -600,7 +659,7 @@ export default function SqlPracticeEditor({
                 📊{" "}
                 {queryResult.reduce(
                   (total, result) => total + result.values.length,
-                  0
+                  0,
                 )}{" "}
                 rows returned
               </Typography>
@@ -610,14 +669,25 @@ export default function SqlPracticeEditor({
 
         {queryResult.map((result, index) => (
           <Box key={index} className="mb-6">
-            {queryResult.length > 1 && (
-              <Typography
-                variant="subtitle1"
-                className="mb-4 font-semibold text-blue-600 flex items-center gap-2"
+            <Box className="flex items-center justify-between mb-2">
+              {queryResult.length > 1 && (
+                <Typography
+                  variant="subtitle1"
+                  className="font-semibold text-blue-600 flex items-center gap-2"
+                >
+                  🔢 Result Set {index + 1}
+                </Typography>
+              )}
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                onClick={() => downloadResultCsv(result, index)}
+                sx={{ ml: "auto" }}
               >
-                🔢 Result Set {index + 1}
-              </Typography>
-            )}
+                Download CSV
+              </Button>
+            </Box>
             {result.columns.length > 4 && (
               <Typography
                 variant="caption"
@@ -738,12 +808,7 @@ export default function SqlPracticeEditor({
           : undefined
       }
     >
-      <SEOContent
-        title="SQL Practice Editor"
-        description="Learn and practice SQL with our interactive online editor featuring sample databases"
-      />
-
-      <Box mb={2}>
+<Box mb={2}>
         <Typography variant="body2" color="text.secondary">
           💡 <strong>Tip:</strong> To execute only selected text, highlight the
           specific SQL query in the editor and click &quot;Execute
@@ -752,6 +817,39 @@ export default function SqlPracticeEditor({
           semicolons. Previous results are automatically cleared when running
           new queries.
         </Typography>
+      </Box>
+
+      <Box mb={2}>
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2">
+          {queryTabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTabId(tab.id)}
+              className={`flex items-center gap-2 rounded-md border px-3 py-1 text-sm transition ${
+                activeTabId === tab.id
+                  ? "border-blue-500 bg-blue-100 text-blue-800"
+                  : "border-gray-300 bg-white text-slate-700 hover:bg-slate-100"
+              }`}
+            >
+              <span>{tab.title}</span>
+              {queryTabs.length > 1 && (
+                <span
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    closeQueryTab(tab.id);
+                  }}
+                  className="font-bold text-slate-500 hover:text-red-600"
+                >
+                  ×
+                </span>
+              )}
+            </button>
+          ))}
+          <Button size="small" variant="outlined" onClick={addQueryTab}>
+            New Tab
+          </Button>
+        </div>
       </Box>
 
       {/* SQL Query Editor and Query Results in Single Column Layout */}

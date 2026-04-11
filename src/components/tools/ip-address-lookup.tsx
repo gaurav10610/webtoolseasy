@@ -14,7 +14,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import RouterIcon from "@mui/icons-material/Router";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 
 interface IPInfo {
@@ -45,7 +45,9 @@ export default function IpAddressLookup({
     const fetchIPInfo = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://ipapi.co/json/");
+        const response = await fetch("/api/ip-address", {
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch IP information");
         }
@@ -63,9 +65,10 @@ export default function IpAddressLookup({
           timezone: data.timezone,
         });
         setError("");
-      } catch (err) {
-        setError("Unable to fetch IP information. Please try again later.");
-        console.error("IP fetch error:", err);
+      } catch {
+        setError(
+          "Unable to fetch IP information right now. Please try again shortly.",
+        );
       } finally {
         setLoading(false);
       }
@@ -101,12 +104,7 @@ export default function IpAddressLookup({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="IP Address Lookup Tool"
-        description="Instantly find your public IP address and network information. View your IP, location, ISP, and connection details."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
         {loading && (
@@ -191,6 +189,45 @@ export default function IpAddressLookup({
                       },
                     }}
                   />
+                </CardContent>
+              </Card>
+            )}
+
+            {ipInfo.loc && (
+              <Card className="border border-gray-200 md:col-span-2">
+                <CardContent className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <LocationOnIcon color="primary" />
+                    <Typography variant="h6" className="text-lg font-semibold">
+                      Coordinates & Map
+                    </Typography>
+                  </div>
+                  <TextField
+                    value={ipInfo.loc}
+                    fullWidth
+                    slotProps={{
+                      input: {
+                        readOnly: true,
+                      },
+                    }}
+                  />
+                  <div className="overflow-hidden rounded-lg border border-gray-200 bg-slate-50">
+                    <iframe
+                      title="Approximate IP location map"
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(ipInfo.loc)}&z=10&output=embed`}
+                      className="h-64 w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps?q=${encodeURIComponent(ipInfo.loc)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    Open in Google Maps
+                  </a>
                 </CardContent>
               </Card>
             )}

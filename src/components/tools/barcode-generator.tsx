@@ -16,10 +16,11 @@ import {
 import DownloadIcon from "@mui/icons-material/Download";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import QRCode from "qrcode";
 
-type BarcodeType = "code128" | "ean13" | "upca" | "code39";
+type BarcodeType = "code128" | "ean13" | "upca" | "code39" | "qr";
 
 export default function BarcodeGenerator({
   hostname,
@@ -92,7 +93,7 @@ export default function BarcodeGenerator({
       ctx.textAlign = "center";
       ctx.fillText(data, canvas.width / 2, barHeight + margin + 20);
     },
-    []
+    [],
   );
 
   // Generate EAN13 barcode
@@ -168,7 +169,7 @@ export default function BarcodeGenerator({
       ctx.textAlign = "center";
       ctx.fillText(paddedData, canvas.width / 2, barHeight + margin + 20);
     },
-    []
+    [],
   );
 
   // Generate barcode
@@ -205,6 +206,19 @@ export default function BarcodeGenerator({
           return;
         }
         generateCode128(toolState.code.toUpperCase(), canvas);
+      } else if (barcodeType === "qr") {
+        if (toolState.code.length === 0) {
+          setError("QR: Enter some text or URL");
+          return;
+        }
+        QRCode.toCanvas(canvas, toolState.code, {
+          width: 256,
+          margin: 2,
+          color: { dark: "#000000", light: "#ffffff" },
+        }).catch((err: unknown) => {
+          setError("Failed to generate QR code");
+          console.error(err);
+        });
       }
     } catch (err) {
       setError("Failed to generate barcode");
@@ -244,7 +258,7 @@ export default function BarcodeGenerator({
         });
       }
     },
-    [barcodeType, toolState.actions]
+    [barcodeType, toolState.actions],
   );
 
   const buttons = createCommonButtons({});
@@ -257,14 +271,7 @@ export default function BarcodeGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Barcode Generator"
-        description="Create professional barcodes online. Generate Code128, EAN13, UPC-A, and Code39 barcodes instantly."
-        exampleCode="Enter data → Select format → Generate barcode → Download"
-        exampleOutput="High-quality barcode images ready for printing"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Error Display */}
@@ -293,6 +300,7 @@ export default function BarcodeGenerator({
                   <MenuItem value="ean13">EAN13 (13 digits)</MenuItem>
                   <MenuItem value="upca">UPC-A (12 digits)</MenuItem>
                   <MenuItem value="code39">Code39 (Alphanumeric)</MenuItem>
+                  <MenuItem value="qr">QR Code (Text / URL)</MenuItem>
                 </Select>
               </FormControl>
 
@@ -312,10 +320,10 @@ export default function BarcodeGenerator({
                   barcodeType === "code128"
                     ? "Supports letters, numbers, and special characters (1-50 chars)"
                     : barcodeType === "ean13"
-                    ? "Enter 13 numeric digits (will auto-pad if shorter)"
-                    : barcodeType === "upca"
-                    ? "Enter 12 numeric digits (will auto-pad if shorter)"
-                    : "Uppercase letters and numbers only (1-40 chars)"
+                      ? "Enter 13 numeric digits (will auto-pad if shorter)"
+                      : barcodeType === "upca"
+                        ? "Enter 12 numeric digits (will auto-pad if shorter)"
+                        : "Uppercase letters and numbers only (1-40 chars)"
                 }
               />
             </div>

@@ -6,7 +6,7 @@ import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import dynamic from "next/dynamic";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { DiffEditorProps } from "../lib/editor";
 
@@ -23,7 +23,7 @@ const DiffEditorsWithHeader = dynamic(
         <div className="text-gray-500">Loading diff editor...</div>
       </div>
     ),
-  }
+  },
 );
 
 export default function DiffChecker({
@@ -37,7 +37,7 @@ export default function DiffChecker({
     total += item.price;
   }
   return total;
-}`
+}`,
   );
 
   const [modifiedText, setModifiedText] = useState(
@@ -47,7 +47,7 @@ export default function DiffChecker({
     total += item.price * item.quantity;
   }
   return total;
-}`
+}`,
   );
 
   const toolState = useToolState({
@@ -66,14 +66,14 @@ export default function DiffChecker({
   const copyOriginal = useCallback(() => {
     toolState.actions.copyText(
       originalText,
-      "Original text copied to clipboard!"
+      "Original text copied to clipboard!",
     );
   }, [originalText, toolState.actions]);
 
   const copyModified = useCallback(() => {
     toolState.actions.copyText(
       modifiedText,
-      "Modified text copied to clipboard!"
+      "Modified text copied to clipboard!",
     );
   }, [modifiedText, toolState.actions]);
 
@@ -144,6 +144,29 @@ export default function DiffChecker({
     toolState.actions.copyText(diffOutput, "Diff report copied!");
   }, [generateDiffOutput, toolState.actions]);
 
+  const wordFrequency = useMemo(() => {
+    const countWords = (text: string): Map<string, number> => {
+      const freq = new Map<string, number>();
+      const words = text.toLowerCase().match(/\b[a-z]{2,}\b/g) || [];
+      for (const w of words) {
+        freq.set(w, (freq.get(w) || 0) + 1);
+      }
+      return freq;
+    };
+    const origFreq = countWords(originalText);
+    const modFreq = countWords(modifiedText);
+    const topN = (freq: Map<string, number>, n = 8) =>
+      [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, n);
+    return {
+      original: topN(origFreq),
+      modified: topN(modFreq),
+      origTotal: [...origFreq.values()].reduce((a, b) => a + b, 0),
+      modTotal: [...modFreq.values()].reduce((a, b) => a + b, 0),
+      origChars: originalText.replace(/\s/g, "").length,
+      modChars: modifiedText.replace(/\s/g, "").length,
+    };
+  }, [originalText, modifiedText]);
+
   const clearAll = useCallback(() => {
     setOriginalText("");
     setModifiedText("");
@@ -190,7 +213,7 @@ export default function DiffChecker({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [swapTexts, copyOriginal, copyModified, copyDiff, clearAll, toolState]
+    [swapTexts, copyOriginal, copyModified, copyDiff, clearAll, toolState],
   );
 
   return (
@@ -202,14 +225,7 @@ export default function DiffChecker({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Free Diff Checker Tool"
-        description="Compare two text blocks or code files and see differences highlighted. Perfect for code review, debugging, and document comparison."
-        exampleCode="Original text vs Modified text"
-        exampleOutput="Visual diff with additions and deletions highlighted"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       {/* Statistics Card */}
       <Card>
@@ -235,6 +251,61 @@ export default function DiffChecker({
               <Typography variant="body2">
                 Unchanged: <strong>{diffStats.unchanged}</strong> lines
               </Typography>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Word & Character Frequency */}
+      <Card>
+        <CardContent>
+          <Typography variant="subtitle2" className="font-semibold mb-3">
+            Word &amp; Character Frequency Analysis:
+          </Typography>
+          <div className="grid grid-cols-2 gap-4 mb-3">
+            <div>
+              <Typography variant="caption" className="text-gray-500">
+                Original — {wordFrequency.origTotal} words /{" "}
+                {wordFrequency.origChars} non-space chars
+              </Typography>
+              <div className="flex flex-col gap-1 mt-1">
+                {wordFrequency.original.map(([word, count]) => (
+                  <div key={word} className="flex items-center gap-2">
+                    <div
+                      className="bg-red-400 rounded-sm"
+                      style={{
+                        width: `${Math.max(4, (count / (wordFrequency.original[0]?.[1] || 1)) * 80)}px`,
+                        height: 12,
+                      }}
+                    />
+                    <Typography variant="caption">
+                      {word} ({count})
+                    </Typography>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <Typography variant="caption" className="text-gray-500">
+                Modified — {wordFrequency.modTotal} words /{" "}
+                {wordFrequency.modChars} non-space chars
+              </Typography>
+              <div className="flex flex-col gap-1 mt-1">
+                {wordFrequency.modified.map(([word, count]) => (
+                  <div key={word} className="flex items-center gap-2">
+                    <div
+                      className="bg-green-500 rounded-sm"
+                      style={{
+                        width: `${Math.max(4, (count / (wordFrequency.modified[0]?.[1] || 1)) * 80)}px`,
+                        height: 12,
+                      }}
+                    />
+                    <Typography variant="caption">
+                      {word} ({count})
+                    </Typography>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </CardContent>

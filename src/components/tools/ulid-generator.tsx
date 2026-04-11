@@ -6,7 +6,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 // Lightweight ULID generator (no external deps) - Crockford base32
 const ENCODING = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -81,14 +81,7 @@ export default function UlidGenerator({ hostname, queryParams }: Readonly<ToolCo
     <ToolLayout
       snackBar={{ open: toolState.snackBar.open, message: toolState.snackBar.message, onClose: toolState.snackBar.close }}
     >
-      <SEOContent
-        title="ULID Generator"
-        description="Generate time-sortable ULIDs (Universally Unique Lexicographically Sortable Identifiers) online. Create single or bulk ULIDs quickly for databases and systems."
-        exampleCode={initialValue}
-        exampleOutput={`Generated ULID: ${initialValue}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div>
             <Typography variant="h6" className="mb-3">

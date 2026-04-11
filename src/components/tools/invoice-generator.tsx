@@ -8,13 +8,16 @@ import {
   Button,
   Typography,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import { jsPDF } from "jspdf";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 import { ToolComponentProps } from "@/types/component";
 import { componentConfig } from "@/data/tools/invoice-generator";
 
@@ -52,6 +55,7 @@ interface InvoiceData {
   // Additional
   notes: string;
   paymentTerms: string;
+  template: "classic" | "minimal" | "bold";
 }
 
 export default function InvoiceGenerator({
@@ -81,6 +85,7 @@ export default function InvoiceGenerator({
     discount: 0,
     notes: "",
     paymentTerms: "Payment due within 30 days",
+    template: "classic",
   });
 
   const [error, setError] = useState<string>("");
@@ -92,7 +97,7 @@ export default function InvoiceGenerator({
 
   const handleInputChange = (
     field: keyof InvoiceData,
-    value: string | number
+    value: string | number,
   ) => {
     setInvoiceData((prev) => ({ ...prev, [field]: value }));
   };
@@ -100,12 +105,12 @@ export default function InvoiceGenerator({
   const handleItemChange = (
     id: number,
     field: keyof LineItem,
-    value: string | number
+    value: string | number,
   ) => {
     setInvoiceData((prev) => ({
       ...prev,
       items: prev.items.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item
+        item.id === id ? { ...item, [field]: value } : item,
       ),
     }));
   };
@@ -139,7 +144,7 @@ export default function InvoiceGenerator({
   const calculateSubtotal = (): number => {
     return invoiceData.items.reduce(
       (sum, item) => sum + item.quantity * item.rate,
-      0
+      0,
     );
   };
 
@@ -199,7 +204,7 @@ export default function InvoiceGenerator({
       if (invoiceData.companyAddress) {
         const addressLines = doc.splitTextToSize(
           invoiceData.companyAddress,
-          80
+          80,
         );
         doc.text(addressLines, 20, yPos);
         yPos += addressLines.length * 5;
@@ -246,7 +251,7 @@ export default function InvoiceGenerator({
       if (invoiceData.clientAddress) {
         const clientAddressLines = doc.splitTextToSize(
           invoiceData.clientAddress,
-          80
+          80,
         );
         doc.text(clientAddressLines, 20, yPos);
         yPos += clientAddressLines.length * 5;
@@ -332,7 +337,7 @@ export default function InvoiceGenerator({
         doc.setFont("helvetica", "normal");
         const termsLines = doc.splitTextToSize(
           invoiceData.paymentTerms,
-          pageWidth - 40
+          pageWidth - 40,
         );
         doc.text(termsLines, 20, yPos);
         yPos += termsLines.length * 5 + 5;
@@ -345,7 +350,7 @@ export default function InvoiceGenerator({
         doc.setFont("helvetica", "normal");
         const notesLines = doc.splitTextToSize(
           invoiceData.notes,
-          pageWidth - 40
+          pageWidth - 40,
         );
         doc.text(notesLines, 20, yPos);
       }
@@ -369,12 +374,7 @@ export default function InvoiceGenerator({
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title={componentConfig.pageTitle}
-        description="Create professional invoices with automatic calculations and PDF export"
-      />
-
-      {error && (
+{error && (
         <Alert severity="error" onClose={() => setError("")}>
           {error}
         </Alert>
@@ -491,6 +491,23 @@ export default function InvoiceGenerator({
               onChange={(e) => handleInputChange("dueDate", e.target.value)}
               InputLabelProps={{ shrink: true }}
             />
+            <FormControl sx={{ minWidth: 180 }}>
+              <InputLabel>Template</InputLabel>
+              <Select
+                value={invoiceData.template}
+                label="Template"
+                onChange={(e) =>
+                  handleInputChange(
+                    "template",
+                    e.target.value as InvoiceData["template"],
+                  )
+                }
+              >
+                <MenuItem value="classic">Classic</MenuItem>
+                <MenuItem value="minimal">Minimal</MenuItem>
+                <MenuItem value="bold">Bold</MenuItem>
+              </Select>
+            </FormControl>
           </div>
         </CardContent>
       </Card>
@@ -532,7 +549,7 @@ export default function InvoiceGenerator({
                   handleItemChange(
                     item.id,
                     "quantity",
-                    parseFloat(e.target.value) || 0
+                    parseFloat(e.target.value) || 0,
                   )
                 }
                 sx={{ width: "100px" }}
@@ -545,7 +562,7 @@ export default function InvoiceGenerator({
                   handleItemChange(
                     item.id,
                     "rate",
-                    parseFloat(e.target.value) || 0
+                    parseFloat(e.target.value) || 0,
                   )
                 }
                 sx={{ width: "120px" }}
@@ -656,6 +673,98 @@ export default function InvoiceGenerator({
               placeholder="Thank you for your business!"
             />
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Live Preview */}
+      <Card>
+        <CardContent>
+          <Typography variant="h6" className="mb-4">
+            Live Invoice Preview
+          </Typography>
+          {(() => {
+            const accent =
+              invoiceData.template === "bold"
+                ? "#1d4ed8"
+                : invoiceData.template === "minimal"
+                  ? "#64748b"
+                  : "#0f172a";
+            return (
+              <div
+                className="rounded-lg border overflow-hidden"
+                style={{ borderColor: accent }}
+              >
+                <div
+                  className="px-4 py-3 text-white"
+                  style={{ backgroundColor: accent }}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <Typography variant="h6">
+                        {invoiceData.companyName || "Your Company"}
+                      </Typography>
+                      <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                        {invoiceData.companyEmail || "company@example.com"}
+                      </Typography>
+                    </div>
+                    <div className="text-right">
+                      <Typography variant="h6">INVOICE</Typography>
+                      <Typography variant="body2">
+                        #{invoiceData.invoiceNumber}
+                      </Typography>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-white">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Typography variant="subtitle2">Bill To</Typography>
+                      <Typography variant="body2">
+                        {invoiceData.clientName || "Client Name"}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {invoiceData.clientEmail || "client@example.com"}
+                      </Typography>
+                    </div>
+                    <div className="text-left md:text-right">
+                      <Typography variant="body2">
+                        Invoice Date: {invoiceData.invoiceDate}
+                      </Typography>
+                      <Typography variant="body2">
+                        Due Date: {invoiceData.dueDate}
+                      </Typography>
+                    </div>
+                  </div>
+                  <div className="space-y-2 mb-4">
+                    {invoiceData.items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex justify-between rounded bg-slate-50 px-3 py-2"
+                      >
+                        <div>
+                          <Typography variant="body2" fontWeight="bold">
+                            {item.description || "Line item"}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {item.quantity} × ${item.rate.toFixed(2)}
+                          </Typography>
+                        </div>
+                        <Typography variant="body2" fontWeight="bold">
+                          ${(item.quantity * item.rate).toFixed(2)}
+                        </Typography>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t pt-3 flex justify-between">
+                    <Typography variant="h6">Total</Typography>
+                    <Typography variant="h6" sx={{ color: accent }}>
+                      ${calculateTotal().toFixed(2)}
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 

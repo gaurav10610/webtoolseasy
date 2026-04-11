@@ -35,7 +35,7 @@ import {
 } from "@mui/icons-material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 type Status = "default" | "success" | "error" | "running";
@@ -110,6 +110,52 @@ export default function TestHardware({
   const [colorDepth, setColorDepth] = useState<number | null>(null);
   const [cpuCores, setCpuCores] = useState<number | null>(null);
   const [touchSupport, setTouchSupport] = useState<boolean | null>(null);
+
+  const benchmarkMetrics = [
+    {
+      label: "Camera readiness",
+      score:
+        cameraStatus === "success" ? 100 : cameraStatus === "error" ? 15 : 55,
+    },
+    {
+      label: "Microphone input",
+      score:
+        micStatus === "success"
+          ? Math.max(70, Math.round(audioLevel * 100))
+          : micStatus === "error"
+            ? 15
+            : 50,
+    },
+    {
+      label: "Network speed",
+      score:
+        networkSpeed !== null
+          ? Math.min(100, Math.round(networkSpeed * 8))
+          : networkStatus === "error"
+            ? 10
+            : 45,
+    },
+    {
+      label: "System capacity",
+      score: Math.min(
+        100,
+        (cpuCores || 2) * 10 + (touchSupport ? 10 : 0) + (gpuInfo ? 20 : 0),
+      ),
+    },
+  ];
+
+  const overallBenchmark = Math.round(
+    benchmarkMetrics.reduce((sum, metric) => sum + metric.score, 0) /
+      benchmarkMetrics.length,
+  );
+  const benchmarkLabel =
+    overallBenchmark >= 85
+      ? "Excellent"
+      : overallBenchmark >= 70
+        ? "Good"
+        : overallBenchmark >= 50
+          ? "Fair"
+          : "Needs attention";
 
   const stopMic = useCallback(() => {
     if (mediaStreamRef.current) {
@@ -350,13 +396,30 @@ export default function TestHardware({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Hardware Tester"
-        description="Test your camera, microphone, speakers, and other device hardware directly in your browser."
-        exampleCode={""}
-        exampleOutput={""}
-      />
-      <div className="mt-6 grid grid-cols-1 gap-6">
+<div className="mt-6 grid grid-cols-1 gap-6">
+        <TestCard title="Hardware Benchmark Scores" status="success">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {benchmarkMetrics.map((metric) => (
+              <div key={metric.label} className="rounded-lg border p-3">
+                <div className="mb-1 flex items-center justify-between text-sm">
+                  <span>{metric.label}</span>
+                  <strong>{metric.score}/100</strong>
+                </div>
+                <div className="h-2 rounded-full bg-gray-200">
+                  <div
+                    className="h-2 rounded-full bg-blue-600"
+                    style={{ width: `${metric.score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 rounded-lg bg-slate-50 p-3 text-sm">
+            <strong>Overall device readiness:</strong> {overallBenchmark}/100 —{" "}
+            {benchmarkLabel}
+          </div>
+        </TestCard>
+
         <TestCard title="Camera Test" status={cameraStatus}>
           <div className="flex flex-col gap-4">
             <FormControl fullWidth size="small">

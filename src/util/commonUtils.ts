@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import * as _ from "lodash-es";
 
 export function formatDate(date?: Date): string {
@@ -16,7 +15,17 @@ export function formatDate(date?: Date): string {
 }
 
 export function getRandomId(): string {
-  return nanoid();
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.getRandomValues === "function"
+  ) {
+    const alphabet =
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-";
+    const randomBytes = crypto.getRandomValues(new Uint8Array(21));
+    return Array.from(randomBytes, (byte) => alphabet[byte & 63]).join("");
+  }
+
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
 export function copyToClipboard(text: string) {

@@ -14,7 +14,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { ToolLayout, SEOContent } from "@/components/common/ToolLayout";
+import { ToolLayout } from "@/components/common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -253,12 +253,7 @@ export default function TimeDurationCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Time Duration Calculator"
-        description="Calculate time duration between hours, add or subtract time, and convert between time formats easily."
-      />
-
-      <div className="w-full max-w-4xl mx-auto">
+<div className="w-full max-w-4xl mx-auto">
         {/* Mode Selection */}
         <Card className="mb-4">
           <CardContent>

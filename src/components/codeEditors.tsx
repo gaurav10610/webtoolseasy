@@ -22,7 +22,7 @@ export function SingleCodeEditorWithHeaderV2({
 }>) {
   return (
     <div
-      className={`flex flex-col gap-2 ${
+      className={`flex min-h-0 flex-col gap-2 ${
         className ? className : "h-[65vh] min-h-[320px]"
       }`}
     >
@@ -39,7 +39,7 @@ export function SingleCodeEditorWithHeaderV2({
         language={codeEditorProps.language}
         value={codeEditorProps.value}
         onChange={codeEditorProps.onChange}
-        className={codeEditorProps.className}
+        className={codeEditorProps.className || "flex-1 min-h-[280px]"}
         editorOptions={{
           ...editorOptions,
           ...(codeEditorProps.editorOptions || {}),
@@ -67,7 +67,7 @@ export function DiffEditorsWithHeader({
   themeOption: string;
 }>) {
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`flex min-h-0 flex-col gap-2 ${className}`}>
       <div className="w-full flex flex-row justify-around">
         <Typography
           variant="body1"

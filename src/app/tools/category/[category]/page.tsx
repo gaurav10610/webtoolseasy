@@ -2,6 +2,7 @@ import { apps } from "@/data/apps";
 import { getAllCategorySlugs, getCategoryConfig } from "@/data/categories";
 import { AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
+import { LazyOnView } from "@/components/common/LazyOnView";
 import { Typography } from "@mui/material";
 import { map } from "lodash-es";
 import { Metadata } from "next";
@@ -78,7 +79,7 @@ export async function generateMetadata(props: {
 
 // Generate structured data for the category
 function generateCategoryStructuredData(
-  config: ReturnType<typeof getCategoryConfig>
+  config: ReturnType<typeof getCategoryConfig>,
 ) {
   if (!config) return null;
 
@@ -139,7 +140,7 @@ export default async function CategoryPage(props: {
       )}
 
       {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500">
+      <nav className="text-sm text-gray-500 dark:text-slate-400">
         <Link href="/" className="hover:text-blue-600">
           Home
         </Link>
@@ -156,7 +157,7 @@ export default async function CategoryPage(props: {
 
       {/* Hero Section */}
       <header
-        className={`text-center py-8 bg-gradient-to-r ${config.heroGradient} rounded-xl border ${config.heroBorderColor}`}
+        className={`text-center py-8 bg-gradient-to-r ${config.heroGradient} rounded-xl border ${config.heroBorderColor} dark:shadow-lg`}
       >
         <Typography
           variant="h1"
@@ -193,12 +194,18 @@ export default async function CategoryPage(props: {
         </Typography>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {map(categoryApps, (app) => (
-            <article key={app.applicationId} className="w-full">
-              <AppHomeCard
-                config={app}
-                className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100"
-              />
-            </article>
+            <LazyOnView
+              key={app.applicationId}
+              className="w-full"
+              minHeight={220}
+            >
+              <article className="w-full">
+                <AppHomeCard
+                  config={app}
+                  className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-slate-700 dark:bg-slate-900"
+                />
+              </article>
+            </LazyOnView>
           ))}
         </div>
       </section>
@@ -206,7 +213,7 @@ export default async function CategoryPage(props: {
       <BaseToolsAds />
 
       {/* Features Section */}
-      <section className="py-8 px-4 bg-gray-50 rounded-xl">
+      <section className="py-8 px-4 bg-gray-50 rounded-xl dark:bg-slate-900/60">
         <Typography
           variant="h2"
           className="!text-xl md:!text-2xl !font-semibold mb-6 text-center"
@@ -266,7 +273,9 @@ export default async function CategoryPage(props: {
               <summary className="cursor-pointer font-medium">
                 {faq.question}
               </summary>
-              <p className="mt-2 text-gray-600">{faq.answer}</p>
+              <p className="mt-2 text-gray-600 dark:text-slate-300">
+                {faq.answer}
+              </p>
             </details>
           ))}
         </div>

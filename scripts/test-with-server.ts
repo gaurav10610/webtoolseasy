@@ -11,7 +11,8 @@ const HOST = "localhost";
 const MAX_WAIT_TIME = 60000;
 const CHECK_INTERVAL = 500;
 
-let devServerProcess: ChildProcess | null = null;
+let appServerProcess: ChildProcess | null = null;
+let startedLocalServer = false;
 let isServerReady = false;
 
 async function checkServerHealth(): Promise<boolean> {
@@ -47,6 +48,12 @@ async function waitForServer(): Promise<boolean> {
 }
 
 async function startDevServer(): Promise<void> {
+  if (await checkServerHealth()) {
+    console.log(`✓ Reusing existing app server at http://${HOST}:${PORT}`);
+    isServerReady = true;
+    return;
+  }
+
   return new Promise((resolve, reject) => {
     console.log("🏗️ Building app for E2E tests...");
     execSync("npm run build", {
@@ -58,8 +65,9 @@ async function startDevServer(): Promise<void> {
     });
 
     console.log(`🚀 Starting app server on http://${HOST}:${PORT} ...`);
+    startedLocalServer = true;
 
-    devServerProcess = spawn(
+    appServerProcess = spawn(
       "npm",
       ["run", "start", "--", "--port", String(PORT)],
       {
@@ -72,7 +80,7 @@ async function startDevServer(): Promise<void> {
       },
     );
 
-    devServerProcess.stdout?.on("data", (data: Buffer) => {
+    appServerProcess.stdout?.on("data", (data: Buffer) => {
       const output = data.toString();
       process.stdout.write(output);
 
@@ -82,16 +90,16 @@ async function startDevServer(): Promise<void> {
       }
     });
 
-    devServerProcess.stderr?.on("data", (data: Buffer) => {
+    appServerProcess.stderr?.on("data", (data: Buffer) => {
       process.stderr.write(data.toString());
     });
 
-    devServerProcess.on("error", (error: Error) => {
+    appServerProcess.on("error", (error: Error) => {
       console.error("✗ Failed to start dev server:", error.message);
       reject(error);
     });
 
-    devServerProcess.on("exit", (code: number | null) => {
+    appServerProcess.on("exit", (code: number | null) => {
       if (code !== 0 && !isServerReady) {
         console.error(`✗ Dev server exited with code ${code}`);
         reject(new Error(`App server exited with code ${code}`));
@@ -127,21 +135,21 @@ async function runTests(): Promise<number> {
 }
 
 async function stopDevServer(): Promise<void> {
-  if (!devServerProcess) return;
+  if (!startedLocalServer || !appServerProcess) return;
 
   console.log("\n🛑 Stopping app server...");
 
   return new Promise((resolve) => {
-    devServerProcess?.on("exit", () => {
+    appServerProcess?.on("exit", () => {
       console.log("✓ App server stopped");
       resolve();
     });
 
-    devServerProcess?.kill("SIGTERM");
+    appServerProcess?.kill("SIGTERM");
 
     setTimeout(() => {
-      if (devServerProcess && !devServerProcess.killed) {
-        devServerProcess.kill("SIGKILL");
+      if (appServerProcess && !appServerProcess.killed) {
+        appServerProcess.kill("SIGKILL");
       }
       resolve();
     }, 3000);
@@ -150,6 +158,10 @@ async function stopDevServer(): Promise<void> {
 
 async function cleanup(): Promise<void> {
   await stopDevServer();
+
+  if (!startedLocalServer) {
+    return;
+  }
 
   try {
     const pid = execSync(`lsof -ti:${PORT}`).toString().trim();

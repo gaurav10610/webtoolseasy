@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   TextField,
   Card,
@@ -13,7 +13,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 
 interface ColorFormats {
@@ -203,6 +203,62 @@ export default function ColorConverter({
     toolState.actions.copyText(value, `${format} copied!`);
   };
 
+  // Derive current HSL hue/saturation/lightness
+  const currentHsl = useMemo(() => {
+    const m = colorFormats.hsl.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    return m ? { h: +m[1], s: +m[2], l: +m[3] } : { h: 0, s: 0, l: 50 };
+  }, [colorFormats.hsl]);
+
+  const hslToRgbArr = (
+    h: number,
+    s: number,
+    l: number,
+  ): [number, number, number] => {
+    const sl = s / 100,
+      ll = l / 100;
+    const a = sl * Math.min(ll, 1 - ll);
+    const f = (n: number) => {
+      const k = (n + h / 30) % 12;
+      return ll - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    };
+    return [
+      Math.round(255 * f(0)),
+      Math.round(255 * f(8)),
+      Math.round(255 * f(4)),
+    ];
+  };
+
+  const harmonyColors = useMemo(() => {
+    const { h, s, l } = currentHsl;
+    const make = (deg: number) => {
+      const [r, g, b] = hslToRgbArr((h + deg) % 360, s, l);
+      return rgbToHex(r, g, b).toUpperCase();
+    };
+    return {
+      complementary: [make(180)],
+      triadic: [make(120), make(240)],
+      analogous: [make(330), make(30)],
+      splitComplementary: [make(150), make(210)],
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentHsl]);
+
+  const wcagContrast = useMemo(() => {
+    const { r, g, b } = rgbSliders;
+    const toLin = (v: number) => {
+      const c = v / 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    };
+    const lum = 0.2126 * toLin(r) + 0.7152 * toLin(g) + 0.0722 * toLin(b);
+    const vsWhite = 1.05 / (lum + 0.05);
+    const vsBlack = (lum + 0.05) / 0.05;
+    return {
+      vsWhite: +vsWhite.toFixed(2),
+      vsBlack: +vsBlack.toFixed(2),
+      lum: +lum.toFixed(4),
+    };
+  }, [rgbSliders]);
+
   const buttons = [
     {
       type: "custom" as const,
@@ -243,12 +299,7 @@ export default function ColorConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Color Converter Tool"
-        description="Convert colors between HEX, RGB, HSL, and CMYK formats. Live color preview with instant conversion and RGB sliders."
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <div className="flex flex-col md:flex-row gap-4 items-start">
           <TextField
             label="Enter Color (HEX, RGB)"
@@ -446,6 +497,116 @@ export default function ColorConverter({
               sliders for precise control. Supported inputs: HEX (#FF5733 or
               #F53), RGB (255, 87, 51), or rgb(255, 87, 51).
             </Typography>
+          </CardContent>
+        </Card>
+
+        {/* Color Harmony */}
+        <Card className="border border-gray-200">
+          <CardContent className="flex flex-col gap-3">
+            <Typography variant="h6">Color Harmony</Typography>
+            {(
+              [
+                {
+                  label: "Complementary",
+                  swatches: harmonyColors.complementary,
+                },
+                { label: "Triadic", swatches: harmonyColors.triadic },
+                { label: "Analogous", swatches: harmonyColors.analogous },
+                {
+                  label: "Split-Complementary",
+                  swatches: harmonyColors.splitComplementary,
+                },
+              ] as const
+            ).map(({ label, swatches }) => (
+              <div key={label} className="flex items-center gap-3">
+                <Typography variant="body2" className="w-40 shrink-0">
+                  {label}
+                </Typography>
+                <div className="flex gap-2">
+                  <div
+                    className="w-8 h-8 rounded border border-gray-300 cursor-pointer"
+                    style={{ backgroundColor: colorFormats.hex }}
+                    title={`Base: ${colorFormats.hex}`}
+                    onClick={() => toolState.setCode(colorFormats.hex)}
+                  />
+                  {swatches.map((hex: string) => (
+                    <div
+                      key={hex}
+                      className="w-8 h-8 rounded border border-gray-300 cursor-pointer"
+                      style={{ backgroundColor: hex }}
+                      title={hex}
+                      onClick={() => toolState.setCode(hex)}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* WCAG Contrast */}
+        <Card className="border border-gray-200">
+          <CardContent className="flex flex-col gap-3">
+            <Typography variant="h6">WCAG Contrast Checker</Typography>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                {
+                  bg: "#ffffff",
+                  label: "vs White",
+                  ratio: wcagContrast.vsWhite,
+                },
+                {
+                  bg: "#000000",
+                  label: "vs Black",
+                  ratio: wcagContrast.vsBlack,
+                },
+              ].map(({ bg, label, ratio }) => (
+                <div
+                  key={label}
+                  className="flex flex-col gap-1 p-3 border rounded"
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <div
+                      className="w-5 h-5 rounded border"
+                      style={{ backgroundColor: bg }}
+                    />
+                    <Typography variant="subtitle2">{label}</Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{ ml: "auto", fontWeight: "bold" }}
+                    >
+                      {ratio}:1
+                    </Typography>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {[
+                      { level: "AA Normal", pass: ratio >= 4.5 },
+                      { level: "AA Large", pass: ratio >= 3 },
+                      { level: "AAA Normal", pass: ratio >= 7 },
+                      { level: "AAA Large", pass: ratio >= 4.5 },
+                    ].map(({ level, pass }) => (
+                      <span
+                        key={level}
+                        className={`text-xs font-semibold px-2 py-0.5 rounded ${pass ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                      >
+                        {pass ? "✓" : "✗"} {level}
+                      </span>
+                    ))}
+                  </div>
+                  <div
+                    className="mt-1 rounded p-2 text-center text-sm font-semibold"
+                    style={{
+                      backgroundColor: bg,
+                      color: colorFormats.hex,
+                      border: `2px solid ${colorFormats.hex}`,
+                    }}
+                  >
+                    Sample text on {bg === "#ffffff" ? "white" : "black"}{" "}
+                    background
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

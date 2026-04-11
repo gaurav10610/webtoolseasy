@@ -20,12 +20,17 @@ import {
   Download as DownloadIcon,
   Compress as CompressIcon,
 } from "@mui/icons-material";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { PDFDocument } from "pdf-lib";
+import { pdfjs } from "react-pdf";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
 
 type CompressionLevel = "low" | "medium" | "high";
+
+if (typeof window !== "undefined") {
+  pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
+}
 
 export default function PDFCompress({
   hostname,
@@ -66,18 +71,18 @@ export default function PDFCompress({
         setCompressedPdfUrl("");
         setCompressedSize(0);
         toolState.actions.showMessage(
-          `PDF loaded: ${formatFileSize(file.size)}`
+          `PDF loaded: ${formatFileSize(file.size)}`,
         );
       }
     },
-    [toolState.actions, formatFileSize]
+    [toolState.actions, formatFileSize],
   );
 
   const handleError = useCallback(
     (error: string) => {
       toolState.actions.showMessage(error);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const compressPDF = useCallback(async () => {
@@ -87,82 +92,88 @@ export default function PDFCompress({
     }
 
     setProcessing(true);
-    toolState.actions.showMessage("Compressing PDF...");
+    toolState.actions.showMessage("Compressing PDF with page re-rendering...");
 
     try {
       const arrayBuffer = await pdfFile.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const sourcePdf = await loadingTask.promise;
+      const outputPdf = await PDFDocument.create();
 
-      // Compression settings based on level
-      const compressionOptions: Record<
+      const settings: Record<
         CompressionLevel,
-        {
-          objectsPerTick: number;
-          useObjectStreams: boolean;
-          addDefaultPage: boolean;
-        }
+        { scale: number; quality: number }
       > = {
-        low: {
-          objectsPerTick: 50,
-          useObjectStreams: true,
-          addDefaultPage: false,
-        },
-        medium: {
-          objectsPerTick: 100,
-          useObjectStreams: true,
-          addDefaultPage: false,
-        },
-        high: {
-          objectsPerTick: 200,
-          useObjectStreams: true,
-          addDefaultPage: false,
-        },
+        low: { scale: 1.3, quality: 0.86 },
+        medium: { scale: 1.05, quality: 0.7 },
+        high: { scale: 0.85, quality: 0.55 },
       };
 
-      // Save with compression options
-      // Note: pdf-lib has limited native compression. For better compression,
-      // we save with object streams enabled which provides some size reduction
-      const pdfBytes = await pdfDoc.save({
-        useObjectStreams: compressionOptions[compressionLevel].useObjectStreams,
-        addDefaultPage: compressionOptions[compressionLevel].addDefaultPage,
-        objectsPerTick: compressionOptions[compressionLevel].objectsPerTick,
-      });
+      const { scale, quality } = settings[compressionLevel];
 
-      // For additional compression, we can remove metadata and optimize
-      const compressedDoc = await PDFDocument.load(pdfBytes);
+      for (let pageNumber = 1; pageNumber <= sourcePdf.numPages; pageNumber++) {
+        const page = await sourcePdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale });
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Unable to initialize canvas context");
 
-      // Remove metadata to reduce size
-      compressedDoc.setTitle("");
-      compressedDoc.setAuthor("");
-      compressedDoc.setSubject("");
-      compressedDoc.setKeywords([]);
-      compressedDoc.setProducer("");
-      compressedDoc.setCreator("");
+        canvas.width = Math.max(1, Math.floor(viewport.width));
+        canvas.height = Math.max(1, Math.floor(viewport.height));
 
-      // Save the optimized PDF
-      const finalBytes = await compressedDoc.save({
+        await page.render({ canvasContext: context, viewport, canvas }).promise;
+
+        const imageBlob = await new Promise<Blob | null>((resolve) =>
+          canvas.toBlob(resolve, "image/jpeg", quality),
+        );
+        if (!imageBlob) {
+          throw new Error(`Failed to rasterize page ${pageNumber}`);
+        }
+
+        const imageBytes = await imageBlob.arrayBuffer();
+        const embeddedImage = await outputPdf.embedJpg(imageBytes);
+        const outPage = outputPdf.addPage([
+          embeddedImage.width,
+          embeddedImage.height,
+        ]);
+        outPage.drawImage(embeddedImage, {
+          x: 0,
+          y: 0,
+          width: embeddedImage.width,
+          height: embeddedImage.height,
+        });
+      }
+
+      outputPdf.setTitle("");
+      outputPdf.setAuthor("");
+      outputPdf.setSubject("");
+      outputPdf.setKeywords([]);
+      outputPdf.setProducer("WebToolsEasy PDF Compress");
+      outputPdf.setCreator("WebToolsEasy PDF Compress");
+
+      const finalBytes = await outputPdf.save({
         useObjectStreams: true,
         addDefaultPage: false,
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const blob = new Blob([finalBytes as any], { type: "application/pdf" });
+      const outputBytes = Uint8Array.from(finalBytes);
+      const blob = new Blob([outputBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       setCompressedPdfUrl(url);
       setCompressedSize(blob.size);
 
       const reductionPercent = Math.round(
-        ((originalSize - blob.size) / originalSize) * 100
+        ((originalSize - blob.size) / originalSize) * 100,
       );
 
       if (blob.size >= originalSize) {
         toolState.actions.showMessage(
-          "PDF is already optimized. No further compression possible."
+          "PDF was re-rendered, but the original file was already highly optimized.",
         );
       } else {
         toolState.actions.showMessage(
-          `PDF compressed! Size reduced by ${reductionPercent}%`
+          `PDF compressed! Size reduced by ${reductionPercent}%`,
         );
       }
     } catch (error) {
@@ -201,14 +212,7 @@ export default function PDFCompress({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF Compress"
-        description="Reduce PDF file size by optimizing content and removing redundant data. Choose compression level."
-        exampleCode="Upload a PDF file"
-        exampleOutput="Smaller, optimized PDF"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         {/* File Upload */}
         {!pdfFile && (
           <FileUploadWithDragDrop

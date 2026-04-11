@@ -22,7 +22,6 @@ import { ToolComponentProps } from "@/types/component";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 import { componentConfig } from "@/data/tools/csv-to-json";
 
 export default function CsvToJsonConverter({}: Readonly<ToolComponentProps>) {
@@ -228,14 +227,7 @@ export default function CsvToJsonConverter({}: Readonly<ToolComponentProps>) {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title={componentConfig.pageTitle}
-        description="Convert CSV to JSON with customizable delimiters and headers"
-        exampleCode={initialValue}
-        exampleOutput='[{"id":1,"name":"John Doe","email":"john@example.com","age":30,"city":"New York"}]'
-      />
-
-      {error && (
+{error && (
         <Alert severity="error" onClose={() => setError("")}>
           {error}
         </Alert>

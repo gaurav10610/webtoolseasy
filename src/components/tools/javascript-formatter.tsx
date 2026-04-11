@@ -1,15 +1,31 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { js_beautify } from "js-beautify";
+import { format as prettierFormat } from "prettier/standalone";
+import * as prettierBabel from "prettier/plugins/babel";
+import * as prettierEstree from "prettier/plugins/estree";
 import { ContentCopy } from "@mui/icons-material";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
+
+const formatWithPrettier = async (code: string) => {
+  const trimmed = code.trim();
+  const parser =
+    trimmed.startsWith("{") || trimmed.startsWith("[") ? "json" : "babel-ts";
+
+  return await prettierFormat(code, {
+    parser,
+    plugins: [prettierBabel, prettierEstree],
+    semi: true,
+    singleQuote: false,
+  });
+};
 
 export default function JavaScriptFormatter({
   hostname,
@@ -30,21 +46,38 @@ if (value === 'webtoolseasy') {
     initialValue,
   });
 
-  const formattedCode = useMemo(() => {
-    if (!toolState.code.trim()) return "";
+  const [formattedCode, setFormattedCode] = useState("");
+
+  useEffect(() => {
+    if (!toolState.code.trim()) {
+      setFormattedCode("");
+      return;
+    }
+
     try {
-      return js_beautify(toolState.code);
+      setFormattedCode(js_beautify(toolState.code));
     } catch {
-      return "";
+      setFormattedCode("");
     }
   }, [toolState.code]);
 
-  const formatCode = useCallback(() => {
+  const formatCode = useCallback(async () => {
     try {
-      js_beautify(toolState.code); // Validate the JavaScript
-      toolState.actions.showMessage("JavaScript formatted successfully!");
+      const formatted = await formatWithPrettier(toolState.code);
+      setFormattedCode(formatted);
+      toolState.actions.showMessage(
+        "JavaScript/TypeScript formatted with Prettier!",
+      );
     } catch (error) {
-      toolState.actions.showMessage(`Error: ${error}`);
+      try {
+        const fallback = js_beautify(toolState.code);
+        setFormattedCode(fallback);
+        toolState.actions.showMessage(
+          "Prettier fallback applied with beautify.",
+        );
+      } catch {
+        toolState.actions.showMessage(`Error: ${error}`);
+      }
     }
   }, [toolState]);
 
@@ -88,7 +121,7 @@ if (value === 'webtoolseasy') {
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatCode, copyFormattedCode, formattedCode, toolState]
+    [formatCode, copyFormattedCode, formattedCode, toolState],
   );
 
   return (
@@ -100,14 +133,7 @@ if (value === 'webtoolseasy') {
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JavaScript Formatter"
-        description="Free online JavaScript formatter and beautifier. Format and prettify JavaScript code with proper indentation."
-        exampleCode={initialValue}
-        exampleOutput={js_beautify(initialValue)}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}

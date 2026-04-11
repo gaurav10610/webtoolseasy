@@ -24,7 +24,6 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import UploadIcon from "@mui/icons-material/Upload";
 import { ToolComponentProps } from "@/types/component";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 
 export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -93,7 +92,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
     (
       e:
         | React.MouseEvent<HTMLCanvasElement>
-        | React.TouchEvent<HTMLCanvasElement>
+        | React.TouchEvent<HTMLCanvasElement>,
     ) => {
       if (activeTab !== 0) return;
       setIsDrawing(true);
@@ -119,14 +118,14 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
     },
-    [activeTab, penColor, penSize]
+    [activeTab, penColor, penSize],
   );
 
   const draw = useCallback(
     (
       e:
         | React.MouseEvent<HTMLCanvasElement>
-        | React.TouchEvent<HTMLCanvasElement>
+        | React.TouchEvent<HTMLCanvasElement>,
     ) => {
       if (!isDrawing || activeTab !== 0) return;
 
@@ -147,7 +146,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
       ctx.lineTo(x, y);
       ctx.stroke();
     },
-    [isDrawing, activeTab]
+    [isDrawing, activeTab],
   );
 
   const stopDrawing = useCallback(() => {
@@ -190,7 +189,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
           // Scale image to fit canvas
           const scale = Math.min(
             canvas.width / img.width,
-            canvas.height / img.height
+            canvas.height / img.height,
           );
           const x = (canvas.width - img.width * scale) / 2;
           const y = (canvas.height - img.height * scale) / 2;
@@ -202,7 +201,7 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
       };
       reader.readAsDataURL(file);
     },
-    []
+    [],
   );
 
   const downloadSignature = useCallback(() => {
@@ -244,14 +243,35 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
     }, "image/png");
   }, []);
 
+  const downloadSignatureSvg = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const isEmpty = !imageData.data.some((v, i) => i % 4 === 3 && v !== 0);
+    if (isEmpty) {
+      showMessage("Please create a signature first");
+      return;
+    }
+    // Embed canvas as base64 PNG inside SVG
+    const dataURL = canvas.toDataURL("image/png");
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}"><image href="${dataURL}" width="${canvas.width}" height="${canvas.height}"/></svg>`;
+    const blob = new Blob([svgContent], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "signature.svg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showMessage("SVG signature downloaded!");
+  }, []);
+
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title="Free Signature Generator - Create Digital Signatures Online"
-        description="Create professional digital signatures online. Draw, type, or upload your signature with transparent background."
-      />
-
-      <SnackBarWithPosition
+<SnackBarWithPosition
         open={isSnackBarOpen}
         message={snackBarMessage}
         handleClose={() => setIsSnackBarOpen(false)}
@@ -431,6 +451,15 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
               sx={{ flex: 1 }}
             >
               Download PNG
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={downloadSignatureSvg}
+              startIcon={<DownloadIcon />}
+              fullWidth
+              sx={{ flex: 1 }}
+            >
+              Download SVG
             </Button>
           </div>
         </CardContent>

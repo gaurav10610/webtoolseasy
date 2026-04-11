@@ -11,7 +11,7 @@ import { CircularProgressWithLabel } from "@/components/lib/progress";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { PaperWithChildren } from "@/components/lib/papers";
 import { SelectWithLabel } from "@/components/lib/select";
-import { ToolLayout, SEOContent } from "@/components/common/ToolLayout";
+import { ToolLayout } from "@/components/common/ToolLayout";
 import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
 import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
 import { FFmpegFormat } from "@/types/ffmpeg";
@@ -422,14 +422,7 @@ export default function AudioConverter() {
         onClose: handleSnackBarClose,
       }}
     >
-      <SEOContent
-        title="Audio Converter"
-        description="Free online audio converter. Convert MP3, WAV, OGG, M4A, AAC, FLAC and more audio formats instantly in your browser."
-        exampleCode="audio.mp3"
-        exampleOutput="audio.wav"
-      />
-
-      {/* Error message */}
+{/* Error message */}
       {state.error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
           <Typography variant="body2" className="text-red-800">

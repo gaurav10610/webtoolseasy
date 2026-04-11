@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Typography,
   Card,
@@ -11,13 +11,13 @@ import {
   FormControlLabel,
   Slider,
   Button,
+  MenuItem,
 } from "@mui/material";
 import { Document, Page, pdfjs } from "react-pdf";
 import { PDFDocument, rgb, StandardFonts, degrees } from "pdf-lib";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { FilePreview } from "../lib/filePreview";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 import { ToolComponentProps } from "@/types/component";
 import {
   FILE_TYPE_PRESETS,
@@ -73,13 +73,18 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   const [textAnnotations, setTextAnnotations] = useState<TextAnnotation[]>([]);
   const [isAnnotationMode, setIsAnnotationMode] = useState(false);
   const [textInput, setTextInput] = useState("");
+  const [signatureName, setSignatureName] = useState("");
+  const [signatureReason, setSignatureReason] = useState("Approved for review");
+  const [signatureStyle, setSignatureStyle] = useState<
+    "formal" | "initials" | "approved"
+  >("formal");
   const [fontSize, setFontSize] = useState(12);
   const [textColor, setTextColor] = useState("#000000");
   const [selectedAnnotationId, setSelectedAnnotationId] = useState<
     string | null
   >(null);
   const [draggedAnnotationId, setDraggedAnnotationId] = useState<string | null>(
-    null
+    null,
   );
   const [error, setError] = useState("");
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -89,6 +94,14 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   const [pdfDocumentData, setPdfDocumentData] = useState<File | null>(null);
   const [documentKey, setDocumentKey] = useState<string>("");
   const [currentRotation, setCurrentRotation] = useState<number>(0);
+  const [searchText, setSearchText] = useState("");
+  const [extractedPageText, setExtractedPageText] = useState<
+    { pageIndex: number; text: string }[]
+  >([]);
+  const [pageOrder, setPageOrder] = useState<number[]>([]);
+  const [draggedPageOrderIndex, setDraggedPageOrderIndex] = useState<
+    number | null
+  >(null);
 
   // Snackbar handler
   const handleSnackBarClose = () => setIsSnackBarOpen(false);
@@ -97,6 +110,39 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
     setSnackBarMessage(message);
     setIsSnackBarOpen(true);
   };
+
+  const extractSearchableText = useCallback(async (file: File) => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const pages: { pageIndex: number; text: string }[] = [];
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+        const page = await pdf.getPage(pageNumber);
+        const textContent = await page.getTextContent();
+        const text = textContent.items
+          .map((item) => ("str" in item ? item.str : ""))
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
+        pages.push({ pageIndex: pageNumber - 1, text });
+      }
+
+      setExtractedPageText(pages);
+    } catch (err) {
+      console.error("Error extracting PDF text:", err);
+      setExtractedPageText([]);
+    }
+  }, []);
+
+  const searchResults = useMemo(() => {
+    if (!searchText.trim()) return [];
+    const term = searchText.toLowerCase();
+    return extractedPageText.filter((page) =>
+      page.text.toLowerCase().includes(term),
+    );
+  }, [searchText, extractedPageText]);
 
   // File handling
   const handleFileSelect = useCallback(
@@ -130,13 +176,18 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setSelectedFile(newFiles[0]);
         setCurrentRotation(0); // Reset rotation for new file
         setNumPages(0); // Reset numPages to trigger fresh onDocumentLoadSuccess
+        setPageOrder(
+          Array.from({ length: newFiles[0].numPages }, (_, index) => index),
+        );
+        setExtractedPageText([]);
         // Store the original file data for the PDF viewer - use original file
         setPdfDocumentData(newFiles[0].file);
         setDocumentKey(`file-${newFiles[0].id}`); // Use file ID for stable key
+        void extractSearchableText(newFiles[0].file);
       }
       setIsProcessing(false);
     },
-    [selectedFile]
+    [selectedFile],
   );
 
   const handleError = useCallback((errorMessage: string) => {
@@ -156,7 +207,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         e.target.value = "";
       }
     },
-    [handleFileSelect]
+    [handleFileSelect],
   );
 
   // PDF Operations
@@ -174,7 +225,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         if (pdfFile.document) {
           const pages = await mergedPdf.copyPages(
             pdfFile.document,
-            pdfFile.document.getPageIndices()
+            pdfFile.document.getPageIndices(),
           );
           pages.forEach((page) => mergedPdf.addPage(page));
         }
@@ -264,7 +315,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
           {
             type: "application/pdf",
             lastModified: Date.now(),
-          }
+          },
         );
 
         // Update the PDF document data for the viewer
@@ -285,15 +336,15 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setSelectedFile(updatedPdfFile);
         setPdfFiles((prev) =>
           prev.map((file) =>
-            file.id === selectedFile.id ? updatedPdfFile : file
-          )
+            file.id === selectedFile.id ? updatedPdfFile : file,
+          ),
         );
 
         // Track total rotation
         setCurrentRotation(newTotalRotation);
 
         showMessage(
-          `Page rotated ${rotationDegrees} degrees (Total: ${newTotalRotation}°)`
+          `Page rotated ${rotationDegrees} degrees (Total: ${newTotalRotation}°)`,
         );
       } catch (err) {
         console.error("Error rotating page:", err);
@@ -301,8 +352,35 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       }
       setIsProcessing(false);
     },
-    [selectedFile, currentPage, currentRotation]
+    [selectedFile, currentPage, currentRotation],
   );
+
+  const prepareSignatureStamp = useCallback(() => {
+    if (!signatureName.trim()) {
+      showMessage("Enter a signer name to prepare the signature stamp.");
+      return;
+    }
+
+    const dateLabel = new Date().toLocaleDateString();
+    const initials = signatureName
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("");
+
+    const signatureText =
+      signatureStyle === "initials"
+        ? `${initials} • ${dateLabel}`
+        : signatureStyle === "approved"
+          ? `Approved by ${signatureName} • ${dateLabel}`
+          : `${signatureName} — ${signatureReason} • ${dateLabel}`;
+
+    setTextInput(signatureText);
+    setFontSize(signatureStyle === "formal" ? 16 : 14);
+    setTextColor("#0f172a");
+    setIsAnnotationMode(true);
+    showMessage("Signature stamp ready. Click on the PDF to place it.");
+  }, [signatureName, signatureReason, signatureStyle]);
 
   const addTextAnnotation = useCallback(
     async (x: number, y: number) => {
@@ -311,6 +389,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         return;
       }
 
+      const mappedPageIndex = pageOrder[currentPage - 1] ?? currentPage - 1;
       const newAnnotation: TextAnnotation = {
         id: crypto.randomUUID(),
         text: textInput,
@@ -318,27 +397,27 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         y,
         fontSize,
         color: textColor,
-        pageIndex: currentPage - 1,
+        pageIndex: mappedPageIndex,
       };
 
       setTextAnnotations((prev) => [...prev, newAnnotation]);
       // Don't clear textInput immediately - let user add multiple annotations with same text
       showMessage(
-        `Text annotation "${textInput}" added at page ${currentPage}`
+        `Text annotation "${textInput}" added at page ${currentPage}`,
       );
     },
-    [textInput, fontSize, textColor, currentPage]
+    [textInput, fontSize, textColor, currentPage, pageOrder],
   );
 
   const updateTextAnnotation = useCallback(
     (id: string, updates: Partial<TextAnnotation>) => {
       setTextAnnotations((prev) =>
         prev.map((annotation) =>
-          annotation.id === id ? { ...annotation, ...updates } : annotation
-        )
+          annotation.id === id ? { ...annotation, ...updates } : annotation,
+        ),
       );
     },
-    []
+    [],
   );
 
   // Handle drag start for text annotations
@@ -376,11 +455,11 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         // Convert pixel movement to actual coordinates
         const newX = Math.max(
           0,
-          Math.min(rect.width, dragState.initialX + deltaX)
+          Math.min(rect.width, dragState.initialX + deltaX),
         );
         const newY = Math.max(
           0,
-          Math.min(rect.height, dragState.initialY + deltaY)
+          Math.min(rect.height, dragState.initialY + deltaY),
         );
 
         updateTextAnnotation(annotationId, { x: newX, y: newY });
@@ -399,7 +478,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     },
-    [textAnnotations, updateTextAnnotation]
+    [textAnnotations, updateTextAnnotation],
   );
 
   const removeAnnotation = useCallback((annotationId: string) => {
@@ -420,12 +499,22 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
     setIsProcessing(true);
     try {
-      const pdfDoc = await PDFDocument.load(await selectedFile.document.save());
+      const sourcePdf = await PDFDocument.load(
+        await selectedFile.document.save(),
+      );
+      const pdfDoc = await PDFDocument.create();
+      const orderedPageIndices = pageOrder.length
+        ? pageOrder
+        : sourcePdf.getPageIndices();
+      const copiedPages = await pdfDoc.copyPages(sourcePdf, orderedPageIndices);
+      copiedPages.forEach((page) => pdfDoc.addPage(page));
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-      // Add text annotations
+      // Add text annotations after page reordering
       textAnnotations.forEach((annotation) => {
-        const page = pdfDoc.getPage(annotation.pageIndex);
+        const reorderedIndex = orderedPageIndices.indexOf(annotation.pageIndex);
+        if (reorderedIndex === -1) return;
+        const page = pdfDoc.getPage(reorderedIndex);
         const { height } = page.getSize();
 
         page.drawText(annotation.text, {
@@ -436,7 +525,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
           color: rgb(
             parseInt(annotation.color.slice(1, 3), 16) / 255,
             parseInt(annotation.color.slice(3, 5), 16) / 255,
-            parseInt(annotation.color.slice(5, 7), 16) / 255
+            parseInt(annotation.color.slice(5, 7), 16) / 255,
           ),
         });
       });
@@ -450,7 +539,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       link.href = url;
       link.download = `${selectedFile.file.name.replace(
         ".pdf",
-        ""
+        "",
       )}-annotated.pdf`;
       link.click();
 
@@ -461,7 +550,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
       setError("Failed to save annotated PDF");
     }
     setIsProcessing(false);
-  }, [selectedFile, textAnnotations]);
+  }, [selectedFile, textAnnotations, pageOrder]);
 
   const removeFile = useCallback(
     (id: string) => {
@@ -471,7 +560,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setCurrentPage(1);
       }
     },
-    [selectedFile]
+    [selectedFile],
   );
 
   const selectFile = useCallback(
@@ -482,12 +571,17 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
         setCurrentPage(1);
         setCurrentRotation(0); // Reset rotation for new file
         setNumPages(0); // Reset numPages to trigger fresh onDocumentLoadSuccess
+        setPageOrder(
+          Array.from({ length: file.numPages }, (_, index) => index),
+        );
+        setExtractedPageText([]);
         // Load the PDF data for the viewer - use original file
         setPdfDocumentData(file.file);
         setDocumentKey(`file-${file.id}`); // Use file ID for stable key
+        void extractSearchableText(file.file);
       }
     },
-    [pdfFiles]
+    [pdfFiles, extractSearchableText],
   );
 
   // PDF Document Load Handler
@@ -582,14 +676,16 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                 }
               >
                 <Page
-                  pageNumber={currentPage}
+                  pageNumber={
+                    (pageOrder[currentPage - 1] ?? currentPage - 1) + 1
+                  }
                   scale={zoom}
                   onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                     if (isAnnotationMode) {
                       // Check if clicking on empty area (not on an annotation)
                       const target = event.target as HTMLElement;
                       const isClickingOnAnnotation = target.closest(
-                        "[data-annotation-id]"
+                        "[data-annotation-id]",
                       );
 
                       if (!isClickingOnAnnotation && !draggedAnnotationId) {
@@ -619,7 +715,9 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
               {/* Overlay annotations for current page */}
               {textAnnotations
                 .filter(
-                  (annotation) => annotation.pageIndex === currentPage - 1
+                  (annotation) =>
+                    annotation.pageIndex ===
+                    (pageOrder[currentPage - 1] ?? currentPage - 1),
                 )
                 .map((annotation) => (
                   <div
@@ -629,8 +727,8 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                       selectedAnnotationId === annotation.id
                         ? "ring-2 ring-blue-400 ring-opacity-60 bg-blue-100 bg-opacity-20 rounded"
                         : isAnnotationMode
-                        ? "hover:ring-1 hover:ring-white hover:ring-opacity-40 rounded"
-                        : ""
+                          ? "hover:ring-1 hover:ring-white hover:ring-opacity-40 rounded"
+                          : ""
                     }`}
                     style={{
                       position: "absolute",
@@ -646,8 +744,8 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                         selectedAnnotationId !== annotation.id
                           ? "rgba(255, 255, 0, 0.3)"
                           : selectedAnnotationId === annotation.id
-                          ? "rgba(59, 130, 246, 0.1)"
-                          : "transparent",
+                            ? "rgba(59, 130, 246, 0.1)"
+                            : "transparent",
                       padding: isAnnotationMode ? "4px 8px" : "0",
                       borderRadius: isAnnotationMode ? "4px" : "0",
                       maxWidth: "200px",
@@ -711,14 +809,7 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
   PDFViewer.displayName = "PDFViewer";
   return (
     <div className="flex flex-col w-full gap-4">
-      <SEOContent
-        title="PDF Editor - Merge, Split, Rotate & Annotate PDFs Online"
-        description="Professional PDF editor with merge, split, rotate and annotation features. Edit PDFs online with text annotations, page manipulation and file management tools."
-        exampleCode="Upload PDF files to merge, split, rotate pages or add text annotations"
-        exampleOutput="Processed PDF files with merged pages, split pages, rotated content or text annotations"
-      />
-
-      <SnackBarWithPosition
+<SnackBarWithPosition
         message={snackBarMessage}
         open={isSnackBarOpen}
         autoHideDuration={3000}
@@ -887,6 +978,107 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                     Download
                   </Button>
                 </div>
+
+                {selectedFile && (
+                  <div className="mt-4 space-y-4 border-t pt-4">
+                    <div>
+                      <Typography variant="subtitle2" className="mb-2">
+                        Search PDF Text
+                      </Typography>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        placeholder="Search extracted text..."
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                      />
+                      {searchText.trim() && (
+                        <div className="mt-2 max-h-28 overflow-y-auto rounded bg-gray-50 p-2 text-xs">
+                          {searchResults.length > 0 ? (
+                            searchResults.map((result) => (
+                              <button
+                                key={result.pageIndex}
+                                type="button"
+                                onClick={() => {
+                                  const reorderedIndex = pageOrder.indexOf(
+                                    result.pageIndex,
+                                  );
+                                  setCurrentPage(
+                                    (reorderedIndex >= 0
+                                      ? reorderedIndex
+                                      : result.pageIndex) + 1,
+                                  );
+                                }}
+                                className="block w-full rounded px-2 py-1 text-left hover:bg-blue-50"
+                              >
+                                <strong>Page {result.pageIndex + 1}:</strong>{" "}
+                                {result.text.slice(0, 120) || "Text found"}
+                              </button>
+                            ))
+                          ) : (
+                            <Typography variant="caption">
+                              No matches found.
+                            </Typography>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <Typography variant="subtitle2">Page Order</Typography>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() =>
+                            setPageOrder(
+                              Array.from(
+                                { length: selectedFile.numPages },
+                                (_, index) => index,
+                              ),
+                            )
+                          }
+                        >
+                          Reset Order
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {pageOrder.map((pageIndex, orderIndex) => (
+                          <div
+                            key={`${pageIndex}-${orderIndex}`}
+                            draggable
+                            onDragStart={() =>
+                              setDraggedPageOrderIndex(orderIndex)
+                            }
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={() => {
+                              if (
+                                draggedPageOrderIndex === null ||
+                                draggedPageOrderIndex === orderIndex
+                              ) {
+                                setDraggedPageOrderIndex(null);
+                                return;
+                              }
+                              setPageOrder((prev) => {
+                                const updated = [...prev];
+                                const [moved] = updated.splice(
+                                  draggedPageOrderIndex,
+                                  1,
+                                );
+                                updated.splice(orderIndex, 0, moved);
+                                return updated;
+                              });
+                              setDraggedPageOrderIndex(null);
+                            }}
+                            className="cursor-move rounded border bg-gray-50 px-2 py-2 text-center text-xs font-medium hover:border-blue-400"
+                          >
+                            Page {pageIndex + 1}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -910,6 +1102,58 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
 
                 {isAnnotationMode && (
                   <div className="space-y-3">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                      <Typography variant="subtitle2" className="mb-2">
+                        Digital signature placement
+                      </Typography>
+                      <div className="space-y-2">
+                        <TextField
+                          label="Signer name"
+                          value={signatureName}
+                          onChange={(e) => setSignatureName(e.target.value)}
+                          fullWidth
+                          size="small"
+                          placeholder="Jane Doe"
+                        />
+                        <TextField
+                          label="Reason / title"
+                          value={signatureReason}
+                          onChange={(e) => setSignatureReason(e.target.value)}
+                          fullWidth
+                          size="small"
+                          placeholder="Approved for review"
+                        />
+                        <TextField
+                          select
+                          label="Signature style"
+                          value={signatureStyle}
+                          onChange={(e) =>
+                            setSignatureStyle(
+                              e.target.value as
+                                | "formal"
+                                | "initials"
+                                | "approved",
+                            )
+                          }
+                          fullWidth
+                          size="small"
+                        >
+                          <MenuItem value="formal">
+                            Formal signature line
+                          </MenuItem>
+                          <MenuItem value="initials">Initials stamp</MenuItem>
+                          <MenuItem value="approved">Approved badge</MenuItem>
+                        </TextField>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={prepareSignatureStamp}
+                        >
+                          Load Signature Stamp
+                        </Button>
+                      </div>
+                    </div>
+
                     <TextField
                       label="Text to Add"
                       value={textInput}
@@ -989,8 +1233,8 @@ export default function PDFEditor({}: Readonly<ToolComponentProps>) {
                     )}
 
                     <Alert severity="info" className="text-xs">
-                      Click on PDF to add text. Click on existing annotations to
-                      remove them.
+                      Click on PDF to place text or a prepared signature stamp.
+                      Click on existing annotations to remove them.
                     </Alert>
                   </div>
                 )}

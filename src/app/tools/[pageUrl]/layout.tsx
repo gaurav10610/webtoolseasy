@@ -3,6 +3,7 @@ import {
   ApplicationIds,
   AppNavigationConfig,
 } from "@/types/config";
+import { categoryConfigs } from "@/data/categories";
 import { DescriptionBlock } from "@/types/description";
 import {
   AppHeading,
@@ -11,11 +12,12 @@ import {
 } from "@/components/commonComponents";
 import { apps } from "@/data/apps";
 import { Metadata } from "next";
+import Link from "next/link";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import SidePanel from "@/components/sidePanel";
-import { BaseToolsAds } from "@/components/baseAds";
 import { notFound } from "next/navigation";
 import { StructuredData } from "@/components/structuredData";
+import { AppChip, AppText } from "@/components/lib/ui";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -119,9 +121,11 @@ export async function generateMetadata(
 
   try {
     const { metadata, componentConfig } = await getToolData(params.pageUrl);
+    const titleText =
+      metadata.title || componentConfig.pageTitle || "WebToolsEasy Tool";
     return {
       ...metadata,
-      title: metadata.title || componentConfig.pageTitle || "WebToolsEasy Tool",
+      title: { absolute: String(titleText) },
       description:
         metadata.description ||
         componentConfig.mainHeading ||
@@ -195,6 +199,18 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
     .map((toolId: ApplicationIds) => apps[toolId])
     .filter(Boolean); // Remove any undefined entries
 
+  const currentAppConfig = Object.values(apps).find(
+    (appConfig) => appConfig.navigateUrl === `tools/${params.pageUrl}`,
+  );
+  const currentCategoryConfig = Object.values(categoryConfigs).find(
+    (categoryConfig) =>
+      currentAppConfig
+        ? categoryConfig.toolIds.includes(
+            currentAppConfig.applicationId as ApplicationIds,
+          )
+        : false,
+  );
+
   // Memoize the hostname URL
   const toolUrl = `${process.env.HOSTNAME}/tools/${params.pageUrl}`;
 
@@ -221,55 +237,96 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
       )}
       {structuredData?.howTo && <StructuredData data={structuredData.howTo} />}
 
-      <div className="w-full px-2 py-4">
-        {/* Desktop Layout with 60% restriction */}
-        <div className="hidden md:flex w-full max-w-none">
-          {/* Left sidebar - 20% */}
-          <div className="w-[20%] pr-2">
+      <div className="w-full py-2 md:py-4">
+        <div className="grid w-full gap-5 xl:grid-cols-[280px_minmax(0,1fr)]">
+          <aside className="hidden xl:block xl:sticky xl:top-[92px] xl:self-start">
             <SidePanel
               className="w-full"
               appConfigJson={apps}
               pageUrl={params.pageUrl}
             />
-          </div>
+          </aside>
 
-          {/* Main content area - 60% */}
-          <div className="w-[60%] px-2">
-            <div className="flex flex-col gap-5 w-full max-w-full">
-              <AppHeading heading={toolConfigData.mainHeading!} />
-              <SocialShareButtons
-                pageUrl={toolUrl}
-                heading={toolConfigData.pageTitle}
-              />
-              <div className="flex flex-col gap-2 w-full max-w-full">
+          <section className="flex w-full min-w-0 flex-col gap-5">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap items-center gap-2 rounded-[18px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-default)]/70 px-4 py-3"
+            >
+              <Link href="/" className="no-underline">
+                <AppText className="!text-sm !font-medium !text-[var(--mui-palette-primary-main)]">
+                  Home
+                </AppText>
+              </Link>
+              <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
+                /
+              </AppText>
+              {currentCategoryConfig && (
+                <>
+                  <Link
+                    href={`/tools/category/${currentCategoryConfig.slug}`}
+                    className="no-underline"
+                  >
+                    <AppText className="!text-sm !font-medium !text-[var(--mui-palette-primary-main)]">
+                      {currentCategoryConfig.name}
+                    </AppText>
+                  </Link>
+                  <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
+                    /
+                  </AppText>
+                </>
+              )}
+              <AppText className="!text-sm !font-semibold">
+                {currentAppConfig?.displayText ?? toolConfigData.pageTitle}
+              </AppText>
+            </nav>
+
+            <AppHeading heading={toolConfigData.mainHeading!} />
+
+            <div className="flex min-w-0 flex-col gap-4 rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div className="flex min-w-0 flex-1 flex-col gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <AppChip
+                      label="100% browser-based"
+                      color="success"
+                      variant="outlined"
+                      size="small"
+                    />
+                    <AppChip
+                      label="No signup required"
+                      color="primary"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0">
+                  <SocialShareButtons
+                    pageUrl={toolUrl}
+                    heading={toolConfigData.pageTitle}
+                  />
+                </div>
+              </div>
+
+              <div className="flex w-full max-w-full flex-col gap-2">
                 {children}
               </div>
-              {relatedToolsConfigs.length > 0 && (
-                <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
-              )}
-              <ToolDescription descriptionData={toolDescriptionData} />
             </div>
-          </div>
 
-          {/* Right sidebar - 20% */}
-          <div className="w-[20%] pl-2">
-            <BaseToolsAds className="w-full" />
-          </div>
-        </div>
+            {relatedToolsConfigs.length > 0 && (
+              <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
+            )}
+            <ToolDescription descriptionData={toolDescriptionData} />
 
-        {/* Mobile Layout - Full width */}
-        <div className="flex md:hidden flex-col gap-5 w-full">
-          <AppHeading heading={toolConfigData.mainHeading!} />
-          <SocialShareButtons
-            pageUrl={toolUrl}
-            heading={toolConfigData.pageTitle}
-          />
-          <div className="flex flex-col gap-2 w-full">{children}</div>
-          {relatedToolsConfigs.length > 0 && (
-            <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
-          )}
-          <ToolDescription descriptionData={toolDescriptionData} />
-          <BaseToolsAds className="w-full" />
+            <div className="xl:hidden">
+              <SidePanel
+                className="w-full"
+                appConfigJson={apps}
+                pageUrl={params.pageUrl}
+              />
+            </div>
+          </section>
         </div>
       </div>
     </>

@@ -12,9 +12,10 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { PDFDocument } from "pdf-lib";
+import { pdfjs } from "react-pdf";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
@@ -23,6 +24,10 @@ enum ProcessingState {
   IDLE = "idle",
   PROCESSING = "processing",
   COMPLETED = "completed",
+}
+
+if (typeof window !== "undefined") {
+  pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 }
 
 export default function PDFToWord({
@@ -35,7 +40,7 @@ export default function PDFToWord({
   });
 
   const [processingState, setProcessingState] = useState<ProcessingState>(
-    ProcessingState.IDLE
+    ProcessingState.IDLE,
   );
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [extractedText, setExtractedText] = useState<string>("");
@@ -69,7 +74,7 @@ export default function PDFToWord({
         toolState.actions.showMessage("Failed to load PDF file");
       }
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleError = useCallback(
@@ -77,10 +82,10 @@ export default function PDFToWord({
       setError(error);
       toolState.actions.showMessage(error);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
-  // Convert PDF to Word
+  // Convert PDF to text using PDF.js text extraction
   const convertToWord = useCallback(async () => {
     if (!pdfFile) {
       toolState.actions.showMessage("Please upload a PDF file first");
@@ -92,26 +97,26 @@ export default function PDFToWord({
       setError("");
 
       const arrayBuffer = await pdfFile.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const pages = pdfDoc.getPages();
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
 
-      // Extract text from PDF (simplified version)
       let text = "";
-      for (let i = 0; i < pages.length; i++) {
-        const page = pages[i];
-        const { width, height } = page.getSize();
-        text += `\n--- Page ${i + 1} ---\n`;
-        text += `Page size: ${width.toFixed(0)}x${height.toFixed(0)}\n\n`;
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+        const page = await pdf.getPage(pageNumber);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item) => ("str" in item ? item.str : ""))
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
 
-        // Note: pdf-lib doesn't extract text directly
-        // This is a placeholder - real implementation would need pdf.js or similar
-        text += `[Text content from page ${i + 1}]\n`;
-        text += `Note: For best results with text extraction, consider using a dedicated PDF text extraction library.\n\n`;
+        text += `--- Page ${pageNumber} ---\n`;
+        text += `${pageText || "[No extractable text found on this page]"}\n\n`;
       }
 
-      setExtractedText(text);
+      setExtractedText(text.trim());
       setProcessingState(ProcessingState.COMPLETED);
-      toolState.actions.showMessage("PDF content extracted successfully!");
+      toolState.actions.showMessage("PDF text extracted successfully!");
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to convert PDF";
@@ -130,7 +135,7 @@ export default function PDFToWord({
 
     // Create a simple text-based document
     const docContent = `PDF to Word Conversion\n${"=".repeat(
-      50
+      50,
     )}\n\n${extractedText}`;
     const blob = new Blob([docContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -166,14 +171,7 @@ export default function PDFToWord({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="PDF to Word Converter"
-        description="Convert PDF files to editable Word documents. Upload your PDF and extract text content for editing."
-        exampleCode="Upload PDF → Extract text → Download as document"
-        exampleOutput="Editable text document with PDF content"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Error Display */}

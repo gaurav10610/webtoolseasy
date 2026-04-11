@@ -9,7 +9,7 @@ function convertDateFormat(isoDate: string) {
 }
 
 function generateSitemap(
-  urlList: { loc: string; lastmod: string; priority?: string }[]
+  urlList: { loc: string; lastmod: string; priority?: string }[],
 ) {
   const header =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
@@ -28,7 +28,7 @@ function generateSitemap(
     <loc>${url.loc}</loc>
     <lastmod>${url.lastmod}</lastmod>
     <priority>${url.priority || "0.7000"}</priority>
-  </url>`
+  </url>`,
     )
     .join("\n");
 
@@ -64,13 +64,14 @@ function updateSitemap() {
     } catch {
       // If parsing fails, continue with empty map
       console.warn(
-        "Warning: Failed to parse existing sitemap.xml. Proceeding without preserving lastmod."
+        "Warning: Failed to parse existing sitemap.xml. Proceeding without preserving lastmod.",
       );
     }
   }
 
   // Get tools from src/data/tools/*.ts
   const toolsPath = `${process.cwd()}/src/data/tools`;
+  const now = convertDateFormat(new Date().toISOString());
   const toolUrls = readdirSync(toolsPath)
     .filter((file) => file.endsWith(".ts"))
     .map((file) => {
@@ -79,8 +80,7 @@ function updateSitemap() {
       const existing = existingUrlMap.get(loc);
       return {
         loc,
-        lastmod:
-          existing?.lastmod || convertDateFormat(new Date().toISOString()),
+        lastmod: now,
         priority: existing?.priority,
       };
     });
@@ -95,8 +95,7 @@ function updateSitemap() {
       const existing = existingUrlMap.get(loc);
       return {
         loc,
-        lastmod:
-          existing?.lastmod || convertDateFormat(new Date().toISOString()),
+        lastmod: now,
         priority: existing?.priority,
       };
     });
@@ -108,7 +107,7 @@ function updateSitemap() {
     const existing = existingUrlMap.get(loc);
     return {
       loc,
-      lastmod: existing?.lastmod || convertDateFormat(new Date().toISOString()),
+      lastmod: now,
       priority: existing?.priority || "0.8000",
     };
   });
@@ -118,16 +117,12 @@ function updateSitemap() {
   const commonUrls = [
     {
       loc: `https://webtoolseasy.com`,
-      lastmod:
-        existingUrlMap.get(`https://webtoolseasy.com`)?.lastmod ||
-        convertDateFormat(new Date().toISOString()),
+      lastmod: now,
       priority: "1.0000",
     },
     {
       loc: `https://webtoolseasy.com/blog`,
-      lastmod:
-        existingUrlMap.get(`https://webtoolseasy.com/blog`)?.lastmod ||
-        convertDateFormat(new Date().toISOString()),
+      lastmod: now,
       priority: "0.8000",
     },
   ];

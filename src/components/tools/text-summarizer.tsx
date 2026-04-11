@@ -19,7 +19,6 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import { ToolComponentProps } from "@/types/component";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 
 export default function TextSummarizer({}: Readonly<ToolComponentProps>) {
   const sampleText = `Artificial intelligence (AI) is revolutionizing the way we live and work. From healthcare to transportation, AI systems are being deployed across various industries to improve efficiency and create new possibilities. Machine learning, a subset of AI, enables computers to learn from data without being explicitly programmed. Deep learning, which uses neural networks, has achieved remarkable breakthroughs in image recognition, natural language processing, and game playing. However, the rapid advancement of AI also raises important ethical questions about privacy, job displacement, and algorithmic bias. As we continue to develop more sophisticated AI systems, it is crucial that we address these concerns and ensure that AI benefits all of humanity. Researchers and policymakers must work together to create frameworks that promote responsible AI development while fostering innovation.`;
@@ -203,12 +202,7 @@ export default function TextSummarizer({}: Readonly<ToolComponentProps>) {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title="Free Text Summarizer - AI Summary Generator Online"
-        description="Summarize long text instantly with our free AI text summarizer. Adjustable summary length for articles, essays, and documents."
-      />
-
-      <SnackBarWithPosition
+<SnackBarWithPosition
         open={isSnackBarOpen}
         message={snackBarMessage}
         handleClose={() => setIsSnackBarOpen(false)}

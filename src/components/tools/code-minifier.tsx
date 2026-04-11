@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { SelectWithLabel } from "@/components/lib/select";
@@ -130,14 +130,7 @@ export default function CodeMinifier({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Code Minifier"
-        description="Minify JavaScript, CSS, and HTML online. Remove comments and whitespace to reduce file size for production."
-        exampleCode={initialValue}
-        exampleOutput={"Minified output"}
-      />
-
-      <div className="flex flex-col gap-3 mb-3 md:flex-row md:items-center md:justify-between">
+<div className="flex flex-col gap-3 mb-3 md:flex-row md:items-center md:justify-between">
         <SelectWithLabel
           options={[
             { key: "js", value: "javascript", label: "JavaScript" },

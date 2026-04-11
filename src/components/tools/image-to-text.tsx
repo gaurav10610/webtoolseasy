@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { ToolComponentProps } from "@/types/component";
-import { Typography, Card, CardContent, Alert, Button } from "@mui/material";
+import {
+  Typography,
+  Card,
+  CardContent,
+  Alert,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import {
   FILE_TYPE_PRESETS,
@@ -24,7 +34,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import DownloadIcon from "@mui/icons-material/Download";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 
 interface OCRProgress {
   status: string;
@@ -41,7 +51,7 @@ export default function ImageToTextConverter({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [extractedText, setExtractedText] = useState<string>(
-    textQueryParam ? decodeText(textQueryParam) : ""
+    textQueryParam ? decodeText(textQueryParam) : "",
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [ocrProgress, setOcrProgress] = useState<OCRProgress>({
@@ -49,6 +59,23 @@ export default function ImageToTextConverter({
     progress: 0,
   });
   const [error, setError] = useState<string>("");
+  const [ocrLanguage, setOcrLanguage] = useState<string>("eng");
+
+  const OCR_LANGUAGES = [
+    { code: "eng", label: "English" },
+    { code: "fra", label: "French" },
+    { code: "deu", label: "German" },
+    { code: "spa", label: "Spanish" },
+    { code: "ita", label: "Italian" },
+    { code: "por", label: "Portuguese" },
+    { code: "rus", label: "Russian" },
+    { code: "chi_sim", label: "Chinese (Simplified)" },
+    { code: "chi_tra", label: "Chinese (Traditional)" },
+    { code: "jpn", label: "Japanese" },
+    { code: "kor", label: "Korean" },
+    { code: "ara", label: "Arabic" },
+    { code: "hin", label: "Hindi" },
+  ];
 
   // Snackbar states
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -98,7 +125,7 @@ export default function ImageToTextConverter({
     try {
       const {
         data: { text },
-      } = await Tesseract.recognize(selectedImage, "eng", {
+      } = await Tesseract.recognize(selectedImage, ocrLanguage, {
         logger: (m) => {
           setOcrProgress({
             status: m.status,
@@ -138,7 +165,7 @@ export default function ImageToTextConverter({
     try {
       const compressedData = await compressStringToBase64(extractedText);
       const url = `${hostname}${currentPath}?content=${encodeText(
-        compressedData
+        compressedData,
       )}`;
       copyToClipboard(url);
       setSnackBarMessage("Shareable link copied to clipboard!");
@@ -182,6 +209,20 @@ export default function ImageToTextConverter({
 
   const ControlButtons = () => (
     <div className="flex flex-col gap-2 w-full md:flex-row">
+      <FormControl size="small" sx={{ minWidth: 180 }}>
+        <InputLabel>OCR Language</InputLabel>
+        <Select
+          value={ocrLanguage}
+          label="OCR Language"
+          onChange={(e) => setOcrLanguage(e.target.value)}
+        >
+          {OCR_LANGUAGES.map((lang) => (
+            <MenuItem key={lang.code} value={lang.code}>
+              {lang.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <Button
         variant="contained"
         size="small"
@@ -232,14 +273,7 @@ export default function ImageToTextConverter({
 
   return (
     <ToolLayout>
-      <SEOContent
-        title="Image to Text Converter (OCR)"
-        description="Free online OCR tool to extract text from images. Convert JPG, PNG, WebP images to editable text using advanced optical character recognition."
-        exampleCode="image.jpg"
-        exampleOutput="Extracted text content"
-      />
-
-      <div className="flex flex-col gap-4 w-full h-full">
+<div className="flex flex-col gap-4 w-full h-full">
         {/* Header Section */}
         <div className="flex justify-between items-center flex-wrap gap-2">
           <Typography variant="h4" component="h1" className="truncate">

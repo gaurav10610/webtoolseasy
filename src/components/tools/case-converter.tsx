@@ -4,7 +4,7 @@ import { TextField, Typography } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "../lib/buttons";
 
@@ -147,14 +147,7 @@ export default function CaseConverter({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Case Converter"
-        description="Free online text case converter. Convert text to uppercase, lowercase, sentence case, or title case."
-        exampleCode={initialValue}
-        exampleOutput="WEBTOOLSEASY IS AWESOME. EXPLORE FREE WEB TOOLS."
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         <div className="flex flex-col gap-3 w-full lg:w-1/2">

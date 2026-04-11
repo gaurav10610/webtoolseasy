@@ -1,14 +1,22 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import PreviewIcon from "@mui/icons-material/Preview";
+import TerminalIcon from "@mui/icons-material/Terminal";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  Chip,
+  IconButton,
+  Tooltip,
+  TextField,
+} from "@mui/material";
 
 export default function JavaScriptEditor({
   hostname,
@@ -127,11 +135,64 @@ export default function JavaScriptEditor({
   });
 
   const [previewHtml, setPreviewHtml] = useState("");
+  const [npmPackages, setNpmPackages] = useState("lodash, dayjs");
+  const [consoleLogs, setConsoleLogs] = useState<
+    { level: string; text: string; id: number }[]
+  >([]);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const logCounterRef = useRef(0);
+
+  const consoleOverride = `<script>(function(){var L=['log','warn','error','info'];L.forEach(function(l){var o=console[l].bind(console);console[l]=function(){var a=Array.prototype.slice.call(arguments);o.apply(console,a);try{window.parent.postMessage({__cc:true,level:l,args:a.map(function(x){try{return typeof x==='object'&&x!==null?JSON.stringify(x,null,2):String(x);}catch(e){return String(x);}})},\'*\');}catch(e){}};});})();<\/script>`;
+
+  const buildImportMap = useCallback((packages: string) => {
+    const imports = packages
+      .split(",")
+      .map((entry) => entry.trim())
+      .filter(Boolean)
+      .reduce<Record<string, string>>((accumulator, entry) => {
+        const [name, customUrl] = entry.split("=").map((item) => item.trim());
+        accumulator[name] = customUrl || `https://esm.sh/${name}`;
+        return accumulator;
+      }, {});
+
+    return Object.keys(imports).length > 0
+      ? `<script type="importmap">${JSON.stringify({ imports }, null, 2)}<\/script>`
+      : "";
+  }, []);
+
+  const buildPreviewHtml = useCallback(
+    (html: string) => {
+      const importMap = buildImportMap(npmPackages);
+      if (html.includes("<head>")) {
+        return html.replace("<head>", `<head>${consoleOverride}${importMap}`);
+      }
+      return `${consoleOverride}${importMap}${html}`;
+    },
+    [buildImportMap, consoleOverride, npmPackages],
+  );
 
   // Initialize preview on component mount
   useEffect(() => {
-    setPreviewHtml(initialValue);
-  }, [initialValue]);
+    setPreviewHtml(buildPreviewHtml(initialValue));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setPreviewHtml(buildPreviewHtml(toolState.code || initialValue));
+  }, [buildPreviewHtml, toolState.code]);
+
+  // Listen for console messages from iframe
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (!e.data?.__cc) return;
+      const text = (e.data.args as string[]).join(" ");
+      setConsoleLogs((prev) => [
+        ...prev,
+        { level: e.data.level, text, id: ++logCounterRef.current },
+      ]);
+    };
+    window.addEventListener("message", handler);
+    return () => window.removeEventListener("message", handler);
+  }, []);
 
   // Auto-update preview when code changes (debounced)
   const handleCodeChange = useCallback(
@@ -139,10 +200,11 @@ export default function JavaScriptEditor({
       toolState.setCode(value);
       // Auto-update preview with a small delay
       setTimeout(() => {
-        setPreviewHtml(value);
+        setPreviewHtml(buildPreviewHtml(value));
+        setConsoleLogs([]); // Clear console on code change
       }, 300);
     },
-    [toolState]
+    [toolState, buildPreviewHtml],
   );
 
   // Editor configuration
@@ -159,13 +221,13 @@ export default function JavaScriptEditor({
         onCopy: () =>
           toolState.actions.copyText(
             toolState.code,
-            "JavaScript code copied to clipboard!"
+            "JavaScript code copied to clipboard!",
           ),
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [toolState]
+    [toolState],
   );
 
   return (
@@ -177,14 +239,18 @@ export default function JavaScriptEditor({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="JavaScript Editor"
-        description="Free online JavaScript editor with live preview. Write, edit and test your HTML with JavaScript code in real-time."
-        exampleCode={initialValue}
-        exampleOutput="Live HTML preview with interactive JavaScript elements"
-      />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+        <TextField
+          fullWidth
+          size="small"
+          label="NPM CDN imports (comma separated or name=url)"
+          value={npmPackages}
+          onChange={(event) => setNpmPackages(event.target.value)}
+          helperText="Use this with <script type='module'> imports, e.g. import _ from 'lodash'"
+        />
+      </div>
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}
@@ -212,13 +278,70 @@ export default function JavaScriptEditor({
               <PreviewIcon className="text-blue-600" />
               Live Preview
             </Typography>
-            <div className="flex-1 w-full border-2 border-gray-300 rounded-lg bg-white overflow-hidden">
+            <div className="flex-1 w-full border-2 border-gray-300 rounded-lg bg-white overflow-hidden min-h-0">
               <iframe
+                ref={iframeRef}
                 srcDoc={previewHtml}
                 className="w-full h-full border-0 rounded-lg"
-                sandbox="allow-scripts allow-same-origin"
+                sandbox="allow-scripts"
                 title="JavaScript Preview"
               />
+            </div>
+            {/* Console Panel */}
+            <div
+              className="border border-gray-300 rounded-lg bg-gray-900 text-white overflow-hidden"
+              style={{ maxHeight: 160 }}
+            >
+              <div className="flex items-center justify-between px-3 py-1 bg-gray-800 border-b border-gray-700">
+                <Typography
+                  variant="caption"
+                  className="flex items-center gap-1 text-gray-300 font-mono"
+                >
+                  <TerminalIcon fontSize="inherit" /> Console
+                  {consoleLogs.length > 0 && (
+                    <Chip
+                      label={consoleLogs.length}
+                      size="small"
+                      sx={{
+                        ml: 1,
+                        height: 16,
+                        fontSize: 10,
+                        bgcolor: "grey.600",
+                        color: "white",
+                      }}
+                    />
+                  )}
+                </Typography>
+                <Tooltip title="Clear console">
+                  <IconButton
+                    size="small"
+                    onClick={() => setConsoleLogs([])}
+                    sx={{ color: "grey.400", p: 0.5 }}
+                  >
+                    <DeleteOutlineIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <div
+                className="overflow-auto font-mono text-xs p-2 space-y-0.5"
+                style={{ maxHeight: 120 }}
+              >
+                {consoleLogs.length === 0 ? (
+                  <span className="text-gray-500">
+                    No output yet. Use console.log() in your code.
+                  </span>
+                ) : (
+                  consoleLogs.map(({ level, text, id }) => (
+                    <div
+                      key={id}
+                      className={`${level === "error" ? "text-red-400" : level === "warn" ? "text-yellow-400" : level === "info" ? "text-blue-400" : "text-green-300"}`}
+                    >
+                      <span className="text-gray-500 mr-1">[{level}]</span>
+                      {text}
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         }

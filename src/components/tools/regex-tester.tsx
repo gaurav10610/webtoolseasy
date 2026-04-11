@@ -1,17 +1,25 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { TextField, Typography, Chip, Box } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  Chip,
+  Box,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 interface RegexMatch {
   match: string;
   index: number;
+  length: number;
   groups?: string[];
 }
 
@@ -31,7 +39,7 @@ Invalid emails: notanemail, @missing.com, test@`;
   });
 
   const [testText, setTestText] = useState(initialText);
-  const [flags, setFlags] = useState("g");
+  const [flags, setFlags] = useState<string[]>(["g"]);
   const [matches, setMatches] = useState<RegexMatch[]>([]);
   const [isValidRegex, setIsValidRegex] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,7 +53,8 @@ Invalid emails: notanemail, @missing.com, test@`;
         return;
       }
 
-      const regex = new RegExp(toolState.code, flags);
+      const flagsStr = flags.join("");
+      const regex = new RegExp(toolState.code, flagsStr);
       const foundMatches: RegexMatch[] = [];
       let match;
 
@@ -55,6 +64,7 @@ Invalid emails: notanemail, @missing.com, test@`;
           foundMatches.push({
             match: match[0],
             index: match.index,
+            length: match[0].length,
             groups: match.slice(1),
           });
           // Prevent infinite loop
@@ -69,6 +79,7 @@ Invalid emails: notanemail, @missing.com, test@`;
           foundMatches.push({
             match: match[0],
             index: match.index,
+            length: match[0].length,
             groups: match.slice(1),
           });
         }
@@ -92,7 +103,7 @@ Invalid emails: notanemail, @missing.com, test@`;
       toolState.setCode(value);
       setTimeout(testRegex, 100);
     },
-    [toolState, testRegex]
+    [toolState, testRegex],
   );
 
   const handleTextChange = useCallback(
@@ -100,18 +111,61 @@ Invalid emails: notanemail, @missing.com, test@`;
       setTestText(value);
       setTimeout(testRegex, 100);
     },
-    [testRegex]
+    [testRegex],
   );
 
   const clearAll = useCallback(() => {
     toolState.setCode("");
     setTestText("");
-    setFlags("g");
+    setFlags(["g"]);
     setMatches([]);
     setIsValidRegex(true);
     setErrorMessage("");
     toolState.actions.showMessage("All fields cleared!");
   }, [toolState]);
+
+  // Render test text with highlighted match spans
+  const renderHighlightedText = useCallback(
+    (text: string, matchList: RegexMatch[]) => {
+      if (!matchList.length) return <span>{text}</span>;
+      const colors = [
+        "#fef08a",
+        "#bbf7d0",
+        "#bae6fd",
+        "#fecaca",
+        "#e9d5ff",
+        "#fed7aa",
+      ];
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+      for (let i = 0; i < matchList.length; i++) {
+        const { index, match } = matchList[i];
+        const len = match.length;
+        if (index > lastIndex) {
+          parts.push(<span key={`t${i}`}>{text.slice(lastIndex, index)}</span>);
+        }
+        parts.push(
+          <mark
+            key={`m${i}`}
+            title={`Match ${i + 1}`}
+            style={{
+              backgroundColor: colors[i % colors.length],
+              borderRadius: "2px",
+              padding: "0 1px",
+            }}
+          >
+            {text.slice(index, index + len)}
+          </mark>,
+        );
+        lastIndex = index + len;
+      }
+      if (lastIndex < text.length) {
+        parts.push(<span key="tail">{text.slice(lastIndex)}</span>);
+      }
+      return <>{parts}</>;
+    },
+    [],
+  );
 
   // Button configuration
   const buttons = useMemo(
@@ -133,13 +187,13 @@ Invalid emails: notanemail, @missing.com, test@`;
         onCopy: () =>
           toolState.actions.copyText(
             toolState.code,
-            "Regex pattern copied to clipboard!"
+            "Regex pattern copied to clipboard!",
           ),
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [testRegex, clearAll, toolState]
+    [testRegex, clearAll, toolState],
   );
 
   return (
@@ -151,14 +205,7 @@ Invalid emails: notanemail, @missing.com, test@`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Regex Tester"
-        description="Free online regular expression tester and debugger. Test and debug your regex patterns with real-time matching."
-        exampleCode={initialRegex}
-        exampleOutput={`Found 3 matches: support@example.com, sales@company.org, admin@website.net`}
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="space-y-4">
         {/* Top Section - Regex and Test Text Side by Side */}
@@ -202,14 +249,40 @@ Invalid emails: notanemail, @missing.com, test@`;
             <Typography variant="h6" className="mb-2">
               Flags
             </Typography>
-            <TextField
-              fullWidth
+            <ToggleButtonGroup
               value={flags}
-              onChange={(e) => setFlags(e.target.value)}
-              placeholder="g, i, m, s, u, y"
+              onChange={(_e, val: string[]) => setFlags(val)}
               size="small"
-              helperText="Common flags: g (global), i (case-insensitive), m (multiline)"
-            />
+              aria-label="regex flags"
+              sx={{ flexWrap: "wrap", gap: 0.5 }}
+            >
+              {[
+                { v: "g", title: "Global — find all matches" },
+                { v: "i", title: "Case insensitive" },
+                { v: "m", title: "Multiline — ^ and $ match line ends" },
+                { v: "s", title: "Dotall — . matches newlines" },
+                { v: "u", title: "Unicode mode" },
+                { v: "y", title: "Sticky — match from lastIndex only" },
+              ].map(({ v, title }) => (
+                <ToggleButton
+                  key={v}
+                  value={v}
+                  title={title}
+                  sx={{ fontFamily: "monospace", fontWeight: "bold" }}
+                >
+                  {v}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              display="block"
+              sx={{ mt: 0.5 }}
+            >
+              g=global · i=insensitive · m=multiline · s=dotall · u=unicode ·
+              y=sticky
+            </Typography>
           </div>
 
           <div>
@@ -266,6 +339,34 @@ Invalid emails: notanemail, @missing.com, test@`;
             )}
           </div>
         </div>
+
+        {/* Highlighted Matches View */}
+        {testText && (
+          <div>
+            <Typography variant="h6" className="mb-2">
+              Match Highlights
+            </Typography>
+            <Box
+              component="pre"
+              sx={{
+                fontFamily: "monospace",
+                fontSize: "0.875rem",
+                p: 2,
+                bgcolor: "grey.50",
+                border: "1px solid",
+                borderColor: "grey.300",
+                borderRadius: 1,
+                overflow: "auto",
+                maxHeight: 200,
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
+                m: 0,
+              }}
+            >
+              {renderHighlightedText(testText, matches)}
+            </Box>
+          </div>
+        )}
 
         {/* Regex Help Section - Full Width */}
         <div className="p-4 bg-blue-50 border border-blue-200 rounded">

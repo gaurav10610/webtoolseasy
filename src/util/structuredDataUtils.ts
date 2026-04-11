@@ -1,9 +1,21 @@
-import { getToolRating } from "./ratingUtils";
+import { apps } from "@/data/apps";
+import { categoryConfigs } from "@/data/categories";
+import { AppCategory, ApplicationIds } from "@/types/config";
 
 export interface ToolFAQ {
   question: string;
   answer: string;
 }
+
+const categoryToApplicationCategory: Record<string, string> = {
+  [AppCategory.PROGRAMMING]: "DeveloperApplication",
+  [AppCategory.ONLINE_EDITORS]: "DeveloperApplication",
+  [AppCategory.MEDIA]: "MultimediaApplication",
+  [AppCategory.FINANCE]: "FinanceApplication",
+  [AppCategory.TEXT]: "UtilitiesApplication",
+  [AppCategory.SEO]: "DeveloperApplication",
+  [AppCategory.MISCELLANEOUS]: "UtilitiesApplication",
+};
 
 export function createToolStructuredData({
   pageUrl,
@@ -20,7 +32,17 @@ export function createToolStructuredData({
 }) {
   const toolUrl = `${process.env.HOSTNAME}/tools/${pageUrl}`;
   const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/${pageUrl}.png`;
-  const toolRating = getToolRating(pageUrl);
+  const currentAppConfig = Object.values(apps).find(
+    (appConfig) => appConfig.navigateUrl === `tools/${pageUrl}`,
+  );
+  const currentCategoryConfig = Object.values(categoryConfigs).find(
+    (categoryConfig) =>
+      currentAppConfig
+        ? categoryConfig.toolIds.includes(
+            currentAppConfig.applicationId as ApplicationIds,
+          )
+        : false,
+  );
 
   const result: Record<string, unknown> = {
     webApplication: {
@@ -29,7 +51,10 @@ export function createToolStructuredData({
       name: pageTitle,
       description: mainHeading,
       url: toolUrl,
-      applicationCategory: "Productivity",
+      applicationCategory:
+        (currentAppConfig
+          ? categoryToApplicationCategory[currentAppConfig.category]
+          : undefined) ?? "UtilitiesApplication",
       operatingSystem: "Any",
       browserRequirements: "Any modern web browser",
       keywords: keywords.join(", "),
@@ -56,13 +81,6 @@ export function createToolStructuredData({
         width: 1200,
         height: 630,
       },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: toolRating.ratingValue,
-        reviewCount: toolRating.reviewCount,
-        bestRating: toolRating.bestRating,
-        worstRating: toolRating.worstRating,
-      },
       datePublished: "2024-01-01",
       dateModified: new Date().toISOString().split("T")[0],
     },
@@ -79,8 +97,10 @@ export function createToolStructuredData({
         {
           "@type": "ListItem",
           position: 2,
-          name: "Tools",
-          item: `${process.env.HOSTNAME}/tools`,
+          name: currentCategoryConfig?.name ?? "Tools",
+          item: currentCategoryConfig
+            ? `${process.env.HOSTNAME}/tools/category/${currentCategoryConfig.slug}`
+            : process.env.HOSTNAME!,
         },
         {
           "@type": "ListItem",

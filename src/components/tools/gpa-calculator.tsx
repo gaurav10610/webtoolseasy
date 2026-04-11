@@ -14,7 +14,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { useState, useCallback } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { ButtonWithHandler } from "../lib/buttons";
@@ -155,12 +155,7 @@ export default function GPACalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="GPA Calculator"
-        description="Calculate your Grade Point Average (GPA) with course grades and credit hours. Track semester and cumulative GPA for academic planning."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Course Entry Card */}
         <Card elevation={2}>
           <CardContent>

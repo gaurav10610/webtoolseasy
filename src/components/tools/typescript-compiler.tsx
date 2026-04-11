@@ -8,11 +8,26 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 // TypeScript compiler types
+interface TypeScriptDiagnosticFile {
+  text: string;
+  getLineAndCharacterOfPosition: (position: number) => {
+    line: number;
+    character: number;
+  };
+}
+
+interface TypeScriptDiagnostic {
+  messageText: string | { messageText: string };
+  start?: number;
+  code?: number;
+  file?: TypeScriptDiagnosticFile;
+}
+
 interface TypeScriptModule {
   transpileModule(
     input: string,
@@ -20,7 +35,7 @@ interface TypeScriptModule {
       compilerOptions: Record<string, unknown>;
       reportDiagnostics?: boolean;
     },
-  ): { outputText: string; diagnostics?: Array<{ messageText: string }> };
+  ): { outputText: string; diagnostics?: TypeScriptDiagnostic[] };
   ScriptTarget: Record<string, number>;
   ModuleKind: Record<string, number>;
 }
@@ -128,6 +143,15 @@ console.log("✅ TypeScript compiled and executed successfully!");`;
   const [isLoading, setIsLoading] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState("");
+  const [diagnostics, setDiagnostics] = useState<
+    Array<{
+      message: string;
+      line: number | null;
+      column: number | null;
+      code?: number;
+      snippet: string;
+    }>
+  >([]);
   const tsRef = useRef<TypeScriptModule | null>(null);
   const consoleOutputRef = useRef<string[]>([]);
 
@@ -179,6 +203,7 @@ console.log("✅ TypeScript compiled and executed successfully!");`;
     setIsRunning(true);
     setError("");
     setOutput("");
+    setDiagnostics([]);
 
     // Load TypeScript compiler if not loaded
     if (!tsRef.current) {
@@ -215,14 +240,40 @@ console.log("✅ TypeScript compiled and executed successfully!");`;
         reportDiagnostics: true,
       });
 
-      // Check for diagnostics
-      if (result.diagnostics && result.diagnostics.length > 0) {
-        const diagMessages = result.diagnostics
-          .map((d) =>
-            typeof d.messageText === "string"
-              ? d.messageText
-              : JSON.stringify(d.messageText),
-          )
+      const mappedDiagnostics = (result.diagnostics ?? []).map((diagnostic) => {
+        const message =
+          typeof diagnostic.messageText === "string"
+            ? diagnostic.messageText
+            : diagnostic.messageText.messageText;
+        const position =
+          typeof diagnostic.start === "number" && diagnostic.file
+            ? diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
+            : null;
+        const line = position ? position.line + 1 : null;
+        const column = position ? position.character + 1 : null;
+        const snippet = line
+          ? diagnostic.file?.text.split("\n")[line - 1] || ""
+          : "";
+
+        return {
+          message,
+          line,
+          column,
+          code: diagnostic.code,
+          snippet,
+        };
+      });
+
+      setDiagnostics(mappedDiagnostics);
+
+      if (mappedDiagnostics.length > 0) {
+        const diagMessages = mappedDiagnostics
+          .map((diagnostic) => {
+            const location = diagnostic.line
+              ? `Line ${diagnostic.line}:${diagnostic.column ?? 1}`
+              : "General";
+            return `${location} - ${diagnostic.message}`;
+          })
           .join("\n");
         consoleOutputRef.current.push(
           `[WARN] TypeScript diagnostics:\n${diagMessages}`,
@@ -342,14 +393,7 @@ console.log("✅ TypeScript compiled and executed successfully!");`;
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Online TypeScript Compiler"
-        description="Free online TypeScript compiler to write, compile and run TypeScript code in your browser. Full type checking and ES6+ support."
-        exampleCode={initialCode}
-        exampleOutput="🚀 TypeScript Compiler Demo\nHello, Developer! You are 25 years old.\n📊 Generics: Hello TypeScript!\n🧭 Direction: UP\n🧮 Calculator: 45\n📍 Coordinates: [10, 20]\n✅ TypeScript compiled and executed successfully!"
-      />
-
-      {isLoading && (
+{isLoading && (
         <Box className="flex flex-col justify-center items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <Typography variant="h6" className="text-gray-800">
             Loading TypeScript Compiler...
@@ -410,6 +454,33 @@ console.log("✅ TypeScript compiled and executed successfully!");`;
                 </div>
               )}
             </div>
+
+            {diagnostics.length > 0 && (
+              <Alert severity="warning" className="!mb-2">
+                <Typography variant="body2" className="mb-2">
+                  <strong>Diagnostics:</strong> {diagnostics.length} issue(s)
+                  found.
+                </Typography>
+                <div className="space-y-2 text-xs font-mono">
+                  {diagnostics.map((diagnostic, index) => (
+                    <div key={`${diagnostic.code}-${index}`}>
+                      <div>
+                        {diagnostic.line
+                          ? `Line ${diagnostic.line}:${diagnostic.column ?? 1}`
+                          : "General"}
+                        {diagnostic.code ? ` • TS${diagnostic.code}` : ""} —{" "}
+                        {diagnostic.message}
+                      </div>
+                      {diagnostic.snippet && (
+                        <pre className="mt-1 overflow-auto rounded bg-yellow-50 p-2 text-[11px] text-slate-800">
+                          {diagnostic.snippet}
+                        </pre>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </Alert>
+            )}
 
             {error && (
               <Alert severity="error" className="!mb-2">

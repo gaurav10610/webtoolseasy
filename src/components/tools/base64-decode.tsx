@@ -5,7 +5,7 @@ import { useState, useCallback, useMemo } from "react";
 import { isEmpty } from "lodash-es";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 /* Method to convert Base64Data Url as Image Blob */
@@ -100,14 +100,7 @@ export default function Base64Decode({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Base64 Decoder"
-        description="Free online base64 decoder. Convert base64 encoded data back to original file format."
-        exampleCode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQ..."
-        exampleOutput="Decoded file download"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col w-full gap-6">
         <div className="flex flex-col gap-3">

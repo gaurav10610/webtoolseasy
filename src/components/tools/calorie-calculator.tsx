@@ -16,7 +16,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { useState, useCallback } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 import { ButtonWithHandler } from "../lib/buttons";
@@ -176,12 +176,7 @@ export default function CalorieCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="Calorie Calculator"
-        description="Calculate your daily calorie needs, BMR, and TDEE. Get personalized calorie targets for weight loss, maintenance, or muscle gain."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Card */}
         <Card elevation={2}>
           <CardContent>
@@ -451,6 +446,126 @@ export default function CalorieCalculator({
                     </Typography>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Food Suggestions */}
+            <Card elevation={2}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Food Suggestions
+                </Typography>
+                {(() => {
+                  const suggestions: Record<
+                    string,
+                    { protein: string[]; carbs: string[]; fats: string[] }
+                  > = {
+                    loss: {
+                      protein: [
+                        "Grilled chicken breast",
+                        "Egg whites",
+                        "Tofu",
+                        "Low-fat Greek yogurt",
+                        "Tuna",
+                      ],
+                      carbs: [
+                        "Brown rice (small portion)",
+                        "Sweet potato",
+                        "Oats",
+                        "Quinoa",
+                        "Vegetables",
+                      ],
+                      fats: [
+                        "Avocado (½)",
+                        "Almonds (small handful)",
+                        "Olive oil (1 tbsp)",
+                        "Chia seeds",
+                      ],
+                    },
+                    maintain: {
+                      protein: [
+                        "Chicken breast",
+                        "Eggs",
+                        "Lentils",
+                        "Cottage cheese",
+                        "Salmon",
+                      ],
+                      carbs: [
+                        "Brown rice",
+                        "Whole wheat bread",
+                        "Oats",
+                        "Fruits",
+                        "Sweet potato",
+                      ],
+                      fats: [
+                        "Avocado",
+                        "Mixed nuts",
+                        "Olive oil",
+                        "Fatty fish",
+                        "Peanut butter",
+                      ],
+                    },
+                    gain: {
+                      protein: [
+                        "Chicken thighs",
+                        "Beef",
+                        "Whole eggs",
+                        "Protein shakes",
+                        "Paneer",
+                      ],
+                      carbs: [
+                        "White rice",
+                        "Whole wheat pasta",
+                        "Banana",
+                        "Whole grain bread",
+                        "Oats",
+                      ],
+                      fats: [
+                        "Peanut butter",
+                        "Full-fat dairy",
+                        "Nuts & seeds",
+                        "Coconut milk",
+                        "Olive oil",
+                      ],
+                    },
+                  };
+                  const s = suggestions[goal] || suggestions.maintain;
+                  return (
+                    <div className="grid grid-cols-3 gap-4">
+                      {[
+                        {
+                          label: "Protein Sources",
+                          items: s.protein,
+                          color: "#f87171",
+                        },
+                        {
+                          label: "Carb Sources",
+                          items: s.carbs,
+                          color: "#60a5fa",
+                        },
+                        {
+                          label: "Healthy Fats",
+                          items: s.fats,
+                          color: "#fbbf24",
+                        },
+                      ].map(({ label, items, color }) => (
+                        <div key={label}>
+                          <Typography variant="subtitle2" sx={{ color, mb: 1 }}>
+                            {label}
+                          </Typography>
+                          <ul className="text-sm space-y-1">
+                            {items.map((item) => (
+                              <li key={item} className="flex items-start gap-1">
+                                <span style={{ color }}>•</span>
+                                <Typography variant="body2">{item}</Typography>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
               </CardContent>
             </Card>
           </>

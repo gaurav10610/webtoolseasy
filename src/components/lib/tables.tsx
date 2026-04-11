@@ -6,9 +6,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Alert from "@mui/material/Alert";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import TablePagination from "@mui/material/TablePagination";
+import TextField from "@mui/material/TextField";
 import isEmpty from "lodash-es/isEmpty";
 import map from "lodash-es/map";
-import { ReactNode } from "react";
+import { ReactNode, useState, useMemo } from "react";
 
 export function BasicTable({
   headers = [],
@@ -76,7 +79,7 @@ export function BasicTable({
   );
 }
 
-// Enhanced table for CSV data with sticky headers and custom styling
+// Enhanced table for CSV data with sticky headers, sorting, and pagination
 export function CsvDataTable({
   headers = [],
   rows = [],
@@ -90,43 +93,124 @@ export function CsvDataTable({
   stickyHeader?: boolean;
   className?: string;
 }>) {
-  if (isEmpty(headers) && isEmpty(rows)) {
-    return null;
-  }
+  const [sortCol, setSortCol] = useState<number | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [filterText, setFilterText] = useState("");
+
+  const filteredRows = useMemo(() => {
+    if (!filterText.trim()) return rows;
+    const lower = filterText.toLowerCase();
+    return rows.filter((row) =>
+      row.some((cell) => (cell ?? "").toLowerCase().includes(lower)),
+    );
+  }, [rows, filterText]);
+
+  const sortedRows = useMemo(() => {
+    if (sortCol === null) return filteredRows;
+    return [...filteredRows].sort((a, b) => {
+      const av = a[sortCol] ?? "";
+      const bv = b[sortCol] ?? "";
+      const numA = parseFloat(av),
+        numB = parseFloat(bv);
+      const isNum = !isNaN(numA) && !isNaN(numB);
+      const cmp = isNum ? numA - numB : av.localeCompare(bv);
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+  }, [filteredRows, sortCol, sortDir]);
+
+  const pageRows = useMemo(
+    () =>
+      sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [sortedRows, page, rowsPerPage],
+  );
+
+  const handleSort = (colIdx: number) => {
+    if (sortCol === colIdx) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortCol(colIdx);
+      setSortDir("asc");
+    }
+    setPage(0);
+  };
+
+  if (isEmpty(headers) && isEmpty(rows)) return null;
 
   return (
-    <div className={`overflow-auto ${className}`} style={{ maxHeight }}>
-      <TableContainer component={Paper}>
-        <Table stickyHeader={stickyHeader}>
-          <TableHead>
-            <TableRow>
-              {headers.map((header, index) => (
-                <TableCell
-                  key={index}
-                  sx={{
-                    fontWeight: "bold",
-                    backgroundColor: "#f5f5f5",
-                    minWidth: "120px",
-                  }}
-                >
-                  {header}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row, rowIndex) => (
-              <TableRow key={rowIndex} hover>
-                {row.map((cell, cellIndex) => (
-                  <TableCell key={cellIndex} sx={{ maxWidth: "200px" }}>
-                    {cell}
+    <div className={className}>
+      <TextField
+        size="small"
+        placeholder="Filter rows..."
+        value={filterText}
+        onChange={(e) => {
+          setFilterText(e.target.value);
+          setPage(0);
+        }}
+        fullWidth
+        sx={{ mb: 1 }}
+      />
+      <div style={{ maxHeight, overflow: "auto" }}>
+        <TableContainer component={Paper}>
+          <Table stickyHeader={stickyHeader} size="small">
+            <TableHead>
+              <TableRow>
+                {headers.map((header, index) => (
+                  <TableCell
+                    key={index}
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "#f5f5f5",
+                      minWidth: "100px",
+                    }}
+                    sortDirection={sortCol === index ? sortDir : false}
+                  >
+                    <TableSortLabel
+                      active={sortCol === index}
+                      direction={sortCol === index ? sortDir : "asc"}
+                      onClick={() => handleSort(index)}
+                    >
+                      {header}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {pageRows.map((row, rowIndex) => (
+                <TableRow key={rowIndex} hover>
+                  {row.map((cell, cellIndex) => (
+                    <TableCell
+                      key={cellIndex}
+                      sx={{
+                        maxWidth: "200px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {cell}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+      <TablePagination
+        component="div"
+        count={sortedRows.length}
+        page={page}
+        onPageChange={(_e, p) => setPage(p)}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={(e) => {
+          setRowsPerPage(parseInt(e.target.value));
+          setPage(0);
+        }}
+        rowsPerPageOptions={[10, 25, 50, 100]}
+      />
     </div>
   );
 }

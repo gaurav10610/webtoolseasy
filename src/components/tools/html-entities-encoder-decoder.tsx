@@ -6,7 +6,7 @@ import CodeOffIcon from "@mui/icons-material/CodeOff";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
-import { ToolLayout, SEOContent, CodeEditorLayout } from "../common/ToolLayout";
+import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
@@ -152,14 +152,7 @@ export default function HtmlEntitiesEncoderDecoder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="HTML Entities Encoder Decoder"
-        description="Encode special characters to HTML entities and decode HTML entities back to text. Essential for web development and security."
-        exampleCode='<div>Hello & "World"</div>'
-        exampleOutput='&lt;div&gt;Hello &amp; "World"&lt;/div&gt;'
-      />
-
-      <div className="flex flex-col gap-4 w-full">
+<div className="flex flex-col gap-4 w-full">
         <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
         <CodeEditorLayout

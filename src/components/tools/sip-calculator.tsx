@@ -8,12 +8,18 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
-import { useState, useCallback, useMemo } from "react";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
 interface SIPCalculation {
+  totalInvestment: number;
+  estimatedReturns: number;
+  totalValue: number;
+}
+
+interface LumpSumCalculation {
   totalInvestment: number;
   estimatedReturns: number;
   totalValue: number;
@@ -37,7 +43,7 @@ export default function SIPCalculator({
     (
       monthlyAmount: number,
       annualRate: number,
-      years: number
+      years: number,
     ): SIPCalculation => {
       // Monthly interest rate
       const monthlyRate = annualRate / 12 / 100;
@@ -65,13 +71,139 @@ export default function SIPCalculator({
         totalValue: Math.round(futureValue),
       };
     },
-    []
+    [],
   );
 
   const sipResults = useMemo(
     () => calculateSIP(monthlyInvestment, expectedReturnRate, timePeriodYears),
-    [monthlyInvestment, expectedReturnRate, timePeriodYears, calculateSIP]
+    [monthlyInvestment, expectedReturnRate, timePeriodYears, calculateSIP],
   );
+
+  const lumpSumResults = useMemo((): LumpSumCalculation => {
+    const totalInvestment = monthlyInvestment * timePeriodYears * 12;
+    const annualRate = expectedReturnRate / 100;
+    const totalValue =
+      totalInvestment * Math.pow(1 + annualRate, timePeriodYears);
+    return {
+      totalInvestment: Math.round(totalInvestment),
+      estimatedReturns: Math.round(totalValue - totalInvestment),
+      totalValue: Math.round(totalValue),
+    };
+  }, [monthlyInvestment, expectedReturnRate, timePeriodYears]);
+
+  const donutRef = useRef<HTMLCanvasElement>(null);
+  const comparisonRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = donutRef.current;
+    if (!canvas || sipResults.totalValue <= 0) return;
+    const ctx = canvas.getContext("2d")!;
+    const W = canvas.width,
+      H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2,
+      cy = H / 2;
+    const radius = Math.min(cx, cy) - 8;
+    const inner = radius * 0.58;
+    const total = sipResults.totalValue;
+    const investedFrac = sipResults.totalInvestment / total;
+    const start = -Math.PI / 2;
+    const mid = start + investedFrac * 2 * Math.PI;
+
+    // Investment slice (blue)
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, mid);
+    ctx.closePath();
+    ctx.fillStyle = "#3b82f6";
+    ctx.fill();
+
+    // Returns slice (green)
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, mid, start + 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = "#22c55e";
+    ctx.fill();
+
+    // Donut hole
+    ctx.beginPath();
+    ctx.arc(cx, cy, inner, 0, 2 * Math.PI);
+    ctx.fillStyle = "#f9fafb";
+    ctx.fill();
+
+    ctx.fillStyle = "#374151";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(`${(investedFrac * 100).toFixed(0)}% Inv`, cx, cy - 7);
+    ctx.fillText(`${((1 - investedFrac) * 100).toFixed(0)}% Ret`, cx, cy + 9);
+  }, [sipResults]);
+
+  // SIP vs Lump Sum comparison bar chart
+  useEffect(() => {
+    const canvas = comparisonRef.current;
+    if (!canvas || sipResults.totalValue <= 0) return;
+    const ctx = canvas.getContext("2d")!;
+    const W = canvas.width,
+      H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    const pad = 40,
+      barW = 60,
+      gap = 40;
+    const maxV = Math.max(sipResults.totalValue, lumpSumResults.totalValue);
+    const chartH = H - pad - 20;
+
+    // SIP bar
+    const sipH = (sipResults.totalValue / maxV) * chartH;
+    const sipX = W / 2 - gap / 2 - barW;
+    ctx.fillStyle = "#3b82f6";
+    ctx.fillRect(
+      sipX,
+      H - pad - sipH,
+      barW,
+      sipH * (sipResults.totalInvestment / sipResults.totalValue),
+    );
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(
+      sipX,
+      H - pad - sipH,
+      barW,
+      sipH * (sipResults.estimatedReturns / sipResults.totalValue),
+    );
+    // Redraw invested portion on top of returns
+    const sipInvH = sipH * (sipResults.totalInvestment / sipResults.totalValue);
+    ctx.fillStyle = "#3b82f6";
+    ctx.fillRect(sipX, H - pad - sipInvH, barW, sipInvH);
+
+    // Lump Sum bar
+    const lsH = (lumpSumResults.totalValue / maxV) * chartH;
+    const lsX = W / 2 + gap / 2;
+    const lsInvH =
+      lsH * (lumpSumResults.totalInvestment / lumpSumResults.totalValue);
+    ctx.fillStyle = "#3b82f6";
+    ctx.fillRect(lsX, H - pad - lsInvH, barW, lsInvH);
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(lsX, H - pad - lsH, barW, lsH - lsInvH);
+
+    // Labels
+    ctx.fillStyle = "#374151";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("SIP", sipX + barW / 2, H - pad + 15);
+    ctx.fillText("Lump Sum", lsX + barW / 2, H - pad + 15);
+    ctx.font = "10px sans-serif";
+    ctx.fillText(
+      formatCurrency(sipResults.totalValue),
+      sipX + barW / 2,
+      H - pad - sipH - 5,
+    );
+    ctx.fillText(
+      formatCurrency(lumpSumResults.totalValue),
+      lsX + barW / 2,
+      H - pad - lsH - 5,
+    );
+  }, [sipResults, lumpSumResults]);
 
   const handleMonthlyInvestmentChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +212,7 @@ export default function SIPCalculator({
         setMonthlyInvestment(value);
       }
     },
-    []
+    [],
   );
 
   const handleReturnRateChange = useCallback(
@@ -90,7 +222,7 @@ export default function SIPCalculator({
         setExpectedReturnRate(value);
       }
     },
-    []
+    [],
   );
 
   const handleTimePeriodChange = useCallback(
@@ -100,7 +232,7 @@ export default function SIPCalculator({
         setTimePeriodYears(value);
       }
     },
-    []
+    [],
   );
 
   const formatCurrency = (value: number): string => {
@@ -122,12 +254,7 @@ export default function SIPCalculator({
           : undefined
       }
     >
-      <SEOContent
-        title="SIP Calculator - Systematic Investment Plan"
-        description="Calculate your SIP returns with our free online calculator. Plan your mutual fund investments and see how your wealth grows over time."
-      />
-
-      <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
         {/* Input Section */}
         <Card elevation={2}>
           <CardContent>
@@ -252,16 +379,111 @@ export default function SIPCalculator({
           </CardContent>
         </Card>
 
+        {/* SIP vs Lump Sum Comparison */}
+        <Card elevation={2}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+              SIP vs Lump Sum Comparison
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Comparing SIP (monthly {formatCurrency(monthlyInvestment)}) vs
+              investing the same total amount (
+              {formatCurrency(lumpSumResults.totalInvestment)}) as a lump sum
+              upfront.
+            </Typography>
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <canvas ref={comparisonRef} width={280} height={200} />
+              <div className="flex-1 space-y-2">
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div />
+                  <Typography variant="subtitle2" color="primary">
+                    SIP
+                  </Typography>
+                  <Typography variant="subtitle2" color="secondary">
+                    Lump Sum
+                  </Typography>
+
+                  <Typography variant="body2" className="text-left">
+                    Invested
+                  </Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatCurrency(sipResults.totalInvestment)}
+                  </Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatCurrency(lumpSumResults.totalInvestment)}
+                  </Typography>
+
+                  <Typography variant="body2" className="text-left">
+                    Returns
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight="bold"
+                    color="success.main"
+                  >
+                    {formatCurrency(sipResults.estimatedReturns)}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight="bold"
+                    color="success.main"
+                  >
+                    {formatCurrency(lumpSumResults.estimatedReturns)}
+                  </Typography>
+
+                  <Typography variant="body2" className="text-left">
+                    Total Value
+                  </Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatCurrency(sipResults.totalValue)}
+                  </Typography>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatCurrency(lumpSumResults.totalValue)}
+                  </Typography>
+                </div>
+                <div className="flex gap-3 mt-2">
+                  <span className="flex items-center gap-1 text-xs">
+                    <span className="inline-block w-3 h-3 rounded-sm bg-blue-500" />{" "}
+                    Invested
+                  </span>
+                  <span className="flex items-center gap-1 text-xs">
+                    <span className="inline-block w-3 h-3 rounded-sm bg-green-500" />{" "}
+                    Returns
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Info Card */}
         <Card elevation={1} sx={{ bgcolor: "info.light" }}>
           <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              <strong>Note:</strong> This calculator provides estimates based on
-              the expected rate of return. Actual returns may vary depending on
-              market conditions and fund performance. SIP investments in mutual
-              funds are subject to market risks. Please read all scheme-related
-              documents carefully before investing.
-            </Typography>
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <div className="flex-1">
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Note:</strong> This calculator provides estimates
+                  based on the expected rate of return. Actual returns may vary
+                  depending on market conditions and fund performance. SIP
+                  investments in mutual funds are subject to market risks.
+                  Please read all scheme-related documents carefully before
+                  investing.
+                </Typography>
+              </div>
+              <div className="flex flex-col items-center">
+                <canvas ref={donutRef} width={140} height={140} />
+                <div className="flex gap-3 mt-1">
+                  <span className="flex items-center gap-1 text-xs">
+                    <span className="inline-block w-3 h-3 rounded-sm bg-blue-500" />{" "}
+                    Invested
+                  </span>
+                  <span className="flex items-center gap-1 text-xs">
+                    <span className="inline-block w-3 h-3 rounded-sm bg-green-500" />{" "}
+                    Returns
+                  </span>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

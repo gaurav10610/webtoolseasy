@@ -6,15 +6,15 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
-import { Guid } from "guid-ts";
+import { ToolLayout } from "../common/ToolLayout";
 
 export default function GuidGenerator({
   hostname,
   queryParams,
 }: Readonly<ToolComponentProps>) {
   const generateGUID = useCallback(() => {
-    return Guid.newGuid().toString();
+    // Use native crypto.randomUUID() – available in all modern browsers and Node 14.17+
+    return crypto.randomUUID();
   }, []);
 
   const initialValue = generateGUID();
@@ -80,14 +80,7 @@ export default function GuidGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="GUID Generator"
-        description="Generate random GUID (Globally Unique Identifier) online. Create single or bulk GUIDs for your applications."
-        exampleCode={initialValue}
-        exampleOutput={`Generated GUID: ${initialValue}`}
-      />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Single GUID */}
         <div className="space-y-4">
           <div>

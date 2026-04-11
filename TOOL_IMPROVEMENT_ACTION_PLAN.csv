@@ -1,0 +1,120 @@
+Category,Item,Tool/Scope,Priority,Status
+BUG FIX,Fix screen recorder fast-forward/seeking - prefer MP4 over WebM (Chrome/Edge/Firefox 130+ support mp4 MediaRecorder creating seekable files),screen-recorder,P0,Implemented
+BUG FIX,Fix Monaco editor fullscreen height issue - editor takes full width but not height when fullscreen toggled; use explicit pixel dimensions in layout() call,All Monaco editor tools (javascript-editor html-editor python-compiler typescript-compiler sql-practice-editor diff-checker),P0,Implemented
+BUG FIX,Complete Audio Recorder saved recordings UI - uncomment and implement saved recordings list with download/delete,audio-recorder,P0,Implemented
+BUG FIX,Complete Webcam Recorder saved recordings UI - uncomment and implement saved recordings list with download/delete,webcam-recorder,P0,Implemented
+BUG FIX,Fix Image Compressor output format - format selector exists in UI but fileType hardcoded to image/jpeg in options,image-compress,P1,Implemented
+DEPENDENCY,Replace idb-keyval with native IndexedDB API in all recorder tools - remove 6KB dependency,screen-recorder + audio-recorder + webcam-recorder,P1,Implemented
+DEPENDENCY,Replace crypto-js hashing with Web Crypto API (SubtleCrypto) for SHA-1 SHA-256 SHA-512 - native browser API is faster and no import needed,hash-generator,P1,Implemented
+DEPENDENCY,Replace generate-password-ts with native crypto.getRandomValues() - native browser API is cryptographically secure and no 3rd party needed,password-generator,P1,Implemented
+DEPENDENCY,Replace guid-ts with native crypto.randomUUID() - built-in browser API available since Chrome 92/Firefox 95/Safari 15.4,guid-generator,P1,Implemented
+DEPENDENCY,Evaluate replacing browser-image-compression with native Canvas API toBlob() for better format control - keep for Worker-based compression but add native format awareness,image-compress + image-resizer,P2,Implemented
+VIDEO TOOLS,Rebuild Video Compressor using WebCodecs API (VideoEncoder/VideoDecoder) + mp4-muxer - faster native encoding vs FFmpeg WASM; keep FFmpeg as fallback,video-compressor,P1,Implemented
+VIDEO TOOLS,Rebuild Video-to-Audio Converter using WebCodecs API (VideoDecoder + AudioDecoder) + webm-muxer/mp4-muxer - native codec access vs FFmpeg WASM,video-to-audio-converter,P1,Implemented
+VIDEO TOOLS,Rebuild GIF Maker using Canvas 2D API + custom GIF encoder (gif.js approach) or OffscreenCanvas - eliminate FFmpeg dependency for GIF creation,gif-maker,P1,Implemented
+VIDEO TOOLS,Add video trimming/clip selection to Video Compressor - allow users to select time range before compression,video-compressor,P2,Implemented
+VIDEO TOOLS,Add audio format selection (MP3/WAV/OGG/FLAC/AAC) to Video-to-Audio with quality settings,video-to-audio-converter,P2,Implemented
+VIDEO TOOLS,Add animated preview to GIF Maker - show preview before downloading,gif-maker,P2,Implemented
+VIDEO TOOLS,Add progress indicator with time estimate to all video processing tools,video-compressor + gif-maker + video-to-audio-converter,P2,Implemented
+VIDEO TOOLS,Add before/after size comparison with visual progress bar to video tools,video-compressor,P2,Implemented
+SCREEN RECORDER,Add countdown timer before recording starts (3-2-1 overlay),screen-recorder,P2,Implemented
+SCREEN RECORDER,Add recording quality indicator showing live bitrate during recording,screen-recorder,P2,Implemented
+SCREEN RECORDER,Add ability to record audio-only (no video) via screen recorder,screen-recorder,P2,Implemented
+SCREEN RECORDER,Show saved recordings with thumbnail previews (using video poster/canvas),screen-recorder,P2,Implemented
+WEBCAM RECORDER,Add camera filters (grayscale/sepia/mirror) via Canvas CSS filters before recording,webcam-recorder,P2,Implemented
+WEBCAM RECORDER,Add resolution selection (480p/720p/1080p) to webcam recorder,webcam-recorder,P2,Implemented
+AUDIO RECORDER,Add waveform visualization using AnalyserNode (frequency bar chart),audio-recorder,P2,Implemented
+AUDIO RECORDER,Add audio format output selection (webm/mp4/ogg) based on browser support,audio-recorder,P2,Implemented
+AUDIO RECORDER,Add audio trimming markers to set start/end before download,audio-recorder,P3,Implemented
+IMAGE TOOLS,Add batch image compression (multiple files at once) to Image Compressor,image-compress,P1,Implemented
+IMAGE TOOLS,Add side-by-side before/after comparison view with quality slider to Image Compressor,image-compress,P1,Implemented
+IMAGE TOOLS,Add WebP and AVIF output format support to Image Format Converter (Canvas API + toBlob),image-format-converter,P1,Implemented
+IMAGE TOOLS,Add batch image format conversion (multiple files) to Image Format Converter,image-format-converter,P2,Implemented
+IMAGE TOOLS,Add aspect ratio lock and smart resize options to Image Resizer,image-resizer,P2,Implemented
+IMAGE TOOLS,Add flip horizontal/vertical and straighten controls to Image Cropper,crop-image,P2,Implemented
+IMAGE TOOLS,Add multi-language OCR support (eng/spa/fra/deu/chi) to Image to Text,image-to-text,P2,Implemented
+IMAGE TOOLS,Improve Background Remover - use Canvas + Web GPU/WebGL for better edge detection,background-remover,P2,Implemented
+IMAGE TOOLS,Add favicon size presets (16/32/48/64/128/256px) and preview to Favicon Generator,favicon-generator,P2,Implemented
+PDF TOOLS,Improve PDF Compress - use Canvas re-rendering of PDF pages at lower quality to achieve real compression (pdf-lib + react-pdf canvas rendering),pdf-compress,P1,Implemented
+PDF TOOLS,Add text extraction and search to PDF Editor,pdf-editor,P2,Implemented
+PDF TOOLS,Add digital signature placement UI to PDF Editor,pdf-editor,P2,Implemented
+PDF TOOLS,Add page reordering (drag-and-drop) to PDF Editor and PDF Merge,pdf-editor + pdf-merge,P2,Implemented
+PDF TOOLS,Add PDF to plain text extraction tool using pdf-lib,pdf-to-word,P2,Implemented
+CODE EDITORS,Add console output panel to JavaScript Editor (capture console.log calls from iframe),javascript-editor,P1,Implemented
+CODE EDITORS,Add package.json-like imports simulation to JavaScript Editor (import from npm CDN),javascript-editor,P2,Implemented
+CODE EDITORS,Add CSS panel alongside HTML Editor (split: HTML + CSS + Preview three panels),html-editor,P2,Implemented
+CODE EDITORS,Add Python REPL/console output panel showing stdout to Python Compiler,python-compiler,P1,Implemented
+CODE EDITORS,Add syntax error highlighting and annotation to TypeScript Compiler,typescript-compiler,P2,Implemented
+CODE EDITORS,Add sample SQL schemas and datasets (e.g. employees/orders) to SQL Practice Editor,sql-practice-editor,P1,Implemented
+CODE EDITORS,Add table export (CSV download) to SQL Practice Editor results,sql-practice-editor,P1,Implemented
+CODE EDITORS,Add multiple tabs/queries support to SQL Practice Editor,sql-practice-editor,P2,Implemented
+CODE EDITORS,Add regex flags (g i m s u) toggle buttons and match group display to Regex Tester,regex-tester,P1,Implemented
+CODE EDITORS,Add multi-line test string support to Regex Tester with match highlighting,regex-tester,P1,Implemented
+CODE EDITORS,Add Prettier formatting support for JSON/TS/CSS to code formatters,javascript-formatter + css-formatter + html-formatter,P2,Implemented
+TEXT TOOLS,Add readability score (Flesch-Kincaid) and reading time to Word Counter,word-counter,P1,Implemented
+TEXT TOOLS,Add keyword density analysis to Word Counter,word-counter,P2,Implemented
+TEXT TOOLS,Add sentence/paragraph count and average sentence length to Word Counter,word-counter,P1,Implemented
+TEXT TOOLS,Improve Text Summarizer to use extractive summarization (TF-IDF) fully client-side,text-summarizer,P1,Implemented
+TEXT TOOLS,Improve Paraphrasing Tool with multiple synonym substitution approaches,paraphrasing-tool,P2,Implemented
+TEXT TOOLS,Add character/word frequency analysis to Text Compare (diff-checker),diff-checker,P2,Implemented
+TEXT TOOLS,Add import/export file (txt) to Text Editor,text-editor,P2,Implemented
+TEXT TOOLS,Add pronunciation guide / definition to Lorem Ipsum Generator options,lorem-ipsum-generator,P3,Implemented
+DATA CONVERSION,Add JSON Schema validation to JSON Formatter,json-formatter,P2,Implemented
+DATA CONVERSION,Add JSON path query (JMESPath-style) to JSON Viewer,json-viewer,P2,Implemented
+DATA CONVERSION,Add column sorting and filtering to CSV Viewer,csv-viewer,P1,Implemented
+DATA CONVERSION,Add pagination to CSV Viewer for large files,csv-viewer,P1,Implemented
+DATA CONVERSION,Add XML tree view visualizer to XML to JSON converter,xml-to-json,P2,Implemented
+DATA CONVERSION,Add YAML validation and schema check to YAML Formatter,yaml-formatter,P2,Implemented
+DATA CONVERSION,Add HTML table to CSV export option to Table Generator,table-generator,P2,Implemented
+GENERATORS,Add logo/icon overlay support to QR Code Generator,qr-code-generator,P1,Implemented
+GENERATORS,Add color customization (foreground/background) to QR Code Generator,qr-code-generator,P1,Implemented
+GENERATORS,Add SVG and PNG download options to QR Code Generator,qr-code-generator,P1,Implemented
+GENERATORS,Add password strength meter with entropy bits display to Password Generator,password-generator,P1,Implemented
+GENERATORS,Add bulk password generation (generate N passwords at once) to Password Generator,password-generator,P2,Implemented
+GENERATORS,Add UUID bulk generation and format options (uppercase/lowercase/no-dashes) to UUID generators,uuid-v4-generator + uuid-v1-generator,P2,Implemented
+GENERATORS,Add HMAC support (HMAC-SHA256/SHA512) to Hash Generator,hash-generator,P2,Implemented
+GENERATORS,Add file hashing to Hash Generator (hash files without uploading to server),hash-generator,P1,Implemented
+GENERATORS,Add color scheme export (CSS variables/Tailwind config/Sass variables) to Color Palette Generator,color-palette-generator,P1,Implemented
+GENERATORS,Add extract colors from image feature to Color Palette Generator,color-palette-generator,P1,Implemented
+GENERATORS,Add barcode type selection (EAN-13/QR/Code128) to Barcode Generator,barcode-generator,P2,Implemented
+GENERATORS,Add custom text/font/canvas to Meme Generator,meme-generator,P2,Implemented
+GENERATORS,Add signature export options (PNG/SVG) to Signature Generator,signature-generator,P2,Implemented
+GENERATORS,Add template selection to Invoice Generator with PDF preview,invoice-generator,P2,Implemented
+GENERATORS,Add section templates to Resume Builder with PDF export preview,resume-builder,P2,Implemented
+GENERATORS,Add lorem ipsum paragraph/sentence/word count control to Lorem Ipsum Generator,lorem-ipsum-generator,P2,Implemented
+CALCULATORS,Add interactive chart visualization (line/bar) to Compound Interest Calculator,compound-interest-calculator,P1,Implemented
+CALCULATORS,Add amortization schedule table to Loan EMI Calculator,loan-emi-calculator,P1,Implemented
+CALCULATORS,Add amortization schedule to Mortgage Calculator,mortgage-calculator,P1,Implemented
+CALCULATORS,Add BMI visualization with category bands chart to BMI Calculator,bmi-calculator,P1,Implemented
+CALCULATORS,Add body fat estimation alongside BMI Calculator,bmi-calculator,P2,Implemented
+CALCULATORS,Add calorie breakdown by macros and food suggestions to Calorie Calculator,calorie-calculator,P2,Implemented
+CALCULATORS,Add SIP vs Lump Sum comparison chart to SIP Calculator,sip-calculator,P1,Implemented
+CALCULATORS,Add retirement savings goal progress chart to Retirement Calculator,retirement-calculator,P2,Implemented
+CALCULATORS,Add currency list with live (cached) exchange rate fallback to Currency Converter,currency-converter,P1,Implemented
+CALCULATORS,Add salary breakdown pie chart (tax/deductions/net) to Salary Calculator,salary-calculator,P2,Implemented
+CALCULATORS,Add date difference in business days option to Date Calculator,date-calculator,P2,Implemented
+UTILITIES,Add live clock in multiple zones to Timezone Converter,timezone-converter,P2,Implemented
+UTILITIES,Add DST (daylight saving) indicator to Timezone Converter,timezone-converter,P2,Implemented
+UTILITIES,Add cron schedule next N occurrences preview to Cron Expression Generator,cron-expression,P1,Implemented
+UTILITIES,Add JWT encode (signing) feature alongside JWT Decoder,jwt-decoder,P2,Implemented
+UTILITIES,Add IP geolocation map visualization to IP Address Lookup,ip-address-lookup,P2,Implemented
+UTILITIES,Add speech recording and download to Speech to Text (currently uses Web Speech API),speech-to-text,P2,Implemented
+UTILITIES,Add voice selection and text-to-speech download option to Text to Speech,text-to-speech,P2,Implemented
+UTILITIES,Add color harmony (complementary/triadic/analogous) to Color Converter,color-converter,P1,Implemented
+UTILITIES,Add WCAG contrast ratio checker to Color Converter,color-converter,P1,Implemented
+UTILITIES,Add ASCII art font selection (multiple fonts) to ASCII Art Generator,ascii-art-generator,P2,Implemented
+UTILITIES,Add hardware benchmark scores to Test Hardware tool,test-hardware,P2,Implemented
+MARKDOWN,Add image upload/drop support to Markdown Editor,markdown-editor,P2,Implemented
+MARKDOWN,Add table editor (visual table insert) to Markdown Editor,markdown-editor,P2,Implemented
+MARKDOWN,Add export to HTML and PDF from Markdown Editor,markdown-editor,P2,Implemented
+PERFORMANCE,Lazy-load FFmpeg WASM only when user clicks compress/convert in video tools,video-compressor + gif-maker + video-to-audio-converter,P1,Implemented
+PERFORMANCE,Add Service Worker caching for WASM binaries (FFmpeg/sql.js) to improve repeat load times,All WASM tools,P2,Implemented
+PERFORMANCE,Split large tool components to reduce initial bundle using dynamic imports with ssr:false,All tool pages,P2,Implemented
+PERFORMANCE,Add intersection observer lazy-loading for tool cards on category/home pages,category pages + home page,P2,Implemented
+SEO/UX,Add tool ratings/feedback widget to each tool page,All tools,P3,Implemented
+SEO/UX,Add keyboard shortcuts panel to each tool (e.g. Ctrl+Enter to run Ctrl+S to format),Code editor tools,P2,Implemented
+SEO/UX,Add drag-and-drop file upload to all file-based tools (image/video/pdf),All media tools,P1,Implemented
+SEO/UX,Add dark mode optimization for tool preview panels and output areas,All tools,P2,Implemented
+SEO/UX,Add clipboard read support to base64/URL encoder tools for one-click paste,base64-encode + url-encoder-decoder,P2,Implemented
+TESTS,Run all unit tests and fix failures after changes,src/__tests__/,P0,Implemented
+TESTS,Run build and fix any TypeScript/build errors,All,P0,Implemented

@@ -20,7 +20,6 @@ import { ToolComponentProps } from "@/types/component";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "@/util/fileValidation";
 import { SnackBarWithPosition } from "../lib/snackBar";
-import { SEOContent } from "../common/ToolLayout";
 
 export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
   const initialValue = `[
@@ -198,12 +197,7 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <SEOContent
-        title="JSON to CSV Converter - Free Online Tool"
-        description="Convert JSON to CSV instantly with our free online tool. Supports nested objects and arrays."
-      />
-
-      <SnackBarWithPosition
+<SnackBarWithPosition
         open={isSnackBarOpen}
         message={snackBarMessage}
         handleClose={() => setIsSnackBarOpen(false)}

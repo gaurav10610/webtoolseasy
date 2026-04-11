@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  set as idbSet,
-  get as idbGet,
-  del as idbDel,
-  keys as idbKeys,
-} from "idb-keyval";
+import { idbSet, idbGet, idbDel, idbKeys } from "@/util/nativeIdb";
 
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import {
@@ -18,6 +13,7 @@ import {
   Box,
   Alert,
   Button,
+  Chip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
@@ -29,8 +25,17 @@ import MicIcon from "@mui/icons-material/Mic";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import {
+  createComposedRecordingStream,
+  getDownloadExtensionFromMimeType,
+  getPreferredRecordingMimeInfo,
+  getRecommendedVideoBitrate,
+  getVideoConstraintsForQuality,
+  RecordingQuality,
+} from "@/util/screenRecorderUtils";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import { SelectWithLabel } from "../lib/select";
 
 enum RecordingState {
   IDLE = "idle",
@@ -46,6 +51,42 @@ interface RecordingConfig {
   includeCamera: boolean;
   includeMicrophone: boolean;
   includeSystemAudio: boolean;
+  audioOnly: boolean;
+  quality: RecordingQuality;
+}
+
+interface SavedRecording {
+  key: string;
+  blob: Blob;
+}
+
+function RecordingThumbnail({ blob }: Readonly<{ blob: Blob }>) {
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    if (blob.type.startsWith("audio/")) return;
+    const objectUrl = URL.createObjectURL(blob);
+    setUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [blob]);
+
+  if (blob.type.startsWith("audio/")) {
+    return (
+      <div className="flex h-14 w-24 items-center justify-center rounded bg-slate-100 text-xs font-medium text-slate-700">
+        Audio only
+      </div>
+    );
+  }
+
+  return (
+    <video
+      src={url}
+      className="h-14 w-24 rounded bg-slate-950 object-cover"
+      muted
+      playsInline
+      preload="metadata"
+    />
+  );
 }
 
 export default function ScreenRecorder({
@@ -58,74 +99,131 @@ export default function ScreenRecorder({
   });
 
   const [recordingState, setRecordingState] = useState<RecordingState>(
-    RecordingState.IDLE
+    RecordingState.IDLE,
   );
   const [recordingConfig, setRecordingConfig] = useState<RecordingConfig>({
     includeScreen: true,
     includeCamera: false,
     includeMicrophone: false,
     includeSystemAudio: false,
+    audioOnly: false,
+    quality: "1080p",
   });
+  const supportedMimeInfo = useMemo(
+    () =>
+      getPreferredRecordingMimeInfo({
+        audioOnly: recordingConfig.audioOnly,
+      }),
+    [recordingConfig.audioOnly],
+  );
+
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  const [savedRecordings, setSavedRecordings] = useState<
-    { key: string; blob: Blob }[]
-  >([]);
-  // Download a saved recording
-  const downloadSavedRecording = useCallback(
-    (key: string, blob: Blob) => {
+  const [savedRecordings, setSavedRecordings] = useState<SavedRecording[]>([]);
+  const [recordingMimeType, setRecordingMimeType] = useState(
+    supportedMimeInfo.mimeType,
+  );
+  const [error, setError] = useState<string>("");
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [liveBitrate, setLiveBitrate] = useState<string>("");
+
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const previewVideoRef = useRef<HTMLVideoElement | null>(null);
+  const streamsRef = useRef<MediaStream[]>([]);
+  const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const compositionCleanupRef = useRef<(() => void) | null>(null);
+  const bitrateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const lastBytesRef = useRef(0);
+  const lastBitrateTimeRef = useRef(0);
+
+  useEffect(() => {
+    if (!recordedBlob) {
+      setPreviewUrl("");
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(recordedBlob);
+    setPreviewUrl(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [recordedBlob]);
+
+  const downloadBlob = useCallback(
+    (blob: Blob, fileName: string, successMessage: string) => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${key}.webm`;
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      toolState.actions.showMessage("Recording downloaded successfully!");
+      toolState.actions.showMessage(successMessage);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
-  // Delete a saved recording
+  const downloadSavedRecording = useCallback(
+    (key: string, blob: Blob) => {
+      const extension = getDownloadExtensionFromMimeType(blob.type);
+      downloadBlob(
+        blob,
+        key.includes(".") ? key : `${key}.${extension}`,
+        "Recording downloaded successfully!",
+      );
+    },
+    [downloadBlob],
+  );
+
   const deleteSavedRecording = useCallback(
     async (key: string) => {
       await idbDel(key);
       setSavedRecordings((prev) => prev.filter((rec) => rec.key !== key));
       toolState.actions.showMessage("Recording deleted.");
     },
-    [toolState.actions]
+    [toolState.actions],
   );
-  // Load saved recordings from IndexedDB on mount
+
   useEffect(() => {
     (async () => {
       const allKeys = await idbKeys();
-      const recordings: { key: string; blob: Blob }[] = [];
+      const recordings: SavedRecording[] = [];
+
       for (const key of allKeys) {
+        if (!String(key).startsWith("screen-recording-")) {
+          continue;
+        }
+
         const blob = await idbGet(key);
         if (blob instanceof Blob) {
           recordings.push({ key: String(key), blob });
         }
       }
+
+      recordings.sort((first, second) => second.key.localeCompare(first.key));
       setSavedRecordings(recordings);
     })();
   }, []);
-  const [error, setError] = useState<string>("");
 
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const streamsRef = useRef<MediaStream[]>([]);
-  const chunksRef = useRef<Blob[]>([]);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Cleanup streams
   const cleanupStreams = useCallback(() => {
+    compositionCleanupRef.current?.();
+    compositionCleanupRef.current = null;
+
     streamsRef.current.forEach((stream) => {
       stream.getTracks().forEach((track) => track.stop());
     });
     streamsRef.current = [];
+
+    if (previewVideoRef.current) {
+      previewVideoRef.current.pause();
+      previewVideoRef.current.srcObject = null;
+    }
   }, []);
 
-  // Format recording time
   const formatTime = useCallback((seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -136,71 +234,58 @@ export default function ScreenRecorder({
         .toString()
         .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     }
+
     return `${mins.toString().padStart(2, "0")}:${secs
       .toString()
       .padStart(2, "0")}`;
   }, []);
 
-  // Get screen capture stream
   const getScreenStream = useCallback(async (): Promise<MediaStream> => {
     try {
       return await navigator.mediaDevices.getDisplayMedia({
-        video: {
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
-          frameRate: { ideal: 30 },
-        },
+        video: getVideoConstraintsForQuality(recordingConfig.quality),
         audio: recordingConfig.includeSystemAudio,
       });
     } catch {
       throw new Error(
-        "Failed to capture screen. Please ensure you grant permission."
+        "Failed to capture your screen. Please grant permission and try again.",
       );
     }
-  }, [recordingConfig.includeSystemAudio]);
+  }, [recordingConfig.includeSystemAudio, recordingConfig.quality]);
 
-  // Get camera and microphone stream
   const getUserMediaStream = useCallback(async (): Promise<MediaStream> => {
     try {
       return await navigator.mediaDevices.getUserMedia({
         video: recordingConfig.includeCamera
-          ? {
-              width: { ideal: 640 },
-              height: { ideal: 480 },
-              frameRate: { ideal: 30 },
-            }
+          ? getVideoConstraintsForQuality(recordingConfig.quality)
           : false,
         audio: recordingConfig.includeMicrophone,
       });
     } catch {
       throw new Error(
-        "Failed to access camera/microphone. Please ensure you grant permission."
+        "Failed to access camera or microphone. Please check permissions and try again.",
       );
     }
-  }, [recordingConfig.includeCamera, recordingConfig.includeMicrophone]);
+  }, [
+    recordingConfig.includeCamera,
+    recordingConfig.includeMicrophone,
+    recordingConfig.quality,
+  ]);
 
-  // Combine multiple streams
-  const combineStreams = useCallback((streams: MediaStream[]): MediaStream => {
-    const combinedStream = new MediaStream();
+  const startTimer = useCallback((reset = false) => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
 
-    streams.forEach((stream) => {
-      stream.getTracks().forEach((track) => {
-        combinedStream.addTrack(track);
-      });
-    });
+    if (reset) {
+      setRecordingTime(0);
+    }
 
-    return combinedStream;
-  }, []);
-
-  // Start recording timer
-  const startTimer = useCallback(() => {
-    setRecordingTime(0);
     timerRef.current = setInterval(() => {
       setRecordingTime((prev) => prev + 1);
     }, 1000);
   }, []);
 
-  // Stop recording timer
   const stopTimer = useCallback(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -210,35 +295,107 @@ export default function ScreenRecorder({
 
   const startRecording = useCallback(async () => {
     try {
+      if (!recordingConfig.includeScreen && !recordingConfig.includeCamera) {
+        throw new Error(
+          "Select Screen Capture or Camera to create a video recording.",
+        );
+      }
+
+      // 3-2-1 Countdown before recording
+      setCountdown(3);
+      await new Promise<void>((resolve) => {
+        let count = 3;
+        const tick = setInterval(() => {
+          count--;
+          if (count <= 0) {
+            clearInterval(tick);
+            setCountdown(null);
+            resolve();
+          } else {
+            setCountdown(count);
+          }
+        }, 1000);
+      });
+
       setRecordingState(RecordingState.PREPARING);
       setError("");
+      setRecordedBlob(null);
+      setPreviewUrl("");
       chunksRef.current = [];
+      setRecordingTime(0);
 
-      // Get required streams
-      const streams: MediaStream[] = [];
+      const screenStream =
+        !recordingConfig.audioOnly && recordingConfig.includeScreen
+          ? await getScreenStream()
+          : undefined;
+      const userMediaStream =
+        recordingConfig.includeCamera || recordingConfig.includeMicrophone
+          ? await getUserMediaStream()
+          : undefined;
 
-      if (recordingConfig.includeScreen) {
-        const screenStream = await getScreenStream();
-        streams.push(screenStream);
-        streamsRef.current.push(screenStream);
+      const activeStreams = [screenStream, userMediaStream].filter(
+        Boolean,
+      ) as MediaStream[];
+      streamsRef.current = activeStreams;
+
+      activeStreams.forEach((stream) => {
+        stream.getVideoTracks().forEach((track) => {
+          track.addEventListener(
+            "ended",
+            () => {
+              if (
+                mediaRecorderRef.current &&
+                mediaRecorderRef.current.state !== "inactive"
+              ) {
+                setRecordingState(RecordingState.STOPPING);
+                mediaRecorderRef.current.stop();
+              }
+            },
+            { once: true },
+          );
+        });
+      });
+
+      const composedSession = await createComposedRecordingStream({
+        screenStream,
+        webcamStream: userMediaStream,
+        includeSystemAudio: recordingConfig.includeSystemAudio,
+        includeMicrophoneAudio: recordingConfig.includeMicrophone,
+        frameRate: 30,
+        audioOnly: recordingConfig.audioOnly,
+      });
+
+      compositionCleanupRef.current = composedSession.cleanup;
+
+      if (previewVideoRef.current) {
+        previewVideoRef.current.srcObject =
+          composedSession.stream.getVideoTracks().length > 0
+            ? composedSession.stream
+            : null;
+        previewVideoRef.current.muted = true;
+        if (composedSession.stream.getVideoTracks().length > 0) {
+          await previewVideoRef.current.play().catch(() => undefined);
+        }
       }
 
-      if (recordingConfig.includeCamera || recordingConfig.includeMicrophone) {
-        const userMediaStream = await getUserMediaStream();
-        streams.push(userMediaStream);
-        streamsRef.current.push(userMediaStream);
-      }
+      const mimeInfo = getPreferredRecordingMimeInfo({
+        audioOnly: recordingConfig.audioOnly,
+      });
+      setRecordingMimeType(mimeInfo.mimeType);
 
-      if (streams.length === 0) {
-        throw new Error("At least one recording source must be selected");
-      }
-
-      // Combine streams
-      const combinedStream = combineStreams(streams);
-
-      // Create media recorder
-      const mediaRecorder = new MediaRecorder(combinedStream, {
-        mimeType: "video/webm;codecs=vp9",
+      const mediaRecorder = new MediaRecorder(composedSession.stream, {
+        mimeType: mimeInfo.mimeType,
+        ...(!recordingConfig.audioOnly
+          ? {
+              videoBitsPerSecond: getRecommendedVideoBitrate(
+                recordingConfig.quality,
+              ),
+            }
+          : {}),
+        ...(recordingConfig.includeMicrophone ||
+        recordingConfig.includeSystemAudio
+          ? { audioBitsPerSecond: 192_000 }
+          : {}),
       });
 
       mediaRecorder.ondataavailable = (event) => {
@@ -247,17 +404,34 @@ export default function ScreenRecorder({
         }
       };
 
+      mediaRecorder.onpause = () => {
+        try {
+          mediaRecorder.requestData();
+        } catch {
+          // Ignore requestData issues for browsers that flush only on stop.
+        }
+      };
+
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: "video/webm" });
+        if (bitrateIntervalRef.current) {
+          clearInterval(bitrateIntervalRef.current);
+          bitrateIntervalRef.current = null;
+        }
+        setLiveBitrate("");
+        const finalMimeType = mediaRecorder.mimeType || mimeInfo.mimeType;
+        const blob = new Blob(chunksRef.current, { type: finalMimeType });
+        const extension = getDownloadExtensionFromMimeType(finalMimeType);
+        const key = `screen-recording-${Date.now()}.${extension}`;
+
+        setRecordingMimeType(finalMimeType);
         setRecordedBlob(blob);
         setRecordingState(RecordingState.COMPLETED);
         cleanupStreams();
         stopTimer();
-        // Save to IndexedDB
-        const key = `recording-${Date.now()}`;
+
         await idbSet(key, blob);
-        setSavedRecordings((prev) => [...prev, { key, blob }]);
-        toolState.actions.showMessage("Recording completed and saved!");
+        setSavedRecordings((prev) => [{ key, blob }, ...prev]);
+        toolState.actions.showMessage("Recording completed and saved.");
       };
 
       mediaRecorder.onerror = (event) => {
@@ -269,25 +443,47 @@ export default function ScreenRecorder({
       };
 
       mediaRecorderRef.current = mediaRecorder;
-      mediaRecorder.start(1000); // Collect data every second
-
+      mediaRecorder.start();
       setRecordingState(RecordingState.RECORDING);
-      startTimer();
-      toolState.actions.showMessage("Recording started!");
-    } catch (error) {
-      console.error("Failed to start recording:", error);
+      startTimer(true);
+
+      // Live bitrate tracking
+      lastBytesRef.current = 0;
+      lastBitrateTimeRef.current = Date.now();
+      bitrateIntervalRef.current = setInterval(() => {
+        const totalBytes = chunksRef.current.reduce((s, c) => s + c.size, 0);
+        const now = Date.now();
+        const elapsed = (now - lastBitrateTimeRef.current) / 1000;
+        if (elapsed > 0) {
+          const bytesPerSec = (totalBytes - lastBytesRef.current) / elapsed;
+          const kbps = Math.round((bytesPerSec * 8) / 1000);
+          setLiveBitrate(`${kbps} kbps`);
+          lastBytesRef.current = totalBytes;
+          lastBitrateTimeRef.current = now;
+        }
+      }, 1000);
+
+      toolState.actions.showMessage(
+        recordingConfig.audioOnly
+          ? `Audio-only recording started (${mimeInfo.extension.toUpperCase()}).`
+          : `Recording started in ${recordingConfig.quality} (${mimeInfo.extension.toUpperCase()}).`,
+      );
+    } catch (startError) {
+      console.error("Failed to start recording:", startError);
       setError(
-        error instanceof Error ? error.message : "Failed to start recording"
+        startError instanceof Error
+          ? startError.message
+          : "Failed to start recording.",
       );
       setRecordingState(RecordingState.IDLE);
       cleanupStreams();
+      stopTimer();
     }
   }, [
-    recordingConfig,
+    cleanupStreams,
     getScreenStream,
     getUserMediaStream,
-    combineStreams,
-    cleanupStreams,
+    recordingConfig,
     startTimer,
     stopTimer,
     toolState.actions,
@@ -298,10 +494,15 @@ export default function ScreenRecorder({
       mediaRecorderRef.current &&
       recordingState === RecordingState.RECORDING
     ) {
+      try {
+        mediaRecorderRef.current.requestData();
+      } catch {
+        // Safe no-op when the browser does not support flushing mid-recording.
+      }
       mediaRecorderRef.current.pause();
       setRecordingState(RecordingState.PAUSED);
       stopTimer();
-      toolState.actions.showMessage("Recording paused");
+      toolState.actions.showMessage("Recording paused.");
     }
   }, [recordingState, stopTimer, toolState.actions]);
 
@@ -310,7 +511,7 @@ export default function ScreenRecorder({
       mediaRecorderRef.current.resume();
       setRecordingState(RecordingState.RECORDING);
       startTimer();
-      toolState.actions.showMessage("Recording resumed");
+      toolState.actions.showMessage("Recording resumed.");
     }
   }, [recordingState, startTimer, toolState.actions]);
 
@@ -321,27 +522,31 @@ export default function ScreenRecorder({
         recordingState === RecordingState.PAUSED)
     ) {
       setRecordingState(RecordingState.STOPPING);
+      try {
+        mediaRecorderRef.current.requestData();
+      } catch {
+        // Ignore flush issues and continue stopping.
+      }
       mediaRecorderRef.current.stop();
     }
   }, [recordingState]);
 
   const downloadRecording = useCallback(() => {
     if (!recordedBlob) {
-      toolState.actions.showMessage("No recording to download");
+      toolState.actions.showMessage("No recording is ready to download yet.");
       return;
     }
 
-    const url = URL.createObjectURL(recordedBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `screen-recording-${Date.now()}.webm`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const extension = getDownloadExtensionFromMimeType(
+      recordingMimeType || recordedBlob.type,
+    );
 
-    toolState.actions.showMessage("Recording downloaded successfully!");
-  }, [recordedBlob, toolState.actions]);
+    downloadBlob(
+      recordedBlob,
+      `screen-recording-${Date.now()}.${extension}`,
+      "Recording downloaded successfully!",
+    );
+  }, [downloadBlob, recordedBlob, recordingMimeType, toolState.actions]);
 
   const resetRecording = useCallback(() => {
     cleanupStreams();
@@ -350,17 +555,20 @@ export default function ScreenRecorder({
     setRecordedBlob(null);
     setRecordingTime(0);
     setError("");
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current = null;
-    }
+    mediaRecorderRef.current = null;
   }, [cleanupStreams, stopTimer]);
 
-  // Check browser support
+  useEffect(() => {
+    return () => {
+      cleanupStreams();
+      stopTimer();
+    };
+  }, [cleanupStreams, stopTimer]);
+
   const isSupported = useMemo(() => {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
   }, []);
 
-  // Button configuration
   const buttons = useMemo(() => {
     const commonButtons = createCommonButtons({});
 
@@ -390,6 +598,7 @@ export default function ScreenRecorder({
           text: "Stop",
           onClick: stopRecording,
           icon: <StopIcon />,
+          color: "error" as const,
         },
         ...commonButtons,
       ];
@@ -408,6 +617,7 @@ export default function ScreenRecorder({
           text: "Stop",
           onClick: stopRecording,
           icon: <StopIcon />,
+          color: "error" as const,
         },
         ...commonButtons,
       ];
@@ -451,17 +661,9 @@ export default function ScreenRecorder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Screen Recorder"
-        description="Record your screen, camera, and audio online. Capture presentations, tutorials, or demonstrations with high-quality video recording."
-        exampleCode="Configure recording settings → Start recording → Download video file"
-        exampleOutput="High-quality WebM video files with screen capture and audio"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="w-full space-y-6">
-        {/* Saved Recordings List */}
         {savedRecordings.length > 0 && (
           <Card>
             <CardContent>
@@ -472,9 +674,10 @@ export default function ScreenRecorder({
                 {savedRecordings.map((rec) => (
                   <div
                     key={rec.key}
-                    className="flex items-center gap-2 p-2 bg-gray-50 rounded"
+                    className="flex flex-wrap items-center gap-2 rounded bg-gray-50 p-2"
                   >
-                    <span className="flex-1 truncate">{rec.key}</span>
+                    <RecordingThumbnail blob={rec.blob} />
+                    <span className="flex-1 truncate text-sm">{rec.key}</span>
                     <Button
                       size="small"
                       variant="outlined"
@@ -496,40 +699,47 @@ export default function ScreenRecorder({
             </CardContent>
           </Card>
         )}
-        {/* Browser Support Check */}
+
         {!isSupported && (
           <Alert severity="error">
             Your browser doesn&apos;t support screen recording. Please use a
-            modern browser like Chrome, Firefox, or Edge.
+            modern browser like Chrome, Edge, Firefox, or Safari 14.1+.
           </Alert>
         )}
 
-        {/* Error Display */}
+        <Alert severity="info">
+          Privacy-first recording: screen, camera, and audio are composited and
+          exported entirely in your browser using native Canvas and Web Audio
+          APIs. Nothing is uploaded to a server.
+        </Alert>
+
         {error && (
           <Alert severity="error" onClose={() => setError("")}>
             {error}
           </Alert>
         )}
 
-        {/* Recording Configuration */}
         <Card>
           <CardContent>
             <Typography variant="h6" className="mb-4 flex items-center gap-2">
               Recording Configuration
             </Typography>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={recordingConfig.includeScreen}
-                    onChange={(e) =>
+                    onChange={(event) =>
                       setRecordingConfig((prev) => ({
                         ...prev,
-                        includeScreen: e.target.checked,
+                        includeScreen: event.target.checked,
                       }))
                     }
-                    disabled={recordingState !== RecordingState.IDLE}
+                    disabled={
+                      recordingState !== RecordingState.IDLE ||
+                      recordingConfig.audioOnly
+                    }
                     icon={<ScreenShareIcon />}
                     checkedIcon={<ScreenShareIcon />}
                   />
@@ -541,28 +751,31 @@ export default function ScreenRecorder({
                 control={
                   <Checkbox
                     checked={recordingConfig.includeCamera}
-                    onChange={(e) =>
+                    onChange={(event) =>
                       setRecordingConfig((prev) => ({
                         ...prev,
-                        includeCamera: e.target.checked,
+                        includeCamera: event.target.checked,
                       }))
                     }
-                    disabled={recordingState !== RecordingState.IDLE}
+                    disabled={
+                      recordingState !== RecordingState.IDLE ||
+                      recordingConfig.audioOnly
+                    }
                     icon={<VideocamIcon />}
                     checkedIcon={<VideocamIcon />}
                   />
                 }
-                label="Camera"
+                label="Camera Picture-in-Picture"
               />
 
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={recordingConfig.includeMicrophone}
-                    onChange={(e) =>
+                    onChange={(event) =>
                       setRecordingConfig((prev) => ({
                         ...prev,
-                        includeMicrophone: e.target.checked,
+                        includeMicrophone: event.target.checked,
                       }))
                     }
                     disabled={recordingState !== RecordingState.IDLE}
@@ -577,10 +790,10 @@ export default function ScreenRecorder({
                 control={
                   <Checkbox
                     checked={recordingConfig.includeSystemAudio}
-                    onChange={(e) =>
+                    onChange={(event) =>
                       setRecordingConfig((prev) => ({
                         ...prev,
-                        includeSystemAudio: e.target.checked,
+                        includeSystemAudio: event.target.checked,
                       }))
                     }
                     disabled={recordingState !== RecordingState.IDLE}
@@ -590,11 +803,187 @@ export default function ScreenRecorder({
                 }
                 label="System Audio"
               />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={recordingConfig.audioOnly}
+                    onChange={(event) =>
+                      setRecordingConfig((prev) => ({
+                        ...prev,
+                        audioOnly: event.target.checked,
+                        includeScreen: event.target.checked
+                          ? false
+                          : prev.includeScreen,
+                        includeCamera: event.target.checked
+                          ? false
+                          : prev.includeCamera,
+                        includeMicrophone: event.target.checked
+                          ? true
+                          : prev.includeMicrophone,
+                      }))
+                    }
+                    disabled={recordingState !== RecordingState.IDLE}
+                    icon={<MicIcon />}
+                    checkedIcon={<MicIcon />}
+                  />
+                }
+                label="Audio-only Mode"
+              />
+
+              <SelectWithLabel
+                selectLabel="Quality Preset"
+                value={recordingConfig.quality}
+                onChange={(event) =>
+                  setRecordingConfig((prev) => ({
+                    ...prev,
+                    quality: event.target.value as RecordingQuality,
+                  }))
+                }
+                options={[
+                  { key: "720p", value: "720p", label: "720p — smaller file" },
+                  {
+                    key: "1080p",
+                    value: "1080p",
+                    label: "1080p — best balance",
+                  },
+                  {
+                    key: "1440p",
+                    value: "1440p",
+                    label: "1440p — maximum detail",
+                  },
+                ]}
+                className="md:max-w-sm"
+              />
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Chip label={`${recordingConfig.quality} preset`} size="small" />
+              {recordingConfig.audioOnly && (
+                <Chip label="Audio-only mode" size="small" color="secondary" />
+              )}
+              <Chip
+                label={`${supportedMimeInfo.extension.toUpperCase()} export`}
+                size="small"
+                color="primary"
+                variant="outlined"
+              />
+              {recordingConfig.includeCamera && (
+                <Chip label="Camera PiP overlay" size="small" />
+              )}
+              {(recordingConfig.includeSystemAudio ||
+                recordingConfig.includeMicrophone) && (
+                <Chip label="Mixed audio track" size="small" />
+              )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Recording Status */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" className="mb-4">
+              Live Preview & Output
+            </Typography>
+
+            <div className="relative aspect-video overflow-hidden rounded-xl bg-slate-950">
+              <video
+                ref={previewVideoRef}
+                src={
+                  recordingState === RecordingState.COMPLETED
+                    ? previewUrl
+                    : undefined
+                }
+                autoPlay={recordingState !== RecordingState.COMPLETED}
+                controls={recordingState === RecordingState.COMPLETED}
+                muted={recordingState !== RecordingState.COMPLETED}
+                playsInline
+                className="h-full w-full object-contain"
+              />
+
+              {recordingConfig.audioOnly && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-950/85 text-white">
+                  <div className="text-center">
+                    <MicIcon sx={{ fontSize: 40, mb: 1 }} />
+                    <Typography variant="h6">Audio-only mode</Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                      Recording microphone / system sound without screen video
+                    </Typography>
+                  </div>
+                </div>
+              )}
+
+              {recordingState === RecordingState.IDLE &&
+                !previewUrl &&
+                !recordingConfig.audioOnly && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center text-white/85">
+                    <Typography variant="h6">Ready to record</Typography>
+                    <Typography variant="body2">
+                      Start a capture to preview your screen, camera overlay,
+                      and final in-browser output before download.
+                    </Typography>
+                  </div>
+                )}
+
+              {(recordingState === RecordingState.RECORDING ||
+                recordingState === RecordingState.PAUSED) && (
+                <div className="absolute right-4 top-4 flex flex-col items-end gap-1">
+                  <div className="flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-white shadow-lg">
+                    <div className="h-3 w-3 rounded-full bg-white animate-pulse" />
+                    <Typography variant="body2" className="font-mono">
+                      {formatTime(recordingTime)}
+                    </Typography>
+                  </div>
+                  {liveBitrate && (
+                    <div className="rounded-full bg-gray-800/80 px-2 py-0.5 text-white text-xs font-mono">
+                      {liveBitrate}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {countdown !== null && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
+                  <Typography
+                    variant="h1"
+                    sx={{
+                      color: "white",
+                      fontWeight: "bold",
+                      fontSize: "6rem",
+                      userSelect: "none",
+                    }}
+                  >
+                    {countdown}
+                  </Typography>
+                </div>
+              )}
+            </div>
+
+            {recordingState === RecordingState.COMPLETED && recordedBlob && (
+              <div className="mt-4 rounded-lg bg-green-50 p-4">
+                <Typography
+                  variant="body2"
+                  component="div"
+                  className="text-green-800"
+                >
+                  ✅ Recording completed successfully with a single composed
+                  video track for smoother seeking and playback.
+                </Typography>
+                <Typography
+                  variant="caption"
+                  component="div"
+                  className="text-green-700"
+                >
+                  Size: {(recordedBlob.size / (1024 * 1024)).toFixed(2)} MB |
+                  Duration: {formatTime(recordingTime)} | Format:{" "}
+                  {getDownloadExtensionFromMimeType(
+                    recordingMimeType,
+                  ).toUpperCase()}
+                </Typography>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         <Card>
           <CardContent>
             <Typography variant="h6" className="mb-4">
@@ -602,8 +991,7 @@ export default function ScreenRecorder({
             </Typography>
 
             <div className="space-y-4">
-              {/* State Display */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <Typography variant="body1">
                   Status:{" "}
                   <span className="font-semibold capitalize">
@@ -613,17 +1001,26 @@ export default function ScreenRecorder({
 
                 {(recordingState === RecordingState.RECORDING ||
                   recordingState === RecordingState.PAUSED) && (
-                  <Typography variant="body1" className="font-mono text-lg">
-                    {formatTime(recordingTime)}
-                  </Typography>
+                  <div className="flex items-center gap-3">
+                    <Typography variant="body1" className="font-mono text-lg">
+                      {formatTime(recordingTime)}
+                    </Typography>
+                    {liveBitrate && (
+                      <Typography
+                        variant="caption"
+                        className="font-mono bg-gray-100 px-2 py-0.5 rounded"
+                      >
+                        {liveBitrate}
+                      </Typography>
+                    )}
+                  </div>
                 )}
               </div>
 
-              {/* Progress Indicators */}
               {recordingState === RecordingState.PREPARING && (
                 <Box>
                   <Typography variant="body2" className="mb-2">
-                    Preparing recording streams...
+                    Preparing your native browser recording pipeline...
                   </Typography>
                   <LinearProgress />
                 </Box>
@@ -632,7 +1029,7 @@ export default function ScreenRecorder({
               {recordingState === RecordingState.STOPPING && (
                 <Box>
                   <Typography variant="body2" className="mb-2">
-                    Processing recording...
+                    Finalizing recording and writing the download file...
                   </Typography>
                   <LinearProgress />
                 </Box>
@@ -649,56 +1046,38 @@ export default function ScreenRecorder({
 
               {recordingState === RecordingState.PAUSED && (
                 <Typography variant="body2" className="text-orange-600">
-                  ⏸️ Recording paused
+                  ⏸️ Recording paused — resume whenever you&apos;re ready.
                 </Typography>
-              )}
-
-              {recordingState === RecordingState.COMPLETED && recordedBlob && (
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <Typography
-                    variant="body2"
-                    component="div"
-                    className="text-green-800"
-                  >
-                    ✅ Recording completed successfully!
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    component="div"
-                    className="text-green-600"
-                  >
-                    Size: {(recordedBlob.size / (1024 * 1024)).toFixed(2)} MB |
-                    Duration: {formatTime(recordingTime)}
-                  </Typography>
-                </div>
               )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Instructions */}
         <Card>
           <CardContent>
             <Typography variant="h6" className="mb-2">
               How to Use
             </Typography>
-            <div className="text-gray-600 space-y-2">
+            <div className="space-y-2 text-gray-600">
               <Typography variant="body2" component="div">
-                1. Configure your recording settings above
+                1. Choose whether to capture your screen, camera, microphone,
+                and/or system audio.
               </Typography>
               <Typography variant="body2" component="div">
-                2. Click &quot;Start Recording&quot; and grant necessary
-                permissions
+                2. Pick a quality preset based on whether you want smaller files
+                or maximum detail.
               </Typography>
               <Typography variant="body2" component="div">
-                3. Select the screen/window to capture when prompted
+                3. Click &quot;Start Recording&quot; and grant the browser
+                permissions when prompted.
               </Typography>
               <Typography variant="body2" component="div">
-                4. Use pause/resume controls as needed
+                4. Pause and resume as needed — the timer now keeps the true
+                elapsed duration.
               </Typography>
               <Typography variant="body2" component="div">
-                5. Click &quot;Stop&quot; when finished and download your
-                recording
+                5. Stop the recording, preview the result, and download the
+                finished file locally.
               </Typography>
             </div>
           </CardContent>

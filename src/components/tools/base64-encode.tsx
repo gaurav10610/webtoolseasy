@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { Typography } from "@mui/material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import { FILE_SIZE_PRESETS } from "../../util/fileValidation";
@@ -38,7 +38,7 @@ export default function Base64Encode({
         toolState.actions.showMessage("Error reading file");
       };
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleError = useCallback(
@@ -46,7 +46,7 @@ export default function Base64Encode({
       setError(errorMessage);
       toolState.actions.showMessage(errorMessage);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const copyBase64Data = useCallback(() => {
@@ -56,13 +56,27 @@ export default function Base64Encode({
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Paste from Clipboard",
+        onClick: async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            setBase64Data(btoa(unescape(encodeURIComponent(text))));
+            toolState.actions.showMessage("Text pasted and encoded!");
+          } catch {
+            toolState.actions.showMessage("Clipboard read not allowed");
+          }
+        },
+        variant: "outlined" as const,
+      },
       ...createCommonButtons({
         onCopy: copyBase64Data,
         onShareLink: () => toolState.actions.copyShareableLink(base64Data),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyBase64Data, toolState, base64Data]
+    [copyBase64Data, toolState, base64Data],
   );
 
   return (
@@ -74,14 +88,7 @@ export default function Base64Encode({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Base64 Encoder"
-        description="Free online base64 encoder. Convert any file to base64 encoding with data URI format."
-        exampleCode="File Upload"
-        exampleOutput="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQ..."
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col w-full gap-6">
         {/* Error message */}

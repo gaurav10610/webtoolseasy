@@ -4,7 +4,7 @@ import { TextField, Typography } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { ButtonWithHandler } from "../lib/buttons";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -128,6 +128,20 @@ export default function UrlEncoderDecoder({
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Paste from Clipboard",
+        onClick: async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            toolState.setCode(text);
+            toolState.actions.showMessage("Pasted from clipboard!");
+          } catch {
+            toolState.actions.showMessage("Clipboard read not allowed");
+          }
+        },
+        variant: "outlined" as const,
+      },
       ...createCommonButtons({
         onCopy: copyOutput,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
@@ -161,14 +175,7 @@ export default function UrlEncoderDecoder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="URL Encoder Decoder"
-        description="Free online URL encoder and decoder. Encode and decode URLs, URI components, and query parameters instantly with support for all special characters."
-        exampleCode="https://example.com/search?q=hello world&user=test@email.com"
-        exampleOutput="https%3A//example.com/search%3Fq%3Dhello%20world%26user%3Dtest%40email.com"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="flex flex-col w-full gap-6">
         {/* Error message */}

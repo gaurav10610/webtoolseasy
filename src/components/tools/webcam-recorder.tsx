@@ -1,17 +1,32 @@
 "use client";
 
-import { set as idbSet, get as idbGet, keys as idbKeys } from "idb-keyval";
+import { idbSet, idbGet, idbDel, idbKeys } from "@/util/nativeIdb";
 
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
-import { Typography, Card, CardContent, Alert } from "@mui/material";
+import {
+  Typography,
+  Card,
+  CardContent,
+  Alert,
+  Chip,
+  IconButton,
+  Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import PauseIcon from "@mui/icons-material/Pause";
 import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import {
+  getDownloadExtensionFromMimeType,
+  getPreferredRecordingMimeInfo,
+} from "@/util/screenRecorderUtils";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SelectWithLabel } from "../lib/select";
 
@@ -28,6 +43,11 @@ interface DeviceInfo {
   label: string;
 }
 
+interface SavedRecording {
+  key: string;
+  blob: Blob;
+}
+
 export default function WebcamRecorder({
   hostname,
   queryParams,
@@ -38,14 +58,12 @@ export default function WebcamRecorder({
   });
 
   const [recordingState, setRecordingState] = useState<RecordingState>(
-    RecordingState.IDLE
+    RecordingState.IDLE,
   );
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  // Saved recordings tracked in IndexedDB - UI implementation pending
-  // const [savedRecordings, setSavedRecordings] = useState<
-  //   { key: string; blob: Blob }[]
-  // >([]);
+  const [recordingMimeType, setRecordingMimeType] = useState("");
+  const [savedRecordings, setSavedRecordings] = useState<SavedRecording[]>([]);
   const [error, setError] = useState<string>("");
   const [devices, setDevices] = useState<{
     videoDevices: DeviceInfo[];
@@ -57,6 +75,8 @@ export default function WebcamRecorder({
   const [selectedVideoDevice, setSelectedVideoDevice] = useState<string>("");
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>("");
   const [videoQuality, setVideoQuality] = useState<string>("720p");
+  const [videoFilter, setVideoFilter] = useState<string>("none");
+  const [mirrorVideo, setMirrorVideo] = useState<boolean>(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -68,44 +88,45 @@ export default function WebcamRecorder({
   useEffect(() => {
     (async () => {
       const allKeys = await idbKeys();
-      // Load recordings into IndexedDB for persistence
+      const recordings: SavedRecording[] = [];
+
       for (const key of allKeys) {
-        if (String(key).startsWith("webcam-recording-")) {
-          const blob = await idbGet(key);
-          if (blob instanceof Blob) {
-            // Recording exists in IndexedDB
-            console.log(`Loaded recording: ${key}`);
-          }
+        if (!key.startsWith("webcam-recording-")) continue;
+        const blob = await idbGet(key);
+        if (blob instanceof Blob) {
+          recordings.push({ key, blob });
         }
       }
+
+      recordings.sort((a, b) => b.key.localeCompare(a.key));
+      setSavedRecordings(recordings);
     })();
   }, []);
 
-  // Download a saved recording - UI implementation pending
-  // const downloadSavedRecording = useCallback(
-  //   (key: string, blob: Blob) => {
-  //     const url = URL.createObjectURL(blob);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = `${key}.webm`;
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //     URL.revokeObjectURL(url);
-  //     toolState.actions.showMessage("Recording downloaded successfully!");
-  //   },
-  //   [toolState.actions]
-  // );
+  const downloadSavedRecording = useCallback(
+    (key: string, blob: Blob) => {
+      const ext = getDownloadExtensionFromMimeType(blob.type);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = key.includes(".") ? key : `${key}.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toolState.actions.showMessage("Recording downloaded!");
+    },
+    [toolState.actions],
+  );
 
-  // Delete a saved recording - UI implementation pending
-  // const deleteSavedRecording = useCallback(
-  //   async (key: string) => {
-  //     await idbDel(key);
-  //     setSavedRecordings((prev) => prev.filter((rec) => rec.key !== key));
-  //     toolState.actions.showMessage("Recording deleted.");
-  //   },
-  //   [toolState.actions]
-  // );
+  const deleteSavedRecording = useCallback(
+    async (key: string) => {
+      await idbDel(key);
+      setSavedRecordings((prev) => prev.filter((r) => r.key !== key));
+      toolState.actions.showMessage("Recording deleted.");
+    },
+    [toolState.actions],
+  );
 
   // Get available devices
   useEffect(() => {
@@ -164,8 +185,15 @@ export default function WebcamRecorder({
   }, [videoQuality]);
 
   // Start timer
-  const startTimer = useCallback(() => {
-    setRecordingTime(0);
+  const startTimer = useCallback((reset = false) => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    if (reset) {
+      setRecordingTime(0);
+    }
+
     timerRef.current = setInterval(() => {
       setRecordingTime((prev) => prev + 1);
     }, 1000);
@@ -248,9 +276,13 @@ export default function WebcamRecorder({
         throw new Error("Failed to initialize media stream");
       }
 
+      const mimeInfo = getPreferredRecordingMimeInfo();
       const mediaRecorder = new MediaRecorder(mediaStreamRef.current, {
-        mimeType: "video/webm;codecs=vp9",
+        mimeType: mimeInfo.mimeType,
+        videoBitsPerSecond: videoQuality === "1080p" ? 8_000_000 : 4_000_000,
+        audioBitsPerSecond: 192_000,
       });
+      setRecordingMimeType(mimeInfo.mimeType);
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -258,16 +290,27 @@ export default function WebcamRecorder({
         }
       };
 
+      mediaRecorder.onpause = () => {
+        try {
+          mediaRecorder.requestData();
+        } catch {
+          // Ignore browsers that only flush on stop.
+        }
+      };
+
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: "video/webm" });
+        const finalMimeType = mediaRecorder.mimeType || mimeInfo.mimeType;
+        const blob = new Blob(chunksRef.current, { type: finalMimeType });
         setRecordedBlob(blob);
+        setRecordingMimeType(finalMimeType);
         setRecordingState(RecordingState.COMPLETED);
         cleanupStream();
         stopTimer();
         // Save to IndexedDB for persistence
-        const key = `webcam-recording-${Date.now()}`;
+        const extension = getDownloadExtensionFromMimeType(finalMimeType);
+        const key = `webcam-recording-${Date.now()}.${extension}`;
         await idbSet(key, blob);
-        console.log(`Saved recording to IndexedDB: ${key}`);
+        setSavedRecordings((prev) => [{ key, blob }, ...prev]);
         toolState.actions.showMessage("Recording completed and saved!");
       };
 
@@ -280,10 +323,10 @@ export default function WebcamRecorder({
       };
 
       mediaRecorderRef.current = mediaRecorder;
-      mediaRecorder.start(1000);
+      mediaRecorder.start();
 
       setRecordingState(RecordingState.RECORDING);
-      startTimer();
+      startTimer(true);
       toolState.actions.showMessage("Recording started!");
     } catch (err) {
       const errorMessage =
@@ -300,6 +343,11 @@ export default function WebcamRecorder({
       mediaRecorderRef.current &&
       recordingState === RecordingState.RECORDING
     ) {
+      try {
+        mediaRecorderRef.current.requestData();
+      } catch {
+        // Ignore requestData issues and continue pausing.
+      }
       mediaRecorderRef.current.pause();
       setRecordingState(RecordingState.PAUSED);
       stopTimer();
@@ -335,17 +383,20 @@ export default function WebcamRecorder({
       return;
     }
 
+    const extension = getDownloadExtensionFromMimeType(
+      recordingMimeType || recordedBlob.type,
+    );
     const url = URL.createObjectURL(recordedBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `webcam-recording-${Date.now()}.webm`;
+    link.download = `webcam-recording-${Date.now()}.${extension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
     toolState.actions.showMessage("Recording downloaded successfully!");
-  }, [recordedBlob, toolState.actions]);
+  }, [recordedBlob, recordingMimeType, toolState.actions]);
 
   // Reset recording
   const resetRecording = useCallback(() => {
@@ -505,14 +556,7 @@ export default function WebcamRecorder({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Webcam Recorder"
-        description="Record high-quality video and audio from your webcam. Perfect for creating video messages, vlogs, and video content."
-        exampleCode="Select camera → Start recording → Download video"
-        exampleOutput="High-quality WebM video files with webcam footage and audio"
-      />
-
-      <ToolControls buttons={buttons} />
+<ToolControls buttons={buttons} />
 
       <div className="space-y-6 mt-6">
         {/* Browser Support Check */}
@@ -570,6 +614,44 @@ export default function WebcamRecorder({
                   { key: "1080p", value: "1080p", label: "1080p (Full HD)" },
                 ]}
               />
+
+              <div>
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Camera Filter
+                </Typography>
+                <ToggleButtonGroup
+                  value={videoFilter}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v !== null) setVideoFilter(v);
+                  }}
+                  size="small"
+                  className="flex-wrap"
+                >
+                  <ToggleButton value="none">None</ToggleButton>
+                  <ToggleButton value="grayscale(1)">Grayscale</ToggleButton>
+                  <ToggleButton value="sepia(1)">Sepia</ToggleButton>
+                  <ToggleButton value="invert(1)">Invert</ToggleButton>
+                  <ToggleButton value="hue-rotate(180deg)">
+                    Hue Shift
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+
+              <div>
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Mirror
+                </Typography>
+                <ToggleButtonGroup
+                  value={mirrorVideo ? "mirror" : "none"}
+                  exclusive
+                  onChange={(_, v) => setMirrorVideo(v === "mirror")}
+                  size="small"
+                >
+                  <ToggleButton value="none">Normal</ToggleButton>
+                  <ToggleButton value="mirror">Mirror</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -587,6 +669,10 @@ export default function WebcamRecorder({
                 autoPlay
                 muted
                 playsInline
+                style={{
+                  filter: videoFilter !== "none" ? videoFilter : undefined,
+                  transform: mirrorVideo ? "scaleX(-1)" : undefined,
+                }}
                 className="w-full h-full object-contain"
               />
               {recordingState === RecordingState.IDLE && (
@@ -647,6 +733,51 @@ export default function WebcamRecorder({
             </div>
           </CardContent>
         </Card>
+
+        {/* Saved Recordings */}
+        {savedRecordings.length > 0 && (
+          <Card>
+            <CardContent>
+              <Typography variant="h6" className="mb-2">
+                Saved Recordings
+              </Typography>
+              <div className="space-y-2">
+                {savedRecordings.map((rec) => (
+                  <div
+                    key={rec.key}
+                    className="flex flex-wrap items-center gap-2 rounded bg-gray-50 dark:bg-gray-800 p-2"
+                  >
+                    <span className="flex-1 truncate text-sm">{rec.key}</span>
+                    <Chip
+                      label={`${(rec.blob.size / (1024 * 1024)).toFixed(1)} MB`}
+                      size="small"
+                      variant="outlined"
+                    />
+                    <Tooltip title="Download">
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          downloadSavedRecording(rec.key, rec.blob)
+                        }
+                      >
+                        <DownloadIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => deleteSavedRecording(rec.key)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </ToolLayout>
   );

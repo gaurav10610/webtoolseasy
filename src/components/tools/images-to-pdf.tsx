@@ -28,7 +28,7 @@ import {
   DragIndicator as DragIndicatorIcon,
 } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { PDFDocument } from "pdf-lib";
 import { FileUploadWithDragDrop } from "@/components/lib/fileUpload";
 import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
@@ -270,14 +270,7 @@ export default function ImagesToPDF({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Images to PDF"
-        description="Combine multiple images (JPG, PNG) into a single PDF document. Customize page size and layout."
-        exampleCode="Upload multiple images"
-        exampleOutput="Single PDF with all images"
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
         {/* File Upload */}
         {isEmpty(images) && (
           <FileUploadWithDragDrop

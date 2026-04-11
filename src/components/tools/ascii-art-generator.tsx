@@ -15,7 +15,7 @@ import {
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 
 type ASCIIFont = "standard" | "banner" | "block" | "slant" | "small";
@@ -267,14 +267,7 @@ export default function ASCIIArtGenerator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="ASCII Art Generator - Text to ASCII Art"
-        description="Convert text to ASCII art online. Create cool text art with multiple fonts. Free ASCII generator for banners, signatures, and code comments."
-        exampleCode="HELLO"
-        exampleOutput="ASCII art text"
-      />
-
-      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="space-y-6">
         {/* Input Section */}

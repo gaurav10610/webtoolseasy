@@ -18,7 +18,7 @@ import {
   Alert,
 } from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import {
   ToolControls,
   createCommonButtons,
@@ -56,6 +56,7 @@ const OUTPUT_FORMATS = [
   { value: "jpeg", label: "JPEG", extension: "jpg" },
   { value: "png", label: "PNG", extension: "png" },
   { value: "webp", label: "WebP", extension: "webp" },
+  { value: "avif", label: "AVIF", extension: "avif" },
   { value: "gif", label: "GIF", extension: "gif" },
   { value: "bmp", label: "BMP", extension: "bmp" },
   { value: "ico", label: "ICO", extension: "ico" },
@@ -88,7 +89,7 @@ export default function ImageFormatConverter({
 
   const selectedImage = useMemo(
     () => images.find((img) => img.id === selectedImageId),
-    [images, selectedImageId]
+    [images, selectedImageId],
   );
 
   const handleFileSelect = useCallback(
@@ -118,22 +119,22 @@ export default function ImageFormatConverter({
           setSelectedImageId(newImages[0].id);
         }
         toolState.actions.showMessage(
-          `${newImages.length} image(s) added successfully!`
+          `${newImages.length} image(s) added successfully!`,
         );
       } else {
         toolState.actions.showMessage(
-          "Please select valid image files (JPG, PNG, WebP, GIF, BMP, ICO)"
+          "Please select valid image files (JPG, PNG, WebP, GIF, BMP, ICO)",
         );
       }
     },
-    [outputFormat, quality, selectedImageId, toolState.actions]
+    [outputFormat, quality, selectedImageId, toolState.actions],
   );
 
   const handleError = useCallback(
     (error: string) => {
       toolState.actions.showMessage(error);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const convertToCanvas = useCallback(
@@ -159,7 +160,7 @@ export default function ImageFormatConverter({
         imgElement.src = URL.createObjectURL(file);
       });
     },
-    []
+    [],
   );
 
   const convertImage = useCallback(
@@ -171,8 +172,8 @@ export default function ImageFormatConverter({
         prev.map((img) =>
           img.id === imageId
             ? { ...img, isConverting: true, error: undefined }
-            : img
-        )
+            : img,
+        ),
       );
 
       try {
@@ -206,12 +207,14 @@ export default function ImageFormatConverter({
             targetFormat === "jpeg"
               ? "image/jpeg"
               : targetFormat === "png"
-              ? "image/png"
-              : targetFormat === "webp"
-              ? "image/webp"
-              : targetFormat === "bmp"
-              ? "image/bmp"
-              : "image/png";
+                ? "image/png"
+                : targetFormat === "webp"
+                  ? "image/webp"
+                  : targetFormat === "avif"
+                    ? "image/avif"
+                    : targetFormat === "bmp"
+                      ? "image/bmp"
+                      : "image/png";
 
           convertedBlob = await new Promise((resolve) => {
             canvas.toBlob((blob) => resolve(blob!), mimeType, targetQuality);
@@ -228,8 +231,8 @@ export default function ImageFormatConverter({
                   isConverting: false,
                   isConverted: true,
                 }
-              : img
-          )
+              : img,
+          ),
         );
 
         toolState.actions.showMessage("Image converted successfully!");
@@ -246,19 +249,19 @@ export default function ImageFormatConverter({
                   isConverting: false,
                   error: errorMessage,
                 }
-              : img
-          )
+              : img,
+          ),
         );
 
         handleError(`Failed to convert image: ${errorMessage}`);
       }
     },
-    [images, convertToCanvas, toolState.actions, handleError]
+    [images, convertToCanvas, toolState.actions, handleError],
   );
 
   const convertAllImages = useCallback(async () => {
     const unconvertedImages = images.filter(
-      (img) => !img.isConverted && !img.isConverting
+      (img) => !img.isConverted && !img.isConverting,
     );
 
     for (const image of unconvertedImages) {
@@ -287,7 +290,7 @@ export default function ImageFormatConverter({
 
       toolState.actions.showMessage("Image downloaded successfully!");
     },
-    [images, toolState.actions]
+    [images, toolState.actions],
   );
 
   const downloadAllImages = useCallback(() => {
@@ -305,11 +308,11 @@ export default function ImageFormatConverter({
       if (selectedImageId === imageId) {
         const remainingImages = images.filter((img) => img.id !== imageId);
         setSelectedImageId(
-          remainingImages.length > 0 ? remainingImages[0].id : ""
+          remainingImages.length > 0 ? remainingImages[0].id : "",
         );
       }
     },
-    [images, selectedImageId]
+    [images, selectedImageId],
   );
 
   const clearAllImages = useCallback(() => {
@@ -332,11 +335,11 @@ export default function ImageFormatConverter({
                 convertedSize: undefined,
                 error: undefined,
               }
-            : img
-        )
+            : img,
+        ),
       );
     },
-    []
+    [],
   );
 
   // Button configuration
@@ -585,7 +588,7 @@ export default function ImageFormatConverter({
                         updateImageSettings(
                           selectedImage.id,
                           newFormat,
-                          selectedImage.quality
+                          selectedImage.quality,
                         );
                       }}
                     >
@@ -609,7 +612,7 @@ export default function ImageFormatConverter({
                         updateImageSettings(
                           selectedImage.id,
                           selectedImage.outputFormat,
-                          newQuality
+                          newQuality,
                         );
                       }}
                       min={10}
@@ -656,8 +659,8 @@ export default function ImageFormatConverter({
                             ? button.color === "primary"
                               ? "#1976d2"
                               : button.color === "error"
-                              ? "#d32f2f"
-                              : "#1976d2"
+                                ? "#d32f2f"
+                                : "#1976d2"
                             : "transparent",
                         border:
                           button.variant === "outlined"
@@ -690,10 +693,6 @@ export default function ImageFormatConverter({
       )}
 
       {/* SEO Content */}
-      <SEOContent
-        title="Image Format Converter"
-        description="Convert images between different formats including JPG, PNG, WebP, GIF, BMP, and ICO. Free online tool for batch image conversion with quality adjustment."
-      />
-    </ToolLayout>
+</ToolLayout>
   );
 }

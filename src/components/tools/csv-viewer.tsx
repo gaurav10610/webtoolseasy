@@ -19,7 +19,6 @@ import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { CsvDataTable, AlertMessage } from "../lib/tables";
 import { CoreFileStreamer } from "@/lib/CoreFileStreamer";
-import { SEOContent } from "../common/ToolLayout";
 import {
   Select,
   MenuItem,
@@ -320,14 +319,7 @@ Sarah Wilson,28,Toronto,Canada`;
         isFullScreen ? "fixed inset-0 z-50 bg-white h-full p-4" : "relative"
       }`}
     >
-      <SEOContent
-        title="CSV Viewer and Parser"
-        description="Free online CSV viewer and parser. Upload CSV files, view data in table format, and parse CSV content with different separators. Supports large files with streaming technology."
-        exampleCode={initialValue}
-        exampleOutput="Parsed CSV table with Name, Age, City, Country columns showing formatted data"
-      />
-
-      <div className="flex justify-between items-center flex-wrap gap-2 min-w-0">
+<div className="flex justify-between items-center flex-wrap gap-2 min-w-0">
         <Typography variant="h4" component="h1" className="truncate">
           CSV Viewer
         </Typography>

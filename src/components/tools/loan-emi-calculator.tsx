@@ -17,10 +17,10 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import { ToolLayout, SEOContent } from "../common/ToolLayout";
+import { ToolLayout } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
 
@@ -100,25 +100,74 @@ export default function LoanEmiCalculator({
     };
   }, [loanAmount, interestRate, tenureYears]);
 
+  const chartRef = useRef<HTMLCanvasElement>(null);
+
+  // Draw donut chart when results change
+  useEffect(() => {
+    const canvas = chartRef.current;
+    if (!canvas || calculateEMI.totalAmount <= 0) return;
+    const ctx = canvas.getContext("2d")!;
+    const { width: W, height: H } = canvas;
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2;
+    const cy = H / 2;
+    const radius = Math.min(cx, cy) - 8;
+    const inner = radius * 0.58;
+    const total = calculateEMI.totalAmount;
+    const principalFrac = loanAmount / total;
+    const start = -Math.PI / 2;
+    const mid = start + principalFrac * 2 * Math.PI;
+
+    // Principal slice
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, mid);
+    ctx.closePath();
+    ctx.fillStyle = "#2563eb";
+    ctx.fill();
+
+    // Interest slice
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, mid, start + 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = "#ef4444";
+    ctx.fill();
+
+    // Donut hole
+    ctx.beginPath();
+    ctx.arc(cx, cy, inner, 0, 2 * Math.PI);
+    ctx.fillStyle = "#f9fafb";
+    ctx.fill();
+
+    // Center text
+    ctx.fillStyle = "#374151";
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(`${(principalFrac * 100).toFixed(0)}% P`, cx, cy - 7);
+    ctx.fillText(`${((1 - principalFrac) * 100).toFixed(0)}% I`, cx, cy + 9);
+  }, [calculateEMI, loanAmount]);
+
   const handleLoanAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setLoanAmount(Number(event.target.value));
     },
-    []
+    [],
   );
 
   const handleInterestRateChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setInterestRate(Number(event.target.value));
     },
-    []
+    [],
   );
 
   const handleTenureChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setTenureYears(Number(event.target.value));
     },
-    []
+    [],
   );
 
   const formatCurrency = (amount: number) => {
@@ -138,14 +187,7 @@ export default function LoanEmiCalculator({
         onClose: toolState.snackBar.close,
       }}
     >
-      <SEOContent
-        title="Loan EMI Calculator"
-        description="Calculate monthly loan payments (EMI) with detailed amortization schedule. Perfect for home loans, car loans, and personal loans."
-        exampleCode="Loan: $500,000, Rate: 8.5%, Tenure: 20 years"
-        exampleOutput={`EMI: ${formatCurrency(calculateEMI.emi)}/month`}
-      />
-
-      <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
+<div className="flex flex-col gap-6 w-full max-w-6xl mx-auto">
         {/* Input Section */}
         <Card className="border border-gray-200">
           <CardContent>
@@ -255,6 +297,81 @@ export default function LoanEmiCalculator({
             </Card>
           </Grid>
         </Grid>
+
+        {/* Visual Breakdown Chart */}
+        {calculateEMI.totalAmount > 0 && (
+          <Card className="border border-gray-200">
+            <CardContent>
+              <Typography variant="h6" className="mb-3 text-gray-800">
+                Principal vs Interest Breakdown
+              </Typography>
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <canvas
+                  ref={chartRef}
+                  width={180}
+                  height={180}
+                  style={{ flexShrink: 0 }}
+                />
+                <div className="space-y-3 flex-1">
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-blue-600 shrink-0" />
+                    <div className="flex-1">
+                      <Typography variant="body2" className="font-medium">
+                        Principal
+                      </Typography>
+                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
+                          style={{
+                            width: `${((loanAmount / calculateEMI.totalAmount) * 100).toFixed(1)}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <Typography
+                      variant="body2"
+                      className="font-mono text-blue-600 whitespace-nowrap"
+                    >
+                      {formatCurrency(loanAmount)} (
+                      {((loanAmount / calculateEMI.totalAmount) * 100).toFixed(
+                        0,
+                      )}
+                      %)
+                    </Typography>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-red-500 shrink-0" />
+                    <div className="flex-1">
+                      <Typography variant="body2" className="font-medium">
+                        Total Interest
+                      </Typography>
+                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div
+                          className="bg-red-500 h-2 rounded-full"
+                          style={{
+                            width: `${((calculateEMI.totalInterest / calculateEMI.totalAmount) * 100).toFixed(1)}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <Typography
+                      variant="body2"
+                      className="font-mono text-red-600 whitespace-nowrap"
+                    >
+                      {formatCurrency(calculateEMI.totalInterest)} (
+                      {(
+                        (calculateEMI.totalInterest /
+                          calculateEMI.totalAmount) *
+                        100
+                      ).toFixed(0)}
+                      %)
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Summary Breakdown */}
         <Card className="border border-gray-200">
