@@ -111,12 +111,14 @@ function AppDiscoveryFilters({
             size="small"
             fullWidth
             defaultValue={searchQuery || ""}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon color="action" />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+              },
             }}
             className="mb-3"
           />

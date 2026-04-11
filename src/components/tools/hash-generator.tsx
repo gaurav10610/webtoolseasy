@@ -25,7 +25,6 @@ async function shaDigest(algorithm: "SHA-1" | "SHA-256", text: string) {
 
 async function md5Digest(text: string) {
   // crypto-js is present in package-lock; import dynamically
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const mod = await import("crypto-js");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CryptoJS = (mod.default || mod) as any;
@@ -96,7 +95,7 @@ export default function HashGenerator({
         try {
           sessionStorage.setItem(
             "__hash_results",
-            JSON.stringify({ md5, sha1, sha256 })
+            JSON.stringify({ md5, sha1, sha256 }),
           );
         } catch {}
       } catch {}
@@ -109,7 +108,7 @@ export default function HashGenerator({
     (text: string, message?: string) => {
       toolState.actions.copyText(text, message || "Copied to clipboard");
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const copyAll = useCallback(() => {

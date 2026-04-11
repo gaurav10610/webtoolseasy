@@ -50,7 +50,7 @@ export default function DiscountCalculator({
 
     if (isNaN(discount) || discount < 0 || discount > 100) {
       toolState.actions.showMessage(
-        "Please enter a valid discount percentage (0-100)!"
+        "Please enter a valid discount percentage (0-100)!",
       );
       return;
     }
@@ -114,10 +114,12 @@ export default function DiscountCalculator({
                 type="number"
                 value={originalPrice}
                 onChange={(e) => setOriginalPrice(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">$</InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">$</InputAdornment>
+                    ),
+                  },
                 }}
                 inputProps={{ min: 0, step: 0.01 }}
                 variant="outlined"
@@ -130,10 +132,12 @@ export default function DiscountCalculator({
                 type="number"
                 value={discountPercentage}
                 onChange={(e) => setDiscountPercentage(e.target.value)}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">%</InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                  },
                 }}
                 inputProps={{ min: 0, max: 100, step: 0.01 }}
                 variant="outlined"

@@ -28,16 +28,27 @@ test.describe("Web Tools Sanity Tests", () => {
       const headingText = await h1.textContent();
 
       // Verify page title exists and is not empty
+      await expect(page, `${toolName} should have a page title`).toHaveTitle(
+        /\S+/,
+        {
+          timeout: 10000,
+        },
+      );
       const title = await page.title();
-      expect(title.length, `${toolName} should have a page title`).toBeGreaterThan(0);
 
       // Verify main content area exists (not a 404 page)
       const mainContent = page.locator("main");
-      await expect(mainContent, `${toolName} should have main content`).toBeVisible();
+      await expect(
+        mainContent,
+        `${toolName} should have main content`,
+      ).toBeVisible();
 
       // Verify no Next.js default 404 page
       const nextJs404 = page.locator('text="This page could not be found"');
-      await expect(nextJs404, `${toolName} should not show 404 page`).not.toBeVisible();
+      await expect(
+        nextJs404,
+        `${toolName} should not show 404 page`,
+      ).not.toBeVisible();
 
       console.log(`✓ ${toolName}: "${title}" - ${headingText?.trim()}`);
     });

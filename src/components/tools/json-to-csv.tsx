@@ -67,7 +67,7 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
         ) {
           Object.assign(
             flattened,
-            flattenObject(value as Record<string, unknown>, newKey)
+            flattenObject(value as Record<string, unknown>, newKey),
           );
         } else if (Array.isArray(value)) {
           flattened[newKey] = value.join(", ");
@@ -79,7 +79,7 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
 
       return flattened;
     },
-    []
+    [],
   );
 
   const escapeCSVValue = useCallback((value: string, delim: string): string => {
@@ -101,11 +101,11 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
       }
 
       const flattenedData = jsonData.map((item) =>
-        flattenObject(item as Record<string, unknown>)
+        flattenObject(item as Record<string, unknown>),
       );
 
       const allKeys = Array.from(
-        new Set(flattenedData.flatMap((item) => Object.keys(item)))
+        new Set(flattenedData.flatMap((item) => Object.keys(item))),
       );
 
       const headerRow = allKeys
@@ -123,7 +123,7 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
 
       return [headerRow, ...dataRows].join("\n");
     },
-    [flattenObject, escapeCSVValue]
+    [flattenObject, escapeCSVValue],
   );
 
   const handleConvert = useCallback(() => {
@@ -150,7 +150,7 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
       setError(
         err instanceof Error
           ? `Invalid JSON: ${err.message}`
-          : "Failed to parse JSON"
+          : "Failed to parse JSON",
       );
       setCsvOutput("");
     }
@@ -303,8 +303,10 @@ export default function JsonToCsvConverter({}: Readonly<ToolComponentProps>) {
               minRows={12}
               value={csvOutput}
               variant="outlined"
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               sx={{
                 "& .MuiInputBase-root": {

@@ -103,13 +103,13 @@ export default function JsonViewer({
             const currentPath = path ? `${path}.${key}` : key;
             const children = parseJsonToTree(value, key, currentPath);
             nodes.push(...children);
-          }
+          },
         );
       }
 
       return nodes;
     },
-    []
+    [],
   );
 
   const validateAndParseJson = useCallback(() => {
@@ -125,9 +125,9 @@ export default function JsonViewer({
           .filter(
             (node) =>
               (!node.path.includes(".") && !node.path.includes("[")) ||
-              (node.path.match(/\./g) || []).length === 0
+              (node.path.match(/\./g) || []).length === 0,
           )
-          .map((node) => node.path)
+          .map((node) => node.path),
       );
       setExpandedNodes(firstLevelPaths);
 
@@ -150,7 +150,7 @@ export default function JsonViewer({
         node.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
         node.path.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (typeof node.value === "string" &&
-          node.value.toLowerCase().includes(searchTerm.toLowerCase()))
+          node.value.toLowerCase().includes(searchTerm.toLowerCase())),
     );
   }, [jsonTree, searchTerm]);
 
@@ -176,7 +176,7 @@ export default function JsonViewer({
       const parsed = JSON.parse(toolState.code);
 
       const countItems = (
-        obj: unknown
+        obj: unknown,
       ): {
         objects: number;
         arrays: number;
@@ -223,8 +223,8 @@ export default function JsonViewer({
         ...jsonTree.map(
           (node) =>
             (node.path.match(/\./g) || []).length +
-            (node.path.match(/\[/g) || []).length
-        )
+            (node.path.match(/\[/g) || []).length,
+        ),
       );
 
       return {
@@ -308,13 +308,13 @@ export default function JsonViewer({
         onCopy: () =>
           toolState.actions.copyText(
             toolState.code,
-            "JSON copied to clipboard!"
+            "JSON copied to clipboard!",
           ),
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [validateAndParseJson, toolState]
+    [validateAndParseJson, toolState],
   );
 
   // Parse initial JSON on mount
@@ -332,9 +332,9 @@ export default function JsonViewer({
             .filter(
               (node) =>
                 (!node.path.includes(".") && !node.path.includes("[")) ||
-                (node.path.match(/\./g) || []).length === 0
+                (node.path.match(/\./g) || []).length === 0,
             )
-            .map((node) => node.path)
+            .map((node) => node.path),
         );
         setExpandedNodes(firstLevelPaths);
       }
@@ -389,8 +389,10 @@ export default function JsonViewer({
             placeholder="Search in JSON..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: <SearchIcon className="mr-2 text-gray-400" />,
+            slotProps={{
+              input: {
+                startAdornment: <SearchIcon className="mr-2 text-gray-400" />,
+              },
             }}
             className="mb-3 w-full"
           />

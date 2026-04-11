@@ -289,7 +289,7 @@ export default function UnitConverter({
       setFromUnit(units[0]);
       setToUnit(units[1] || units[0]);
     },
-    []
+    [],
   );
 
   const handleSwapUnits = useCallback(() => {
@@ -406,8 +406,10 @@ export default function UnitConverter({
                       fullWidth
                       value={convertedValue}
                       variant="outlined"
-                      InputProps={{
-                        readOnly: true,
+                      slotProps={{
+                        input: {
+                          readOnly: true,
+                        },
                       }}
                       sx={{
                         "& .MuiInputBase-input": {

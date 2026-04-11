@@ -17,7 +17,7 @@ let jsYamlDump: JsYamlDumpFn = () => {
   throw new Error("js-yaml not available");
 };
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mod = require("js-yaml");
   if (mod) {
     jsYamlLoad = mod.load as JsYamlLoadFn;
@@ -78,7 +78,7 @@ export default function YamlFormatter({
   const copyFormatted = useCallback(() => {
     toolState.actions.copyText(
       formattedCode,
-      "Formatted YAML copied to clipboard!"
+      "Formatted YAML copied to clipboard!",
     );
   }, [formattedCode, toolState.actions]);
 
@@ -112,7 +112,7 @@ export default function YamlFormatter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [formatYaml, validateYaml, copyFormatted, toolState]
+    [formatYaml, validateYaml, copyFormatted, toolState],
   );
 
   return (

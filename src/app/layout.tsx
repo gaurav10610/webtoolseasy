@@ -1,8 +1,8 @@
 import "./globals.css";
 import { robotoFont } from "@/design";
 import { theme } from "@/theme";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { ThemeProvider } from "@mui/material/styles";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";

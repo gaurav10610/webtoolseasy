@@ -69,14 +69,14 @@ export default function PdfToImages({
         setConvertedImages([]);
       }
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const handleError = useCallback(
     (error: string) => {
       toolState.actions.showMessage(error);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const onDocumentLoadSuccess = useCallback(
@@ -84,7 +84,7 @@ export default function PdfToImages({
       setNumPages(numPages);
       toolState.actions.showMessage(`PDF loaded: ${numPages} pages`);
     },
-    [toolState.actions]
+    [toolState.actions],
   );
 
   const parsePageNumbers = useCallback(
@@ -110,7 +110,7 @@ export default function PdfToImages({
 
       return Array.from(pages).sort((a, b) => a - b);
     },
-    []
+    [],
   );
 
   const getPageNumbers = useCallback((): number[] => {
@@ -141,8 +141,9 @@ export default function PdfToImages({
 
         // Render page to canvas
         await page.render({
+          canvas,
           canvasContext: context,
-          viewport: viewport,
+          viewport,
         }).promise;
 
         // Convert canvas to blob
@@ -159,7 +160,7 @@ export default function PdfToImages({
               }
             },
             `image/${format}`,
-            quality
+            quality,
           );
         });
       } catch (error) {
@@ -167,7 +168,7 @@ export default function PdfToImages({
         return null;
       }
     },
-    [pdfFile, format, quality, scale]
+    [pdfFile, format, quality, scale],
   );
 
   const handleConvert = useCallback(async () => {
@@ -199,7 +200,7 @@ export default function PdfToImages({
       toolState.actions.showMessage(
         `Successfully converted ${
           images.length
-        } pages to ${format.toUpperCase()}`
+        } pages to ${format.toUpperCase()}`,
       );
     } catch (error) {
       console.error("Conversion error:", error);
@@ -218,7 +219,7 @@ export default function PdfToImages({
       link.click();
       document.body.removeChild(link);
     },
-    [format]
+    [format],
   );
 
   const handleDownloadAll = useCallback(() => {
@@ -226,7 +227,7 @@ export default function PdfToImages({
       setTimeout(() => handleDownloadImage(image), 100 * image.pageNumber);
     });
     toolState.actions.showMessage(
-      `Downloading ${convertedImages.length} images...`
+      `Downloading ${convertedImages.length} images...`,
     );
   }, [convertedImages, handleDownloadImage, toolState.actions]);
 

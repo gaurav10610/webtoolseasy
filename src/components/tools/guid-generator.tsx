@@ -43,7 +43,7 @@ export default function GuidGenerator({
     const allGuids = guidList.join("\n");
     toolState.actions.copyText(
       allGuids,
-      `${guidList.length} GUIDs copied to clipboard!`
+      `${guidList.length} GUIDs copied to clipboard!`,
     );
   }, [guidList, toolState]);
 
@@ -68,7 +68,7 @@ export default function GuidGenerator({
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toolState.actions.showMessage(
-      `${guidList.length} GUIDs downloaded successfully!`
+      `${guidList.length} GUIDs downloaded successfully!`,
     );
   }, [guidList, toolState.actions]);
 
@@ -97,8 +97,10 @@ export default function GuidGenerator({
             <TextField
               fullWidth
               value={toolState.code}
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               variant="outlined"
               className="font-mono"
@@ -128,7 +130,7 @@ export default function GuidGenerator({
                 value={bulkCount}
                 onChange={(e) =>
                   setBulkCount(
-                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1))
+                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)),
                   )
                 }
                 size="small"

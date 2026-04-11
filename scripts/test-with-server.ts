@@ -30,7 +30,7 @@ async function checkServerHealth(): Promise<boolean> {
 
 async function waitForServer(): Promise<boolean> {
   const startTime = Date.now();
-  console.log("⏳ Waiting for dev server to be ready...");
+  console.log("⏳ Waiting for app server to be ready...");
 
   while (Date.now() - startTime < MAX_WAIT_TIME) {
     if (await checkServerHealth()) {
@@ -42,25 +42,42 @@ async function waitForServer(): Promise<boolean> {
     process.stdout.write(".");
   }
 
-  console.log("\n✗ Timeout waiting for dev server");
+  console.log("\n✗ Timeout waiting for app server");
   return false;
 }
 
 async function startDevServer(): Promise<void> {
   return new Promise((resolve, reject) => {
-    console.log("🚀 Starting dev server...");
-
-    devServerProcess = spawn("npm", ["run", "dev"], {
-      stdio: ["ignore", "pipe", "pipe"],
-      shell: true,
+    console.log("🏗️ Building app for E2E tests...");
+    execSync("npm run build", {
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        PORT: String(PORT),
+      },
     });
+
+    console.log(`🚀 Starting app server on http://${HOST}:${PORT} ...`);
+
+    devServerProcess = spawn(
+      "npm",
+      ["run", "start", "--", "--port", String(PORT)],
+      {
+        stdio: ["ignore", "pipe", "pipe"],
+        shell: true,
+        env: {
+          ...process.env,
+          PORT: String(PORT),
+        },
+      },
+    );
 
     devServerProcess.stdout?.on("data", (data: Buffer) => {
       const output = data.toString();
       process.stdout.write(output);
 
-      if (output.includes("Ready in")) {
-        console.log("✓ Dev server started");
+      if (output.includes("Ready in") || output.includes("Ready on")) {
+        console.log("✓ App server started");
         resolve();
       }
     });
@@ -77,7 +94,7 @@ async function startDevServer(): Promise<void> {
     devServerProcess.on("exit", (code: number | null) => {
       if (code !== 0 && !isServerReady) {
         console.error(`✗ Dev server exited with code ${code}`);
-        reject(new Error(`Dev server exited with code ${code}`));
+        reject(new Error(`App server exited with code ${code}`));
       }
     });
 
@@ -96,6 +113,11 @@ async function runTests(): Promise<number> {
     const testProcess = spawn("npx", ["playwright", "test"], {
       stdio: "inherit",
       shell: true,
+      env: {
+        ...process.env,
+        PORT: String(PORT),
+        BASE_URL: `http://${HOST}:${PORT}`,
+      },
     });
 
     testProcess.on("exit", (code: number | null) => {
@@ -107,11 +129,11 @@ async function runTests(): Promise<number> {
 async function stopDevServer(): Promise<void> {
   if (!devServerProcess) return;
 
-  console.log("\n🛑 Stopping dev server...");
+  console.log("\n🛑 Stopping app server...");
 
   return new Promise((resolve) => {
     devServerProcess?.on("exit", () => {
-      console.log("✓ Dev server stopped");
+      console.log("✓ App server stopped");
       resolve();
     });
 
@@ -133,7 +155,7 @@ async function cleanup(): Promise<void> {
     const pid = execSync(`lsof -ti:${PORT}`).toString().trim();
     if (pid) {
       execSync(`kill -9 ${pid}`);
-      console.log("✓ Cleaned up port 3000");
+      console.log(`✓ Cleaned up port ${PORT}`);
     }
   } catch {
     // Port already free
@@ -148,7 +170,7 @@ async function main(): Promise<void> {
     const serverReady = await waitForServer();
 
     if (!serverReady) {
-      console.error("✗ Dev server failed to become ready");
+      console.error("✗ App server failed to become ready");
       exitCode = 1;
     } else {
       exitCode = await runTests();

@@ -54,7 +54,7 @@ export default function UuidV7Generator({
     const allUuids = uuidList.join("\n");
     toolState.actions.copyText(
       allUuids,
-      `${uuidList.length} UUIDs copied to clipboard!`
+      `${uuidList.length} UUIDs copied to clipboard!`,
     );
   }, [uuidList, toolState]);
 
@@ -78,7 +78,7 @@ export default function UuidV7Generator({
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toolState.actions.showMessage(
-      `${uuidList.length} UUIDs downloaded successfully!`
+      `${uuidList.length} UUIDs downloaded successfully!`,
     );
   }, [uuidList, toolState.actions]);
 
@@ -109,8 +109,10 @@ export default function UuidV7Generator({
             <TextField
               fullWidth
               value={toolState.code}
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               variant="outlined"
               className="font-mono"
@@ -154,7 +156,7 @@ export default function UuidV7Generator({
                 value={bulkCount}
                 onChange={(e) =>
                   setBulkCount(
-                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1))
+                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)),
                   )
                 }
                 size="small"

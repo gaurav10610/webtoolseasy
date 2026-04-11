@@ -119,7 +119,7 @@ export default function ParaphrasingTool({
       // Formal mode: prefer later synonyms (usually more formal)
       index = Math.min(
         Math.floor((wordSynonyms.length * 2) / 3),
-        wordSynonyms.length - 1
+        wordSynonyms.length - 1,
       );
     } else {
       // Standard/Fluency: first synonym (most common)
@@ -181,7 +181,7 @@ export default function ParaphrasingTool({
               return ""; // Remove from start, will add later
             }
             return match;
-          }
+          },
         );
       }
 
@@ -341,8 +341,10 @@ export default function ParaphrasingTool({
               rows={10}
               value={paraphrasedText}
               variant="outlined"
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               sx={{
                 "& .MuiInputBase-root": {

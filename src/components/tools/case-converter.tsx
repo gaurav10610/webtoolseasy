@@ -122,7 +122,7 @@ export default function CaseConverter({
       convertToSentenceCase,
       convertToTitleCase,
       clearText,
-    ]
+    ],
   );
 
   // Standard buttons
@@ -135,7 +135,7 @@ export default function CaseConverter({
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [copyOutput, downloadOutput, toolState]
+    [copyOutput, downloadOutput, toolState],
   );
 
   return (
@@ -188,7 +188,7 @@ export default function CaseConverter({
             multiline
             rows={8}
             value={outputText}
-            InputProps={{ readOnly: true }}
+            slotProps={{ input: { readOnly: true } }}
             placeholder="Converted text will appear here..."
             className="w-full"
             variant="outlined"

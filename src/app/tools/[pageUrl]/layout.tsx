@@ -85,7 +85,7 @@ async function getToolData(pageUrl: string): Promise<ToolData> {
  * @returns metadata for the page
  */
 export async function generateMetadata(
-  props: Readonly<LayoutProps>
+  props: Readonly<LayoutProps>,
 ): Promise<Metadata> {
   const params = await props.params;
 
@@ -118,13 +118,20 @@ export async function generateMetadata(
   }
 
   try {
-    const { metadata } = await getToolData(params.pageUrl);
-    return metadata;
+    const { metadata, componentConfig } = await getToolData(params.pageUrl);
+    return {
+      ...metadata,
+      title: metadata.title || componentConfig.pageTitle || "WebToolsEasy Tool",
+      description:
+        metadata.description ||
+        componentConfig.mainHeading ||
+        "The requested tool could not be found.",
+    };
   } catch (error) {
     if (process.env.NODE_ENV === "development") {
       console.error(
         `Failed to generate metadata for: ${params.pageUrl}`,
-        error
+        error,
       );
     }
     // Return default metadata for fallback
@@ -176,7 +183,7 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
 
   // Get tool data with error handling
   const { descriptionData, componentConfig } = await getToolData(
-    params.pageUrl
+    params.pageUrl,
   );
 
   const toolDescriptionData = descriptionData as DescriptionBlock[];

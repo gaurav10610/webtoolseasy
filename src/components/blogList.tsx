@@ -32,8 +32,6 @@ const BlogOverviewListItem = ({
           href={`/blog/${blogPost.slug}`}
           className="no-underline"
           style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
-          target="_blank"
-          rel="noopener noreferrer"
         >
           {/* Category and Featured Badge */}
           <Box sx={{ display: "flex", gap: 1, mb: 2, alignItems: "center" }}>
@@ -110,7 +108,7 @@ export default async function BlogList({
     <div className="w-full flex flex-col gap-4">
       {/* Hero Section */}
       <Box sx={{ textAlign: "center", mb: 4 }}>
-        <H1Heading heading="Expert Guides for Online Web Tools & Technologies" />
+        <H1Heading heading="WebToolsEasy Blog: Expert Guides for Online Web Tools & Technologies" />
         <Typography variant="h6" color="textSecondary" paragraph>
           Master the latest web development tools, security practices, and
           productivity techniques

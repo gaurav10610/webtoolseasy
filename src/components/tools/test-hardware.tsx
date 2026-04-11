@@ -26,7 +26,7 @@ import {
   Memory,
   CheckCircle,
   Cancel,
-  HelpOutline,
+  HelpOutlined,
   RadioButtonChecked,
   Speed,
   ScreenShare,
@@ -49,7 +49,7 @@ function StatusIcon({ status }: { status: Status }) {
     case "running":
       return <RadioButtonChecked color="primary" />;
     default:
-      return <HelpOutline color="disabled" />;
+      return <HelpOutlined color="disabled" />;
   }
 }
 
@@ -142,7 +142,7 @@ export default function TestHardware({
     } catch (err) {
       setCameraStatus("error");
       toolState.actions.showMessage(
-        "Failed to start camera. Check permissions."
+        "Failed to start camera. Check permissions.",
       );
     }
   }, [toolState, selectedCameraId, stopMic]);
@@ -165,9 +165,11 @@ export default function TestHardware({
       };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       mediaStreamRef.current = stream;
-      const context = new (window.AudioContext ||
+      const context = new (
+        window.AudioContext ||
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (window as any).webkitAudioContext)();
+        (window as any).webkitAudioContext
+      )();
       audioContextRef.current = context;
       const source = context.createMediaStreamSource(stream);
       const analyser = context.createAnalyser();
@@ -185,9 +187,11 @@ export default function TestHardware({
   const playTestTone = useCallback(() => {
     setSpeakerStatus("running");
     try {
-      const context = new (window.AudioContext ||
+      const context = new (
+        window.AudioContext ||
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (window as any).webkitAudioContext)();
+        (window as any).webkitAudioContext
+      )();
       const oscillator = context.createOscillator();
       const gain = context.createGain();
       oscillator.type = "sine";
@@ -212,7 +216,7 @@ export default function TestHardware({
     try {
       const startTime = Date.now();
       const response = await fetch(
-        "https://webtoolseasy.com/screenshots/home.png"
+        "https://webtoolseasy.com/screenshots/home.png",
       );
       const endTime = Date.now();
       const duration = (endTime - startTime) / 1000;
@@ -236,12 +240,12 @@ export default function TestHardware({
       setDevices(devices);
       if (!selectedCameraId && devices.some((d) => d.kind === "videoinput")) {
         setSelectedCameraId(
-          devices.find((d) => d.kind === "videoinput")!.deviceId
+          devices.find((d) => d.kind === "videoinput")!.deviceId,
         );
       }
       if (!selectedMicId && devices.some((d) => d.kind === "audioinput")) {
         setSelectedMicId(
-          devices.find((d) => d.kind === "audioinput")!.deviceId
+          devices.find((d) => d.kind === "audioinput")!.deviceId,
         );
       }
     };
@@ -273,7 +277,9 @@ export default function TestHardware({
       if (gl && "getExtension" in gl) {
         const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
         setGpuInfo(
-          debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "N/A"
+          debugInfo
+            ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+            : "N/A",
         );
       } else {
         setGpuInfo(null);

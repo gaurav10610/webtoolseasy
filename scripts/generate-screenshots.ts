@@ -14,19 +14,60 @@ interface ScreenshotTask {
   folder?: string | undefined;
 }
 
+const waitForPageReady = async (page: Page): Promise<void> => {
+  await page.waitForSelector("main", { timeout: 15000 });
+
+  await page
+    .waitForFunction(() => document.readyState === "complete", {
+      timeout: 15000,
+    })
+    .catch(() => undefined);
+
+  await page
+    .waitForFunction(
+      () => !document.body.innerText.includes("Loading tool..."),
+      {
+        timeout: 15000,
+      },
+    )
+    .catch(() => undefined);
+
+  await new Promise((resolve) => setTimeout(resolve, 750));
+};
+
 const takeScreenshot = async (url: string, page: Page): Promise<Buffer> => {
   console.log(`📸 Taking screenshot of ${url}...`);
-  await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
-  const screenshot = await page.screenshot();
-  console.log(`✅ Screenshot of ${url} taken successfully!!`);
-  return screenshot as Buffer;
+
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+      await waitForPageReady(page);
+      const screenshot = await page.screenshot();
+      console.log(`✅ Screenshot of ${url} taken successfully!!`);
+      return screenshot as Buffer;
+    } catch (error) {
+      lastError = error;
+      console.warn(`⚠️ Screenshot attempt ${attempt} failed for ${url}`);
+
+      if (attempt < 2) {
+        await page.goto("about:blank", { waitUntil: "load", timeout: 10000 });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error(`Failed to take screenshot for ${url}`);
 };
 
 const saveScreenshot = (
   baseFolderPath: string,
   screenshot: Buffer,
   fileName: string | undefined,
-  folder?: string | undefined
+  folder?: string | undefined,
 ) => {
   if (isNil(folder)) {
     writeFileSync(`${baseFolderPath}/${fileName}.png`, screenshot);
@@ -43,7 +84,7 @@ const saveScreenshot = (
 const processScreenshotTask = async (
   task: ScreenshotTask,
   page: Page,
-  baseFolderPath: string
+  baseFolderPath: string,
 ): Promise<void> => {
   try {
     const { url, fileName, folder } = task;
@@ -59,9 +100,10 @@ const createWorker = async (
   browser: Browser,
   tasks: ScreenshotTask[],
   baseFolderPath: string,
-  workerId: number
+  workerId: number,
 ): Promise<void> => {
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.setViewport({ width: 1640, height: 856 });
 
   console.log(`🚀 Worker ${workerId} started`);
@@ -136,7 +178,7 @@ const generateScreenshots = async (): Promise<void> => {
     const workers: Promise<void>[] = [];
     for (let i = 0; i < PARALLELISM; i++) {
       workers.push(
-        createWorker(browser, screenshotsUrls, baseFolderPath, i + 1)
+        createWorker(browser, screenshotsUrls, baseFolderPath, i + 1),
       );
     }
 

@@ -45,7 +45,7 @@ export default function TextSummarizer({}: Readonly<ToolComponentProps>) {
       }
       return words.length > 0 ? score / words.length : 0;
     },
-    []
+    [],
   );
 
   const summarizeText = useCallback(
@@ -138,7 +138,7 @@ export default function TextSummarizer({}: Readonly<ToolComponentProps>) {
 
       return selectedSentences.map((s) => s.sentence).join(" ");
     },
-    [sentenceScore]
+    [sentenceScore],
   );
 
   const handleSummarize = useCallback(() => {
@@ -197,7 +197,7 @@ export default function TextSummarizer({}: Readonly<ToolComponentProps>) {
   const compressionRatio = useMemo(() => {
     if (inputWordCount === 0) return 0;
     return Math.round(
-      ((inputWordCount - summaryWordCount) / inputWordCount) * 100
+      ((inputWordCount - summaryWordCount) / inputWordCount) * 100,
     );
   }, [inputWordCount, summaryWordCount]);
 
@@ -313,8 +313,10 @@ export default function TextSummarizer({}: Readonly<ToolComponentProps>) {
               minRows={8}
               value={summary}
               variant="outlined"
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               sx={{
                 "& .MuiInputBase-root": {

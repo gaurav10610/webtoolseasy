@@ -74,7 +74,7 @@ export default function TableGenerator({
         toolState.actions.showMessage("Table must have at least one row");
       }
     },
-    [rows, toolState.actions]
+    [rows, toolState.actions],
   );
 
   const addColumn = useCallback(() => {
@@ -99,7 +99,7 @@ export default function TableGenerator({
         toolState.actions.showMessage("Table must have at least one column");
       }
     },
-    [rows, toolState.actions]
+    [rows, toolState.actions],
   );
 
   const updateCell = useCallback(
@@ -108,7 +108,7 @@ export default function TableGenerator({
       newRows[rowIndex][colIndex].content = value;
       setRows(newRows);
     },
-    [rows]
+    [rows],
   );
 
   const generateHTML = useCallback((): string => {
@@ -167,7 +167,7 @@ export default function TableGenerator({
               ? `"${content}"`
               : content;
           })
-          .join(",")
+          .join(","),
       )
       .join("\n");
   }, [rows]);
@@ -341,8 +341,10 @@ export default function TableGenerator({
                                 size="small"
                                 fullWidth
                                 variant="standard"
-                                InputProps={{
-                                  disableUnderline: true,
+                                slotProps={{
+                                  input: {
+                                    disableUnderline: true,
+                                  },
                                 }}
                               />
                               {colIndex === row.length - 1 && (

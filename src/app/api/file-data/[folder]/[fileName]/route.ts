@@ -11,7 +11,7 @@ import { updateJsonFile } from "@/service/apiService";
  */
 export async function GET(
   request: Request,
-  props: { params: Promise<{ folder: string; pageUrl: string }> }
+  props: { params: Promise<{ folder: string; fileName: string }> },
 ) {
   const params = await props.params;
   try {
@@ -20,21 +20,21 @@ export async function GET(
         { error: "This endpoint is not available in production" },
         {
           status: 400,
-        }
+        },
       );
     }
 
     const folder = params.folder;
-    const pageUrl = params.pageUrl;
+    const fileName = params.fileName;
 
-    const filePath = join(process.cwd(), `/src/data/${folder}/${pageUrl}`);
+    const filePath = join(process.cwd(), `/src/data/${folder}/${fileName}`);
 
     if (!fs.existsSync(filePath)) {
       return NextResponse.json(
         { error: "File Not Found!" },
         {
           status: 404,
-        }
+        },
       );
     }
 
@@ -45,7 +45,7 @@ export async function GET(
       { data: jsonData },
       {
         status: 200,
-      }
+      },
     );
   } catch (error) {
     const errorMessage =
@@ -54,7 +54,7 @@ export async function GET(
       { error: errorMessage },
       {
         status: 500,
-      }
+      },
     );
   }
 }
@@ -67,7 +67,7 @@ export async function GET(
  */
 export async function PUT(
   request: Request,
-  props: { params: Promise<{ folder: string; fileName: string }> }
+  props: { params: Promise<{ folder: string; fileName: string }> },
 ) {
   const { folder, fileName } = await props.params;
   try {
@@ -76,7 +76,7 @@ export async function PUT(
         { error: "This endpoint is not available in production" },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -92,7 +92,7 @@ export async function PUT(
       { success: true },
       {
         status: 200,
-      }
+      },
     );
   } catch (error) {
     console.error(error);
@@ -102,7 +102,7 @@ export async function PUT(
       { error: errorMessage, success: false },
       {
         status: 500,
-      }
+      },
     );
   }
 }

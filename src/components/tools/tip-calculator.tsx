@@ -83,7 +83,7 @@ export default function TipCalculator({
         setCustomTip("");
       }
     },
-    []
+    [],
   );
 
   const handleCustomTipChange = useCallback((value: string) => {
@@ -151,10 +151,12 @@ export default function TipCalculator({
                 type="number"
                 value={billAmount}
                 onChange={(e) => setBillAmount(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">$</InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">$</InputAdornment>
+                    ),
+                  },
                 }}
                 inputProps={{ min: 0, step: 0.01 }}
                 variant="outlined"
@@ -190,10 +192,12 @@ export default function TipCalculator({
                   type="number"
                   value={customTip}
                   onChange={(e) => handleCustomTipChange(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">%</InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    },
                   }}
                   inputProps={{ min: 0, max: 100, step: 0.1 }}
                   variant="outlined"
@@ -208,12 +212,14 @@ export default function TipCalculator({
                 type="number"
                 value={numberOfPeople}
                 onChange={(e) => setNumberOfPeople(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PeopleIcon />
-                    </InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PeopleIcon />
+                      </InputAdornment>
+                    ),
+                  },
                 }}
                 inputProps={{ min: 1, max: 100 }}
                 variant="outlined"

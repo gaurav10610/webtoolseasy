@@ -122,7 +122,7 @@ export default function UrlEncoderDecoder({
         size: "small" as const,
       },
     ],
-    [encodeUri, decodeUri, encodeComponent, decodeComponent]
+    [encodeUri, decodeUri, encodeComponent, decodeComponent],
   );
 
   // Button configuration
@@ -149,7 +149,7 @@ export default function UrlEncoderDecoder({
         icon: <CompareArrowsIcon />,
       },
     ],
-    [copyOutput, toolState, clearText, swapInputOutput]
+    [copyOutput, toolState, clearText, swapInputOutput],
   );
 
   return (
@@ -269,8 +269,10 @@ export default function UrlEncoderDecoder({
             placeholder="Encoded/decoded result will appear here..."
             variant="outlined"
             fullWidth
-            InputProps={{
-              readOnly: true,
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
             }}
             className="!font-mono"
             sx={{

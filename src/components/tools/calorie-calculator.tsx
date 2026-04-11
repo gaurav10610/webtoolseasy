@@ -81,7 +81,7 @@ export default function CalorieCalculator({
 
     if (isNaN(heightNum) || heightNum < 100 || heightNum > 250) {
       toolState.actions.showMessage(
-        "Please enter a valid height (100-250 cm)!"
+        "Please enter a valid height (100-250 cm)!",
       );
       return;
     }
@@ -218,10 +218,12 @@ export default function CalorieCalculator({
                   type="number"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">years</InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">years</InputAdornment>
+                      ),
+                    },
                   }}
                   inputProps={{ min: 1, max: 120 }}
                 />
@@ -231,10 +233,12 @@ export default function CalorieCalculator({
                   type="number"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">kg</InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">kg</InputAdornment>
+                      ),
+                    },
                   }}
                   inputProps={{ min: 20, max: 300, step: 0.1 }}
                 />
@@ -244,10 +248,12 @@ export default function CalorieCalculator({
                   type="number"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">cm</InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">cm</InputAdornment>
+                      ),
+                    },
                   }}
                   inputProps={{ min: 100, max: 250 }}
                 />

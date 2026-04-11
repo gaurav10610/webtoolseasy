@@ -45,7 +45,7 @@ export default function UuidV3Generator({
           : NAMESPACES[namespace as keyof typeof NAMESPACES];
       return uuidv3(inputName, namespaceUuid);
     },
-    [namespace, customNamespace]
+    [namespace, customNamespace],
   );
 
   const currentUuid = name ? generateUuidV3(name) : "";
@@ -78,7 +78,7 @@ export default function UuidV3Generator({
       toolState.actions.showMessage("UUID v3 generated!");
     } catch {
       toolState.actions.showMessage(
-        "Error generating UUID. Check your inputs."
+        "Error generating UUID. Check your inputs.",
       );
     }
   }, [name, namespace, customNamespace, generateUuidV3, toolState]);
@@ -91,14 +91,14 @@ export default function UuidV3Generator({
     const allUuids = uuidList.join("\n");
     toolState.actions.copyText(
       allUuids,
-      `${uuidList.length} UUIDs copied to clipboard!`
+      `${uuidList.length} UUIDs copied to clipboard!`,
     );
   }, [uuidList, toolState]);
 
   const generateBulkUuids = useCallback(() => {
     if (!bulkNamePrefix) {
       toolState.actions.showMessage(
-        "Please enter a name prefix for bulk generation"
+        "Please enter a name prefix for bulk generation",
       );
       return;
     }
@@ -111,14 +111,14 @@ export default function UuidV3Generator({
     try {
       const count = Math.min(Math.max(1, bulkCount), 1000);
       const newUuids = Array.from({ length: count }, (_, i) =>
-        generateUuidV3(`${bulkNamePrefix}${i + 1}`)
+        generateUuidV3(`${bulkNamePrefix}${i + 1}`),
       );
       setUuidList(newUuids);
       toolState.setCode(newUuids[0]);
       toolState.actions.showMessage(`Generated ${count} UUIDs!`);
     } catch {
       toolState.actions.showMessage(
-        "Error generating UUIDs. Check your inputs."
+        "Error generating UUIDs. Check your inputs.",
       );
     }
   }, [
@@ -133,7 +133,7 @@ export default function UuidV3Generator({
   const downloadUuids = useCallback(() => {
     if (uuidList.length === 0) {
       toolState.actions.showMessage(
-        "No UUIDs to download. Generate some first!"
+        "No UUIDs to download. Generate some first!",
       );
       return;
     }
@@ -148,7 +148,7 @@ export default function UuidV3Generator({
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toolState.actions.showMessage(
-      `${uuidList.length} UUIDs downloaded successfully!`
+      `${uuidList.length} UUIDs downloaded successfully!`,
     );
   }, [uuidList, toolState.actions]);
 
@@ -227,8 +227,10 @@ export default function UuidV3Generator({
             <TextField
               fullWidth
               value={currentUuid}
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               variant="outlined"
               className="font-mono"
@@ -260,7 +262,7 @@ export default function UuidV3Generator({
                 value={bulkCount}
                 onChange={(e) =>
                   setBulkCount(
-                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1))
+                    Math.max(1, Math.min(1000, parseInt(e.target.value) || 1)),
                   )
                 }
                 size="small"

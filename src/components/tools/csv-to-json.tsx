@@ -68,7 +68,7 @@ export default function CsvToJsonConverter({}: Readonly<ToolComponentProps>) {
       csvData: string,
       delim: string,
       header: boolean,
-      pretty: boolean
+      pretty: boolean,
     ): string => {
       const lines = csvData.trim().split("\n");
 
@@ -139,7 +139,7 @@ export default function CsvToJsonConverter({}: Readonly<ToolComponentProps>) {
         ? JSON.stringify(jsonArray, null, 2)
         : JSON.stringify(jsonArray);
     },
-    []
+    [],
   );
 
   const handleConvert = () => {
@@ -354,8 +354,10 @@ export default function CsvToJsonConverter({}: Readonly<ToolComponentProps>) {
               rows={12}
               value={jsonOutput}
               variant="outlined"
-              InputProps={{
-                readOnly: true,
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
               }}
               sx={{
                 "& .MuiInputBase-root": {

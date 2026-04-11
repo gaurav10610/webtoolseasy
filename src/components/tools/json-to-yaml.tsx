@@ -19,7 +19,7 @@ let jsYamlDump: JsYamlDumpFn = () => {
   throw new Error("js-yaml not available");
 };
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mod = require("js-yaml");
   if (mod) {
     jsYamlLoad = mod.load as JsYamlLoadFn;
@@ -123,7 +123,7 @@ export default function JsonToYaml({
   const copyOutput = useCallback(() => {
     toolState.actions.copyText(
       outputCode,
-      `${outputLanguage.toUpperCase()} copied to clipboard!`
+      `${outputLanguage.toUpperCase()} copied to clipboard!`,
     );
   }, [outputCode, outputLanguage, toolState.actions]);
 
@@ -208,7 +208,7 @@ export default function JsonToYaml({
       copyOutput,
       downloadOutput,
       toolState,
-    ]
+    ],
   );
 
   return (

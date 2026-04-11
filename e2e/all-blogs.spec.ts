@@ -5,7 +5,7 @@ import { join } from "path";
 // Get all blog config files dynamically
 const blogConfigDir = join(process.cwd(), "src/data/blog/config");
 const blogFiles = readdirSync(blogConfigDir).filter((file) =>
-  file.endsWith(".ts")
+  file.endsWith(".ts"),
 );
 const blogSlugs = blogFiles.map((file) => file.replace(".ts", ""));
 
@@ -32,7 +32,7 @@ test.describe("Blog Posts E2E Tests", () => {
       const title = await page.title();
       expect(
         title.length,
-        "Blog listing should have a page title"
+        "Blog listing should have a page title",
       ).toBeGreaterThan(0);
       expect(title.toLowerCase()).toContain("blog");
 
@@ -40,14 +40,14 @@ test.describe("Blog Posts E2E Tests", () => {
       const mainContent = page.locator("main");
       await expect(
         mainContent,
-        "Blog listing should have main content"
+        "Blog listing should have main content",
       ).toBeVisible();
 
       // Verify no 404 page
       const nextJs404 = page.locator('text="This page could not be found"');
       await expect(
         nextJs404,
-        "Blog listing should not show 404 page"
+        "Blog listing should not show 404 page",
       ).not.toBeVisible();
 
       console.log(`✓ Blog listing page: "${title}"`);
@@ -64,12 +64,12 @@ test.describe("Blog Posts E2E Tests", () => {
 
       // Check that at least one blog card is visible
       const blogCards = page.locator(
-        '[role="article"], article, .MuiCard-root'
+        '[role="article"], article, .MuiCard-root',
       );
       const cardCount = await blogCards.count();
       expect(
         cardCount,
-        "Should display at least one blog card"
+        "Should display at least one blog card",
       ).toBeGreaterThan(0);
 
       console.log(`✓ Found ${cardCount} blog post cards`);
@@ -79,7 +79,7 @@ test.describe("Blog Posts E2E Tests", () => {
       await page.goto("/blog", { waitUntil: "domcontentloaded" });
 
       // Check for heading
-      const heading = page.locator("h1");
+      const heading = page.locator("h1").first();
       await expect(heading).toBeVisible();
 
       // Check for description text
@@ -94,12 +94,12 @@ test.describe("Blog Posts E2E Tests", () => {
 
       // Look for social share buttons (Facebook, Twitter, LinkedIn, etc.)
       const socialButtons = page.locator(
-        'button[aria-label*="share"], a[href*="facebook"], a[href*="twitter"], a[href*="linkedin"]'
+        'button[aria-label*="share"], a[href*="facebook"], a[href*="twitter"], a[href*="linkedin"]',
       );
       const buttonCount = await socialButtons.count();
 
       expect(buttonCount, "Should have social sharing buttons").toBeGreaterThan(
-        0
+        0,
       );
       console.log(`✓ Found ${buttonCount} social sharing buttons`);
     });
@@ -127,21 +127,21 @@ test.describe("Blog Posts E2E Tests", () => {
         const title = await page.title();
         expect(
           title.length,
-          `${blogSlug} should have a page title`
+          `${blogSlug} should have a page title`,
         ).toBeGreaterThan(0);
 
         // Verify main content area exists
         const mainContent = page.locator("main");
         await expect(
           mainContent,
-          `${blogSlug} should have main content`
+          `${blogSlug} should have main content`,
         ).toBeVisible();
 
         // Verify no Next.js default 404 page
         const nextJs404 = page.locator('text="This page could not be found"');
         await expect(
           nextJs404,
-          `${blogSlug} should not show 404 page`
+          `${blogSlug} should not show 404 page`,
         ).not.toBeVisible();
 
         console.log(`✓ ${blogSlug}: "${title}" - ${headingText?.trim()}`);
@@ -151,25 +151,25 @@ test.describe("Blog Posts E2E Tests", () => {
         await page.goto(`/blog/${blogSlug}`, { waitUntil: "domcontentloaded" });
 
         // Check for author information
-        const author = page.locator(
-          'text=/by|author|written/i, [data-testid="author"], .author'
-        );
-        const authorVisible = (await author.count()) > 0;
+        const authorText = page.getByText(/by|author|written/i);
+        const authorElement = page.locator('[data-testid="author"], .author');
+        const authorVisible =
+          (await authorText.count()) > 0 || (await authorElement.count()) > 0;
 
         // Check for date information
-        const date = page.locator(
-          'text=/\\d{4}|updated|published/i, time, [data-testid="date"]'
-        );
-        const dateVisible = (await date.count()) > 0;
+        const dateText = page.getByText(/\d{4}|updated|published/i);
+        const dateElement = page.locator('time, [data-testid="date"]');
+        const dateVisible =
+          (await dateText.count()) > 0 || (await dateElement.count()) > 0;
 
         // At least one of author or date should be visible
         expect(
           authorVisible || dateVisible,
-          `${blogSlug} should display author or date metadata`
+          `${blogSlug} should display author or date metadata`,
         ).toBe(true);
 
         console.log(
-          `✓ ${blogSlug} displays metadata (author: ${authorVisible}, date: ${dateVisible})`
+          `✓ ${blogSlug} displays metadata (author: ${authorVisible}, date: ${dateVisible})`,
         );
       });
 
@@ -178,13 +178,13 @@ test.describe("Blog Posts E2E Tests", () => {
 
         // Check for category chip/badge
         const categoryChip = page.locator(
-          '.MuiChip-root, [data-testid="category"], .category, .badge'
+          '.MuiChip-root, [data-testid="category"], .category, .badge',
         );
         const chipCount = await categoryChip.count();
 
         expect(
           chipCount,
-          `${blogSlug} should display category chip`
+          `${blogSlug} should display category chip`,
         ).toBeGreaterThan(0);
         console.log(`✓ ${blogSlug} displays category chip`);
       });
@@ -194,12 +194,12 @@ test.describe("Blog Posts E2E Tests", () => {
 
         // Check for reading time indicator
         const readingTime = page.locator(
-          "text=/\\d+\\s*min|minute|reading time/i"
+          "text=/\\d+\\s*min|minute|reading time/i",
         );
         const hasReadingTime = (await readingTime.count()) > 0;
 
         expect(hasReadingTime, `${blogSlug} should display reading time`).toBe(
-          true
+          true,
         );
         console.log(`✓ ${blogSlug} displays reading time`);
       });
@@ -213,7 +213,7 @@ test.describe("Blog Posts E2E Tests", () => {
           {
             timeout: 10000,
             state: "visible",
-          }
+          },
         );
 
         // Check for various markdown elements
@@ -222,7 +222,7 @@ test.describe("Blog Posts E2E Tests", () => {
 
         expect(
           paragraphCount,
-          `${blogSlug} should have rendered paragraphs`
+          `${blogSlug} should have rendered paragraphs`,
         ).toBeGreaterThan(0);
 
         // Check if there are headings (h2, h3, h4)
@@ -230,7 +230,7 @@ test.describe("Blog Posts E2E Tests", () => {
         const subheadingCount = await subheadings.count();
 
         console.log(
-          `✓ ${blogSlug} renders markdown (${paragraphCount} paragraphs, ${subheadingCount} subheadings)`
+          `✓ ${blogSlug} renders markdown (${paragraphCount} paragraphs, ${subheadingCount} subheadings)`,
         );
       });
 
@@ -241,13 +241,13 @@ test.describe("Blog Posts E2E Tests", () => {
 
         // Look for social share buttons
         const socialButtons = page.locator(
-          'button[aria-label*="share"], a[href*="facebook"], a[href*="twitter"], a[href*="linkedin"]'
+          'button[aria-label*="share"], a[href*="facebook"], a[href*="twitter"], a[href*="linkedin"]',
         );
         const buttonCount = await socialButtons.count();
 
         expect(
           buttonCount,
-          `${blogSlug} should have social sharing buttons`
+          `${blogSlug} should have social sharing buttons`,
         ).toBeGreaterThan(0);
         console.log(`✓ ${blogSlug} has ${buttonCount} social sharing buttons`);
       });
@@ -259,13 +259,13 @@ test.describe("Blog Posts E2E Tests", () => {
 
         // Check if there are code blocks
         const codeBlocks = page.locator(
-          "pre code, .hljs, [class*='language-']"
+          "pre code, .hljs, [class*='language-']",
         );
         const codeBlockCount = await codeBlocks.count();
 
         if (codeBlockCount > 0) {
           console.log(
-            `✓ ${blogSlug} has ${codeBlockCount} code blocks with syntax highlighting`
+            `✓ ${blogSlug} has ${codeBlockCount} code blocks with syntax highlighting`,
           );
         } else {
           console.log(`  ${blogSlug} has no code blocks (which is okay)`);
@@ -285,7 +285,7 @@ test.describe("Blog Posts E2E Tests", () => {
 
         // Check if there are mermaid diagrams
         const mermaidDiagrams = page.locator(
-          '.mermaid, [data-processed="true"]'
+          '.mermaid, [data-processed="true"]',
         );
         const diagramCount = await mermaidDiagrams.count();
 
@@ -297,7 +297,7 @@ test.describe("Blog Posts E2E Tests", () => {
           const svgCount = await svgElements.count();
           expect(
             svgCount,
-            `${blogSlug} mermaid diagrams should render as SVG`
+            `${blogSlug} mermaid diagrams should render as SVG`,
           ).toBeGreaterThan(0);
         } else {
           console.log(`  ${blogSlug} has no mermaid diagrams (which is okay)`);
@@ -316,11 +316,11 @@ test.describe("Blog Posts E2E Tests", () => {
           .getAttribute("content");
         expect(
           description,
-          `${blogSlug} should have meta description`
+          `${blogSlug} should have meta description`,
         ).toBeTruthy();
         expect(
           description!.length,
-          `${blogSlug} meta description should not be empty`
+          `${blogSlug} meta description should not be empty`,
         ).toBeGreaterThan(0);
 
         // Check for OpenGraph tags
@@ -334,14 +334,14 @@ test.describe("Blog Posts E2E Tests", () => {
           .getAttribute("content");
         expect(
           ogDescription,
-          `${blogSlug} should have og:description`
+          `${blogSlug} should have og:description`,
         ).toBeTruthy();
 
         const ogType = await page
           .locator('meta[property="og:type"]')
           .getAttribute("content");
         expect(ogType, `${blogSlug} should have og:type = article`).toBe(
-          "article"
+          "article",
         );
 
         // Check for Twitter card tags
@@ -350,7 +350,7 @@ test.describe("Blog Posts E2E Tests", () => {
           .getAttribute("content");
         expect(
           twitterCard,
-          `${blogSlug} should have twitter:card`
+          `${blogSlug} should have twitter:card`,
         ).toBeTruthy();
 
         console.log(`✓ ${blogSlug} has proper SEO meta tags`);
@@ -363,17 +363,17 @@ test.describe("Blog Posts E2E Tests", () => {
         const canonical = page.locator('link[rel="canonical"]');
         await expect(
           canonical,
-          `${blogSlug} should have canonical link`
+          `${blogSlug} should have canonical link`,
         ).toHaveCount(1);
 
         const canonicalHref = await canonical.getAttribute("href");
         expect(
           canonicalHref,
-          `${blogSlug} canonical href should exist`
+          `${blogSlug} canonical href should exist`,
         ).toBeTruthy();
         expect(
           canonicalHref,
-          `${blogSlug} canonical should contain blog slug`
+          `${blogSlug} canonical should contain blog slug`,
         ).toContain(blogSlug);
 
         console.log(`✓ ${blogSlug} has canonical URL: ${canonicalHref}`);
@@ -397,10 +397,12 @@ test.describe("Blog Posts E2E Tests", () => {
       await expect(firstBlogLink).toBeVisible();
 
       const linkHref = await firstBlogLink.getAttribute("href");
-      await firstBlogLink.click();
 
-      // Wait for navigation
-      await page.waitForURL(new RegExp(linkHref!), { timeout: 10000 });
+      // Wait for navigation and click together to avoid race conditions.
+      await Promise.all([
+        page.waitForURL(new RegExp(linkHref!), { timeout: 10000 }),
+        firstBlogLink.click(),
+      ]);
 
       // Verify we're on the blog post page
       const h1 = page.locator("h1").first();
@@ -417,7 +419,7 @@ test.describe("Blog Posts E2E Tests", () => {
 
         // Look for navigation back to blog listing
         const backLink = page.locator(
-          'a[href="/blog"], a[href*="/blog"]:has-text("back")'
+          'a[href="/blog"], a[href*="/blog"]:has-text("back")',
         );
         const hasBackLink = (await backLink.count()) > 0;
 
@@ -427,11 +429,11 @@ test.describe("Blog Posts E2E Tests", () => {
 
         expect(
           hasBackLink || hasNav,
-          "Blog post should have navigation back to blog listing or site header"
+          "Blog post should have navigation back to blog listing or site header",
         ).toBe(true);
 
         console.log(
-          `✓ Blog post has navigation (back link: ${hasBackLink}, header nav: ${hasNav})`
+          `✓ Blog post has navigation (back link: ${hasBackLink}, header nav: ${hasNav})`,
         );
       }
     });
@@ -447,7 +449,7 @@ test.describe("Blog Posts E2E Tests", () => {
 
       expect(
         loadTime,
-        "Blog listing should load within 5 seconds"
+        "Blog listing should load within 5 seconds",
       ).toBeLessThan(5000);
       console.log(`✓ Blog listing loaded in ${loadTime}ms`);
     });
@@ -463,7 +465,7 @@ test.describe("Blog Posts E2E Tests", () => {
         const loadTime = Date.now() - startTime;
 
         expect(loadTime, "Blog post should load within 5 seconds").toBeLessThan(
-          5000
+          5000,
         );
         console.log(`✓ Blog post loaded in ${loadTime}ms`);
       }

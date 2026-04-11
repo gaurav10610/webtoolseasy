@@ -24,8 +24,8 @@ export default defineConfig({
   workers: process.env.PLAYWRIGHT_WORKERS
     ? parseInt(process.env.PLAYWRIGHT_WORKERS)
     : process.env.CI
-    ? 1
-    : Math.floor(cpus().length / 2) || 1,
+      ? 1
+      : Math.floor(cpus().length / 2) || 1,
 
   // Fail the build on CI if you accidentally left test.only in the source code
   forbidOnly: !!process.env.CI,
@@ -35,7 +35,7 @@ export default defineConfig({
 
   // Reporter to use
   reporter: [
-    ["html"],
+    ["html", { open: "never" }],
     ["list"],
     ["json", { outputFile: "test-results/results.json" }],
   ],

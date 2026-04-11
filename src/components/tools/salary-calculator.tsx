@@ -188,10 +188,12 @@ export default function SalaryCalculator({
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">$</InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">$</InputAdornment>
+                      ),
+                    },
                   }}
                   inputProps={{ min: 0, step: 0.01 }}
                   helperText="Enter your salary or wage"

@@ -19,24 +19,9 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Block Pyodide internal files from being treated as tools
+      // Block Pyodide/internal asset requests from being treated as tool routes.
       {
-        source: "/tools/:path*.js",
-        destination: "/404",
-        permanent: false,
-      },
-      {
-        source: "/tools/:path*.mjs",
-        destination: "/404",
-        permanent: false,
-      },
-      {
-        source: "/tools/stackframe:path*",
-        destination: "/404",
-        permanent: false,
-      },
-      {
-        source: "/tools/pyodide:path*",
+        source: "/tools/:path((?:.*\\.js|.*\\.mjs|stackframe.*|pyodide.*))",
         destination: "/404",
         permanent: false,
       },
@@ -49,6 +34,14 @@ const nextConfig = {
     });
 
     return config;
+  },
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
   },
   experimental: {
     optimizePackageImports: ["lodash-es"],
