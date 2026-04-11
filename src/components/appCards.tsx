@@ -13,6 +13,7 @@ export async function AppHomeCard({
   className?: string;
 }>) {
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
+  const Icon = svgIcon.default;
 
   return (
     <PaperWithChildren
@@ -27,7 +28,7 @@ export async function AppHomeCard({
           <div className="flex items-start justify-between gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-[var(--mui-palette-primary-main)] dark:bg-slate-800">
               <CustomSvgIcon size="large">
-                {React.createElement(svgIcon.default)}
+                <Icon />
               </CustomSvgIcon>
             </div>
             <AppChip
@@ -61,6 +62,7 @@ export async function RelatedToolCard({
   className?: string;
 }>) {
   const svgIcon = await import(`@/data/icons/${config.iconRelativeUrl}`);
+  const Icon = svgIcon.default;
 
   return (
     <PaperWithChildren
@@ -71,7 +73,7 @@ export async function RelatedToolCard({
         <div className="flex flex-row items-center gap-3 overflow-hidden p-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-[var(--mui-palette-primary-main)] dark:bg-slate-800">
             <CustomSvgIcon size="medium">
-              {React.createElement(svgIcon.default)}
+              <Icon />
             </CustomSvgIcon>
           </div>
           <AppText className="min-w-0 flex-1 truncate !font-medium">

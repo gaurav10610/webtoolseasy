@@ -2,27 +2,49 @@ import { FFMPEG_COMMANDS } from "@/data/config/ffmpeg-config";
 import { ConversionState, VideoFileData } from "@/types/file";
 import { updateFileState } from "@/util/videoConverterUtils";
 import { FFmpeg, FileData } from "@ffmpeg/ffmpeg";
-import { toBlobURL } from "@ffmpeg/util";
+
+let ffmpegInstancePromise: Promise<FFmpeg> | null = null;
+
+function getFFmpegBaseURL() {
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/vendor/ffmpeg`;
+  }
+
+  const hostname = process.env.HOSTNAME?.replace(/\/$/, "") ?? "";
+  return `${hostname}/vendor/ffmpeg`;
+}
 
 export const createFFmpegInstance = async () => {
-  const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd";
-  const ffmpeg = new FFmpeg();
+  if (ffmpegInstancePromise) {
+    return ffmpegInstancePromise;
+  }
 
-  // toBlobURL is used to bypass CORS issue, urls with the same
-  // domain can be used directly.
-  await ffmpeg.load({
-    coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
-    wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, "application/wasm"),
-  });
+  ffmpegInstancePromise = (async () => {
+    const ffmpeg = new FFmpeg();
 
-  // Log initialization
-  ffmpeg.on("log", ({ type, message }) => {
-    if (type === "error") {
-      console.error("FFmpeg error:", message);
-    }
-  });
+    ffmpeg.on("log", ({ type, message }) => {
+      if (type === "error") {
+        console.error("FFmpeg error:", message);
+      }
+    });
 
-  return ffmpeg;
+    const baseURL = getFFmpegBaseURL();
+
+    await ffmpeg.load({
+      coreURL: `${baseURL}/ffmpeg-core.js`,
+      wasmURL: `${baseURL}/ffmpeg-core.wasm`,
+    });
+
+    return ffmpeg;
+  })();
+
+  try {
+    return await ffmpegInstancePromise;
+  } catch (error) {
+    ffmpegInstancePromise = null;
+    console.error("Failed to load FFmpeg from local assets", error);
+    throw error;
+  }
 };
 
 export const executeFFmpegCommand = async ({
@@ -99,7 +121,7 @@ export const buildFFMpegCommand = ({
 
   if (!command) {
     console.error(
-      `No command found for fileFormat ${fileFormat} -> targetFormat ${targetFormat}`
+      `No command found for fileFormat ${fileFormat} -> targetFormat ${targetFormat}`,
     );
     throw new Error(`Unsupported conversion: ${fileFormat} -> ${targetFormat}`);
   }
@@ -141,7 +163,7 @@ export async function transcodeVideo({
 
   if (!fileSizeValid) {
     setSnackBarMessage(
-      `File size should be less than 100MB. File: ${videoFileData.originalFile.name}`
+      `File size should be less than 100MB. File: ${videoFileData.originalFile.name}`,
     );
     setSnackBarColor("error");
     setIsSnackBarOpen(true);
@@ -196,7 +218,7 @@ export async function transcodeVideo({
       `Reading file: ${videoFileData.originalFile.name}, size: ${(
         videoFileData.originalFile.size /
         (1024 * 1024)
-      ).toFixed(2)}MB`
+      ).toFixed(2)}MB`,
     );
 
     const fileArrayBuffer = await videoFileData.originalFile.arrayBuffer();
@@ -219,7 +241,7 @@ export async function transcodeVideo({
     videoFileData.convertedData[targetFormatId]!.conversionState =
       ConversionState.FAILED;
     setSnackBarMessage(
-      `Failed to read file: ${videoFileData.originalFile.name}. Error: ${error}`
+      `Failed to read file: ${videoFileData.originalFile.name}. Error: ${error}`,
     );
     setSnackBarColor("error");
     setIsSnackBarOpen(true);
@@ -295,7 +317,7 @@ export async function transcodeVideo({
           videoFileData.convertedData[targetFormatId]!.conversionState =
             ConversionState.FAILED;
           setSnackBarMessage(
-            `Failed to read converted file: ${videoFileData.originalFile.name}`
+            `Failed to read converted file: ${videoFileData.originalFile.name}`,
           );
           setSnackBarColor("error");
           setIsSnackBarOpen(true);
@@ -303,10 +325,10 @@ export async function transcodeVideo({
           // Clean up on error
           try {
             deleteFFmpegFile({ ffmpeg, fileName: formattedFileName }).catch(
-              console.warn
+              console.warn,
             );
             deleteFFmpegFile({ ffmpeg, fileName: outputFileName }).catch(
-              console.warn
+              console.warn,
             );
             ffmpeg.terminate();
           } catch (cleanupError) {
@@ -338,7 +360,7 @@ export async function transcodeVideo({
     videoFileData.convertedData[targetFormatId]!.conversionState =
       ConversionState.FAILED;
     setSnackBarMessage(
-      `Conversion failed for ${videoFileData.originalFile.name}: ${error}`
+      `Conversion failed for ${videoFileData.originalFile.name}: ${error}`,
     );
     setSnackBarColor("error");
     setIsSnackBarOpen(true);
@@ -346,10 +368,10 @@ export async function transcodeVideo({
     // Clean up on FFmpeg execution error
     try {
       deleteFFmpegFile({ ffmpeg, fileName: formattedFileName }).catch(
-        console.warn
+        console.warn,
       );
       deleteFFmpegFile({ ffmpeg, fileName: outputFileName }).catch(
-        console.warn
+        console.warn,
       );
       ffmpeg.terminate();
     } catch (cleanupError) {

@@ -45,7 +45,9 @@ export default function IpAddressLookup({
     const fetchIPInfo = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://ipapi.co/json/");
+        const response = await fetch("/api/ip-address", {
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch IP information");
         }
@@ -63,9 +65,10 @@ export default function IpAddressLookup({
           timezone: data.timezone,
         });
         setError("");
-      } catch (err) {
-        setError("Unable to fetch IP information. Please try again later.");
-        console.error("IP fetch error:", err);
+      } catch {
+        setError(
+          "Unable to fetch IP information right now. Please try again shortly.",
+        );
       } finally {
         setLoading(false);
       }

@@ -3,6 +3,7 @@ import {
   ApplicationIds,
   AppNavigationConfig,
 } from "@/types/config";
+import { categoryConfigs } from "@/data/categories";
 import { DescriptionBlock } from "@/types/description";
 import {
   AppHeading,
@@ -11,6 +12,7 @@ import {
 } from "@/components/commonComponents";
 import { apps } from "@/data/apps";
 import { Metadata } from "next";
+import Link from "next/link";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import SidePanel from "@/components/sidePanel";
 import { notFound } from "next/navigation";
@@ -195,6 +197,18 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
     .map((toolId: ApplicationIds) => apps[toolId])
     .filter(Boolean); // Remove any undefined entries
 
+  const currentAppConfig = Object.values(apps).find(
+    (appConfig) => appConfig.navigateUrl === `tools/${params.pageUrl}`,
+  );
+  const currentCategoryConfig = Object.values(categoryConfigs).find(
+    (categoryConfig) =>
+      currentAppConfig
+        ? categoryConfig.toolIds.includes(
+            currentAppConfig.applicationId as ApplicationIds,
+          )
+        : false,
+  );
+
   // Memoize the hostname URL
   const toolUrl = `${process.env.HOSTNAME}/tools/${params.pageUrl}`;
 
@@ -231,12 +245,44 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
             />
           </aside>
 
-          <section className="flex min-w-0 flex-col gap-5">
+          <section className="flex w-full min-w-0 flex-col gap-5">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex flex-wrap items-center gap-2 rounded-[18px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-default)]/70 px-4 py-3"
+            >
+              <Link href="/" className="no-underline">
+                <AppText className="!text-sm !font-medium !text-[var(--mui-palette-primary-main)]">
+                  Home
+                </AppText>
+              </Link>
+              <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
+                /
+              </AppText>
+              {currentCategoryConfig && (
+                <>
+                  <Link
+                    href={`/tools/category/${currentCategoryConfig.slug}`}
+                    className="no-underline"
+                  >
+                    <AppText className="!text-sm !font-medium !text-[var(--mui-palette-primary-main)]">
+                      {currentCategoryConfig.name}
+                    </AppText>
+                  </Link>
+                  <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
+                    /
+                  </AppText>
+                </>
+              )}
+              <AppText className="!text-sm !font-semibold">
+                {currentAppConfig?.displayText ?? toolConfigData.pageTitle}
+              </AppText>
+            </nav>
+
             <AppHeading heading={toolConfigData.mainHeading!} />
 
-            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-              <div className="min-w-0">
-                <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
+            <div className="flex min-w-0 flex-col gap-4 rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div className="flex min-w-0 flex-1 flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <AppChip
                       label="100% browser-based"
@@ -245,7 +291,7 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
                       size="small"
                     />
                     <AppChip
-                      label="No ads on tool pages"
+                      label="Left browse sidebar"
                       color="primary"
                       variant="outlined"
                       size="small"
@@ -258,44 +304,46 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
                     />
                   </div>
                   <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
-                    Use the tool immediately below with a wider workspace, more
-                    consistent fullscreen behavior, and preserved page content.
+                    Browse related workflows from the left rail while keeping
+                    the live tool workspace, current URL, and crawlable content
+                    intact.
                   </AppText>
-                  <div className="flex flex-col gap-2 w-full max-w-full">
-                    {children}
+                </div>
+
+                <div className="w-full lg:max-w-[340px]">
+                  <div className="rounded-[18px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-default)]/70 p-4">
+                    <AppText component="h2" variant="h4" className="!mb-2">
+                      Share or bookmark this tool
+                    </AppText>
+                    <AppText className="!mb-4 !text-sm !text-[var(--mui-palette-text-secondary)]">
+                      Keep the current URL unchanged and share it directly with
+                      teammates or users.
+                    </AppText>
+                    <SocialShareButtons
+                      pageUrl={toolUrl}
+                      heading={toolConfigData.pageTitle}
+                    />
                   </div>
                 </div>
               </div>
 
-              <aside className="flex flex-col gap-4">
-                <div className="rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
-                  <AppText component="h2" variant="h4" className="!mb-2">
-                    Share or bookmark this tool
-                  </AppText>
-                  <AppText className="!mb-4 !text-sm !text-[var(--mui-palette-text-secondary)]">
-                    Keep the current URL unchanged and share it directly with
-                    teammates or users.
-                  </AppText>
-                  <SocialShareButtons
-                    pageUrl={toolUrl}
-                    heading={toolConfigData.pageTitle}
-                  />
-                </div>
-
-                <div className="xl:hidden">
-                  <SidePanel
-                    className="w-full"
-                    appConfigJson={apps}
-                    pageUrl={params.pageUrl}
-                  />
-                </div>
-              </aside>
+              <div className="flex w-full max-w-full flex-col gap-2">
+                {children}
+              </div>
             </div>
 
             {relatedToolsConfigs.length > 0 && (
               <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
             )}
             <ToolDescription descriptionData={toolDescriptionData} />
+
+            <div className="xl:hidden">
+              <SidePanel
+                className="w-full"
+                appConfigJson={apps}
+                pageUrl={params.pageUrl}
+              />
+            </div>
           </section>
         </div>
       </div>

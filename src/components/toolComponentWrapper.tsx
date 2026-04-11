@@ -40,6 +40,7 @@ const ToolComponentWrapper = memo(
             };
           }),
         {
+          ssr: false,
           loading: () => <ToolPageSkeleton />,
         },
       ) as React.FC<ToolComponentProps>;

@@ -30,25 +30,16 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SchemaIcon from "@mui/icons-material/Schema";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import initSqlJs, {
+  type Database as SqlDatabase,
+  type QueryExecResult,
+} from "sql.js";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { useEditorConfig } from "@/hooks/useEditorConfig";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
-
-// SQL.js types - simplified
-interface Database {
-  exec(sql: string): ExecResult[];
-  run(sql: string, params?: unknown[]): void;
-  export(): Uint8Array;
-  close(): void;
-}
-
-interface ExecResult {
-  columns: string[];
-  values: unknown[][];
-}
 
 // Sample data for the database
 const sampleTables = {
@@ -179,13 +170,13 @@ export default function SqlPracticeEditor({
   hostname,
 }: Readonly<ToolComponentProps>) {
   const [sqlCode, setSqlCode] = useState(
-    "-- Welcome to SQL Practice Editor!\n-- Try running: SELECT * FROM employees LIMIT 10;\n\nSELECT * FROM employees LIMIT 10;"
+    "-- Welcome to SQL Practice Editor!\n-- Try running: SELECT * FROM employees LIMIT 10;\n\nSELECT * FROM employees LIMIT 10;",
   );
-  const [queryResult, setQueryResult] = useState<ExecResult[]>([]);
+  const [queryResult, setQueryResult] = useState<QueryExecResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [executionTime, setExecutionTime] = useState<number | null>(null);
-  const [database, setDatabase] = useState<Database | null>(null);
+  const [database, setDatabase] = useState<SqlDatabase | null>(null);
   const [sqlLoaded, setSqlLoaded] = useState(false);
 
   const editorConfig = useEditorConfig({
@@ -207,30 +198,13 @@ export default function SqlPracticeEditor({
     const loadSqlJs = async () => {
       try {
         setIsLoading(true);
-        // Load SQL.js from CDN
-        const sqlPromise = new Promise<unknown>((resolve, reject) => {
-          const script = document.createElement("script");
-          script.src =
-            "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js";
-          script.onload = () => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (window as any)
-              .initSqlJs({
-                locateFile: (file: string) =>
-                  `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`,
-              })
-              .then(resolve)
-              .catch(reject);
-          };
-          script.onerror = reject;
-          document.head.appendChild(script);
+
+        const SQL = await initSqlJs({
+          locateFile: () => "/vendor/sql/sql-wasm.wasm",
         });
 
-        const SQL = await sqlPromise;
-
         // Create database and populate with sample data
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const db = new (SQL as any).Database();
+        const db = new SQL.Database();
 
         // Create tables and insert sample data
         Object.values(sampleTables).forEach((table) => {
@@ -253,7 +227,7 @@ export default function SqlPracticeEditor({
         setError(
           `Failed to load SQL.js: ${
             err instanceof Error ? err.message : "Unknown error"
-          }`
+          }`,
         );
       } finally {
         setIsLoading(false);
@@ -329,7 +303,7 @@ export default function SqlPracticeEditor({
         return;
       }
 
-      const allResults: ExecResult[] = [];
+      const allResults: QueryExecResult[] = [];
       let hasErrors = false;
 
       // Execute each query sequentially
@@ -341,7 +315,7 @@ export default function SqlPracticeEditor({
           setError(
             `Error in query ${i + 1}: ${
               err instanceof Error ? err.message : "Unknown error"
-            }`
+            }`,
           );
           hasErrors = true;
           break;
@@ -355,7 +329,7 @@ export default function SqlPracticeEditor({
 
         if (allResults.length === 0) {
           setError(
-            "All queries executed successfully but returned no results."
+            "All queries executed successfully but returned no results.",
           );
         }
       }
@@ -378,7 +352,7 @@ export default function SqlPracticeEditor({
     async (text: string) => {
       actions.copyText(text, `Copied: ${text}`);
     },
-    [actions]
+    [actions],
   );
 
   const commonButtons = useMemo(
@@ -390,7 +364,7 @@ export default function SqlPracticeEditor({
           actions.copyShareableLink(sqlCode, "Share link copied!"),
         onFullScreen: toggleFullScreen,
       }),
-    [sqlCode, actions, toggleFullScreen]
+    [sqlCode, actions, toggleFullScreen],
   );
 
   const controls = useMemo(
@@ -421,7 +395,7 @@ export default function SqlPracticeEditor({
       sqlLoaded,
       isLoading,
       commonButtons,
-    ]
+    ],
   );
 
   const renderTableSchema = () => (
@@ -600,7 +574,7 @@ export default function SqlPracticeEditor({
                 📊{" "}
                 {queryResult.reduce(
                   (total, result) => total + result.values.length,
-                  0
+                  0,
                 )}{" "}
                 rows returned
               </Typography>

@@ -19,9 +19,7 @@ export function AppThemeProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)", {
-    noSsr: true,
-  });
+  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
   const [preference, setPreference] = useState<ThemePreference>("system");
   const [isReady, setIsReady] = useState(false);
 
@@ -49,8 +47,13 @@ export function AppThemeProvider({
     window.localStorage.setItem(themeStorageKey, preference);
   }, [isReady, preference]);
 
-  const resolvedMode =
-    preference === "system" ? (prefersDark ? "dark" : "light") : preference;
+  const resolvedMode = !isReady
+    ? "light"
+    : preference === "system"
+      ? prefersDark
+        ? "dark"
+        : "light"
+      : preference;
 
   const theme = useMemo(() => getAppTheme(resolvedMode), [resolvedMode]);
   const value = useMemo(

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | WebToolsEasy",
   },
   description:
-    "Use 100+ privacy-first online tools for JSON, PDF, images, text, SEO, and development workflows. Fast, modern, and browser-based.",
+    "Use 100+ free online JSON, PDF, image, text, video, and SEO tools that run in your browser with no upload, no signup, and privacy-first processing.",
   alternates: {
     canonical: process.env.HOSTNAME!,
   },
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WebToolsEasy - Free Privacy-First Online Tools",
     description:
-      "Professional browser-based tools for developers, teams, creators, and everyday workflows.",
+      "Free browser-based tools for JSON, PDF, image, video, text, and SEO workflows with no upload and no signup.",
     url: process.env.HOSTNAME!,
     siteName: "WebToolsEasy",
     type: "website",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WebToolsEasy - Free Privacy-First Online Tools",
     description:
-      "Professional browser-based tools for developers, teams, creators, and everyday workflows.",
+      "Free browser-based tools for JSON, PDF, image, video, text, and SEO workflows with no upload and no signup.",
   },
 };
 
@@ -57,12 +57,12 @@ export default function RootLayout({
                 id="main-content"
                 className="w-full min-h-[calc(100vh-72px)]"
               >
-                <div className="mx-auto w-full max-w-[1720px] px-3 py-4 md:px-5 md:py-6">
+                <div className="w-full px-3 py-4 md:px-5 md:py-6 xl:px-6 2xl:px-8">
                   {children}
                 </div>
               </main>
 
-              <section className="mx-auto w-full max-w-[1720px] px-3 pb-6 md:px-5 md:pb-8">
+              <section className="w-full px-3 pb-6 md:px-5 md:pb-8 xl:px-6 2xl:px-8">
                 <div className="rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)]/85 p-4 shadow-sm backdrop-blur md:p-6">
                   <CommonSiteData className="w-full" />
                 </div>

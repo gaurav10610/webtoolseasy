@@ -1,3 +1,6 @@
+import { apps } from "@/data/apps";
+import { categoryConfigs } from "@/data/categories";
+import { ApplicationIds } from "@/types/config";
 import { getToolRating } from "./ratingUtils";
 
 export interface ToolFAQ {
@@ -21,6 +24,17 @@ export function createToolStructuredData({
   const toolUrl = `${process.env.HOSTNAME}/tools/${pageUrl}`;
   const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/${pageUrl}.png`;
   const toolRating = getToolRating(pageUrl);
+  const currentAppConfig = Object.values(apps).find(
+    (appConfig) => appConfig.navigateUrl === `tools/${pageUrl}`,
+  );
+  const currentCategoryConfig = Object.values(categoryConfigs).find(
+    (categoryConfig) =>
+      currentAppConfig
+        ? categoryConfig.toolIds.includes(
+            currentAppConfig.applicationId as ApplicationIds,
+          )
+        : false,
+  );
 
   const result: Record<string, unknown> = {
     webApplication: {
@@ -79,8 +93,10 @@ export function createToolStructuredData({
         {
           "@type": "ListItem",
           position: 2,
-          name: "Tools",
-          item: `${process.env.HOSTNAME}/tools`,
+          name: currentCategoryConfig?.name ?? "Tools",
+          item: currentCategoryConfig
+            ? `${process.env.HOSTNAME}/tools/category/${currentCategoryConfig.slug}`
+            : process.env.HOSTNAME!,
         },
         {
           "@type": "ListItem",
