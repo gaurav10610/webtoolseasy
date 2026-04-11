@@ -1,81 +1,69 @@
 import Link from "next/link";
 import { CustomSvgIcon } from "./lib/icons";
-import { Typography, Chip, Box } from "@mui/material";
 import AppMenu from "./appMenu";
 import ApplicationIcon from "@/data/icons/app-icon.svg";
+import { ThemeModeToggle } from "./ThemeModeToggle";
+import { AppChip, AppText } from "./lib/ui";
 
 export default function HeaderAppBar({
-  className,
+  className = "",
 }: Readonly<{ className?: string }>) {
   return (
     <header
-      className={`sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200 ${className}`}
+      className={`sticky top-0 z-50 border-b border-[var(--mui-palette-divider)] bg-[color:color-mix(in_srgb,var(--mui-palette-background-paper)_88%,transparent)]/95 backdrop-blur ${className}`}
     >
-      {/* Main header content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo and brand */}
+      <div className="mx-auto w-full max-w-[1720px] px-3 md:px-5">
+        <div className="flex min-h-[72px] items-center justify-between gap-3 py-2">
           <Link
             href="/"
-            title="Go to Home Page of WebToolsEasy"
+            title="Go to WebToolsEasy home page"
             rel="home"
-            className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200 group"
+            className="group flex min-w-0 items-center gap-3 no-underline"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-blue-50 rounded-full blur-sm group-hover:bg-blue-100 transition-colors duration-200"></div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--mui-palette-divider)] bg-gradient-to-br from-sky-100 to-white shadow-sm transition-transform duration-200 group-hover:-translate-y-0.5 dark:from-slate-800 dark:to-slate-900">
               <CustomSvgIcon
                 size="large"
-                className="relative text-blue-600 drop-shadow-sm"
+                className="text-[var(--mui-palette-primary-main)]"
               >
                 <ApplicationIcon />
               </CustomSvgIcon>
             </div>
-            <div className="flex flex-col">
-              <Typography className="hidden sm:block !text-2xl !font-bold text-gray-900 tracking-tight">
+
+            <div className="min-w-0">
+              <AppText className="!text-base !font-bold tracking-tight sm:!text-xl">
                 WebToolsEasy
-              </Typography>
-              <Typography className="!text-xs text-gray-600 hidden sm:block">
-                Free Online Productivity Tools
-              </Typography>
+              </AppText>
+              <AppText className="hidden !text-xs !text-[var(--mui-palette-text-secondary)] md:block">
+                Enterprise-grade privacy-first browser tools
+              </AppText>
             </div>
           </Link>
 
-          {/* Center section - Tools count badge (visible on larger screens) */}
-          <div className="hidden lg:flex items-center">
-            <Box className="bg-gray-50 rounded-full px-4 py-2 border border-gray-200 shadow-sm">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <Typography className="!text-sm text-gray-700 font-medium">
-                  60+ Tools Available
-                </Typography>
-              </div>
-            </Box>
+          <div className="hidden xl:flex items-center gap-2">
+            <AppChip label="115+ tools" color="primary" variant="outlined" />
+            <AppChip
+              label="Private by default"
+              color="success"
+              variant="outlined"
+            />
           </div>
 
-          {/* Right section - Menu */}
-          <div className="flex items-center space-x-4">
-            {/* Quick stats chip (visible on medium screens and up) */}
+          <div className="flex items-center gap-2 md:gap-3">
             <div className="hidden md:block">
-              <Chip
-                label="100% Free"
-                size="small"
-                className="!bg-green-500 !text-white !font-semibold !border-0 hover:!bg-green-600 transition-colors duration-200 !shadow-sm"
-              />
+              <ThemeModeToggle />
             </div>
             <AppMenu />
-            {/* GitHub Link */}
-            {/* <IconButton
-              component="a"
-              href="https://github.com/gaurav10610/webtoolseasy"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View source on GitHub"
-              className="!text-gray-700 hover:!text-gray-900 hover:!bg-gray-100 transition-colors duration-200"
-              size="large"
-            >
-              <GitHubIcon />
-            </IconButton> */}
           </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-2 border-t border-[var(--mui-palette-divider)] py-2 md:hidden">
+          <AppChip
+            label="115+ tools"
+            size="small"
+            color="primary"
+            variant="outlined"
+          />
+          <ThemeModeToggle />
         </div>
       </div>
     </header>

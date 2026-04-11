@@ -1,39 +1,34 @@
-import { getRandomId } from "@/util/commonUtils";
 import { map } from "lodash-es";
 import { ButtonWithLink } from "./lib/buttons";
-import { Typography } from "@mui/material";
 
 export const menuItems = [
   {
     label: "Home",
     routeLink: "/",
-    openInNewTab: false,
   },
   {
     label: "Blog",
     routeLink: "/blog",
-    openInNewTab: true,
   },
 ];
 
 export default function AppMenu({ className = "" }: { className?: string }) {
   return (
-    <nav className={`flex flex-row gap-1 justify-start ${className}`}>
-      {map(menuItems, (menuItem) => (
+    <nav className={`flex flex-row gap-2 justify-start ${className}`}>
+      {map(menuItems, (menuItem, index) => (
         <ButtonWithLink
           buttonText={
-            <Typography className="!text-gray-700 !font-medium" variant="body2">
+            <span className="text-sm font-semibold tracking-tight">
               {menuItem.label}
-            </Typography>
+            </span>
           }
           href={menuItem.routeLink}
-          key={getRandomId()}
-          title={`Go to ${menuItem.label} Page`}
+          key={menuItem.routeLink}
+          title={`Go to ${menuItem.label} page`}
           size="small"
-          variant="outlined"
-          className="!capitalize !border-gray-300 hover:!border-blue-500 hover:!bg-blue-50 !text-gray-700 transition-all duration-200"
-          target={menuItem.openInNewTab ? "_blank" : undefined}
-          rel={menuItem.openInNewTab ? "noopener noreferrer" : undefined}
+          variant={index === 0 ? "contained" : "outlined"}
+          color={index === 0 ? "primary" : "inherit"}
+          className="!capitalize !rounded-full !border-[var(--mui-palette-divider)] !px-4"
         />
       ))}
     </nav>

@@ -13,9 +13,9 @@ import { apps } from "@/data/apps";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
 import SidePanel from "@/components/sidePanel";
-import { BaseToolsAds } from "@/components/baseAds";
 import { notFound } from "next/navigation";
 import { StructuredData } from "@/components/structuredData";
+import { AppChip, AppText } from "@/components/lib/ui";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -221,55 +221,82 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
       )}
       {structuredData?.howTo && <StructuredData data={structuredData.howTo} />}
 
-      <div className="w-full px-2 py-4">
-        {/* Desktop Layout with 60% restriction */}
-        <div className="hidden md:flex w-full max-w-none">
-          {/* Left sidebar - 20% */}
-          <div className="w-[20%] pr-2">
+      <div className="w-full py-2 md:py-4">
+        <div className="grid w-full gap-5 xl:grid-cols-[280px_minmax(0,1fr)]">
+          <aside className="hidden xl:block xl:sticky xl:top-[92px] xl:self-start">
             <SidePanel
               className="w-full"
               appConfigJson={apps}
               pageUrl={params.pageUrl}
             />
-          </div>
+          </aside>
 
-          {/* Main content area - 60% */}
-          <div className="w-[60%] px-2">
-            <div className="flex flex-col gap-5 w-full max-w-full">
-              <AppHeading heading={toolConfigData.mainHeading!} />
-              <SocialShareButtons
-                pageUrl={toolUrl}
-                heading={toolConfigData.pageTitle}
-              />
-              <div className="flex flex-col gap-2 w-full max-w-full">
-                {children}
+          <section className="flex min-w-0 flex-col gap-5">
+            <AppHeading heading={toolConfigData.mainHeading!} />
+
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+              <div className="min-w-0">
+                <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <AppChip
+                      label="100% browser-based"
+                      color="success"
+                      variant="outlined"
+                      size="small"
+                    />
+                    <AppChip
+                      label="No ads on tool pages"
+                      color="primary"
+                      variant="outlined"
+                      size="small"
+                    />
+                    <AppChip
+                      label="SEO-friendly content"
+                      color="secondary"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                  <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
+                    Use the tool immediately below with a wider workspace, more
+                    consistent fullscreen behavior, and preserved page content.
+                  </AppText>
+                  <div className="flex flex-col gap-2 w-full max-w-full">
+                    {children}
+                  </div>
+                </div>
               </div>
-              {relatedToolsConfigs.length > 0 && (
-                <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
-              )}
-              <ToolDescription descriptionData={toolDescriptionData} />
+
+              <aside className="flex flex-col gap-4">
+                <div className="rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
+                  <AppText component="h2" variant="h4" className="!mb-2">
+                    Share or bookmark this tool
+                  </AppText>
+                  <AppText className="!mb-4 !text-sm !text-[var(--mui-palette-text-secondary)]">
+                    Keep the current URL unchanged and share it directly with
+                    teammates or users.
+                  </AppText>
+                  <SocialShareButtons
+                    pageUrl={toolUrl}
+                    heading={toolConfigData.pageTitle}
+                  />
+                </div>
+
+                <div className="xl:hidden">
+                  <SidePanel
+                    className="w-full"
+                    appConfigJson={apps}
+                    pageUrl={params.pageUrl}
+                  />
+                </div>
+              </aside>
             </div>
-          </div>
 
-          {/* Right sidebar - 20% */}
-          <div className="w-[20%] pl-2">
-            <BaseToolsAds className="w-full" />
-          </div>
-        </div>
-
-        {/* Mobile Layout - Full width */}
-        <div className="flex md:hidden flex-col gap-5 w-full">
-          <AppHeading heading={toolConfigData.mainHeading!} />
-          <SocialShareButtons
-            pageUrl={toolUrl}
-            heading={toolConfigData.pageTitle}
-          />
-          <div className="flex flex-col gap-2 w-full">{children}</div>
-          {relatedToolsConfigs.length > 0 && (
-            <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
-          )}
-          <ToolDescription descriptionData={toolDescriptionData} />
-          <BaseToolsAds className="w-full" />
+            {relatedToolsConfigs.length > 0 && (
+              <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
+            )}
+            <ToolDescription descriptionData={toolDescriptionData} />
+          </section>
         </div>
       </div>
     </>

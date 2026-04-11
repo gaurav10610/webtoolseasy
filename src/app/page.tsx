@@ -2,19 +2,18 @@ import { AppHeading } from "@/components/commonComponents";
 import { apps } from "@/data/apps";
 import { AppNavigationConfig, AppCategory } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
-import {
-  Typography,
-  Chip,
-  Box,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { groupBy, map, values, filter, includes, toLower } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
-import { BaseToolsAds } from "@/components/baseAds";
+import {
+  AppAdornment,
+  AppBox,
+  AppChip,
+  AppField,
+  AppText,
+} from "@/components/lib/ui";
 import Link from "next/link";
 import {
   StructuredData,
@@ -92,35 +91,34 @@ function AppDiscoveryFilters({
   filteredCount: number;
 }>) {
   return (
-    <Box className="w-full mb-6">
-      <section className="flex flex-col gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-        <header className="flex items-center gap-2 mb-2">
+    <AppBox className="w-full mb-6">
+      <section className="app-shell-section flex flex-col gap-4">
+        <header className="flex items-center gap-2 mb-1">
           <FilterListIcon color="primary" />
-          <Typography variant="h6" className="!font-medium">
-            Discover Tools ({filteredCount} of {totalTools})
-          </Typography>
+          <AppText variant="h6" className="!font-semibold">
+            Discover tools ({filteredCount} of {totalTools})
+          </AppText>
         </header>
 
         <form method="GET" className="w-full">
           {selectedCategory && (
             <input type="hidden" name="category" value={selectedCategory} />
           )}
-          <TextField
+          <AppField
             name="search"
-            placeholder="Search tools by name or description... (Press Enter to search)"
+            placeholder="Search tools by name or category and press Enter"
             size="small"
             fullWidth
             defaultValue={searchQuery || ""}
             slotProps={{
               input: {
                 startAdornment: (
-                  <InputAdornment position="start">
+                  <AppAdornment position="start">
                     <SearchIcon color="action" />
-                  </InputAdornment>
+                  </AppAdornment>
                 ),
               },
             }}
-            className="mb-3"
           />
         </form>
 
@@ -131,8 +129,8 @@ function AppDiscoveryFilters({
             }
             className="no-underline"
           >
-            <Chip
-              label="All Categories"
+            <AppChip
+              label="All categories"
               variant={!selectedCategory ? "filled" : "outlined"}
               color={!selectedCategory ? "primary" : "default"}
               className="cursor-pointer hover:shadow-md transition-shadow"
@@ -151,7 +149,7 @@ function AppDiscoveryFilters({
                 href={href}
                 className="no-underline"
               >
-                <Chip
+                <AppChip
                   label={category}
                   variant={
                     selectedCategory === category ? "filled" : "outlined"
@@ -165,10 +163,10 @@ function AppDiscoveryFilters({
         </nav>
 
         {(selectedCategory || searchQuery) && (
-          <div className="flex items-center gap-2 pt-2 border-t border-blue-200">
-            <Typography variant="body2" color="textSecondary">
+          <div className="flex flex-wrap items-center gap-2 border-t border-[var(--mui-palette-divider)] pt-2">
+            <AppText variant="body2" color="textSecondary">
               Active filters:
-            </Typography>
+            </AppText>
             {selectedCategory && (
               <Link
                 href={
@@ -178,7 +176,7 @@ function AppDiscoveryFilters({
                 }
                 className="no-underline"
               >
-                <Chip
+                <AppChip
                   label={`Category: ${selectedCategory}`}
                   size="small"
                   color="secondary"
@@ -195,7 +193,7 @@ function AppDiscoveryFilters({
                 }
                 className="no-underline"
               >
-                <Chip
+                <AppChip
                   label={`Search: ${searchQuery}`}
                   size="small"
                   color="secondary"
@@ -206,7 +204,7 @@ function AppDiscoveryFilters({
           </div>
         )}
       </section>
-    </Box>
+    </AppBox>
   );
 }
 
@@ -238,15 +236,15 @@ function PopularToolsSection({
           isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
         }`}
       >
-        <Typography
+        <AppText
           id="popular-tools-heading"
           variant={isMobile ? "h6" : "h5"}
           className="!font-semibold !text-purple-800"
         >
           🌟 Popular Tools
-        </Typography>
-        <Chip
-          label="Most Used"
+        </AppText>
+        <AppChip
+          label="Most used"
           color="secondary"
           variant="outlined"
           size="small"
@@ -311,14 +309,14 @@ function SectionAppList({
     <section className="flex flex-col gap-4 w-full">
       {showCategoryTitle && (
         <header className="flex items-center gap-3 pb-2 border-b border-gray-200">
-          <Typography
+          <AppText
             variant="h2"
             className="!text-xl md:!text-2xl !font-medium !text-gray-800"
             color="textSecondary"
           >
             {category}
-          </Typography>
-          <Chip
+          </AppText>
+          <AppChip
             label={`${configs.length} tools`}
             size="small"
             variant="outlined"
@@ -454,137 +452,25 @@ export default async function Home({
       <StructuredData data={websiteSchema} />
       <StructuredData data={faqSchema} />
 
-      <div className="w-full px-2 py-4">
-        {/* Desktop Layout with 60% restriction */}
-        <div className="hidden md:flex w-full max-w-none">
-          <aside className="w-[20%] pr-2">
-            <BaseToolsAds className="w-full" />
-          </aside>
+      <div className="w-full py-2 md:py-4">
+        <div className="flex flex-col gap-4 items-center w-full">
+          <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
 
-          <section className="w-[60%] px-2">
-            <div className="flex flex-col gap-4 items-center w-full">
-              <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
+          <section className="app-shell-section w-full">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+              <div className="max-w-3xl">
+                <AppText className="!text-base !text-[var(--mui-palette-text-secondary)]">
+                  Explore a wider, ad-free workspace built for developers,
+                  creators, and business users who want reliable browser-based
+                  utilities with a consistent enterprise-grade experience.
+                </AppText>
+              </div>
               <SocialShareButtons
                 pageUrl={`${process.env.HOSTNAME}`}
                 heading={pageTitle}
               />
-
-              <AppDiscoveryFilters
-                categories={allCategories}
-                selectedCategory={selectedCategory}
-                searchQuery={searchQuery}
-                totalTools={allApps.length}
-                filteredCount={filteredApps.length}
-              />
-
-              {!selectedCategory && !searchQuery && (
-                <nav
-                  className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4"
-                  aria-label="Quick category access"
-                >
-                  <Suspense
-                    fallback={
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-4">
-                        {Array.from({ length: 4 }, (_, i) => (
-                          <SkeletonWithProps
-                            key={i}
-                            height={80}
-                            className="rounded-lg"
-                          />
-                        ))}
-                      </div>
-                    }
-                  >
-                    {allCategories.slice(0, 4).map((category) => {
-                      const categoryCount = allApps.filter(
-                        (app) => app.category === category,
-                      ).length;
-                      return (
-                        <Link
-                          key={`quick-${category}`}
-                          href={`/?category=${encodeURIComponent(category)}`}
-                          className="no-underline"
-                        >
-                          <Box className="p-3 text-center bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300">
-                            <Typography
-                              variant="h6"
-                              className="!font-bold !text-blue-600"
-                            >
-                              {categoryCount}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="textSecondary"
-                              className="truncate"
-                            >
-                              {category}
-                            </Typography>
-                          </Box>
-                        </Link>
-                      );
-                    })}
-                  </Suspense>
-                </nav>
-              )}
-
-              {filteredApps.length > 0 ? (
-                <div className="flex flex-col gap-8 w-full mt-5">
-                  {!selectedCategory &&
-                    !searchQuery &&
-                    ENABLE_POPULAR_TOOLS && (
-                      <PopularToolsSection allApps={allApps} />
-                    )}
-
-                  {map(categoryWiseAppList, (configs, category) => {
-                    return (
-                      <SectionAppList
-                        key={`section-${category}`}
-                        category={category}
-                        configs={configs}
-                        showCategoryTitle={!searchQuery}
-                      />
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    className="mb-4"
-                  >
-                    🔍 No tools found matching your criteria
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    className="mb-4"
-                  >
-                    Try adjusting your search or removing filters
-                  </Typography>
-                  <Link href="/" className="no-underline">
-                    <Chip
-                      label="Clear All Filters"
-                      color="primary"
-                      className="cursor-pointer"
-                    />
-                  </Link>
-                </div>
-              )}
             </div>
           </section>
-
-          <aside className="w-[20%] pl-2">
-            <BaseToolsAds className="w-full" />
-          </aside>
-        </div>
-
-        <div className="flex md:hidden flex-col gap-4 items-center w-full">
-          <AppHeading heading="Free Online Tools - Web Utilities & Productivity Suite" />
-          <SocialShareButtons
-            pageUrl={`${process.env.HOSTNAME}`}
-            heading={pageTitle}
-          />
 
           <AppDiscoveryFilters
             categories={allCategories}
@@ -594,16 +480,66 @@ export default async function Home({
             filteredCount={filteredApps.length}
           />
 
+          {!selectedCategory && !searchQuery && (
+            <nav
+              className="grid grid-cols-2 gap-4 w-full mb-2 md:grid-cols-4"
+              aria-label="Quick category access"
+            >
+              <Suspense
+                fallback={
+                  <div className="grid grid-cols-2 gap-4 w-full md:grid-cols-4">
+                    {Array.from({ length: 4 }, (_, i) => (
+                      <SkeletonWithProps
+                        key={i}
+                        height={88}
+                        className="rounded-lg"
+                      />
+                    ))}
+                  </div>
+                }
+              >
+                {allCategories.slice(0, 4).map((category) => {
+                  const categoryCount = allApps.filter(
+                    (app) => app.category === category,
+                  ).length;
+                  return (
+                    <Link
+                      key={`quick-${category}`}
+                      href={`/?category=${encodeURIComponent(category)}`}
+                      className="no-underline"
+                    >
+                      <AppBox className="app-shell-section !p-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-pointer">
+                        <AppText
+                          variant="h6"
+                          className="!font-bold !text-[var(--mui-palette-primary-main)]"
+                        >
+                          {categoryCount}
+                        </AppText>
+                        <AppText
+                          variant="body2"
+                          color="textSecondary"
+                          className="truncate"
+                        >
+                          {category}
+                        </AppText>
+                      </AppBox>
+                    </Link>
+                  );
+                })}
+              </Suspense>
+            </nav>
+          )}
+
           {filteredApps.length > 0 ? (
-            <div className="flex flex-col gap-8 w-full mt-5">
+            <div className="flex flex-col gap-8 w-full mt-2">
               {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
-                <PopularToolsSection allApps={allApps} isMobile={true} />
+                <PopularToolsSection allApps={allApps} />
               )}
 
               {map(categoryWiseAppList, (configs, category) => {
                 return (
                   <SectionAppList
-                    key={`mobile-section-${category}`}
+                    key={`section-${category}`}
                     category={category}
                     configs={configs}
                     showCategoryTitle={!searchQuery}
@@ -612,144 +548,140 @@ export default async function Home({
               })}
             </div>
           ) : (
-            <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200">
-              <Typography variant="h6" color="textSecondary" className="mb-4">
-                🔍 No tools found
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                className="mb-4"
-              >
-                Try adjusting your search or removing filters
-              </Typography>
+            <div className="app-shell-section w-full text-center py-10">
+              <AppText variant="h6" color="textSecondary" className="mb-4">
+                🔍 No tools found matching your criteria
+              </AppText>
+              <AppText variant="body2" color="textSecondary" className="mb-4">
+                Try adjusting your search or removing filters.
+              </AppText>
               <Link href="/" className="no-underline">
-                <Chip
-                  label="Clear Filters"
+                <AppChip
+                  label="Clear all filters"
                   color="primary"
                   className="cursor-pointer"
                 />
               </Link>
             </div>
           )}
-          <BaseToolsAds className="w-full" />
+
+          {/* SEO Content Section — visible to search engines and users */}
+          <section className="w-full px-4 py-8 mt-2 bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-100">
+            <div className="max-w-4xl mx-auto">
+              <AppText
+                variant="h2"
+                className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 !mb-6"
+              >
+                Free Online Tools for Developers, Designers &amp; Everyone
+              </AppText>
+
+              <AppText
+                variant="body1"
+                className="!text-gray-600 !mb-4 !leading-relaxed"
+              >
+                WebToolsEasy provides 115+ free browser-based utilities that
+                handle everything from JSON formatting and code beautification
+                to PDF editing, image compression, and financial calculations.
+                Unlike other online tools,{" "}
+                <strong>your data never leaves your browser</strong> — every
+                operation runs locally using client-side JavaScript, giving you
+                complete privacy and security without any server uploads.
+              </AppText>
+
+              <AppText
+                variant="h3"
+                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+              >
+                Popular Developer Tools
+              </AppText>
+              <AppText
+                variant="body1"
+                className="!text-gray-600 !mb-4 !leading-relaxed"
+              >
+                Our developer toolkit includes a powerful{" "}
+                <strong>JSON formatter</strong> and validator,{" "}
+                <strong>JavaScript editor</strong> with live preview,{" "}
+                <strong>HTML/CSS/SQL formatter</strong>,{" "}
+                <strong>regex tester</strong>,{" "}
+                <strong>Base64 encoder/decoder</strong>,{" "}
+                <strong>JWT decoder</strong>, <strong>diff checker</strong>, and
+                converters for JSON&#8596;CSV, JSON&#8596;YAML, XML&#8596;JSON,
+                and Markdown&#8596;HTML. All formatters support syntax
+                highlighting, error detection, and one-click copy.
+              </AppText>
+
+              <AppText
+                variant="h3"
+                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+              >
+                Image &amp; Media Tools
+              </AppText>
+              <AppText
+                variant="body1"
+                className="!text-gray-600 !mb-4 !leading-relaxed"
+              >
+                Compress images, convert formats (PNG, JPG, WebP, SVG), resize
+                and crop photos, remove backgrounds, and create GIFs — all
+                without uploading to any server. Our{" "}
+                <strong>video converter</strong>,{" "}
+                <strong>screen recorder</strong>, and{" "}
+                <strong>audio recorder</strong> tools let you work with media
+                files directly in your browser using WebAssembly-powered
+                processing.
+              </AppText>
+
+              <AppText
+                variant="h3"
+                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+              >
+                PDF &amp; Document Tools
+              </AppText>
+              <AppText
+                variant="body1"
+                className="!text-gray-600 !mb-4 !leading-relaxed"
+              >
+                Edit, merge, split, and compress PDF files online for free.
+                Convert PDFs to images or Word documents and vice versa. Our{" "}
+                <strong>resume builder</strong> and{" "}
+                <strong>invoice generator</strong> create professional documents
+                instantly with no signup required.
+              </AppText>
+
+              <AppText
+                variant="h3"
+                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+              >
+                Why Choose WebToolsEasy?
+              </AppText>
+              <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-6">
+                <li>
+                  <strong>100% Free</strong> — No hidden fees, no premium tiers,
+                  no usage limits
+                </li>
+                <li>
+                  <strong>Complete Privacy</strong> — All processing happens in
+                  your browser, zero server uploads
+                </li>
+                <li>
+                  <strong>No Signup Required</strong> — Use any tool instantly
+                  without creating an account
+                </li>
+                <li>
+                  <strong>Works Offline</strong> — Once loaded, most tools
+                  function without internet
+                </li>
+                <li>
+                  <strong>Mobile Friendly</strong> — Responsive design works on
+                  phones, tablets, and desktops
+                </li>
+                <li>
+                  <strong>Auto-Save</strong> — Your work is automatically saved
+                  and restored on page reload
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
-
-        {/* SEO Content Section — visible to search engines and users */}
-        <section className="w-full px-4 py-8 mt-8 bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-100">
-          <div className="max-w-4xl mx-auto">
-            <Typography
-              variant="h2"
-              className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 !mb-6"
-            >
-              Free Online Tools for Developers, Designers &amp; Everyone
-            </Typography>
-
-            <Typography
-              variant="body1"
-              className="!text-gray-600 !mb-4 !leading-relaxed"
-            >
-              WebToolsEasy provides 115+ free browser-based utilities that
-              handle everything from JSON formatting and code beautification to
-              PDF editing, image compression, and financial calculations. Unlike
-              other online tools,{" "}
-              <strong>your data never leaves your browser</strong> — every
-              operation runs locally using client-side JavaScript, giving you
-              complete privacy and security without any server uploads.
-            </Typography>
-
-            <Typography
-              variant="h3"
-              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
-            >
-              Popular Developer Tools
-            </Typography>
-            <Typography
-              variant="body1"
-              className="!text-gray-600 !mb-4 !leading-relaxed"
-            >
-              Our developer toolkit includes a powerful{" "}
-              <strong>JSON formatter</strong> and validator,{" "}
-              <strong>JavaScript editor</strong> with live preview,{" "}
-              <strong>HTML/CSS/SQL formatter</strong>,{" "}
-              <strong>regex tester</strong>,{" "}
-              <strong>Base64 encoder/decoder</strong>,{" "}
-              <strong>JWT decoder</strong>, <strong>diff checker</strong>, and
-              converters for JSON&#8596;CSV, JSON&#8596;YAML, XML&#8596;JSON,
-              and Markdown&#8596;HTML. All formatters support syntax
-              highlighting, error detection, and one-click copy.
-            </Typography>
-
-            <Typography
-              variant="h3"
-              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
-            >
-              Image &amp; Media Tools
-            </Typography>
-            <Typography
-              variant="body1"
-              className="!text-gray-600 !mb-4 !leading-relaxed"
-            >
-              Compress images, convert formats (PNG, JPG, WebP, SVG), resize and
-              crop photos, remove backgrounds, and create GIFs — all without
-              uploading to any server. Our <strong>video converter</strong>,{" "}
-              <strong>screen recorder</strong>, and{" "}
-              <strong>audio recorder</strong> tools let you work with media
-              files directly in your browser using WebAssembly-powered
-              processing.
-            </Typography>
-
-            <Typography
-              variant="h3"
-              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
-            >
-              PDF &amp; Document Tools
-            </Typography>
-            <Typography
-              variant="body1"
-              className="!text-gray-600 !mb-4 !leading-relaxed"
-            >
-              Edit, merge, split, and compress PDF files online for free.
-              Convert PDFs to images or Word documents and vice versa. Our{" "}
-              <strong>resume builder</strong> and{" "}
-              <strong>invoice generator</strong> create professional documents
-              instantly with no signup required.
-            </Typography>
-
-            <Typography
-              variant="h3"
-              className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
-            >
-              Why Choose WebToolsEasy?
-            </Typography>
-            <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-6">
-              <li>
-                <strong>100% Free</strong> — No hidden fees, no premium tiers,
-                no usage limits
-              </li>
-              <li>
-                <strong>Complete Privacy</strong> — All processing happens in
-                your browser, zero server uploads
-              </li>
-              <li>
-                <strong>No Signup Required</strong> — Use any tool instantly
-                without creating an account
-              </li>
-              <li>
-                <strong>Works Offline</strong> — Once loaded, most tools
-                function without internet
-              </li>
-              <li>
-                <strong>Mobile Friendly</strong> — Responsive design works on
-                phones, tablets, and desktops
-              </li>
-              <li>
-                <strong>Auto-Save</strong> — Your work is automatically saved
-                and restored on page reload
-              </li>
-            </ul>
-          </div>
-        </section>
       </div>
     </>
   );

@@ -1,9 +1,9 @@
 import { DescriptionBlock } from "@/types/description";
-import Typography from "@mui/material/Typography";
 import { isEmpty, isNil, map } from "lodash-es";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { AppNavigationConfig } from "@/types/config";
 import { RelatedToolCard } from "./appCards";
+import { AppChip, AppText } from "./lib/ui";
 
 export function AppHeading({
   heading,
@@ -11,12 +11,15 @@ export function AppHeading({
   heading: string;
 }>) {
   return (
-    <Typography
-      variant="h1"
-      className="text-center !text-2xl md:!text-4xl !font-normal"
-    >
-      {heading}
-    </Typography>
+    <section className="app-shell-section flex flex-col items-center gap-3 text-center">
+      <AppText component="h1" variant="h1" className="!mb-0">
+        {heading}
+      </AppText>
+      <AppText className="max-w-3xl !text-[var(--mui-palette-text-secondary)]">
+        Privacy-first browser tools with a cleaner workflow, stronger visual
+        consistency, and zero unnecessary redirects.
+      </AppText>
+    </section>
   );
 }
 
@@ -26,18 +29,24 @@ export function RelatedTools({
   relatedToolsConfigs: AppNavigationConfig[];
 }>) {
   return (
-    <div className="flex flex-col gap-2 w-full">
-      <Typography variant="h2" fontSize={"inherit"}>
-        Related Tools
-      </Typography>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full">
+    <section className="app-shell-section flex flex-col gap-4 w-full">
+      <div className="flex items-center justify-between gap-3">
+        <AppText component="h2" variant="h2">
+          Related tools
+        </AppText>
+        <AppChip
+          label={`${relatedToolsConfigs.length} suggestions`}
+          size="small"
+        />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 w-full">
         {map(relatedToolsConfigs, (relatedToolConfig) => (
           <div key={relatedToolConfig.applicationId} className="w-full">
             <RelatedToolCard config={relatedToolConfig} />
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -62,10 +71,14 @@ function ToolDescriptionBlock({
   descriptionBlock: DescriptionBlock;
 }>) {
   return (
-    <div className="flex flex-col w-full gap-2">
-      <Typography variant="h3" fontSize={"inherit"} color="info">
+    <section className="app-shell-section flex flex-col w-full gap-3">
+      <AppText
+        component="h2"
+        variant="h3"
+        className="!text-[var(--mui-palette-primary-main)]"
+      >
         {descriptionBlock.heading}
-      </Typography>
+      </AppText>
       {!isNil(descriptionBlock.blockData) &&
         isEmpty(descriptionBlock.listData) && (
           <DescriptionDataBlockData blockData={descriptionBlock.blockData} />
@@ -77,7 +90,7 @@ function ToolDescriptionBlock({
       {!isNil(descriptionBlock.links) && (
         <DescriptionLinks links={descriptionBlock.links} />
       )}
-    </div>
+    </section>
   );
 }
 
@@ -91,7 +104,7 @@ function DescriptionLinks({
       {map(links, (link) => (
         <div key={link.url} className="flex flex-row gap-2">
           <KeyboardArrowRightIcon />
-          <Typography
+          <AppText
             href={link.url}
             component={"a"}
             color="primary"
@@ -99,7 +112,7 @@ function DescriptionLinks({
             className="no-underline hover:underline"
           >
             {link.displayText}
-          </Typography>
+          </AppText>
         </div>
       ))}
     </div>
@@ -179,7 +192,7 @@ function DescriptionDataBlockData({
         parts.push(
           <strong key={`bold-${keyCounter++}`} style={{ fontWeight: 600 }}>
             {pattern.content}
-          </strong>
+          </strong>,
         );
       } else if (pattern.type === "code") {
         parts.push(
@@ -194,7 +207,7 @@ function DescriptionDataBlockData({
             }}
           >
             {pattern.content}
-          </code>
+          </code>,
         );
       } else if (pattern.type === "link") {
         parts.push(
@@ -206,7 +219,7 @@ function DescriptionDataBlockData({
             style={{ color: "#1976d2", textDecoration: "underline" }}
           >
             {pattern.content}
-          </a>
+          </a>,
         );
       }
 
@@ -225,13 +238,9 @@ function DescriptionDataBlockData({
   return (
     <div className="flex flex-col gap-2 w-full">
       {map(blockData, (data, index) => (
-        <Typography
-          key={`block-${index}`}
-          variant="body1"
-          color="textSecondary"
-        >
+        <AppText key={`block-${index}`} variant="body1" color="textSecondary">
           {parseMarkdownText(data)}
-        </Typography>
+        </AppText>
       ))}
     </div>
   );
@@ -310,7 +319,7 @@ function DescriptionDataListData({
         parts.push(
           <strong key={`bold-${keyCounter++}`} style={{ fontWeight: 600 }}>
             {pattern.content}
-          </strong>
+          </strong>,
         );
       } else if (pattern.type === "code") {
         parts.push(
@@ -325,7 +334,7 @@ function DescriptionDataListData({
             }}
           >
             {pattern.content}
-          </code>
+          </code>,
         );
       } else if (pattern.type === "link") {
         parts.push(
@@ -337,7 +346,7 @@ function DescriptionDataListData({
             style={{ color: "#1976d2", textDecoration: "underline" }}
           >
             {pattern.content}
-          </a>
+          </a>,
         );
       }
 
@@ -358,9 +367,9 @@ function DescriptionDataListData({
       {map(listData, (data, index) => (
         <div key={`list-${index}`} className="flex flex-row gap-2 w-full">
           <KeyboardArrowRightIcon />
-          <Typography variant="body1" color="textSecondary">
+          <AppText variant="body1" color="textSecondary">
             {parseMarkdownText(data)}
-          </Typography>
+          </AppText>
         </div>
       ))}
     </div>

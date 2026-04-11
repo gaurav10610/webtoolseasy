@@ -41,8 +41,7 @@ const ToolComponentWrapper = memo(
           }),
         {
           loading: () => <ToolPageSkeleton />,
-          ssr: false,
-        }
+        },
       ) as React.FC<ToolComponentProps>;
 
       return <Component hostname={hostname} queryParams={queryParams} />;
@@ -53,7 +52,7 @@ const ToolComponentWrapper = memo(
         <ToolComponent />
       </Suspense>
     );
-  }
+  },
 );
 
 ToolComponentWrapper.displayName = "ToolComponentWrapper";

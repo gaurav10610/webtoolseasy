@@ -24,7 +24,7 @@ export const ToolLayout = memo(function ToolLayout({
     <div
       className={`flex flex-col gap-4 w-full ${
         isFullScreen
-          ? "p-3 fixed inset-0 z-50 bg-white h-full overflow-auto"
+          ? "fixed inset-0 z-[1400] h-full overflow-auto bg-[var(--mui-palette-background-default)] p-4 md:p-6"
           : ""
       } ${className}`}
     >
@@ -57,7 +57,7 @@ export const CodeEditorLayout = memo(function CodeEditorLayout({
 }: CodeEditorLayoutProps) {
   const containerHeight = isFullScreen
     ? "h-full"
-    : "md:h-[65vh] md:min-h-[320px]";
+    : "md:h-[68vh] md:min-h-[420px]";
 
   return (
     <div

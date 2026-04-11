@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+
+  body {
+    color: var(--mui-palette-text-primary);
+    background-color: var(--mui-palette-background-default);
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@layer components {
+  .app-shell-section {
+    @apply rounded-[24px] border p-4 shadow-sm md:p-6;
+    border-color: var(--mui-palette-divider);
+    background: color-mix(
+      in srgb,
+      var(--mui-palette-background-paper) 88%,
+      transparent
+    );
+    backdrop-filter: blur(12px);
+  }
+}
