@@ -32,6 +32,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CropIcon from "@mui/icons-material/Crop";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
+import FlipIcon from "@mui/icons-material/Flip";
 import { BaseFileData } from "@/types/file";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 
@@ -56,6 +57,8 @@ export default function CropImageOptimized() {
   const formatList = useMemo(() => ["png", "jpeg", "webp", "bmp", "ico"], []);
   const [imageFormat, setImageFormat] = useState<string>("png");
   const [error, setError] = useState("");
+  const [flipH, setFlipH] = useState(false);
+  const [flipV, setFlipV] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const addMoreInputRef = useRef<HTMLInputElement>(null);
@@ -299,6 +302,11 @@ export default function CropImageOptimized() {
       const ctx = canvas.getContext("2d");
 
       if (ctx) {
+        ctx.save();
+        if (flipH || flipV) {
+          ctx.translate(flipH ? cropWidth : 0, flipV ? cropHeight : 0);
+          ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+        }
         ctx.drawImage(
           image,
           cropX,
@@ -310,6 +318,7 @@ export default function CropImageOptimized() {
           cropWidth,
           cropHeight
         );
+        ctx.restore();
 
         canvas.toBlob(callback);
       }
@@ -581,6 +590,20 @@ export default function CropImageOptimized() {
             <Grid item xs={12}>
               <div className="flex gap-2 justify-end">
                 <ButtonWithHandler
+                  buttonText={`Flip H${flipH ? " ✓" : ""}`}
+                  startIcon={<FlipIcon />}
+                  onClick={() => setFlipH((v) => !v)}
+                  size="small"
+                  variant={flipH ? "contained" : "outlined"}
+                />
+                <ButtonWithHandler
+                  buttonText={`Flip V${flipV ? " ✓" : ""}`}
+                  startIcon={<FlipIcon sx={{ transform: "rotate(90deg)" }} />}
+                  onClick={() => setFlipV((v) => !v)}
+                  size="small"
+                  variant={flipV ? "contained" : "outlined"}
+                />
+                <ButtonWithHandler
                   buttonText="Reset Crop"
                   startIcon={<RestartAltIcon />}
                   onClick={resetCrop}
@@ -615,6 +638,10 @@ export default function CropImageOptimized() {
     handleWidthTextChange,
     handleHeightTextChange,
     resetCrop,
+    flipH,
+    flipV,
+    setFlipH,
+    setFlipV,
   ]);
 
   const selectImageHandler = useCallback(
@@ -761,6 +788,9 @@ export default function CropImageOptimized() {
               alt={selectedFile?.originalFile.name || ""}
               className="h-full w-full object-cover"
               onLoad={handleImageLoad}
+              style={{
+                transform: `scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
+              }}
             />
           </ReactCrop>
         )}

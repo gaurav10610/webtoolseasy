@@ -8,8 +8,19 @@ import {
   Grid,
   Divider,
   Alert,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import { useState, useCallback, useMemo } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolComponentProps } from "@/types/component";
@@ -21,6 +32,14 @@ interface MortgageCalculation {
   loanAmount: number;
   principalPercentage: number;
   interestPercentage: number;
+}
+
+interface AmortizationEntry {
+  month: number;
+  emi: number;
+  principal: number;
+  interest: number;
+  balance: number;
 }
 
 export default function MortgageCalculator({
@@ -79,6 +98,23 @@ export default function MortgageCalculator({
       calculateMortgage(homePrice, downPayment, interestRate, loanTermYears),
     [homePrice, downPayment, interestRate, loanTermYears, calculateMortgage]
   );
+
+  const amortizationSchedule = useMemo((): AmortizationEntry[] => {
+    const loanAmount = homePrice - downPayment;
+    if (loanAmount <= 0 || interestRate <= 0 || loanTermYears <= 0) return [];
+    const monthlyRate = interestRate / 12 / 100;
+    const months = loanTermYears * 12;
+    const emi = mortgageResults.monthlyEMI;
+    const schedule: AmortizationEntry[] = [];
+    let balance = loanAmount;
+    for (let m = 1; m <= months; m++) {
+      const interest = Math.round(balance * monthlyRate);
+      const principal = Math.round(emi - interest);
+      balance = Math.max(0, balance - principal);
+      schedule.push({ month: m, emi, principal, interest, balance });
+    }
+    return schedule;
+  }, [homePrice, downPayment, interestRate, loanTermYears, mortgageResults.monthlyEMI]);
 
   const handleHomePriceChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -373,6 +409,40 @@ export default function MortgageCalculator({
                 </Grid>
               </CardContent>
             </Card>
+            {/* Amortization Schedule */}
+            {amortizationSchedule.length > 0 && (
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6">Amortization Schedule</Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ p: 0 }}>
+                  <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+                    <Table stickyHeader size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Month</TableCell>
+                          <TableCell align="right">EMI</TableCell>
+                          <TableCell align="right">Principal</TableCell>
+                          <TableCell align="right">Interest</TableCell>
+                          <TableCell align="right">Balance</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {amortizationSchedule.map((row) => (
+                          <TableRow key={row.month} hover>
+                            <TableCell>{row.month}</TableCell>
+                            <TableCell align="right">{formatCurrency(row.emi)}</TableCell>
+                            <TableCell align="right">{formatCurrency(row.principal)}</TableCell>
+                            <TableCell align="right" sx={{ color: "error.main" }}>{formatCurrency(row.interest)}</TableCell>
+                            <TableCell align="right">{formatCurrency(row.balance)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </AccordionDetails>
+              </Accordion>
+            )}
           </>
         )}
 

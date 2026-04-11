@@ -56,6 +56,20 @@ export default function Base64Encode({
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Paste from Clipboard",
+        onClick: async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            setBase64Data(btoa(unescape(encodeURIComponent(text))));
+            toolState.actions.showMessage("Text pasted and encoded!");
+          } catch {
+            toolState.actions.showMessage("Clipboard read not allowed");
+          }
+        },
+        variant: "outlined" as const,
+      },
       ...createCommonButtons({
         onCopy: copyBase64Data,
         onShareLink: () => toolState.actions.copyShareableLink(base64Data),

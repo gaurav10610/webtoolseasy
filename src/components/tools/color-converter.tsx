@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   TextField,
   Card,
@@ -534,7 +534,7 @@ export default function ColorConverter({
                     title={`Base: ${colorFormats.hex}`}
                     onClick={() => toolState.setCode(colorFormats.hex)}
                   />
-                  {swatches.map((hex) => (
+                  {swatches.map((hex: string) => (
                     <div
                       key={hex}
                       className="w-8 h-8 rounded border border-gray-300 cursor-pointer"

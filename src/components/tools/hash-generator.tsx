@@ -10,6 +10,7 @@ import {
   Chip,
   Alert,
   LinearProgress,
+  TextField,
 } from "@mui/material";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -265,6 +266,34 @@ export default function HashGenerator({
   } | null>(null);
   const [fileLoading, setFileLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [hmacKey, setHmacKey] = useState("");
+  const [hmacResults, setHmacResults] = useState<{
+    "SHA-256": string;
+    "SHA-512": string;
+  }>({ "SHA-256": "", "SHA-512": "" });
+
+  const computeHmac = useCallback(async (msg: string, key: string) => {
+    if (!msg || !key) {
+      setHmacResults({ "SHA-256": "", "SHA-512": "" });
+      return;
+    }
+    const enc = new TextEncoder();
+    const keyBuf = enc.encode(key);
+    const msgBuf = enc.encode(msg);
+    const results: Record<string, string> = {};
+    for (const alg of ["SHA-256", "SHA-512"] as const) {
+      const k = await crypto.subtle.importKey(
+        "raw",
+        keyBuf,
+        { name: "HMAC", hash: alg },
+        false,
+        ["sign"],
+      );
+      const sig = await crypto.subtle.sign("HMAC", k, msgBuf);
+      results[alg] = toHex(sig);
+    }
+    setHmacResults(results as typeof hmacResults);
+  }, []);
 
   const computeHashes = useCallback(async (input: string) => {
     if (!input) {
@@ -285,6 +314,12 @@ export default function HashGenerator({
     const t = setTimeout(() => computeHashes(toolState.code || ""), 150);
     return () => clearTimeout(t);
   }, [toolState.code, computeHashes]);
+
+  // Auto-compute HMAC when input or key changes
+  useEffect(() => {
+    const t = setTimeout(() => computeHmac(toolState.code || "", hmacKey), 150);
+    return () => clearTimeout(t);
+  }, [toolState.code, hmacKey, computeHmac]);
 
   // Initial compute
   useEffect(() => {
@@ -465,6 +500,23 @@ export default function HashGenerator({
           <HashRow label="SHA-1" value={results.sha1} />
           <HashRow label="SHA-256" value={results.sha256} />
           <HashRow label="SHA-512" value={results.sha512} />
+
+          {/* HMAC Section */}
+          <Divider />
+          <Typography variant="subtitle1" className="font-semibold">
+            HMAC (Keyed-Hash)
+          </Typography>
+          <TextField
+            label="HMAC Secret Key"
+            size="small"
+            fullWidth
+            value={hmacKey}
+            onChange={(e) => setHmacKey(e.target.value)}
+            placeholder="Enter secret key for HMAC"
+            helperText="COMPUTES HMAC-SHA256 and HMAC-SHA512 with the secret key above"
+          />
+          <HashRow label="HMAC-SHA256" value={hmacResults["SHA-256"]} />
+          <HashRow label="HMAC-SHA512" value={hmacResults["SHA-512"]} />
 
           {/* File Hashing Section */}
           <Divider />

@@ -13,6 +13,8 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
@@ -62,6 +64,9 @@ export default function AudioRecorder({
   const [audioDevices, setAudioDevices] = useState<AudioDevice[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [audioLevel, setAudioLevel] = useState<number>(0);
+  const [audioFormat, setAudioFormat] = useState<string>(
+    "audio/webm;codecs=opus",
+  );
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -71,6 +76,8 @@ export default function AudioRecorder({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const waveformRef = useRef<HTMLCanvasElement | null>(null);
+  const waveformFrameRef = useRef<number | null>(null);
 
   // Load saved recordings from IndexedDB on mount
   useEffect(() => {
@@ -179,25 +186,52 @@ export default function AudioRecorder({
       const analyser = audioContext.createAnalyser();
       const source = audioContext.createMediaStreamSource(stream);
 
-      analyser.fftSize = 256;
+      analyser.fftSize = 2048;
       source.connect(analyser);
 
       audioContextRef.current = audioContext;
       analyserRef.current = analyser;
 
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      const freqData = new Uint8Array(analyser.frequencyBinCount);
 
       const updateLevel = () => {
         if (analyserRef.current) {
-          analyserRef.current.getByteFrequencyData(dataArray);
-          const average =
-            dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+          analyserRef.current.getByteFrequencyData(freqData);
+          const average = freqData.reduce((a, b) => a + b, 0) / freqData.length;
           setAudioLevel((average / 255) * 100);
           animationFrameRef.current = requestAnimationFrame(updateLevel);
         }
       };
-
       updateLevel();
+
+      // Waveform drawing
+      const waveData = new Uint8Array(analyser.fftSize);
+      const drawWaveform = () => {
+        const canvas = waveformRef.current;
+        if (!canvas || !analyserRef.current) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        analyserRef.current.getByteTimeDomainData(waveData);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#111827";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#22d3ee";
+        ctx.beginPath();
+        const sliceWidth = canvas.width / waveData.length;
+        let x = 0;
+        for (let i = 0; i < waveData.length; i++) {
+          const v = waveData[i] / 128.0;
+          const y = (v * canvas.height) / 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+        waveformFrameRef.current = requestAnimationFrame(drawWaveform);
+      };
+      drawWaveform();
     } catch (err) {
       console.error("Error setting up audio visualization:", err);
     }
@@ -208,6 +242,10 @@ export default function AudioRecorder({
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
+    }
+    if (waveformFrameRef.current) {
+      cancelAnimationFrame(waveformFrameRef.current);
+      waveformFrameRef.current = null;
     }
     if (audioContextRef.current) {
       audioContextRef.current.close();
@@ -240,7 +278,7 @@ export default function AudioRecorder({
       setupAudioVisualization(stream);
 
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: "audio/webm;codecs=opus",
+        mimeType: audioFormat,
       });
 
       mediaRecorder.ondataavailable = (event) => {
@@ -249,14 +287,16 @@ export default function AudioRecorder({
         }
       };
 
+      const formatExt = audioFormat.includes("ogg") ? "ogg" : "webm";
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const baseType = audioFormat.split(";")[0];
+        const blob = new Blob(chunksRef.current, { type: baseType });
         setRecordedBlob(blob);
         setRecordingState(RecordingState.COMPLETED);
         cleanupStream();
         stopTimer();
         // Save to IndexedDB for persistence
-        const key = `audio-recording-${Date.now()}.webm`;
+        const key = `audio-recording-${Date.now()}.${formatExt}`;
         await idbSet(key, blob);
         setSavedRecordings((prev) => [{ key, blob }, ...prev]);
         toolState.actions.showMessage("Recording completed and saved!");
@@ -285,6 +325,7 @@ export default function AudioRecorder({
     }
   }, [
     selectedDevice,
+    audioFormat,
     setupAudioVisualization,
     startTimer,
     stopTimer,
@@ -345,10 +386,11 @@ export default function AudioRecorder({
       return;
     }
 
+    const ext = recordedBlob.type.includes("ogg") ? "ogg" : "webm";
     const url = URL.createObjectURL(recordedBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `audio-recording-${Date.now()}.webm`;
+    link.download = `audio-recording-${Date.now()}.${ext}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -531,6 +573,28 @@ export default function AudioRecorder({
                   label: device.label,
                 }))}
               />
+
+              <div className="mt-4">
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Output Format
+                </Typography>
+                <ToggleButtonGroup
+                  value={audioFormat}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v !== null) setAudioFormat(v);
+                  }}
+                  size="small"
+                >
+                  <ToggleButton value="audio/webm;codecs=opus">
+                    WebM (Opus)
+                  </ToggleButton>
+                  <ToggleButton value="audio/ogg;codecs=opus">
+                    OGG (Opus)
+                  </ToggleButton>
+                  <ToggleButton value="audio/webm">WebM</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -580,6 +644,15 @@ export default function AudioRecorder({
                     value={audioLevel}
                     className="h-2 rounded"
                   />
+                  {/* Waveform */}
+                  <div className="mt-3 rounded overflow-hidden">
+                    <canvas
+                      ref={waveformRef}
+                      width={600}
+                      height={80}
+                      className="w-full rounded"
+                    />
+                  </div>
                 </div>
               )}
 

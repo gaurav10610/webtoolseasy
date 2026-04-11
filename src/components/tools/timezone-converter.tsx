@@ -73,6 +73,33 @@ function formatTime(date: Date, tz: string, use24: boolean) {
   }
 }
 
+function isDST(date: Date, tz: string): boolean {
+  try {
+    // Compare UTC offset in Jan vs Jul to detect DST
+    const jan = new Date(date.getFullYear(), 0, 1);
+    const jul = new Date(date.getFullYear(), 6, 1);
+    const getOffset = (d: Date) => {
+      const s = new Intl.DateTimeFormat("en", {
+        timeZone: tz,
+        hour: "numeric",
+        timeZoneName: "shortOffset",
+      }).formatToParts(d);
+      const tzPart = s.find((p) => p.type === "timeZoneName")?.value ?? "";
+      const m = tzPart.match(/([+-])(\d+)(?::(\d+))?/);
+      if (!m) return 0;
+      const sign = m[1] === "+" ? 1 : -1;
+      return sign * (parseInt(m[2]) * 60 + parseInt(m[3] ?? "0"));
+    };
+    const janOffset = getOffset(jan);
+    const julOffset = getOffset(jul);
+    const curOffset = getOffset(date);
+    if (janOffset === julOffset) return false; // No DST in this timezone
+    return curOffset === Math.max(janOffset, julOffset);
+  } catch {
+    return false;
+  }
+}
+
 export default function TimezoneConverter({
   hostname,
   queryParams,
@@ -365,8 +392,11 @@ export default function TimezoneConverter({
                   key={tz}
                   className="flex items-center justify-between p-2 border rounded"
                 >
-                  <div className="font-medium">
+                  <div className="font-medium flex items-center gap-2">
                     {tz.replace("_/", "/").replace(/_/g, " ")}
+                    {isDST(baseDate, tz) && (
+                      <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-semibold border border-amber-300">DST</span>
+                    )}
                   </div>
                   <div className="text-right text-lg font-mono">
                     {formatTime(baseDate, tz, use24)}

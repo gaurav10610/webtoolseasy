@@ -87,6 +87,8 @@ export default function ScreenRecorder({
   );
   const [error, setError] = useState<string>("");
   const [previewUrl, setPreviewUrl] = useState("");
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [liveBitrate, setLiveBitrate] = useState<string>("");
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const previewVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -94,6 +96,9 @@ export default function ScreenRecorder({
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const compositionCleanupRef = useRef<(() => void) | null>(null);
+  const bitrateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const lastBytesRef = useRef(0);
+  const lastBitrateTimeRef = useRef(0);
 
   useEffect(() => {
     if (!recordedBlob) {
@@ -258,6 +263,22 @@ export default function ScreenRecorder({
         );
       }
 
+      // 3-2-1 Countdown before recording
+      setCountdown(3);
+      await new Promise<void>((resolve) => {
+        let count = 3;
+        const tick = setInterval(() => {
+          count--;
+          if (count <= 0) {
+            clearInterval(tick);
+            setCountdown(null);
+            resolve();
+          } else {
+            setCountdown(count);
+          }
+        }, 1000);
+      });
+
       setRecordingState(RecordingState.PREPARING);
       setError("");
       setRecordedBlob(null);
@@ -339,6 +360,11 @@ export default function ScreenRecorder({
       };
 
       mediaRecorder.onstop = async () => {
+        if (bitrateIntervalRef.current) {
+          clearInterval(bitrateIntervalRef.current);
+          bitrateIntervalRef.current = null;
+        }
+        setLiveBitrate("");
         const finalMimeType = mediaRecorder.mimeType || mimeInfo.mimeType;
         const blob = new Blob(chunksRef.current, { type: finalMimeType });
         const extension = getDownloadExtensionFromMimeType(finalMimeType);
@@ -367,6 +393,23 @@ export default function ScreenRecorder({
       mediaRecorder.start();
       setRecordingState(RecordingState.RECORDING);
       startTimer(true);
+
+      // Live bitrate tracking
+      lastBytesRef.current = 0;
+      lastBitrateTimeRef.current = Date.now();
+      bitrateIntervalRef.current = setInterval(() => {
+        const totalBytes = chunksRef.current.reduce((s, c) => s + c.size, 0);
+        const now = Date.now();
+        const elapsed = (now - lastBitrateTimeRef.current) / 1000;
+        if (elapsed > 0) {
+          const bytesPerSec = (totalBytes - lastBytesRef.current) / elapsed;
+          const kbps = Math.round((bytesPerSec * 8) / 1000);
+          setLiveBitrate(`${kbps} kbps`);
+          lastBytesRef.current = totalBytes;
+          lastBitrateTimeRef.current = now;
+        }
+      }, 1000);
+
       toolState.actions.showMessage(
         `Recording started in ${recordingConfig.quality} (${mimeInfo.extension.toUpperCase()}).`,
       );
@@ -784,10 +827,33 @@ export default function ScreenRecorder({
 
               {(recordingState === RecordingState.RECORDING ||
                 recordingState === RecordingState.PAUSED) && (
-                <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-white shadow-lg">
-                  <div className="h-3 w-3 rounded-full bg-white animate-pulse" />
-                  <Typography variant="body2" className="font-mono">
-                    {formatTime(recordingTime)}
+                <div className="absolute right-4 top-4 flex flex-col items-end gap-1">
+                  <div className="flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-white shadow-lg">
+                    <div className="h-3 w-3 rounded-full bg-white animate-pulse" />
+                    <Typography variant="body2" className="font-mono">
+                      {formatTime(recordingTime)}
+                    </Typography>
+                  </div>
+                  {liveBitrate && (
+                    <div className="rounded-full bg-gray-800/80 px-2 py-0.5 text-white text-xs font-mono">
+                      {liveBitrate}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {countdown !== null && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
+                  <Typography
+                    variant="h1"
+                    sx={{
+                      color: "white",
+                      fontWeight: "bold",
+                      fontSize: "6rem",
+                      userSelect: "none",
+                    }}
+                  >
+                    {countdown}
                   </Typography>
                 </div>
               )}
@@ -836,9 +902,19 @@ export default function ScreenRecorder({
 
                 {(recordingState === RecordingState.RECORDING ||
                   recordingState === RecordingState.PAUSED) && (
-                  <Typography variant="body1" className="font-mono text-lg">
-                    {formatTime(recordingTime)}
-                  </Typography>
+                  <div className="flex items-center gap-3">
+                    <Typography variant="body1" className="font-mono text-lg">
+                      {formatTime(recordingTime)}
+                    </Typography>
+                    {liveBitrate && (
+                      <Typography
+                        variant="caption"
+                        className="font-mono bg-gray-100 px-2 py-0.5 rounded"
+                      >
+                        {liveBitrate}
+                      </Typography>
+                    )}
+                  </div>
                 )}
               </div>
 

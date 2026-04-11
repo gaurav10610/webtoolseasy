@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Typography, TextField, Button, Divider } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  Button,
+  Divider,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { ToolComponentProps } from "@/types/component";
@@ -26,6 +33,21 @@ export default function UuidV4Generator({
 
   const [uuidList, setUuidList] = useState<string[]>([initialValue]);
   const [bulkCount, setBulkCount] = useState(10);
+  const [uuidCase, setUuidCase] = useState<"lower" | "upper">("lower");
+  const [uuidStyle, setUuidStyle] = useState<
+    "hyphens" | "nohyphens" | "braces"
+  >("hyphens");
+
+  const applyFormat = useCallback(
+    (uuid: string) => {
+      let result =
+        uuidCase === "upper" ? uuid.toUpperCase() : uuid.toLowerCase();
+      if (uuidStyle === "nohyphens") result = result.replace(/-/g, "");
+      else if (uuidStyle === "braces") result = `{${result}}`;
+      return result;
+    },
+    [uuidCase, uuidStyle],
+  );
 
   const generateNewUuid = useCallback(() => {
     const newUuid = generateUuidV4();
@@ -39,12 +61,12 @@ export default function UuidV4Generator({
   }, [toolState]);
 
   const copyCurrentUuid = useCallback(() => {
-    const allUuids = uuidList.join("\n");
+    const allUuids = uuidList.map(applyFormat).join("\n");
     toolState.actions.copyText(
       allUuids,
       `${uuidList.length} UUIDs copied to clipboard!`,
     );
-  }, [uuidList, toolState]);
+  }, [uuidList, applyFormat, toolState]);
 
   const generateBulkUuids = useCallback(() => {
     const count = Math.min(Math.max(1, bulkCount), 1000); // Limit between 1-1000
@@ -56,7 +78,7 @@ export default function UuidV4Generator({
   }, [bulkCount, toolState]);
 
   const downloadUuids = useCallback(() => {
-    const allUuids = uuidList.join("\n");
+    const allUuids = uuidList.map(applyFormat).join("\n");
     const blob = new Blob([allUuids], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -113,6 +135,50 @@ export default function UuidV4Generator({
             >
               Generate New UUID
             </Button>
+          </div>
+
+          <Divider />
+
+          {/* Format Options */}
+          <div>
+            <Typography variant="h6" className="mb-3">
+              🎨 Format Options
+            </Typography>
+            <div className="space-y-2">
+              <div>
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Case
+                </Typography>
+                <ToggleButtonGroup
+                  value={uuidCase}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v !== null) setUuidCase(v);
+                  }}
+                  size="small"
+                >
+                  <ToggleButton value="lower">lowercase</ToggleButton>
+                  <ToggleButton value="upper">UPPERCASE</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+              <div>
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Style
+                </Typography>
+                <ToggleButtonGroup
+                  value={uuidStyle}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v !== null) setUuidStyle(v);
+                  }}
+                  size="small"
+                >
+                  <ToggleButton value="hyphens">With Hyphens</ToggleButton>
+                  <ToggleButton value="nohyphens">No Hyphens</ToggleButton>
+                  <ToggleButton value="braces">With Braces</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+            </div>
           </div>
 
           <Divider />
@@ -192,7 +258,7 @@ export default function UuidV4Generator({
                 {uuidList.map((uuid, index) => (
                   <div key={index} className="p-3 font-mono text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-blue-600">{uuid}</span>
+                      <span className="text-blue-600">{applyFormat(uuid)}</span>
                       <span className="text-xs text-gray-400">
                         #{index + 1}
                       </span>

@@ -434,6 +434,39 @@ export default function SalaryCalculator({
               </CardContent>
             </Card>
 
+            {/* Salary Breakdown Chart */}
+            <Card elevation={1}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Salary Breakdown
+                </Typography>
+                {[
+                  { label: "Take-Home Pay", value: result.afterTaxAnnual, color: "#4ade80", pct: (1 - result.effectiveTaxRate / 100) * 100 },
+                  { label: "Tax Deduction", value: result.annual - result.afterTaxAnnual, color: "#f87171", pct: result.effectiveTaxRate },
+                ].map(({ label, value, color, pct }) => (
+                  <div key={label} className="mb-3">
+                    <div className="flex justify-between mb-1">
+                      <Typography variant="body2">{label}</Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        {formatLargeCurrency(value)} ({pct.toFixed(1)}%)
+                      </Typography>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-4">
+                      <div
+                        className="h-4 rounded-full transition-all duration-500"
+                        style={{ width: `${pct}%`, backgroundColor: color }}
+                      />
+                    </div>
+                  </div>
+                ))}
+                <Divider sx={{ my: 2 }} />
+                <div className="flex justify-between">
+                  <Typography variant="body2" fontWeight="bold">Gross Annual</Typography>
+                  <Typography variant="body2" fontWeight="bold">{formatLargeCurrency(result.annual)}</Typography>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Work Hours Summary */}
             <Card elevation={1} sx={{ bgcolor: "grey.50" }}>
               <CardContent>

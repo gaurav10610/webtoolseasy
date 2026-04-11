@@ -9,7 +9,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Button,
+  Chip,
 } from "@mui/material";
+import ImageIcon from "@mui/icons-material/Image";
+import ClearIcon from "@mui/icons-material/Clear";
 import { toCanvas, toString, toDataURL, QRCodeToDataURLOptions } from "qrcode";
 import DownloadIcon from "@mui/icons-material/Download";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -56,10 +60,38 @@ Try these examples:
   });
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
   const [darkColor, setDarkColor] = useState("#000000");
   const [lightColor, setLightColor] = useState("#FFFFFF");
   const [qrSize, setQrSize] = useState(300);
   const [errLevel, setErrLevel] = useState<"L" | "M" | "Q" | "H">("M");
+  const [logoDataUrl, setLogoDataUrl] = useState<string>("");
+
+  const applyLogo = useCallback(
+    (canvas: HTMLCanvasElement, logoUrl: string) => {
+      const img = new Image();
+      img.onload = () => {
+        const ctx = canvas.getContext("2d")!;
+        const logoSize = canvas.width * 0.22;
+        const x = (canvas.width - logoSize) / 2;
+        const y = (canvas.height - logoSize) / 2;
+        // White background circle for logo
+        ctx.beginPath();
+        ctx.arc(
+          canvas.width / 2,
+          canvas.height / 2,
+          logoSize / 2 + 6,
+          0,
+          2 * Math.PI,
+        );
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.drawImage(img, x, y, logoSize, logoSize);
+      };
+      img.src = logoUrl;
+    },
+    [],
+  );
 
   const generateQrCode = useCallback(async () => {
     const canvas = canvasRef.current;
@@ -74,6 +106,7 @@ Try these examples:
             light: lightColor,
           },
         });
+        if (logoDataUrl) applyLogo(canvas, logoDataUrl);
       } catch (error) {
         console.error("QR Code generation error:", error);
         toolState.actions.showMessage("Error generating QR code");
@@ -86,6 +119,8 @@ Try these examples:
     lightColor,
     qrSize,
     errLevel,
+    logoDataUrl,
+    applyLogo,
   ]);
 
   useEffect(() => {
@@ -307,6 +342,59 @@ Try these examples:
                 <MenuItem value="H">H — High (30%)</MenuItem>
               </Select>
             </FormControl>
+
+            {/* Logo Overlay */}
+            <div>
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                display="block"
+                gutterBottom
+              >
+                Logo Overlay (use H error correction for best results)
+              </Typography>
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = (ev) =>
+                    setLogoDataUrl(ev.target?.result as string);
+                  reader.readAsDataURL(file);
+                  e.target.value = "";
+                }}
+              />
+              <div className="flex items-center gap-2 flex-wrap mt-1">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<ImageIcon />}
+                  onClick={() => logoInputRef.current?.click()}
+                >
+                  Upload Logo
+                </Button>
+                {logoDataUrl && (
+                  <>
+                    <img
+                      src={logoDataUrl}
+                      alt="logo"
+                      className="w-8 h-8 object-contain border rounded"
+                    />
+                    <Chip
+                      label="Remove"
+                      size="small"
+                      onDelete={() => setLogoDataUrl("")}
+                      deleteIcon={<ClearIcon />}
+                      variant="outlined"
+                    />
+                  </>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Examples */}

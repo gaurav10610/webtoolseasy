@@ -56,6 +56,7 @@ const OUTPUT_FORMATS = [
   { value: "jpeg", label: "JPEG", extension: "jpg" },
   { value: "png", label: "PNG", extension: "png" },
   { value: "webp", label: "WebP", extension: "webp" },
+  { value: "avif", label: "AVIF", extension: "avif" },
   { value: "gif", label: "GIF", extension: "gif" },
   { value: "bmp", label: "BMP", extension: "bmp" },
   { value: "ico", label: "ICO", extension: "ico" },
@@ -209,6 +210,8 @@ export default function ImageFormatConverter({
               ? "image/png"
               : targetFormat === "webp"
               ? "image/webp"
+              : targetFormat === "avif"
+              ? "image/avif"
               : targetFormat === "bmp"
               ? "image/bmp"
               : "image/png";

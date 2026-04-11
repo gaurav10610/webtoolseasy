@@ -18,8 +18,9 @@ import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout, SEOContent } from "../common/ToolLayout";
 import { ToolControls, createCommonButtons } from "../common/ToolControls";
+import QRCode from "qrcode";
 
-type BarcodeType = "code128" | "ean13" | "upca" | "code39";
+type BarcodeType = "code128" | "ean13" | "upca" | "code39" | "qr";
 
 export default function BarcodeGenerator({
   hostname,
@@ -205,6 +206,19 @@ export default function BarcodeGenerator({
           return;
         }
         generateCode128(toolState.code.toUpperCase(), canvas);
+      } else if (barcodeType === "qr") {
+        if (toolState.code.length === 0) {
+          setError("QR: Enter some text or URL");
+          return;
+        }
+        QRCode.toCanvas(canvas, toolState.code, {
+          width: 256,
+          margin: 2,
+          color: { dark: "#000000", light: "#ffffff" },
+        }).catch((err: unknown) => {
+          setError("Failed to generate QR code");
+          console.error(err);
+        });
       }
     } catch (err) {
       setError("Failed to generate barcode");
@@ -293,6 +307,7 @@ export default function BarcodeGenerator({
                   <MenuItem value="ean13">EAN13 (13 digits)</MenuItem>
                   <MenuItem value="upca">UPC-A (12 digits)</MenuItem>
                   <MenuItem value="code39">Code39 (Alphanumeric)</MenuItem>
+                  <MenuItem value="qr">QR Code (Text / URL)</MenuItem>
                 </Select>
               </FormControl>
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from "react";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
-import { Checkbox, Typography } from "@mui/material";
+import { Checkbox, Typography, Card, CardContent } from "@mui/material";
 import { Code, ContentCopy } from "@mui/icons-material";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -116,6 +116,37 @@ export default function XmlToJsonConverter({
     [convertXml, copyJsonData, toolState]
   );
 
+  const renderTree = (value: unknown, keyName = "root", depth = 0): React.ReactNode => {
+    const indent = depth * 16;
+    if (value === null || typeof value !== "object") {
+      return (
+        <div key={`${keyName}-${depth}`} style={{ marginLeft: indent }} className="py-0.5">
+          <Typography variant="body2" component="span" sx={{ fontFamily: "monospace" }}>
+            <strong>{keyName}:</strong> {String(value)}
+          </Typography>
+        </div>
+      );
+    }
+    if (Array.isArray(value)) {
+      return (
+        <div key={`${keyName}-${depth}`} style={{ marginLeft: indent }}>
+          <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 700 }}>
+            {keyName}: [ ] ({value.length})
+          </Typography>
+          {value.map((item, i) => renderTree(item, `[${i}]`, depth + 1))}
+        </div>
+      );
+    }
+    return (
+      <div key={`${keyName}-${depth}`} style={{ marginLeft: indent }}>
+        <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 700 }}>
+          {keyName}: {'{ }'}
+        </Typography>
+        {Object.entries(value as Record<string, unknown>).map(([k, v]) => renderTree(v, k, depth + 1))}
+      </div>
+    );
+  };
+
   return (
     <ToolLayout
       isFullScreen={toolState.isFullScreen}
@@ -161,6 +192,27 @@ export default function XmlToJsonConverter({
           />
         }
       />
+
+      {/* JSON Tree View */}
+      {convertedJson && convertedJson !== "Invalid XML" && (
+        <Card className="mt-4">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              JSON Tree View
+            </Typography>
+            <div className="max-h-80 overflow-auto bg-gray-50 rounded p-3">
+              {(() => {
+                try {
+                  const parsed = JSON.parse(convertedJson);
+                  return renderTree(parsed);
+                } catch {
+                  return <Typography variant="body2">Unable to render tree.</Typography>;
+                }
+              })()}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex flex-row gap-4 justify-center w-full mt-4">
         <div className="flex flex-row gap-2 items-center">

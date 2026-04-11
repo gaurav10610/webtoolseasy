@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ToolComponentProps } from "@/types/component";
-import { Typography, Card, CardContent, Alert, Button } from "@mui/material";
+import { Typography, Card, CardContent, Alert, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { FileUploadWithDragDrop } from "../lib/fileUpload";
 import {
   FILE_TYPE_PRESETS,
@@ -49,6 +49,23 @@ export default function ImageToTextConverter({
     progress: 0,
   });
   const [error, setError] = useState<string>("");
+  const [ocrLanguage, setOcrLanguage] = useState<string>("eng");
+
+  const OCR_LANGUAGES = [
+    { code: "eng", label: "English" },
+    { code: "fra", label: "French" },
+    { code: "deu", label: "German" },
+    { code: "spa", label: "Spanish" },
+    { code: "ita", label: "Italian" },
+    { code: "por", label: "Portuguese" },
+    { code: "rus", label: "Russian" },
+    { code: "chi_sim", label: "Chinese (Simplified)" },
+    { code: "chi_tra", label: "Chinese (Traditional)" },
+    { code: "jpn", label: "Japanese" },
+    { code: "kor", label: "Korean" },
+    { code: "ara", label: "Arabic" },
+    { code: "hin", label: "Hindi" },
+  ];
 
   // Snackbar states
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -98,7 +115,7 @@ export default function ImageToTextConverter({
     try {
       const {
         data: { text },
-      } = await Tesseract.recognize(selectedImage, "eng", {
+      } = await Tesseract.recognize(selectedImage, ocrLanguage, {
         logger: (m) => {
           setOcrProgress({
             status: m.status,
@@ -182,6 +199,20 @@ export default function ImageToTextConverter({
 
   const ControlButtons = () => (
     <div className="flex flex-col gap-2 w-full md:flex-row">
+      <FormControl size="small" sx={{ minWidth: 180 }}>
+        <InputLabel>OCR Language</InputLabel>
+        <Select
+          value={ocrLanguage}
+          label="OCR Language"
+          onChange={(e) => setOcrLanguage(e.target.value)}
+        >
+          {OCR_LANGUAGES.map((lang) => (
+            <MenuItem key={lang.code} value={lang.code}>
+              {lang.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <Button
         variant="contained"
         size="small"

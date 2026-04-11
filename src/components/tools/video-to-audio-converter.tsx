@@ -11,6 +11,10 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -179,6 +183,7 @@ export default function VideoToAudioConverter() {
   const [entries, setEntries] = useState<AudioEntry[]>([]);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMsg, setSnackMsg] = useState("");
+  const [audioFormat, setAudioFormat] = useState<"wav" | "webm" | "ogg">("wav");
   const abortRefs = useRef<Map<string, AbortController>>(new Map());
 
   const showMsg = useCallback((msg: string) => {
@@ -231,18 +236,29 @@ export default function VideoToAudioConverter() {
 
       let result: { blob: Blob; ext: string };
 
-      try {
-        // Fast path — works for MP4, WebM and most browser-decodable formats
-        result = await extractAudioFast(entry.file);
+      if (audioFormat === "wav") {
+        // Fast path via AudioContext — always produces WAV
+        try {
+          result = await extractAudioFast(entry.file);
+        } catch {
+          result = await extractAudioRealtime(
+            entry.file,
+            (pct) => setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, progress: pct } : e))),
+            ac.signal,
+          );
+        }
         setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, progress: 100 } : e)));
-      } catch {
-        // Fallback: real-time capture for formats decodeAudioData can't handle
+      } else {
+        // Realtime path for webm/ogg — override mimeType to match user's choice
+        const preferredMime = audioFormat === "ogg" ? "audio/ogg;codecs=opus" : "audio/webm;codecs=opus";
+        const mimeType = MediaRecorder.isTypeSupported(preferredMime) ? preferredMime : "audio/webm";
         result = await extractAudioRealtime(
           entry.file,
-          (pct) =>
-            setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, progress: pct } : e))),
+          (pct) => setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, progress: pct } : e))),
           ac.signal,
         );
+        // Re-wrap with the selected extension label
+        result = { blob: new Blob([await result.blob.arrayBuffer()], { type: mimeType }), ext: audioFormat };
       }
 
       setEntries((prev) =>
@@ -263,7 +279,7 @@ export default function VideoToAudioConverter() {
     } finally {
       abortRefs.current.delete(id);
     }
-  }, [entries, showMsg]);
+  }, [entries, audioFormat, showMsg]);
 
   const download = useCallback((entry: AudioEntry) => {
     if (!entry.resultBlob) return;
@@ -316,7 +332,19 @@ export default function VideoToAudioConverter() {
             <Typography variant="h6">
               {entries.length} file{entries.length !== 1 ? "s" : ""}
             </Typography>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <FormControl size="small" sx={{ minWidth: 130 }}>
+                <InputLabel>Output Format</InputLabel>
+                <Select
+                  value={audioFormat}
+                  label="Output Format"
+                  onChange={(e) => setAudioFormat(e.target.value as "wav" | "webm" | "ogg")}
+                >
+                  <MenuItem value="wav">WAV</MenuItem>
+                  <MenuItem value="webm">WebM</MenuItem>
+                  <MenuItem value="ogg">OGG</MenuItem>
+                </Select>
+              </FormControl>
               {hasConvertible && (
                 <Button variant="contained" startIcon={<AudiotrackIcon />} onClick={convertAll}>
                   Convert All

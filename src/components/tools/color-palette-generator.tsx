@@ -415,11 +415,7 @@ export default function ColorPaletteGenerator() {
               Export Palette
             </Typography>
             <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
-              <Tabs
-                value={exportTab}
-                onChange={(_e, v) => setExportTab(v)}
-                size="small"
-              >
+              <Tabs value={exportTab} onChange={(_e, v) => setExportTab(v)}>
                 <Tab label="CSS Variables" />
                 <Tab label="Tailwind" />
                 {extractedColors.length > 0 && <Tab label="Extracted" />}

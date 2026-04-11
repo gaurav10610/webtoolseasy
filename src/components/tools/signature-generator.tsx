@@ -244,6 +244,29 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
     }, "image/png");
   }, []);
 
+  const downloadSignatureSvg = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const isEmpty = !imageData.data.some((v, i) => i % 4 === 3 && v !== 0);
+    if (isEmpty) { showMessage("Please create a signature first"); return; }
+    // Embed canvas as base64 PNG inside SVG
+    const dataURL = canvas.toDataURL("image/png");
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}"><image href="${dataURL}" width="${canvas.width}" height="${canvas.height}"/></svg>`;
+    const blob = new Blob([svgContent], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "signature.svg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showMessage("SVG signature downloaded!");
+  }, []);
+
   return (
     <div className="flex flex-col gap-4 p-4">
       <SEOContent
@@ -431,6 +454,15 @@ export default function SignatureGenerator({}: Readonly<ToolComponentProps>) {
               sx={{ flex: 1 }}
             >
               Download PNG
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={downloadSignatureSvg}
+              startIcon={<DownloadIcon />}
+              fullWidth
+              sx={{ flex: 1 }}
+            >
+              Download SVG
             </Button>
           </div>
         </CardContent>

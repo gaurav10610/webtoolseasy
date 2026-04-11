@@ -332,6 +332,57 @@ export default function RetirementCalculator({
                 income shown is based on this rule.
               </Typography>
             </Alert>
+
+            {/* Savings Goal Chart */}
+            <Card elevation={2}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Savings Breakdown
+                </Typography>
+                {[
+                  {
+                    label: "Current Savings",
+                    value: currentSavings,
+                    color: "#60a5fa",
+                  },
+                  {
+                    label: "Future Contributions",
+                    value: monthlyContribution * retirementResults.yearsUntilRetirement * 12,
+                    color: "#34d399",
+                  },
+                  {
+                    label: "Investment Growth",
+                    value: retirementResults.investmentGrowth,
+                    color: "#f59e0b",
+                  },
+                ].map(({ label, value, color }) => {
+                  const pct = retirementResults.totalSavings > 0
+                    ? (value / retirementResults.totalSavings) * 100
+                    : 0;
+                  return (
+                    <div key={label} className="mb-3">
+                      <div className="flex justify-between mb-1">
+                        <Typography variant="body2">{label}</Typography>
+                        <Typography variant="body2" fontWeight="bold">
+                          {formatCurrency(value)} ({pct.toFixed(1)}%)
+                        </Typography>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-4">
+                        <div
+                          className="h-4 rounded-full transition-all duration-500"
+                          style={{ width: `${pct}%`, backgroundColor: color }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+                <Divider sx={{ my: 2 }} />
+                <div className="flex justify-between">
+                  <Typography variant="body2" fontWeight="bold">Total Corpus at Retirement</Typography>
+                  <Typography variant="body2" fontWeight="bold">{formatCurrency(retirementResults.totalSavings)}</Typography>
+                </div>
+              </CardContent>
+            </Card>
           </>
         )}
 

@@ -128,6 +128,20 @@ export default function UrlEncoderDecoder({
   // Button configuration
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: "Paste from Clipboard",
+        onClick: async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            toolState.setCode(text);
+            toolState.actions.showMessage("Pasted from clipboard!");
+          } catch {
+            toolState.actions.showMessage("Clipboard read not allowed");
+          }
+        },
+        variant: "outlined" as const,
+      },
       ...createCommonButtons({
         onCopy: copyOutput,
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),

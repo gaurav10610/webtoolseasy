@@ -44,6 +44,8 @@ export default function BMICalculator({
   const [weightLbs, setWeightLbs] = useState<number>(154);
   const [heightFt, setHeightFt] = useState<number>(5);
   const [heightIn, setHeightIn] = useState<number>(7);
+  const [age, setAge] = useState<number>(30);
+  const [sex, setSex] = useState<"male" | "female">("male");
 
   const toolState = useToolState({
     hostname: hostname || "",
@@ -155,6 +157,29 @@ export default function BMICalculator({
     [],
   );
 
+  // Deurenberg formula: BFP = (1.20 × BMI) + (0.23 × age) − (10.8 × sex) − 5.4
+  const bodyFat = useMemo(() => {
+    if (!bmiResult || age <= 0) return null;
+    const sexFactor = sex === "male" ? 1 : 0;
+    const bfp = 1.2 * bmiResult.bmi + 0.23 * age - 10.8 * sexFactor - 5.4;
+    const clamped = Math.max(0, Math.min(70, bfp));
+    let category: string;
+    if (sex === "male") {
+      if (clamped < 6) category = "Essential Fat";
+      else if (clamped < 14) category = "Athletic";
+      else if (clamped < 18) category = "Fitness";
+      else if (clamped < 25) category = "Average";
+      else category = "Obese";
+    } else {
+      if (clamped < 14) category = "Essential Fat";
+      else if (clamped < 21) category = "Athletic";
+      else if (clamped < 25) category = "Fitness";
+      else if (clamped < 32) category = "Average";
+      else category = "Obese";
+    }
+    return { bfp: parseFloat(clamped.toFixed(1)), category };
+  }, [bmiResult, age, sex]);
+
   return (
     <ToolLayout
       snackBar={
@@ -260,6 +285,33 @@ export default function BMICalculator({
                 </Grid>
               </div>
             )}
+            {/* Age & Sex for Body Fat Estimation */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <TextField
+                fullWidth
+                label="Age (years)"
+                type="number"
+                value={age}
+                onChange={(e) => setAge(Number(e.target.value))}
+                inputProps={{ min: 1, max: 120 }}
+                variant="outlined"
+              />
+              <div>
+                <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
+                  Sex (for body fat estimation)
+                </Typography>
+                <ToggleButtonGroup
+                  value={sex}
+                  exclusive
+                  onChange={(_e, v) => v && setSex(v)}
+                  size="small"
+                  fullWidth
+                >
+                  <ToggleButton value="male">Male</ToggleButton>
+                  <ToggleButton value="female">Female</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -329,6 +381,42 @@ export default function BMICalculator({
                 {bmiResult.recommendation}
               </Typography>
             </Alert>
+
+            {/* Body Fat Estimation */}
+            {bodyFat && (
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Estimated Body Fat (Deurenberg Formula)
+                  </Typography>
+                  <div className="flex items-center gap-4">
+                    <Typography variant="h4" fontWeight="bold" color="primary">
+                      {bodyFat.bfp}%
+                    </Typography>
+                    <Chip label={bodyFat.category} color="primary" variant="outlined" />
+                  </div>
+                  <div className="mt-3 w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className="h-3 rounded-full"
+                      style={{
+                        width: `${Math.min(100, bodyFat.bfp * 1.5)}%`,
+                        backgroundColor:
+                          bodyFat.category === "Athletic" || bodyFat.category === "Fitness"
+                            ? "#4ade80"
+                            : bodyFat.category === "Average"
+                              ? "#facc15"
+                              : bodyFat.category === "Obese"
+                                ? "#f87171"
+                                : "#60a5fa",
+                      }}
+                    />
+                  </div>
+                  <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+                    Estimated using age ({age} yrs) and sex. This is an approximation — not a medical measurement.
+                  </Typography>
+                </CardContent>
+              </Card>
+            )}
 
             {/* BMI Visual Gauge */}
             <Card elevation={1} sx={{ bgcolor: "grey.50" }}>

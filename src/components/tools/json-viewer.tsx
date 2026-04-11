@@ -79,6 +79,9 @@ export default function JsonViewer({
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+  const [pathQuery, setPathQuery] = useState("");
+  const [queryResult, setQueryResult] = useState<string | null>(null);
+  const [queryError, setQueryError] = useState<string | null>(null);
 
   // Parse JSON and create tree structure
   const parseJsonToTree = useCallback(
@@ -345,6 +348,40 @@ export default function JsonViewer({
     }
   }, [parseJsonToTree, initialJson]); // Use initialJson instead of toolState.code
 
+  // JMESPath-style dot-notation query resolver
+  const runPathQuery = useCallback(() => {
+    setQueryError(null);
+    setQueryResult(null);
+    if (!pathQuery.trim()) return;
+    try {
+      const parsed = JSON.parse(toolState.code);
+      // Support: a.b.c and a[0].b
+      const parts = pathQuery.trim().split(/\.(?![^\[]*\])/).flatMap((p) => {
+        const bracketMatch = p.match(/^([^\[]+)?\[(\d+)\](.*)$/);
+        if (bracketMatch) {
+          const res: (string | number)[] = [];
+          if (bracketMatch[1]) res.push(bracketMatch[1]);
+          res.push(parseInt(bracketMatch[2], 10));
+          if (bracketMatch[3]) res.push(...bracketMatch[3].replace(/^\./,"").split(".").filter(Boolean));
+          return res;
+        }
+        return [p];
+      });
+      let current: unknown = parsed;
+      for (const part of parts) {
+        if (current === null || current === undefined) break;
+        if (typeof current === "object") {
+          current = (current as Record<string | number, unknown>)[part];
+        } else {
+          current = undefined;
+        }
+      }
+      setQueryResult(JSON.stringify(current, null, 2));
+    } catch (err) {
+      setQueryError(err instanceof Error ? err.message : "Query failed");
+    }
+  }, [pathQuery, toolState.code]);
+
   return (
     <ToolLayout
       isFullScreen={toolState.isFullScreen}
@@ -398,6 +435,31 @@ export default function JsonViewer({
             }}
             className="mb-3 w-full"
           />
+
+          {/* Path Query */}
+          <div className="flex gap-2 mb-3">
+            <TextField
+              size="small"
+              fullWidth
+              placeholder="Path query e.g. features.treeView or tools[0].name"
+              value={pathQuery}
+              onChange={(e) => setPathQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && runPathQuery()}
+            />
+            <Box
+              component="button"
+              onClick={runPathQuery}
+              sx={{ px: 2, bgcolor: "primary.main", color: "white", borderRadius: 1, border: "none", cursor: "pointer", fontSize: 13, whiteSpace: "nowrap" }}
+            >
+              Run
+            </Box>
+          </div>
+          {queryError && <Alert severity="error" sx={{ mb: 1 }}><Typography variant="caption">{queryError}</Typography></Alert>}
+          {queryResult !== null && (
+            <Box sx={{ mb: 2, p: 1.5, bgcolor: "grey.100", borderRadius: 1, fontFamily: "monospace", fontSize: 12, whiteSpace: "pre-wrap", maxHeight: 120, overflow: "auto" }}>
+              {queryResult}
+            </Box>
+          )}
 
           {/* Error Display */}
           {error && (

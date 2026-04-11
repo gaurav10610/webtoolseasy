@@ -11,6 +11,8 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
@@ -73,6 +75,8 @@ export default function WebcamRecorder({
   const [selectedVideoDevice, setSelectedVideoDevice] = useState<string>("");
   const [selectedAudioDevice, setSelectedAudioDevice] = useState<string>("");
   const [videoQuality, setVideoQuality] = useState<string>("720p");
+  const [videoFilter, setVideoFilter] = useState<string>("none");
+  const [mirrorVideo, setMirrorVideo] = useState<boolean>(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -617,6 +621,44 @@ export default function WebcamRecorder({
                   { key: "1080p", value: "1080p", label: "1080p (Full HD)" },
                 ]}
               />
+
+              <div>
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Camera Filter
+                </Typography>
+                <ToggleButtonGroup
+                  value={videoFilter}
+                  exclusive
+                  onChange={(_, v) => {
+                    if (v !== null) setVideoFilter(v);
+                  }}
+                  size="small"
+                  className="flex-wrap"
+                >
+                  <ToggleButton value="none">None</ToggleButton>
+                  <ToggleButton value="grayscale(1)">Grayscale</ToggleButton>
+                  <ToggleButton value="sepia(1)">Sepia</ToggleButton>
+                  <ToggleButton value="invert(1)">Invert</ToggleButton>
+                  <ToggleButton value="hue-rotate(180deg)">
+                    Hue Shift
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+
+              <div>
+                <Typography variant="body2" className="mb-1 font-medium">
+                  Mirror
+                </Typography>
+                <ToggleButtonGroup
+                  value={mirrorVideo ? "mirror" : "none"}
+                  exclusive
+                  onChange={(_, v) => setMirrorVideo(v === "mirror")}
+                  size="small"
+                >
+                  <ToggleButton value="none">Normal</ToggleButton>
+                  <ToggleButton value="mirror">Mirror</ToggleButton>
+                </ToggleButtonGroup>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -634,6 +676,10 @@ export default function WebcamRecorder({
                 autoPlay
                 muted
                 playsInline
+                style={{
+                  filter: videoFilter !== "none" ? videoFilter : undefined,
+                  transform: mirrorVideo ? "scaleX(-1)" : undefined,
+                }}
                 className="w-full h-full object-contain"
               />
               {recordingState === RecordingState.IDLE && (
