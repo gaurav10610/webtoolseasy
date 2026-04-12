@@ -1,0 +1,5 @@
+{
+  "name": "WebToolsEasy",
+  "version": 1,
+  "features": ["format", "convert", "validate"]
+}

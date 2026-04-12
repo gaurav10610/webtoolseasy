@@ -159,18 +159,16 @@ async function stopDevServer(): Promise<void> {
 async function cleanup(): Promise<void> {
   await stopDevServer();
 
-  if (!startedLocalServer) {
-    return;
-  }
-
+  // Always kill whatever is holding port 3000, whether we started it or not.
+  // This ensures no stale server process is left running after the test suite.
   try {
-    const pid = execSync(`lsof -ti:${PORT}`).toString().trim();
+    const pid = execSync(`lsof -ti:${PORT} 2>/dev/null`).toString().trim();
     if (pid) {
-      execSync(`kill -9 ${pid}`);
+      execSync(`kill -9 ${pid} 2>/dev/null || true`);
       console.log(`✓ Cleaned up port ${PORT}`);
     }
   } catch {
-    // Port already free
+    // Port already free — nothing to do
   }
 }
 
