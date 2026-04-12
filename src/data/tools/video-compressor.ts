@@ -157,7 +157,7 @@ export const descriptionData: DescriptionBlock[] = [
       "Resolution options: Original, 1080p, 720p, 480p, 360p",
       "Bitrate range: 500 kbps to 10000 kbps",
       "Audio: Compressed to AAC at 128 kbps",
-      "Processing: Client-side using FFmpeg WebAssembly",
+      "Processing: Client-side using native WebCodecs API",
       "No server upload required",
     ],
   },

@@ -11,14 +11,8 @@ const nextConfig = {
         value: "require-corp",
       },
     ];
-    // Only apply restrictive cross-origin headers to FFmpeg-based tool routes
-    // that require SharedArrayBuffer. Applying site-wide blocks social embeds,
-    // OG image previews, and can interfere with crawler rendering.
-    return [
-      { source: "/tools/video-editor", headers: coopCoepHeaders },
-      { source: "/tools/audio-converter", headers: coopCoepHeaders },
-      { source: "/tools/video-to-audio-converter", headers: coopCoepHeaders },
-    ];
+    // No COOP/COEP headers needed – all tools use native WebCodecs API (no SharedArrayBuffer required)
+    return [];
   },
   async redirects() {
     return [

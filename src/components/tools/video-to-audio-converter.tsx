@@ -184,7 +184,7 @@ async function encodeAudioWithWebCodecs(
   }
 }
 
-type EncodingEngine = "webcodecs" | "webaudio" | "mediarecorder" | "ffmpeg";
+type EncodingEngine = "webcodecs" | "webaudio" | "mediarecorder" | "native";
 
 // ---------------------------------------------------------------------------
 // Fast path: AudioContext.decodeAudioData → WAV (no real-time playback needed)
@@ -300,78 +300,25 @@ async function extractAudioRealtime(
   });
 }
 
-async function extractAudioWithFFmpeg(
+async function extractAudioWithNative(
   file: File,
   format: "mp3" | "flac" | "aac",
-  bitrate: string,
+  bitrate: number,
   onProgress: (pct: number) => void,
 ): Promise<{ blob: Blob; ext: string }> {
-  const {
-    createFFmpegInstance,
-    writeFFmpegFile,
-    getFFmpegFile,
-    deleteFFmpegFile,
-  } = await import("@/service/ffmpegService");
+  const { encodeAudioFile } = await import("@/service/webCodecsAudioService");
 
-  const ffmpeg = await createFFmpegInstance();
-  const inputExt = file.name.split(".").pop()?.toLowerCase() || "mp4";
-  const inputName = `input-${crypto.randomUUID()}.${inputExt}`;
-  const outputExt = format === "aac" ? "m4a" : format;
-  const outputName = `output-${crypto.randomUUID()}.${outputExt}`;
+  // Map format strings to audio-config ids
+  // mp3 → 1, flac → 5 (WAV lossless), aac → 4
+  const formatIdMap: Record<string, number> = { mp3: 1, flac: 5, aac: 4 };
+  const targetId = formatIdMap[format] ?? 5;
 
-  ffmpeg.on("progress", ({ progress }) => {
-    onProgress(Math.round(progress * 100));
+  const { blob, ext } = await encodeAudioFile(file, targetId, {
+    bitrate: bitrate * 1000,
+    onProgress,
   });
 
-  await writeFFmpegFile({
-    ffmpeg,
-    fileData: new Uint8Array(await file.arrayBuffer()),
-    fileName: inputName,
-  });
-
-  const command = ["-i", inputName, "-vn"];
-  if (format === "flac") {
-    command.push("-c:a", "flac", outputName);
-  } else if (format === "aac") {
-    command.push("-c:a", "aac", "-b:a", bitrate, outputName);
-  } else {
-    command.push("-b:a", bitrate, outputName);
-  }
-
-  await ffmpeg.exec(command);
-  const fileData = await getFFmpegFile({ ffmpeg, fileName: outputName });
-  const bytes =
-    typeof fileData === "string"
-      ? new TextEncoder().encode(fileData)
-      : fileData instanceof Uint8Array
-        ? new Uint8Array(
-            fileData.buffer.slice(
-              fileData.byteOffset,
-              fileData.byteOffset + fileData.byteLength,
-            ),
-          )
-        : new Uint8Array(fileData);
-  const safeBuffer = new ArrayBuffer(bytes.byteLength);
-  new Uint8Array(safeBuffer).set(bytes);
-
-  try {
-    await deleteFFmpegFile({ ffmpeg, fileName: inputName });
-    await deleteFFmpegFile({ ffmpeg, fileName: outputName });
-  } catch {
-    // ignore cleanup issues in the browser sandbox
-  }
-
-  return {
-    blob: new Blob([safeBuffer], {
-      type:
-        format === "mp3"
-          ? "audio/mpeg"
-          : format === "flac"
-            ? "audio/flac"
-            : "audio/mp4",
-    }),
-    ext: outputExt,
-  };
+  return { blob, ext };
 }
 
 // ---------------------------------------------------------------------------
@@ -408,7 +355,7 @@ export default function VideoToAudioConverter() {
   }, []);
 
   const bitrate =
-    audioQuality === "high" ? "192k" : audioQuality === "low" ? "96k" : "128k";
+    audioQuality === "high" ? 192 : audioQuality === "low" ? 96 : 128;
 
   useEffect(() => {
     const refs = abortRefs.current;
@@ -493,7 +440,7 @@ export default function VideoToAudioConverter() {
               ac.signal,
               {
                 preferredMimeType: "audio/webm;codecs=opus",
-                audioBitsPerSecond: parseInt(bitrate, 10) * 1000,
+                audioBitsPerSecond: bitrate * 1000,
                 ext: "wav",
               },
             );
@@ -516,7 +463,7 @@ export default function VideoToAudioConverter() {
               ac.signal,
               {
                 preferredMimeType: "audio/ogg;codecs=opus",
-                audioBitsPerSecond: parseInt(bitrate, 10) * 1000,
+                audioBitsPerSecond: bitrate * 1000,
                 ext: "ogg",
               },
             );
@@ -527,13 +474,13 @@ export default function VideoToAudioConverter() {
           audioFormat === "flac" ||
           audioFormat === "aac"
         ) {
-          result = await extractAudioWithFFmpeg(
+          result = await extractAudioWithNative(
             entry.file,
             audioFormat,
             bitrate,
             updateProgress,
           );
-          engine = "ffmpeg";
+          engine = "native";
           updateProgress(100);
         } else {
           result = await extractAudioRealtime(
@@ -542,7 +489,7 @@ export default function VideoToAudioConverter() {
             ac.signal,
             {
               preferredMimeType: "audio/mp4",
-              audioBitsPerSecond: parseInt(bitrate, 10) * 1000,
+              audioBitsPerSecond: bitrate * 1000,
               ext: "m4a",
             },
           );
@@ -615,7 +562,7 @@ export default function VideoToAudioConverter() {
         onClose: () => setSnackOpen(false),
       }}
     >
-{entries.length === 0 ? (
+      {entries.length === 0 ? (
         <FileUploadWithDragDrop
           accept="video/*"
           multiple
@@ -716,8 +663,8 @@ export default function VideoToAudioConverter() {
                             ? "WebCodecs"
                             : entry.engine === "webaudio"
                               ? "Web Audio"
-                              : entry.engine === "ffmpeg"
-                                ? "FFmpeg"
+                              : entry.engine === "native"
+                                ? "Native Encoder"
                                 : "MediaRecorder"
                         }
                         variant="outlined"

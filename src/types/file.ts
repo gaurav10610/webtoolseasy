@@ -5,7 +5,7 @@ export interface BaseFileData {
 
 export enum ConversionState {
   NOT_CONVERTED = "Not Converted",
-  INITIALISING_FFMPEG = "Initialising Coverter...",
+  INITIALISING_CONVERTER = "Initialising Converter...",
   FILE_LOADING = "Loading File...",
   IN_PROGRESS = "Conversion In Progress...",
   FILE_READING = "Preparing File...",

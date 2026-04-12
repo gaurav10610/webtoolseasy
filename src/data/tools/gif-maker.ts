@@ -163,7 +163,7 @@ export const descriptionData: DescriptionBlock[] = [
       "Output format: Animated GIF",
       "Frame rate: 1-60 FPS (10-30 recommended)",
       "Maximum output width: 1920px",
-      "Processing: Client-side using FFmpeg WASM",
+      "Processing: Client-side using native browser APIs",
       "No file upload to servers - all local processing",
     ],
   },

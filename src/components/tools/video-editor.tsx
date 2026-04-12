@@ -32,13 +32,7 @@ import {
   FILE_SIZE_PRESETS,
 } from "../../util/fileValidation";
 import { formatBytes, getRandomId } from "@/util/commonUtils";
-import {
-  createFFmpegInstance,
-  executeFFmpegCommand,
-  writeFFmpegFile,
-  getFFmpegFile,
-} from "@/service/ffmpegService";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { buildWebM, type MuxChunk } from "@/lib/webmMuxer";
 import { ToolLayout } from "../common/ToolLayout";
 
 interface VideoClip {
@@ -80,7 +74,6 @@ export default function VideoEditor() {
   const [textOverlays, setTextOverlays] = useState<TextOverlay[]>([]);
   const [filters, setFilters] = useState<VideoFilter[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null);
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [snackBarMessage, setSnackBarMessage] = useState("");
   const [snackBarColor, setSnackBarColor] = useState<
@@ -89,7 +82,7 @@ export default function VideoEditor() {
   const [error, setError] = useState("");
   const [realTimePreview, setRealTimePreview] = useState(true);
   const [selectedOverlayId, setSelectedOverlayId] = useState<string | null>(
-    null
+    null,
   );
   const [draggedOverlayId, setDraggedOverlayId] = useState<string | null>(null);
 
@@ -99,23 +92,6 @@ export default function VideoEditor() {
   const overlayContainerRef = useRef<HTMLDivElement>(null);
 
   const animationFrameRef = useRef<number | null>(null);
-
-  // Initialize FFmpeg
-  useEffect(() => {
-    const initFFmpeg = async () => {
-      try {
-        const ffmpegInstance = await createFFmpegInstance();
-        setFFmpeg(ffmpegInstance);
-      } catch (error) {
-        console.error("Failed to initialize FFmpeg:", error);
-        setError(
-          "Failed to initialize video processor. Please refresh the page."
-        );
-      }
-    };
-
-    initFFmpeg();
-  }, []);
 
   // Handle video loading when currentClip changes
   useEffect(() => {
@@ -395,7 +371,7 @@ export default function VideoEditor() {
       setClips((prev) => [...prev, ...newClips]);
       setError("");
     },
-    [currentClip]
+    [currentClip],
   );
 
   const handleError = useCallback((errorMessage: string) => {
@@ -446,7 +422,7 @@ export default function VideoEditor() {
 
       // Show user-friendly error
       setSnackBarMessage(
-        "Unable to play video. Please try selecting the video again."
+        "Unable to play video. Please try selecting the video again.",
       );
       setSnackBarColor("warning");
       setIsSnackBarOpen(true);
@@ -504,12 +480,12 @@ export default function VideoEditor() {
   const updateClipTrim = (
     clipId: string,
     trimStart: number,
-    trimEnd: number
+    trimEnd: number,
   ) => {
     setClips((prev) =>
       prev.map((clip) =>
-        clip.id === clipId ? { ...clip, trimStart, trimEnd } : clip
-      )
+        clip.id === clipId ? { ...clip, trimStart, trimEnd } : clip,
+      ),
     );
 
     if (currentClip?.id === clipId) {
@@ -562,11 +538,11 @@ export default function VideoEditor() {
     (id: string, updates: Partial<TextOverlay>) => {
       setTextOverlays((prev) =>
         prev.map((overlay) =>
-          overlay.id === id ? { ...overlay, ...updates } : overlay
-        )
+          overlay.id === id ? { ...overlay, ...updates } : overlay,
+        ),
       );
     },
-    []
+    [],
   );
 
   const removeTextOverlay = (id: string) => {
@@ -616,11 +592,11 @@ export default function VideoEditor() {
 
         const newX = Math.max(
           0,
-          Math.min(100, dragState.initialX + deltaXPercent)
+          Math.min(100, dragState.initialX + deltaXPercent),
         );
         const newY = Math.max(
           0,
-          Math.min(100, dragState.initialY + deltaYPercent)
+          Math.min(100, dragState.initialY + deltaYPercent),
         );
 
         updateTextOverlay(overlayId, { x: newX, y: newY });
@@ -639,7 +615,7 @@ export default function VideoEditor() {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
     },
-    [textOverlays, updateTextOverlay]
+    [textOverlays, updateTextOverlay],
   );
 
   // Handle overlay container click (deselect when clicking empty area)
@@ -664,7 +640,7 @@ export default function VideoEditor() {
 
   const updateFilter = (id: string, value: number) => {
     setFilters((prev) =>
-      prev.map((filter) => (filter.id === id ? { ...filter, value } : filter))
+      prev.map((filter) => (filter.id === id ? { ...filter, value } : filter)),
     );
   };
 
@@ -673,106 +649,288 @@ export default function VideoEditor() {
   };
 
   const exportVideo = async () => {
-    if (!ffmpeg || !currentClip || clips.length === 0) return;
+    if (!currentClip || clips.length === 0) return;
 
     setIsProcessing(true);
 
     try {
-      // Write input file to FFmpeg
-      const inputFileName = `input_${currentClip.id}.mp4`;
-      const outputFileName = `output_${Date.now()}.mp4`;
+      const video = videoRef.current;
+      if (!video) throw new Error("Video element not ready");
 
-      const arrayBuffer = await currentClip.file.arrayBuffer();
-      await writeFFmpegFile({
-        ffmpeg,
-        fileData: new Uint8Array(arrayBuffer),
-        fileName: inputFileName,
-      });
+      const trimStart = currentClip.trimStart;
+      const trimEnd = currentClip.trimEnd;
+      const segmentDuration = trimEnd - trimStart;
 
-      // Build FFmpeg command for trimming
-      const command = [
-        "-i",
-        inputFileName,
-        "-ss",
-        currentClip.trimStart.toString(),
-        "-t",
-        (currentClip.trimEnd - currentClip.trimStart).toString(),
-      ];
+      const W = video.videoWidth || 640;
+      const H = video.videoHeight || 360;
 
-      // Add filters
-      const filterComplex = [];
+      // Offscreen canvas for lossless frame rendering (native resolution)
+      const exportCanvas = document.createElement("canvas");
+      exportCanvas.width = W;
+      exportCanvas.height = H;
+      const ctx = exportCanvas.getContext("2d")!;
 
-      // Video filters
-      if (filters.length > 0) {
-        const videoFilters = filters
-          .map((filter) => {
-            switch (filter.type) {
-              case "brightness":
-                return `eq=brightness=${(filter.value - 100) / 100}`;
-              case "contrast":
-                return `eq=contrast=${filter.value / 100}`;
-              case "saturation":
-                return `eq=saturation=${filter.value / 100}`;
-              case "blur":
-                return `boxblur=${filter.value}`;
-              default:
-                return "";
-            }
-          })
-          .filter(Boolean);
-
-        if (videoFilters.length > 0) {
-          filterComplex.push(`[0:v]${videoFilters.join(",")}[v]`);
-        }
-      }
-
-      // Text overlays
-      if (textOverlays.length > 0) {
-        textOverlays.forEach((overlay, index) => {
-          const inputTag =
-            index === 0
-              ? filterComplex.length > 0
-                ? "[v]"
-                : "[0:v]"
-              : `[v${index}]`;
-          const outputTag =
-            index === textOverlays.length - 1 ? "[vout]" : `[v${index + 1}]`;
-
-          filterComplex.push(
-            `${inputTag}drawtext=text='${overlay.text}':fontfile=/System/Library/Fonts/Arial.ttf:fontsize=${overlay.fontSize}:fontcolor=${overlay.color}:x=${overlay.x}:y=${overlay.y}:enable='between(t,${overlay.startTime},${overlay.endTime})'${outputTag}`
-          );
+      // Draw one frame to the offscreen canvas: video + CSS filters + text overlays
+      const drawExportFrame = (t: number) => {
+        // Build canvas filter string from applied filters
+        const filterParts: string[] = [];
+        filters.forEach((f) => {
+          switch (f.type) {
+            case "brightness":
+              filterParts.push(`brightness(${1 + (f.value - 100) / 100})`);
+              break;
+            case "contrast":
+              filterParts.push(`contrast(${f.value / 100})`);
+              break;
+            case "saturation":
+              filterParts.push(`saturate(${f.value / 100})`);
+              break;
+            case "blur":
+              filterParts.push(`blur(${f.value}px)`);
+              break;
+          }
         });
-      }
 
-      if (filterComplex.length > 0) {
-        command.push("-filter_complex", filterComplex.join(";"));
-        if (textOverlays.length > 0) {
-          command.push("-map", "[vout]");
-        } else if (filters.length > 0) {
-          command.push("-map", "[v]");
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, W, H);
+        if (filterParts.length > 0) ctx.filter = filterParts.join(" ");
+        ctx.drawImage(video, 0, 0, W, H);
+        ctx.restore();
+
+        // Draw text overlays at native resolution
+        textOverlays.forEach((overlay) => {
+          if (t >= overlay.startTime && t <= overlay.endTime) {
+            ctx.save();
+            ctx.font = `${overlay.fontSize}px ${overlay.fontFamily}`;
+            ctx.fillStyle = overlay.color;
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            const x = (overlay.x / 100) * W;
+            const y = (overlay.y / 100) * H;
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = Math.max(1, overlay.fontSize / 12);
+            ctx.strokeText(overlay.text, x, y);
+            ctx.fillText(overlay.text, x, y);
+            ctx.restore();
+          }
+        });
+      };
+
+      // Seek to trim start
+      video.currentTime = trimStart;
+      await new Promise<void>((resolve) => {
+        const onSeeked = () => {
+          video.removeEventListener("seeked", onSeeked);
+          resolve();
+        };
+        video.addEventListener("seeked", onSeeked);
+      });
+
+      /* ---- Try WebCodecs (VP9 → VP8) first – video only ---- */
+      const hasWebCodecs =
+        typeof VideoEncoder !== "undefined" &&
+        typeof VideoFrame !== "undefined";
+
+      if (hasWebCodecs) {
+        let codec = "vp09.00.10.08";
+        let codecId = "V_VP9";
+        const vp9Ok = await VideoEncoder.isConfigSupported({
+          codec,
+          width: W,
+          height: H,
+          bitrate: 4_000_000,
+          framerate: 30,
+        });
+        if (!vp9Ok.supported) {
+          codec = "vp8";
+          codecId = "V_VP8";
+          const vp8Ok = await VideoEncoder.isConfigSupported({
+            codec,
+            width: W,
+            height: H,
+            bitrate: 4_000_000,
+            framerate: 30,
+          });
+          if (!vp8Ok.supported) {
+            // fall through to MediaRecorder
+            codec = "";
+          }
         }
-        command.push("-map", "0:a?");
+
+        if (codec) {
+          try {
+            const encodedChunks: MuxChunk[] = [];
+            let encoderError: Error | null = null;
+
+            const encoder = new VideoEncoder({
+              output: (chunk, meta) => {
+                const buf = new Uint8Array(chunk.byteLength);
+                chunk.copyTo(buf);
+                encodedChunks.push({
+                  data: buf,
+                  timestampUs: chunk.timestamp,
+                  isKey:
+                    meta?.decoderConfig !== undefined || chunk.type === "key",
+                });
+              },
+              error: (e) => {
+                encoderError = e;
+              },
+            });
+
+            encoder.configure({
+              codec,
+              width: W,
+              height: H,
+              bitrate: 4_000_000,
+              framerate: 30,
+            });
+
+            let frameCount = 0;
+            await new Promise<void>((resolve, reject) => {
+              let animId: number;
+              const draw = () => {
+                if (encoderError) {
+                  cancelAnimationFrame(animId);
+                  reject(encoderError);
+                  return;
+                }
+                const reachedEnd = video.currentTime >= trimEnd;
+                if (!video.ended && !reachedEnd) {
+                  drawExportFrame(video.currentTime);
+                  const frame = new VideoFrame(exportCanvas, {
+                    timestamp: Math.round(
+                      (video.currentTime - trimStart) * 1_000_000,
+                    ),
+                  });
+                  encoder.encode(frame, { keyFrame: frameCount % 150 === 0 });
+                  frame.close();
+                  frameCount++;
+                  animId = requestAnimationFrame(draw);
+                } else {
+                  drawExportFrame(video.currentTime);
+                  const frame = new VideoFrame(exportCanvas, {
+                    timestamp: Math.round(
+                      (video.currentTime - trimStart) * 1_000_000,
+                    ),
+                  });
+                  encoder.encode(frame, { keyFrame: false });
+                  frame.close();
+                  cancelAnimationFrame(animId);
+                  video.pause();
+                  resolve();
+                }
+              };
+              video.onended = () => {
+                cancelAnimationFrame(animId);
+                video.pause();
+                resolve();
+              };
+              animId = requestAnimationFrame(draw);
+              video.play().catch(reject);
+            });
+
+            await encoder.flush();
+            encoder.close();
+
+            if (encoderError) throw encoderError;
+
+            const blob = buildWebM({
+              width: W,
+              height: H,
+              durationMs: Math.round(segmentDuration * 1000),
+              codecId,
+              chunks: encodedChunks,
+            });
+
+            const baseName = currentClip.name.replace(/\.[^.]+$/, "");
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `edited_${baseName}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            setSnackBarMessage("Video exported successfully!");
+            setSnackBarColor("success");
+            setIsSnackBarOpen(true);
+            return;
+          } catch {
+            // fall through to MediaRecorder
+          }
+        }
       }
 
-      command.push("-c:a", "copy", outputFileName);
+      /* ---- Fallback: Canvas + MediaRecorder (includes audio) ---- */
+      const canvasStream = exportCanvas.captureStream(30);
 
-      // Execute FFmpeg command
-      await executeFFmpegCommand({ ffmpeg, command });
+      // Capture audio from the original video element
+      const rawStream = (
+        video as HTMLVideoElement & { captureStream?: () => MediaStream }
+      ).captureStream?.();
+      if (rawStream) {
+        rawStream
+          .getAudioTracks()
+          .forEach((t) => canvasStream.addTrack(t.clone()));
+      }
 
-      // Read output file
-      const outputData = await getFFmpegFile({
-        ffmpeg,
-        fileName: outputFileName,
+      const mimeType =
+        ["video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find((m) =>
+          MediaRecorder.isTypeSupported(m),
+        ) ?? "video/webm";
+      const extension = mimeType.startsWith("video/mp4") ? "mp4" : "webm";
+
+      const recorder = new MediaRecorder(canvasStream, {
+        mimeType,
+        videoBitsPerSecond: 4_000_000,
+        audioBitsPerSecond: 128_000,
       });
 
-      // Download the processed video
-      const blob = new Blob([outputData as unknown as ArrayBuffer], {
-        type: "video/mp4",
+      const chunks: Blob[] = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
+
+      const completionPromise = new Promise<Blob>((resolve) => {
+        recorder.onstop = () => resolve(new Blob(chunks, { type: mimeType }));
       });
+
+      recorder.start(500);
+      video.muted = true; // prevent echo during capture
+
+      let animFrameId: number;
+      const drawFrame = () => {
+        const reachedEnd = video.currentTime >= trimEnd;
+        if (!video.ended && !reachedEnd) {
+          drawExportFrame(video.currentTime);
+          animFrameId = requestAnimationFrame(drawFrame);
+        } else {
+          drawExportFrame(video.currentTime);
+          cancelAnimationFrame(animFrameId);
+          video.pause();
+          video.muted = isMuted;
+          if (recorder.state === "recording") recorder.stop();
+        }
+      };
+
+      video.onended = () => {
+        cancelAnimationFrame(animFrameId);
+        video.muted = isMuted;
+        if (recorder.state === "recording") recorder.stop();
+      };
+
+      animFrameId = requestAnimationFrame(drawFrame);
+      await video.play();
+
+      const blob = await completionPromise;
+      const baseName = currentClip.name.replace(/\.[^.]+$/, "");
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `edited_${currentClip.name}`;
+      a.download = `edited_${baseName}.${extension}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -802,7 +960,7 @@ export default function VideoEditor() {
 
   return (
     <ToolLayout>
-<div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4 w-full">
         {/* File Upload */}
         <FileUploadWithDragDrop
           accept="video/*"
@@ -984,7 +1142,7 @@ export default function VideoEditor() {
                           const video = videoRef.current;
                           if (
                             Math.abs(
-                              video.currentTime - currentClip.trimStart
+                              video.currentTime - currentClip.trimStart,
                             ) > 0.1
                           ) {
                             video.currentTime = currentClip.trimStart;
@@ -1242,7 +1400,7 @@ export default function VideoEditor() {
                       Trimmed duration:{" "}
                       {formatTime(
                         (currentClip?.trimEnd || 0) -
-                          (currentClip?.trimStart || 0)
+                          (currentClip?.trimStart || 0),
                       )}
                     </Typography>
                   </div>
@@ -1543,7 +1701,7 @@ export default function VideoEditor() {
 
                   <Button
                     onClick={exportVideo}
-                    disabled={!ffmpeg || isProcessing}
+                    disabled={isProcessing}
                     startIcon={<Download />}
                     variant="contained"
                     color="primary"

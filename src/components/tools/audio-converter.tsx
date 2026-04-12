@@ -13,17 +13,14 @@ import { PaperWithChildren } from "@/components/lib/papers";
 import { SelectWithLabel } from "@/components/lib/select";
 import { ToolLayout } from "@/components/common/ToolLayout";
 import { FILE_SIZE_PRESETS, FILE_TYPE_PRESETS } from "@/util/fileValidation";
-import { FFMPEG_FORMATS } from "@/data/config/ffmpeg-config";
-import { FFmpegFormat } from "@/types/ffmpeg";
 import {
-  getFileFormatId,
-  getOutputFileName,
-  getMimeType,
-  getEligibleFormatIds,
-} from "@/util/videoConverterUtils";
+  AUDIO_FORMAT_MAP,
+  AUDIO_FORMAT_LIST,
+} from "@/data/config/audio-config";
+import { getOutputFileName, getMimeType } from "@/util/videoConverterUtils";
 import { formatBytes, getFormattedFileName } from "@/util/commonUtils";
 import { CircularProgress, SelectChangeEvent, Typography } from "@mui/material";
-import { isEmpty, find, isNil, cloneDeep, includes } from "lodash-es";
+import { isEmpty, find, isNil, includes } from "lodash-es";
 
 interface AudioConverterState {
   fileList: VideoFileData[];
@@ -47,42 +44,34 @@ const AudioFile = memo(function AudioFile({
   onAudioConvert: (fileId: string) => void;
   onDownload: (fileId: string) => void;
 }) {
-  const eligibleFormats = useMemo(
-    () => getEligibleFormatIds(audioFileData.originalFile.name, "Audio")!,
-    [audioFileData.originalFile.name]
-  );
-
   const selectOptions = useMemo(
     () =>
-      eligibleFormats.map((formatId) => {
-        const format = FFMPEG_FORMATS.get(formatId) as FFmpegFormat;
-        return {
-          key: String(formatId),
-          value: String(formatId),
-          label: format.displayName,
-        };
-      }),
-    [eligibleFormats]
+      AUDIO_FORMAT_LIST.map((format) => ({
+        key: String(format.id),
+        value: String(format.id),
+        label: format.displayName,
+      })),
+    [],
   );
 
   const currentConversionData =
     audioFileData.convertedData[audioFileData.selectedTargetFormatId];
   const isProcessing = includes(
     [
-      ConversionState.INITIALISING_FFMPEG,
+      ConversionState.INITIALISING_CONVERTER,
       ConversionState.FILE_LOADING,
       ConversionState.IN_PROGRESS,
       ConversionState.FAILED,
       ConversionState.FILE_READING,
     ],
-    currentConversionData.conversionState
+    currentConversionData.conversionState,
   );
 
   const handleFormatChange = useCallback(
     (event: SelectChangeEvent<string>) => {
       onTargetFormatChange(event.target.value, audioFileData.id);
     },
-    [onTargetFormatChange, audioFileData.id]
+    [onTargetFormatChange, audioFileData.id],
   );
 
   const handleConvert = useCallback(() => {
@@ -141,8 +130,11 @@ const AudioFile = memo(function AudioFile({
           />
         )}
         {includes(
-          [ConversionState.INITIALISING_FFMPEG, ConversionState.FILE_LOADING],
-          currentConversionData.conversionState
+          [
+            ConversionState.INITIALISING_CONVERTER,
+            ConversionState.FILE_LOADING,
+          ],
+          currentConversionData.conversionState,
         ) && <CircularProgress size={30} />}
         {currentConversionData.conversionState ===
           ConversionState.IN_PROGRESS && (
@@ -213,7 +205,7 @@ export default function AudioConverter() {
         snackBar: { open: true, message, color },
       }));
     },
-    []
+    [],
   );
 
   const handleSnackBarClose = useCallback(() => {
@@ -223,18 +215,14 @@ export default function AudioConverter() {
     }));
   }, []);
 
+  const defaultFormatId = AUDIO_FORMAT_LIST[0].id;
+
   const handleFileSelect = useCallback((files: FileList) => {
     const newFiles = Array.from(files).map((file) => {
-      const fileExtension = file.name.split(".").pop()?.toLowerCase();
-      const formatId = getFileFormatId(fileExtension!);
-      const defaultTargetFormatId = getEligibleFormatIds(
-        file.name,
-        "Audio"
-      )![0];
       const formattedFileName = getFormattedFileName(file.name);
       const outputFileName = getOutputFileName({
         fileName: formattedFileName,
-        targetFormatid: defaultTargetFormatId,
+        targetFormatid: defaultFormatId,
       });
 
       const audioFileData: VideoFileData = {
@@ -242,18 +230,18 @@ export default function AudioConverter() {
         originalFile: file,
         formattedFileName,
         convertedData: {
-          [defaultTargetFormatId]: {
-            formatId: defaultTargetFormatId,
+          [defaultFormatId]: {
+            formatId: defaultFormatId,
             isConverted: false,
-            formatName: FFMPEG_FORMATS.get(defaultTargetFormatId)!.displayName,
+            formatName: AUDIO_FORMAT_MAP.get(defaultFormatId)!.displayName,
             conversionProgress: 0,
             conversionState: ConversionState.NOT_CONVERTED,
             outputFileName,
           },
         },
-        formatName: FFMPEG_FORMATS.get(formatId)!.displayName,
-        formatId,
-        selectedTargetFormatId: defaultTargetFormatId,
+        formatName: file.name.split(".").pop()?.toUpperCase() ?? "Audio",
+        formatId: defaultFormatId,
+        selectedTargetFormatId: defaultFormatId,
       };
       return audioFileData;
     });
@@ -284,7 +272,7 @@ export default function AudioConverter() {
                   [Number(selectedFormatId)]: {
                     formatId: Number(selectedFormatId),
                     isConverted: false,
-                    formatName: FFMPEG_FORMATS.get(Number(selectedFormatId))!
+                    formatName: AUDIO_FORMAT_MAP.get(Number(selectedFormatId))!
                       .displayName,
                     conversionState: ConversionState.NOT_CONVERTED,
                     conversionProgress: 0,
@@ -305,7 +293,7 @@ export default function AudioConverter() {
         }),
       }));
     },
-    []
+    [],
   );
 
   const onAudioConvert = useCallback(
@@ -313,61 +301,113 @@ export default function AudioConverter() {
       const audioFileData = find(state.fileList, (file) => file.id === fileId);
       if (isEmpty(audioFileData)) return;
 
-      try {
-        // Dynamically import FFmpeg service when needed for lazy loading
-        const { transcodeVideo } = await import("@/service/ffmpegService");
+      const targetFormatId = audioFileData!.selectedTargetFormatId;
 
-        transcodeVideo({
-          videoFileData: cloneDeep(audioFileData!),
-          setFileList: (updateFn) => {
-            setState((prev) => ({
-              ...prev,
-              fileList:
-                typeof updateFn === "function"
-                  ? updateFn(prev.fileList)
-                  : updateFn,
-            }));
+      setState((prev) => ({
+        ...prev,
+        fileList: prev.fileList.map((f) =>
+          f.id === fileId
+            ? {
+                ...f,
+                convertedData: {
+                  ...f.convertedData,
+                  [targetFormatId]: {
+                    ...f.convertedData[targetFormatId],
+                    conversionState: ConversionState.INITIALISING_CONVERTER,
+                    conversionProgress: 0,
+                  },
+                },
+              }
+            : f,
+        ),
+      }));
+
+      try {
+        const { encodeAudioFile } =
+          await import("@/service/webCodecsAudioService");
+
+        const { blob } = await encodeAudioFile(
+          audioFileData!.originalFile,
+          targetFormatId,
+          {
+            onProgress: (pct) => {
+              setState((prev) => ({
+                ...prev,
+                fileList: prev.fileList.map((f) =>
+                  f.id === fileId
+                    ? {
+                        ...f,
+                        convertedData: {
+                          ...f.convertedData,
+                          [targetFormatId]: {
+                            ...f.convertedData[targetFormatId],
+                            conversionState:
+                              pct < 5
+                                ? ConversionState.FILE_LOADING
+                                : ConversionState.IN_PROGRESS,
+                            conversionProgress: pct,
+                          },
+                        },
+                      }
+                    : f,
+                ),
+              }));
+            },
           },
-          setIsSnackBarOpen: (open) => {
-            setState((prev) => ({
-              ...prev,
-              snackBar: {
-                ...prev.snackBar,
-                open:
-                  typeof open === "function" ? open(prev.snackBar.open) : open,
-              },
-            }));
-          },
-          setSnackBarMessage: (message) => {
-            setState((prev) => ({
-              ...prev,
-              snackBar: {
-                ...prev.snackBar,
-                message:
-                  typeof message === "function"
-                    ? message(prev.snackBar.message)
-                    : message,
-              },
-            }));
-          },
-          setSnackBarColor: (color) => {
-            setState((prev) => ({
-              ...prev,
-              snackBar: {
-                ...prev.snackBar,
-                color:
-                  typeof color === "function"
-                    ? color(prev.snackBar.color)
-                    : color,
-              },
-            }));
-          },
+        );
+
+        const outputFileName = getOutputFileName({
+          fileName: audioFileData!.formattedFileName,
+          targetFormatid: targetFormatId,
         });
-      } catch {
-        showMessage("Failed to load audio processing library", "error");
+
+        const arrayBuffer = await blob.arrayBuffer();
+        setState((prev) => ({
+          ...prev,
+          fileList: prev.fileList.map((f) =>
+            f.id === fileId
+              ? {
+                  ...f,
+                  convertedData: {
+                    ...f.convertedData,
+                    [targetFormatId]: {
+                      ...f.convertedData[targetFormatId],
+                      conversionState: ConversionState.CONVERTED,
+                      conversionProgress: 100,
+                      isConverted: true,
+                      outputFileName,
+                      data: new Uint8Array(arrayBuffer),
+                    },
+                  },
+                }
+              : f,
+          ),
+        }));
+        showMessage("Conversion complete!");
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Conversion failed";
+        setState((prev) => ({
+          ...prev,
+          fileList: prev.fileList.map((f) =>
+            f.id === fileId
+              ? {
+                  ...f,
+                  convertedData: {
+                    ...f.convertedData,
+                    [targetFormatId]: {
+                      ...f.convertedData[targetFormatId],
+                      conversionState: ConversionState.FAILED,
+                      error: msg,
+                    },
+                  },
+                }
+              : f,
+          ),
+        }));
+        showMessage(msg, "error");
       }
     },
-    [state.fileList, showMessage]
+    [state.fileList, showMessage],
   );
 
   const downloadConvertedFile = useCallback(
@@ -375,27 +415,21 @@ export default function AudioConverter() {
       const audioFileData = find(state.fileList, (file) => file.id === fileId);
       if (!audioFileData) return;
 
+      const convData =
+        audioFileData.convertedData[audioFileData.selectedTargetFormatId];
+      const file = new Blob([convData.data! as unknown as ArrayBuffer], {
+        type: getMimeType(audioFileData.selectedTargetFormatId),
+      });
+
       const element = document.createElement("a");
-      const file = new Blob(
-        [
-          audioFileData.convertedData[audioFileData.selectedTargetFormatId]!
-            .data! as unknown as ArrayBuffer,
-        ],
-        { type: getMimeType(audioFileData.selectedTargetFormatId) }
-      );
-
       element.href = URL.createObjectURL(file);
-      element.download =
-        audioFileData.convertedData[
-          audioFileData.selectedTargetFormatId
-        ].outputFileName;
-
+      element.download = convData.outputFileName;
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
       URL.revokeObjectURL(element.href);
     },
-    [state.fileList]
+    [state.fileList],
   );
 
   const handleAddMoreAudio = useCallback(() => {
@@ -411,7 +445,7 @@ export default function AudioConverter() {
         e.target.value = "";
       }
     },
-    [handleFileSelect]
+    [handleFileSelect],
   );
 
   return (
@@ -422,7 +456,7 @@ export default function AudioConverter() {
         onClose: handleSnackBarClose,
       }}
     >
-{/* Error message */}
+      {/* Error message */}
       {state.error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
           <Typography variant="body2" className="text-red-800">
@@ -440,9 +474,9 @@ export default function AudioConverter() {
           maxSize={FILE_SIZE_PRESETS.LARGE}
           onFileSelect={handleFileSelect}
           onError={handleError}
-          title="Upload Audio Files to Convert"
-          subtitle="Drag and drop your audio files here or click to browse"
-          supportText="Supports MP3, WAV, OGG, M4A, AAC, FLAC formats up to 50MB each"
+          title="Upload Audio or Video Files to Convert"
+          subtitle="Drag and drop your files here or click to browse"
+          supportText="Converts to MP3, Opus WebM, AAC/M4A, or WAV — all processing runs locally in your browser"
         />
       )}
 

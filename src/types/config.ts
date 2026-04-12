@@ -108,6 +108,7 @@ export enum ApplicationIds {
   ASCII_ART_GENERATOR = "ascii-art-generator",
   TABLE_GENERATOR = "table-generator",
   TS_COMPILER = "tscompiler",
+  FRAME_EXTRACTOR = "frame-extractor",
 }
 
 export interface BaseAppConfig {

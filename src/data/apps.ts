@@ -390,6 +390,13 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "video-convert.svg",
     category: AppCategory.MEDIA,
   },
+  "frame-extractor": {
+    applicationId: "frame-extractor",
+    displayText: "Video Frame Extractor",
+    navigateUrl: "tools/frame-extractor",
+    iconRelativeUrl: "video-convert.svg",
+    category: AppCategory.MEDIA,
+  },
   urlencoderdecoder: {
     applicationId: "urlencoderdecoder",
     displayText: "URL Encoder Decoder",

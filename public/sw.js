@@ -1,9 +1,5 @@
 const CACHE_NAME = "webtoolseasy-wasm-v1";
-const WASM_ASSETS = [
-  "/vendor/sql/sql-wasm.wasm",
-  "/vendor/ffmpeg/ffmpeg-core.js",
-  "/pdf.worker.min.mjs",
-];
+const WASM_ASSETS = ["/vendor/sql/sql-wasm.wasm", "/pdf.worker.min.mjs"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

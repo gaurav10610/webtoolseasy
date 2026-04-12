@@ -77,7 +77,7 @@ export const descriptionData: DescriptionBlock[] = [
   {
     heading: "What is an Audio Converter?",
     blockData: [
-      "An audio converter is a free online tool that converts audio files between different formats such as MP3, WAV, OGG, M4A, AAC, and FLAC. Our browser-based audio converter uses FFmpeg technology to process files entirely on your device - no server uploads required for complete privacy.",
+      "An audio converter is a free online tool that converts audio files between different formats such as MP3, WAV, Opus WebM, M4A, AAC, and FLAC. Our browser-based audio converter uses the native browser WebCodecs API to process files entirely on your device - no server uploads required for complete privacy.",
       "Perfect for musicians, podcasters, content creators, and anyone needing to convert audio files for compatibility across different devices and platforms.",
     ],
   },
