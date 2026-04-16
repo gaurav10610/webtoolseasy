@@ -111,6 +111,9 @@ export default function StringEscape({
     ];
   }, [doEscapeJs, doUnescapeJs, doClear, copyOutput, toolState]);
 
+  const outputPreview =
+    output || "Escaped or unescaped output will appear here.";
+
   return (
     <ToolLayout
       isFullScreen={toolState.isFullScreen}
@@ -120,7 +123,7 @@ export default function StringEscape({
         onClose: toolState.snackBar.close,
       }}
     >
-<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <CodeEditorLayout
         isFullScreen={toolState.isFullScreen}
@@ -145,6 +148,13 @@ export default function StringEscape({
           />
         }
       />
+
+      <section className="app-shell-section mt-4 flex flex-col gap-2">
+        <h2 className="text-base font-semibold">Output Preview</h2>
+        <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded-xl border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 text-sm text-[var(--mui-palette-text-primary)]">
+          {outputPreview}
+        </pre>
+      </section>
     </ToolLayout>
   );
 }

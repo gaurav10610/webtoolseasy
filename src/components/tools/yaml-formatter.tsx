@@ -226,6 +226,9 @@ properties:
     [formatYaml, validateYaml, validateSchemaCheck, copyFormatted, toolState],
   );
 
+  const formattedPreview =
+    formattedCode || "Formatted YAML output will appear here.";
+
   return (
     <ToolLayout
       isFullScreen={toolState.isFullScreen}
@@ -236,7 +239,7 @@ properties:
         color: snackBarColor,
       }}
     >
-<ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
+      <ToolControls buttons={buttons} isFullScreen={toolState.isFullScreen} />
 
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
         <TextField
@@ -285,6 +288,13 @@ properties:
           />
         }
       />
+
+      <section className="app-shell-section mt-4 flex flex-col gap-2">
+        <h2 className="text-base font-semibold">Formatted YAML Preview</h2>
+        <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded-xl border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 text-sm text-[var(--mui-palette-text-primary)]">
+          {formattedPreview}
+        </pre>
+      </section>
     </ToolLayout>
   );
 }

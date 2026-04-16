@@ -26,11 +26,11 @@ import { SkeletonWithProps } from "@/components/lib/skeletons";
 import { Suspense } from "react";
 
 const pageTitle =
-  "115+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
+  "110+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
 const pageDescription =
-  "Use 115+ free online tools that run 100% in your browser with complete privacy. JSON formatter, PDF editor, image compressor, code beautifier, resume builder, video converter & more. No signup, no data upload, works offline.";
+  "Use 110+ free online tools that run 100% in your browser with complete privacy. JSON formatter, PDF editor, image compressor, code beautifier, resume builder, video converter & more. No signup, no data upload, works offline.";
 const keywords =
-  "free online tools, private tools, client-side tools, no upload, privacy-first, browser tools, secure online tools, offline tools, developer tools, JSON formatter, PDF editor, image compressor, code formatter, resume builder, video converter, QR code generator, password generator, base64 encoder, markdown editor, text compare, word counter, no signup, best free online tools 2026";
+  "free online tools, private browser tools, client-side developer tools, no upload pdf editor, offline privacy-first tools";
 
 const ENABLE_POPULAR_TOOLS = true;
 

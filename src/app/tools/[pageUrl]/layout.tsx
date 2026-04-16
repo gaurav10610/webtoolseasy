@@ -217,6 +217,17 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   // Get structured data from tool config
   const structuredData = toolConfigData.structuredData;
 
+  // Only pass tools from the current category to the SidePanel to prevent SEO topical dilution
+  const categoryApps = currentCategoryConfig
+    ? Object.fromEntries(
+        Object.entries(apps).filter(([_, app]) =>
+          currentCategoryConfig.toolIds.includes(
+            app.applicationId as ApplicationIds,
+          ),
+        ),
+      )
+    : apps;
+
   return (
     <>
       {/* Structured Data */}
@@ -242,7 +253,7 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
           <aside className="hidden xl:block xl:sticky xl:top-[92px] xl:self-start">
             <SidePanel
               className="w-full"
-              appConfigJson={apps}
+              appConfigJson={categoryApps}
               pageUrl={params.pageUrl}
             />
           </aside>
