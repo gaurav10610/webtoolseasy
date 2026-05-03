@@ -31,7 +31,7 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
   }
 } else {
   console.warn(
-    "No Google service account provided. Set GOOGLE_SERVICE_ACCOUNT_PATH or GOOGLE_SERVICE_ACCOUNT_JSON to enable Google Indexing API."
+    "No Google service account provided. Set GOOGLE_SERVICE_ACCOUNT_PATH or GOOGLE_SERVICE_ACCOUNT_JSON to enable Google Indexing API.",
   );
 }
 
@@ -68,7 +68,7 @@ const updatedUrls: string[] = getNewToolsUrls();
 export const indexUrlsInGoogle = () => {
   if (!key) {
     console.error(
-      "Google service account key not available; skipping Google indexing."
+      "Google service account key not available; skipping Google indexing.",
     );
     return;
   }
@@ -78,7 +78,7 @@ export const indexUrlsInGoogle = () => {
     undefined,
     key.private_key,
     ["https://www.googleapis.com/auth/indexing"],
-    undefined
+    undefined,
   );
 
   jwtClient.authorize(async function (err, tokens) {
@@ -144,8 +144,8 @@ const indexUrlsInIndexNow = async () => {
   }
 
   const indexNowApiKey = "baec1387a4304900bdcac22c4ce740ba";
-
   const host = "webtoolseasy.com";
+
   const keyLocation = `https://${host}/${indexNowApiKey}.txt`;
 
   if (!urlsToIndex || urlsToIndex.length === 0) {

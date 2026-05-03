@@ -1,372 +1,150 @@
-<h1 align="center">
-  <img src="./public/favion_512.png" alt="WebToolsEasy Logo" width="64" height="64" style="vertical-align: middle; margin-right: 16px;">
-  <span style="vertical-align: middle;">WebToolsEasy</span>
-</h1>
+# WebToolsEasy
 
-**Privacy-First Web Tools That Run Entirely in Your Browser**
+Open source platform for privacy-first browser tools at [webtoolseasy.com](https://webtoolseasy.com).
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-15.1.6-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)](https://www.typescriptlang.org/)
 
-WebToolsEasy is a comprehensive collection of **115 free, privacy-focused web tools** built with Next.js and TypeScript. All tools run **100% client-side in your browser** — your data never leaves your device, ensuring complete privacy and security.
+WebToolsEasy offers 110+ free online tools for developers, creators, students, and teams. Tools run primarily in-browser so users can work with JSON, PDF, images, video, text, and SEO data quickly with a privacy-first experience.
 
-🔒 **No server uploads** • 🚀 **Lightning fast** • 🎯 **No registration required** • 💯 **Completely free**
+## Live Product
 
-**Live Demo:** [https://webtoolseasy.com](https://webtoolseasy.com)
+- Website: [https://webtoolseasy.com](https://webtoolseasy.com)
+- Tools directory: [https://webtoolseasy.com/tools](https://webtoolseasy.com/tools)
+- Blog: [https://webtoolseasy.com/blog](https://webtoolseasy.com/blog)
 
----
+## Why This Project Exists
 
-## ✨ Why WebToolsEasy?
+- Give people fast, free alternatives to install-heavy utility software.
+- Ship practical tools that solve real daily workflow problems.
+- Keep privacy strong by default with local/browser-first processing where possible.
+- Build SEO-friendly tool pages and educational blog content that help users discover solutions via search.
 
-- **🔐 Privacy First**: All processing happens in your browser. Your files, text, and data stay on your device.
-- **⚡ Instant Results**: No waiting for server uploads or processing queues.
-- **🌐 Works Offline**: Most tools work without internet once loaded.
-- **📱 Responsive Design**: Optimized for desktop, tablet, and mobile devices.
-- **🎨 Modern UI**: Clean, intuitive interface built with Material-UI.
-- **🔓 Open Source**: Transparent code you can inspect, modify, and contribute to.
+## Core Features
 
----
+- 110+ tools across development, media, text, finance, utility, and SEO workflows.
+- SEO-focused page architecture: canonical URLs, structured metadata, sitemap, robots directives.
+- Mobile-friendly and desktop-friendly UI.
+- Strong test coverage for page behavior and metadata integrity.
+- Fully open source under MIT.
 
-## 🎯 Available Tools
+## Popular Tools (Examples)
 
-### 📝 Online Editors & IDEs
+- JSON Formatter: [https://webtoolseasy.com/tools/json-formatter](https://webtoolseasy.com/tools/json-formatter)
+- Image Compressor: [https://webtoolseasy.com/tools/image-compress](https://webtoolseasy.com/tools/image-compress)
+- PDF Editor: [https://webtoolseasy.com/tools/pdf-editor](https://webtoolseasy.com/tools/pdf-editor)
+- Password Generator: [https://webtoolseasy.com/tools/password-generator](https://webtoolseasy.com/tools/password-generator)
+- Meta Tag Generator: [https://webtoolseasy.com/tools/meta-tag-generator](https://webtoolseasy.com/tools/meta-tag-generator)
+- Robots.txt Generator: [https://webtoolseasy.com/tools/robots-txt-generator](https://webtoolseasy.com/tools/robots-txt-generator)
 
-- [JavaScript Editor Online](https://webtoolseasy.com/tools/javascript-editor) - Feature-rich JavaScript code editor with syntax highlighting
-- [HTML Editor Online](https://webtoolseasy.com/tools/html-editor) - Live HTML preview with instant rendering
-- [Python Compiler Online](https://webtoolseasy.com/tools/python-compiler) - Execute Python code directly in browser
-- [JavaScript Compiler Online](https://webtoolseasy.com/tools/javascript-compiler) - Run and test JavaScript code instantly
-- [Markdown Editor Online](https://webtoolseasy.com/tools/markdown-editor) - Real-time Markdown editor with preview
-- [Text Editor Online](https://webtoolseasy.com/tools/text-editor) - Simple, fast text editing
-- [PDF Editor Online](https://webtoolseasy.com/tools/pdf-editor) - Edit PDFs directly in browser
-- [SQL Practice Editor](https://webtoolseasy.com/tools/sql-practice-editor) - Interactive SQL learning environment
+## Technology Stack
 
-### 💻 Programming & Development Tools
+- Next.js 16 (App Router)
+- React 19 + TypeScript
+- Material UI
+- Vitest + Playwright
+- Web APIs and WebAssembly tooling for browser-side processing
 
-- [JSON Formatter Online](https://webtoolseasy.com/tools/json-formatter) - Format and beautify JSON data
-- [JSON Viewer Online](https://webtoolseasy.com/tools/json-viewer) - Visualize and explore JSON structures
-- [JavaScript Formatter](https://webtoolseasy.com/tools/javascript-formatter) - Auto-format JavaScript code
-- [HTML Formatter Online](https://webtoolseasy.com/tools/html-formatter) - Clean and format HTML markup
-- [CSS Formatter Online](https://webtoolseasy.com/tools/css-formatter) - Beautify CSS stylesheets
-- [SQL Formatter](https://webtoolseasy.com/tools/sql-formatter) - Format SQL queries
-- [YAML Formatter & Validator](https://webtoolseasy.com/tools/yaml-formatter) - Format and validate YAML
-- [XML JSON Converter](https://webtoolseasy.com/tools/xml-to-json) - Convert between XML and JSON
-- [JSON to CSV Converter](https://webtoolseasy.com/tools/json-to-csv) - Convert JSON data to CSV format instantly
-- [CSV to JSON Converter](https://webtoolseasy.com/tools/csv-to-json) - Convert CSV files to JSON format with custom delimiters
-- [JSON to YAML Converter](https://webtoolseasy.com/tools/json-to-yaml) - Convert JSON to YAML format with syntax highlighting
-- [HTML to Markdown Converter](https://webtoolseasy.com/tools/html-to-markdown) - Convert HTML to Markdown
-- [Code Minifier](https://webtoolseasy.com/tools/code-minifier) - Minify JavaScript, CSS, and HTML
-- [Base64 Encoder Tool](https://webtoolseasy.com/tools/base64-encode) - Encode text and files to Base64
-- [Base64 Decoder Tool](https://webtoolseasy.com/tools/base64-decode) - Decode Base64 strings
-- [URL Encoder Decoder](https://webtoolseasy.com/tools/url-encoder-decoder) - Encode/decode URL components
-- [String Escape & Unescape](https://webtoolseasy.com/tools/string-escape) - Handle string escaping
-- [JWT Decoder Tool](https://webtoolseasy.com/tools/jwt-decoder) - Decode and inspect JWT tokens
-- [Hash Generator](https://webtoolseasy.com/tools/hash-generator) - Generate MD5, SHA-1, SHA-256, and more
-- [Regex Tester Online](https://webtoolseasy.com/tools/regex-tester) - Test regular expressions with live matching
-- [Diff Checker Tool](https://webtoolseasy.com/tools/diff-checker) - Compare text and code differences side-by-side
-- [Cron Generator Tool](https://webtoolseasy.com/tools/cron-expression) - Generate cron expressions visually
-- [UUID Generator Tool](https://webtoolseasy.com/tools/uuid-v4-generator) - Generate UUID v4
-- [UUID V1 Generator](https://webtoolseasy.com/tools/uuid-v1-generator) - Generate UUID v1
-- [UUID v5 Generator](https://webtoolseasy.com/tools/uuid-v5-generator) - Generate name-based UUID v5 with SHA-1
-- [UUID v3 Generator](https://webtoolseasy.com/tools/uuid-v3-generator) - Generate name-based UUID v3 with MD5
-- [UUID v7 Generator](https://webtoolseasy.com/tools/uuid-v7-generator) - Generate time-ordered UUID v7 for databases
-- [GUID Generator Tool](https://webtoolseasy.com/tools/guid-generator) - Generate GUIDs
-- [ULID Generator](https://webtoolseasy.com/tools/ulid-generator) - Generate ULIDs
-- [CSV Viewer Online](https://webtoolseasy.com/tools/csv-viewer) - View and analyze CSV files
-- [ASCII Art Generator](https://webtoolseasy.com/tools/ascii-art-generator) - Convert text to ASCII art with multiple font styles
-- [Table Generator Online](https://webtoolseasy.com/tools/table-generator) - Create HTML, Markdown, and CSV tables with visual editor
-
-### 📝 Text Processing Tools
-
-- [Text Case Converter](https://webtoolseasy.com/tools/case-converter) - Convert text case (upper, lower, title, camel)
-- [Word Counter Tool](https://webtoolseasy.com/tools/word-counter) - Count words, characters, and lines
-- [Text Summarizer Free](https://webtoolseasy.com/tools/text-summarizer) - AI-powered text summarization with adjustable length
-- [Paraphrasing Tool Free](https://webtoolseasy.com/tools/paraphrasing-tool) - Rewrite text with multiple paraphrasing modes
-- [Text Compare Tool](https://webtoolseasy.com/tools/text-compare) - Diff and compare text side-by-side
-- [Speech to Text Online](https://webtoolseasy.com/tools/speech-to-text) - Convert speech to text using your microphone
-- [Text to Speech Online](https://webtoolseasy.com/tools/text-to-speech) - Convert text to natural speech audio
-- [Lorem Ipsum Generator](https://webtoolseasy.com/tools/lorem-ipsum-generator) - Generate placeholder Lorem Ipsum text
-- [HTML Entities Encoder Decoder](https://webtoolseasy.com/tools/html-entities-encoder-decoder) - Encode/decode HTML special characters
-- [Markdown to HTML Converter](https://webtoolseasy.com/tools/markdown-to-html-converter) - Convert Markdown syntax to HTML
-
-### 🎨 Media Processing Tools
-
-- [Background Remover](https://webtoolseasy.com/tools/background-remover) - Remove image backgrounds automatically with transparent PNG output
-- [Image Compressor Tool](https://webtoolseasy.com/tools/image-compress) - Reduce image file size without quality loss
-- [Image Format Converter](https://webtoolseasy.com/tools/image-format-converter) - Convert between image formats
-- [Image Cropper Tool](https://webtoolseasy.com/tools/crop-image) - Crop and resize images
-- [Image Resizer](https://webtoolseasy.com/tools/image-resizer) - Resize and optimize images with quality control
-- [Image to Text OCR](https://webtoolseasy.com/tools/image-to-text) - Extract text from images
-- [Audio Converter Tool](https://webtoolseasy.com/tools/audio-converter) - Convert between MP3, WAV, OGG, M4A, AAC, FLAC formats
-- [Audio Recorder Online](https://webtoolseasy.com/tools/audio-recorder) - Record audio from microphone with real-time level visualization
-- [Video Audio Converter](https://webtoolseasy.com/tools/video-to-audio-converter) - Convert video to audio
-- [Video Editor Online](https://webtoolseasy.com/tools/video-editor) - Edit videos in browser
-- [Video Compressor Online](https://webtoolseasy.com/tools/video-compressor) - Compress videos to reduce file size with quality control
-- [Screen Recorder Online](https://webtoolseasy.com/tools/screen-recorder) - Record your screen with audio
-- [Webcam Recorder Online](https://webtoolseasy.com/tools/webcam-recorder) - Record video from webcam with device selection
-- [GIF Maker Online](https://webtoolseasy.com/tools/gif-maker) - Create animated GIFs from videos
-- [Meme Generator Free](https://webtoolseasy.com/tools/meme-generator) - Create custom memes with text overlay
-- [PDF Merge Tool](https://webtoolseasy.com/tools/pdf-merge) - Combine multiple PDF files into one document
-- [PDF Split Tool](https://webtoolseasy.com/tools/pdf-split) - Extract specific pages or ranges from PDF files
-- [PDF Compress Tool](https://webtoolseasy.com/tools/pdf-compress) - Reduce PDF file size with quality control
-- [PDF to Images Converter](https://webtoolseasy.com/tools/pdf-to-images) - Convert PDF pages to PNG or JPG images
-- [Images to PDF Converter](https://webtoolseasy.com/tools/images-to-pdf) - Combine multiple images into a single PDF
-- [PDF to Word Converter](https://webtoolseasy.com/tools/pdf-to-word) - Convert PDF files to editable Word documents
-- [Word to PDF Converter](https://webtoolseasy.com/tools/word-to-pdf) - Convert Word documents to PDF format
-
-### 🔧 Utility Tools
-
-- [QR Code Generator Free](https://webtoolseasy.com/tools/qr-code-generator) - Create QR codes instantly
-- [Barcode Generator](https://webtoolseasy.com/tools/barcode-generator) - Generate Code128, EAN13, UPC-A, and Code39 barcodes
-- [Password Generator Tool](https://webtoolseasy.com/tools/password-generator) - Generate secure passwords
-- [Signature Generator Free](https://webtoolseasy.com/tools/signature-generator) - Create digital signatures online - draw, type, or upload
-- [Invoice Generator Free](https://webtoolseasy.com/tools/invoice-generator) - Create professional invoices with PDF export
-- [Resume Builder Free](https://webtoolseasy.com/tools/resume-builder) - Create professional resumes with customizable templates and PDF export
-- [Favicon Generator](https://webtoolseasy.com/tools/favicon-generator) - Generate favicons in multiple sizes from any image
-- [Color Palette Generator](https://webtoolseasy.com/tools/color-palette-generator) - Create color schemes
-- [Color Converter](https://webtoolseasy.com/tools/color-converter) - Convert between HEX, RGB, HSL, CMYK color formats
-- [Timezone Converter](https://webtoolseasy.com/tools/timezone-converter) - Convert between timezones
-- [UNIX Timestamp Converter](https://webtoolseasy.com/tools/unix-timestamp-converter) - Convert UNIX timestamps to dates
-- [Age Calculator](https://webtoolseasy.com/tools/age-calculator) - Calculate exact age from birthdate
-- [IP Address Lookup](https://webtoolseasy.com/tools/ip-address-lookup) - Find your IP address and location
-- [Device Hardware Tester](https://webtoolseasy.com/tools/test-hardware) - Test camera, microphone, and screen
-- [BMI Calculator](https://webtoolseasy.com/tools/bmi-calculator) - Calculate Body Mass Index with health category assessment
-- [Unit Converter](https://webtoolseasy.com/tools/unit-converter) - Convert between length, weight, temperature, area, volume, speed
-- [Random Number Generator](https://webtoolseasy.com/tools/random-number-generator) - Generate random numbers for lottery, gaming, and more
-- [Date Calculator](https://webtoolseasy.com/tools/date-calculator) - Calculate date differences, add/subtract days, count working days
-- [Discount Calculator](https://webtoolseasy.com/tools/discount-calculator) - Calculate sale prices, discounts, and savings
-- [Tip Calculator](https://webtoolseasy.com/tools/tip-calculator) - Calculate tips and split bills for dining
-- [GPA Calculator](https://webtoolseasy.com/tools/gpa-calculator) - Calculate Grade Point Average for academic planning
-- [Calorie Calculator](https://webtoolseasy.com/tools/calorie-calculator) - Calculate daily calorie needs, BMR, and TDEE
-- [Time Duration Calculator](https://webtoolseasy.com/tools/time-duration-calculator) - Calculate time between hours, add/subtract time
-- [Countdown Timer Online](https://webtoolseasy.com/tools/countdown-timer) - Set custom countdown timer with alarm notifications
-- [Stopwatch Online](https://webtoolseasy.com/tools/stopwatch) - Digital stopwatch with lap timer for precise time tracking
-- [Fraction Calculator](https://webtoolseasy.com/tools/fraction-calculator) - Add, subtract, multiply, divide fractions with simplification
-- [Meta Tag Generator](https://webtoolseasy.com/tools/meta-tag-generator) - Generate SEO meta tags, Open Graph, and Twitter Cards
-- [Robots.txt Generator](https://webtoolseasy.com/tools/robots-txt-generator) - Create robots.txt file for SEO and crawlers
-
-### 💰 Finance Tools
-
-- [SIP Calculator](https://webtoolseasy.com/tools/sip-calculator) - Calculate mutual fund SIP returns and investment growth
-- [Retirement Calculator](https://webtoolseasy.com/tools/retirement-calculator) - Plan retirement savings and estimate corpus needed
-- [Mortgage Calculator](https://webtoolseasy.com/tools/mortgage-calculator) - Calculate home loan EMI with payment breakdown
-- [ROI Calculator](https://webtoolseasy.com/tools/roi-calculator) - Measure return on investment and profitability
-- [Interest Calculator Tool](https://webtoolseasy.com/tools/compound-interest-calculator) - Calculate compound interest
-- [Percentage Calculator](https://webtoolseasy.com/tools/percentage-calculator) - Calculate percentages, increases, decreases
-- [Loan EMI Calculator](https://webtoolseasy.com/tools/loan-emi-calculator) - Calculate monthly loan payments with amortization
-- [Currency Converter](https://webtoolseasy.com/tools/currency-converter) - Convert currencies with live exchange rates
-- [Salary Calculator](https://webtoolseasy.com/tools/salary-calculator) - Convert between hourly, monthly, and annual salary
-
----
-
-## 🚀 Getting Started
+## Quick Start
 
 ### Prerequisites
 
-- Node.js 18.0 or higher
-- npm, yarn, or pnpm
+- Node.js 22.x
+- npm 10+
 
-### Installation
+### Setup
 
-1. Clone the repository
+1. Clone this repository.
 
 ```bash
 git clone https://github.com/gaurav10610/webtoolseasy.git
 cd webtoolseasy
 ```
 
-2. Install dependencies
+2. Install dependencies.
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
-3. Create environment configuration
-
-Copy `.env.development` or create your own `.env.local`:
+3. Create local environment file.
 
 ```bash
-cp .env.development .env.local
+cp .env.example .env.local
 ```
 
-4. Start the development server
+4. Run development server.
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the application.
+5. Open [http://localhost:3000](http://localhost:3000).
 
----
+## Environment Variables
 
-## 🏗️ Build for Production
+The repository intentionally does not contain real secrets.
 
-```bash
-npm run build
-npm run start
-```
-
----
-
-## 📁 Project Structure
-
-```
-webtoolseasy/
-├── public/               # Static assets
-├── scripts/              # Build and utility scripts
-├── src/
-│   ├── app/             # Next.js app router pages
-│   ├── components/      # React components
-│   │   ├── tools/      # Individual tool components
-│   │   └── lib/        # Reusable UI components
-│   ├── data/           # Tool configurations and metadata
-│   ├── hooks/          # Custom React hooks
-│   ├── lib/            # Utility libraries
-│   ├── service/        # Service layer (FFmpeg, API)
-│   ├── types/          # TypeScript type definitions
-│   └── util/           # Helper functions
-├── .env.development    # Development environment variables
-├── .env.production     # Production environment variables
-└── next.config.mjs     # Next.js configuration
-```
-
----
-
-## 🔒 Privacy & Security
-
-**Your privacy is our priority.** WebToolsEasy is designed with privacy at its core:
-
-- ✅ **No Data Upload**: All tools process data locally in your browser using WebAssembly, JavaScript APIs, and client-side libraries.
-- ✅ **No Tracking**: We don't track your usage or collect personal information.
-- ✅ **No Cookies**: No cookies required for functionality.
-- ✅ **Open Source**: Full transparency - inspect the code yourself.
-- ✅ **HTTPS Only**: Secure connection for all traffic.
-
-### How It Works
-
-Tools leverage modern browser APIs:
-
-- **FFmpeg.wasm** for video/audio processing
-- **Canvas API** for image manipulation
-- **Web Workers** for heavy computations
-- **File System Access API** for local file handling
-- **Speech Recognition API** for speech-to-text
-
----
-
-## 🔐 Environment Variables
-
-Create a `.env.local` file for local development with the following variables:
+Use `.env.local` (gitignored) and configure as needed:
 
 ```env
-# Required
 HOSTNAME=http://localhost:3000
 SCREENSHOTS_BASE_URL=/screenshots
+GA_CODE=G-XXXXXXX
+ADSENSE_PUBLISHER_ID=ca-pub-xxxxxxxxxxxxxxxx
 
-# Optional: Analytics (required for production builds)
-GA_CODE=your-google-analytics-code
-ADSENSE_PUBLISHER_ID=your-adsense-id
-
-# Optional: For indexing scripts (keep in .env.local, not in repo)
-GOOGLE_SERVICE_ACCOUNT_PATH=/path/to/service-account.json
-# OR
+# Optional indexing integrations
+INDEXNOW_API_KEY=your-indexnow-key
+INDEXNOW_HOST=webtoolseasy.com
+GOOGLE_SERVICE_ACCOUNT_PATH=/absolute/path/to/google-service-account.json
+# or
 GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account",...}
 ```
 
-**Important**: Never commit real API keys or secrets. Use `.env.local` for sensitive values (already gitignored).
-
----
-
-## 🛠️ Available Scripts
+## Scripts
 
 ```bash
-npm run dev              # Start development server
-npm run build            # Build for production
-npm run start            # Start production server
-npm run lint             # Run ESLint
-npm run generate:screenshots  # Generate tool screenshots
-npm run index:urls       # Index URLs in search engines
-npm run update:sitemap   # Update sitemap.xml
-npm run share:tools      # Generate social share URLs
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run test:unit
+npm run test:e2e
+npm run test
+npm run update:sitemap
+npm run index:urls
+npm run index:urls:all
+npm run generate:screenshots
 ```
 
----
+## Open Source Guidelines
 
-## 🤝 Contributing
+- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Security policy: [SECURITY.md](SECURITY.md)
+- Code of conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- License: [LICENSE](LICENSE)
 
-We welcome contributions! Whether it's:
+## SEO and Growth Notes
 
-- 🐛 Bug reports
-- 💡 Feature requests
-- �� Documentation improvements
-- 🔧 Code contributions
+This repository supports growth of the live service by making quality transparent:
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+- Public code increases trust for users and technical reviewers.
+- Better documentation helps contributors ship pages/features faster.
+- Consistent metadata and sitemap updates improve discoverability.
+- Open source contributions can expand long-tail keyword coverage through new tools and content improvements.
 
-### Quick Contribution Guide
+## How to Contribute
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-tool`)
-3. Make your changes
-4. Test thoroughly
-5. Commit your changes (`git commit -m 'Add amazing tool'`)
-6. Push to the branch (`git push origin feature/amazing-tool`)
-7. Open a Pull Request
+1. Pick an issue or propose one.
+2. Fork and create a branch.
+3. Add or improve a tool, UX, tests, or docs.
+4. Run quality checks: `npm run lint && npm run test`.
+5. Open a PR with clear context and screenshots for UI changes.
 
----
+## Maintainer
 
-## Tech Stack
+Gaurav Kumar Yadav
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **UI Library**: [Material-UI (MUI)](https://mui.com/)
-- **Code Editor**: [Monaco Editor](https://microsoft.github.io/monaco-editor/)
-- **Media Processing**: [FFmpeg.wasm](https://ffmpegwasm.netlify.app/)
-- **PDF Generation**: [@react-pdf/renderer](https://react-pdf.org/)
-- **Markdown**: [@uiw/react-md-editor](https://uiwjs.github.io/react-md-editor/)
-- **Styling**: [Emotion](https://emotion.sh/)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🌟 Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
----
-
-## 📞 Support
-
-- **Website**: [https://webtoolseasy.com](https://webtoolseasy.com)
-- **Issues**: [GitHub Issues](https://github.com/gaurav10610/webtoolseasy/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/gaurav10610/webtoolseasy/discussions)
-
----
-
-## 👨‍💻 Author & Developer
-
-**Gaurav Kumar Yadav**
-
-- **LinkedIn**: [View LinkedIn Profile](https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/)
-- **GitHub**: [View GitHub Profile](https://github.com/gaurav10610)
-
----
-
-## 🙏 Acknowledgments
-
-- Built with ❤️ using open source technologies
-- Inspired by the need for privacy-respecting web tools
-- Thanks to all users
-
----
-
-**Made with ♥ for developers, by a developer**
+- GitHub: [https://github.com/gaurav10610](https://github.com/gaurav10610)
+- LinkedIn: [https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/](https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/)

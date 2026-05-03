@@ -1,0 +1,81 @@
+# Contributing to WebToolsEasy
+
+Thanks for helping improve WebToolsEasy.
+
+## Ways to Contribute
+
+- Report bugs.
+- Suggest or design new tools.
+- Improve accessibility, performance, and SEO.
+- Add or improve tests.
+- Improve docs and examples.
+
+## Development Setup
+
+1. Fork and clone the repository.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create local env file:
+
+```bash
+cp .env.example .env.local
+```
+
+4. Start local dev server:
+
+```bash
+npm run dev
+```
+
+## Branch and Commit Guidelines
+
+- Use focused branches, for example: `feat/new-tool-name` or `fix/tool-route-bug`.
+- Keep commits small and descriptive.
+- Reference issues when possible.
+
+## Quality Checklist for Pull Requests
+
+Before opening a PR, run:
+
+```bash
+npm run lint
+npm run test
+npm run build
+```
+
+PRs should include:
+
+- Clear summary of what changed and why.
+- Screenshots or short recordings for UI changes.
+- Notes about any SEO-impacting changes (title, description, canonical paths, schema, sitemap).
+
+## Tool Contribution Expectations
+
+- Keep tool metadata accurate and user-focused.
+- Prefer browser-side/local processing for privacy.
+- Ensure tool pages have clear headings and useful content.
+- Add or update tests for major new behaviors.
+
+## Code Style
+
+- Use TypeScript where applicable.
+- Follow existing project structure and naming patterns.
+- Avoid unrelated refactors in feature PRs.
+
+## Issue Reporting
+
+Please include:
+
+- Expected behavior
+- Actual behavior
+- Steps to reproduce
+- Browser and OS information
+- Screenshots if relevant
+
+## Security
+
+Do not disclose vulnerabilities publicly. Please follow the process in `SECURITY.md`.

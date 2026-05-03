@@ -1,6 +1,26 @@
 {
   "name": "webtoolseasy",
   "version": "0.1.0",
+  "description": "Open source privacy-first collection of 110+ free online tools for JSON, PDF, image, text, video, and SEO workflows.",
+  "homepage": "https://webtoolseasy.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaurav10610/webtoolseasy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gaurav10610/webtoolseasy/issues"
+  },
+  "keywords": [
+    "web tools",
+    "online tools",
+    "privacy-first",
+    "json formatter",
+    "pdf tools",
+    "image tools",
+    "seo tools",
+    "nextjs",
+    "typescript"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",
