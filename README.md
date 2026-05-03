@@ -11,7 +11,6 @@ WebToolsEasy offers 110+ free online tools for developers, creators, students, a
 ## Live Product
 
 - Website: [https://webtoolseasy.com](https://webtoolseasy.com)
-- Tools directory: [https://webtoolseasy.com/tools](https://webtoolseasy.com/tools)
 - Blog: [https://webtoolseasy.com/blog](https://webtoolseasy.com/blog)
 
 ## Why This Project Exists
