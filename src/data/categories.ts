@@ -58,7 +58,7 @@ export const pdfToolsConfig: CategoryConfig = {
     "free PDF tools, PDF editor online, merge PDF, split PDF, compress PDF, PDF to Word, images to PDF, private PDF tools, no upload PDF, client-side PDF",
   heroTitle: "🔒 Free Private PDF Tools",
   heroDescription:
-    "Edit, merge, split, and convert PDFs directly in your browser. No uploads, no servers, no tracking. Your documents stay 100% private.",
+    "Get your PDFs exactly right — merged, split, compressed, or converted — without uploading a single file. Everything runs in your browser, so your documents stay 100% private.",
   heroGradient: "from-red-50 to-orange-50",
   heroBorderColor: "border-red-200",
   heroTitleColor: "!text-red-800",
@@ -151,7 +151,7 @@ export const imageToolsConfig: CategoryConfig = {
     "free image tools, image compressor, image resizer, crop image, background remover, image converter, private image tools, no upload, client-side image editing",
   heroTitle: "🖼️ Free Private Image Tools",
   heroDescription:
-    "Compress, resize, crop, and convert images directly in your browser. No uploads, no servers, no tracking. Your images stay 100% private.",
+    "Get publish-ready images — compressed, resized, cropped, or converted — without uploading them anywhere. Your images are processed locally and stay 100% private.",
   heroGradient: "from-blue-50 to-cyan-50",
   heroBorderColor: "border-blue-200",
   heroTitleColor: "!text-blue-800",
@@ -247,7 +247,7 @@ export const devToolsConfig: CategoryConfig = {
     "free developer tools, JSON formatter, code minifier, Base64 encoder, JWT decoder, regex tester, UUID generator, hash generator, client-side tools",
   heroTitle: "🛠️ Free Private Developer Tools",
   heroDescription:
-    "Format, encode, decode, and generate code directly in your browser. No uploads, no servers, no tracking. Your code stays 100% private.",
+    "Ship cleaner, faster code — format, validate, encode, and debug your payloads directly in the browser. No copy-pasting into online services; your code never leaves your machine.",
   heroGradient: "from-green-50 to-emerald-50",
   heroBorderColor: "border-green-200",
   heroTitleColor: "!text-green-800",
@@ -400,7 +400,7 @@ export const textToolsConfig: CategoryConfig = {
     "free text tools, word counter, case converter, text compare, markdown editor, text summarizer, paraphrasing tool, client-side text tools",
   heroTitle: "✍️ Free Private Text Tools",
   heroDescription:
-    "Count words, convert cases, compare texts, and edit markdown directly in your browser. No uploads, no servers, no tracking. Your content stays 100% private.",
+    "Publish polished content faster — count words, clean up formatting, compare drafts, and edit markdown without sending your writing to any server. Your content stays 100% on your device.",
   heroGradient: "from-purple-50 to-pink-50",
   heroBorderColor: "border-purple-200",
   heroTitleColor: "!text-purple-800",
@@ -523,7 +523,7 @@ export const calculatorsConfig: CategoryConfig = {
     "free calculator tools, EMI calculator, SIP calculator, mortgage calculator, ROI calculator, percentage calculator, loan calculator, client-side calculator",
   heroTitle: "🧮 Free Private Calculator Tools",
   heroDescription:
-    "Calculate EMI, SIP, mortgage, and more directly in your browser. No uploads, no servers, no tracking. Your financial data stays 100% private.",
+    "Make smarter financial decisions — calculate EMIs, plan SIP returns, model mortgages, and more without sharing your numbers with any server. Your financial data stays completely private.",
   heroGradient: "from-amber-50 to-yellow-50",
   heroBorderColor: "border-amber-200",
   heroTitleColor: "!text-amber-800",

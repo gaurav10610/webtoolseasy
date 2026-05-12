@@ -26,6 +26,20 @@ const footerGroups = [
     ],
   },
   {
+    title: "Workflow packs",
+    links: [
+      { href: "/workflows", label: "All Workflow Packs" },
+      { href: "/workflows/api-payload-cleanup", label: "API Payload Cleanup" },
+      { href: "/workflows/blog-publish", label: "Blog Publish Workflow" },
+      {
+        href: "/workflows/technical-seo-quick-audit",
+        label: "SEO Quick Audit",
+      },
+      { href: "/templates", label: "Browse Templates" },
+      { href: "/workflows/insights", label: "Workflow Insights" },
+    ],
+  },
+  {
     title: "Resources",
     links: [
       { href: "/blog", label: "Blog" },
@@ -64,7 +78,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {footerGroups.map((group) => (
             <div key={group.title} className="space-y-3">
               <AppText className="!text-sm !font-semibold !uppercase !tracking-[0.16em] !text-slate-100">

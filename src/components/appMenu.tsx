@@ -49,21 +49,22 @@ export const menuItems = baseMenuItems.filter((item) => {
 
 export default function AppMenu({ className = "" }: { className?: string }) {
   return (
-    <nav className={`flex flex-row gap-2 justify-start ${className}`}>
-      {map(menuItems, (menuItem, index) => (
+    <nav
+      className={`flex flex-row gap-1 items-center ${className}`}
+      aria-label="Main navigation"
+    >
+      {map(menuItems, (menuItem) => (
         <ButtonWithLink
           buttonText={
-            <span className="text-sm font-semibold tracking-tight">
-              {menuItem.label}
-            </span>
+            <span className="text-sm font-medium">{menuItem.label}</span>
           }
           href={menuItem.routeLink}
           key={menuItem.routeLink}
           title={`Go to ${menuItem.label} page`}
           size="small"
-          variant={index === 0 ? "contained" : "text"}
-          color={index === 0 ? "primary" : "inherit"}
-          className={`${menuItem.className ?? ""} !capitalize !rounded-full !border-[var(--mui-palette-divider)] !px-4`}
+          variant="text"
+          color="inherit"
+          className={`${menuItem.className ?? ""} !capitalize !rounded-full !px-3 !text-[var(--mui-palette-text-primary)] hover:!bg-[var(--mui-palette-action-hover)]`}
         />
       ))}
     </nav>

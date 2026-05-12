@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { robotoFont } from "@/design";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -8,31 +8,40 @@ import { CommonSiteData } from "@/components/commonSiteData";
 import { SiteFooter } from "@/components/siteFooter";
 import { AppThemeProvider } from "@/components/AppThemeProvider";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.HOSTNAME!),
   title: {
-    default: "WebToolsEasy - Free Privacy-First Online Tools",
+    default: "WebToolsEasy – 110+ Free Online Tools | No Signup, Privacy-First",
     template: "%s | WebToolsEasy",
   },
   description:
-    "Use 100+ free online JSON, PDF, image, text, video, and SEO tools that run in your browser with no upload, no signup, and privacy-first processing.",
+    "Use 110+ free online tools — JSON formatter, PDF editor, image compressor, code beautifier, resume builder, and more. Everything runs in your browser: no upload, no signup, 100% private.",
   alternates: {
     canonical: process.env.HOSTNAME!,
   },
   robots: "index, follow",
   openGraph: {
-    title: "WebToolsEasy - Free Privacy-First Online Tools",
+    title: "WebToolsEasy – 110+ Free Online Tools | No Signup, Privacy-First",
     description:
-      "Free browser-based tools for JSON, PDF, image, video, text, and SEO workflows with no upload and no signup.",
+      "Free browser-based tools for JSON, PDF, image, video, text, and SEO workflows. No upload, no signup — your data never leaves your device.",
     url: process.env.HOSTNAME!,
     siteName: "WebToolsEasy",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "WebToolsEasy - Free Privacy-First Online Tools",
+    title: "WebToolsEasy – 110+ Free Online Tools | No Signup, Privacy-First",
     description:
-      "Free browser-based tools for JSON, PDF, image, video, text, and SEO workflows with no upload and no signup.",
+      "Free browser-based tools for JSON, PDF, image, video, text, and SEO workflows. No upload, no signup — your data never leaves your device.",
   },
 };
 

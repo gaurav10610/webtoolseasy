@@ -27,11 +27,12 @@ import { Suspense } from "react";
 import { featuredWorkflowSlugs, workflowBySlug } from "@/data/workflows";
 import ExperimentHooks from "@/components/workflows/ExperimentHooks";
 
-const pageTitle = "Privacy-First Workflow Workspace - WebToolsEasy";
+const pageTitle =
+  "110+ Free Online Browser Tools — No Signup, No Upload | WebToolsEasy";
 const pageDescription =
-  "Run repeatable web workflows fully in your browser with no upload, no signup, and reusable presets. Includes API cleanup, blog publish, SEO audit, and more.";
+  "Free online tools for JSON formatting, PDF editing, image compression, code beautification, SEO analysis, and more. Everything runs in your browser — no upload, no signup, 100% private. Includes guided workflow packs for repeatable outcomes.";
 const keywords =
-  "privacy-first workflows, browser workflow tools, local-first productivity tools, no upload workflows";
+  "free online tools, json formatter, pdf editor, image compressor, code beautifier, browser tools, no signup, privacy-first, developer tools, text tools, SEO tools, resume builder, password generator, qr code generator";
 
 const ENABLE_POPULAR_TOOLS = true;
 
@@ -328,10 +329,10 @@ function SectionAppList({
           />
         </header>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 w-full">
         <Suspense
           fallback={
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 w-full">
               {Array.from({ length: Math.min(configs.length, 8) }, (_, i) => (
                 <SkeletonWithProps
                   key={i}
@@ -464,7 +465,7 @@ export default async function Home({
 
       <div className="w-full py-2 md:py-4">
         <div className="flex flex-col gap-4 items-center w-full">
-          <AppHeading heading="Privacy-First Browser Workflows — No Signup, No Upload" />
+          <AppHeading heading="Free Privacy-First Browser Tools — No Signup, No Upload" />
           <section className="app-shell-section w-full">
             <div className="flex flex-wrap items-center gap-2">
               {featuredWorkflowSlugs.map((slug) => {

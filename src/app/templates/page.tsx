@@ -10,9 +10,9 @@ import {
 } from "@/components/structuredData";
 
 export const metadata: Metadata = {
-  title: "Workflow Templates - Reusable Recipe Starters",
+  title: "Free Workflow Templates — Reusable Starter Recipes | WebToolsEasy",
   description:
-    "Clone reusable workflow templates to speed up recurring web tasks.",
+    "Clone reusable workflow templates to speed up recurring web tasks. Privacy-first, browser-based, no upload required.",
   alternates: {
     canonical: `${process.env.HOSTNAME}/templates`,
   },

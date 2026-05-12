@@ -35,7 +35,7 @@ export function RelatedTools({
           size="small"
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 w-full">
         {map(relatedToolsConfigs, (relatedToolConfig) => (
           <div key={relatedToolConfig.applicationId} className="w-full">
             <RelatedToolCard config={relatedToolConfig} />

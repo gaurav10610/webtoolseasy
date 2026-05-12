@@ -4,9 +4,10 @@ import { WorkflowCards } from "@/components/workflows/WorkflowCards";
 import { AppHeading } from "@/components/commonComponents";
 import { AppText } from "@/components/lib/ui";
 
-const pageTitle = "Workflow Packs - Privacy-First Browser Workspace";
+const pageTitle =
+  "Free Workflow Packs for Repeatable Browser Tasks | WebToolsEasy";
 const pageDescription =
-  "Run repeatable web workflows with local-first processing, reusable presets, and export summaries. No upload required.";
+  "Run repeatable web workflows entirely in your browser with no upload, no signup. Includes API cleanup, blog publish, SEO audit, and more — with reusable presets and export summaries.";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
