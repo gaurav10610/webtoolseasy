@@ -124,52 +124,52 @@ Estimate legend:
 95. TB-095 | P1 | S | Add localization-ready string key extraction for new workflow surfaces. | Status: TODO
 96. TB-096 | P0 | XS | Define coding conventions for new workflow module directories. | Status: DONE
 97. TB-097 | P0 | S | Add workflow module scaffold generator script for rapid pack creation. | Status: DONE
-98. TB-098 | P1 | S | Add developer docs for creating new pack adapters. | Status: TODO
-99. TB-099 | P1 | S | Add troubleshooting docs for privacy guardrail failures. | Status: TODO
-100. TB-100 | P1 | XS | Add architecture decision record for workflow engine design choices. | Status: TODO
-101. TB-101 | P1 | XS | Add architecture decision record for local-first storage approach. | Status: TODO
-102. TB-102 | P1 | XS | Add architecture decision record for recipe sharing format. | Status: TODO
-103. TB-103 | P1 | XS | Add architecture decision record for telemetry stack choice. | Status: TODO
+98. TB-098 | P1 | S | Add developer docs for creating new pack adapters. | Status: DONE
+99. TB-099 | P1 | S | Add troubleshooting docs for privacy guardrail failures. | Status: DONE
+100. TB-100 | P1 | XS | Add architecture decision record for workflow engine design choices. | Status: DONE
+101. TB-101 | P1 | XS | Add architecture decision record for local-first storage approach. | Status: DONE
+102. TB-102 | P1 | XS | Add architecture decision record for recipe sharing format. | Status: DONE
+103. TB-103 | P1 | XS | Add architecture decision record for telemetry stack choice. | Status: DONE
 104. TB-104 | P0 | S | Add robots/sitemap updates for new workflow and template routes. | Status: DONE
 105. TB-105 | P1 | S | Add automated sitemap inclusion tests for workflow/template/blog clusters. | Status: DONE
-106. TB-106 | P1 | XS | Add canonical consistency checker for duplicate path patterns. | Status: TODO
+106. TB-106 | P1 | XS | Add canonical consistency checker for duplicate path patterns. | Status: DONE
 107. TB-107 | P1 | M | Add category landing rewrites emphasizing outcomes not tool count. | Status: TODO
-108. TB-108 | P1 | S | Add quality gates for template page uniqueness (title/meta/content overlap thresholds). | Status: TODO
-109. TB-109 | P1 | S | Add anti-thin-content checks for generated template pages. | Status: TODO
-110. TB-110 | P1 | S | Add observable "time-to-first-output" metric and alarms. | Status: TODO
-111. TB-111 | P1 | S | Add "completion under 2 minutes" success indicator per pack. | Status: TODO
-112. TB-112 | P1 | S | Add retention cohort tracking for users with vs without presets. | Status: TODO
-113. TB-113 | P1 | S | Add repeat usage tracking by project workspace utilization. | Status: TODO
-114. TB-114 | P1 | S | Add recipe viewer-to-clone conversion tracking. | Status: TODO
-115. TB-115 | P1 | XS | Add baseline KPI docs aligned to WCW and funnel goals. | Status: TODO
+108. TB-108 | P1 | S | Add quality gates for template page uniqueness (title/meta/content overlap thresholds). | Status: DONE
+109. TB-109 | P1 | S | Add anti-thin-content checks for generated template pages. | Status: DONE
+110. TB-110 | P1 | S | Add observable "time-to-first-output" metric and alarms. | Status: DONE
+111. TB-111 | P1 | S | Add "completion under 2 minutes" success indicator per pack. | Status: DONE
+112. TB-112 | P1 | S | Add retention cohort tracking for users with vs without presets. | Status: DONE
+113. TB-113 | P1 | S | Add repeat usage tracking by project workspace utilization. | Status: DONE
+114. TB-114 | P1 | S | Add recipe viewer-to-clone conversion tracking. | Status: DONE
+115. TB-115 | P1 | XS | Add baseline KPI docs aligned to WCW and funnel goals. | Status: DONE
 116. TB-116 | P0 | S | Ensure all existing tool URLs continue to resolve after IA changes. | Status: DONE
 117. TB-117 | P0 | S | Add regression test for tool route continuity and canonical integrity. | Status: DONE
-118. TB-118 | P1 | S | Add migration messaging for old tool users entering workflow-first UI. | Status: TODO
-119. TB-119 | P1 | S | Add in-product onboarding tooltip flow for new workflow users. | Status: TODO
+118. TB-118 | P1 | S | Add migration messaging for old tool users entering workflow-first UI. | Status: DONE
+119. TB-119 | P1 | S | Add in-product onboarding tooltip flow for new workflow users. | Status: DONE
 120. TB-120 | P1 | XS | Add sample input datasets for each launch workflow pack. | Status: DONE
 121. TB-121 | P1 | XS | Add one-click "try sample" button to reduce cold-start friction. | Status: DONE
 122. TB-122 | P1 | S | Add export naming convention utility for predictable file outputs. | Status: DONE
-123. TB-123 | P1 | S | Add artifact checksum and integrity verification in exported manifests. | Status: TODO
-124. TB-124 | P1 | S | Add undo/back navigation support inside workflow runs where feasible. | Status: TODO
+123. TB-123 | P1 | S | Add artifact checksum and integrity verification in exported manifests. | Status: DONE
+124. TB-124 | P1 | S | Add undo/back navigation support inside workflow runs where feasible. | Status: DONE
 125. TB-125 | P1 | XS | Add warning for irreversible transformations before execution. | Status: PARTIAL
 126. TB-126 | P1 | S | Add client resource usage warnings for very large files. | Status: DONE
-127. TB-127 | P1 | XS | Add safe fallback for browsers lacking required APIs. | Status: TODO
-128. TB-128 | P1 | XS | Add capability detection banner and degraded mode handling. | Status: TODO
-129. TB-129 | P2 | S | Add pack execution queue for handling multi-run requests gracefully. | Status: TODO
-130. TB-130 | P2 | S | Add optional background processing UX for long-running client steps. | Status: TODO
-131. TB-131 | P2 | XS | Add cache strategy for static workflow/template content assets. | Status: TODO
-132. TB-132 | P2 | S | Add memory pressure recovery strategy for large browser processing jobs. | Status: TODO
-133. TB-133 | P2 | S | Add retry strategy standardization for network-required non-local steps. | Status: TODO
-134. TB-134 | P2 | S | Add resilience tests for interrupted sessions and tab reloads. | Status: TODO
-135. TB-135 | P2 | XS | Add workflow run archival policy for local storage cleanup. | Status: TODO
-136. TB-136 | P2 | XS | Add configurable local retention limits for runs/artifacts. | Status: TODO
-137. TB-137 | P1 | S | Add embed-mode route for selected lightweight workflows. | Status: TODO
-138. TB-138 | P1 | XS | Add embed security headers and origin restrictions. | Status: TODO
+127. TB-127 | P1 | XS | Add safe fallback for browsers lacking required APIs. | Status: DONE
+128. TB-128 | P1 | XS | Add capability detection banner and degraded mode handling. | Status: DONE
+129. TB-129 | P2 | S | Add pack execution queue for handling multi-run requests gracefully. | Status: DONE
+130. TB-130 | P2 | S | Add optional background processing UX for long-running client steps. | Status: DONE
+131. TB-131 | P2 | XS | Add cache strategy for static workflow/template content assets. | Status: DONE
+132. TB-132 | P2 | S | Add memory pressure recovery strategy for large browser processing jobs. | Status: DONE
+133. TB-133 | P2 | S | Add retry strategy standardization for network-required non-local steps. | Status: DONE
+134. TB-134 | P2 | S | Add resilience tests for interrupted sessions and tab reloads. | Status: DONE
+135. TB-135 | P2 | XS | Add workflow run archival policy for local storage cleanup. | Status: DONE
+136. TB-136 | P2 | XS | Add configurable local retention limits for runs/artifacts. | Status: DONE
+137. TB-137 | P1 | S | Add embed-mode route for selected lightweight workflows. | Status: DONE
+138. TB-138 | P1 | XS | Add embed security headers and origin restrictions. | Status: DONE
 139. TB-139 | P1 | S | Add template submission flow for community-contributed recipes (local draft first). | Status: TODO
 140. TB-140 | P1 | S | Add moderation checklist pipeline for public template publication. | Status: TODO
-141. TB-141 | P1 | XS | Add abuse/spam prevention checks for template titles/descriptions. | Status: TODO
-142. TB-142 | P1 | XS | Add template versioning and update history metadata. | Status: TODO
-143. TB-143 | P1 | XS | Add template clone count and popularity ranking logic. | Status: TODO
+141. TB-141 | P1 | XS | Add abuse/spam prevention checks for template titles/descriptions. | Status: DONE
+142. TB-142 | P1 | XS | Add template versioning and update history metadata. | Status: DONE
+143. TB-143 | P1 | XS | Add template clone count and popularity ranking logic. | Status: DONE
 144. TB-144 | P1 | XS | Add challenge page framework for benchmark/before-after storytelling. | Status: TODO
 145. TB-145 | P1 | S | Add workflow benchmark data capture method (privacy-safe aggregate only). | Status: TODO
 146. TB-146 | P1 | XS | Add "why this workflow" proof section component for pages. | Status: TODO
@@ -177,17 +177,17 @@ Estimate legend:
 148. TB-148 | P1 | XS | Add privacy disclaimer update to align with workflow-specific behavior. | Status: TODO
 149. TB-149 | P1 | XS | Add legal copy for recipe sharing and template publication terms. | Status: TODO
 150. TB-150 | P1 | XS | Add support/contact hooks on workflow completion pages. | Status: TODO
-151. TB-151 | P0 | XS | Select ORM for optional backend sync track (Drizzle recommended). | Status: PARTIAL
-152. TB-152 | P0 | XS | Select DB schema naming and migration conventions. | Status: TODO
-153. TB-153 | P0 | XS | Select analytics vendor/stack with privacy constraints. | Status: TODO
+151. TB-151 | P0 | XS | Select ORM for optional backend sync track (Drizzle recommended). | Status: DONE
+152. TB-152 | P0 | XS | Select DB schema naming and migration conventions. | Status: DONE
+153. TB-153 | P0 | XS | Select analytics vendor/stack with privacy constraints. | Status: DONE
 154. TB-154 | P1 | XS | Select auth approach for optional sync login (or anonymous-only mode). | Status: TODO
 155. TB-155 | P1 | XS | Select recipe link signing/encryption format and size limits. | Status: TODO
 156. TB-156 | P0 | XS | Add local Docker compose for Postgres (metadata sync track). | Status: DONE
 157. TB-157 | P0 | XS | Add DB startup/shutdown/log scripts to package scripts. | Status: DONE
 158. TB-158 | P0 | XS | Add local DATABASE_URL environment configuration docs. | Status: DONE
-159. TB-159 | P0 | S | Add migration runner integration with local Docker Postgres. | Status: TODO
-160. TB-160 | P0 | M | Create metadata sync DB schema (projects, runs, presets, recipes, optional users). | Status: PARTIAL
-161. TB-161 | P0 | S | Enforce server-side schema guard to block private file-content persistence. | Status: TODO
+159. TB-159 | P0 | S | Add migration runner integration with local Docker Postgres. | Status: DONE
+160. TB-160 | P0 | M | Create metadata sync DB schema (projects, runs, presets, recipes, optional users). | Status: DONE
+161. TB-161 | P0 | S | Enforce server-side schema guard to block private file-content persistence. | Status: DONE
 162. TB-162 | P1 | M | Build CRUD APIs for projects, presets, runs, and recipes. | Status: PARTIAL
 163. TB-163 | P1 | S | Add sync conflict handling strategy (last-write-wins v1). | Status: PARTIAL
 164. TB-164 | P1 | S | Add manual sync and status indicators in UI. | Status: PARTIAL
