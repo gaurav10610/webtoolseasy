@@ -186,12 +186,14 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   }
 
   // Get tool data with error handling
-  const { descriptionData, componentConfig } = await getToolData(
+  const { metadata, descriptionData, componentConfig } = await getToolData(
     params.pageUrl,
   );
 
   const toolDescriptionData = descriptionData as DescriptionBlock[];
   const toolConfigData = componentConfig as ApplicationConfig;
+  const toolSummary =
+    typeof metadata.description === "string" ? metadata.description : null;
 
   // Optimize related tools filtering and mapping
   const relatedToolsConfigs: AppNavigationConfig[] = toolConfigData.relatedTools
@@ -220,11 +222,13 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   // Only pass tools from the current category to the SidePanel to prevent SEO topical dilution
   const categoryApps = currentCategoryConfig
     ? Object.fromEntries(
-        Object.entries(apps).filter(([_, app]) =>
-          currentCategoryConfig.toolIds.includes(
-            app.applicationId as ApplicationIds,
-          ),
-        ),
+        Object.values(apps)
+          .filter((app) =>
+            currentCategoryConfig.toolIds.includes(
+              app.applicationId as ApplicationIds,
+            ),
+          )
+          .map((app) => [app.applicationId, app]),
       )
     : apps;
 
@@ -310,6 +314,11 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
                       size="small"
                     />
                   </div>
+                  {toolSummary && (
+                    <AppText className="max-w-4xl !text-sm md:!text-base !leading-7 !text-[var(--mui-palette-text-secondary)]">
+                      {toolSummary}
+                    </AppText>
+                  )}
                 </div>
 
                 <div className="flex-shrink-0">

@@ -24,13 +24,13 @@ import {
 } from "@/components/structuredData";
 import { SkeletonWithProps } from "@/components/lib/skeletons";
 import { Suspense } from "react";
+import { featuredWorkflowSlugs, workflowBySlug } from "@/data/workflows";
 
-const pageTitle =
-  "110+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
+const pageTitle = "Privacy-First Workflow Workspace - WebToolsEasy";
 const pageDescription =
-  "Use 110+ free online tools that run 100% in your browser with complete privacy. JSON formatter, PDF editor, image compressor, code beautifier, resume builder, video converter & more. No signup, no data upload, works offline.";
+  "Run repeatable web workflows fully in your browser with no upload, no signup, and reusable presets. Includes API cleanup, blog publish, SEO audit, and more.";
 const keywords =
-  "free online tools, private browser tools, client-side developer tools, no upload pdf editor, offline privacy-first tools";
+  "privacy-first workflows, browser workflow tools, local-first productivity tools, no upload workflows";
 
 const ENABLE_POPULAR_TOOLS = true;
 
@@ -462,16 +462,43 @@ export default async function Home({
 
       <div className="w-full py-2 md:py-4">
         <div className="flex flex-col gap-4 items-center w-full">
-          <AppHeading heading="Free Online Tools — No Signup, No Upload, 100% Private" />
+          <AppHeading heading="Privacy-First Browser Workflows — No Signup, No Upload" />
+          <section className="app-shell-section w-full">
+            <div className="flex flex-wrap items-center gap-2">
+              {featuredWorkflowSlugs.map((slug) => {
+                const workflow = workflowBySlug[slug];
+                return (
+                  <Link
+                    key={slug}
+                    href={`/workflows/${slug}`}
+                    className="no-underline"
+                  >
+                    <AppChip
+                      label={`Workflow: ${workflow?.name ?? slug}`}
+                      color="secondary"
+                      variant="outlined"
+                      className="cursor-pointer"
+                    />
+                  </Link>
+                );
+              })}
+              <Link href="/templates" className="no-underline">
+                <AppChip
+                  label="Browse Templates"
+                  color="primary"
+                  className="cursor-pointer"
+                />
+              </Link>
+            </div>
+          </section>
 
           <section className="app-shell-section w-full">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-3xl">
                 <AppText className="!text-base !text-[var(--mui-palette-text-secondary)]">
-                  115+ free online tools for developers, designers, and everyday
-                  tasks. Format JSON, compress images, edit PDFs, convert files,
-                  and more — everything runs in your browser with complete
-                  privacy.
+                  Start with guided workflow packs for repeatable outcomes, then
+                  drop into individual tools as needed. Everything still runs in
+                  your browser with complete privacy-first processing.
                 </AppText>
               </div>
               <SocialShareButtons

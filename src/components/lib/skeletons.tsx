@@ -1,4 +1,4 @@
-import { Skeleton, Box, Typography } from "@mui/material";
+import { Skeleton, Box } from "@mui/material";
 
 interface SkeletonWithPropsProps {
   variant?: "text" | "rectangular" | "circular";
@@ -98,13 +98,6 @@ export function ToolPageSkeleton() {
           height={36}
           sx={{ borderRadius: 1 }}
         />
-      </Box>
-
-      {/* Loading indicator */}
-      <Box className="text-center mt-4">
-        <Typography variant="body2" color="textSecondary">
-          Loading tool...
-        </Typography>
       </Box>
     </Box>
   );

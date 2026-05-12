@@ -24,7 +24,13 @@ export async function loadBlogConfig(blogSlug: string) {
   }
 }
 
-export function validateMetadataExports(config: any): boolean {
+interface ToolConfigModule {
+  metadata?: unknown;
+  componentConfig?: unknown;
+  descriptionData?: unknown;
+}
+
+export function validateMetadataExports(config: ToolConfigModule): boolean {
   return (
     config.metadata !== undefined &&
     typeof config.metadata === "object" &&
@@ -34,7 +40,10 @@ export function validateMetadataExports(config: any): boolean {
   );
 }
 
-export function validateToolConfig(config: any, toolName: string): string[] {
+export function validateToolConfig(
+  config: ToolConfigModule,
+  toolName: string,
+): string[] {
   const errors: string[] = [];
 
   if (!config.metadata) {

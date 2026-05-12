@@ -1,4 +1,10 @@
-import { readdirSync, writeFileSync, readFileSync, existsSync } from "fs";
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+} from "fs";
 import { getAllCategorySlugs } from "../src/data/categories";
 
 function convertDateFormat(isoDate: string) {
@@ -33,6 +39,18 @@ function generateSitemap(
     .join("\n");
 
   return header + body + "\n" + footer;
+}
+
+function getMostRecentMtime(paths: string[]) {
+  const mtimes = paths
+    .filter((filePath) => existsSync(filePath))
+    .map((filePath) => statSync(filePath).mtime.getTime());
+
+  return convertDateFormat(
+    new Date(
+      mtimes.length > 0 ? Math.max(...mtimes) : Date.now(),
+    ).toISOString(),
+  );
 }
 
 function updateSitemap() {
@@ -71,16 +89,19 @@ function updateSitemap() {
 
   // Get tools from src/data/tools/*.ts
   const toolsPath = `${process.cwd()}/src/data/tools`;
-  const now = convertDateFormat(new Date().toISOString());
   const toolUrls = readdirSync(toolsPath)
     .filter((file) => file.endsWith(".ts"))
     .map((file) => {
-      const fileName = `tools/${file.replace(".ts", "")}`;
+      const toolSlug = file.replace(".ts", "");
+      const fileName = `tools/${toolSlug}`;
       const loc = `https://webtoolseasy.com/${fileName}`;
       const existing = existingUrlMap.get(loc);
       return {
         loc,
-        lastmod: now,
+        lastmod: getMostRecentMtime([
+          `${toolsPath}/${file}`,
+          `${process.cwd()}/src/components/tools/${toolSlug}.tsx`,
+        ]),
         priority: existing?.priority,
       };
     });
@@ -93,9 +114,19 @@ function updateSitemap() {
       const fileName = `blog/${file.replace(".ts", "")}`;
       const loc = `https://webtoolseasy.com/${fileName}`;
       const existing = existingUrlMap.get(loc);
+      const contentMatch = readFileSync(
+        `${blogConfigPath}/${file}`,
+        "utf-8",
+      ).match(/contentFile:\s*"([^"]+)"/);
+      const contentFile = contentMatch?.[1];
       return {
         loc,
-        lastmod: now,
+        lastmod: getMostRecentMtime([
+          `${blogConfigPath}/${file}`,
+          ...(contentFile
+            ? [`${process.cwd()}/src/data/blog/content/${contentFile}`]
+            : []),
+        ]),
         priority: existing?.priority,
       };
     });
@@ -107,7 +138,7 @@ function updateSitemap() {
     const existing = existingUrlMap.get(loc);
     return {
       loc,
-      lastmod: now,
+      lastmod: getMostRecentMtime([`${process.cwd()}/src/data/categories.ts`]),
       priority: existing?.priority || "0.8000",
     };
   });
@@ -117,12 +148,18 @@ function updateSitemap() {
   const commonUrls = [
     {
       loc: `https://webtoolseasy.com`,
-      lastmod: now,
+      lastmod: getMostRecentMtime([
+        `${process.cwd()}/src/app/page.tsx`,
+        `${process.cwd()}/src/data/apps.ts`,
+      ]),
       priority: "1.0000",
     },
     {
       loc: `https://webtoolseasy.com/blog`,
-      lastmod: now,
+      lastmod: getMostRecentMtime([
+        `${process.cwd()}/src/app/blog/page.tsx`,
+        `${process.cwd()}/src/data/blogPosts.ts`,
+      ]),
       priority: "0.8000",
     },
   ];

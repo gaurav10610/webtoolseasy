@@ -34,13 +34,17 @@ export default function HeaderAppBar({
                 WebToolsEasy
               </AppText>
               <AppText className="hidden !text-xs !text-[var(--mui-palette-text-secondary)] md:block">
-                Free browser tools — no signup, no upload
+                Privacy-first browser workflows — no signup, no upload
               </AppText>
             </div>
           </Link>
 
           <div className="hidden xl:flex items-center gap-2">
-            <AppChip label="115+ tools" color="primary" variant="outlined" />
+            <AppChip
+              label="Workflow packs"
+              color="primary"
+              variant="outlined"
+            />
             <AppChip
               label="Private by default"
               color="success"
@@ -58,7 +62,7 @@ export default function HeaderAppBar({
 
         <div className="flex items-center justify-between gap-2 border-t border-[var(--mui-palette-divider)] py-2 md:hidden">
           <AppChip
-            label="115+ tools"
+            label="Workflow packs"
             size="small"
             color="primary"
             variant="outlined"

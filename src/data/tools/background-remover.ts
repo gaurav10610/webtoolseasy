@@ -13,12 +13,16 @@ const keywords =
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: navigationUrl,
+    canonical: `${process.env.HOSTNAME}${navigationUrl}`,
   },
   title: pageTitle,
   description: pageDescription,
   keywords: keywords,
-  metadataBase: new URL(`https://webtoolseasy.com${navigationUrl}`),
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://webtoolseasy.com",
+  ),
   icons: {
     icon: [
       { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
@@ -31,7 +35,7 @@ export const metadata: Metadata = {
     title: pageTitle,
     description: pageDescription,
     type: "website",
-    url: navigationUrl,
+    url: `${process.env.HOSTNAME}${navigationUrl}`,
     images: [
       {
         url: "/web-app-manifest-192x192.png",

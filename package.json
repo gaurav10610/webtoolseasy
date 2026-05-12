@@ -34,7 +34,11 @@
     "index:urls": "tsx scripts/index-urls.ts",
     "index:urls:all": "INDEX_ALL_URLS=true tsx scripts/index-urls.ts",
     "update:sitemap": "tsx scripts/update-sitemap.ts",
-    "bot": "npm run update:sitemap && tsx scripts/screenshot-generator-bot.ts"
+    "bot": "npm run update:sitemap && tsx scripts/screenshot-generator-bot.ts",
+    "db:up": "docker compose -f docker-compose.local-db.yml up -d",
+    "db:down": "docker compose -f docker-compose.local-db.yml down",
+    "db:logs": "docker compose -f docker-compose.local-db.yml logs -f postgres",
+    "db:ps": "docker compose -f docker-compose.local-db.yml ps"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
