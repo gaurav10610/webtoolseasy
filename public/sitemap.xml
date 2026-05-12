@@ -7,13 +7,25 @@
 
   <url>
     <loc>https://webtoolseasy.com</loc>
-    <lastmod>2026-04-16T18:31:49+00:00</lastmod>
+    <lastmod>2026-05-12T14:42:54+00:00</lastmod>
     <priority>1.0000</priority>
   </url>
 
   <url>
     <loc>https://webtoolseasy.com/blog</loc>
     <lastmod>2026-01-11T12:10:32+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/workflows</loc>
+    <lastmod>2026-05-12T14:42:54+00:00</lastmod>
+    <priority>0.9000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/templates</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
     <priority>0.8000</priority>
   </url>
 
@@ -783,5 +795,65 @@
     <loc>https://webtoolseasy.com/tools/category/calculators</loc>
     <lastmod>2026-03-05T07:50:16+00:00</lastmod>
     <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/workflows/api-payload-cleanup</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/workflows/blog-publish</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/workflows/technical-seo-quick-audit</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/workflows/private-document-prep</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/workflows/media-publish</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.8000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/templates/api-payload-cleanup</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/templates/blog-publish</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/templates/technical-seo-quick-audit</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/templates/private-document-prep</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.7000</priority>
+  </url>
+
+  <url>
+    <loc>https://webtoolseasy.com/templates/media-publish</loc>
+    <lastmod>2026-05-12T15:03:18+00:00</lastmod>
+    <priority>0.7000</priority>
   </url>
 </urlset>

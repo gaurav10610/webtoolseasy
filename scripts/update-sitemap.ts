@@ -6,6 +6,7 @@ import {
   writeFileSync,
 } from "fs";
 import { getAllCategorySlugs } from "../src/data/categories";
+import { workflowPacks } from "../src/data/workflows";
 
 function convertDateFormat(isoDate: string) {
   const date = new Date(isoDate);
@@ -143,7 +144,40 @@ function updateSitemap() {
     };
   });
 
-  const urlList = [...toolUrls, ...blogUrls, ...categoryUrls];
+  const workflowUrls = workflowPacks.map((workflow) => {
+    const loc = `https://webtoolseasy.com/workflows/${workflow.slug}`;
+    const existing = existingUrlMap.get(loc);
+    return {
+      loc,
+      lastmod: getMostRecentMtime([
+        `${process.cwd()}/src/data/workflows.ts`,
+        `${process.cwd()}/src/app/workflows/[slug]/page.tsx`,
+        `${process.cwd()}/src/components/workflows/WorkflowRunner.tsx`,
+      ]),
+      priority: existing?.priority || "0.8000",
+    };
+  });
+
+  const templateDetailUrls = workflowPacks.map((workflow) => {
+    const loc = `https://webtoolseasy.com/templates/${workflow.slug}`;
+    const existing = existingUrlMap.get(loc);
+    return {
+      loc,
+      lastmod: getMostRecentMtime([
+        `${process.cwd()}/src/data/workflows.ts`,
+        `${process.cwd()}/src/app/templates/[slug]/page.tsx`,
+      ]),
+      priority: existing?.priority || "0.7000",
+    };
+  });
+
+  const urlList = [
+    ...toolUrls,
+    ...blogUrls,
+    ...categoryUrls,
+    ...workflowUrls,
+    ...templateDetailUrls,
+  ];
 
   const commonUrls = [
     {
@@ -159,6 +193,22 @@ function updateSitemap() {
       lastmod: getMostRecentMtime([
         `${process.cwd()}/src/app/blog/page.tsx`,
         `${process.cwd()}/src/data/blogPosts.ts`,
+      ]),
+      priority: "0.8000",
+    },
+    {
+      loc: `https://webtoolseasy.com/workflows`,
+      lastmod: getMostRecentMtime([
+        `${process.cwd()}/src/app/workflows/page.tsx`,
+        `${process.cwd()}/src/data/workflows.ts`,
+      ]),
+      priority: "0.9000",
+    },
+    {
+      loc: `https://webtoolseasy.com/templates`,
+      lastmod: getMostRecentMtime([
+        `${process.cwd()}/src/app/templates/page.tsx`,
+        `${process.cwd()}/src/data/workflows.ts`,
       ]),
       priority: "0.8000",
     },

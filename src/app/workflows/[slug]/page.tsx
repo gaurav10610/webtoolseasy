@@ -39,10 +39,13 @@ export async function generateMetadata({
 
 export default async function WorkflowDetailPage({
   params,
+  searchParams,
 }: Readonly<{
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ template?: string; recipe?: string }>;
 }>) {
   const { slug } = await params;
+  const { template, recipe } = await searchParams;
   const workflow = workflowBySlug[slug];
 
   if (!workflow) {
@@ -53,7 +56,7 @@ export default async function WorkflowDetailPage({
     <div className="w-full flex flex-col gap-4">
       <AppHeading heading={workflow.name} />
       <AppText color="textSecondary">{workflow.summary}</AppText>
-      <WorkflowRunner workflow={workflow} />
+      <WorkflowRunner workflow={workflow} template={template} recipe={recipe} />
     </div>
   );
 }

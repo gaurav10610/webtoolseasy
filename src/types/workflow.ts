@@ -52,3 +52,10 @@ export interface WorkflowTelemetryEvent {
   projectId?: string;
   timestamp: string;
 }
+
+export interface WorkflowRecipeSharePayload {
+  workflowSlug: string;
+  projectId: string;
+  presetName: string;
+  timestamp: string;
+}

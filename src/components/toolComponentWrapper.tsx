@@ -1,8 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { Suspense, memo, useCallback } from "react";
 import { ToolComponentProps } from "@/types/component";
+import { toolWorkflowBridges } from "@/data/toolWorkflowBridges";
 import { ToolPageSkeleton } from "./lib/skeletons";
 
 interface ToolComponentWrapperProps {
@@ -13,6 +15,8 @@ interface ToolComponentWrapperProps {
 
 const ToolComponentWrapper = memo(
   ({ pageUrl, queryParams, hostname }: Readonly<ToolComponentWrapperProps>) => {
+    const bridge = toolWorkflowBridges[pageUrl];
+
     // Memoize the dynamic import to prevent recreation on re-renders
     const ToolComponent = useCallback(() => {
       const Component = dynamic(
@@ -49,9 +53,24 @@ const ToolComponentWrapper = memo(
     }, [pageUrl, hostname, queryParams]);
 
     return (
-      <Suspense fallback={<ToolPageSkeleton />}>
-        <ToolComponent />
-      </Suspense>
+      <div className="flex flex-col gap-4">
+        <Suspense fallback={<ToolPageSkeleton />}>
+          <ToolComponent />
+        </Suspense>
+
+        {bridge && (
+          <section className="rounded-xl border border-[var(--mui-palette-divider)] p-4 bg-[var(--mui-palette-background-paper)]">
+            <p className="font-semibold">This is better as workflow</p>
+            <p className="text-sm opacity-80 mt-1">{bridge.message}</p>
+            <Link
+              className="inline-block mt-3 text-sm font-semibold underline"
+              href={`/workflows/${bridge.workflowSlug}`}
+            >
+              Open recommended workflow
+            </Link>
+          </section>
+        )}
+      </div>
     );
   },
 );
