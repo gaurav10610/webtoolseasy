@@ -25,6 +25,7 @@ import {
 import { SkeletonWithProps } from "@/components/lib/skeletons";
 import { Suspense } from "react";
 import { featuredWorkflowSlugs, workflowBySlug } from "@/data/workflows";
+import ExperimentHooks from "@/components/workflows/ExperimentHooks";
 
 const pageTitle = "Privacy-First Workflow Workspace - WebToolsEasy";
 const pageDescription =
@@ -455,6 +456,7 @@ export default async function Home({
 
   return (
     <>
+      <ExperimentHooks event="entry" />
       {/* Structured Data */}
       <StructuredData data={organizationSchema} />
       <StructuredData data={websiteSchema} />

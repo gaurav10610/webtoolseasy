@@ -8,6 +8,9 @@ const pageTitle = "Workflow Packs - Privacy-First Browser Workspace";
 const pageDescription =
   "Run repeatable web workflows with local-first processing, reusable presets, and export summaries. No upload required.";
 
+export const dynamic = "force-static";
+export const revalidate = 86400;
+
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,

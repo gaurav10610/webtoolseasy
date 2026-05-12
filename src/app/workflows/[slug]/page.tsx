@@ -1,12 +1,34 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { workflowBySlug, workflowPacks } from "@/data/workflows";
+import {
+  featuredWorkflowSlugs,
+  workflowBySlug,
+  workflowPacks,
+} from "@/data/workflows";
 import WorkflowRunner from "@/components/workflows/WorkflowRunner";
+import WorkflowEnhancements from "@/components/workflows/WorkflowEnhancements";
 import { AppHeading } from "@/components/commonComponents";
 import { AppText } from "@/components/lib/ui";
+import {
+  StructuredData,
+  generateFAQPageSchema,
+  generateHowToSchema,
+} from "@/components/structuredData";
+
+export const dynamic = "force-static";
+export const dynamicParams = false;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
-  return workflowPacks.map((pack) => ({ slug: pack.slug }));
+  const availableSlugs = new Set(workflowPacks.map((pack) => pack.slug));
+
+  for (const featuredSlug of featuredWorkflowSlugs) {
+    if (workflowBySlug[featuredSlug]) {
+      availableSlugs.add(featuredSlug);
+    }
+  }
+
+  return Array.from(availableSlugs).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -53,10 +75,47 @@ export default async function WorkflowDetailPage({
   }
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      <AppHeading heading={workflow.name} />
-      <AppText color="textSecondary">{workflow.summary}</AppText>
-      <WorkflowRunner workflow={workflow} template={template} recipe={recipe} />
-    </div>
+    <>
+      <StructuredData
+        data={generateHowToSchema({
+          name: workflow.name,
+          description: workflow.summary,
+          steps: workflow.steps.map((step) => ({
+            name: step.title,
+            text: step.description,
+          })),
+          totalTime: `PT${Math.max(2, workflow.steps.length * 2)}M`,
+        })}
+      />
+      <StructuredData
+        data={generateFAQPageSchema({
+          faqs: [
+            {
+              question: `What is ${workflow.name}?`,
+              answer: workflow.summary,
+            },
+            {
+              question: "Does this workflow upload my files?",
+              answer:
+                "Workflow steps are local-first and explicitly labeled by data flow mode.",
+            },
+          ],
+        })}
+      />
+      <div className="w-full flex flex-col gap-4">
+        <AppHeading heading={workflow.name} />
+        <AppText color="textSecondary">{workflow.summary}</AppText>
+        <WorkflowRunner
+          workflow={workflow}
+          template={template}
+          recipe={recipe}
+        />
+        <WorkflowEnhancements
+          workflowName={workflow.name}
+          workflowSlug={workflow.slug}
+          summary={workflow.summary}
+        />
+      </div>
+    </>
   );
 }

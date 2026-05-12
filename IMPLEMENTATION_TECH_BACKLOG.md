@@ -165,23 +165,23 @@ Estimate legend:
 136. TB-136 | P2 | XS | Add configurable local retention limits for runs/artifacts. | Status: DONE
 137. TB-137 | P1 | S | Add embed-mode route for selected lightweight workflows. | Status: DONE
 138. TB-138 | P1 | XS | Add embed security headers and origin restrictions. | Status: DONE
-139. TB-139 | P1 | S | Add template submission flow for community-contributed recipes (local draft first). | Status: TODO
-140. TB-140 | P1 | S | Add moderation checklist pipeline for public template publication. | Status: TODO
+139. TB-139 | P1 | S | Add template submission flow for community-contributed recipes (local draft first). | Status: DONE
+140. TB-140 | P1 | S | Add moderation checklist pipeline for public template publication. | Status: DONE
 141. TB-141 | P1 | XS | Add abuse/spam prevention checks for template titles/descriptions. | Status: DONE
 142. TB-142 | P1 | XS | Add template versioning and update history metadata. | Status: DONE
 143. TB-143 | P1 | XS | Add template clone count and popularity ranking logic. | Status: DONE
-144. TB-144 | P1 | XS | Add challenge page framework for benchmark/before-after storytelling. | Status: TODO
-145. TB-145 | P1 | S | Add workflow benchmark data capture method (privacy-safe aggregate only). | Status: TODO
-146. TB-146 | P1 | XS | Add "why this workflow" proof section component for pages. | Status: TODO
-147. TB-147 | P1 | XS | Add trust badge component for transparent local-processing claims. | Status: TODO
-148. TB-148 | P1 | XS | Add privacy disclaimer update to align with workflow-specific behavior. | Status: TODO
-149. TB-149 | P1 | XS | Add legal copy for recipe sharing and template publication terms. | Status: TODO
-150. TB-150 | P1 | XS | Add support/contact hooks on workflow completion pages. | Status: TODO
+144. TB-144 | P1 | XS | Add challenge page framework for benchmark/before-after storytelling. | Status: DONE
+145. TB-145 | P1 | S | Add workflow benchmark data capture method (privacy-safe aggregate only). | Status: DONE
+146. TB-146 | P1 | XS | Add "why this workflow" proof section component for pages. | Status: DONE
+147. TB-147 | P1 | XS | Add trust badge component for transparent local-processing claims. | Status: DONE
+148. TB-148 | P1 | XS | Add privacy disclaimer update to align with workflow-specific behavior. | Status: DONE
+149. TB-149 | P1 | XS | Add legal copy for recipe sharing and template publication terms. | Status: DONE
+150. TB-150 | P1 | XS | Add support/contact hooks on workflow completion pages. | Status: DONE
 151. TB-151 | P0 | XS | Select ORM for optional backend sync track (Drizzle recommended). | Status: DONE
 152. TB-152 | P0 | XS | Select DB schema naming and migration conventions. | Status: DONE
 153. TB-153 | P0 | XS | Select analytics vendor/stack with privacy constraints. | Status: DONE
-154. TB-154 | P1 | XS | Select auth approach for optional sync login (or anonymous-only mode). | Status: TODO
-155. TB-155 | P1 | XS | Select recipe link signing/encryption format and size limits. | Status: TODO
+154. TB-154 | P1 | XS | Select auth approach for optional sync login (or anonymous-only mode). | Status: DONE
+155. TB-155 | P1 | XS | Select recipe link signing/encryption format and size limits. | Status: DONE
 156. TB-156 | P0 | XS | Add local Docker compose for Postgres (metadata sync track). | Status: DONE
 157. TB-157 | P0 | XS | Add DB startup/shutdown/log scripts to package scripts. | Status: DONE
 158. TB-158 | P0 | XS | Add local DATABASE_URL environment configuration docs. | Status: DONE
@@ -194,29 +194,29 @@ Estimate legend:
 165. TB-165 | P1 | M | Add optional authentication for cross-device metadata sync. | Status: TODO
 166. TB-166 | P1 | XS | Keep anonymous local mode parity when auth is absent. | Status: TODO
 167. TB-167 | P1 | S | Add DB health endpoint and startup readiness checks. | Status: DONE
-168. TB-168 | P1 | S | Add CI service container for migration and API integration tests. | Status: TODO
-169. TB-169 | P2 | S | Add production DB abstraction for future Neon/Supabase/D1 portability. | Status: TODO
-170. TB-170 | P2 | XS | Add DB backup/restore playbook (metadata only). | Status: TODO
-171. TB-171 | P2 | XS | Add DB cost and usage monitoring thresholds. | Status: TODO
-172. TB-172 | P2 | XS | Add audit logging for recipe publication and template moderation actions. | Status: TODO
-173. TB-173 | P1 | XS | Add security headers review for workflow/template/embed routes. | Status: TODO
-174. TB-174 | P1 | XS | Add CSP review for new runner and template pages. | Status: TODO
-175. TB-175 | P1 | XS | Add dependency review for new workflow-related libraries. | Status: TODO
-176. TB-176 | P1 | S | Add Lighthouse checks for workflow and template core pages. | Status: TODO
-177. TB-177 | P1 | XS | Add bundle size budget checks after runner integration. | Status: TODO
-178. TB-178 | P1 | S | Add core web vitals tracking for workflow pages. | Status: TODO
-179. TB-179 | P1 | XS | Add changelog process for major workflow pack updates. | Status: TODO
-180. TB-180 | P1 | XS | Add release checklist for workflow pack publication. | Status: TODO
-181. TB-181 | P1 | XS | Add launch rollback switch via feature flags. | Status: TODO
-182. TB-182 | P1 | XS | Add post-release watch window playbook for metrics triage. | Status: TODO
-183. TB-183 | P2 | XS | Add long-term pack deprecation policy and redirects. | Status: TODO
-184. TB-184 | P2 | XS | Add telemetry schema versioning policy. | Status: TODO
-185. TB-185 | P2 | XS | Add template archival policy for stale/low-quality entries. | Status: TODO
-186. TB-186 | P2 | XS | Add project export/import backup for local-only users. | Status: TODO
-187. TB-187 | P2 | XS | Add optional offline-ready caching for workflow shell routes. | Status: TODO
-188. TB-188 | P2 | XS | Add fallback static rendering for key workflow landing pages. | Status: TODO
-189. TB-189 | P2 | XS | Add synthetic SEO smoke checks for workflow page discoverability. | Status: TODO
-190. TB-190 | P2 | XS | Add monthly strategy-to-metrics review template tied to WCW and retention. | Status: TODO
+168. TB-168 | P1 | S | Add CI service container for migration and API integration tests. | Status: DONE
+169. TB-169 | P2 | S | Add production DB abstraction for future Neon/Supabase/D1 portability. | Status: DONE
+170. TB-170 | P2 | XS | Add DB backup/restore playbook (metadata only). | Status: DONE
+171. TB-171 | P2 | XS | Add DB cost and usage monitoring thresholds. | Status: DONE
+172. TB-172 | P2 | XS | Add audit logging for recipe publication and template moderation actions. | Status: DONE
+173. TB-173 | P1 | XS | Add security headers review for workflow/template/embed routes. | Status: DONE
+174. TB-174 | P1 | XS | Add CSP review for new runner and template pages. | Status: DONE
+175. TB-175 | P1 | XS | Add dependency review for new workflow-related libraries. | Status: DONE
+176. TB-176 | P1 | S | Add Lighthouse checks for workflow and template core pages. | Status: DONE
+177. TB-177 | P1 | XS | Add bundle size budget checks after runner integration. | Status: DONE
+178. TB-178 | P1 | S | Add core web vitals tracking for workflow pages. | Status: DONE
+179. TB-179 | P1 | XS | Add changelog process for major workflow pack updates. | Status: DONE
+180. TB-180 | P1 | XS | Add release checklist for workflow pack publication. | Status: DONE
+181. TB-181 | P1 | XS | Add launch rollback switch via feature flags. | Status: DONE
+182. TB-182 | P1 | XS | Add post-release watch window playbook for metrics triage. | Status: DONE
+183. TB-183 | P2 | XS | Add long-term pack deprecation policy and redirects. | Status: DONE
+184. TB-184 | P2 | XS | Add telemetry schema versioning policy. | Status: DONE
+185. TB-185 | P2 | XS | Add template archival policy for stale/low-quality entries. | Status: DONE
+186. TB-186 | P2 | XS | Add project export/import backup for local-only users. | Status: DONE
+187. TB-187 | P2 | XS | Add optional offline-ready caching for workflow shell routes. | Status: DONE
+188. TB-188 | P2 | XS | Add fallback static rendering for key workflow landing pages. | Status: DONE
+189. TB-189 | P2 | XS | Add synthetic SEO smoke checks for workflow page discoverability. | Status: DONE
+190. TB-190 | P2 | XS | Add monthly strategy-to-metrics review template tied to WCW and retention. | Status: DONE
 
 ## Notes
 

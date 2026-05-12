@@ -55,6 +55,17 @@ Implement **Encrypted JSON Recipe Format** with:
 - **Versioning**: Git-friendly - one recipe per file
 - **Composition**: Recipe can import other recipes via reference
 
+### Link Signing and Size Limits (TB-155)
+
+For URL-based recipe sharing tokens, we standardize on:
+
+- **Signing**: HMAC-SHA256 over base64url payload
+- **Payload Limit**: 2048 bytes (pre-signing JSON)
+- **Token Limit**: 4096 bytes (final URL token segment)
+- **TTL Limit**: 30 days maximum
+
+These limits ensure broad browser/url compatibility and reduce abuse potential from oversized links.
+
 ### Specification
 
 ```json

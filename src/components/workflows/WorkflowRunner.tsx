@@ -5,6 +5,7 @@ import { AppBox, AppChip, AppField, AppText } from "@/components/lib/ui";
 import { ButtonWithHandler } from "@/components/lib/buttons";
 import { WorkflowPackConfig } from "@/types/workflow";
 import { useWorkflowState } from "@/hooks/useWorkflowState";
+import ExperimentHooks from "@/components/workflows/ExperimentHooks";
 
 export default function WorkflowRunner({
   workflow,
@@ -18,15 +19,22 @@ export default function WorkflowRunner({
   const {
     activeRun,
     presets,
+    projects,
     projectId,
     setProjectId,
     startRun,
     completeStep,
+    cancelRun,
+    resetRun,
     savePreset,
     exportSummary,
     shareRecipe,
     cloneTemplate,
     continueLastRun,
+    createProject,
+    syncStatus,
+    manualSync,
+    outputManifest,
     downloadSampleData,
     runFromPreset,
     importRecipeFromUrl,
@@ -35,6 +43,7 @@ export default function WorkflowRunner({
 
   const [presetName, setPresetName] = useState(`${workflow.name} starter`);
   const [recipeUrlInput, setRecipeUrlInput] = useState("");
+  const [projectName, setProjectName] = useState("New Workspace Project");
 
   const completedCount = activeRun?.completedStepIds.length ?? 0;
   const progressText = `${completedCount}/${workflow.steps.length} completed`;
@@ -54,6 +63,9 @@ export default function WorkflowRunner({
 
   return (
     <AppBox className="app-shell-section w-full flex flex-col gap-4">
+      <ExperimentHooks event="preset" workflowSlug={workflow.slug} />
+      <ExperimentHooks event="recipe" workflowSlug={workflow.slug} />
+      <ExperimentHooks event="privacy" workflowSlug={workflow.slug} />
       <div className="flex flex-wrap items-center gap-2">
         <AppChip label={workflow.category} color="primary" variant="outlined" />
         <AppChip label={progressText} color="success" variant="outlined" />
@@ -71,6 +83,12 @@ export default function WorkflowRunner({
           value={projectId}
           onChange={(event) => setProjectId(event.target.value)}
           helperText="Metadata-only project grouping. No file content is uploaded."
+        />
+        <AppField
+          size="small"
+          label="New project name"
+          value={projectName}
+          onChange={(event) => setProjectName(event.target.value)}
         />
         <AppField
           size="small"
@@ -97,6 +115,24 @@ export default function WorkflowRunner({
         <ButtonWithHandler
           buttonText="Continue Last Run"
           onClick={continueLastRun}
+          variant="outlined"
+          color="primary"
+        />
+        <ButtonWithHandler
+          buttonText="Cancel Run"
+          onClick={cancelRun}
+          variant="outlined"
+          color="warning"
+        />
+        <ButtonWithHandler
+          buttonText="Reset Run"
+          onClick={resetRun}
+          variant="outlined"
+          color="warning"
+        />
+        <ButtonWithHandler
+          buttonText="Create Project"
+          onClick={() => createProject(projectName)}
           variant="outlined"
           color="primary"
         />
@@ -139,7 +175,28 @@ export default function WorkflowRunner({
           color="success"
           className={canExport ? "" : "pointer-events-none opacity-60"}
         />
+        <ButtonWithHandler
+          buttonText={`Manual Sync (${syncStatus})`}
+          onClick={manualSync}
+          variant="outlined"
+          color={syncStatus === "failed" ? "error" : "info"}
+        />
       </div>
+
+      <section className="rounded-xl border border-[var(--mui-palette-divider)] p-3">
+        <AppText className="!font-semibold !mb-2">Project Workspace</AppText>
+        <div className="flex flex-wrap gap-2">
+          {projects.map((project) => (
+            <AppChip
+              key={project.id}
+              size="small"
+              label={project.name}
+              color={project.id === projectId ? "primary" : "default"}
+              onClick={() => setProjectId(project.id)}
+            />
+          ))}
+        </div>
+      </section>
 
       <section className="flex flex-col gap-3">
         {workflow.steps.map((step, index) => {
@@ -168,13 +225,22 @@ export default function WorkflowRunner({
                     color={isDone ? "success" : "default"}
                   />
                   {!isDone && (
-                    <ButtonWithHandler
-                      buttonText="Complete Step"
-                      onClick={() => completeStep(step.id)}
-                      variant="outlined"
-                      size="small"
-                      className="!py-1"
-                    />
+                    <div className="flex flex-col items-end gap-1">
+                      {/normalize|compress|convert|transform|cleanup/i.test(
+                        `${step.title} ${step.description}`,
+                      ) && (
+                        <AppText variant="caption" color="warning.main">
+                          This step may apply irreversible transformations.
+                        </AppText>
+                      )}
+                      <ButtonWithHandler
+                        buttonText="Complete Step"
+                        onClick={() => completeStep(step.id)}
+                        variant="outlined"
+                        size="small"
+                        className="!py-1"
+                      />
+                    </div>
                   )}
                 </div>
               </div>
@@ -205,6 +271,25 @@ export default function WorkflowRunner({
                     size="small"
                   />
                 </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="rounded-xl border border-[var(--mui-palette-divider)] p-3">
+        <AppText className="!font-semibold !mb-2">Output Manifest</AppText>
+        {outputManifest.length === 0 ? (
+          <AppText variant="body2" color="textSecondary">
+            No output artifacts generated yet for this run.
+          </AppText>
+        ) : (
+          <ul className="list-disc pl-5">
+            {outputManifest.map((artifact) => (
+              <li key={artifact.id}>
+                <AppText variant="body2">
+                  {artifact.name} ({artifact.type}) - {artifact.size} bytes
+                </AppText>
               </li>
             ))}
           </ul>

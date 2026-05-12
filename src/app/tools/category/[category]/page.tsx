@@ -169,8 +169,17 @@ export default async function CategoryPage(props: {
           variant="body1"
           className="max-w-2xl mx-auto text-gray-600 mb-4 px-4"
         >
-          {config.heroDescription}
+          {config.heroDescription} Build repeatable outcomes faster with linked
+          workflow packs and reusable templates.
         </Typography>
+        <div className="mb-4">
+          <Link
+            href="/workflows"
+            className="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white no-underline"
+          >
+            Explore Outcome Workflows
+          </Link>
+        </div>
         <div className="flex flex-wrap justify-center gap-2 px-4">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
             ✓ 100% Client-Side
@@ -190,7 +199,7 @@ export default async function CategoryPage(props: {
           variant="h2"
           className="!text-xl md:!text-2xl !font-semibold mb-6 text-center"
         >
-          Available {config.name} ({categoryApps.length})
+          Outcome-Ready {config.name} ({categoryApps.length})
         </Typography>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {map(categoryApps, (app) => (

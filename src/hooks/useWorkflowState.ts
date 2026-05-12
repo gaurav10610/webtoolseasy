@@ -4,16 +4,35 @@ import { useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
   WorkflowPackConfig,
+  WorkflowProject,
   WorkflowPreset,
   WorkflowRecipeSharePayload,
   WorkflowRun,
 } from "@/types/workflow";
 import { trackWorkflowEvent } from "@/lib/workflowTelemetry";
 import { workflowSamplePayloads } from "@/data/workflowSamples";
+import {
+  _decodeRecipeSchema,
+  _encodeRecipeSchema,
+  _serializeRecipe,
+  _validateRecipeSchema,
+} from "@/lib/recipeSchema";
+import {
+  _executeWorkflowStepWithAdapters,
+  _exportRunSummaryJson,
+  WorkflowArtifact,
+} from "@/lib/workflowAdapters";
+import {
+  _migrateStorageEnvelope,
+  _parseStorageEnvelope,
+  WORKFLOW_LOCAL_STORAGE_SCHEMA_VERSION,
+} from "@/lib/localStorageMigration";
 
 const RUNS_KEY = "wte_workflow_runs";
 const PRESETS_KEY = "wte_workflow_presets";
 const ACTIVITY_KEY = "wte_workflow_activity";
+const PROJECTS_KEY = "wte_workflow_projects";
+const ARTIFACTS_KEY = "wte_workflow_artifacts";
 
 interface WorkflowActivityItem {
   id: string;
@@ -26,7 +45,14 @@ interface WorkflowActivityItem {
 function readStorage<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
-    return (JSON.parse(localStorage.getItem(key) || "") as T) ?? fallback;
+    const envelope = _migrateStorageEnvelope(
+      _parseStorageEnvelope(localStorage.getItem(key)),
+    );
+    localStorage.setItem(key, JSON.stringify(envelope));
+    if (Array.isArray(fallback) && !Array.isArray(envelope.data)) {
+      return fallback;
+    }
+    return (envelope.data as T) ?? fallback;
   } catch {
     return fallback;
   }
@@ -35,22 +61,15 @@ function readStorage<T>(key: string, fallback: T): T {
 function writeStorage<T>(key: string, value: T) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(
+      key,
+      JSON.stringify({
+        version: WORKFLOW_LOCAL_STORAGE_SCHEMA_VERSION,
+        data: value,
+      }),
+    );
   } catch {
     // Ignore storage write failures.
-  }
-}
-
-function encodeRecipe(payload: WorkflowRecipeSharePayload) {
-  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-}
-
-function decodeRecipe(encoded: string): WorkflowRecipeSharePayload | null {
-  try {
-    const json = decodeURIComponent(escape(atob(encoded)));
-    return JSON.parse(json) as WorkflowRecipeSharePayload;
-  } catch {
-    return null;
   }
 }
 
@@ -58,12 +77,28 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
   const [runs, setRuns] = useState<WorkflowRun[]>([]);
   const [presets, setPresets] = useState<WorkflowPreset[]>([]);
   const [activity, setActivity] = useState<WorkflowActivityItem[]>([]);
+  const [projects, setProjects] = useState<WorkflowProject[]>([]);
+  const [artifacts, setArtifacts] = useState<WorkflowArtifact[]>([]);
   const [projectId, setProjectId] = useState<string>("local-project-default");
+  const [syncStatus, setSyncStatus] = useState<
+    "idle" | "syncing" | "synced" | "failed"
+  >("idle");
 
   useEffect(() => {
     setRuns(readStorage(RUNS_KEY, []));
     setPresets(readStorage(PRESETS_KEY, []));
     setActivity(readStorage(ACTIVITY_KEY, []));
+    setProjects(
+      readStorage<WorkflowProject[]>(PROJECTS_KEY, [
+        {
+          id: "local-project-default",
+          name: "Default Local Project",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ]),
+    );
+    setArtifacts(readStorage(ARTIFACTS_KEY, []));
   }, []);
 
   const activeRun = useMemo(() => {
@@ -101,7 +136,9 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
     const next: WorkflowRun = {
       id: uuidv4(),
       workflowSlug: workflow.slug,
+      projectId,
       completedStepIds: [],
+      status: "running",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -116,12 +153,14 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
     logActivity("run_started");
   }
 
-  function completeStep(stepId: string) {
+  async function completeStep(stepId: string) {
     const now = new Date().toISOString();
     const fallback = {
       id: uuidv4(),
       workflowSlug: workflow.slug,
+      projectId,
       completedStepIds: [],
+      status: "running",
       createdAt: now,
       updatedAt: now,
     };
@@ -133,12 +172,33 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
     const updated: WorkflowRun = {
       ...current,
       completedStepIds,
+      status:
+        completedStepIds.length === workflow.steps.length
+          ? "completed"
+          : "running",
       updatedAt: now,
     };
 
     const nextRuns = [updated, ...runs.filter((r) => r.id !== updated.id)];
     setRuns(nextRuns);
     writeStorage(RUNS_KEY, nextRuns);
+
+    const step = workflow.steps.find((item) => item.id === stepId);
+    if (step) {
+      const artifact = await _executeWorkflowStepWithAdapters(
+        step,
+        JSON.stringify({
+          workflowSlug: workflow.slug,
+          projectId,
+          stepId,
+          completedStepIds,
+          timestamp: now,
+        }),
+      );
+      const nextArtifacts = [artifact, ...artifacts].slice(0, 300);
+      setArtifacts(nextArtifacts);
+      writeStorage(ARTIFACTS_KEY, nextArtifacts);
+    }
 
     trackWorkflowEvent("step_completed", workflow.slug, stepId, projectId);
     logActivity("step_completed", stepId);
@@ -171,15 +231,18 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
   function exportSummary() {
     trackWorkflowEvent("export_generated", workflow.slug, undefined, projectId);
 
-    const payload = {
-      workflow: workflow.slug,
+    const payload = _exportRunSummaryJson({
+      workflowSlug: workflow.slug,
       projectId,
       completedSteps: activeRun?.completedStepIds ?? [],
-      artifacts: workflow.outputArtifacts,
+      artifacts: artifacts.filter(
+        (artifact) =>
+          activeRun?.completedStepIds.includes(artifact.sourceStep) ?? false,
+      ),
       exportedAt: new Date().toISOString(),
-    };
+    });
 
-    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    const blob = new Blob([payload], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
@@ -192,13 +255,16 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
   }
 
   function shareRecipe() {
-    const payload: WorkflowRecipeSharePayload = {
+    const payload = _serializeRecipe({
       workflowSlug: workflow.slug,
       projectId,
       presetName: `${workflow.name} starter`,
       timestamp: new Date().toISOString(),
-    };
-    const recipe = encodeRecipe(payload);
+      config: {
+        template: "starter",
+      },
+    });
+    const recipe = _encodeRecipeSchema(payload);
     const url = `${window.location.origin}/workflows/${workflow.slug}?template=starter&recipe=${encodeURIComponent(recipe)}`;
     navigator.clipboard.writeText(url).catch(() => {
       // Clipboard may be blocked by browser policy.
@@ -230,6 +296,7 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
 
     const updated: WorkflowRun = {
       ...activeRun,
+      status: "running",
       updatedAt: new Date().toISOString(),
     };
     const nextRuns = [updated, ...runs.filter((run) => run.id !== updated.id)];
@@ -264,6 +331,97 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
     logActivity("run_from_preset");
   }
 
+  function cancelRun() {
+    if (!activeRun) return;
+
+    const updated: WorkflowRun = {
+      ...activeRun,
+      status: "cancelled",
+      updatedAt: new Date().toISOString(),
+    };
+    const nextRuns = [updated, ...runs.filter((run) => run.id !== updated.id)];
+    setRuns(nextRuns);
+    writeStorage(RUNS_KEY, nextRuns);
+    logActivity("run_cancelled");
+  }
+
+  function resetRun() {
+    if (!activeRun) return;
+
+    const updated: WorkflowRun = {
+      ...activeRun,
+      completedStepIds: [],
+      status: "idle",
+      updatedAt: new Date().toISOString(),
+    };
+    const nextRuns = [updated, ...runs.filter((run) => run.id !== updated.id)];
+    setRuns(nextRuns);
+    writeStorage(RUNS_KEY, nextRuns);
+    logActivity("run_reset");
+  }
+
+  function createProject(name: string) {
+    const project: WorkflowProject = {
+      id: uuidv4(),
+      name,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const nextProjects = [project, ...projects];
+    setProjects(nextProjects);
+    writeStorage(PROJECTS_KEY, nextProjects);
+    setProjectId(project.id);
+    logActivity("project_created");
+  }
+
+  async function manualSync() {
+    setSyncStatus("syncing");
+    try {
+      const runPayload = runs.map((run) => ({
+        id: run.id,
+        projectId: run.projectId,
+        updatedAt: run.updatedAt,
+        payload: run,
+      }));
+      const presetPayload = presets.map((preset) => ({
+        id: preset.id,
+        projectId,
+        updatedAt: preset.createdAt,
+        payload: preset,
+      }));
+      const projectPayload = projects.map((project) => ({
+        id: project.id,
+        projectId: project.id,
+        updatedAt: project.updatedAt,
+        payload: project,
+      }));
+
+      await Promise.all([
+        fetch("/api/sync/runs", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ items: runPayload }),
+        }),
+        fetch("/api/sync/presets", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ items: presetPayload }),
+        }),
+        fetch("/api/sync/projects", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ items: projectPayload }),
+        }),
+      ]);
+
+      setSyncStatus("synced");
+      logActivity("manual_sync_completed");
+    } catch {
+      setSyncStatus("failed");
+      logActivity("manual_sync_failed");
+    }
+  }
+
   function importRecipeFromUrl(inputUrl?: string) {
     const raw = inputUrl || "";
     if (!raw) return;
@@ -276,9 +434,13 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
       // Allow direct recipe token paste.
     }
 
-    const payload = decodeRecipe(candidate);
-    if (!payload || payload.workflowSlug !== workflow.slug) return;
+    const decoded = _decodeRecipeSchema(candidate);
+    if (!decoded || decoded.workflowSlug !== workflow.slug) return;
 
+    const validation = _validateRecipeSchema(decoded);
+    if (!validation.valid) return;
+
+    const payload = decoded as unknown as WorkflowRecipeSharePayload;
     setProjectId(payload.projectId);
     savePreset(payload.presetName);
     logActivity("recipe_imported");
@@ -296,9 +458,19 @@ export function useWorkflowState(workflow: WorkflowPackConfig) {
     shareRecipe,
     cloneTemplate,
     continueLastRun,
+    cancelRun,
+    resetRun,
     downloadSampleData,
     runFromPreset,
     importRecipeFromUrl,
+    projects,
+    createProject,
+    syncStatus,
+    manualSync,
+    outputManifest: artifacts.filter(
+      (artifact) =>
+        activeRun?.completedStepIds.includes(artifact.sourceStep) ?? false,
+    ),
     recentActivity,
   };
 }

@@ -11,6 +11,9 @@ import { blogConfig as freeDeveloperToolsGuide } from "./blog/config/free-develo
 import { blogConfig as freeImageEditingToolsGuide } from "./blog/config/free-image-editing-tools-guide";
 import { blogConfig as textWritingToolsGuide } from "./blog/config/text-writing-tools-guide";
 import { blogConfig as freeCalculatorToolsGuide } from "./blog/config/free-calculator-tools-guide";
+import { blogConfig as apiPayloadCleanupWorkflowPlaybook } from "./blog/config/api-payload-cleanup-workflow-playbook";
+import { blogConfig as blogPublishWorkflowPlaybook } from "./blog/config/blog-publish-workflow-playbook";
+import { blogConfig as technicalSeoQuickAuditWorkflowPlaybook } from "./blog/config/technical-seo-quick-audit-workflow-playbook";
 
 export const blogPosts: Record<BlogIds, BlogNavigationConfig> = {
   [BlogIds.DECODING_JWT_COMPREHENSIVE_GUIDE]: {
@@ -157,6 +160,43 @@ export const blogPosts: Record<BlogIds, BlogNavigationConfig> = {
     readingTimeMinutes: freeCalculatorToolsGuide.readingTimeMinutes,
     isFeatured: freeCalculatorToolsGuide.isFeatured,
   },
+  [BlogIds.API_PAYLOAD_CLEANUP_WORKFLOW_PLAYBOOK]: {
+    blogId: apiPayloadCleanupWorkflowPlaybook.blogId,
+    title: apiPayloadCleanupWorkflowPlaybook.title,
+    slug: apiPayloadCleanupWorkflowPlaybook.slug,
+    category: apiPayloadCleanupWorkflowPlaybook.category,
+    excerpt: apiPayloadCleanupWorkflowPlaybook.excerpt,
+    publishedAt: apiPayloadCleanupWorkflowPlaybook.publishedAt,
+    updatedAt: apiPayloadCleanupWorkflowPlaybook.updatedAt,
+    author: apiPayloadCleanupWorkflowPlaybook.author,
+    readingTimeMinutes: apiPayloadCleanupWorkflowPlaybook.readingTimeMinutes,
+    isFeatured: apiPayloadCleanupWorkflowPlaybook.isFeatured,
+  },
+  [BlogIds.BLOG_PUBLISH_WORKFLOW_PLAYBOOK]: {
+    blogId: blogPublishWorkflowPlaybook.blogId,
+    title: blogPublishWorkflowPlaybook.title,
+    slug: blogPublishWorkflowPlaybook.slug,
+    category: blogPublishWorkflowPlaybook.category,
+    excerpt: blogPublishWorkflowPlaybook.excerpt,
+    publishedAt: blogPublishWorkflowPlaybook.publishedAt,
+    updatedAt: blogPublishWorkflowPlaybook.updatedAt,
+    author: blogPublishWorkflowPlaybook.author,
+    readingTimeMinutes: blogPublishWorkflowPlaybook.readingTimeMinutes,
+    isFeatured: blogPublishWorkflowPlaybook.isFeatured,
+  },
+  [BlogIds.TECHNICAL_SEO_QUICK_AUDIT_WORKFLOW_PLAYBOOK]: {
+    blogId: technicalSeoQuickAuditWorkflowPlaybook.blogId,
+    title: technicalSeoQuickAuditWorkflowPlaybook.title,
+    slug: technicalSeoQuickAuditWorkflowPlaybook.slug,
+    category: technicalSeoQuickAuditWorkflowPlaybook.category,
+    excerpt: technicalSeoQuickAuditWorkflowPlaybook.excerpt,
+    publishedAt: technicalSeoQuickAuditWorkflowPlaybook.publishedAt,
+    updatedAt: technicalSeoQuickAuditWorkflowPlaybook.updatedAt,
+    author: technicalSeoQuickAuditWorkflowPlaybook.author,
+    readingTimeMinutes:
+      technicalSeoQuickAuditWorkflowPlaybook.readingTimeMinutes,
+    isFeatured: technicalSeoQuickAuditWorkflowPlaybook.isFeatured,
+  },
 };
 
 // Helper function to get all blog posts as an array
@@ -171,16 +211,16 @@ export const getFeaturedBlogPosts = (): BlogNavigationConfig[] => {
 
 // Helper function to get blog posts by category
 export const getBlogPostsByCategory = (
-  category: string
+  category: string,
 ): BlogNavigationConfig[] => {
   return getAllBlogPosts().filter((post) => post.category === category);
 };
 
 // Helper function to sort blog posts by date (newest first)
 export const sortBlogPostsByDate = (
-  posts: BlogNavigationConfig[]
+  posts: BlogNavigationConfig[],
 ): BlogNavigationConfig[] => {
   return [...posts].sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   );
 };

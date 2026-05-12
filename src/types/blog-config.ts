@@ -23,6 +23,9 @@ export enum BlogIds {
   FREE_IMAGE_EDITING_TOOLS_GUIDE = "free-image-editing-tools-guide",
   TEXT_WRITING_TOOLS_GUIDE = "text-writing-tools-guide",
   FREE_CALCULATOR_TOOLS_GUIDE = "free-calculator-tools-guide",
+  API_PAYLOAD_CLEANUP_WORKFLOW_PLAYBOOK = "api-payload-cleanup-workflow-playbook",
+  BLOG_PUBLISH_WORKFLOW_PLAYBOOK = "blog-publish-workflow-playbook",
+  TECHNICAL_SEO_QUICK_AUDIT_WORKFLOW_PLAYBOOK = "technical-seo-quick-audit-workflow-playbook",
 }
 
 export interface BlogAuthor {

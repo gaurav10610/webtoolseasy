@@ -28,6 +28,9 @@ import { blogConfig as freeDeveloperToolsGuide } from "@/data/blog/config/free-d
 import { blogConfig as freeImageEditingToolsGuide } from "@/data/blog/config/free-image-editing-tools-guide";
 import { blogConfig as textWritingToolsGuide } from "@/data/blog/config/text-writing-tools-guide";
 import { blogConfig as freeCalculatorToolsGuide } from "@/data/blog/config/free-calculator-tools-guide";
+import { blogConfig as apiPayloadCleanupWorkflowPlaybook } from "@/data/blog/config/api-payload-cleanup-workflow-playbook";
+import { blogConfig as blogPublishWorkflowPlaybook } from "@/data/blog/config/blog-publish-workflow-playbook";
+import { blogConfig as technicalSeoQuickAuditWorkflowPlaybook } from "@/data/blog/config/technical-seo-quick-audit-workflow-playbook";
 
 const blogConfigs = {
   [BlogIds.DECODING_JWT_COMPREHENSIVE_GUIDE]: decodingJwtGuide,
@@ -42,16 +45,21 @@ const blogConfigs = {
   [BlogIds.FREE_IMAGE_EDITING_TOOLS_GUIDE]: freeImageEditingToolsGuide,
   [BlogIds.TEXT_WRITING_TOOLS_GUIDE]: textWritingToolsGuide,
   [BlogIds.FREE_CALCULATOR_TOOLS_GUIDE]: freeCalculatorToolsGuide,
+  [BlogIds.API_PAYLOAD_CLEANUP_WORKFLOW_PLAYBOOK]:
+    apiPayloadCleanupWorkflowPlaybook,
+  [BlogIds.BLOG_PUBLISH_WORKFLOW_PLAYBOOK]: blogPublishWorkflowPlaybook,
+  [BlogIds.TECHNICAL_SEO_QUICK_AUDIT_WORKFLOW_PLAYBOOK]:
+    technicalSeoQuickAuditWorkflowPlaybook,
 };
 
 export async function generateMetadata(
   props: Readonly<{
     params: Promise<{ [key: string]: string }>;
-  }>
+  }>,
 ) {
   const { pageUrl } = await props.params;
   const blogConfig = Object.values(blogConfigs).find(
-    (config) => config.slug === pageUrl
+    (config) => config.slug === pageUrl,
   );
 
   if (!blogConfig) {
@@ -73,11 +81,11 @@ export async function generateStaticParams() {
 export default async function BlogPage(
   props: Readonly<{
     params: Promise<{ [key: string]: string }>;
-  }>
+  }>,
 ) {
   const { pageUrl } = await props.params;
   const blogConfig = Object.values(blogConfigs).find(
-    (config) => config.slug === pageUrl
+    (config) => config.slug === pageUrl,
   );
 
   if (!blogConfig) {
@@ -100,7 +108,7 @@ export default async function BlogPage(
   const contentPath = path.join(
     process.cwd(),
     "src/data/blog/content",
-    blogConfig.contentFile
+    blogConfig.contentFile,
   );
   const markdownContent = fs.readFileSync(contentPath, "utf-8");
 

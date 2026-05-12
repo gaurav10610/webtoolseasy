@@ -31,7 +31,16 @@ export interface WorkflowPreset {
 export interface WorkflowRun {
   id: string;
   workflowSlug: string;
+  projectId: string;
   completedStepIds: string[];
+  status: "idle" | "running" | "completed" | "cancelled" | "failed";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowProject {
+  id: string;
+  name: string;
   createdAt: string;
   updatedAt: string;
 }

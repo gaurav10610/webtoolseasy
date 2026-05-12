@@ -129,7 +129,8 @@ export interface Cache {
  * Initialize cache with specified strategy
  */
 export function _initializeCache(strategy: CacheStrategy = "balanced"): Cache {
-  const config = DEFAULT_CACHE_STRATEGIES[strategy];
+  // Clone strategy config to avoid cross-test or cross-instance mutation leakage.
+  const config = { ...DEFAULT_CACHE_STRATEGIES[strategy] };
 
   return {
     entries: new Map(),
