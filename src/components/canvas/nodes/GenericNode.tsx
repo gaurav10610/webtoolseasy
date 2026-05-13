@@ -1,8 +1,11 @@
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { nodeRegistry } from '@/components/canvas/nodeRegistry';
 
-export function GenericNode({ type, data }: NodeProps) {
+import { usePipelineStore } from '@/store/usePipelineStore';
+
+export function GenericNode({ id, type, data }: NodeProps) {
   const registryEntry = nodeRegistry[type];
+  const updateNodeData = usePipelineStore((state) => state.updateNodeData);
   
   let borderColor = 'border-white/10 hover:border-indigo-500/50';
   let glow = '';
@@ -24,7 +27,24 @@ export function GenericNode({ type, data }: NodeProps) {
         <span className="font-semibold text-sm text-gray-200 tracking-wide">{data.label as string}</span>
       </div>
       
-      <div className="text-[11px] text-gray-400 leading-relaxed mb-1">{registryEntry?.description}</div>
+      <div className="text-[11px] text-gray-400 leading-relaxed mb-3">{registryEntry?.description}</div>
+      
+      {registryEntry?.configFields && (
+        <div className="flex flex-col gap-2 mb-3 bg-black/20 p-2 rounded-lg border border-white/5">
+          {registryEntry.configFields.map((field) => (
+            <div key={field.key} className="flex flex-col gap-1">
+              <label className="text-[10px] text-indigo-300 font-medium uppercase tracking-wider">{field.label}</label>
+              <input
+                type={field.type}
+                className="bg-black/60 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
+                placeholder={field.placeholder}
+                value={(data[field.key] as string) || ''}
+                onChange={(e) => updateNodeData(id, { [field.key]: e.target.value })}
+              />
+            </div>
+          ))}
+        </div>
+      )}
       
       {data.error && (
         <div className="mt-3 text-xs bg-red-950/50 text-red-300 p-2.5 rounded-lg border border-red-900/50 overflow-x-auto break-all font-mono">

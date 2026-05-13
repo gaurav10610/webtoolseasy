@@ -128,7 +128,7 @@ export const usePipelineStore = create<PipelineState>((set, get) => ({
         const registryEntry = nodeRegistry[node.type];
         
         if (registryEntry && registryEntry.transform) {
-           currentValue = await registryEntry.transform(currentValue);
+           currentValue = await registryEntry.transform(currentValue, node.data);
            updateNodeData(currentNodeId, { output: currentValue, isProcessing: false });
         } else if (node.type === 'outputNode') {
            updateNodeData(currentNodeId, { value: currentValue, output: currentValue, isProcessing: false });

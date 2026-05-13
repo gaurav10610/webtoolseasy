@@ -95,5 +95,45 @@ export const toolsData: ToolDefinition[] = [
         { id: 'e2', source: 'transform', target: 'output' },
       ],
     },
+  },
+  {
+    slug: 'regex-replace',
+    name: 'Regex Replace',
+    title: 'Online Regex Replace Tool | Private Pattern Matching',
+    description: 'Perform regular expression replacements on your text data securely in the browser.',
+    keywords: 'regex replace, online regex, replace text, regular expression tool',
+    h1: 'Online Regex Replace',
+    seoText: 'Use powerful regular expressions to search and replace text in your data. Our engine runs locally, so your proprietary text and sensitive payloads are never transmitted to our servers.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 100 }, data: { label: 'Input Text' } },
+        { id: 'transform', type: 'regexReplaceNode', position: { x: 400, y: 100 }, data: { label: 'Regex Replace', regex: '[a-z]+', flags: 'g', replacement: 'new' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 100 }, data: { label: 'Output Text' } },
+      ],
+      edges: [
+        { id: 'e1', source: 'input', target: 'transform' },
+        { id: 'e2', source: 'transform', target: 'output' },
+      ],
+    },
+  },
+  {
+    slug: 'html-encoder',
+    name: 'HTML Encoder',
+    title: 'HTML Entity Encoder | Secure & Local',
+    description: 'Encode characters into secure HTML entities to prevent XSS. 100% client-side processing.',
+    keywords: 'html encoder, encode html entities, escape html',
+    h1: 'HTML Entity Encoder',
+    seoText: 'Safely encode special characters into HTML entities to prevent Cross-Site Scripting (XSS) and ensure proper rendering. Processing is handled securely within your local browser sandbox.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 100 }, data: { label: 'Raw HTML/Text' } },
+        { id: 'transform', type: 'htmlEncodeNode', position: { x: 400, y: 100 }, data: { label: 'HTML Encode' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 100 }, data: { label: 'Encoded Output' } },
+      ],
+      edges: [
+        { id: 'e1', source: 'input', target: 'transform' },
+        { id: 'e2', source: 'transform', target: 'output' },
+      ],
+    },
   }
 ];

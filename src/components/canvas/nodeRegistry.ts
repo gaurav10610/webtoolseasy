@@ -1,6 +1,13 @@
-export type NodeTransformFunction = (input: string) => Promise<string>;
+export type NodeTransformFunction = (input: string, data?: Record<string, any>) => Promise<string>;
 
-export const nodeRegistry: Record<string, { label: string, description: string, transform?: NodeTransformFunction }> = {
+export type ConfigField = {
+  key: string;
+  label: string;
+  type: 'text' | 'number';
+  placeholder?: string;
+};
+
+export const nodeRegistry: Record<string, { label: string, description: string, configFields?: ConfigField[], transform?: NodeTransformFunction }> = {
   inputNode: {
     label: 'Input Text',
     description: 'Provide raw text or JSON data to start the pipeline.',
@@ -39,6 +46,24 @@ export const nodeRegistry: Record<string, { label: string, description: string, 
     description: 'Decodes URL components.',
     transform: async (input) => decodeURIComponent(input),
   },
+  htmlEncodeNode: {
+    label: 'HTML Encode',
+    description: 'Encodes characters to HTML entities.',
+    transform: async (input) => {
+      const el = document.createElement('div');
+      el.innerText = input;
+      return el.innerHTML;
+    },
+  },
+  htmlDecodeNode: {
+    label: 'HTML Decode',
+    description: 'Decodes HTML entities back to characters.',
+    transform: async (input) => {
+      const el = document.createElement('div');
+      el.innerHTML = input;
+      return el.innerText || el.textContent || '';
+    },
+  },
   jwtDecodeNode: {
     label: 'Decode JWT',
     description: 'Decodes the header and payload of a JSON Web Token.',
@@ -69,5 +94,22 @@ export const nodeRegistry: Record<string, { label: string, description: string, 
     label: 'To Uppercase',
     description: 'Converts all text to uppercase.',
     transform: async (input) => input.toUpperCase(),
+  },
+  regexReplaceNode: {
+    label: 'Regex Replace',
+    description: 'Replaces text using a regular expression.',
+    configFields: [
+      { key: 'regex', label: 'Regex Pattern', type: 'text', placeholder: '[a-z]+' },
+      { key: 'flags', label: 'Regex Flags', type: 'text', placeholder: 'g, i, m' },
+      { key: 'replacement', label: 'Replacement String', type: 'text', placeholder: 'new_word' },
+    ],
+    transform: async (input, data) => {
+      const regexStr = data?.regex || '';
+      const flags = data?.flags || 'g';
+      const replacement = data?.replacement || '';
+      if (!regexStr) return input;
+      const re = new RegExp(regexStr, flags);
+      return input.replace(re, replacement);
+    },
   },
 };
