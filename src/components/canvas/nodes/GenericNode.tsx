@@ -22,9 +22,18 @@ export function GenericNode({ id, type, data }: NodeProps) {
     <div className={`bg-[#1A1A1E]/90 backdrop-blur-md border ${borderColor} ${glow} rounded-xl p-5 min-w-[240px] transition-all duration-300`}>
       <Handle type="target" position={Position.Left} className="w-3 h-3 bg-indigo-500 border-none" />
       
-      <div className="flex items-center gap-3 mb-2">
-        <div className={`w-2 h-2 rounded-full ${data.isProcessing ? 'bg-indigo-400 animate-pulse' : data.error ? 'bg-red-500' : data.output ? 'bg-emerald-500' : 'bg-gray-600'}`} />
-        <span className="font-semibold text-sm text-gray-200 tracking-wide">{data.label as string}</span>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-3">
+          <div className={`w-2 h-2 rounded-full ${data.isProcessing ? 'bg-indigo-400 animate-pulse' : data.error ? 'bg-red-500' : data.output ? 'bg-emerald-500' : 'bg-gray-600'}`} />
+          <span className="font-semibold text-sm text-gray-200 tracking-wide">{data.label as string}</span>
+        </div>
+        <button
+          onClick={() => usePipelineStore.getState().deleteNode(id)}
+          className="text-gray-500 hover:text-red-400 hover:bg-white/5 rounded p-1 transition-colors group"
+          title="Delete Node"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
       </div>
       
       <div className="text-[11px] text-gray-400 leading-relaxed mb-3">{registryEntry?.description}</div>

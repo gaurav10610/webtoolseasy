@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { ReactFlow, Background, Controls, MiniMap, ReactFlowProvider } from '@xyflow/react';
+import { ReactFlow, Background, Controls, MiniMap, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import { usePipelineStore } from '@/store/usePipelineStore';
@@ -30,25 +30,10 @@ interface PipelineCanvasProps {
   initialTemplate?: { nodes: PipelineNode[]; edges: Edge[] };
 }
 
-export function PipelineCanvas({ initialTemplate }: PipelineCanvasProps = {}) {
-  const {
-    nodes, edges, onNodesChange, onEdgesChange, onConnect,
-    runPipeline, addNode, exportPipeline, importPipeline, loadTemplate,
-  } = usePipelineStore();
+function FlowInner() {
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNode } = usePipelineStore();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const [copied, setCopied] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const hash = window.location.hash.replace('#', '');
-    if (hash) {
-      importPipeline(hash);
-    } else if (initialTemplate) {
-      loadTemplate(initialTemplate.nodes, initialTemplate.edges);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialTemplate]);
+  const { screenToFlowPosition } = useReactFlow();
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -60,15 +45,70 @@ export function PipelineCanvas({ initialTemplate }: PipelineCanvasProps = {}) {
       event.preventDefault();
       const type = event.dataTransfer.getData('application/reactflow');
       if (!type) return;
-      const bounds = reactFlowWrapper.current?.getBoundingClientRect();
-      const position = {
-        x: event.clientX - (bounds?.left || 0),
-        y: event.clientY - (bounds?.top || 0),
-      };
+
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      
       addNode(type, position);
     },
-    [addNode]
+    [addNode, screenToFlowPosition]
   );
+
+  return (
+    <div className="flex-1 relative" ref={reactFlowWrapper}>
+      {nodes.length === 0 && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10 opacity-30">
+          <div className="text-center">
+            <div className="w-20 h-20 border-2 border-dashed border-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p className="text-gray-500 font-medium">Drag tools here to build a pipeline</p>
+          </div>
+        </div>
+      )}
+
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        fitView
+        colorMode="dark"
+        className="bg-[#0A0A0B]"
+        defaultEdgeOptions={{ style: { stroke: '#4f46e5', strokeWidth: 2 } }}
+      >
+        <Background color="#1f1f23" gap={24} size={1} />
+        <Controls className="bg-[#121214] border border-white/10 rounded-xl overflow-hidden" />
+        <MiniMap
+          className="bg-[#121214]/90 border border-white/10 backdrop-blur-md rounded-xl overflow-hidden"
+          maskColor="rgba(0,0,0,0.6)"
+          nodeColor="#4f46e5"
+        />
+      </ReactFlow>
+    </div>
+  );
+}
+
+export function PipelineCanvas({ initialTemplate }: PipelineCanvasProps = {}) {
+  const { runPipeline, exportPipeline, importPipeline, loadTemplate } = usePipelineStore();
+  const [copied, setCopied] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      importPipeline(hash);
+    } else if (initialTemplate) {
+      loadTemplate(initialTemplate.nodes, initialTemplate.edges);
+    }
+  }, [initialTemplate, importPipeline, loadTemplate]);
 
   const handleShare = () => {
     const base64Config = exportPipeline();
@@ -85,10 +125,10 @@ export function PipelineCanvas({ initialTemplate }: PipelineCanvasProps = {}) {
     setIsRunning(false);
   };
 
-  const loadExample = () => {
-    // JWT decode example encoded as a pre-built template
-    window.location.hash = 'eyJub2RlcyI6W3siaWQiOiJpbnB1dC0xIiwidHlwZSI6ImlucHV0Tm9kZSIsInBvc2l0aW9uIjp7IngiOjgwLCJ5IjoxMjB9LCJkYXRhIjp7ImxhYmVsIjoiUGFzdGUgSldUIn19LHsiaWQiOiJqd3QtMSIsInR5cGUiOiJqd3REZWNvZGVOb2RlIiwicG9zaXRpb24iOnsieCI6NDAwLCJ5IjoxMjB9LCJkYXRhIjp7ImxhYmVsIjoiRGVjb2RlIEpXVCJ9fSx7ImlkIjoib3V0cHV0LTEiLCJ0eXBlIjoib3V0cHV0Tm9kZSIsInBvc2l0aW9uIjp7IngiOjcyMCwieSI6MTIwfSwiZGF0YSI6eyJsYWJlbCI6Ik91dHB1dCJ9fV0sImVkZ2VzIjpbeyJpZCI6ImUxIiwic291cmNlIjoiaW5wdXQtMSIsInRhcmdldCI6Imp3dC0xIn0seyJpZCI6ImUyIiwic291cmNlIjoiand0LTEiLCJ0YXJnZXQiOiJvdXRwdXQtMSJ9XX0=';
-    window.location.reload();
+  const handleClear = () => {
+    if (confirm('Are you sure you want to clear the canvas?')) {
+      loadTemplate([], []);
+    }
   };
 
   return (
@@ -116,10 +156,10 @@ export function PipelineCanvas({ initialTemplate }: PipelineCanvasProps = {}) {
 
         <div className="flex gap-2">
           <button
-            onClick={loadExample}
-            className="text-sm text-gray-500 hover:text-white px-3 py-2 transition-colors hidden sm:block"
+            onClick={handleClear}
+            className="text-sm text-gray-500 hover:text-red-400 px-3 py-2 transition-colors hidden sm:block"
           >
-            Load Example
+            Clear Canvas
           </button>
           <button
             onClick={handleShare}
@@ -153,43 +193,9 @@ export function PipelineCanvas({ initialTemplate }: PipelineCanvasProps = {}) {
       {/* Main Workspace */}
       <div className="flex-1 flex overflow-hidden">
         <Sidebar />
-        <div className="flex-1 relative" ref={reactFlowWrapper}>
-          {nodes.length <= 2 && (
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10 opacity-30">
-              <div className="text-center">
-                <div className="w-20 h-20 border-2 border-dashed border-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                </div>
-                <p className="text-gray-500 font-medium">Drag tools here to build a pipeline</p>
-              </div>
-            </div>
-          )}
-
-          <ReactFlowProvider>
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              nodeTypes={nodeTypes}
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              fitView
-              colorMode="dark"
-              className="bg-[#0A0A0B]"
-              defaultEdgeOptions={{ style: { stroke: '#4f46e5', strokeWidth: 2 } }}
-            >
-              <Background color="#1f1f23" gap={24} size={1} />
-              <Controls className="bg-[#121214] border border-white/10 rounded-xl overflow-hidden" />
-              <MiniMap
-                className="bg-[#121214]/90 border border-white/10 backdrop-blur-md rounded-xl overflow-hidden"
-                maskColor="rgba(0,0,0,0.6)"
-                nodeColor="#4f46e5"
-              />
-            </ReactFlow>
-          </ReactFlowProvider>
-        </div>
+        <ReactFlowProvider>
+          <FlowInner />
+        </ReactFlowProvider>
       </div>
     </div>
   );

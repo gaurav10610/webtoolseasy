@@ -1,6 +1,6 @@
 import { Handle, Position, NodeProps } from '@xyflow/react';
 
-export function OutputNode({ data }: NodeProps) {
+export function OutputNode({ id, data }: NodeProps) {
   const value = (data.value as string) || '';
 
   return (
@@ -13,14 +13,26 @@ export function OutputNode({ data }: NodeProps) {
           <span className="font-semibold text-sm text-emerald-100 uppercase tracking-widest">{data.label as string}</span>
         </div>
         
-        {value && (
-          <button 
-            onClick={() => navigator.clipboard.writeText(value)}
-            className="text-[10px] bg-white/5 hover:bg-white/10 px-2 py-1 rounded text-gray-400 hover:text-white transition-colors"
+        <div className="flex items-center gap-1">
+          {value && (
+            <button 
+              onClick={() => navigator.clipboard.writeText(value)}
+              className="text-[10px] bg-white/5 hover:bg-white/10 px-2 py-1 rounded text-gray-400 hover:text-white transition-colors"
+            >
+              Copy
+            </button>
+          )}
+          <button
+            onClick={() => {
+              // need to import usePipelineStore for this to work
+              import('@/store/usePipelineStore').then(m => m.usePipelineStore.getState().deleteNode(id));
+            }}
+            className="text-gray-500 hover:text-red-400 hover:bg-white/5 rounded p-1 transition-colors"
+            title="Delete Node"
           >
-            Copy
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
           </button>
-        )}
+        </div>
       </div>
 
       <div className="bg-black/60 border border-white/5 rounded-lg p-3 max-h-[300px] overflow-auto custom-scrollbar">

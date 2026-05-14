@@ -27,6 +27,7 @@ type PipelineState = {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   addNode: (type: string, position: { x: number; y: number }) => void;
+  deleteNode: (nodeId: string) => void;
   updateNodeData: (nodeId: string, data: Partial<NodeData>) => void;
   runPipeline: () => Promise<void>;
   exportPipeline: () => string;
@@ -112,6 +113,13 @@ export const usePipelineStore = create<PipelineState>((set, get) => ({
     const updated = [...get().nodes, { id, type, position, data: { label: registryEntry.label, ...extraData } }];
     set({ nodes: updated });
     saveToStorage(updated, get().edges);
+  },
+
+  deleteNode: (nodeId: string) => {
+    const updatedNodes = get().nodes.filter(n => n.id !== nodeId);
+    const updatedEdges = get().edges.filter(e => e.source !== nodeId && e.target !== nodeId);
+    set({ nodes: updatedNodes, edges: updatedEdges });
+    saveToStorage(updatedNodes, updatedEdges);
   },
 
   updateNodeData: (nodeId: string, data: Partial<NodeData>) => {
