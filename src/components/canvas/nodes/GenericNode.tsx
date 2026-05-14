@@ -34,15 +34,40 @@ export function GenericNode({ id, type, data }: NodeProps) {
           {registryEntry.configFields.map((field) => (
             <div key={field.key} className="flex flex-col gap-1">
               <label className="text-[10px] text-indigo-300 font-medium uppercase tracking-wider">{field.label}</label>
-              <input
-                type={field.type}
-                className="bg-black/60 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
-                placeholder={field.placeholder}
-                value={(data[field.key] as string) || ''}
-                onChange={(e) => updateNodeData(id, { [field.key]: e.target.value })}
-              />
+              {field.type === 'select' && field.options ? (
+                <select
+                  className="bg-black/60 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors"
+                  value={(data[field.key] as string) || field.options[0]?.value || ''}
+                  onChange={(e) => updateNodeData(id, { [field.key]: e.target.value })}
+                >
+                  {field.options.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              ) : field.type === 'textarea' ? (
+                <textarea
+                  className="bg-black/60 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600 min-h-[60px] resize-y"
+                  placeholder={field.placeholder}
+                  value={(data[field.key] as string) || ''}
+                  onChange={(e) => updateNodeData(id, { [field.key]: e.target.value })}
+                />
+              ) : (
+                <input
+                  type={field.type}
+                  className="bg-black/60 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
+                  placeholder={field.placeholder}
+                  value={(data[field.key] as string) || ''}
+                  onChange={(e) => updateNodeData(id, { [field.key]: e.target.value })}
+                />
+              )}
             </div>
           ))}
+        </div>
+      )}
+
+      {data.output && !data.error && (
+        <div className="mt-2 bg-emerald-950/30 border border-emerald-800/30 rounded-lg p-2 max-h-[60px] overflow-hidden">
+          <pre className="text-[10px] text-emerald-400/80 font-mono truncate">{(data.output as string).slice(0, 120)}</pre>
         </div>
       )}
       

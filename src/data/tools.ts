@@ -137,3 +137,109 @@ export const toolsData: ToolDefinition[] = [
     },
   }
 ];
+
+// ── Append newly implemented tool pages ──
+toolsData.push(
+  {
+    slug: 'csv-to-json',
+    name: 'CSV to JSON',
+    title: 'CSV to JSON Converter | Free & Private Online Tool',
+    description: 'Convert CSV data to a JSON array instantly in your browser. No uploads, no server.',
+    keywords: 'csv to json, convert csv json, csv parser online, free csv tool',
+    h1: 'CSV to JSON Converter',
+    seoText: 'Paste your CSV data (with a header row) and instantly convert it to a structured JSON array. All parsing happens locally in your browser — your spreadsheet data never leaves your device.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 120 }, data: { label: 'Paste CSV' } },
+        { id: 'transform', type: 'csvToJsonNode', position: { x: 400, y: 120 }, data: { label: 'CSV → JSON' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 120 }, data: { label: 'JSON Output' } },
+      ],
+      edges: [{ id: 'e1', source: 'input', target: 'transform' }, { id: 'e2', source: 'transform', target: 'output' }],
+    },
+  },
+  {
+    slug: 'yaml-to-json',
+    name: 'YAML to JSON',
+    title: 'YAML to JSON Converter | Client-Side & Private',
+    description: 'Convert YAML configuration files to JSON format securely in your browser.',
+    keywords: 'yaml to json, yaml parser, convert yaml json, yaml tool online',
+    h1: 'YAML to JSON Converter',
+    seoText: 'Paste your YAML configuration file and instantly get the equivalent JSON structure. Perfect for converting Kubernetes configs, Docker Compose files, or CI/CD pipelines. Runs 100% locally.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 120 }, data: { label: 'Paste YAML' } },
+        { id: 'transform', type: 'yamlToJsonNode', position: { x: 400, y: 120 }, data: { label: 'YAML → JSON' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 120 }, data: { label: 'JSON Output' } },
+      ],
+      edges: [{ id: 'e1', source: 'input', target: 'transform' }, { id: 'e2', source: 'transform', target: 'output' }],
+    },
+  },
+  {
+    slug: 'sql-formatter',
+    name: 'SQL Formatter',
+    title: 'SQL Formatter & Beautifier | 100% Local, No Data Upload',
+    description: 'Format and beautify messy SQL queries in your browser. Your database schemas never leave your device.',
+    keywords: 'sql formatter, sql beautifier, format sql online, sql query prettifier',
+    h1: 'SQL Formatter & Beautifier',
+    seoText: 'Paste messy, logged SQL queries and get them back in a clean, readable format. Unlike other online SQL tools, your query and schema never leave the browser — critical for enterprise database security.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 120 }, data: { label: 'Paste SQL' } },
+        { id: 'transform', type: 'sqlFormatNode', position: { x: 400, y: 120 }, data: { label: 'Format SQL' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 120 }, data: { label: 'Formatted SQL' } },
+      ],
+      edges: [{ id: 'e1', source: 'input', target: 'transform' }, { id: 'e2', source: 'transform', target: 'output' }],
+    },
+  },
+  {
+    slug: 'timestamp-converter',
+    name: 'Timestamp Converter',
+    title: 'Unix Timestamp Converter | Epoch to ISO-8601 | Free Tool',
+    description: 'Convert Unix epoch timestamps to human-readable dates and vice-versa. Fully client-side.',
+    keywords: 'unix timestamp converter, epoch to date, timestamp to iso, date converter',
+    h1: 'Unix Timestamp Converter',
+    seoText: 'Instantly convert Unix epoch timestamps (seconds or milliseconds) to ISO-8601, UTC, and local time strings — or convert a date string back to its epoch value. No server, no delay.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 120 }, data: { label: 'Paste Timestamp or Date' } },
+        { id: 'transform', type: 'timestampNode', position: { x: 400, y: 120 }, data: { label: 'Convert Timestamp' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 120 }, data: { label: 'Converted Output' } },
+      ],
+      edges: [{ id: 'e1', source: 'input', target: 'transform' }, { id: 'e2', source: 'transform', target: 'output' }],
+    },
+  },
+  {
+    slug: 'aes-encrypt',
+    name: 'AES Encrypt / Decrypt',
+    title: 'AES Encrypt & Decrypt Online | Web Crypto API | 100% Private',
+    description: 'Encrypt and decrypt text using AES-256-GCM directly in your browser using the Web Crypto API.',
+    keywords: 'aes encrypt online, aes decrypt, aes-256-gcm, web crypto api, local encryption tool',
+    h1: 'AES-256 Encrypt & Decrypt',
+    seoText: 'Encrypt sensitive text with AES-256-GCM using a secret passphrase. Decryption also works locally. We use the native browser Web Crypto API — your data and secret key are never transmitted anywhere.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 120 }, data: { label: 'Plaintext to Encrypt' } },
+        { id: 'transform', type: 'aesEncryptNode', position: { x: 400, y: 120 }, data: { label: 'AES Encrypt', secretKey: '' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 120 }, data: { label: 'Encrypted JSON' } },
+      ],
+      edges: [{ id: 'e1', source: 'input', target: 'transform' }, { id: 'e2', source: 'transform', target: 'output' }],
+    },
+  },
+  {
+    slug: 'curl-parser',
+    name: 'cURL Parser',
+    title: 'cURL Command Parser | Extract URL, Headers & Body | Private',
+    description: 'Parse a cURL command copied from Chrome DevTools to extract the URL, headers, and request body instantly.',
+    keywords: 'curl parser, parse curl command, extract curl body, curl to json',
+    h1: 'cURL Command Parser',
+    seoText: 'Paste a cURL command directly from Chrome DevTools Network tab and instantly extract the URL, request headers, and JSON body as a structured output. All parsing happens locally — no API keys leave your browser.',
+    pipeline: {
+      nodes: [
+        { id: 'input', type: 'inputNode', position: { x: 50, y: 120 }, data: { label: 'Paste cURL Command' } },
+        { id: 'transform', type: 'curlParserNode', position: { x: 400, y: 120 }, data: { label: 'Parse cURL' } },
+        { id: 'output', type: 'outputNode', position: { x: 750, y: 120 }, data: { label: 'Parsed Output' } },
+      ],
+      edges: [{ id: 'e1', source: 'input', target: 'transform' }, { id: 'e2', source: 'transform', target: 'output' }],
+    },
+  }
+);
