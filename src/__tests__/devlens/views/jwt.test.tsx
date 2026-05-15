@@ -28,12 +28,14 @@ describe("JwtView", () => {
 
     expect(html).toContain("ALG HS256");
     expect(html).toContain("Signature segment present: yes");
+    expect(html).toContain("Signature");
     expect(html).toContain("Expires");
     expect(html).toContain("Issued");
     expect(html).toContain("Subject");
     expect(html).toContain("Should match the expected identity provider.");
     expect(html).toContain("Verify the token was minted for this application.");
     expect(html).toContain("email");
+    expect(html).toContain("Value");
   });
 
   it("shows a raw payload error when the payload is not JSON", () => {

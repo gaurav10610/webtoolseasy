@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Panel } from "@/components/ui/Panel";
@@ -9,6 +9,8 @@ type Base64ViewProps = {
   input: string;
 };
 
+type DecodedKind = "empty" | "json" | "html" | "binary" | "text";
+
 function decodeBase64(value: string): string {
   const normalized = value
     .replace(/\s+/g, "")
@@ -16,6 +18,62 @@ function decodeBase64(value: string): string {
     .replace(/_/g, "/");
   const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
   return atob(padded);
+}
+
+function isLikelyBase64(value: string) {
+  const normalized = value
+    .replace(/\s+/g, "")
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
+  if (!normalized || normalized.length % 4 === 1) {
+    return false;
+  }
+
+  if (!/^[A-Za-z0-9+/]+=*$/.test(normalized)) {
+    return false;
+  }
+
+  try {
+    decodeBase64(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function encodeBase64(value: string) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary);
+}
+
+function decodeToBytes(value: string) {
+  return Array.from(value, (character) => character.charCodeAt(0));
+}
+
+function formatHexDump(decoded: string) {
+  const bytes = decodeToBytes(decoded);
+  const lines: string[] = [];
+
+  for (let index = 0; index < bytes.length; index += 16) {
+    const chunk = bytes.slice(index, index + 16);
+    const hex = chunk
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join(" ");
+    const ascii = chunk
+      .map((byte) =>
+        byte >= 32 && byte <= 126 ? String.fromCharCode(byte) : ".",
+      )
+      .join("");
+    lines.push(
+      `${index.toString(16).padStart(4, "0")}: ${hex.padEnd(47, " ")} ${ascii}`,
+    );
+  }
+
+  return lines.join("\n");
 }
 
 function getDataUrlMeta(value: string) {
@@ -48,17 +106,49 @@ function classifyDecodedValue(decoded: string) {
     return { type: "html", label: "HTML" };
   }
 
-  const printableCharacters = trimmed.replace(/[\r\n\t\f\b]/g, "").length;
-  const controlCharacters = decoded.length - printableCharacters;
+  const binaryCharacters = Array.from(decoded).filter((character) => {
+    const codePoint = character.charCodeAt(0);
+    return codePoint < 32 || codePoint > 126;
+  }).length;
 
-  if (controlCharacters > Math.max(3, decoded.length * 0.05)) {
+  if (binaryCharacters > Math.max(1, decoded.length * 0.05)) {
     return { type: "binary", label: "Binary" };
   }
 
   return { type: "text", label: "Plain text" };
 }
 
+function prettyPrintJson(value: string) {
+  try {
+    return JSON.stringify(JSON.parse(value), null, 2);
+  } catch {
+    return value;
+  }
+}
+
 export function Base64View({ input }: Base64ViewProps) {
+  const initialMode = useMemo<"decode" | "encode">(() => {
+    try {
+      if (input.startsWith("data:")) {
+        const [, payload = ""] = input.split(",", 2);
+        return isLikelyBase64(payload) ? "decode" : "encode";
+      }
+      return isLikelyBase64(input) ? "decode" : "encode";
+    } catch {
+      return "encode";
+    }
+  }, [input]);
+
+  const [mode, setMode] = useState<"decode" | "encode">(initialMode);
+  const [encodeInput, setEncodeInput] = useState(input);
+  const [showPrettyJson, setShowPrettyJson] = useState(false);
+
+  useEffect(() => {
+    setEncodeInput(input);
+    setShowPrettyJson(false);
+    setMode(initialMode);
+  }, [input, initialMode]);
+
   const result = useMemo(() => {
     try {
       if (input.startsWith("data:")) {
@@ -86,9 +176,75 @@ export function Base64View({ input }: Base64ViewProps) {
     }
   }, [input]);
 
+  if (mode === "encode") {
+    const encoded = encodeBase64(encodeInput);
+
+    return (
+      <Panel title="Base64" subtitle="Encode text to Base64">
+        <div className="space-y-3">
+          <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+            <button
+              type="button"
+              className="rounded-full border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-indigo-100"
+              onClick={() => setMode("decode")}
+            >
+              Decode
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300"
+              onClick={() => setMode("encode")}
+            >
+              Encode
+            </button>
+          </div>
+          <textarea
+            value={encodeInput}
+            onChange={(event) => setEncodeInput(event.target.value)}
+            rows={6}
+            className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white outline-none ring-0 placeholder:text-gray-500 focus:border-indigo-500/60"
+            placeholder="Type text to encode"
+          />
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                Encoded output
+              </div>
+              <CopyButton text={encoded} label="Copy encoded" />
+            </div>
+            <pre className="mt-2 overflow-x-auto text-xs leading-6 text-gray-100">
+              {encoded}
+            </pre>
+          </div>
+        </div>
+      </Panel>
+    );
+  }
+
   if (result.error) {
     return (
-      <Panel title="Base64" subtitle="Unable to decode input">
+      <Panel
+        title="Base64"
+        subtitle="Unable to decode input"
+        action={
+          <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+            <button
+              type="button"
+              className="rounded-full border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-indigo-100"
+              onClick={() => setMode("decode")}
+            >
+              Decode
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300"
+              onClick={() => setMode("encode")}
+            >
+              Encode
+            </button>
+          </div>
+        }
+      >
         <div className="space-y-3 text-sm text-gray-300">
           <p className="rounded-2xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-rose-200">
             {result.error}
@@ -137,7 +293,25 @@ export function Base64View({ input }: Base64ViewProps) {
 
       <Panel
         title="Decoded output"
-        action={<CopyButton text={result.decoded} label="Copy decoded" />}
+        action={
+          <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+            <button
+              type="button"
+              className="rounded-full border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-indigo-100"
+              onClick={() => setMode("decode")}
+            >
+              Decode
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300"
+              onClick={() => setMode("encode")}
+            >
+              Encode
+            </button>
+            <CopyButton text={result.decoded} label="Copy decoded" />
+          </div>
+        }
       >
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2 text-xs text-gray-400">
@@ -161,10 +335,32 @@ export function Base64View({ input }: Base64ViewProps) {
             <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
               HTML: {looksLikeHtml ? "likely" : "no"}
             </span>
+            {decodedClass.type === "json" ? (
+              <button
+                type="button"
+                onClick={() => setShowPrettyJson((current) => !current)}
+                className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-emerald-100"
+              >
+                {showPrettyJson ? "Show raw JSON" : "View as JSON"}
+              </button>
+            ) : null}
           </div>
-          <pre className="max-h-[420px] overflow-auto rounded-2xl bg-black/30 p-4 text-xs leading-6 text-gray-100">
-            {result.decoded}
-          </pre>
+          {decodedClass.type === "binary" ? (
+            <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                Hex preview
+              </div>
+              <pre className="mt-2 max-h-[420px] overflow-auto text-xs leading-6 text-gray-100">
+                {formatHexDump(result.decoded)}
+              </pre>
+            </div>
+          ) : (
+            <pre className="max-h-[420px] overflow-auto rounded-2xl bg-black/30 p-4 text-xs leading-6 text-gray-100">
+              {decodedClass.type === "json" && showPrettyJson
+                ? prettyPrintJson(result.decoded)
+                : result.decoded}
+            </pre>
+          )}
         </div>
       </Panel>
     </div>

@@ -26,6 +26,8 @@ describe("UuidView", () => {
 
     expect(html).toContain("Random bits");
     expect(html).toContain("122 bits of randomness");
+    expect(html).toContain("Generate new UUID v4");
+    expect(html).toContain("Generate new UUID v7");
   });
 
   it("renders version 7 timestamp details", () => {

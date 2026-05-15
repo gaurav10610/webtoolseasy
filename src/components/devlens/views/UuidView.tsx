@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Panel } from "@/components/ui/Panel";
@@ -22,6 +22,39 @@ function getVariant(value: string) {
   if (["8", "9", "a", "b"].includes(nibble)) return "RFC 4122";
   if (["c", "d", "e", "f"].includes(nibble)) return "future";
   return "NCS";
+}
+
+function bytesToUuid(bytes: Uint8Array) {
+  const hex = Array.from(bytes, (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+  return [
+    hex.slice(0, 8),
+    hex.slice(8, 12),
+    hex.slice(12, 16),
+    hex.slice(16, 20),
+    hex.slice(20, 32),
+  ].join("-");
+}
+
+function generateUuidV4() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  return bytesToUuid(bytes);
+}
+
+function generateUuidV7() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  const timestamp = BigInt(Date.now());
+
+  for (let index = 0; index < 6; index += 1) {
+    bytes[5 - index] = Number((timestamp >> BigInt(index * 8)) & BigInt(0xff));
+  }
+
+  bytes[6] = (bytes[6] & 0x0f) | 0x70;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  return bytesToUuid(bytes);
 }
 
 function parseUuid(value: string) {
@@ -87,8 +120,14 @@ function formatUuidVersionDetails(parsed: ReturnType<typeof parseUuid>) {
 }
 
 export function UuidView({ input }: UuidViewProps) {
+  const [currentValue, setCurrentValue] = useState(input.trim());
+
+  useEffect(() => {
+    setCurrentValue(input.trim());
+  }, [input]);
+
   const parsed = useMemo(() => {
-    const value = input.trim();
+    const value = currentValue.trim();
     const uuid = parseUuid(value);
 
     if (!uuid) {
@@ -100,16 +139,37 @@ export function UuidView({ input }: UuidViewProps) {
     }
 
     return { valid: true, uuid, version: getVersion(value) };
-  }, [input]);
+  }, [currentValue]);
 
   if (!parsed.valid) {
     return (
-      <Panel title="UUID" subtitle="Unable to parse UUID">
+      <Panel
+        title="UUID"
+        subtitle="Unable to parse UUID"
+        action={
+          <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+            <button
+              type="button"
+              className="rounded-full border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-indigo-100"
+              onClick={() => setCurrentValue(generateUuidV4())}
+            >
+              Generate new UUID v4
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300"
+              onClick={() => setCurrentValue(generateUuidV7())}
+            >
+              Generate new UUID v7
+            </button>
+          </div>
+        }
+      >
         <div className="space-y-3 text-sm text-gray-300">
           <p className="rounded-2xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-rose-200">
             Invalid UUID format
           </p>
-          <CopyButton text={input} label="Copy raw input" />
+          <CopyButton text={currentValue} label="Copy raw input" />
         </div>
       </Panel>
     );
@@ -121,14 +181,34 @@ export function UuidView({ input }: UuidViewProps) {
     <Panel
       title="UUID"
       subtitle={`Version ${parsed.version}`}
-      action={<CopyButton text={input} label="Copy UUID" />}
+      action={
+        <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+          <button
+            type="button"
+            className="rounded-full border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-indigo-100"
+            onClick={() => setCurrentValue(generateUuidV4())}
+          >
+            Generate new UUID v4
+          </button>
+          <button
+            type="button"
+            className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-gray-300"
+            onClick={() => setCurrentValue(generateUuidV7())}
+          >
+            Generate new UUID v7
+          </button>
+          <CopyButton text={currentValue} label="Copy UUID" />
+        </div>
+      }
     >
       <div className="space-y-4 text-sm text-gray-300">
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
             UUID
           </div>
-          <div className="mt-2 break-all text-lg text-white">{input}</div>
+          <div className="mt-2 break-all text-lg text-white">
+            {currentValue}
+          </div>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4">

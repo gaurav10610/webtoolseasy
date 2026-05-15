@@ -15,6 +15,13 @@ import { TimestampView } from "./views/TimestampView";
 import { UuidView } from "./views/UuidView";
 import { ColorView } from "./views/ColorView";
 import { IpView } from "./views/IpView";
+import { RegexView } from "./views/RegexView";
+import { YamlView } from "./views/YamlView";
+import { XmlView } from "./views/XmlView";
+import { EnvView } from "./views/EnvView";
+import { CronView } from "./views/CronView";
+import { SqlView } from "./views/SqlView";
+import { CsvView } from "./views/CsvView";
 import { DevLensPanel } from "@/store/useDevLensStore";
 
 type PanelContainerProps = {
@@ -41,6 +48,13 @@ export function PanelContainer({
   const isUuid = panel.detection.type === "uuid";
   const isHexColor = panel.detection.type === "hex-color";
   const isIp = panel.detection.type === "ip";
+  const isRegex = panel.detection.type === "regex";
+  const isYaml = panel.detection.type === "yaml";
+  const isXml = panel.detection.type === "xml";
+  const isEnv = panel.detection.type === "env";
+  const isCron = panel.detection.type === "cron";
+  const isSql = panel.detection.type === "sql";
+  const isCsv = panel.detection.type === "csv";
 
   return (
     <Panel
@@ -89,6 +103,20 @@ export function PanelContainer({
           <ColorView input={panel.input} />
         ) : isIp ? (
           <IpView input={panel.input} />
+        ) : isRegex ? (
+          <RegexView input={panel.input} />
+        ) : isYaml ? (
+          <YamlView input={panel.input} />
+        ) : isXml ? (
+          <XmlView input={panel.input} />
+        ) : isEnv ? (
+          <EnvView input={panel.input} />
+        ) : isCron ? (
+          <CronView input={panel.input} />
+        ) : isSql ? (
+          <SqlView input={panel.input} />
+        ) : isCsv ? (
+          <CsvView input={panel.input} />
         ) : (
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">

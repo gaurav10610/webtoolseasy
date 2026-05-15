@@ -182,7 +182,7 @@ export function JwtView({ input }: JwtViewProps) {
   const hasIat = Number.isFinite(iat);
 
   return (
-    <div className="space-y-4">
+    <div className="grid gap-4 xl:grid-cols-3">
       <Panel
         title="JWT Header"
         subtitle="Unsigned view only"
@@ -238,33 +238,43 @@ export function JwtView({ input }: JwtViewProps) {
           <pre className="overflow-x-auto rounded-2xl bg-black/30 p-4 text-xs leading-6 text-gray-100">
             {JSON.stringify(decoded.payload, null, 2)}
           </pre>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="space-y-3">
             {payloadEntries.map(([key, value]) => {
               const note = claimNotes[key];
               return (
-                <div
+                <details
                   key={key}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-3"
+                  className="group rounded-2xl border border-white/10 bg-white/5 p-3"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-semibold text-white">
-                      {key}
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+                    <div>
+                      <div className="text-sm font-semibold text-white">
+                        {key}
+                      </div>
+                      <div className="mt-1 text-xs uppercase tracking-[0.2em] text-gray-500">
+                        {note?.label ?? "Claim"}
+                      </div>
                     </div>
                     <CopyButton text={String(value)} label="Copy" />
-                  </div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.2em] text-gray-500">
-                    {note?.label ?? "Claim"}
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-gray-300">
-                    {note?.note ??
-                      "Standard JWT claim or application-specific field."}
-                  </p>
-                  {note?.securityNote ? (
-                    <p className="mt-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-100">
-                      {note.securityNote}
+                  </summary>
+                  <div className="mt-3 space-y-2">
+                    <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-gray-100">
+                      <span className="mr-2 text-xs uppercase tracking-[0.2em] text-gray-500">
+                        Value
+                      </span>
+                      {String(value)}
+                    </div>
+                    <p className="text-sm leading-6 text-gray-300">
+                      {note?.note ??
+                        "Standard JWT claim or application-specific field."}
                     </p>
-                  ) : null}
-                </div>
+                    {note?.securityNote ? (
+                      <p className="rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-100">
+                        {note.securityNote}
+                      </p>
+                    ) : null}
+                  </div>
+                </details>
               );
             })}
           </div>

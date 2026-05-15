@@ -11,7 +11,17 @@ describe("Base64View", () => {
     expect(html).toContain("Encoded length");
     expect(html).toContain("Overhead");
     expect(html).toContain("JSON");
+    expect(html).toContain("View as JSON");
     expect(html).toContain("WebToolsEasy");
+  });
+
+  it("renders encode mode controls and output", () => {
+    const html = renderToStaticMarkup(<Base64View input="Hello world!" />);
+
+    expect(html).toContain("Encode");
+    expect(html).toContain("Decode");
+    expect(html).toContain("Encoded output");
+    expect(html).toContain(Buffer.from("Hello world!").toString("base64"));
   });
 
   it("renders data URL metadata for images", () => {
@@ -32,5 +42,14 @@ describe("Base64View", () => {
 
     expect(html).toContain("HTML");
     expect(html).toContain("Hello");
+  });
+
+  it("renders a binary hex preview", () => {
+    const input = Buffer.from([0, 1, 2, 3, 255]).toString("base64");
+    const html = renderToStaticMarkup(<Base64View input={input} />);
+
+    expect(html).toContain("Binary");
+    expect(html).toContain("Hex preview");
+    expect(html).toContain("00 01 02 03 ff");
   });
 });
