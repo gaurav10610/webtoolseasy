@@ -12,35 +12,35 @@ const getPaletteTokens = (mode: PaletteMode) => {
   return {
     mode,
     primary: {
-      main: isDark ? "#7dd3fc" : "#0f6cbd",
-      light: isDark ? "#bae6fd" : "#5aa9e6",
-      dark: isDark ? "#0369a1" : "#084c8d",
-      contrastText: isDark ? "#082f49" : "#ffffff",
+      main: isDark ? "#818cf8" : "#4338ca",
+      light: isDark ? "#a5b4fc" : "#6366f1",
+      dark: isDark ? "#4f46e5" : "#312e81",
+      contrastText: "#ffffff",
     },
     secondary: {
-      main: isDark ? "#c4b5fd" : "#6f42c1",
-      light: isDark ? "#ddd6fe" : "#8b5fd6",
-      dark: isDark ? "#7c3aed" : "#4c2889",
+      main: isDark ? "#fdba74" : "#c2410c",
+      light: isDark ? "#fed7aa" : "#ea580c",
+      dark: isDark ? "#f97316" : "#9a3412",
       contrastText: "#ffffff",
     },
     success: {
-      main: isDark ? "#4ade80" : "#1a7f37",
+      main: isDark ? "#4ade80" : "#15803d",
     },
     warning: {
-      main: isDark ? "#fbbf24" : "#b7791f",
+      main: isDark ? "#fbbf24" : "#d97706",
     },
     error: {
-      main: isDark ? "#f87171" : "#c62828",
+      main: isDark ? "#fb7185" : "#e11d48",
     },
     background: {
-      default: isDark ? "#0b1120" : "#f4f7fb",
-      paper: isDark ? "#111827" : "#ffffff",
+      default: isDark ? "#0a0a0b" : "#f8fafc",
+      paper: isDark ? "#121214" : "#ffffff",
     },
     text: {
       primary: isDark ? "#f8fafc" : "#0f172a",
       secondary: isDark ? "#cbd5e1" : "#475569",
     },
-    divider: isDark ? alpha("#e2e8f0", 0.14) : alpha("#0f172a", 0.1),
+    divider: isDark ? alpha("#e2e8f0", 0.12) : alpha("#0f172a", 0.1),
   };
 };
 
@@ -56,7 +56,7 @@ export const getAppTheme = (mode: PaletteMode) => {
       borderRadius: 16,
     },
     typography: {
-      fontFamily: "var(--font-roboto)",
+      fontFamily: "var(--font-space-grotesk)",
       h1: {
         fontSize: "clamp(2rem, 3.5vw, 3rem)",
         fontWeight: 700,
@@ -108,8 +108,8 @@ export const getAppTheme = (mode: PaletteMode) => {
           },
           body: {
             backgroundImage: isDark
-              ? "radial-gradient(circle at top, rgba(14, 116, 144, 0.18), transparent 0, transparent 42%), linear-gradient(180deg, #0b1120 0%, #111827 100%)"
-              : "radial-gradient(circle at top, rgba(15, 108, 189, 0.10), transparent 0, transparent 42%), linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%)",
+              ? "radial-gradient(circle at top, rgba(79, 70, 229, 0.20), transparent 0, transparent 42%), linear-gradient(180deg, #0a0a0b 0%, #121214 100%)"
+              : "radial-gradient(circle at top, rgba(79, 70, 229, 0.08), transparent 0, transparent 42%), linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
           },
           "*::selection": {
             backgroundColor: alpha(palette.primary.main, 0.24),

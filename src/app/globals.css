@@ -15,12 +15,18 @@
   }
 
   body {
-    color: var(--mui-palette-text-primary);
-    background-color: var(--mui-palette-background-default);
+    color: #e5e7eb;
+    background-color: #0a0a0b;
+    color-scheme: dark;
   }
 
   a {
     color: inherit;
+  }
+
+  ::selection {
+    background: rgba(79, 70, 229, 0.35);
+    color: #ffffff;
   }
 }
 

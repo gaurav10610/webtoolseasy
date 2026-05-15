@@ -78,44 +78,44 @@
 
 ### B2 · Pricing Data Pipeline (Option B — build-time fetch)
 
-- [ ] Create `scripts/fetch-aws-pricing.ts` — fetches from AWS Bulk Pricing API for services: EC2, RDS, S3, Lambda, CloudFront, ALB, NLB, API Gateway, ECS, EKS, DynamoDB, ElastiCache, SQS, SNS, EventBridge, Kinesis, CloudWatch, Route 53, NAT Gateway, Secrets Manager, KMS, CodeBuild
-- [ ] For each service, parse only the fields needed: `instanceType`, `pricePerUnit`, `unit`, `region`, `operatingSystem` — discard the 300MB of irrelevant data
-- [ ] Output a compact `src/data/awsPricing.generated.json` (target < 500KB) with structure: `{ region: { service: { instanceType: pricePerHour } } }`
-- [ ] Add `"fetch-pricing": "npx ts-node scripts/fetch-aws-pricing.ts"` to `package.json` scripts
+- [x] Create `scripts/fetch-aws-pricing.ts` — fetches from AWS Bulk Pricing API for services: EC2, RDS, S3, Lambda, CloudFront, ALB, NLB, API Gateway, ECS, EKS, DynamoDB, ElastiCache, SQS, SNS, EventBridge, Kinesis, CloudWatch, Route 53, NAT Gateway, Secrets Manager, KMS, CodeBuild
+- [x] For each service, parse only the fields needed: `instanceType`, `pricePerUnit`, `unit`, `region`, `operatingSystem` — discard the 300MB of irrelevant data
+- [x] Output a compact `src/data/awsPricing.generated.json` (target < 500KB) with structure: `{ region: { service: { instanceType: pricePerHour } } }`
+- [x] Add `"fetch-pricing": "tsx scripts/fetch-aws-pricing.ts"` to `package.json` scripts
 - [ ] Add a GitHub Actions workflow `.github/workflows/update-pricing.yml` that runs `fetch-pricing` on a weekly cron (`0 6 * * 1`), commits the updated JSON if changed, and triggers a Vercel deploy
-- [ ] Update `src/data/pricingEngine.ts` to import from `awsPricing.generated.json` instead of hardcoded rates
+- [x] Update `src/data/pricingEngine.ts` to import from `awsPricing.generated.json` instead of hardcoded rates
 - [ ] Add `src/data/awsPricing.generated.json` to `.gitignore` exclusion list (keep it tracked, not ignored)
-- [ ] Add Option C fallback: if `awsPricing.generated.json` is missing (first clone), fall back to a hardcoded baseline in `pricingEngine.ts` and show a "Prices updated quarterly" badge on the canvas
+- [x] Add Option C fallback: if `awsPricing.generated.json` is missing (first clone), fall back to a hardcoded baseline in `pricingEngine.ts` and show a "Prices updated quarterly" badge on the canvas
 
 ### B3 · Shared UI Component Library (new design system)
 
-- [ ] Create `src/components/ui/` directory for all shared primitives
-- [ ] Build `src/components/ui/Button.tsx` — variants: primary, secondary, ghost, danger; sizes: sm, md, lg; supports icon left/right
-- [ ] Build `src/components/ui/Badge.tsx` — variants: info, warning, success, error, neutral
-- [ ] Build `src/components/ui/Tooltip.tsx` — accessible, keyboard-friendly tooltip wrapper
-- [ ] Build `src/components/ui/CopyButton.tsx` — copies text to clipboard, shows "Copied!" tick for 2 seconds
-- [ ] Build `src/components/ui/Panel.tsx` — card container with header, body, optional footer; used by DevLens panels
-- [ ] Build `src/components/ui/KeyboardShortcut.tsx` — renders `⌘K` / `Ctrl+K` style shortcut chips
-- [ ] Build `src/components/ui/EmptyState.tsx` — icon + title + description + optional CTA; used when panels are empty
-- [ ] Build `src/components/ui/Tabs.tsx` — accessible tab strip (used in specialist views)
-- [ ] Build `src/components/ui/Resizer.tsx` — drag handle for resizable panels
-- [ ] Update `src/theme.ts` and `tailwind.config.ts` to define the new color palette (dark background `#0A0A0B`, surface `#121214`, borders `white/8`, accent indigo/orange per product)
+- [x] Create `src/components/ui/` directory for all shared primitives
+- [x] Build `src/components/ui/Button.tsx` — variants: primary, secondary, ghost, danger; sizes: sm, md, lg; supports icon left/right
+- [x] Build `src/components/ui/Badge.tsx` — variants: info, warning, success, error, neutral
+- [x] Build `src/components/ui/Tooltip.tsx` — accessible, keyboard-friendly tooltip wrapper
+- [x] Build `src/components/ui/CopyButton.tsx` — copies text to clipboard, shows "Copied!" tick for 2 seconds
+- [x] Build `src/components/ui/Panel.tsx` — card container with header, body, optional footer; used by DevLens panels
+- [x] Build `src/components/ui/KeyboardShortcut.tsx` — renders `⌘K` / `Ctrl+K` style shortcut chips
+- [x] Build `src/components/ui/EmptyState.tsx` — icon + title + description + optional CTA; used when panels are empty
+- [x] Build `src/components/ui/Tabs.tsx` — accessible tab strip (used in specialist views)
+- [x] Build `src/components/ui/Resizer.tsx` — drag handle for resizable panels
+- [x] Update `src/theme.ts` and `tailwind.config.ts` to define the new color palette (dark background `#0A0A0B`, surface `#121214`, borders `white/8`, accent indigo/orange per product)
 
 ### B4 · Shared Utility Library
 
-- [ ] Create `src/utils/nanoid.ts` — tiny wrapper around `nanoid` for 8-char IDs (used for share URLs)
-- [ ] Create `src/utils/compress.ts` — `compress(str): string` and `decompress(str): string` using `fflate` (pure JS, no WASM) for URL-safe state serialization
-- [ ] Create `src/utils/clipboard.ts` — `readClipboard(): Promise<string>`, handles permissions gracefully with fallback to paste prompt
-- [ ] Create `src/utils/formatBytes.ts` — human-readable byte sizes
-- [ ] Install `nanoid` and `fflate` packages
+- [x] Create `src/utils/nanoid.ts` — tiny wrapper around `nanoid` for 8-char IDs (used for share URLs)
+- [x] Create `src/utils/compress.ts` — `compress(str): string` and `decompress(str): string` using `fflate` (pure JS, no WASM) for URL-safe state serialization
+- [x] Create `src/utils/clipboard.ts` — `readClipboard(): Promise<string>`, handles permissions gracefully with fallback to paste prompt
+- [x] Create `src/utils/formatBytes.ts` — human-readable byte sizes
+- [x] Install `nanoid` and `fflate` packages
 
 ### B5 · Global Layout & Navigation
 
-- [ ] Rewrite `src/app/layout.tsx` — new global layout: dark background, minimal nav with "DevLens" and "ArchCost" links, no tool categories
+- [x] Rewrite `src/app/layout.tsx` — new global layout: dark background, minimal nav with "DevLens" and "ArchCost" links, no tool categories
 - [ ] Build `src/components/Nav.tsx` — responsive top nav: logo/brand left, `DevLens` and `ArchCost` links center, GitHub link right; mobile: hamburger
 - [ ] Build `src/components/Footer.tsx` — minimal: product name, GitHub link, privacy policy note ("All data processed locally — nothing ever sent to our servers"), MIT license
-- [ ] Rewrite `src/app/page.tsx` — new landing page: hero section pitching both DevLens and ArchCost, privacy guarantee callout, short feature grids for each product, CTA buttons
-- [ ] Add `src/app/privacy/page.tsx` — simple static page explaining the zero-data-collection architecture; important for developer trust
+- [x] Rewrite `src/app/page.tsx` — new landing page: hero section pitching both DevLens and ArchCost, privacy guarantee callout, short feature grids for each product, CTA buttons
+- [x] Add `src/app/privacy/page.tsx` — simple static page explaining the zero-data-collection architecture; important for developer trust
 - [ ] Update `src/app/globals.css` — remove old tool-factory styles, keep only global resets and custom scrollbar styling
 
 ---
@@ -126,44 +126,44 @@
 
 ### C1 · Data Type Detector
 
-- [ ] Create `src/lib/devlens/detector.ts` — `detect(input: string): DetectedType` function
-- [ ] Implement JWT detection: matches `^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*$`
-- [ ] Implement JSON detection: attempt `JSON.parse()`, catch errors, return confidence score
-- [ ] Implement Base64 detection: matches base64 charset, validates decode succeeds, checks if result is text or binary
-- [ ] Implement Base64 Data URL detection: `^data:[a-z]+/[a-z]+;base64,`
-- [ ] Implement URL-encoded string detection: contains `%[0-9A-F]{2}` patterns with density threshold
-- [ ] Implement Unix timestamp detection: 10-digit (seconds) or 13-digit (milliseconds) integer string
-- [ ] Implement UUID detection: `^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`
-- [ ] Implement IPv4 detection: `^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$`
-- [ ] Implement IPv6 detection: standard IPv6 pattern
-- [ ] Implement Hex color detection: `^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$`
-- [ ] Implement Regex detection: starts with `/` and ends with `/{flags}`, or user explicitly marks as regex
-- [ ] Implement YAML detection: contains `---` or `key: value` patterns without being JSON
-- [ ] Implement XML detection: starts with `<?xml` or `<[A-Za-z]`
-- [ ] Implement CSV/TSV detection: consistent delimiter across 3+ lines, no JSON/XML
-- [ ] Implement `.env` file detection: 3+ lines matching `[A-Z_]+=.*` pattern
-- [ ] Implement Cron expression detection: 5 or 6 space-separated fields matching cron token patterns
-- [ ] Implement SQL detection: starts with `SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER` (case-insensitive)
-- [ ] Implement PEM certificate detection: `-----BEGIN CERTIFICATE-----` prefix
-- [ ] Implement PEM private key detection: `-----BEGIN.*PRIVATE KEY-----` prefix
-- [ ] Export `DetectedType` union type covering all supported types plus `'unknown'`
-- [ ] Export `DetectionResult` type: `{ type: DetectedType; confidence: 'high' | 'medium' | 'low'; meta?: Record<string, unknown> }`
-- [ ] Write unit tests `src/__tests__/devlens/detector.test.ts` covering all 18 types plus ambiguous inputs
+- [x] Create `src/lib/devlens/detector.ts` — `detect(input: string): DetectedType` function
+- [x] Implement JWT detection: matches `^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*$`
+- [x] Implement JSON detection: attempt `JSON.parse()`, catch errors, return confidence score
+- [x] Implement Base64 detection: matches base64 charset, validates decode succeeds, checks if result is text or binary
+- [x] Implement Base64 Data URL detection: `^data:[a-z]+/[a-z]+;base64,`
+- [x] Implement URL-encoded string detection: contains `%[0-9A-F]{2}` patterns with density threshold
+- [x] Implement Unix timestamp detection: 10-digit (seconds) or 13-digit (milliseconds) integer string
+- [x] Implement UUID detection: `^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`
+- [x] Implement IPv4 detection: `^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$`
+- [x] Implement IPv6 detection: standard IPv6 pattern
+- [x] Implement Hex color detection: `^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$`
+- [x] Implement Regex detection: starts with `/` and ends with `/{flags}`, or user explicitly marks as regex
+- [x] Implement YAML detection: contains `---` or `key: value` patterns without being JSON
+- [x] Implement XML detection: starts with `<?xml` or `<[A-Za-z]`
+- [x] Implement CSV/TSV detection: consistent delimiter across 3+ lines, no JSON/XML
+- [x] Implement `.env` file detection: 3+ lines matching `[A-Z_]+=.*` pattern
+- [x] Implement Cron expression detection: 5 or 6 space-separated fields matching cron token patterns
+- [x] Implement SQL detection: starts with `SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER` (case-insensitive)
+- [x] Implement PEM certificate detection: `-----BEGIN CERTIFICATE-----` prefix
+- [x] Implement PEM private key detection: `-----BEGIN.*PRIVATE KEY-----` prefix
+- [x] Export `DetectedType` union type covering all supported types plus `'unknown'`
+- [x] Export `DetectionResult` type: `{ type: DetectedType; confidence: 'high' | 'medium' | 'low'; meta?: Record<string, unknown> }`
+- [x] Write unit tests `src/__tests__/devlens/detector.test.ts` covering all 18 types plus ambiguous inputs
 
 ### C2 · DevLens Studio Page & Panel Architecture
 
-- [ ] Create `src/app/studio/page.tsx` — the `/studio` route; renders the multi-panel workbench
-- [ ] Create `src/components/devlens/Studio.tsx` — client component; manages panel layout state
-- [ ] Create `src/components/devlens/PanelContainer.tsx` — single panel: header with detected type badge + actions, body with specialist view, resize handle
-- [ ] Create `src/components/devlens/PasteInput.tsx` — large textarea with paste hint and drag-and-drop file support; calls detector on every significant change (debounced 300ms)
-- [ ] Create `src/store/useDevLensStore.ts` (Zustand) — manages: `panels[]`, `history[]`, `addPanel()`, `updatePanel()`, `removePanel()`, `pushHistory()`
-- [ ] Implement panel add/remove: `+` button adds a new panel (max 4); `×` closes a panel
+- [x] Create `src/app/studio/page.tsx` — the `/studio` route; renders the multi-panel workbench
+- [x] Create `src/components/devlens/Studio.tsx` — client component; manages panel layout state
+- [x] Create `src/components/devlens/PanelContainer.tsx` — single panel: header with detected type badge + actions, body with specialist view, resize handle
+- [x] Create `src/components/devlens/PasteInput.tsx` — large textarea with paste hint and drag-and-drop file support; calls detector on every significant change (debounced 300ms)
+- [x] Create `src/store/useDevLensStore.ts` (Zustand) — manages: `panels[]`, `history[]`, `addPanel()`, `updatePanel()`, `removePanel()`, `pushHistory()`
+- [x] Implement panel add/remove: `+` button adds a new panel (max 4); `×` closes a panel
 - [ ] Implement panel resize: draggable divider between adjacent panels; stores widths in store
-- [ ] Implement `Ctrl/Cmd+V` global shortcut: pastes clipboard content into the focused or first empty panel
-- [ ] Implement localStorage persistence for `history[]` (last 20 inputs); load on mount
-- [ ] Build `src/components/devlens/HistoryDrawer.tsx` — slide-in drawer showing last 20 inputs with type icon, truncated preview, timestamp; click to restore to panel
-- [ ] Build `src/components/devlens/TypeBadge.tsx` — colored badge showing the detected type with icon (e.g., `🔑 JWT`, `{ } JSON`)
-- [ ] Build `src/components/devlens/UnknownView.tsx` — fallback view when type is `'unknown'`: shows raw text with line numbers, copy button, suggestions for what it might be
+- [x] Implement `Ctrl/Cmd+V` global shortcut: pastes clipboard content into the focused or first empty panel
+- [x] Implement localStorage persistence for `history[]` (last 20 inputs); load on mount
+- [x] Build `src/components/devlens/HistoryDrawer.tsx` — slide-in drawer showing last 20 inputs with type icon, truncated preview, timestamp; click to restore to panel
+- [x] Build `src/components/devlens/TypeBadge.tsx` — colored badge showing the detected type with icon (e.g., `🔑 JWT`, `{ } JSON`)
+- [x] Build `src/components/devlens/UnknownView.tsx` — fallback view when type is `'unknown'`: shows raw text with line numbers, copy button, suggestions for what it might be
 
 ---
 
@@ -174,78 +174,78 @@
 ### D1 · JWT Specialist View
 
 - [ ] Install `jose` package (pure JS JWT library, no Node.js deps)
-- [ ] Create `src/components/devlens/views/JwtView.tsx`
-- [ ] Decode header and payload without signature verification (display only)
+- [x] Create `src/components/devlens/views/JwtView.tsx`
+- [x] Decode header and payload without signature verification (display only)
 - [ ] Render three-column layout: Header JSON, Payload JSON, Signature status
 - [ ] Show signature algorithm (alg) with a badge; mark HS256/RS256/ES256 etc.
 - [ ] Implement claim explanation panel: for each claim in payload, show a collapsible row with: claim key, value, human-readable name, plain-English explanation, security note if applicable
 - [ ] Built-in claim dictionary covering: `sub`, `iss`, `aud`, `exp`, `iat`, `nbf`, `jti`, `name`, `email`, `roles`, `scope`, `azp`, `sid` — at minimum
 - [ ] Implement `exp` countdown: if token has `exp`, show "Expires in X minutes" or "Expired X minutes ago" with color (green/yellow/red); updates every second via `setInterval`
 - [ ] Implement `iat` display: "Issued X days ago" relative time
-- [ ] Show "Invalid JWT structure" error state if the input doesn't have 3 dot-separated base64 parts
+- [x] Show "Invalid JWT structure" error state if the input doesn't have 3 dot-separated base64 parts
 - [ ] Show "Payload is not valid JSON" error state with raw decoded bytes shown
-- [ ] Add "Copy Header", "Copy Payload", "Copy Raw" buttons
+- [x] Add "Copy Header", "Copy Payload", "Copy Raw" buttons
 - [ ] Write unit tests `src/__tests__/devlens/views/jwt.test.ts`
 
 ### D2 · JSON Specialist View
 
-- [ ] Create `src/components/devlens/views/JsonView.tsx`
+- [x] Create `src/components/devlens/views/JsonView.tsx`
 - [ ] Implement **Tree view** tab: recursive expandable tree; collapsed by default for objects > 3 levels deep; click key to copy path; click value to copy value
 - [ ] Implement **Table view** tab: if root is an array of objects, render as sortable HTML table; show row count; clicking a row expands nested JSON inline
 - [ ] Implement **Prettify/Minify** tab: Monaco editor (or CodeMirror for lighter weight) with syntax highlighting; toggle between 2-space indent and minified; copy button
 - [ ] Implement **JSONPath Query** tab: text input for JSONPath expression; real-time query results shown below; results are copyable as JSON; show query error if invalid
 - [ ] Install `jsonpath-plus` package for JSONPath evaluation (client-side)
 - [ ] Implement **Schema** tab: infer JSON Schema from the input using `generate-schema` or hand-rolled inference; display as formatted JSON; copyable
-- [ ] Show "Invalid JSON" error with the parse error message and line/col position highlighted
-- [ ] Show JSON stats in the header: key count at root, total key count, nesting depth, array lengths
+- [x] Show "Invalid JSON" error with the parse error message and line/col position highlighted
+- [x] Show JSON stats in the header: key count at root, total key count, nesting depth, array lengths
 - [ ] Write unit tests `src/__tests__/devlens/views/json.test.ts`
 
 ### D3 · Base64 Specialist View
 
-- [ ] Create `src/components/devlens/views/Base64View.tsx`
+- [x] Create `src/components/devlens/views/Base64View.tsx`
 - [ ] Implement decode: `atob()` with error handling; display decoded text with charset detection hint
 - [ ] Detect if decoded content is: plain text, JSON (offer "View as JSON" button), HTML, binary (show hex dump preview)
 - [ ] If input is a `data:` URL: extract MIME type, render image inline using `<img src={input} />` if image MIME; show PDF viewer hint if `application/pdf`
 - [ ] Implement encode tab: textarea input → base64 encoded output; copy button
 - [ ] Implement encode file: drag-and-drop or file picker → converts file to base64 data URL; useful for embedding images in CSS/HTML
-- [ ] Show decoded byte length vs encoded length; explain the ~33% size overhead
+- [x] Show decoded byte length vs encoded length; explain the ~33% size overhead
 - [ ] Write unit tests
 
 ### D4 · URL-Encoded String Specialist View
 
-- [ ] Create `src/components/devlens/views/UrlEncodedView.tsx`
-- [ ] Detect if input is a full URL or just a query string
-- [ ] If full URL: parse with `URL` API; show protocol, hostname, pathname, search params table, hash
-- [ ] If query string: parse with `URLSearchParams`; render as two-column table (key | decoded value)
-- [ ] Each param row: show raw encoded value + decoded value side by side; copy decoded button
+- [x] Create `src/components/devlens/views/UrlEncodedView.tsx`
+- [x] Detect if input is a full URL or just a query string
+- [x] If full URL: parse with `URL` API; show protocol, hostname, pathname, search params table, hash
+- [x] If query string: parse with `URLSearchParams`; render as two-column table (key | decoded value)
+- [x] Each param row: show raw encoded value + decoded value side by side; copy decoded button
 - [ ] Detect and flag double-encoded values (e.g., `%2520` → `%20` → ` `)
 - [ ] Implement encode tab: key-value editor → generates URL-encoded query string; copy button
 - [ ] Write unit tests
 
 ### D5 · Unix Timestamp Specialist View
 
-- [ ] Create `src/components/devlens/views/TimestampView.tsx`
-- [ ] Auto-detect seconds (10 digits) vs milliseconds (13 digits) vs microseconds (16 digits)
+- [x] Create `src/components/devlens/views/TimestampView.tsx`
+- [x] Auto-detect seconds (10 digits) vs milliseconds (13 digits) vs microseconds (16 digits)
 - [ ] Display the date in a grid of timezones: UTC, US/Eastern, US/Pacific, Europe/London, Europe/Berlin, Asia/Kolkata, Asia/Tokyo, Australia/Sydney
 - [ ] Show "X days ago" / "in X days" relative time; update every second for recent timestamps
-- [ ] Show ISO 8601 string, RFC 2822 string, Unix seconds, Unix milliseconds — all copyable
+- [x] Show ISO 8601 string, RFC 2822 string, Unix seconds, Unix milliseconds — all copyable
 - [ ] Implement "Convert a date" reverse direction: date-time picker → shows Unix timestamp output
 - [ ] Write unit tests
 
 ### D6 · UUID Specialist View
 
-- [ ] Create `src/components/devlens/views/UuidView.tsx`
-- [ ] Detect UUID version (1, 3, 4, 5, 7) from the version nibble
+- [x] Create `src/components/devlens/views/UuidView.tsx`
+- [x] Detect UUID version (1, 3, 4, 5, 7) from the version nibble
 - [ ] For v1: decode the embedded timestamp; show as human-readable date; show MAC address hint
 - [ ] For v4: confirm it's random; show entropy bits
 - [ ] For v7: decode the Unix timestamp milliseconds from bits 0-47
-- [ ] Show variant (RFC 4122 vs Microsoft GUID)
+- [x] Show variant (RFC 4122 vs Microsoft GUID)
 - [ ] Add "Generate new UUID v4" and "Generate new UUID v7" buttons (using `crypto.randomUUID()`)
 - [ ] Write unit tests
 
 ### D7 · IP Address Specialist View
 
-- [ ] Create `src/components/devlens/views/IpView.tsx`
+- [x] Create `src/components/devlens/views/IpView.tsx`
 - [ ] Install `ip-cidr` or implement CIDR math manually (small, no dep)
 - [ ] Bundle a compact IP geolocation database: use `@maxmind/geoip2-node` with a bundled MaxMind GeoLite2 City MMDB, or use `ip-location-db` (CC0 licensed CSV converted to compact binary at build time) — evaluate bundle size impact; target < 2MB
 - [ ] For IPv4: show class (A/B/C/D/E), private/public/loopback/reserved status, geolocation (country, region, city), reverse DNS hint
@@ -255,11 +255,11 @@
 
 ### D8 · Hex Color Specialist View
 
-- [ ] Create `src/components/devlens/views/ColorView.tsx`
-- [ ] Show a large color swatch
+- [x] Create `src/components/devlens/views/ColorView.tsx`
+- [x] Show a large color swatch
 - [ ] Convert and display: HEX, RGB, HSL, HSV, OKLCH
 - [ ] Show the closest named CSS color
-- [ ] Show WCAG contrast ratio against white and black backgrounds; label AA/AAA pass/fail for normal and large text
+- [x] Show WCAG contrast ratio against white and black backgrounds; label AA/AAA pass/fail for normal and large text
 - [ ] Show a tint/shade palette: 9 lighter shades and 9 darker shades; each swatch is copyable
 - [ ] Implement color picker input (native `<input type="color">`) for live editing
 - [ ] Write unit tests for color conversion math
@@ -719,7 +719,7 @@
 - [ ] `src/__tests__/devlens/views/csv.test.ts` — delimiter detection, type inference
 - [ ] `src/__tests__/devlens/views/timestamp.test.ts` — seconds vs ms detection, timezone display
 - [ ] `src/__tests__/devlens/views/regex.test.ts` — explanation engine token coverage
-- [ ] `src/__tests__/archcost/pricingEngine.test.ts` — all 40+ service calculators
+- [x] `src/__tests__/archcost/pricingEngine.test.ts` — all 40+ service calculators
 - [ ] `src/__tests__/archcost/dataTransfer.test.ts` — all node-pair transfer cost rules
 - [ ] `src/__tests__/utils/compress.test.ts` — compress/decompress round-trip, large payloads
 - [ ] `src/__tests__/utils/nanoid.test.ts` — uniqueness, length
