@@ -22,6 +22,7 @@ import { EnvView } from "./views/EnvView";
 import { CronView } from "./views/CronView";
 import { SqlView } from "./views/SqlView";
 import { CsvView } from "./views/CsvView";
+import { PemView } from "./views/PemView";
 import { DevLensPanel } from "@/store/useDevLensStore";
 
 type PanelContainerProps = {
@@ -55,6 +56,9 @@ export function PanelContainer({
   const isCron = panel.detection.type === "cron";
   const isSql = panel.detection.type === "sql";
   const isCsv = panel.detection.type === "csv";
+  const isPem =
+    panel.detection.type === "pem-certificate" ||
+    panel.detection.type === "pem-private-key";
 
   return (
     <Panel
@@ -117,6 +121,8 @@ export function PanelContainer({
           <SqlView input={panel.input} />
         ) : isCsv ? (
           <CsvView input={panel.input} />
+        ) : isPem ? (
+          <PemView input={panel.input} />
         ) : (
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">

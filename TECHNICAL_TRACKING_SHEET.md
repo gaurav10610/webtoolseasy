@@ -266,91 +266,91 @@
 
 ### D9 · Regex Specialist View
 
-- [ ] Create `src/components/devlens/views/RegexView.tsx`
-- [ ] Parse the regex input: support both `/pattern/flags` format and raw pattern with separate flags input
-- [ ] Implement **Test** tab: multiline textarea for test string; highlight all matches inline with different colors per capture group; show match count in header
-- [ ] Show match table: match index, full match, captured groups (named and positional)
-- [ ] Implement **Explain** tab: tokenize the regex using `regexp-tree` or `regexpp` package; for each token, show a human-readable explanation (e.g., `\d` → "any digit 0-9", `{2,4}` → "between 2 and 4 times", `(?=...)` → "positive lookahead: the following must be present")
-- [ ] Install `regexpp` (used by ESLint, well-maintained, tree-shakeable)
-- [ ] Implement **Replace** tab: replacement string input; show live replacement result
-- [ ] Show regex flags toggle: g, i, m, s, u, v — each toggleable; update test results live
-- [ ] Show "Invalid regex" error state with the JS engine's error message
-- [ ] Write unit tests for the explanation engine
+- [x] Create `src/components/devlens/views/RegexView.tsx`
+- [x] Parse the regex input: support both `/pattern/flags` format and raw pattern with separate flags input
+- [x] Implement **Test** tab: multiline textarea for test string; highlight all matches inline with different colors per capture group; show match count in header
+- [x] Show match table: match index, full match, captured groups (named and positional)
+- [x] Implement **Explain** tab: tokenize the regex using `regexp-tree` or `regexpp` package; for each token, show a human-readable explanation (e.g., `\d` → "any digit 0-9", `{2,4}` → "between 2 and 4 times", `(?=...)` → "positive lookahead: the following must be present")
+- [x] Install `regexpp` (used by ESLint, well-maintained, tree-shakeable)
+- [x] Implement **Replace** tab: replacement string input; show live replacement result
+- [x] Show regex flags toggle: g, i, m, s, u, v — each toggleable; update test results live
+- [x] Show "Invalid regex" error state with the JS engine's error message
+- [x] Write unit tests for the explanation engine
 
 ### D10 · YAML Specialist View
 
-- [ ] Create `src/components/devlens/views/YamlView.tsx`
-- [ ] Install `js-yaml` package
-- [ ] Parse YAML; show validation error with line number if invalid
-- [ ] Convert to JSON (pretty-printed) with copy button — primary view
-- [ ] Show YAML stats: top-level keys, nesting depth
-- [ ] Add "Convert JSON → YAML" reverse direction tab
-- [ ] Write unit tests
+- [x] Create `src/components/devlens/views/YamlView.tsx`
+- [x] Install `js-yaml` package
+- [x] Parse YAML; show validation error with line number if invalid
+- [x] Convert to JSON (pretty-printed) with copy button — primary view
+- [x] Show YAML stats: top-level keys, nesting depth
+- [x] Add "Convert JSON → YAML" reverse direction tab
+- [x] Write unit tests
 
 ### D11 · XML Specialist View
 
-- [ ] Create `src/components/devlens/views/XmlView.tsx`
-- [ ] Parse using native `DOMParser` API (zero dependency)
-- [ ] Show **Tree view**: recursive collapsible tree of elements, attributes, text nodes
-- [ ] Implement **XPath query** tab: text input for XPath expression; evaluate using `document.evaluate()`; show matching nodes count and values
-- [ ] Show **Prettify** tab: properly indented XML with syntax highlighting; copy button
-- [ ] Show parse error with line/col if invalid XML
-- [ ] Write unit tests
+- [x] Create `src/components/devlens/views/XmlView.tsx`
+- [x] Parse using native `DOMParser` API (zero dependency)
+- [x] Show **Tree view**: recursive collapsible tree of elements, attributes, text nodes
+- [x] Implement **XPath query** tab: text input for XPath expression; evaluate using `document.evaluate()`; show matching nodes count and values
+- [x] Show **Prettify** tab: properly indented XML with syntax highlighting; copy button
+- [x] Show parse error with line/col if invalid XML
+- [x] Write unit tests
 
 ### D12 · CSV / TSV Specialist View
 
-- [ ] Create `src/components/devlens/views/CsvView.tsx`
-- [ ] Install `papaparse` for robust CSV parsing (handles quotes, newlines in fields, etc.)
-- [ ] Auto-detect delimiter (comma, semicolon, tab, pipe) based on consistency across first 5 rows
-- [ ] Render **Table view**: virtualized table (use `@tanstack/react-virtual` for large files) with sticky header row; sortable by clicking column header; show row/column counts
-- [ ] Implement column type inference: detect numeric, date, boolean, text columns; show type indicator in column header
-- [ ] For numeric columns: show sparkline chart (min/max/mean) inline in the column header using a tiny SVG sparkline (no chart library dep)
-- [ ] Implement **Filter** row: per-column text filter inputs below header
-- [ ] Implement **Export** tab: download as JSON array, JSON array of objects, or re-download as cleaned CSV
-- [ ] Write unit tests for parsing and type inference
+- [x] Create `src/components/devlens/views/CsvView.tsx`
+- [x] Install `papaparse` for robust CSV parsing (handles quotes, newlines in fields, etc.)
+- [x] Auto-detect delimiter (comma, semicolon, tab, pipe) based on consistency across first 5 rows
+- [x] Render **Table view**: virtualized table (use `@tanstack/react-virtual` for large files) with sticky header row; sortable by clicking column header; show row/column counts
+- [x] Implement column type inference: detect numeric, date, boolean, text columns; show type indicator in column header
+- [x] For numeric columns: show sparkline chart (min/max/mean) inline in the column header using a tiny SVG sparkline (no chart library dep)
+- [x] Implement **Filter** row: per-column text filter inputs below header
+- [x] Implement **Export** tab: download as JSON array, JSON array of objects, or re-download as cleaned CSV
+- [x] Write unit tests for parsing and type inference
 
 ### D13 · Environment File Specialist View
 
-- [ ] Create `src/components/devlens/views/EnvView.tsx`
-- [ ] Parse `.env` format: handle comments (`#`), quoted values, multiline values (backslash continuation)
-- [ ] Render as two-column table: key | value; values masked by default (show `••••••`) with per-row reveal toggle
-- [ ] Show "Reveal all" / "Mask all" global toggle
-- [ ] Allow inline editing of values; show diff indicator if value changed from input
-- [ ] Implement **Compare** tab: paste a second `.env` file; show three-column diff: key, file A value, file B value; highlight keys present in only one file, and keys with different values
-- [ ] Export tab: download as `.env` or `.env.local` format; download as JSON (for loading into secrets manager)
-- [ ] Write unit tests for parsing edge cases
+- [x] Create `src/components/devlens/views/EnvView.tsx`
+- [x] Parse `.env` format: handle comments (`#`), quoted values, multiline values (backslash continuation)
+- [x] Render as two-column table: key | value; values masked by default (show `••••••`) with per-row reveal toggle
+- [x] Show "Reveal all" / "Mask all" global toggle
+- [x] Allow inline editing of values; show diff indicator if value changed from input
+- [x] Implement **Compare** tab: paste a second `.env` file; show three-column diff: key, file A value, file B value; highlight keys present in only one file, and keys with different values
+- [x] Export tab: download as `.env` or `.env.local` format; download as JSON (for loading into secrets manager)
+- [x] Write unit tests for parsing edge cases
 
 ### D14 · Cron Expression Specialist View
 
-- [ ] Create `src/components/devlens/views/CronView.tsx`
-- [ ] Install `croner` package (supports standard 5-field and extended 6-field cron, no Node.js deps, works in browser)
-- [ ] Show human-readable description of the cron expression (e.g., "Every Monday at 9:00 AM")
-- [ ] Show next 15 trigger times in a list (in UTC and user's local timezone)
-- [ ] Show "time until next trigger" countdown
-- [ ] Implement visual cron builder: 5 field inputs (minute, hour, day, month, weekday) with dropdowns for common values; updates the expression string in real-time
-- [ ] Show "Invalid cron expression" error state
-- [ ] Write unit tests
+- [x] Create `src/components/devlens/views/CronView.tsx`
+- [x] Install `croner` package (supports standard 5-field and extended 6-field cron, no Node.js deps, works in browser)
+- [x] Show human-readable description of the cron expression (e.g., "Every Monday at 9:00 AM")
+- [x] Show next 15 trigger times in a list (in UTC and user's local timezone)
+- [x] Show "time until next trigger" countdown
+- [x] Implement visual cron builder: 5 field inputs (minute, hour, day, month, weekday) with dropdowns for common values; updates the expression string in real-time
+- [x] Show "Invalid cron expression" error state
+- [x] Write unit tests
 
 ### D15 · SQL Specialist View
 
-- [ ] Create `src/components/devlens/views/SqlView.tsx`
-- [ ] Install `sql-formatter` package for formatting
-- [ ] Format the SQL with proper indentation and capitalization; show in syntax-highlighted code block
-- [ ] Show query type badge: SELECT / INSERT / UPDATE / DELETE / DDL
-- [ ] For SELECT: show table names referenced, column names, WHERE conditions, JOINs — all as a structured breakdown
-- [ ] Implement dialect selector: MySQL, PostgreSQL, SQLite, BigQuery — changes formatting rules
-- [ ] Write unit tests
+- [x] Create `src/components/devlens/views/SqlView.tsx`
+- [x] Install `sql-formatter` package for formatting
+- [x] Format the SQL with proper indentation and capitalization; show in syntax-highlighted code block
+- [x] Show query type badge: SELECT / INSERT / UPDATE / DELETE / DDL
+- [x] For SELECT: show table names referenced, column names, WHERE conditions, JOINs — all as a structured breakdown
+- [x] Implement dialect selector: MySQL, PostgreSQL, SQLite, BigQuery — changes formatting rules
+- [x] Write unit tests
 
 ### D16 · PEM Certificate Specialist View
 
-- [ ] Create `src/components/devlens/views/PemView.tsx`
-- [ ] Install `pkijs` and `asn1js` packages (pure JS, browser-compatible ASN.1/PKI parsing)
-- [ ] Parse X.509 certificate fields: Subject, Issuer, Serial Number, Validity (Not Before / Not After), Public Key Algorithm, Key Size, Signature Algorithm, Subject Alternative Names (SANs), Key Usage, Extended Key Usage, Basic Constraints
-- [ ] Show "Expires in X days" / "Expired X days ago" countdown with color coding
-- [ ] Show fingerprint (SHA-256) computed client-side
-- [ ] Show whether it's a Root CA, Intermediate CA, or End-Entity certificate
-- [ ] For private keys: show key type and bit length only — never show the key material in plain text without explicit user action
-- [ ] Write unit tests
+- [x] Create `src/components/devlens/views/PemView.tsx`
+- [x] Install `pkijs` and `asn1js` packages (pure JS, browser-compatible ASN.1/PKI parsing)
+- [x] Parse X.509 certificate fields: Subject, Issuer, Serial Number, Validity (Not Before / Not After), Public Key Algorithm, Key Size, Signature Algorithm, Subject Alternative Names (SANs), Key Usage, Extended Key Usage, Basic Constraints
+- [x] Show "Expires in X days" / "Expired X days ago" countdown with color coding
+- [x] Show fingerprint (SHA-256) computed client-side
+- [x] Show whether it's a Root CA, Intermediate CA, or End-Entity certificate
+- [x] For private keys: show key type and bit length only — never show the key material in plain text without explicit user action
+- [x] Write unit tests
 
 ---
 
@@ -360,78 +360,78 @@
 
 ### E1 · Shared Landing Page Template
 
-- [ ] Create `src/components/devlens/ToolLandingLayout.tsx` — reusable layout: hero with tool title + description, inline embedded tool, "How it works" section, educational content slot, FAQ slot, related tools section
-- [ ] Create `src/components/devlens/InlineTool.tsx` — renders the relevant specialist view with a paste input directly on the landing page (not requiring navigation to `/studio`)
-- [ ] Create `src/lib/devlens/toolMeta.ts` — registry of all DevLens tool metadata: slug, title, description, targetKeywords, faqs, relatedSlugs
-- [ ] Implement JSON-LD `FAQPage` structured data block on each landing page
-- [ ] Implement JSON-LD `SoftwareApplication` structured data on each landing page
+- [x] Create `src/components/devlens/ToolLandingLayout.tsx` — reusable layout: hero with tool title + description, inline embedded tool, "How it works" section, educational content slot, FAQ slot, related tools section
+- [x] Create `src/components/devlens/InlineTool.tsx` — renders the relevant specialist view with a paste input directly on the landing page (not requiring navigation to `/studio`)
+- [x] Create `src/lib/devlens/toolMeta.ts` — registry of all DevLens tool metadata: slug, title, description, targetKeywords, faqs, relatedSlugs
+- [x] Implement JSON-LD `FAQPage` structured data block on each landing page
+- [x] Implement JSON-LD `SoftwareApplication` structured data on each landing page
 
 ### E2 · JWT Decoder Landing Page
 
-- [ ] Create `src/app/tools/jwt-decoder/page.tsx`
-- [ ] Write full educational content: what is a JWT, the three-part structure, signing algorithms, security pitfalls (alg:none attack, key confusion), when to use each algorithm
-- [ ] Write FAQ: "Is my JWT sent to your server?", "How do I validate a JWT?", "What does the exp claim mean?", etc.
-- [ ] Target keywords in content naturally: "decode jwt online", "jwt token debugger", "jwt claims explained", "decode jwt without secret"
+- [x] Create `src/app/tools/jwt-decoder/page.tsx`
+- [x] Write full educational content: what is a JWT, the three-part structure, signing algorithms, security pitfalls (alg:none attack, key confusion), when to use each algorithm
+- [x] Write FAQ: "Is my JWT sent to your server?", "How do I validate a JWT?", "What does the exp claim mean?", etc.
+- [x] Target keywords in content naturally: "decode jwt online", "jwt token debugger", "jwt claims explained", "decode jwt without secret"
 
 ### E3 · JSON Query Tool Landing Page
 
-- [ ] Create `src/app/tools/json-query/page.tsx`
-- [ ] Write full educational content: JSON syntax, JSONPath syntax guide with examples, common JSON errors and how to fix them
-- [ ] Target keywords: "jsonpath online tester", "query json online", "json formatter", "json to table online", "json validator"
+- [x] Create `src/app/tools/json-query/page.tsx`
+- [x] Write full educational content: JSON syntax, JSONPath syntax guide with examples, common JSON errors and how to fix them
+- [x] Target keywords: "jsonpath online tester", "query json online", "json formatter", "json to table online", "json validator"
 
 ### E4 · Regex Tester Landing Page
 
-- [ ] Create `src/app/tools/regex-tester/page.tsx`
-- [ ] Write full educational content: regex syntax guide for all major token types, common patterns (email, URL, date, phone), flag explanations, lookahead/lookbehind guide
-- [ ] Target keywords: "regex tester online", "test regular expression", "regex debugger", "regex explained"
+- [x] Create `src/app/tools/regex-tester/page.tsx`
+- [x] Write full educational content: regex syntax guide for all major token types, common patterns (email, URL, date, phone), flag explanations, lookahead/lookbehind guide
+- [x] Target keywords: "regex tester online", "test regular expression", "regex debugger", "regex explained"
 
 ### E5 · Unix Timestamp Converter Landing Page
 
-- [ ] Create `src/app/tools/timestamp-converter/page.tsx`
-- [ ] Write educational content: what is Unix epoch time, why milliseconds vs seconds, timezone gotchas
-- [ ] Target keywords: "unix timestamp converter", "epoch time to date", "timestamp to human readable date"
+- [x] Create `src/app/tools/timestamp-converter/page.tsx`
+- [x] Write educational content: what is Unix epoch time, why milliseconds vs seconds, timezone gotchas
+- [x] Target keywords: "unix timestamp converter", "epoch time to date", "timestamp to human readable date"
 
 ### E6 · Base64 Encoder/Decoder Landing Page
 
-- [ ] Create `src/app/tools/base64/page.tsx`
-- [ ] Write educational content: what is Base64, when it's used (JWT, data URLs, email attachments), size overhead, URL-safe vs standard alphabet
-- [ ] Target keywords: "base64 decode online", "base64 encoder decoder", "decode base64 string"
+- [x] Create `src/app/tools/base64/page.tsx`
+- [x] Write educational content: what is Base64, when it's used (JWT, data URLs, email attachments), size overhead, URL-safe vs standard alphabet
+- [x] Target keywords: "base64 decode online", "base64 encoder decoder", "decode base64 string"
 
 ### E7 · Environment File Editor Landing Page
 
-- [ ] Create `src/app/tools/env-file-editor/page.tsx`
-- [ ] Write educational content: .env file format spec, security best practices, .env vs .env.local vs .env.production
-- [ ] Target keywords: "env file editor online", "compare env files", ".env file formatter"
+- [x] Create `src/app/tools/env-file-editor/page.tsx`
+- [x] Write educational content: .env file format spec, security best practices, .env vs .env.local vs .env.production
+- [x] Target keywords: "env file editor online", "compare env files", ".env file formatter"
 
 ### E8 · URL Decoder Landing Page
 
-- [ ] Create `src/app/tools/url-decoder/page.tsx`
-- [ ] Write educational content: percent encoding spec, common encoded characters, when to URL encode
-- [ ] Target keywords: "url decoder online", "url encode decode", "percent decode url"
+- [x] Create `src/app/tools/url-decoder/page.tsx`
+- [x] Write educational content: percent encoding spec, common encoded characters, when to URL encode
+- [x] Target keywords: "url decoder online", "url encode decode", "percent decode url"
 
 ### E9 · UUID Generator/Inspector Landing Page
 
-- [ ] Create `src/app/tools/uuid/page.tsx`
-- [ ] Write educational content: UUID versions, v4 vs v7, ULID comparison, monotonicity for DB primary keys
-- [ ] Target keywords: "uuid generator online", "uuid v4 vs v7", "inspect uuid version"
+- [x] Create `src/app/tools/uuid/page.tsx`
+- [x] Write educational content: UUID versions, v4 vs v7, ULID comparison, monotonicity for DB primary keys
+- [x] Target keywords: "uuid generator online", "uuid v4 vs v7", "inspect uuid version"
 
 ### E10 · Color Tools Landing Page
 
-- [ ] Create `src/app/tools/color/page.tsx`
-- [ ] Write educational content: hex vs RGB vs HSL, WCAG contrast requirements, OKLCH for perceptual uniformity
-- [ ] Target keywords: "hex to rgb converter", "color contrast checker", "hex color inspector"
+- [x] Create `src/app/tools/color/page.tsx`
+- [x] Write educational content: hex vs RGB vs HSL, WCAG contrast requirements, OKLCH for perceptual uniformity
+- [x] Target keywords: "hex to rgb converter", "color contrast checker", "hex color inspector"
 
 ### E11 · Cron Expression Builder Landing Page
 
-- [ ] Create `src/app/tools/cron/page.tsx`
-- [ ] Write educational content: cron syntax, 5 vs 6 field formats, common patterns, timezone behaviour
-- [ ] Target keywords: "cron expression builder", "cron tester online", "cron schedule visualizer"
+- [x] Create `src/app/tools/cron/page.tsx`
+- [x] Write educational content: cron syntax, 5 vs 6 field formats, common patterns, timezone behaviour
+- [x] Target keywords: "cron expression builder", "cron tester online", "cron schedule visualizer"
 
 ### E12 · Certificate Inspector Landing Page
 
-- [ ] Create `src/app/tools/certificate-inspector/page.tsx`
-- [ ] Write educational content: X.509 structure, certificate chain, TLS SNI, common validation errors
-- [ ] Target keywords: "x509 certificate decoder online", "pem certificate viewer", "ssl certificate inspector"
+- [x] Create `src/app/tools/certificate-inspector/page.tsx`
+- [x] Write educational content: X.509 structure, certificate chain, TLS SNI, common validation errors
+- [x] Target keywords: "x509 certificate decoder online", "pem certificate viewer", "ssl certificate inspector"
 
 ---
 

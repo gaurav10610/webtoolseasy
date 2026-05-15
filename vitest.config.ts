@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    setupFiles: ["reflect-metadata"],
     exclude: [
       "**/node_modules/**",
       "**/e2e/**",
