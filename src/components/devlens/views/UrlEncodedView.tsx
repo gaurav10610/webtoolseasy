@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { Badge } from "@/components/ui/Badge";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Panel } from "@/components/ui/Panel";
 
@@ -16,7 +17,11 @@ export function UrlEncodedView({ input }: UrlEncodedViewProps) {
         const url = new URL(input);
         return {
           type: "url" as const,
-          rows: Array.from(url.searchParams.entries()),
+          rows: Array.from(url.searchParams.entries()).map(([key, value]) => ({
+            key,
+            value,
+            doubleEncoded: /%[0-9A-Fa-f]{2}/.test(value),
+          })),
           summary: `${url.protocol}//${url.host}${url.pathname}`,
         };
       }
@@ -26,13 +31,21 @@ export function UrlEncodedView({ input }: UrlEncodedViewProps) {
       );
       return {
         type: "query" as const,
-        rows: Array.from(params.entries()),
+        rows: Array.from(params.entries()).map(([key, value]) => ({
+          key,
+          value,
+          doubleEncoded: /%[0-9A-Fa-f]{2}/.test(value),
+        })),
         summary: "Query string",
       };
     } catch (error) {
       return {
         type: "error" as const,
-        rows: [] as Array<[string, string]>,
+        rows: [] as Array<{
+          key: string;
+          value: string;
+          doubleEncoded: boolean;
+        }>,
         summary:
           error instanceof Error ? error.message : "Invalid URL encoding",
       };
@@ -60,17 +73,19 @@ export function UrlEncodedView({ input }: UrlEncodedViewProps) {
             No query parameters found.
           </div>
         ) : (
-          parsed.rows.map(([key, value]) => (
+          parsed.rows.map(({ key, value, doubleEncoded }) => (
             <div
               key={`${key}-${value}`}
               className="rounded-2xl border border-white/10 bg-black/20 p-3"
             >
               <div className="flex items-center justify-between gap-3">
-                <div className="text-sm font-semibold text-white">{key}</div>
-                <CopyButton
-                  text={decodeURIComponent(value)}
-                  label="Copy decoded"
-                />
+                <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                  <span>{key}</span>
+                  {doubleEncoded ? (
+                    <Badge variant="warning">Double-encoded</Badge>
+                  ) : null}
+                </div>
+                <CopyButton text={safeDecode(value)} label="Copy decoded" />
               </div>
               <div className="mt-2 grid gap-2 md:grid-cols-2">
                 <div>
@@ -86,14 +101,28 @@ export function UrlEncodedView({ input }: UrlEncodedViewProps) {
                     Decoded
                   </div>
                   <div className="mt-1 break-words text-sm text-gray-100">
-                    {decodeURIComponent(value)}
+                    {safeDecode(value)}
                   </div>
                 </div>
               </div>
+              {doubleEncoded ? (
+                <p className="mt-2 text-xs leading-5 text-amber-200">
+                  This value still contains percent-encoded bytes after one
+                  decode. Try decoding it twice.
+                </p>
+              ) : null}
             </div>
           ))
         )}
       </div>
     </Panel>
   );
+}
+
+function safeDecode(value: string) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
 }

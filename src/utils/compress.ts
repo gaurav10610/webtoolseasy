@@ -1,9 +1,4 @@
-import {
-  compress as gzipCompress,
-  decompress as gzipDecompress,
-  strToU8,
-  strFromU8,
-} from "fflate";
+import { gzipSync, gunzipSync, strToU8, strFromU8 } from "fflate";
 
 function toBase64Url(bytes: Uint8Array): string {
   let binary = "";
@@ -32,12 +27,12 @@ function fromBase64Url(value: string): Uint8Array {
 
 export function compress(value: string): string {
   const input = strToU8(value);
-  const output = gzipCompress(input, { level: 9 });
+  const output = gzipSync(input, { level: 9 });
   return toBase64Url(output);
 }
 
 export function decompress(value: string): string {
   const input = fromBase64Url(value);
-  const output = gzipDecompress(input);
+  const output = gunzipSync(input);
   return strFromU8(output);
 }
