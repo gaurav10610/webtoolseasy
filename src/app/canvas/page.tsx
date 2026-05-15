@@ -1,16 +1,15 @@
 import { Metadata } from 'next';
-import { PipelineCanvas } from '@/components/canvas/PipelineCanvas';
-import Link from 'next/link';
+import { ArchitectureCanvas } from '@/components/canvas/ArchitectureCanvas';
 
 export const metadata: Metadata = {
-  title: 'Pipeline Canvas | WebToolsEasy — Chain Developer Tools Together',
-  description: 'Drag and drop developer tools onto an interactive canvas to create custom data transformation pipelines. 100% client-side processing.',
+  title: 'Visual Cloud Architecture Estimator | ArchCost',
+  description: 'Drag and drop AWS resources onto a canvas to instantly visualize your architecture and calculate real-time monthly costs.',
 };
 
 export default function CanvasPage() {
   return (
     <main className="w-full h-screen bg-[#0A0A0B] flex flex-col">
-      <PipelineCanvas />
+      <ArchitectureCanvas />
     </main>
   );
 }
