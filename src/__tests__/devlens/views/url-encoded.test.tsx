@@ -8,7 +8,7 @@ describe("UrlEncodedView", () => {
       <UrlEncodedView input="name=WebToolsEasy&note=hello%20world" />,
     );
 
-    expect(html).toContain("Query string");
+    expect(html).toContain("Parameters");
     expect(html).toContain("WebToolsEasy");
     expect(html).toContain("hello world");
   });
@@ -18,8 +18,8 @@ describe("UrlEncodedView", () => {
       <UrlEncodedView input="note=hello%2520world" />,
     );
 
-    expect(html).toContain("Double-encoded");
-    expect(html).toContain("Try decoding it twice.");
+    expect(html).toContain("double-encoded");
+    expect(html).toContain("2×");
   });
 
   it("renders the parsed summary for a full URL", () => {

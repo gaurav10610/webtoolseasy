@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS architectures (
+  id TEXT PRIMARY KEY,
+  slug TEXT UNIQUE NOT NULL,
+  data TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  view_count INTEGER DEFAULT 0
+);

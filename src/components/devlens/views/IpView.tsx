@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Panel } from "@/components/ui/Panel";
+import { lookupIpv4Geo } from "@/lib/devlens/ipGeo";
 
 type IpViewProps = {
   input: string;
@@ -249,6 +250,34 @@ function parseIp(input: string): ParsedIp {
 
 export function IpView({ input }: IpViewProps) {
   const parsed = useMemo(() => parseIp(input), [input]);
+  const [geo, setGeo] = useState<{
+    countryCode: string;
+    region: string | null;
+    city: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    if (parsed.kind !== "IPv4") {
+      setGeo(null);
+      return () => {
+        isCancelled = true;
+      };
+    }
+
+    lookupIpv4Geo(parsed.address)
+      .then((result) => {
+        if (!isCancelled) setGeo(result);
+      })
+      .catch(() => {
+        if (!isCancelled) setGeo(null);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [parsed]);
 
   if (parsed.kind === "Invalid") {
     return (
@@ -320,6 +349,37 @@ export function IpView({ input }: IpViewProps) {
                 </div>
                 <div className="mt-2 text-white">
                   {parsed.status.join(", ")}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                  Country
+                </div>
+                <div className="mt-2 text-white">
+                  {geo?.countryCode || "Unknown"}
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                  Region
+                </div>
+                <div className="mt-2 text-white">{geo?.region || "n/a"}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                  City
+                </div>
+                <div className="mt-2 text-white">{geo?.city || "n/a"}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+                  Reverse DNS hint
+                </div>
+                <div className="mt-2 text-white">
+                  Use dig -x {parsed.address}
                 </div>
               </div>
             </div>

@@ -8,9 +8,9 @@ describe("JsonView", () => {
       <JsonView input='{"name":"WebToolsEasy","items":[{"id":1,"tags":["a","b"]}]}' />,
     );
 
-    expect(html).toContain("Tree view");
-    expect(html).toContain("Top-level entries: 2");
-    expect(html).toContain("Total keys: 4");
+    expect(html).toContain("Tree");
+    expect(html).toContain("Entries: 2");
+    expect(html).toContain("Keys: 4");
     expect(html).toContain("Depth: 5");
     expect(html).toContain("object · 2");
     expect(html).toContain("items");

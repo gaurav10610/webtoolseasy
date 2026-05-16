@@ -1,26 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
-    const coopCoepHeaders = [
-      {
-        key: "Cross-Origin-Opener-Policy",
-        value: "same-origin",
-      },
-      {
-        key: "Cross-Origin-Embedder-Policy",
-        value: "require-corp",
-      },
-    ];
-    // No COOP/COEP headers needed – all tools use native WebCodecs API (no SharedArrayBuffer required)
+    // No COOP/COEP headers needed – all tools use native APIs
     return [];
   },
   async redirects() {
     return [
-      // Block Pyodide/internal asset requests from being treated as tool routes.
+      // Old tool URLs that map to new DevLens equivalents
       {
-        source: "/tools/:path((?:.*\\.js|.*\\.mjs|stackframe.*|pyodide.*))",
-        destination: "/404",
-        permanent: false,
+        source: "/tools/json-formatter",
+        destination: "/tools/json-query",
+        permanent: true,
+      },
+      {
+        source: "/tools/base64-encoder",
+        destination: "/tools/base64",
+        permanent: true,
+      },
+      {
+        source: "/tools/base64-decoder",
+        destination: "/tools/base64",
+        permanent: true,
       },
     ];
   },
@@ -39,9 +39,6 @@ const nextConfig = {
         as: "*.js",
       },
     },
-  },
-  experimental: {
-    optimizePackageImports: ["lodash-es"],
   },
 };
 

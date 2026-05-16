@@ -4,36 +4,37 @@ import {
   readdirSync,
   statSync,
   writeFileSync,
-} from "fs";
-import { getAllCategorySlugs } from "../src/data/categories";
-import { workflowPacks } from "../src/data/workflows";
+} from "node:fs";
+import { resolve } from "node:path";
+import { jwtClaims } from "../src/data/jwtClaims";
+import { regexPatterns } from "../src/data/regexPatterns";
+import { calculatorPages } from "../src/data/calculatorPages";
+import { architectureTemplates } from "../src/data/architectureTemplates";
+
+const HOST = "https://webtoolseasy.com";
 
 function convertDateFormat(isoDate: string) {
   const date = new Date(isoDate);
-  const isoString = date.toISOString(); // Example: 2025-05-06T11:52:24.125Z
-  const trimmed = isoString.split(".")[0]; // Remove milliseconds: "2025-05-06T11:52:24"
+  const isoString = date.toISOString();
+  const trimmed = isoString.split(".")[0];
   return `${trimmed}+00:00`;
 }
 
 function generateSitemap(
-  urlList: { loc: string; lastmod: string; priority?: string }[],
+  urlList: { loc: string; lastmod: string; priority?: string; changefreq?: string }[],
 ) {
   const header =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n` +
-    `        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"\n` +
-    `        xmlns:xhtml="http://www.w3.org/1999/xhtml"\n` +
-    `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"\n` +
-    `        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n`;
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
   const footer = `</urlset>`;
 
   const body = urlList
     .map(
-      (url) => `
-  <url>
+      (url) => `  <url>
     <loc>${url.loc}</loc>
     <lastmod>${url.lastmod}</lastmod>
+    <changefreq>${url.changefreq || "weekly"}</changefreq>
     <priority>${url.priority || "0.7000"}</priority>
   </url>`,
     )
@@ -54,18 +55,24 @@ function getMostRecentMtime(paths: string[]) {
   );
 }
 
+function getToolDirs() {
+  const toolsPath = resolve(process.cwd(), "src/app/tools");
+  if (!existsSync(toolsPath)) return [];
+  return readdirSync(toolsPath, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+}
+
 function updateSitemap() {
-  // Read existing sitemap to preserve lastmod for existing URLs
-  const sitemapPath = `${process.cwd()}/public/sitemap.xml`;
+  const sitemapPath = resolve(process.cwd(), "public/sitemap.xml");
   const existingUrlMap = new Map<
     string,
-    { lastmod?: string; priority?: string }
+    { lastmod?: string; priority?: string; changefreq?: string }
   >();
 
   if (existsSync(sitemapPath)) {
     try {
       const xml = readFileSync(sitemapPath, "utf-8");
-      // Naive XML parsing sufficient for our simple structure
       const urlRegex = /<url>([\s\S]*?)<\/url>/g;
       let match: RegExpExecArray | null;
       while ((match = urlRegex.exec(xml)) !== null) {
@@ -73,152 +80,114 @@ function updateSitemap() {
         const locMatch = block.match(/<loc>(.*?)<\/loc>/);
         if (!locMatch) continue;
         const loc = locMatch[1].trim();
-        const lastmodMatch = block.match(/<lastmod>(.*?)<\/lastmod>/);
-        const priorityMatch = block.match(/<priority>(.*?)<\/priority>/);
         existingUrlMap.set(loc, {
-          lastmod: lastmodMatch?.[1]?.trim(),
-          priority: priorityMatch?.[1]?.trim(),
+          lastmod: block.match(/<lastmod>(.*?)<\/lastmod>/)?.[1]?.trim(),
+          priority: block.match(/<priority>(.*?)<\/priority>/)?.[1]?.trim(),
+          changefreq: block.match(/<changefreq>(.*?)<\/changefreq>/)?.[1]?.trim(),
         });
       }
     } catch {
-      // If parsing fails, continue with empty map
-      console.warn(
-        "Warning: Failed to parse existing sitemap.xml. Proceeding without preserving lastmod.",
-      );
+      console.warn("Failed to parse existing sitemap.xml. Proceeding without preserving metadata.");
     }
   }
 
-  // Get tools from src/data/tools/*.ts
-  const toolsPath = `${process.cwd()}/src/data/tools`;
-  const toolUrls = readdirSync(toolsPath)
-    .filter((file) => file.endsWith(".ts"))
-    .map((file) => {
-      const toolSlug = file.replace(".ts", "");
-      const fileName = `tools/${toolSlug}`;
-      const loc = `https://webtoolseasy.com/${fileName}`;
-      const existing = existingUrlMap.get(loc);
-      return {
-        loc,
-        lastmod: getMostRecentMtime([
-          `${toolsPath}/${file}`,
-          `${process.cwd()}/src/components/tools/${toolSlug}.tsx`,
-        ]),
-        priority: existing?.priority,
-      };
-    });
+  const urlList: any[] = [];
 
-  // Get blogs from src/data/blog/config/*.ts
-  const blogConfigPath = `${process.cwd()}/src/data/blog/config`;
-  const blogUrls = readdirSync(blogConfigPath)
-    .filter((file) => file.endsWith(".ts"))
-    .map((file) => {
-      const fileName = `blog/${file.replace(".ts", "")}`;
-      const loc = `https://webtoolseasy.com/${fileName}`;
-      const existing = existingUrlMap.get(loc);
-      const contentMatch = readFileSync(
-        `${blogConfigPath}/${file}`,
-        "utf-8",
-      ).match(/contentFile:\s*"([^"]+)"/);
-      const contentFile = contentMatch?.[1];
-      return {
-        loc,
-        lastmod: getMostRecentMtime([
-          `${blogConfigPath}/${file}`,
-          ...(contentFile
-            ? [`${process.cwd()}/src/data/blog/content/${contentFile}`]
-            : []),
-        ]),
-        priority: existing?.priority,
-      };
-    });
-
-  // Get category pages from categories configuration
-  const categorySlugs = getAllCategorySlugs();
-  const categoryUrls = categorySlugs.map((slug) => {
-    const loc = `https://webtoolseasy.com/tools/category/${slug}`;
-    const existing = existingUrlMap.get(loc);
-    return {
-      loc,
-      lastmod: getMostRecentMtime([`${process.cwd()}/src/data/categories.ts`]),
-      priority: existing?.priority || "0.8000",
-    };
-  });
-
-  const workflowUrls = workflowPacks.map((workflow) => {
-    const loc = `https://webtoolseasy.com/workflows/${workflow.slug}`;
-    const existing = existingUrlMap.get(loc);
-    return {
-      loc,
-      lastmod: getMostRecentMtime([
-        `${process.cwd()}/src/data/workflows.ts`,
-        `${process.cwd()}/src/app/workflows/[slug]/page.tsx`,
-        `${process.cwd()}/src/components/workflows/WorkflowRunner.tsx`,
-      ]),
-      priority: existing?.priority || "0.8000",
-    };
-  });
-
-  const templateDetailUrls = workflowPacks.map((workflow) => {
-    const loc = `https://webtoolseasy.com/templates/${workflow.slug}`;
-    const existing = existingUrlMap.get(loc);
-    return {
-      loc,
-      lastmod: getMostRecentMtime([
-        `${process.cwd()}/src/data/workflows.ts`,
-        `${process.cwd()}/src/app/templates/[slug]/page.tsx`,
-      ]),
-      priority: existing?.priority || "0.7000",
-    };
-  });
-
-  const urlList = [
-    ...toolUrls,
-    ...blogUrls,
-    ...categoryUrls,
-    ...workflowUrls,
-    ...templateDetailUrls,
+  // Core Pages
+  const coreUrls = [
+    { path: "", priority: "1.0000", changefreq: "daily" },
+    { path: "/studio", priority: "0.9000", changefreq: "daily" },
+    { path: "/canvas", priority: "0.9000", changefreq: "daily" },
+    { path: "/privacy", priority: "0.5000", changefreq: "monthly" },
   ];
 
-  const commonUrls = [
-    {
-      loc: `https://webtoolseasy.com`,
-      lastmod: getMostRecentMtime([
-        `${process.cwd()}/src/app/page.tsx`,
-        `${process.cwd()}/src/data/apps.ts`,
-      ]),
-      priority: "1.0000",
-    },
-    {
-      loc: `https://webtoolseasy.com/blog`,
-      lastmod: getMostRecentMtime([
-        `${process.cwd()}/src/app/blog/page.tsx`,
-        `${process.cwd()}/src/data/blogPosts.ts`,
-      ]),
-      priority: "0.8000",
-    },
-    {
-      loc: `https://webtoolseasy.com/workflows`,
-      lastmod: getMostRecentMtime([
-        `${process.cwd()}/src/app/workflows/page.tsx`,
-        `${process.cwd()}/src/data/workflows.ts`,
-      ]),
-      priority: "0.9000",
-    },
-    {
-      loc: `https://webtoolseasy.com/templates`,
-      lastmod: getMostRecentMtime([
-        `${process.cwd()}/src/app/templates/page.tsx`,
-        `${process.cwd()}/src/data/workflows.ts`,
-      ]),
-      priority: "0.8000",
-    },
-  ];
+  coreUrls.forEach(({ path, priority, changefreq }) => {
+    const loc = `${HOST}${path}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), `src/app${path || "/page"}.tsx`)]),
+      priority: existingUrlMap.get(loc)?.priority || priority,
+      changefreq: existingUrlMap.get(loc)?.changefreq || changefreq,
+    });
+  });
 
-  urlList.unshift(...commonUrls);
+  // Tools Pages
+  const tools = getToolDirs();
+  tools.forEach((tool) => {
+    const loc = `${HOST}/tools/${tool}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), `src/app/tools/${tool}/page.tsx`)]),
+      priority: existingUrlMap.get(loc)?.priority || "0.8000",
+      changefreq: existingUrlMap.get(loc)?.changefreq || "weekly",
+    });
+  });
+
+  // Programmatic Index Pages
+  const indexes = [
+    { path: "/jwt/claims", src: "src/app/jwt/claims/page.tsx" },
+    { path: "/regex/patterns", src: "src/app/regex/patterns/page.tsx" },
+    { path: "/calculators", src: "src/app/calculators/page.tsx" },
+    { path: "/architectures", src: "src/app/architectures/page.tsx" },
+  ];
+  indexes.forEach(({ path, src }) => {
+    const loc = `${HOST}${path}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), src)]),
+      priority: existingUrlMap.get(loc)?.priority || "0.7000",
+      changefreq: existingUrlMap.get(loc)?.changefreq || "weekly",
+    });
+  });
+
+  // Programmatic Details Pages
+  // 1. JWT Claims
+  jwtClaims.forEach((claim) => {
+    const loc = `${HOST}/jwt/claims/${claim.id}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/jwtClaims.ts")]),
+      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      changefreq: "monthly",
+    });
+  });
+
+  // 2. Regex Patterns
+  regexPatterns.forEach((pattern) => {
+    const loc = `${HOST}/regex/patterns/${pattern.slug}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/regexPatterns.ts")]),
+      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      changefreq: "monthly",
+    });
+  });
+
+  // 3. Calculators
+  calculatorPages.forEach((calc) => {
+    const loc = `${HOST}/calculators/${calc.service.toLowerCase()}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/calculatorPages.ts")]),
+      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      changefreq: "monthly",
+    });
+  });
+
+  // 4. Architectures
+  architectureTemplates.forEach((template) => {
+    const loc = `${HOST}/architectures/${template.slug}`;
+    urlList.push({
+      loc,
+      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/architectureTemplates.ts")]),
+      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      changefreq: "monthly",
+    });
+  });
 
   const sitemap = generateSitemap(urlList);
-
-  writeFileSync(`${process.cwd()}/public/sitemap.xml`, sitemap);
+  writeFileSync(sitemapPath, sitemap);
+  console.log(`Generated sitemap with ${urlList.length} URLs.`);
 }
 
 updateSitemap();

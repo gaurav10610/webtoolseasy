@@ -15,7 +15,7 @@ describe("TimestampView", () => {
     expect(html).toContain("Asia/Tokyo");
     expect(html).toContain("Unix seconds");
     expect(html).toContain("Unix milliseconds");
-    expect(html).toContain("Microseconds");
+    expect(html).toContain("Unix microseconds");
   });
 
   it("rejects invalid timestamps", () => {

@@ -5,10 +5,10 @@ Thanks for helping improve WebToolsEasy.
 ## Ways to Contribute
 
 - Report bugs.
-- Suggest or design new tools.
 - Improve accessibility, performance, and SEO.
 - Add or improve tests.
-- Improve docs and examples.
+- Add new Specialist Views to DevLens (see [Adding a DevLens View](docs/ADDING_A_DEVLENS_VIEW.md)).
+- Add new AWS Services to ArchCost (see [Adding an ArchCost Service](docs/ADDING_AN_ARCHCOST_SERVICE.md)).
 
 ## Development Setup
 
@@ -56,9 +56,9 @@ PRs should include:
 ## Tool Contribution Expectations
 
 - Keep tool metadata accurate and user-focused.
-- Prefer browser-side/local processing for privacy.
-- Ensure tool pages have clear headings and useful content.
-- Add or update tests for major new behaviors.
+- **Privacy First**: Ensure all processing happens locally in the browser (zero-trust architecture). No raw payload uploads.
+- **Documentation**: Provide a detailed explanation for users on what their input actually means, not just a decoded output.
+- Follow the guidelines in the specific contributing files in `docs/`.
 
 ## Code Style
 

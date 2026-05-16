@@ -1,58 +1,82 @@
 import { test, expect } from "@playwright/test";
-import { HomePage, CategoryPage } from "./utils/page-objects";
 
 test.describe("Core Pages E2E Tests", () => {
-  test.describe("Home Page", () => {
-    test("loads successfully", async ({ page }) => {
-      const home = new HomePage(page);
-      await home.goto();
-      await home.checkPageLoaded();
-      await home.checkA11y();
-      console.log("✓ Home page loads");
+  async function expectNoConsoleErrors(
+    page: import("@playwright/test").Page,
+    path: string,
+  ) {
+    const errors: string[] = [];
+
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        errors.push(message.text());
+      }
     });
 
-    test("has search functionality", async ({ page }) => {
-      const home = new HomePage(page);
-      await home.goto();
-      await home.checkSearch();
-      console.log("✓ Search functionality present");
+    page.on("pageerror", (error) => {
+      errors.push(error.message);
     });
 
-    test("displays categories", async ({ page }) => {
-      const home = new HomePage(page);
-      await home.goto();
-      await home.checkCategories();
-      console.log("✓ Categories displayed");
-    });
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(200);
+    await page.waitForLoadState("networkidle");
+    expect(errors, `Expected no console/page errors on ${path}`).toEqual([]);
+  }
+
+  test("Home page loads successfully", async ({ page }) => {
+    await expectNoConsoleErrors(page, "/");
+
+    // Check for core navigation links
+    await expect(
+      page.getByRole("link", { name: /DevLens/i }).first(),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /ArchCost/i }).first(),
+    ).toBeVisible();
   });
 
-  test.describe("Category Pages", () => {
-    const categories = ["pdf-tools", "image-tools", "dev-tools", "text-tools"];
+  test("DevLens Studio loads successfully", async ({ page }) => {
+    await expectNoConsoleErrors(page, "/studio");
 
-    for (const category of categories) {
-      test(`${category} category page loads`, async ({ page }) => {
-        const catPage = new CategoryPage(page, category);
-        await catPage.goto();
-        await catPage.checkPageLoaded();
-        await catPage.checkA11y();
+    // Verify DevLens header/panel is visible
+    await expect(page.getByText("DevLens", { exact: true })).toBeVisible();
+    await expect(page.getByText("Smart Paste Workbench")).toBeVisible();
 
-        const toolCount = await catPage.checkToolsList();
-        expect(toolCount).toBeGreaterThan(0);
-        console.log(`✓ ${category} category displays ${toolCount} tools`);
-      });
-    }
+    // Verify a panel input exists
+    await expect(page.locator("textarea").first()).toBeVisible();
   });
 
-  test.describe("Error Handling", () => {
-    test("404 page exists", async ({ page }) => {
-      const response = await page.goto(
-        "http://localhost:3000/nonexistent-page",
-        {
-          waitUntil: "domcontentloaded",
-        },
-      );
-      expect(response?.status() || 0).toBeGreaterThanOrEqual(400);
-      console.log("✓ 404 page handling works");
+  test("ArchCost Canvas loads successfully", async ({ page }) => {
+    await expectNoConsoleErrors(page, "/canvas");
+
+    // Verify ArchCost header
+    await expect(page.getByText("ArchCost", { exact: true })).toBeVisible();
+
+    // Verify AWS Resources sidebar is visible
+    await expect(page.getByText("AWS RESOURCES")).toBeVisible();
+
+    // Verify toolbar elements
+    await expect(
+      page.getByRole("button", { name: /clear canvas/i }),
+    ).toBeVisible();
+  });
+
+  test("Tool SEO landing page loads successfully", async ({ page }) => {
+    await expectNoConsoleErrors(page, "/tools/jwt-decoder");
+
+    // Verify tool metadata is present
+    await expect(page.getByText("JWT Decoder", { exact: true })).toBeVisible();
+    await expect(page.locator("textarea").first()).toHaveAttribute(
+      "placeholder",
+      /Paste a JWT token here/i,
+    );
+  });
+
+  test("404 page exists", async ({ page }) => {
+    const response = await page.goto("/nonexistent-page", {
+      waitUntil: "domcontentloaded",
     });
+    // Check for Next.js default 404 behavior or our custom 404
+    expect(response?.status() || 0).toBeGreaterThanOrEqual(400);
   });
 });

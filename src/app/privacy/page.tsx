@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Privacy | WebToolsEasy",
   description:
     "How WebToolsEasy keeps developer data local-first and minimizes server-side exposure.",
+  alternates: {
+    canonical: "https://webtoolseasy.com/privacy",
+  },
 };
 
 export default function PrivacyPage() {

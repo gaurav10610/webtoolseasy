@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "WebToolsEasy | DevLens and ArchCost",
   description:
     "A privacy-first developer studio for smart data inspection and cloud cost planning. Paste anything, understand everything, and plan confidently.",
+  alternates: {
+    canonical: "https://webtoolseasy.com/",
+  },
 };
 
 const featureGroups = [

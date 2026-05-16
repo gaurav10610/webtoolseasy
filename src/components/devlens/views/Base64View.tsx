@@ -142,12 +142,44 @@ export function Base64View({ input }: Base64ViewProps) {
   const [mode, setMode] = useState<"decode" | "encode">(initialMode);
   const [encodeInput, setEncodeInput] = useState(input);
   const [showPrettyJson, setShowPrettyJson] = useState(false);
+  const [fileDataUrl, setFileDataUrl] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   useEffect(() => {
     setEncodeInput(input);
     setShowPrettyJson(false);
     setMode(initialMode);
+    setFileDataUrl(null);
+    setFileName(null);
+    setFileError(null);
   }, [input, initialMode]);
+
+  const handleFileEncode = (file?: File) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const resultValue =
+        typeof reader.result === "string" ? reader.result : "";
+      if (!resultValue.startsWith("data:")) {
+        setFileError("Unable to convert file to a Base64 data URL.");
+        setFileDataUrl(null);
+        setFileName(null);
+        return;
+      }
+      setFileError(null);
+      setFileDataUrl(resultValue);
+      setFileName(file.name);
+    };
+    reader.onerror = () => {
+      setFileError("Failed to read the selected file.");
+      setFileDataUrl(null);
+      setFileName(null);
+    };
+
+    reader.readAsDataURL(file);
+  };
 
   const result = useMemo(() => {
     try {
@@ -177,7 +209,7 @@ export function Base64View({ input }: Base64ViewProps) {
   }, [input]);
 
   if (mode === "encode") {
-    const encoded = encodeBase64(encodeInput);
+    const encoded = fileDataUrl ?? encodeBase64(encodeInput);
 
     return (
       <Panel title="Base64" subtitle="Encode text to Base64">
@@ -205,12 +237,58 @@ export function Base64View({ input }: Base64ViewProps) {
             className="w-full rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-white outline-none ring-0 placeholder:text-gray-500 focus:border-indigo-500/60"
             placeholder="Type text to encode"
           />
+          <label
+            htmlFor="base64-file-input"
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={(event) => {
+              event.preventDefault();
+              handleFileEncode(event.dataTransfer.files?.[0]);
+            }}
+            className="block cursor-pointer rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-4 text-sm text-gray-300 transition-colors hover:border-indigo-400/50 hover:bg-indigo-500/5"
+          >
+            <div className="font-semibold text-white">
+              Encode file to data URL
+            </div>
+            <p className="mt-1 text-xs text-gray-400">
+              Drag and drop a file here, or click to choose a file.
+            </p>
+            <input
+              id="base64-file-input"
+              type="file"
+              className="hidden"
+              onChange={(event) => handleFileEncode(event.target.files?.[0])}
+            />
+          </label>
+          {fileError ? (
+            <p className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-200">
+              {fileError}
+            </p>
+          ) : null}
+          {fileDataUrl ? (
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">
+              File encoded: {fileName || "selected file"}
+            </div>
+          ) : null}
           <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
             <div className="flex items-center justify-between gap-3">
               <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                Encoded output
+                Encoded output {fileDataUrl ? "(data URL)" : ""}
               </div>
-              <CopyButton text={encoded} label="Copy encoded" />
+              <div className="flex items-center gap-2">
+                {fileDataUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFileDataUrl(null);
+                      setFileName(null);
+                    }}
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300 hover:bg-white/10"
+                  >
+                    Use text output
+                  </button>
+                ) : null}
+                <CopyButton text={encoded} label="Copy encoded" />
+              </div>
             </div>
             <pre className="mt-2 overflow-x-auto text-xs leading-6 text-gray-100">
               {encoded}

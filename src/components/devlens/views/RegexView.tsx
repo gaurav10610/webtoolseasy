@@ -88,7 +88,7 @@ function explainGroup(inner: string): string {
   return "Group";
 }
 
-function tokenizeRegex(
+export function tokenizeRegex(
   pattern: string,
 ): Array<{ token: string; description: string }> {
   const tokens: Array<{ token: string; description: string }> = [];
@@ -119,7 +119,7 @@ function tokenizeRegex(
   return tokens;
 }
 
-function parseRegexInput(input: string): ParsedRegex | RegexParseError {
+export function parseRegexInput(input: string): ParsedRegex | RegexParseError {
   const trimmed = input.trim();
   let pattern = trimmed;
   let flags = "";
@@ -150,7 +150,7 @@ type Match = {
   namedGroups: Record<string, string>;
 };
 
-function findMatches(regex: RegExp, text: string): Match[] {
+export function findMatches(regex: RegExp, text: string): Match[] {
   const matches: Match[] = [];
   const globalRegex = regex.flags.includes("g")
     ? regex

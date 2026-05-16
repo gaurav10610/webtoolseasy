@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { JwtView } from "./views/JwtView";
 import { JsonView } from "./views/JsonView";
 import { Base64View } from "./views/Base64View";
@@ -102,6 +103,10 @@ type InlineToolProps = {
 
 export function InlineTool({ toolType, defaultInput = "" }: InlineToolProps) {
   const [input, setInput] = useState(defaultInput);
+
+  useEffect(() => {
+    trackEvent("tool_landing_viewed", { tool_slug: toolType });
+  }, [toolType]);
 
   return (
     <div className="space-y-4">

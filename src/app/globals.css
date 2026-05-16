@@ -28,6 +28,20 @@
     background: rgba(79, 70, 229, 0.35);
     color: #ffffff;
   }
+
+  /* Smooth focus transitions */
+  input,
+  textarea,
+  select,
+  button {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  /* Accessible focus ring */
+  :focus-visible {
+    outline: 2px solid rgba(99, 102, 241, 0.5);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
@@ -44,5 +58,14 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ReactFlow canvas overrides */
+  .react-flow__node {
+    font-family: inherit;
+  }
+
+  .react-flow__attribution {
+    display: none;
   }
 }

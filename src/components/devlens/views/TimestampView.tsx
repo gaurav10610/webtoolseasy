@@ -19,7 +19,7 @@ const TIMEZONES = [
   { name: "Australia/Sydney", timeZone: "Australia/Sydney" },
 ] as const;
 
-function toDate(value: string): Date | null {
+export function toDate(value: string): Date | null {
   if (!/^\d+$/.test(value)) return null;
   const numeric = Number(value);
   if (value.length === 13) return new Date(numeric);
@@ -27,7 +27,7 @@ function toDate(value: string): Date | null {
   return new Date(numeric * 1000);
 }
 
-function formatRelativeTime(date: Date, now: Date) {
+export function formatRelativeTime(date: Date, now: Date) {
   const diffSeconds = Math.round((date.getTime() - now.getTime()) / 1000);
   const absolute = Math.abs(diffSeconds);
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
@@ -46,6 +46,13 @@ function formatInTimeZone(date: Date, timeZone: string) {
     dateStyle: "full",
     timeStyle: "long",
   }).format(date);
+}
+
+export function getRelativeColor(date: Date, now: Date): string {
+  const diff = date.getTime() - now.getTime();
+  if (diff < 0) return "text-gray-400";
+  if (diff < 3600 * 1000) return "text-amber-400";
+  return "text-emerald-400";
 }
 
 export function TimestampView({ input }: TimestampViewProps) {
@@ -100,6 +107,7 @@ export function TimestampView({ input }: TimestampViewProps) {
       action={<CopyButton text={iso} label="Copy ISO" />}
     >
       <div className="space-y-4">
+        {/* Main display */}
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
             ISO 8601
@@ -116,75 +124,19 @@ export function TimestampView({ input }: TimestampViewProps) {
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
             Relative time
           </div>
-          <div className="mt-2 text-lg text-white">
+          <div
+            className={`mt-2 text-lg font-semibold ${getRelativeColor(result.date, now)}`}
+          >
             {formatRelativeTime(result.date, now)}
           </div>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              RFC 2822
-            </div>
-            <div className="mt-2 break-words text-sm text-white">{rfc2822}</div>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              Reverse conversion
-            </div>
-            <div className="mt-2 space-y-3">
-              <input
-                type="datetime-local"
-                value={reverseInput}
-                onChange={(event) => setReverseInput(event.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-[#0b0b0c] px-3 py-2 text-sm text-white outline-none ring-0 placeholder:text-gray-500 focus:border-indigo-500/60"
-              />
-              {reverseValid ? (
-                <div className="flex flex-wrap gap-2 text-xs text-gray-400">
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    Unix seconds: {Math.floor(reverseDate.getTime() / 1000)}
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    Unix milliseconds: {reverseDate.getTime()}
-                  </span>
-                </div>
-              ) : (
-                <p className="text-xs text-gray-500">
-                  Pick a date and time to convert it back to Unix time.
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              Unix seconds
-            </div>
-            <div className="mt-2 text-white">{unixSeconds}</div>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              Unix milliseconds
-            </div>
-            <div className="mt-2 text-white">{unixMilliseconds}</div>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2 text-xs text-gray-400">
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-            Seconds: {unixSeconds}
-          </span>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-            Milliseconds: {unixMilliseconds}
-          </span>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-            Microseconds: {unixMilliseconds * 1000}
-          </span>
-        </div>
+
+        {/* Timezone grid */}
         <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
             Timezones
           </div>
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {TIMEZONES.map((zone) => (
               <div
                 key={zone.timeZone}
@@ -198,6 +150,98 @@ export function TimestampView({ input }: TimestampViewProps) {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Formats grid */}
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              RFC 2822
+            </div>
+            <div className="mt-2 flex items-center gap-2 break-words text-sm text-white">
+              <span>{rfc2822}</span>
+              <CopyButton text={rfc2822} label="Copy" />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              Reverse conversion
+            </div>
+            <div className="mt-2 space-y-3">
+              <input
+                type="datetime-local"
+                value={reverseInput}
+                onChange={(event) => setReverseInput(event.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-[#0b0b0c] px-3 py-2 text-sm text-white outline-none ring-0 placeholder:text-gray-500 focus:border-indigo-500/60"
+              />
+              {reverseValid ? (
+                <div className="space-y-2">
+                  <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                      Unix seconds: {Math.floor(reverseDate.getTime() / 1000)}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                      Unix milliseconds: {reverseDate.getTime()}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <CopyButton
+                      text={String(Math.floor(reverseDate.getTime() / 1000))}
+                      label="Copy seconds"
+                    />
+                    <CopyButton
+                      text={String(reverseDate.getTime())}
+                      label="Copy ms"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500">
+                  Pick a date and time to convert it back to Unix time.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* All formats */}
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              Unix seconds
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-white">
+              <span>{unixSeconds}</span>
+              <CopyButton text={String(unixSeconds)} label="Copy" />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              Unix milliseconds
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-white">
+              <span>{unixMilliseconds}</span>
+              <CopyButton text={String(unixMilliseconds)} label="Copy" />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              Unix microseconds
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-white">
+              <span>{unixMilliseconds * 1000}</span>
+              <CopyButton text={String(unixMilliseconds * 1000)} label="Copy" />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              ISO 8601
+            </div>
+            <div className="mt-2 flex items-center gap-2 text-white">
+              <span className="truncate">{iso}</span>
+              <CopyButton text={iso} label="Copy" />
+            </div>
           </div>
         </div>
       </div>

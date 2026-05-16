@@ -1,36 +1,76 @@
 "use client";
 
-import { useEffect } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  PointerEvent as ReactPointerEvent,
+} from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Panel } from "@/components/ui/Panel";
+import { Resizer } from "@/components/ui/Resizer";
 import { readClipboard } from "@/utils/clipboard";
 import { useDevLensStore, persistDevLensState } from "@/store/useDevLensStore";
 import { PanelContainer } from "./PanelContainer";
 import { HistoryDrawer } from "./HistoryDrawer";
 
 export function Studio() {
+  const [mounted, setMounted] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const panelContainerRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{
+    leftId: string;
+    rightId: string;
+    startX: number;
+    startLeft: number;
+    startRight: number;
+    containerWidth: number;
+  } | null>(null);
+
   const panels = useDevLensStore((state) => state.panels);
+  const panelWidths = useDevLensStore((state) => state.panelWidths);
   const history = useDevLensStore((state) => state.history);
   const addPanel = useDevLensStore((state) => state.addPanel);
   const removePanel = useDevLensStore((state) => state.removePanel);
+  const setPanelWidths = useDevLensStore((state) => state.setPanelWidths);
   const updatePanelInput = useDevLensStore((state) => state.updatePanelInput);
+  const addToHistory = useDevLensStore((state) => state.addToHistory);
   const restoreFromHistory = useDevLensStore(
     (state) => state.restoreFromHistory,
   );
 
   useEffect(() => {
-    persistDevLensState({
-      panels,
-      history,
-      addPanel,
-      removePanel,
-      updatePanelInput,
-      loadPanels: useDevLensStore.getState().loadPanels,
-      restoreFromHistory: useDevLensStore.getState().restoreFromHistory,
-    });
-  }, [panels, history, addPanel, removePanel, updatePanelInput]);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      persistDevLensState({
+        panels,
+        panelWidths,
+        history,
+        addPanel,
+        removePanel,
+        setPanelWidths,
+        updatePanelInput,
+        addToHistory,
+        loadPanels: useDevLensStore.getState().loadPanels,
+        restoreFromHistory: useDevLensStore.getState().restoreFromHistory,
+      });
+    }
+  }, [
+    mounted,
+    panels,
+    panelWidths,
+    history,
+    addPanel,
+    removePanel,
+    setPanelWidths,
+    updatePanelInput,
+    addToHistory,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = async (event: KeyboardEvent) => {
@@ -49,11 +89,88 @@ export function Studio() {
       if (!firstPanel) return;
 
       updatePanelInput(firstPanel.id, clipboardValue);
+      addToHistory(clipboardValue);
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [updatePanelInput]);
+  }, [updatePanelInput, addToHistory]);
+
+  const handleInputUpdate = (id: string, input: string) => {
+    updatePanelInput(id, input);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      addToHistory(input);
+    }, 1000);
+  };
+
+  const handleResizerPointerDown = (
+    leftId: string,
+    rightId: string,
+    startEvent: ReactPointerEvent<HTMLDivElement>,
+  ) => {
+    const container = panelContainerRef.current;
+    if (!container) return;
+
+    const width = container.getBoundingClientRect().width;
+    if (width <= 0) return;
+
+    const fallback = 100 / Math.max(1, panels.length);
+    dragRef.current = {
+      leftId,
+      rightId,
+      startX: startEvent.clientX,
+      startLeft: panelWidths[leftId] ?? fallback,
+      startRight: panelWidths[rightId] ?? fallback,
+      containerWidth: width,
+    };
+
+    const handleMove = (moveEvent: PointerEvent) => {
+      const drag = dragRef.current;
+      if (!drag) return;
+
+      const deltaPx = moveEvent.clientX - drag.startX;
+      const deltaPct = (deltaPx / drag.containerWidth) * 100;
+      const combined = drag.startLeft + drag.startRight;
+      const minPct = 18;
+
+      const nextLeft = Math.min(
+        combined - minPct,
+        Math.max(minPct, drag.startLeft + deltaPct),
+      );
+      const nextRight = combined - nextLeft;
+
+      setPanelWidths({
+        ...useDevLensStore.getState().panelWidths,
+        [drag.leftId]: Number(nextLeft.toFixed(4)),
+        [drag.rightId]: Number(nextRight.toFixed(4)),
+      });
+    };
+
+    const handleUp = () => {
+      dragRef.current = null;
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+    };
+
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp);
+  };
+
+  if (!mounted) {
+    return (
+      <main className="min-h-screen bg-[#0A0A0B] text-white">
+        <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-6 py-10">
+          <div className="animate-pulse space-y-6">
+            <div className="h-32 rounded-3xl bg-white/5"></div>
+            <div className="h-20 rounded-3xl bg-white/5"></div>
+            <div className="h-[680px] rounded-3xl bg-white/5"></div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white">
@@ -110,17 +227,40 @@ export function Studio() {
         <HistoryDrawer items={history} onSelect={restoreFromHistory} />
 
         <div
-          className={`grid gap-6 ${panels.length > 1 ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}
+          className="flex flex-col gap-6 lg:gap-0 lg:flex-row"
+          ref={panelContainerRef}
         >
-          {panels.map((panel) => (
-            <div key={panel.id} className="min-h-[680px]">
-              <PanelContainer
-                panel={panel}
-                onChange={(input) => updatePanelInput(panel.id, input)}
-                onRemove={() => removePanel(panel.id)}
-              />
-            </div>
-          ))}
+          {panels.map((panel, index) => {
+            const fallback = 100 / Math.max(1, panels.length);
+            const width = panelWidths[panel.id] ?? fallback;
+            const nextPanel = panels[index + 1];
+
+            return (
+              <div
+                key={panel.id}
+                className="flex w-full min-h-[680px] lg:w-auto"
+                style={{ flexBasis: `${width}%` }}
+              >
+                <div className="min-h-[680px] h-full w-full lg:pr-3">
+                  <PanelContainer
+                    panel={panel}
+                    onChange={(input) => handleInputUpdate(panel.id, input)}
+                    onRemove={() => removePanel(panel.id)}
+                  />
+                </div>
+                {nextPanel ? (
+                  <div className="hidden lg:flex items-stretch min-h-[680px]">
+                    <Resizer
+                      onPointerDown={(event) =>
+                        handleResizerPointerDown(panel.id, nextPanel.id, event)
+                      }
+                      className="self-stretch"
+                    />
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
       </div>
     </main>

@@ -1,9 +1,17 @@
-# Allow all URLs (see https://www.robotstxt.org/robotstxt.html)
+# WebToolsEasy Developer Studio
+# Privacy-first developer tools — all processing runs locally
+
 User-agent: *
 Disallow: /api/
 Allow: /
 
-# Specific bot directives for better crawling
+# Core pages
+# /            — Home
+# /studio      — DevLens workbench
+# /canvas      — ArchCost cloud cost planner
+# /tools/*     — DevLens tool landing pages
+# /privacy     — Privacy policy
+
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1

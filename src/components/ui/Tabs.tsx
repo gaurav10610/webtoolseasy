@@ -36,3 +36,30 @@ export function Tabs({ items, activeId, onChange, className = "" }: TabsProps) {
     </div>
   );
 }
+
+/**
+ * Convenience wrapper for simple string-based tabs.
+ * Accepts an array of tab labels and numeric index.
+ */
+type SimpleTabsProps = {
+  tabs: string[];
+  activeIndex: number;
+  onChange: (index: number) => void;
+  className?: string;
+};
+
+export function SimpleTabs({
+  tabs,
+  activeIndex,
+  onChange,
+  className = "",
+}: SimpleTabsProps) {
+  return (
+    <Tabs
+      items={tabs.map((label, i) => ({ id: String(i), label }))}
+      activeId={String(activeIndex)}
+      onChange={(id) => onChange(Number(id))}
+      className={className}
+    />
+  );
+}

@@ -1,9 +1,13 @@
-import { Metadata } from 'next';
-import { ArchitectureCanvas } from '@/components/canvas/ArchitectureCanvas';
+import { Metadata } from "next";
+import { ArchitectureCanvas } from "@/components/canvas/ArchitectureCanvas";
 
 export const metadata: Metadata = {
-  title: 'Visual Cloud Architecture Estimator | ArchCost',
-  description: 'Drag and drop AWS resources onto a canvas to instantly visualize your architecture and calculate real-time monthly costs.',
+  title: "Visual Cloud Architecture Estimator | ArchCost",
+  description:
+    "Drag and drop AWS resources onto a canvas to instantly visualize your architecture and calculate real-time monthly costs.",
+  alternates: {
+    canonical: "https://webtoolseasy.com/canvas",
+  },
 };
 
 export default function CanvasPage() {
