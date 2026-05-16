@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -43,6 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+  const gaId = process.env.GA_CODE?.trim() || process.env.NEXT_PUBLIC_GA_ID?.trim();
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -62,6 +64,7 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.className} bg-[#0A0A0B] text-gray-100 antialiased`}
       >
+        {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
         {plausibleDomain ? (
           <Script
             defer
