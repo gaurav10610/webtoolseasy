@@ -7,10 +7,10 @@ export function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="relative z-10 mx-auto border-b border-white/8 px-6">
+    <nav className="relative z-10 border-b border-white/8 bg-[#0A0A0B]/85 px-6 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)]">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
             <svg
               width="20"
               height="20"
@@ -32,7 +32,7 @@ export function Nav() {
               WebToolsEasy
             </div>
             <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
-              Developer Studio
+              DevLens + ArchCost in one suite
             </div>
           </div>
         </Link>
@@ -49,6 +49,30 @@ export function Nav() {
             className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
           >
             ArchCost
+          </Link>
+          <Link
+            href="/tools/jwt-decoder"
+            className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
+          >
+            JWT
+          </Link>
+          <Link
+            href="/tools/regex-tester"
+            className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
+          >
+            Regex
+          </Link>
+          <Link
+            href="/calculators"
+            className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
+          >
+            AWS Calculators
+          </Link>
+          <Link
+            href="/architectures"
+            className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
+          >
+            Templates
           </Link>
           <a
             href="https://github.com/gaurav10610/webtoolseasy"
@@ -100,6 +124,34 @@ export function Nav() {
             onClick={() => setMenuOpen(false)}
           >
             ArchCost
+          </Link>
+          <Link
+            href="/tools/jwt-decoder"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
+            onClick={() => setMenuOpen(false)}
+          >
+            JWT
+          </Link>
+          <Link
+            href="/tools/regex-tester"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
+            onClick={() => setMenuOpen(false)}
+          >
+            Regex
+          </Link>
+          <Link
+            href="/calculators"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
+            onClick={() => setMenuOpen(false)}
+          >
+            AWS Calculators
+          </Link>
+          <Link
+            href="/architectures"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
+            onClick={() => setMenuOpen(false)}
+          >
+            Architecture Templates
           </Link>
           <a
             href="https://github.com/gaurav10610/webtoolseasy"

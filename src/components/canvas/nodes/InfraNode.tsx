@@ -6,14 +6,15 @@ import { serviceRegistry } from "@/data/serviceRegistry";
 export function InfraNode({ id, data }: NodeProps<Node<InfraNodeData>>) {
   const { updateNodeConfig, deleteNode } = useArchitectureStore();
   const serviceDef = serviceRegistry[data.service];
+  const config = data.config ?? {};
   const color = serviceDef?.color || "from-gray-500 to-gray-600";
   const icon = serviceDef?.icon || "☁️";
   const displayName = serviceDef?.displayName || data.service;
   const showNoChargeBadge =
-    data.service === "ElasticBeanstalk" && !!data.config.noAdditionalCharge;
-  const showInfoOnlyBadge = !!data.config.infoOnly;
+    data.service === "ElasticBeanstalk" && !!config.noAdditionalCharge;
+  const showInfoOnlyBadge = !!config.infoOnly;
 
-  const purchaseOption = String(data.config.purchaseOption || "on-demand");
+  const purchaseOption = String(config.purchaseOption || "on-demand");
   const reservedSavingsText =
     purchaseOption === "reserved-1yr"
       ? "Reserved 1yr: ~30% savings"
@@ -24,14 +25,14 @@ export function InfraNode({ id, data }: NodeProps<Node<InfraNodeData>>) {
 
   const isEc2FreeTier =
     data.service === "EC2" &&
-    data.config.instanceType === "t3.micro" &&
-    Number(data.config.count || 0) <= 1 &&
-    Number(data.config.hoursPerMonth || 0) <= 750;
+    config.instanceType === "t3.micro" &&
+    Number(config.count || 0) <= 1 &&
+    Number(config.hoursPerMonth || 0) <= 750;
   const isRdsFreeTier =
     data.service === "RDS" &&
-    data.config.instanceType === "db.t3.micro" &&
-    !data.config.multiAZ &&
-    Number(data.config.storageGB || 0) <= 20;
+    config.instanceType === "db.t3.micro" &&
+    !config.multiAZ &&
+    Number(config.storageGB || 0) <= 20;
   const isFreeTierEligible = isEc2FreeTier || isRdsFreeTier;
 
   const postFreeTierCost = isFreeTierEligible
@@ -105,7 +106,7 @@ export function InfraNode({ id, data }: NodeProps<Node<InfraNodeData>>) {
                 <select
                   className="bg-black/50 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200"
                   value={
-                    data.config[field.key] ??
+                    config[field.key] ??
                     (serviceDef?.defaultConfig as any)?.[field.key] ??
                     ""
                   }
@@ -133,7 +134,7 @@ export function InfraNode({ id, data }: NodeProps<Node<InfraNodeData>>) {
                   max={field.max}
                   step={field.step || 1}
                   className="bg-black/50 border border-white/10 rounded px-2 py-1.5 text-xs text-gray-200"
-                  value={data.config[field.key]}
+                  value={config[field.key]}
                   onChange={(e) =>
                     handleChange(field.key, parseFloat(e.target.value) || 0)
                   }
@@ -149,7 +150,7 @@ export function InfraNode({ id, data }: NodeProps<Node<InfraNodeData>>) {
               >
                 <input
                   type="checkbox"
-                  checked={!!data.config[field.key]}
+                  checked={!!config[field.key]}
                   onChange={(e) => handleChange(field.key, e.target.checked)}
                 />
                 {field.label}

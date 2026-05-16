@@ -162,6 +162,126 @@ export function Studio() {
     return (
       <main className="min-h-screen bg-[#0A0A0B] text-white">
         <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-6 py-10">
+          <div className="flex items-center justify-between rounded-[28px] border border-white/10 bg-[#121214]/90 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-md">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                  <line x1="6" y1="6" x2="6.01" y2="6" />
+                  <line x1="6" y1="18" x2="6.01" y2="18" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-lg font-bold tracking-tight text-white">
+                  WebToolsEasy
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
+                  DevLens workspace
+                </div>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-3">
+              <Link
+                href="/canvas"
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                ArchCost
+              </Link>
+              <Badge variant="info">Local-first</Badge>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between rounded-[28px] border border-white/10 bg-[#121214]/90 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-md">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                  <line x1="6" y1="6" x2="6.01" y2="6" />
+                  <line x1="6" y1="18" x2="6.01" y2="18" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-lg font-bold tracking-tight text-white">
+                  WebToolsEasy
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
+                  DevLens workspace
+                </div>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-3">
+              <Link
+                href="/canvas"
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                ArchCost
+              </Link>
+              <Badge variant="info">Local-first</Badge>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between rounded-[28px] border border-white/10 bg-[#121214]/90 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-md">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                  <line x1="6" y1="6" x2="6.01" y2="6" />
+                  <line x1="6" y1="18" x2="6.01" y2="18" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-lg font-bold tracking-tight text-white">
+                  WebToolsEasy
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
+                  ArchCost workspace
+                </div>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-3">
+              <Link
+                href="/studio"
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                DevLens
+              </Link>
+              <Badge variant="info">Local-first</Badge>
+            </div>
+          </div>
+
           <div className="animate-pulse space-y-6">
             <div className="h-32 rounded-3xl bg-white/5"></div>
             <div className="h-20 rounded-3xl bg-white/5"></div>

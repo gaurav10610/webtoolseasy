@@ -21,7 +21,12 @@ function convertDateFormat(isoDate: string) {
 }
 
 function generateSitemap(
-  urlList: { loc: string; lastmod: string; priority?: string; changefreq?: string }[],
+  urlList: {
+    loc: string;
+    lastmod: string;
+    priority?: string;
+    changefreq?: string;
+  }[],
 ) {
   const header =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
@@ -59,7 +64,13 @@ function getToolDirs() {
   const toolsPath = resolve(process.cwd(), "src/app/tools");
   if (!existsSync(toolsPath)) return [];
   return readdirSync(toolsPath, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
+    .filter(
+      (dirent) =>
+        dirent.isDirectory() &&
+        !dirent.name.startsWith("[") &&
+        !dirent.name.includes("...") &&
+        !dirent.name.includes("["),
+    )
     .map((dirent) => dirent.name);
 }
 
@@ -83,11 +94,15 @@ function updateSitemap() {
         existingUrlMap.set(loc, {
           lastmod: block.match(/<lastmod>(.*?)<\/lastmod>/)?.[1]?.trim(),
           priority: block.match(/<priority>(.*?)<\/priority>/)?.[1]?.trim(),
-          changefreq: block.match(/<changefreq>(.*?)<\/changefreq>/)?.[1]?.trim(),
+          changefreq: block
+            .match(/<changefreq>(.*?)<\/changefreq>/)?.[1]
+            ?.trim(),
         });
       }
     } catch {
-      console.warn("Failed to parse existing sitemap.xml. Proceeding without preserving metadata.");
+      console.warn(
+        "Failed to parse existing sitemap.xml. Proceeding without preserving metadata.",
+      );
     }
   }
 
@@ -105,9 +120,11 @@ function updateSitemap() {
     const loc = `${HOST}${path}`;
     urlList.push({
       loc,
-      lastmod: getMostRecentMtime([resolve(process.cwd(), `src/app${path || "/page"}.tsx`)]),
-      priority: existingUrlMap.get(loc)?.priority || priority,
-      changefreq: existingUrlMap.get(loc)?.changefreq || changefreq,
+      lastmod: getMostRecentMtime([
+        resolve(process.cwd(), `src/app${path || "/page"}.tsx`),
+      ]),
+      priority,
+      changefreq,
     });
   });
 
@@ -117,9 +134,11 @@ function updateSitemap() {
     const loc = `${HOST}/tools/${tool}`;
     urlList.push({
       loc,
-      lastmod: getMostRecentMtime([resolve(process.cwd(), `src/app/tools/${tool}/page.tsx`)]),
-      priority: existingUrlMap.get(loc)?.priority || "0.8000",
-      changefreq: existingUrlMap.get(loc)?.changefreq || "weekly",
+      lastmod: getMostRecentMtime([
+        resolve(process.cwd(), `src/app/tools/${tool}/page.tsx`),
+      ]),
+      priority: "0.8000",
+      changefreq: "weekly",
     });
   });
 
@@ -135,8 +154,8 @@ function updateSitemap() {
     urlList.push({
       loc,
       lastmod: getMostRecentMtime([resolve(process.cwd(), src)]),
-      priority: existingUrlMap.get(loc)?.priority || "0.7000",
-      changefreq: existingUrlMap.get(loc)?.changefreq || "weekly",
+      priority: "0.7000",
+      changefreq: "weekly",
     });
   });
 
@@ -146,8 +165,10 @@ function updateSitemap() {
     const loc = `${HOST}/jwt/claims/${claim.id}`;
     urlList.push({
       loc,
-      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/jwtClaims.ts")]),
-      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      lastmod: getMostRecentMtime([
+        resolve(process.cwd(), "src/data/jwtClaims.ts"),
+      ]),
+      priority: "0.6000",
       changefreq: "monthly",
     });
   });
@@ -157,8 +178,10 @@ function updateSitemap() {
     const loc = `${HOST}/regex/patterns/${pattern.slug}`;
     urlList.push({
       loc,
-      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/regexPatterns.ts")]),
-      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      lastmod: getMostRecentMtime([
+        resolve(process.cwd(), "src/data/regexPatterns.ts"),
+      ]),
+      priority: "0.6000",
       changefreq: "monthly",
     });
   });
@@ -168,8 +191,10 @@ function updateSitemap() {
     const loc = `${HOST}/calculators/${calc.service.toLowerCase()}`;
     urlList.push({
       loc,
-      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/calculatorPages.ts")]),
-      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      lastmod: getMostRecentMtime([
+        resolve(process.cwd(), "src/data/calculatorPages.ts"),
+      ]),
+      priority: "0.6000",
       changefreq: "monthly",
     });
   });
@@ -179,8 +204,10 @@ function updateSitemap() {
     const loc = `${HOST}/architectures/${template.slug}`;
     urlList.push({
       loc,
-      lastmod: getMostRecentMtime([resolve(process.cwd(), "src/data/architectureTemplates.ts")]),
-      priority: existingUrlMap.get(loc)?.priority || "0.6000",
+      lastmod: getMostRecentMtime([
+        resolve(process.cwd(), "src/data/architectureTemplates.ts"),
+      ]),
+      priority: "0.6000",
       changefreq: "monthly",
     });
   });

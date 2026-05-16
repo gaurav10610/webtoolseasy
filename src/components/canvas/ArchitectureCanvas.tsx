@@ -689,7 +689,7 @@ export function ArchitectureCanvas({
       <header className="h-16 bg-[#0A0A0B]/90 backdrop-blur-md border-b border-white/10 px-6 flex justify-between items-center shrink-0 z-20">
         <div className="flex items-center gap-4">
           <a href="/" className="flex items-center gap-3 no-underline group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.5)] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.7)] transition-all">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.5)] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.7)] transition-all ring-1 ring-white/10">
               <svg
                 width="16"
                 height="16"
@@ -707,7 +707,10 @@ export function ArchitectureCanvas({
               </svg>
             </div>
             <div>
-              <span className="text-lg font-bold text-white tracking-tight block">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-gray-500 block">
+                WebToolsEasy
+              </span>
+              <span className="text-lg font-bold text-white tracking-tight block -mt-0.5">
                 ArchCost
               </span>
               <span className="text-[10px] text-orange-400 font-mono tracking-widest uppercase block mt-[-2px]">

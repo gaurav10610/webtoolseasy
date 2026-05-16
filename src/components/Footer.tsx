@@ -12,6 +12,36 @@ export function Footer() {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-4">
+          <Link href="/studio" className="transition-colors hover:text-white">
+            DevLens Studio
+          </Link>
+          <Link href="/canvas" className="transition-colors hover:text-white">
+            ArchCost Canvas
+          </Link>
+          <Link
+            href="/tools/jwt-decoder"
+            className="transition-colors hover:text-white"
+          >
+            JWT
+          </Link>
+          <Link
+            href="/tools/regex-tester"
+            className="transition-colors hover:text-white"
+          >
+            Regex
+          </Link>
+          <Link
+            href="/calculators"
+            className="transition-colors hover:text-white"
+          >
+            AWS Calculators
+          </Link>
+          <Link
+            href="/architectures"
+            className="transition-colors hover:text-white"
+          >
+            Templates
+          </Link>
           <Link href="/privacy" className="transition-colors hover:text-white">
             Privacy
           </Link>

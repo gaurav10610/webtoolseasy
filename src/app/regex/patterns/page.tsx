@@ -6,14 +6,39 @@ export const metadata: Metadata = {
   title: "Regex Patterns Library | WebToolsEasy",
   description:
     "A library of common regular expression patterns for email, UUID, IP addresses, and more.",
+  keywords: [
+    "regex patterns library",
+    "regular expression examples",
+    "email regex",
+    "uuid regex",
+    "ip address regex",
+  ],
   alternates: {
     canonical: "https://webtoolseasy.com/regex/patterns",
   },
 };
 
 export default function RegexPatternsIndex() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Regex Patterns Library",
+    url: "https://webtoolseasy.com/regex/patterns",
+    hasPart: regexPatterns.map((pattern, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://webtoolseasy.com/regex/patterns/${pattern.slug}`,
+      name: pattern.name,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="regex-patterns-collection-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold mb-4">Regex Patterns Library</h1>
         <p className="text-gray-400 mb-8">

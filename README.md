@@ -1,6 +1,6 @@
 # WebToolsEasy — Developer Studio
 
-Privacy-first developer tools. All processing runs locally in your browser.
+Privacy-first developer tools. All processing runs locally in your browser, with Postgres used only for shared architecture persistence.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
@@ -15,10 +15,10 @@ Privacy-first developer tools. All processing runs locally in your browser.
 
 🌐 **[webtoolseasy.com](https://webtoolseasy.com)**
 
-| Product  | URL                                            |
-| -------- | ---------------------------------------------- |
-| DevLens  | [/studio](https://webtoolseasy.com/studio)     |
-| ArchCost | [/canvas](https://webtoolseasy.com/canvas)     |
+| Product  | URL                                        |
+| -------- | ------------------------------------------ |
+| DevLens  | [/studio](https://webtoolseasy.com/studio) |
+| ArchCost | [/canvas](https://webtoolseasy.com/canvas) |
 
 ## Why This Project Exists
 
@@ -30,24 +30,24 @@ Privacy-first developer tools. All processing runs locally in your browser.
 
 Paste any developer data — DevLens auto-detects the type and renders a specialist view:
 
-| Type | Features |
-|------|----------|
-| JWT | Header/Payload/Signature decode, claim explanations, exp countdown, alg security badges |
-| JSON | Tree view, sortable table, prettify/minify, JSONPath query, schema inference |
-| Base64 | Decode/encode, data URL preview, binary hex dump, content type detection |
-| Regex | Test/explain/replace tabs, capture group highlighting, flag toggles |
-| Timestamp | 8-timezone grid, relative time, reverse converter |
-| UUID | Version decode (v1/v4/v7), timestamp extraction, generate buttons |
-| Color | HEX/RGB/HSL/HSV/OKLCH conversions, WCAG contrast, tint/shade palette |
-| URL Encoded | Parameter table, double-encoding detection, encode builder |
-| IP Address | IPv4/IPv6, CIDR math, private/public/loopback classification |
-| PEM/X.509 | Certificate fields, expiry countdown, chain analysis |
-| YAML | Parse/validate, YAML↔JSON conversion |
-| XML | Tree view, XPath query, prettify |
-| CSV/TSV | Auto-delimiter detection, sortable table, column type inference |
-| .env | Masked values, compare two files, export as JSON |
-| Cron | Human-readable description, next 15 triggers, visual builder |
-| SQL | Format/prettify, query breakdown, dialect selector |
+| Type        | Features                                                                                |
+| ----------- | --------------------------------------------------------------------------------------- |
+| JWT         | Header/Payload/Signature decode, claim explanations, exp countdown, alg security badges |
+| JSON        | Tree view, sortable table, prettify/minify, JSONPath query, schema inference            |
+| Base64      | Decode/encode, data URL preview, binary hex dump, content type detection                |
+| Regex       | Test/explain/replace tabs, capture group highlighting, flag toggles                     |
+| Timestamp   | 8-timezone grid, relative time, reverse converter                                       |
+| UUID        | Version decode (v1/v4/v7), timestamp extraction, generate buttons                       |
+| Color       | HEX/RGB/HSL/HSV/OKLCH conversions, WCAG contrast, tint/shade palette                    |
+| URL Encoded | Parameter table, double-encoding detection, encode builder                              |
+| IP Address  | IPv4/IPv6, CIDR math, private/public/loopback classification                            |
+| PEM/X.509   | Certificate fields, expiry countdown, chain analysis                                    |
+| YAML        | Parse/validate, YAML↔JSON conversion                                                    |
+| XML         | Tree view, XPath query, prettify                                                        |
+| CSV/TSV     | Auto-delimiter detection, sortable table, column type inference                         |
+| .env        | Masked values, compare two files, export as JSON                                        |
+| Cron        | Human-readable description, next 15 triggers, visual builder                            |
+| SQL         | Format/prettify, query breakdown, dialect selector                                      |
 
 ## ArchCost: Visual Cost Planner
 
@@ -59,6 +59,8 @@ Drag AWS services onto a canvas and configure them to get live cost estimates:
 - **Keyboard shortcuts**: Delete, select all, duplicate, arrow nudge, fit view
 - **Shareable**: Compress architecture to URL for sharing
 - **Export**: PNG, PDF, CSV cost breakdown (coming soon)
+
+Shared architecture links require a Postgres database configured via `DATABASE_URL`. The rest of the app does not require a database.
 
 ## Technology Stack
 
@@ -91,17 +93,19 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## npm Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run test:unit` | Run Vitest unit tests |
-| `npm run test:e2e` | Run Playwright E2E tests |
-| `npm run test` | Run all tests |
-| `npm run fetch-pricing` | Update AWS pricing data |
-| `npm run update:sitemap` | Regenerate sitemap.xml |
+| Script                   | Description              |
+| ------------------------ | ------------------------ |
+| `npm run dev`            | Start development server |
+| `npm run build`          | Production build         |
+| `npm run start`          | Start production server  |
+| `npm run lint`           | Run ESLint               |
+| `npm run test:unit`      | Run Vitest unit tests    |
+| `npm run test:e2e`       | Run Playwright E2E tests |
+| `npm run test`           | Run all tests            |
+| `npm run fetch-pricing`  | Update AWS pricing data  |
+| `npm run update:sitemap` | Regenerate sitemap.xml   |
+
+If you want architecture sharing in development or production, set `DATABASE_URL` before starting the app.
 
 ## Project Structure
 

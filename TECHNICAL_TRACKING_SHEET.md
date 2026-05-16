@@ -699,6 +699,10 @@
 - [x] Add OG image generation using Next.js `ImageResponse` (Edge runtime, no extra service): dynamic OG images for tool pages showing the tool name and a preview graphic
 - [x] Add OG image for shared architecture URLs: show architecture name and cost estimate on the OG card
 - [x] Add Twitter Card meta tags to all pages
+- [x] Add global OG/Twitter fallback image metadata in root layout for non-tool pages (`/opengraph-image`)
+- [x] Add site-level `WebSite` JSON-LD with `SearchAction` in root layout
+- [x] Add page-level JSON-LD on major hub pages (`/`, `/studio`, `/canvas`, `/calculators`, `/architectures`, `/regex/patterns`, `/jwt/claims`)
+- [x] Add page-level SEO metadata + JSON-LD to programmatic detail routes for calculators, architecture templates, regex patterns, and JWT claims
 
 ### J3 · Analytics (Privacy-Respecting)
 
@@ -732,6 +736,7 @@
 - [x] `e2e/archcost-share.spec.ts` — build small architecture → share → navigate to shared URL → verify canvas loads correctly
 - [x] `e2e/archcost-export.spec.ts` — build architecture → export CSV → verify download occurs
 - [x] `e2e/seo-metadata.spec.ts` — verify each tool landing page has unique title, description, canonical, JSON-LD
+- [x] Integrated browser verification sweep: canonical/OG/Twitter/JSON-LD checks across core hubs, tools, and sitemap hygiene (`/tools/[...slug]` excluded)
 
 ### K3 · Performance Tests
 

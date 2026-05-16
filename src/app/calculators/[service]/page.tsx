@@ -25,8 +25,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${calcData.name} (${calcData.service}) Pricing Calculator | WebToolsEasy`,
     description: calcData.description,
+    keywords: [
+      `${calcData.service} cost calculator`,
+      `${calcData.service} pricing estimator`,
+      "aws monthly cost",
+      "cloud cost calculator",
+    ],
     alternates: {
       canonical: `https://webtoolseasy.com/calculators/${service}`,
+    },
+    openGraph: {
+      title: `${calcData.name} (${calcData.service}) Pricing Calculator | WebToolsEasy`,
+      description: calcData.description,
+      url: `https://webtoolseasy.com/calculators/${service}`,
+      images: ["https://webtoolseasy.com/opengraph-image"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${calcData.name} (${calcData.service}) Pricing Calculator | WebToolsEasy`,
+      description: calcData.description,
+      images: ["https://webtoolseasy.com/opengraph-image"],
     },
   };
 }
@@ -39,8 +57,30 @@ export default async function CalculatorServicePage({ params }: Props) {
     notFound();
   }
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: `${calc.name} (${calc.service}) Pricing Calculator`,
+    description: calc.description,
+    url: `https://webtoolseasy.com/calculators/${service}`,
+    about: [
+      { "@type": "Thing", name: calc.service },
+      { "@type": "Thing", name: "AWS Pricing" },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "WebToolsEasy",
+      url: "https://webtoolseasy.com",
+    },
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="calculator-service-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-4xl">
         <Link
           href="/calculators"

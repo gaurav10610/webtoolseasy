@@ -23,8 +23,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${patternData.name} Regex Pattern | WebToolsEasy`,
     description: patternData.description,
+    keywords: [
+      `${patternData.name} regex`,
+      "regular expression pattern",
+      "regex examples",
+      "regex tester",
+    ],
     alternates: {
       canonical: `https://webtoolseasy.com/regex/patterns/${slug}`,
+    },
+    openGraph: {
+      title: `${patternData.name} Regex Pattern | WebToolsEasy`,
+      description: patternData.description,
+      url: `https://webtoolseasy.com/regex/patterns/${slug}`,
+      images: ["https://webtoolseasy.com/opengraph-image"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${patternData.name} Regex Pattern | WebToolsEasy`,
+      description: patternData.description,
+      images: ["https://webtoolseasy.com/opengraph-image"],
     },
   };
 }
@@ -41,8 +59,30 @@ export default async function RegexPatternPage({ params }: Props) {
   const defaultTestString = pattern.testExamples.passing[0] || "";
   const testerUrl = `/tools/regex-tester?pattern=${encodeURIComponent(pattern.pattern)}&flags=${encodeURIComponent(pattern.flags)}&testString=${encodeURIComponent(defaultTestString)}`;
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: `${pattern.name} Regex Pattern`,
+    description: pattern.description,
+    url: `https://webtoolseasy.com/regex/patterns/${slug}`,
+    about: [
+      { "@type": "Thing", name: "Regular Expressions" },
+      { "@type": "Thing", name: pattern.name },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "WebToolsEasy",
+      url: "https://webtoolseasy.com",
+    },
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="regex-pattern-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-3xl">
         <Link
           href="/regex/patterns"

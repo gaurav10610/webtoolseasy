@@ -6,14 +6,38 @@ export const metadata: Metadata = {
   title: "AWS Cost Calculators | WebToolsEasy",
   description:
     "Visual cloud cost estimators for Amazon EC2, RDS, S3, Lambda, and more.",
+  keywords: [
+    "aws cost calculators",
+    "ec2 cost calculator",
+    "rds cost calculator",
+    "lambda cost estimator",
+  ],
   alternates: {
     canonical: "https://webtoolseasy.com/calculators",
   },
 };
 
 export default function CalculatorsIndex() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "AWS Cost Calculators",
+    url: "https://webtoolseasy.com/calculators",
+    hasPart: calculatorPages.map((calc, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://webtoolseasy.com/calculators/${calc.service.toLowerCase()}`,
+      name: calc.name,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="calculators-collection-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold mb-4">AWS Cost Calculators</h1>
         <p className="text-gray-400 mb-8">

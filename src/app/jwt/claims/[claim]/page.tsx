@@ -23,8 +23,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `JWT ${claimData.name} Claim (${claimData.fullName}) | WebToolsEasy`,
     description: claimData.description,
+    keywords: [
+      `jwt ${claimData.name} claim`,
+      "jwt claims reference",
+      "json web token claims",
+      "jwt decoder",
+    ],
     alternates: {
       canonical: `https://webtoolseasy.com/jwt/claims/${claim}`,
+    },
+    openGraph: {
+      title: `JWT ${claimData.name} Claim (${claimData.fullName}) | WebToolsEasy`,
+      description: claimData.description,
+      url: `https://webtoolseasy.com/jwt/claims/${claim}`,
+      images: ["https://webtoolseasy.com/opengraph-image"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `JWT ${claimData.name} Claim (${claimData.fullName}) | WebToolsEasy`,
+      description: claimData.description,
+      images: ["https://webtoolseasy.com/opengraph-image"],
     },
   };
 }
@@ -37,8 +55,23 @@ export default async function JwtClaimPage({ params }: Props) {
     notFound();
   }
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    name: claim.name,
+    description: claim.description,
+    termCode: claim.name,
+    inDefinedTermSet: "https://webtoolseasy.com/jwt/claims",
+    url: `https://webtoolseasy.com/jwt/claims/${claimId}`,
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="jwt-claim-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-3xl">
         <Link
           href="/jwt/claims"

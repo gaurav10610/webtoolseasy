@@ -6,14 +6,39 @@ export const metadata: Metadata = {
   title: "JWT Claims Reference | WebToolsEasy",
   description:
     "A comprehensive reference of standard JSON Web Token (JWT) claims, their types, and security implications.",
+  keywords: [
+    "jwt claims reference",
+    "jwt claim meanings",
+    "exp claim",
+    "iss aud sub jwt",
+    "jwt security claims",
+  ],
   alternates: {
     canonical: "https://webtoolseasy.com/jwt/claims",
   },
 };
 
 export default function JwtClaimsIndex() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "JWT Claims Reference",
+    url: "https://webtoolseasy.com/jwt/claims",
+    hasPart: jwtClaims.map((claim, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://webtoolseasy.com/jwt/claims/${claim.id}`,
+      name: claim.fullName,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="jwt-claims-collection-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold mb-4">JWT Claims Reference</h1>
         <p className="text-gray-400 mb-8">

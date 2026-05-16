@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { Edge } from "@xyflow/react";
 import { ArchitectureCanvas } from "@/components/canvas/ArchitectureCanvas";
-import { getDb } from "@/lib/db";
-import { decompress } from "@/utils/compress";
+import { ensureArchitectureTable, getDb } from "@/lib/db";
+import { decompressArchitecture } from "@/lib/archcost/shareUrl";
 
 type SharedTemplate = {
   nodes: Array<{ data?: { label?: string; costPerMonth?: number } }>;
@@ -13,10 +13,11 @@ type SharedTemplate = {
 const SITE_URL = "https://webtoolseasy.com";
 
 async function loadSharedTemplate(id: string): Promise<SharedTemplate | null> {
+  await ensureArchitectureTable();
   const client = getDb();
-  const result = await client.execute({
-    sql: "SELECT data FROM architectures WHERE id = ? OR slug = ?",
-    args: [id, id],
+  const result = await client.query({
+    text: "SELECT data FROM architectures WHERE id = $1 OR slug = $1",
+    values: [id],
   });
 
   if (result.rows.length === 0) {
@@ -24,8 +25,13 @@ async function loadSharedTemplate(id: string): Promise<SharedTemplate | null> {
   }
 
   const compressedData = result.rows[0].data as string;
-  const decoded = decompress(compressedData);
-  const parsed = JSON.parse(decoded);
+  const decoded = decompressArchitecture(compressedData);
+
+  if ("error" in decoded) {
+    throw new Error(decoded.error);
+  }
+
+  const parsed = decoded.payload;
 
   if (!Array.isArray(parsed?.nodes) || !Array.isArray(parsed?.edges)) {
     throw new Error("Invalid shared architecture payload");
@@ -119,11 +125,12 @@ export default async function SharedArchitecturePage({
       notFound();
     }
 
+    await ensureArchitectureTable();
     const client = getDb();
     client
-      .execute({
-        sql: "UPDATE architectures SET view_count = view_count + 1 WHERE id = ? OR slug = ?",
-        args: [id, id],
+      .query({
+        text: "UPDATE architectures SET view_count = view_count + 1 WHERE id = $1 OR slug = $1",
+        values: [id],
       })
       .catch(() => {});
   } catch (err) {

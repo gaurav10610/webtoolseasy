@@ -8,8 +8,31 @@ export const metadata: Metadata = {
   title: "WebToolsEasy | DevLens and ArchCost",
   description:
     "A privacy-first developer studio for smart data inspection and cloud cost planning. Paste anything, understand everything, and plan confidently.",
+  keywords: [
+    "developer tools",
+    "jwt decoder online",
+    "regex tester",
+    "json formatter",
+    "base64 decoder",
+    "aws cost calculator",
+    "cloud architecture cost estimator",
+  ],
   alternates: {
     canonical: "https://webtoolseasy.com/",
+  },
+  openGraph: {
+    title: "WebToolsEasy | DevLens and ArchCost",
+    description:
+      "Smart paste developer tools and visual AWS cost planning, local-first.",
+    url: "https://webtoolseasy.com/",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "WebToolsEasy | DevLens and ArchCost",
+    description:
+      "Smart paste developer tools and visual AWS cost planning, local-first.",
+    images: ["https://webtoolseasy.com/opengraph-image"],
   },
 };
 
@@ -41,8 +64,94 @@ const featureGroups = [
 ];
 
 export default function Home() {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "WebToolsEasy",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Web",
+    url: "https://webtoolseasy.com",
+    description:
+      "Privacy-first developer studio for JWT decoding, JSON query, regex testing, and AWS cloud cost estimation.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
+  const hubsSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "WebToolsEasy Core Hubs",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        url: "https://webtoolseasy.com/studio",
+        name: "DevLens Studio",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        url: "https://webtoolseasy.com/canvas",
+        name: "ArchCost Canvas",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        url: "https://webtoolseasy.com/calculators",
+        name: "AWS Cost Calculators",
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        url: "https://webtoolseasy.com/architectures",
+        name: "Architecture Templates",
+      },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Are WebToolsEasy tools client-side and privacy-first?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Core inspection and estimation flows run in-browser so your pasted technical payloads stay local by default.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Which high-intent developer tools are available?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "JWT decoder, JSON query and formatter, regex tester, timestamp converter, Base64 encoder and decoder, certificate inspector, env file editor, and AWS architecture cost planning.",
+        },
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#0A0A0B] text-white">
+      <script
+        id="home-software-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <script
+        id="home-hubs-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(hubsSchema) }}
+      />
+      <script
+        id="home-faq-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="pointer-events-none absolute left-[-12%] top-[-18%] h-[50%] w-[50%] rounded-full bg-indigo-600/20 blur-[120px]" />
       <div className="pointer-events-none absolute right-[-10%] top-[18%] h-[40%] w-[40%] rounded-full bg-cyan-600/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-[-12%] left-[18%] h-[40%] w-[60%] rounded-full bg-orange-600/10 blur-[120px]" />
@@ -118,6 +227,53 @@ export default function Home() {
       </section>
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24">
+        <div className="mb-10 rounded-[24px] border border-white/10 bg-white/5 p-6">
+          <h2 className="text-2xl font-bold text-white mb-3">
+            Popular Developer Tools
+          </h2>
+          <p className="text-sm text-gray-300 mb-4">
+            Fast access to high-intent workflows developers search for daily.
+          </p>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <Link
+              href="/tools/jwt-decoder"
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 hover:bg-black/50"
+            >
+              JWT Decoder
+            </Link>
+            <Link
+              href="/tools/json-query"
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 hover:bg-black/50"
+            >
+              JSON Query Tool
+            </Link>
+            <Link
+              href="/tools/regex-tester"
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 hover:bg-black/50"
+            >
+              Regex Tester
+            </Link>
+            <Link
+              href="/tools/base64"
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 hover:bg-black/50"
+            >
+              Base64 Encoder and Decoder
+            </Link>
+            <Link
+              href="/tools/timestamp-converter"
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 hover:bg-black/50"
+            >
+              Unix Timestamp Converter
+            </Link>
+            <Link
+              href="/tools/certificate-inspector"
+              className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 hover:bg-black/50"
+            >
+              X.509 Certificate Inspector
+            </Link>
+          </div>
+        </div>
+
         <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-[24px] border border-white/10 bg-white/5 p-6">
             <div className="text-xs font-bold uppercase tracking-[0.24em] text-gray-500">

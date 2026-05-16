@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "A privacy-first developer studio for smart data inspection and cloud cost planning. DevLens and ArchCost run locally first with shareable configurations.",
   keywords:
-    "DevLens, ArchCost, JWT decoder, JSON inspector, Base64 encoder, cloud cost planner, privacy-first developer tools",
+    "developer tools, jwt decoder online, regex tester, json formatter, base64 decoder, timestamp converter, env file editor, aws cost calculator, cloud architecture cost estimator, privacy-first developer tools",
   openGraph: {
     title: "WebToolsEasy | DevLens and ArchCost",
     description:
@@ -19,12 +19,21 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://webtoolseasy.com",
     siteName: "WebToolsEasy",
+    images: [
+      {
+        url: "https://webtoolseasy.com/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "WebToolsEasy DevLens and ArchCost",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "WebToolsEasy | DevLens and ArchCost",
     description:
       "A privacy-first developer studio for smart data inspection and cloud cost planning.",
+    images: ["https://webtoolseasy.com/opengraph-image"],
   },
 };
 
@@ -34,6 +43,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "WebToolsEasy",
+    url: "https://webtoolseasy.com",
+    description:
+      "Privacy-first developer studio with DevLens smart paste tooling and ArchCost AWS architecture cost planning.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://webtoolseasy.com/tools/{query}",
+      "query-input": "required name=query",
+    },
+  };
 
   return (
     <html lang="en" className="dark">
@@ -48,6 +70,11 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
         ) : null}
+        <script
+          id="website-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         {children}
       </body>
     </html>

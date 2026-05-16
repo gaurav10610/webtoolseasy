@@ -6,14 +6,38 @@ export const metadata: Metadata = {
   title: "AWS Architecture Templates | WebToolsEasy",
   description:
     "Browse pre-configured AWS cloud architecture templates and instantly load them into the ArchCost canvas for cost estimation.",
+  keywords: [
+    "aws architecture templates",
+    "cloud architecture examples",
+    "aws reference architecture cost",
+    "cloud cost planning templates",
+  ],
   alternates: {
     canonical: "https://webtoolseasy.com/architectures",
   },
 };
 
 export default function ArchitecturesIndex() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "AWS Architecture Templates",
+    url: "https://webtoolseasy.com/architectures",
+    hasPart: architectureTemplates.map((template, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://webtoolseasy.com/architectures/${template.slug}`,
+      name: template.name,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="architectures-collection-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold mb-4">Architecture Templates</h1>
         <p className="text-gray-400 mb-8">

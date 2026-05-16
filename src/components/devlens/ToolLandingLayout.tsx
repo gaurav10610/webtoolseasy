@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { type ToolMeta } from "@/lib/devlens/toolMeta";
 import { Badge } from "@/components/ui/Badge";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 
 type ToolLandingLayoutProps = {
   meta: ToolMeta;
@@ -14,23 +16,7 @@ export function ToolLandingLayout({ meta, toolSlot }: ToolLandingLayoutProps) {
       <div className="pointer-events-none fixed left-[-12%] top-[-18%] h-[50%] w-[50%] rounded-full bg-indigo-600/15 blur-[120px]" />
       <div className="pointer-events-none fixed right-[-10%] top-[18%] h-[40%] w-[40%] rounded-full bg-cyan-600/8 blur-[120px]" />
 
-      {/* Slim nav */}
-      <nav className="relative z-20 border-b border-white/5 bg-[#0A0A0B]/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-          <Link
-            href="/"
-            className="text-sm font-semibold text-white hover:text-gray-300"
-          >
-            WebToolsEasy
-          </Link>
-          <Link
-            href="/studio"
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Open DevLens Studio
-          </Link>
-        </div>
-      </nav>
+      <Nav />
 
       <main className="relative z-10">
         {/* Hero */}
@@ -118,35 +104,7 @@ export function ToolLandingLayout({ meta, toolSlot }: ToolLandingLayoutProps) {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-8 text-center text-xs text-gray-600">
-        <p>
-          &copy; {new Date().getFullYear()} WebToolsEasy &mdash; All tools run
-          locally in your browser.
-        </p>
-        <p className="mt-1">
-          <Link
-            href="/"
-            className="underline underline-offset-2 hover:text-gray-400"
-          >
-            Home
-          </Link>{" "}
-          &middot;{" "}
-          <Link
-            href="/studio"
-            className="underline underline-offset-2 hover:text-gray-400"
-          >
-            DevLens Studio
-          </Link>{" "}
-          &middot;{" "}
-          <Link
-            href="/privacy"
-            className="underline underline-offset-2 hover:text-gray-400"
-          >
-            Privacy
-          </Link>
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

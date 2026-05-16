@@ -24,8 +24,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${template.name} Architecture Template | WebToolsEasy`,
     description: template.description,
+    keywords: [
+      `${template.name} aws architecture`,
+      "aws architecture template",
+      "cloud reference architecture",
+      "architecture cost estimate",
+    ],
     alternates: {
       canonical: `https://webtoolseasy.com/architectures/${slug}`,
+    },
+    openGraph: {
+      title: `${template.name} Architecture Template | WebToolsEasy`,
+      description: template.description,
+      url: `https://webtoolseasy.com/architectures/${slug}`,
+      images: ["https://webtoolseasy.com/opengraph-image"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${template.name} Architecture Template | WebToolsEasy`,
+      description: template.description,
+      images: ["https://webtoolseasy.com/opengraph-image"],
     },
   };
 }
@@ -45,8 +63,28 @@ export default async function ArchitectureTemplatePage({ params }: Props) {
       ? `/canvas?arch=${compressionResult.encoded}`
       : "/canvas";
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: `${template.name} Architecture Template`,
+    description: template.description,
+    url: `https://webtoolseasy.com/architectures/${slug}`,
+    keywords: template.tags.join(", "),
+    about: template.tags.map((tag) => ({ "@type": "Thing", name: tag })),
+    publisher: {
+      "@type": "Organization",
+      name: "WebToolsEasy",
+      url: "https://webtoolseasy.com",
+    },
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+      <script
+        id="architecture-template-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-4xl">
         <Link
           href="/architectures"
