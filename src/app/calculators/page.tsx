@@ -1,6 +1,7 @@
 import { calculatorPages } from "@/data/calculatorPages";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export const metadata: Metadata = {
   title: "AWS Cost Calculators | WebToolsEasy",
@@ -14,6 +15,20 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://webtoolseasy.com/calculators",
+  },
+  openGraph: {
+    title: "AWS Cost Calculators | WebToolsEasy",
+    description:
+      "Visual cloud cost estimators for Amazon EC2, RDS, S3, Lambda, and more.",
+    url: "https://webtoolseasy.com/calculators",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AWS Cost Calculators | WebToolsEasy",
+    description:
+      "Visual cloud cost estimators for Amazon EC2, RDS, S3, Lambda, and more.",
+    images: ["https://webtoolseasy.com/opengraph-image"],
   },
 };
 
@@ -32,7 +47,7 @@ export default function CalculatorsIndex() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+    <ContentPageLayout mainClassName="px-6 py-12">
       <script
         id="calculators-collection-jsonld"
         type="application/ld+json"
@@ -65,6 +80,6 @@ export default function CalculatorsIndex() {
           ))}
         </div>
       </div>
-    </main>
+    </ContentPageLayout>
   );
 }

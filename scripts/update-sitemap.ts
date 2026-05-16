@@ -113,6 +113,7 @@ function updateSitemap() {
     { path: "", priority: "1.0000", changefreq: "daily" },
     { path: "/studio", priority: "0.9000", changefreq: "daily" },
     { path: "/canvas", priority: "0.9000", changefreq: "daily" },
+    { path: "/tools", priority: "0.8500", changefreq: "daily" },
     { path: "/privacy", priority: "0.5000", changefreq: "monthly" },
   ];
 

@@ -42,14 +42,11 @@
     "update:sitemap": "tsx scripts/update-sitemap.ts",
     "maintenance": "tsx scripts/maintenance.ts",
     "maintenance:pricing": "tsx scripts/maintenance.ts --pricing",
-    "maintenance:sitemap": "tsx scripts/maintenance.ts --sitemap",
-    "migrate": "tsx scripts/run-migrations.ts"
+    "maintenance:sitemap": "tsx scripts/maintenance.ts --sitemap"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.3",
     "@next/third-parties": "16.2.3",
     "@peculiar/x509": "^2.0.0",
-    "@types/pg": "^8.20.0",
     "@xyflow/react": "^12.10.2",
     "croner": "^10.0.1",
     "fast-xml-parser": "^5.8.0",
@@ -63,7 +60,6 @@
     "nanoid": "^5.1.11",
     "next": "16.2.3",
     "papaparse": "^5.5.3",
-    "pg": "^8.20.0",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "reflect-metadata": "^0.2.2",

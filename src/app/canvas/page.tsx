@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { ArchitectureCanvas } from "@/components/canvas/ArchitectureCanvas";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export const metadata: Metadata = {
   title: "Visual Cloud Architecture Estimator | ArchCost",
@@ -19,6 +20,13 @@ export const metadata: Metadata = {
     description:
       "Design AWS architectures visually with live pricing, transfer costs, and exports.",
     url: "https://webtoolseasy.com/canvas",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Visual Cloud Architecture Estimator | ArchCost",
+    description:
+      "Drag and drop AWS resources onto a canvas to instantly visualize your architecture and calculate real-time monthly costs.",
     images: ["https://webtoolseasy.com/opengraph-image"],
   },
 };
@@ -41,15 +49,20 @@ export default function CanvasPage() {
   };
 
   return (
-    <>
+    <ContentPageLayout
+      showExploreStrip={false}
+      showFooter={false}
+      width="full"
+      mainClassName="p-0"
+    >
       <script
         id="canvas-software-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      <main className="w-full h-screen bg-[#0A0A0B] flex flex-col">
+      <main className="h-[calc(100vh-80px)] w-full bg-[#0A0A0B]">
         <ArchitectureCanvas />
       </main>
-    </>
+    </ContentPageLayout>
   );
 }

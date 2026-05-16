@@ -2,6 +2,7 @@ import { calculatorPages } from "@/data/calculatorPages";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export function generateStaticParams() {
   return calculatorPages.map((calc) => ({
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     (c) => c.service.toLowerCase() === service,
   );
   if (!calcData) return { title: "Not Found" };
+  const imageUrl = `https://webtoolseasy.com/calculators/${service}/opengraph-image`;
 
   return {
     title: `${calcData.name} (${calcData.service}) Pricing Calculator | WebToolsEasy`,
@@ -38,13 +40,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${calcData.name} (${calcData.service}) Pricing Calculator | WebToolsEasy`,
       description: calcData.description,
       url: `https://webtoolseasy.com/calculators/${service}`,
-      images: ["https://webtoolseasy.com/opengraph-image"],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${calcData.name} pricing calculator preview`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${calcData.name} (${calcData.service}) Pricing Calculator | WebToolsEasy`,
       description: calcData.description,
-      images: ["https://webtoolseasy.com/opengraph-image"],
+      images: [imageUrl],
     },
   };
 }
@@ -75,7 +84,7 @@ export default async function CalculatorServicePage({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+    <ContentPageLayout mainClassName="px-6 py-12">
       <script
         id="calculator-service-jsonld"
         type="application/ld+json"
@@ -125,6 +134,43 @@ export default async function CalculatorServicePage({ params }: Props) {
             </div>
           </section>
 
+          <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">
+              Scenario Presets
+            </h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {calc.scenarioPresets.map((preset) => (
+                <article
+                  key={preset.name}
+                  className="rounded-xl border border-white/10 bg-black/20 p-4"
+                >
+                  <div className="text-sm font-semibold text-white">
+                    {preset.name}
+                  </div>
+                  <div className="mt-1 text-lg font-bold text-amber-300">
+                    ~${preset.monthlyEstimate.toFixed(0)}/mo
+                  </div>
+                  <ul className="mt-3 list-disc space-y-1 pl-5 text-xs text-gray-400">
+                    {preset.assumptions.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="rounded-2xl border border-sky-500/20 bg-sky-500/5 p-6">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-sky-400 mb-4">
+              Assumptions & Caveats
+            </h2>
+            <ul className="list-disc space-y-2 pl-5 text-sm text-sky-100/80">
+              {calc.assumptionNotes.map((note) => (
+                <li key={note}>{note}</li>
+              ))}
+            </ul>
+          </section>
+
           <div className="rounded-2xl border border-indigo-500/30 bg-indigo-500/10 p-8 text-center">
             <h2 className="text-2xl font-bold mb-4">
               Ready to estimate costs?
@@ -139,9 +185,24 @@ export default async function CalculatorServicePage({ params }: Props) {
             >
               Open ArchCost Canvas
             </Link>
+
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              <Link
+                href="/architectures"
+                className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs text-gray-200 hover:bg-black/50"
+              >
+                Browse architecture templates
+              </Link>
+              <Link
+                href="/tools/json-query"
+                className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs text-gray-200 hover:bg-black/50"
+              >
+                Model config inputs with JSON Query
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </main>
+    </ContentPageLayout>
   );
 }

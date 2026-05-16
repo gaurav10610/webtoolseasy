@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Footer } from "@/components/Footer";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export const metadata: Metadata = {
   title: "Privacy | WebToolsEasy",
@@ -8,11 +8,39 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://webtoolseasy.com/privacy",
   },
+  openGraph: {
+    title: "Privacy | WebToolsEasy",
+    description:
+      "How WebToolsEasy keeps developer data local-first and minimizes server-side exposure.",
+    url: "https://webtoolseasy.com/privacy",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy | WebToolsEasy",
+    description:
+      "How WebToolsEasy keeps developer data local-first and minimizes server-side exposure.",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
 };
 
 export default function PrivacyPage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Privacy | WebToolsEasy",
+    description:
+      "How WebToolsEasy keeps developer data local-first and minimizes server-side exposure.",
+    url: "https://webtoolseasy.com/privacy",
+  };
+
   return (
-    <main className="min-h-screen bg-[#0A0A0B] px-6 py-16 text-white">
+    <ContentPageLayout mainClassName="px-6 py-16 text-white">
+      <script
+        id="privacy-webpage-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-3xl">
         <div className="mb-4 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-gray-300">
           Privacy
@@ -36,8 +64,8 @@ export default function PrivacyPage() {
               state.
             </li>
             <li>
-              Use optional server-side storage only for explicitly saved,
-              shareable artifacts.
+              Keep sharing payloads URL-based so architecture context stays
+              transparent and portable.
             </li>
           </ul>
           <p>What we do not do:</p>
@@ -50,7 +78,6 @@ export default function PrivacyPage() {
           </ul>
         </div>
       </div>
-      <Footer />
-    </main>
+    </ContentPageLayout>
   );
 }

@@ -1,6 +1,7 @@
 import { jwtClaims } from "@/data/jwtClaims";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export const metadata: Metadata = {
   title: "JWT Claims Reference | WebToolsEasy",
@@ -16,15 +17,53 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://webtoolseasy.com/jwt/claims",
   },
+  openGraph: {
+    title: "JWT Claims Reference | WebToolsEasy",
+    description:
+      "A comprehensive reference of standard JSON Web Token (JWT) claims, their types, and security implications.",
+    url: "https://webtoolseasy.com/jwt/claims",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JWT Claims Reference | WebToolsEasy",
+    description:
+      "A comprehensive reference of standard JSON Web Token (JWT) claims, their types, and security implications.",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
 };
 
-export default function JwtClaimsIndex() {
+type JwtClaimsIndexProps = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+export default async function JwtClaimsIndex({
+  searchParams,
+}: JwtClaimsIndexProps) {
+  const { q } = await searchParams;
+  const query = (q ?? "").trim().toLowerCase();
+
+  const filteredClaims = jwtClaims.filter((claim) => {
+    if (!query) return true;
+    const haystack = [
+      claim.id,
+      claim.name,
+      claim.fullName,
+      claim.description,
+      claim.type,
+      claim.securityNote ?? "",
+    ]
+      .join(" ")
+      .toLowerCase();
+    return haystack.includes(query);
+  });
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "JWT Claims Reference",
     url: "https://webtoolseasy.com/jwt/claims",
-    hasPart: jwtClaims.map((claim, index) => ({
+    hasPart: filteredClaims.map((claim, index) => ({
       "@type": "ListItem",
       position: index + 1,
       url: `https://webtoolseasy.com/jwt/claims/${claim.id}`,
@@ -33,7 +72,7 @@ export default function JwtClaimsIndex() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+    <ContentPageLayout mainClassName="px-6 py-12">
       <script
         id="jwt-claims-collection-jsonld"
         type="application/ld+json"
@@ -47,8 +86,34 @@ export default function JwtClaimsIndex() {
           IANA registered JWT claims.
         </p>
 
+        <form className="mb-6" action="/jwt/claims" method="get">
+          <label htmlFor="jwt-claims-search" className="sr-only">
+            Search JWT claims
+          </label>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input
+              id="jwt-claims-search"
+              name="q"
+              defaultValue={q ?? ""}
+              placeholder="Search by claim name, purpose, or security note"
+              className="w-full rounded-xl border border-white/10 bg-[#121214] px-4 py-2.5 text-sm text-white outline-none placeholder:text-gray-500 focus:border-indigo-500/60"
+            />
+            <button
+              type="submit"
+              className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+
+        <p className="mb-6 text-xs text-gray-500">
+          Showing {filteredClaims.length} of {jwtClaims.length} claims
+          {query ? ` for "${q}"` : ""}.
+        </p>
+
         <div className="grid gap-4 md:grid-cols-2">
-          {jwtClaims.map((claim) => (
+          {filteredClaims.map((claim) => (
             <Link
               key={claim.id}
               href={`/jwt/claims/${claim.id}`}
@@ -65,8 +130,15 @@ export default function JwtClaimsIndex() {
               </p>
             </Link>
           ))}
+
+          {filteredClaims.length === 0 ? (
+            <div className="col-span-full rounded-2xl border border-dashed border-white/20 bg-white/5 p-8 text-center text-sm text-gray-400">
+              No claims matched that search. Try terms like "expiry", "issuer",
+              "mfa", or "audience".
+            </div>
+          ) : null}
         </div>
       </div>
-    </main>
+    </ContentPageLayout>
   );
 }

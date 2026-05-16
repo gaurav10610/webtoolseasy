@@ -11,7 +11,10 @@ import {
   SelectionMode,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { compress, decompress } from "@/utils/compress";
+import {
+  compressArchitecture,
+  decompressArchitecture,
+} from "@/lib/archcost/shareUrl";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 
@@ -285,8 +288,12 @@ export function ArchitectureCanvas({
         const url = new URL(input);
         const arch = url.searchParams.get("arch");
         if (!arch) throw new Error("No arch query param found in URL");
-        const decoded = decompress(arch);
-        const parsed = JSON.parse(decoded);
+        const modern = decompressArchitecture(arch);
+        if ("error" in modern) {
+          throw new Error(modern.error);
+        }
+        const parsed = modern.payload;
+
         if (!parsed.nodes || !parsed.edges) {
           throw new Error("Invalid architecture payload");
         }
@@ -369,10 +376,14 @@ export function ArchitectureCanvas({
 
     if (archParam) {
       try {
-        const decoded = decompress(archParam);
-        const parsed = JSON.parse(decoded);
+        const modern = decompressArchitecture(archParam);
+        if ("error" in modern) {
+          throw new Error(modern.error);
+        }
+        const parsed = modern.payload;
+
         if (parsed.nodes && parsed.edges) {
-          loadTemplate(parsed.nodes, parsed.edges);
+          loadTemplate(parsed.nodes as any[], parsed.edges as Edge[]);
           setReadOnlyMode(true);
         }
       } catch (err) {
@@ -412,33 +423,33 @@ export function ArchitectureCanvas({
 
   const handleShare = async () => {
     try {
-      const data = JSON.stringify({ nodes, edges });
-      const compressed = compress(data);
+      const sharePayload = {
+        nodes: nodes.map((node) => ({
+          id: node.id,
+          type: node.type ?? "infraNode",
+          position: node.position,
+          data: node.data as Record<string, unknown>,
+        })),
+        edges: edges.map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          animated: edge.animated,
+        })),
+      };
 
-      if (compressed.length > 4000) {
-        // Use DB for large architectures
-        const response = await fetch("/api/architectures", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: compressed }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to save architecture");
-        }
-
-        const { url } = await response.json();
-        const fullUrl = new URL(url, window.location.origin);
-        navigator.clipboard.writeText(fullUrl.toString());
-      } else {
-        // Use URL param for small architectures
-        const url = new URL(window.location.origin + "/canvas");
-        url.searchParams.set("arch", compressed);
-        navigator.clipboard.writeText(url.toString());
+      const result = compressArchitecture(sharePayload);
+      if ("error" in result) {
+        alert(result.error);
+        return;
       }
 
+      const url = new URL(window.location.origin + "/canvas");
+      url.searchParams.set("arch", result.encoded);
+      navigator.clipboard.writeText(url.toString());
+
       trackEvent("architecture_shared", {
-        share_type: compressed.length > 4000 ? "short_link" : "url_param",
+        share_type: "url_param",
       });
 
       setCopied(true);
@@ -686,38 +697,16 @@ export function ArchitectureCanvas({
   return (
     <div className="w-full h-full flex flex-col font-sans bg-[#0A0A0B]">
       {/* Header */}
-      <header className="h-16 bg-[#0A0A0B]/90 backdrop-blur-md border-b border-white/10 px-6 flex justify-between items-center shrink-0 z-20">
+      <header className="bg-[#0A0A0B]/90 backdrop-blur-md border-b border-white/10 px-3 py-2 sm:px-6 sm:py-0 sm:h-16 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center shrink-0 z-20">
         <div className="flex items-center gap-4">
-          <a href="/" className="flex items-center gap-3 no-underline group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.5)] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.7)] transition-all ring-1 ring-white/10">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-                <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-                <line x1="6" y1="6" x2="6.01" y2="6" />
-                <line x1="6" y1="18" x2="6.01" y2="18" />
-              </svg>
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
+              Workspace
             </div>
-            <div>
-              <span className="text-[10px] uppercase tracking-[0.22em] text-gray-500 block">
-                WebToolsEasy
-              </span>
-              <span className="text-lg font-bold text-white tracking-tight block -mt-0.5">
-                ArchCost
-              </span>
-              <span className="text-[10px] text-orange-400 font-mono tracking-widest uppercase block mt-[-2px]">
-                Visual Cloud Estimator
-              </span>
+            <div className="text-base sm:text-lg font-bold text-white tracking-tight">
+              ArchCost Canvas
             </div>
-          </a>
+          </div>
           <div className="hidden md:inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold text-gray-200">
             <span
               className={`h-1.5 w-1.5 rounded-full ${pricingStatus.isFallback ? "bg-amber-400" : "bg-emerald-400"}`}
@@ -726,10 +715,16 @@ export function ArchitectureCanvas({
               ? "Quarterly baseline pricing"
               : "Weekly synced pricing"}
           </div>
+          <a
+            href="/architectures"
+            className="hidden md:inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-[11px] font-semibold text-indigo-200 hover:bg-indigo-500/20"
+          >
+            Start from ArchCost templates
+          </a>
         </div>
 
         {readOnlyMode && (
-          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3 bg-blue-900/30 border border-blue-500/30 px-4 py-1.5 rounded-full z-30">
+          <div className="absolute left-1/2 top-full mt-2 w-[calc(100%-1rem)] max-w-2xl -translate-x-1/2 flex flex-wrap items-center justify-center gap-2 bg-blue-900/30 border border-blue-500/30 px-3 py-2 rounded-2xl z-30">
             <span className="text-xs text-blue-300 font-medium">
               Viewing shared architecture (Read-only)
             </span>
@@ -742,10 +737,10 @@ export function ArchitectureCanvas({
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto sm:justify-end">
           <button
             onClick={handleUndo}
-            className="text-sm text-gray-300 hover:text-white px-3 py-2 transition-colors"
+            className="text-xs sm:text-sm text-gray-300 hover:text-white px-3 py-2 transition-colors"
             aria-label="Undo"
             title="Undo"
           >
@@ -753,7 +748,7 @@ export function ArchitectureCanvas({
           </button>
           <button
             onClick={handleRedo}
-            className="text-sm text-gray-300 hover:text-white px-3 py-2 transition-colors"
+            className="text-xs sm:text-sm text-gray-300 hover:text-white px-3 py-2 transition-colors"
             aria-label="Redo"
             title="Redo"
           >
@@ -767,7 +762,7 @@ export function ArchitectureCanvas({
           </button>
           <button
             onClick={handleShare}
-            className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg font-medium transition-all text-sm flex items-center gap-2"
+            className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-all text-xs sm:text-sm flex items-center gap-2"
           >
             {copied ? "✓ Copied!" : "🔗 Share"}
           </button>
@@ -775,14 +770,14 @@ export function ArchitectureCanvas({
             compareMode ? (
               <button
                 onClick={handleExitCompareMode}
-                className="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold transition-all text-sm"
+                className="bg-amber-600 hover:bg-amber-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all text-xs sm:text-sm"
               >
                 Exit Comparison
               </button>
             ) : (
               <button
                 onClick={handleEnterCompareMode}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-semibold transition-all text-sm"
+                className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all text-xs sm:text-sm"
               >
                 Compare
               </button>
@@ -791,7 +786,7 @@ export function ArchitectureCanvas({
           <div className="relative ml-1">
             <button
               onClick={() => setShowExportMenu((current) => !current)}
-              className="bg-indigo-600 hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.3)] text-white px-5 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 text-sm"
+              className="bg-indigo-600 hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.3)] text-white px-4 sm:px-5 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 text-xs sm:text-sm"
             >
               Export
             </button>

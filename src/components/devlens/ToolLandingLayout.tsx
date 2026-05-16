@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { type ToolMeta } from "@/lib/devlens/toolMeta";
+import { TOOL_META, type ToolMeta } from "@/lib/devlens/toolMeta";
 import { Badge } from "@/components/ui/Badge";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -10,6 +10,10 @@ type ToolLandingLayoutProps = {
 };
 
 export function ToolLandingLayout({ meta, toolSlot }: ToolLandingLayoutProps) {
+  const allToolSlugs = Object.keys(TOOL_META)
+    .filter((slug) => slug !== meta.slug)
+    .sort();
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#0A0A0B] text-white">
       {/* Background glow */}
@@ -84,7 +88,7 @@ export function ToolLandingLayout({ meta, toolSlot }: ToolLandingLayoutProps) {
 
         {/* Related tools */}
         {meta.relatedSlugs.length > 0 && (
-          <section className="mx-auto max-w-5xl px-6 pb-20">
+          <section className="mx-auto max-w-5xl px-6 pb-10">
             <h2 className="mb-5 text-lg font-bold text-white">Related Tools</h2>
             <div className="flex flex-wrap gap-3">
               {meta.relatedSlugs.map((slug) => (
@@ -102,6 +106,34 @@ export function ToolLandingLayout({ meta, toolSlot }: ToolLandingLayoutProps) {
             </div>
           </section>
         )}
+
+        <section className="mx-auto max-w-5xl px-6 pb-20">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-lg font-bold text-white">Browse All Tools</h2>
+              <Link
+                href="/tools"
+                className="rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-black/50"
+              >
+                Open Tools Directory
+              </Link>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {allToolSlugs.map((slug) => (
+                <Link
+                  key={slug}
+                  href={`/tools/${slug}`}
+                  className="rounded-lg border border-white/10 bg-black/20 px-3 py-1.5 text-xs font-semibold text-gray-300 transition-colors hover:bg-black/40 hover:text-white"
+                >
+                  {slug
+                    .split("-")
+                    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                    .join(" ")}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />

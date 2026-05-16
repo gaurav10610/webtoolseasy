@@ -18,6 +18,9 @@ export function Footer() {
           <Link href="/canvas" className="transition-colors hover:text-white">
             ArchCost Canvas
           </Link>
+          <Link href="/tools" className="transition-colors hover:text-white">
+            Tools
+          </Link>
           <Link
             href="/tools/jwt-decoder"
             className="transition-colors hover:text-white"
@@ -29,6 +32,18 @@ export function Footer() {
             className="transition-colors hover:text-white"
           >
             Regex
+          </Link>
+          <Link
+            href="/jwt/claims"
+            className="transition-colors hover:text-white"
+          >
+            JWT Claims
+          </Link>
+          <Link
+            href="/regex/patterns"
+            className="transition-colors hover:text-white"
+          >
+            Regex Patterns
           </Link>
           <Link
             href="/calculators"

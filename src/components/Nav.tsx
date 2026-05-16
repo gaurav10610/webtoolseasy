@@ -31,7 +31,7 @@ export function Nav() {
             <div className="text-lg font-bold tracking-tight text-white">
               WebToolsEasy
             </div>
-            <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
+            <div className="hidden text-[10px] uppercase tracking-[0.22em] text-gray-500 sm:block">
               DevLens + ArchCost in one suite
             </div>
           </div>
@@ -51,16 +51,10 @@ export function Nav() {
             ArchCost
           </Link>
           <Link
-            href="/tools/jwt-decoder"
+            href="/tools"
             className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
           >
-            JWT
-          </Link>
-          <Link
-            href="/tools/regex-tester"
-            className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
-          >
-            Regex
+            Tools
           </Link>
           <Link
             href="/calculators"
@@ -72,7 +66,7 @@ export function Nav() {
             href="/architectures"
             className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
           >
-            Templates
+            ArchCost Templates
           </Link>
           <a
             href="https://github.com/gaurav10610/webtoolseasy"
@@ -126,18 +120,11 @@ export function Nav() {
             ArchCost
           </Link>
           <Link
-            href="/tools/jwt-decoder"
+            href="/tools"
             className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
             onClick={() => setMenuOpen(false)}
           >
-            JWT
-          </Link>
-          <Link
-            href="/tools/regex-tester"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
-            onClick={() => setMenuOpen(false)}
-          >
-            Regex
+            Tools
           </Link>
           <Link
             href="/calculators"
@@ -151,7 +138,7 @@ export function Nav() {
             className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-gray-200 transition-colors hover:bg-white/10"
             onClick={() => setMenuOpen(false)}
           >
-            Architecture Templates
+            ArchCost Templates
           </Link>
           <a
             href="https://github.com/gaurav10610/webtoolseasy"

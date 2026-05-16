@@ -2,6 +2,7 @@ import { regexPatterns } from "@/data/regexPatterns";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export function generateStaticParams() {
   return regexPatterns.map((pattern) => ({
@@ -17,8 +18,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const patternData = regexPatterns.find((p) => p.slug === slug);
+  const slugParam = Array.isArray(slug) ? slug[0] : slug;
+  const patternData = regexPatterns.find((p) => p.slug === slugParam);
   if (!patternData) return { title: "Not Found" };
+  const imageUrl = `https://webtoolseasy.com/regex/patterns/${slugParam}/opengraph-image`;
 
   return {
     title: `${patternData.name} Regex Pattern | WebToolsEasy`,
@@ -30,25 +33,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "regex tester",
     ],
     alternates: {
-      canonical: `https://webtoolseasy.com/regex/patterns/${slug}`,
+      canonical: `https://webtoolseasy.com/regex/patterns/${slugParam}`,
     },
     openGraph: {
       title: `${patternData.name} Regex Pattern | WebToolsEasy`,
       description: patternData.description,
-      url: `https://webtoolseasy.com/regex/patterns/${slug}`,
-      images: ["https://webtoolseasy.com/opengraph-image"],
+      url: `https://webtoolseasy.com/regex/patterns/${slugParam}`,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${patternData.name} regex pattern preview`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${patternData.name} Regex Pattern | WebToolsEasy`,
       description: patternData.description,
-      images: ["https://webtoolseasy.com/opengraph-image"],
+      images: [imageUrl],
     },
   };
 }
 
 export default async function RegexPatternPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
   const pattern = regexPatterns.find((p) => p.slug === slug);
 
   if (!pattern) {
@@ -77,7 +88,7 @@ export default async function RegexPatternPage({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+    <ContentPageLayout mainClassName="px-6 py-12">
       <script
         id="regex-pattern-jsonld"
         type="application/ld+json"
@@ -161,6 +172,6 @@ export default async function RegexPatternPage({ params }: Props) {
           </div>
         </div>
       </div>
-    </main>
+    </ContentPageLayout>
   );
 }

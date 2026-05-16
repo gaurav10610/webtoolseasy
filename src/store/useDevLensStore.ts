@@ -19,6 +19,7 @@ type DevLensState = {
   setPanelWidths: (widths: PanelWidthMap) => void;
   updatePanelInput: (id: string, input: string) => void;
   addToHistory: (input: string) => void;
+  clearHistory: () => void;
   loadPanels: (panels: DevLensPanel[]) => void;
   restoreFromHistory: (input: string) => void;
 };
@@ -187,6 +188,10 @@ export const useDevLensStore = create<DevLensState>((set, get) => ({
       ...get().history.filter((entry) => entry !== input),
     ].slice(0, 20);
     set({ history });
+  },
+
+  clearHistory: () => {
+    set({ history: [] });
   },
 
   loadPanels: (panels: DevLensPanel[]) => {

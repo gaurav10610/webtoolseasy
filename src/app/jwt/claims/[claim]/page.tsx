@@ -2,6 +2,7 @@ import { jwtClaims } from "@/data/jwtClaims";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export function generateStaticParams() {
   return jwtClaims.map((claim) => ({
@@ -17,8 +18,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { claim } = await params;
-  const claimData = jwtClaims.find((c) => c.id === claim);
+  const claimParam = Array.isArray(claim) ? claim[0] : claim;
+  const claimData = jwtClaims.find((c) => c.id === claimParam);
   if (!claimData) return { title: "Not Found" };
+  const imageUrl = `https://webtoolseasy.com/jwt/claims/${claimParam}/opengraph-image`;
 
   return {
     title: `JWT ${claimData.name} Claim (${claimData.fullName}) | WebToolsEasy`,
@@ -30,25 +33,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "jwt decoder",
     ],
     alternates: {
-      canonical: `https://webtoolseasy.com/jwt/claims/${claim}`,
+      canonical: `https://webtoolseasy.com/jwt/claims/${claimParam}`,
     },
     openGraph: {
       title: `JWT ${claimData.name} Claim (${claimData.fullName}) | WebToolsEasy`,
       description: claimData.description,
-      url: `https://webtoolseasy.com/jwt/claims/${claim}`,
-      images: ["https://webtoolseasy.com/opengraph-image"],
+      url: `https://webtoolseasy.com/jwt/claims/${claimParam}`,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `JWT ${claimData.name} claim reference preview`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `JWT ${claimData.name} Claim (${claimData.fullName}) | WebToolsEasy`,
       description: claimData.description,
-      images: ["https://webtoolseasy.com/opengraph-image"],
+      images: [imageUrl],
     },
   };
 }
 
 export default async function JwtClaimPage({ params }: Props) {
-  const { claim: claimId } = await params;
+  const { claim: rawClaim } = await params;
+  const claimId = Array.isArray(rawClaim) ? rawClaim[0] : rawClaim;
   const claim = jwtClaims.find((c) => c.id === claimId);
 
   if (!claim) {
@@ -65,8 +76,18 @@ export default async function JwtClaimPage({ params }: Props) {
     url: `https://webtoolseasy.com/jwt/claims/${claimId}`,
   };
 
+  const relatedLinks = [
+    { href: "/tools/jwt-decoder", label: "Decode a live token" },
+    {
+      href: "/tools/timestamp-converter",
+      label: "Validate exp/iat timestamps",
+    },
+    { href: "/regex/patterns", label: "Find claim validation regex" },
+    { href: "/tools/regex-tester", label: "Test your claim regex" },
+  ];
+
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+    <ContentPageLayout mainClassName="px-6 py-12">
       <script
         id="jwt-claim-jsonld"
         type="application/ld+json"
@@ -144,8 +165,25 @@ export default async function JwtClaimPage({ params }: Props) {
               </a>
             )}
           </div>
+
+          <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">
+              Related Workflows
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {relatedLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-200 hover:bg-black/50"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
-    </main>
+    </ContentPageLayout>
   );
 }

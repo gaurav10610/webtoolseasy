@@ -1,6 +1,7 @@
 import { architectureTemplates } from "@/data/architectureTemplates";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ContentPageLayout } from "@/components/ContentPageLayout";
 
 export const metadata: Metadata = {
   title: "AWS Architecture Templates | WebToolsEasy",
@@ -14,6 +15,20 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://webtoolseasy.com/architectures",
+  },
+  openGraph: {
+    title: "AWS Architecture Templates | WebToolsEasy",
+    description:
+      "Browse pre-configured AWS cloud architecture templates and instantly load them into the ArchCost canvas for cost estimation.",
+    url: "https://webtoolseasy.com/architectures",
+    images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AWS Architecture Templates | WebToolsEasy",
+    description:
+      "Browse pre-configured AWS cloud architecture templates and instantly load them into the ArchCost canvas for cost estimation.",
+    images: ["https://webtoolseasy.com/opengraph-image"],
   },
 };
 
@@ -32,13 +47,23 @@ export default function ArchitecturesIndex() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white py-12 px-6">
+    <ContentPageLayout mainClassName="px-6 py-12">
       <script
         id="architectures-collection-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <div className="mx-auto max-w-4xl">
+        <div className="mb-6 rounded-2xl border border-indigo-500/30 bg-indigo-500/10 p-4 text-sm text-indigo-100">
+          These are starter examples for ArchCost. Pick a template, then load it
+          into the canvas and customize it for your environment.
+          <Link
+            href="/canvas"
+            className="ml-2 inline-flex font-semibold text-indigo-300 hover:text-indigo-200"
+          >
+            Open ArchCost Canvas
+          </Link>
+        </div>
         <h1 className="text-3xl font-bold mb-4">Architecture Templates</h1>
         <p className="text-gray-400 mb-8">
           Browse common cloud architectures, view their estimated monthly costs,
@@ -78,6 +103,6 @@ export default function ArchitecturesIndex() {
           ))}
         </div>
       </div>
-    </main>
+    </ContentPageLayout>
   );
 }

@@ -1,85 +1,175 @@
-# WebToolsEasy — Developer Studio
+# WebToolsEasy
 
-Privacy-first developer tools. All processing runs locally in your browser, with Postgres used only for shared architecture persistence.
+Open-source, privacy-first developer studio built with Next.js.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)](https://www.typescriptlang.org/)
 
-**WebToolsEasy** is an open-source developer studio built around two flagship products:
+WebToolsEasy currently focuses on two connected product surfaces:
 
-- **DevLens** — A smart data inspector that auto-detects what you've pasted (JWT, JSON, Base64, timestamps, UUIDs, regex, and more) and renders deep, interactive analysis views.
-- **ArchCost** — A visual cloud architecture cost planner. Drag-and-drop AWS services onto a canvas and get real-time cost estimates.
+- DevLens: smart-paste inspection for developer payloads such as JWT, JSON, Base64, regex, timestamps, UUID, certificates, CSV, URL-encoded data, and env files.
+- ArchCost: visual AWS architecture planning with live pricing, transfer awareness, scenario comparison, and shareable URL state.
 
-## Live Product
+## Product Snapshot (Latest)
 
-🌐 **[webtoolseasy.com](https://webtoolseasy.com)**
+- Positioning: privacy-first developer studio for data inspection and cloud cost planning.
+- Core UX: "Paste anything. Understand everything. Plan confidently."
+- Delivery model: local-first browser workflows for core tools.
+- SEO model: route-level metadata plus structured data (SoftwareApplication, CollectionPage, FAQPage, TechArticle, DefinedTerm) across major pages.
 
-| Product  | URL                                        |
-| -------- | ------------------------------------------ |
-| DevLens  | [/studio](https://webtoolseasy.com/studio) |
-| ArchCost | [/canvas](https://webtoolseasy.com/canvas) |
+## Official Site and Canonical Links
 
-## Why This Project Exists
+If you reference this product in blogs, videos, courses, newsletters, or tool lists, use these canonical URLs.
 
-1. **AI-proof** — Complex runtime inspection and visual cost planning are things static AI chat models cannot replicate well.
-2. **Privacy-first** — Zero data leaves your browser. No accounts, no uploads, no server-side processing.
-3. **Deep, not wide** — Instead of 100+ shallow tools, two products with deep, expert-level features.
+- Homepage: https://webtoolseasy.com
+- DevLens Studio: https://webtoolseasy.com/studio
+- ArchCost Canvas: https://webtoolseasy.com/canvas
+- Developer Tools Directory: https://webtoolseasy.com/tools
+- JWT Decoder: https://webtoolseasy.com/tools/jwt-decoder
+- JSON Query: https://webtoolseasy.com/tools/json-query
+- Regex Tester: https://webtoolseasy.com/tools/regex-tester
+- AWS Calculators: https://webtoolseasy.com/calculators
+- AWS Architecture Templates: https://webtoolseasy.com/architectures
+- JWT Claims Reference: https://webtoolseasy.com/jwt/claims
+- Regex Pattern Library: https://webtoolseasy.com/regex/patterns
 
-## DevLens: Smart Paste Engine
+## Full App URL Directory (Backlinks)
 
-Paste any developer data — DevLens auto-detects the type and renders a specialist view:
+This section provides crawlable backlinks for every current app page route.
 
-| Type        | Features                                                                                |
-| ----------- | --------------------------------------------------------------------------------------- |
-| JWT         | Header/Payload/Signature decode, claim explanations, exp countdown, alg security badges |
-| JSON        | Tree view, sortable table, prettify/minify, JSONPath query, schema inference            |
-| Base64      | Decode/encode, data URL preview, binary hex dump, content type detection                |
-| Regex       | Test/explain/replace tabs, capture group highlighting, flag toggles                     |
-| Timestamp   | 8-timezone grid, relative time, reverse converter                                       |
-| UUID        | Version decode (v1/v4/v7), timestamp extraction, generate buttons                       |
-| Color       | HEX/RGB/HSL/HSV/OKLCH conversions, WCAG contrast, tint/shade palette                    |
-| URL Encoded | Parameter table, double-encoding detection, encode builder                              |
-| IP Address  | IPv4/IPv6, CIDR math, private/public/loopback classification                            |
-| PEM/X.509   | Certificate fields, expiry countdown, chain analysis                                    |
-| YAML        | Parse/validate, YAML↔JSON conversion                                                    |
-| XML         | Tree view, XPath query, prettify                                                        |
-| CSV/TSV     | Auto-delimiter detection, sortable table, column type inference                         |
-| .env        | Masked values, compare two files, export as JSON                                        |
-| Cron        | Human-readable description, next 15 triggers, visual builder                            |
-| SQL         | Format/prettify, query breakdown, dialect selector                                      |
+### Core Pages
 
-## ArchCost: Visual Cost Planner
+- [Homepage](https://webtoolseasy.com)
+- [DevLens Studio](https://webtoolseasy.com/studio)
+- [ArchCost Canvas](https://webtoolseasy.com/canvas)
+- [Developer Tools Directory](https://webtoolseasy.com/tools)
+- [AWS Calculators Index](https://webtoolseasy.com/calculators)
+- [AWS Architecture Templates Index](https://webtoolseasy.com/architectures)
+- [JWT Claims Index](https://webtoolseasy.com/jwt/claims)
+- [Regex Patterns Index](https://webtoolseasy.com/regex/patterns)
+- [Privacy](https://webtoolseasy.com/privacy)
 
-Drag AWS services onto a canvas and configure them to get live cost estimates:
+### DevLens Tool Pages
 
-- **6 services**: EC2, RDS, S3, Lambda, ALB, CloudFront
-- **Real pricing**: Weekly automated updates from AWS Bulk Pricing API
-- **Undo/Redo**: Full history with Cmd+Z / Cmd+Shift+Z
-- **Keyboard shortcuts**: Delete, select all, duplicate, arrow nudge, fit view
-- **Shareable**: Compress architecture to URL for sharing
-- **Export**: PNG, PDF, CSV cost breakdown (coming soon)
+- [Base64 Encoder and Decoder](https://webtoolseasy.com/tools/base64)
+- [Certificate Inspector](https://webtoolseasy.com/tools/certificate-inspector)
+- [Color Utilities](https://webtoolseasy.com/tools/color)
+- [Cron Parser](https://webtoolseasy.com/tools/cron)
+- [Env File Editor](https://webtoolseasy.com/tools/env-file-editor)
+- [JSON Query](https://webtoolseasy.com/tools/json-query)
+- [JWT Decoder](https://webtoolseasy.com/tools/jwt-decoder)
+- [Regex Tester](https://webtoolseasy.com/tools/regex-tester)
+- [Timestamp Converter](https://webtoolseasy.com/tools/timestamp-converter)
+- [URL Decoder](https://webtoolseasy.com/tools/url-decoder)
+- [UUID Utilities](https://webtoolseasy.com/tools/uuid)
 
-Shared architecture links require a Postgres database configured via `DATABASE_URL`. The rest of the app does not require a database.
+### ArchCost Calculator Pages
 
-## Technology Stack
+- [EC2 Pricing Calculator](https://webtoolseasy.com/calculators/ec2)
+- [RDS Pricing Calculator](https://webtoolseasy.com/calculators/rds)
+- [S3 Pricing Calculator](https://webtoolseasy.com/calculators/s3)
+- [Lambda Pricing Calculator](https://webtoolseasy.com/calculators/lambda)
+- [ALB Pricing Calculator](https://webtoolseasy.com/calculators/alb)
 
-- **Framework**: Next.js 16 (App Router, Turbopack)
-- **Language**: TypeScript 6
-- **Styling**: Tailwind CSS 3
-- **State**: Zustand (with zundo for undo/redo)
-- **Canvas**: ReactFlow
-- **Testing**: Vitest + Playwright
-- **Font**: Space Grotesk
+### Architecture Template Detail Pages
+
+- [Classic 3 Tier Web Architecture](https://webtoolseasy.com/architectures/classic-3-tier-web)
+- [Serverless API Architecture](https://webtoolseasy.com/architectures/serverless-api)
+
+### JWT Claim Reference Pages
+
+- [iss Claim](https://webtoolseasy.com/jwt/claims/iss)
+- [sub Claim](https://webtoolseasy.com/jwt/claims/sub)
+- [aud Claim](https://webtoolseasy.com/jwt/claims/aud)
+- [exp Claim](https://webtoolseasy.com/jwt/claims/exp)
+- [nbf Claim](https://webtoolseasy.com/jwt/claims/nbf)
+- [iat Claim](https://webtoolseasy.com/jwt/claims/iat)
+- [jti Claim](https://webtoolseasy.com/jwt/claims/jti)
+- [typ Claim](https://webtoolseasy.com/jwt/claims/typ)
+- [azp Claim](https://webtoolseasy.com/jwt/claims/azp)
+- [nonce Claim](https://webtoolseasy.com/jwt/claims/nonce)
+- [auth_time Claim](https://webtoolseasy.com/jwt/claims/auth_time)
+- [acr Claim](https://webtoolseasy.com/jwt/claims/acr)
+- [amr Claim](https://webtoolseasy.com/jwt/claims/amr)
+- [scope Claim](https://webtoolseasy.com/jwt/claims/scope)
+- [roles Claim](https://webtoolseasy.com/jwt/claims/roles)
+- [permissions Claim](https://webtoolseasy.com/jwt/claims/permissions)
+- [name Claim](https://webtoolseasy.com/jwt/claims/name)
+- [given_name Claim](https://webtoolseasy.com/jwt/claims/given_name)
+- [family_name Claim](https://webtoolseasy.com/jwt/claims/family_name)
+- [preferred_username Claim](https://webtoolseasy.com/jwt/claims/preferred_username)
+- [email Claim](https://webtoolseasy.com/jwt/claims/email)
+- [email_verified Claim](https://webtoolseasy.com/jwt/claims/email_verified)
+- [phone_number Claim](https://webtoolseasy.com/jwt/claims/phone_number)
+- [phone_number_verified Claim](https://webtoolseasy.com/jwt/claims/phone_number_verified)
+- [locale Claim](https://webtoolseasy.com/jwt/claims/locale)
+- [zoneinfo Claim](https://webtoolseasy.com/jwt/claims/zoneinfo)
+- [sid Claim](https://webtoolseasy.com/jwt/claims/sid)
+- [at_hash Claim](https://webtoolseasy.com/jwt/claims/at_hash)
+- [c_hash Claim](https://webtoolseasy.com/jwt/claims/c_hash)
+- [client_id Claim](https://webtoolseasy.com/jwt/claims/client_id)
+- [tenant Claim](https://webtoolseasy.com/jwt/claims/tenant)
+
+### Regex Pattern Detail Pages
+
+- [Email Regex Pattern](https://webtoolseasy.com/regex/patterns/email)
+- [UUID Regex Pattern](https://webtoolseasy.com/regex/patterns/uuid)
+- [IPv4 Regex Pattern](https://webtoolseasy.com/regex/patterns/ipv4)
+- [MAC Address Regex Pattern](https://webtoolseasy.com/regex/patterns/mac-address)
+- [Hex Color Regex Pattern](https://webtoolseasy.com/regex/patterns/hex-color)
+- [URL Regex Pattern](https://webtoolseasy.com/regex/patterns/url)
+- [Domain Name Regex Pattern](https://webtoolseasy.com/regex/patterns/domain-name)
+- [Slug Regex Pattern](https://webtoolseasy.com/regex/patterns/slug)
+- [SemVer Regex Pattern](https://webtoolseasy.com/regex/patterns/semver)
+- [ISO Date Regex Pattern](https://webtoolseasy.com/regex/patterns/date-iso)
+- [24h Time Regex Pattern](https://webtoolseasy.com/regex/patterns/time-24h)
+- [E.164 Phone Regex Pattern](https://webtoolseasy.com/regex/patterns/phone-e164)
+- [US ZIP Regex Pattern](https://webtoolseasy.com/regex/patterns/postal-us-zip)
+- [HTML Tag Regex Pattern](https://webtoolseasy.com/regex/patterns/html-tag)
+- [Credit Card Basic Regex Pattern](https://webtoolseasy.com/regex/patterns/credit-card-basic)
+- [Strong Password Regex Pattern](https://webtoolseasy.com/regex/patterns/strong-password)
+- [Linux File Path Regex Pattern](https://webtoolseasy.com/regex/patterns/linux-file-path)
+- [Windows File Path Regex Pattern](https://webtoolseasy.com/regex/patterns/windows-file-path)
+- [HTML Hex Entity Regex Pattern](https://webtoolseasy.com/regex/patterns/html-hex-entity)
+- [Markdown Heading Regex Pattern](https://webtoolseasy.com/regex/patterns/markdown-heading)
+- [GitHub Username Regex Pattern](https://webtoolseasy.com/regex/patterns/github-username)
+- [Git Commit SHA Regex Pattern](https://webtoolseasy.com/regex/patterns/git-commit-sha)
+- [Docker Image Tag Regex Pattern](https://webtoolseasy.com/regex/patterns/docker-image-tag)
+- [AWS ARN Regex Pattern](https://webtoolseasy.com/regex/patterns/aws-arn)
+- [Kubernetes Name Regex Pattern](https://webtoolseasy.com/regex/patterns/kubernetes-name)
+
+## What This Repository Includes
+
+- Next.js App Router implementation for the product website and app experiences.
+- Route-level metadata and JSON-LD structured data for search discoverability.
+- Static and generated data sources for tools, calculators, claims, and patterns.
+- Unit tests (Vitest) and end-to-end tests (Playwright).
+- Scripts for pricing updates, sitemap generation, and indexing workflows.
+
+## Privacy and Data Handling
+
+- Core inspection and transformation workflows are designed to run in-browser.
+- No database is required for core product workflows, including architecture sharing.
+- Architecture sharing works by compressing state into URL parameters.
+
+## Tech Stack
+
+- Framework: Next.js 16
+- Language: TypeScript
+- Styling: Tailwind CSS
+- State: Zustand
+- Diagram Canvas: React Flow
+- Testing: Vitest and Playwright
 
 ## Quick Start
 
-### Prerequisites
+Prerequisites:
 
 - Node.js 22.x
 - npm 10+
 
-### Setup
+Setup:
 
 ```bash
 git clone https://github.com/gaurav10610/webtoolseasy.git
@@ -89,72 +179,56 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Run locally at http://localhost:3000.
 
-## npm Scripts
+Database note:
 
-| Script                   | Description              |
-| ------------------------ | ------------------------ |
-| `npm run dev`            | Start development server |
-| `npm run build`          | Production build         |
-| `npm run start`          | Start production server  |
-| `npm run lint`           | Run ESLint               |
-| `npm run test:unit`      | Run Vitest unit tests    |
-| `npm run test:e2e`       | Run Playwright E2E tests |
-| `npm run test`           | Run all tests            |
-| `npm run fetch-pricing`  | Update AWS pricing data  |
-| `npm run update:sitemap` | Regenerate sitemap.xml   |
+- Runtime does not require a database for core product flows.
 
-If you want architecture sharing in development or production, set `DATABASE_URL` before starting the app.
+## Scripts
+
+| Script                 | Description              |
+| ---------------------- | ------------------------ |
+| npm run dev            | Start development server |
+| npm run build          | Production build         |
+| npm run start          | Start production server  |
+| npm run lint           | Run ESLint               |
+| npm run test:unit      | Run Vitest tests         |
+| npm run test:e2e       | Run Playwright tests     |
+| npm run test           | Run full test suite      |
+| npm run fetch-pricing  | Refresh AWS pricing data |
+| npm run update:sitemap | Regenerate sitemap.xml   |
 
 ## Project Structure
 
-```
+```text
 src/
-├── app/                    # Next.js App Router pages
-│   ├── studio/             # DevLens workbench
-│   ├── canvas/             # ArchCost planner
-│   ├── tools/              # Tool landing pages (SEO)
-│   └── privacy/            # Privacy policy
-├── components/
-│   ├── devlens/            # Smart Paste engine + specialist views
-│   ├── canvas/             # ArchCost canvas components
-│   └── ui/                 # Shared design system
-├── store/                  # Zustand stores
-├── data/                   # Pricing data, tool metadata
-├── lib/                    # Business logic modules
-└── __tests__/              # Unit tests
+	app/                # Next.js routes
+	components/         # UI and feature components
+	data/               # Static and generated data sources
+	hooks/              # React hooks
+	lib/                # Core business logic
+	store/              # Zustand stores
+	types/              # Shared TypeScript types
+	utils/              # Utility helpers
 ```
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md).
 
-### Adding a new DevLens specialist view
+Implementation guides:
 
-1. Create `src/components/devlens/views/YourView.tsx`
-2. Add detection logic in `src/lib/devlens/detector.ts`
-3. Register in `src/components/devlens/InlineTool.tsx`
-4. Add metadata in `src/lib/devlens/toolMeta.ts`
-5. Write unit tests
+- [docs/ADDING_A_DEVLENS_VIEW.md](docs/ADDING_A_DEVLENS_VIEW.md)
+- [docs/ADDING_AN_ARCHCOST_SERVICE.md](docs/ADDING_AN_ARCHCOST_SERVICE.md)
 
-### Adding a new ArchCost service
+## License
 
-1. Add pricing logic in `src/data/pricingEngine.ts`
-2. Add default config in `useArchitectureStore.ts`
-3. Add to the sidebar service list
-4. Write unit tests for the pricing calculator
-
-## Open Source
-
-- [CONTRIBUTING.md](CONTRIBUTING.md)
-- [SECURITY.md](SECURITY.md)
-- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-- [LICENSE](LICENSE) (MIT)
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
 
 ## Maintainer
 
-**Gaurav Kumar Yadav**
+Gaurav Kumar Yadav
 
-- GitHub: [github.com/gaurav10610](https://github.com/gaurav10610)
-- LinkedIn: [linkedin.com/in/gaurav-kumar-yadav-6125817a](https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/)
+- GitHub: https://github.com/gaurav10610
+- LinkedIn: https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/

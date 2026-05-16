@@ -2,25 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://webtoolseasy.com</loc>
-    <lastmod>2026-05-16T10:27:44+00:00</lastmod>
+    <lastmod>2026-05-16T16:22:25+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/studio</loc>
-    <lastmod>2026-05-16T10:46:53+00:00</lastmod>
+    <lastmod>2026-05-16T16:42:11+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/canvas</loc>
-    <lastmod>2026-05-16T10:46:53+00:00</lastmod>
+    <lastmod>2026-05-16T16:42:11+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9000</priority>
   </url>
   <url>
+    <loc>https://webtoolseasy.com/tools</loc>
+    <lastmod>2026-05-16T16:42:11+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8500</priority>
+  </url>
+  <url>
     <loc>https://webtoolseasy.com/privacy</loc>
-    <lastmod>2026-05-16T10:46:53+00:00</lastmod>
+    <lastmod>2026-05-16T16:42:11+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5000</priority>
   </url>
@@ -92,139 +98,403 @@
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims</loc>
-    <lastmod>2026-05-16T10:27:44+00:00</lastmod>
+    <lastmod>2026-05-16T15:55:41+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/regex/patterns</loc>
-    <lastmod>2026-05-16T10:27:44+00:00</lastmod>
+    <lastmod>2026-05-16T15:55:41+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/calculators</loc>
-    <lastmod>2026-05-16T10:27:44+00:00</lastmod>
+    <lastmod>2026-05-16T15:55:41+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/architectures</loc>
-    <lastmod>2026-05-16T10:27:44+00:00</lastmod>
+    <lastmod>2026-05-16T16:18:39+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/iss</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/sub</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/aud</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/exp</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/nbf</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/iat</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/jwt/claims/jti</loc>
-    <lastmod>2026-05-16T06:50:49+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/typ</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/azp</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/nonce</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/auth_time</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/acr</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/amr</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/scope</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/roles</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/permissions</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/name</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/given_name</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/family_name</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/preferred_username</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/email</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/email_verified</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/phone_number</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/phone_number_verified</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/locale</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/zoneinfo</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/sid</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/at_hash</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/c_hash</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/client_id</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/jwt/claims/tenant</loc>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/regex/patterns/email</loc>
-    <lastmod>2026-05-16T06:51:37+00:00</lastmod>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/regex/patterns/uuid</loc>
-    <lastmod>2026-05-16T06:51:37+00:00</lastmod>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/regex/patterns/ipv4</loc>
-    <lastmod>2026-05-16T06:51:37+00:00</lastmod>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/regex/patterns/mac-address</loc>
-    <lastmod>2026-05-16T06:51:37+00:00</lastmod>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/regex/patterns/hex-color</loc>
-    <lastmod>2026-05-16T06:51:37+00:00</lastmod>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/url</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/domain-name</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/slug</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/semver</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/date-iso</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/time-24h</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/phone-e164</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/postal-us-zip</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/html-tag</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/credit-card-basic</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/strong-password</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/linux-file-path</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/windows-file-path</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/html-hex-entity</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/markdown-heading</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/github-username</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/git-commit-sha</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/docker-image-tag</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/aws-arn</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6000</priority>
+  </url>
+  <url>
+    <loc>https://webtoolseasy.com/regex/patterns/kubernetes-name</loc>
+    <lastmod>2026-05-16T15:37:20+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/calculators/ec2</loc>
-    <lastmod>2026-05-16T06:52:41+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/calculators/rds</loc>
-    <lastmod>2026-05-16T06:52:41+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/calculators/s3</loc>
-    <lastmod>2026-05-16T06:52:41+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/calculators/lambda</loc>
-    <lastmod>2026-05-16T06:52:41+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/calculators/alb</loc>
-    <lastmod>2026-05-16T06:52:41+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/architectures/classic-3-tier-web</loc>
-    <lastmod>2026-05-16T06:53:28+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>
   <url>
     <loc>https://webtoolseasy.com/architectures/serverless-api</loc>
-    <lastmod>2026-05-16T06:53:28+00:00</lastmod>
+    <lastmod>2026-05-16T15:40:55+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6000</priority>
   </url>

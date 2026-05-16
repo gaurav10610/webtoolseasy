@@ -37,7 +37,7 @@ export function compressArchitecture(
 
     if (compressed.length > MAX_PAYLOAD_BYTES) {
       return {
-        error: `Architecture too large for URL sharing (${(compressed.length / 1024).toFixed(1)}KB > ${MAX_PAYLOAD_BYTES / 1024}KB). Use "Save & get short link" instead.`,
+        error: `Architecture too large for URL sharing (${(compressed.length / 1024).toFixed(1)}KB > ${MAX_PAYLOAD_BYTES / 1024}KB). Remove some nodes/edges or export as PNG/PDF.`,
       };
     }
 
@@ -100,7 +100,9 @@ export function decompressArchitecture(
 /**
  * Build a share URL with the architecture encoded in the ?arch= param.
  */
-export function buildShareUrl(payload: ArchPayload): string | { error: string } {
+export function buildShareUrl(
+  payload: ArchPayload,
+): string | { error: string } {
   const result = compressArchitecture(payload);
   if ("error" in result) return result;
 

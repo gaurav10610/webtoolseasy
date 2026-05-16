@@ -40,6 +40,7 @@ export function Studio() {
   const restoreFromHistory = useDevLensStore(
     (state) => state.restoreFromHistory,
   );
+  const clearHistory = useDevLensStore((state) => state.clearHistory);
 
   useEffect(() => {
     setMounted(true);
@@ -56,6 +57,7 @@ export function Studio() {
         setPanelWidths,
         updatePanelInput,
         addToHistory,
+        clearHistory,
         loadPanels: useDevLensStore.getState().loadPanels,
         restoreFromHistory: useDevLensStore.getState().restoreFromHistory,
       });
@@ -70,6 +72,7 @@ export function Studio() {
     setPanelWidths,
     updatePanelInput,
     addToHistory,
+    clearHistory,
   ]);
 
   useEffect(() => {
@@ -160,229 +163,107 @@ export function Studio() {
 
   if (!mounted) {
     return (
-      <main className="min-h-screen bg-[#0A0A0B] text-white">
-        <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-6 py-10">
-          <div className="flex items-center justify-between rounded-[28px] border border-white/10 bg-[#121214]/90 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-md">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-                  <line x1="6" y1="6" x2="6.01" y2="6" />
-                  <line x1="6" y1="18" x2="6.01" y2="18" />
-                </svg>
-              </div>
-              <div>
-                <div className="text-lg font-bold tracking-tight text-white">
-                  WebToolsEasy
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
-                  DevLens workspace
-                </div>
-              </div>
-            </Link>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/canvas"
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
-              >
-                ArchCost
-              </Link>
-              <Badge variant="info">Local-first</Badge>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between rounded-[28px] border border-white/10 bg-[#121214]/90 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-md">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-                  <line x1="6" y1="6" x2="6.01" y2="6" />
-                  <line x1="6" y1="18" x2="6.01" y2="18" />
-                </svg>
-              </div>
-              <div>
-                <div className="text-lg font-bold tracking-tight text-white">
-                  WebToolsEasy
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
-                  DevLens workspace
-                </div>
-              </div>
-            </Link>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/canvas"
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
-              >
-                ArchCost
-              </Link>
-              <Badge variant="info">Local-first</Badge>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between rounded-[28px] border border-white/10 bg-[#121214]/90 px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur-md">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-indigo-600 shadow-[0_0_20px_rgba(249,115,22,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-                  <line x1="6" y1="6" x2="6.01" y2="6" />
-                  <line x1="6" y1="18" x2="6.01" y2="18" />
-                </svg>
-              </div>
-              <div>
-                <div className="text-lg font-bold tracking-tight text-white">
-                  WebToolsEasy
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
-                  ArchCost workspace
-                </div>
-              </div>
-            </Link>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/studio"
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
-              >
-                DevLens
-              </Link>
-              <Badge variant="info">Local-first</Badge>
-            </div>
-          </div>
-
-          <div className="animate-pulse space-y-6">
-            <div className="h-32 rounded-3xl bg-white/5"></div>
-            <div className="h-20 rounded-3xl bg-white/5"></div>
-            <div className="h-[680px] rounded-3xl bg-white/5"></div>
-          </div>
-        </div>
-      </main>
+      <div className="animate-pulse space-y-6 px-6 py-10">
+        <div className="h-32 rounded-3xl bg-white/5"></div>
+        <div className="h-20 rounded-3xl bg-white/5"></div>
+        <div className="h-[680px] rounded-3xl bg-white/5"></div>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0B] text-white">
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-6 py-10">
-        <Panel
-          title="DevLens"
-          subtitle="Smart Paste Workbench"
-          action={
-            <div className="flex items-center gap-2">
-              <Badge variant="info">Local-first</Badge>
-              <Button variant="secondary" size="sm" onClick={addPanel}>
-                Add panel
-              </Button>
-              <Link
-                href="/canvas"
-                className="inline-flex h-8 items-center rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-semibold text-white transition-colors hover:bg-white/10"
-              >
-                ArchCost
-              </Link>
-            </div>
-          }
-        >
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                Purpose
-              </div>
-              <p className="mt-2 text-sm leading-6 text-gray-300">
-                Inspect opaque developer data instantly and explain what the
-                input actually means.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                Model
-              </div>
-              <p className="mt-2 text-sm leading-6 text-gray-300">
-                No raw payload upload, no account required, and no server
-                dependency for core inspection.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                Next
-              </div>
-              <p className="mt-2 text-sm leading-6 text-gray-300">
-                JWT and JSON specialist views will arrive first because they
-                cover the most common debugging flow.
-              </p>
-            </div>
+    <div className="flex flex-col gap-6 px-6 py-10">
+      <Panel
+        title="DevLens Studio"
+        subtitle="Smart Paste Workbench"
+        action={
+          <div className="flex items-center gap-2">
+            <Badge variant="info">Local-first</Badge>
+            <Button variant="secondary" size="sm" onClick={addPanel}>
+              Add panel
+            </Button>
+            <Link
+              href="/canvas"
+              className="inline-flex h-8 items-center rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              Open ArchCost
+            </Link>
           </div>
-        </Panel>
+        }
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              What You Can Do
+            </div>
+            <p className="mt-2 text-sm leading-6 text-gray-300">
+              Paste JWT, JSON, Base64, regex, timestamps, certs, and more to
+              inspect structure, decode content, and validate assumptions.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              How It Works
+            </div>
+            <p className="mt-2 text-sm leading-6 text-gray-300">
+              Smart Paste detects input type and routes it to specialist views
+              so you can debug faster without switching tools.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              Privacy Model
+            </div>
+            <p className="mt-2 text-sm leading-6 text-gray-300">
+              Core analysis runs in your browser. Recent inputs are stored only
+              in local browser storage and can be cleared anytime.
+            </p>
+          </div>
+        </div>
+      </Panel>
 
-        <HistoryDrawer items={history} onSelect={restoreFromHistory} />
+      <HistoryDrawer
+        items={history}
+        onSelect={restoreFromHistory}
+        onClear={clearHistory}
+      />
 
-        <div
-          className="flex flex-col gap-6 lg:gap-0 lg:flex-row"
-          ref={panelContainerRef}
-        >
-          {panels.map((panel, index) => {
-            const fallback = 100 / Math.max(1, panels.length);
-            const width = panelWidths[panel.id] ?? fallback;
-            const nextPanel = panels[index + 1];
+      <div
+        className="flex flex-col gap-6 lg:gap-0 lg:flex-row"
+        ref={panelContainerRef}
+      >
+        {panels.map((panel, index) => {
+          const fallback = 100 / Math.max(1, panels.length);
+          const width = panelWidths[panel.id] ?? fallback;
+          const nextPanel = panels[index + 1];
 
-            return (
-              <div
-                key={panel.id}
-                className="flex w-full min-h-[680px] lg:w-auto"
-                style={{ flexBasis: `${width}%` }}
-              >
-                <div className="min-h-[680px] h-full w-full lg:pr-3">
-                  <PanelContainer
-                    panel={panel}
-                    onChange={(input) => handleInputUpdate(panel.id, input)}
-                    onRemove={() => removePanel(panel.id)}
+          return (
+            <div
+              key={panel.id}
+              className="flex w-full min-h-[680px] lg:w-auto"
+              style={{ flexBasis: `${width}%` }}
+            >
+              <div className="min-h-[680px] h-full w-full lg:pr-3">
+                <PanelContainer
+                  panel={panel}
+                  onChange={(input) => handleInputUpdate(panel.id, input)}
+                  onRemove={() => removePanel(panel.id)}
+                />
+              </div>
+              {nextPanel ? (
+                <div className="hidden lg:flex items-stretch min-h-[680px]">
+                  <Resizer
+                    onPointerDown={(event) =>
+                      handleResizerPointerDown(panel.id, nextPanel.id, event)
+                    }
+                    className="self-stretch"
                   />
                 </div>
-                {nextPanel ? (
-                  <div className="hidden lg:flex items-stretch min-h-[680px]">
-                    <Resizer
-                      onPointerDown={(event) =>
-                        handleResizerPointerDown(panel.id, nextPanel.id, event)
-                      }
-                      className="self-stretch"
-                    />
-                  </div>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
-    </main>
+    </div>
   );
 }
