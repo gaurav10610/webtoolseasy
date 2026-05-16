@@ -44,7 +44,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
-  const gaId = process.env.GA_CODE?.trim() || process.env.NEXT_PUBLIC_GA_ID?.trim();
+  const gaId =
+    process.env.GA_CODE?.trim() || process.env.NEXT_PUBLIC_GA_ID?.trim();
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
