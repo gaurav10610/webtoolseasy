@@ -8,15 +8,15 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://webtoolseasy.com"),
-  title: "WebToolsEasy | DevLens and ArchCost",
+  title: "WebToolsEasy | 20+ Free Developer Workbenches & Mock APIs",
   description:
-    "A privacy-first developer studio for smart data inspection and cloud cost planning. DevLens and ArchCost run locally first with shareable configurations.",
+    "The ultimate free hub for frontend developers. Access 20+ locally-sandboxed workbenches including JSON/Zod converters, SQL formatters, JWT debuggers, CSS generators, and instant Mock APIs.",
   keywords:
-    "developer tools, jwt decoder online, regex tester, json formatter, base64 decoder, timestamp converter, env file editor, aws cost calculator, cloud architecture cost estimator, privacy-first developer tools",
+    "developer tools, mock apis, json to zod converter, css glassmorphism generator, jwt debugger local, regex explainer, mock api generator, sql formatter online, svg to react converter, docker compose builder",
   openGraph: {
-    title: "WebToolsEasy | DevLens and ArchCost",
+    title: "WebToolsEasy | 20+ Free Developer Workbenches",
     description:
-      "A privacy-first developer studio for smart data inspection and cloud cost planning.",
+      "The ultimate free hub for frontend developers. Access 20+ locally-sandboxed workbenches including JSON/Zod converters, SQL formatters, JWT debuggers, CSS generators, and instant Mock APIs.",
     type: "website",
     url: "https://webtoolseasy.com",
     siteName: "WebToolsEasy",
@@ -25,16 +25,23 @@ export const metadata: Metadata = {
         url: "https://webtoolseasy.com/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "WebToolsEasy DevLens and ArchCost",
+        alt: "WebToolsEasy Free Developer Tools",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "WebToolsEasy | DevLens and ArchCost",
+    title: "WebToolsEasy | 20+ Free Developer Workbenches",
     description:
-      "A privacy-first developer studio for smart data inspection and cloud cost planning.",
+      "The ultimate free hub for frontend developers. Access 20+ locally-sandboxed workbenches including JSON/Zod converters, SQL formatters, JWT debuggers, CSS generators, and instant Mock APIs.",
     images: ["https://webtoolseasy.com/opengraph-image"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon_48.png", sizes: "48x48", type: "image/png" },
+    ],
+    apple: "/favicon_512.png",
   },
 };
 
@@ -52,7 +59,7 @@ export default function RootLayout({
     name: "WebToolsEasy",
     url: "https://webtoolseasy.com",
     description:
-      "Privacy-first developer studio with DevLens smart paste tooling and ArchCost AWS architecture cost planning.",
+      "The ultimate free hub for frontend developers. Access 20+ locally-sandboxed workbenches and instant Mock APIs.",
     potentialAction: {
       "@type": "SearchAction",
       target: "https://webtoolseasy.com/tools/{query}",

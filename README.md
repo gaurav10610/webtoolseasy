@@ -1,175 +1,123 @@
-# WebToolsEasy
+# WebToolsEasy — 22+ Free Developer Tools & Mock APIs
 
-Open-source, privacy-first developer studio built with Next.js.
+**Privacy-first, local-only developer tools hub. No sign-up. No tracking. No watermarks. Every tool runs entirely in your browser.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-blue)](https://www.typescriptlang.org/)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fwebtoolseasy.com&label=webtoolseasy.com)](https://webtoolseasy.com)
 
-WebToolsEasy currently focuses on two connected product surfaces:
+---
 
-- DevLens: smart-paste inspection for developer payloads such as JWT, JSON, Base64, regex, timestamps, UUID, certificates, CSV, URL-encoded data, and env files.
-- ArchCost: visual AWS architecture planning with live pricing, transfer awareness, scenario comparison, and shareable URL state.
+## Why WebToolsEasy?
 
-## Product Snapshot (Latest)
+Developers waste hours bouncing between sketchy online tools that harvest data, require sign-ups, or inject watermarks. **WebToolsEasy** is a free, open-source collection of **22+ developer tools and 4 mock API endpoints** — all running locally in your browser with zero server-side processing.
 
-- Positioning: privacy-first developer studio for data inspection and cloud cost planning.
-- Core UX: "Paste anything. Understand everything. Plan confidently."
-- Delivery model: local-first browser workflows for core tools.
-- SEO model: route-level metadata plus structured data (SoftwareApplication, CollectionPage, FAQPage, TechArticle, DefinedTerm) across major pages.
+- 🔒 **Privacy-First** — Your data never leaves your device. Zero telemetry. Zero uploads.
+- ⚡ **Instant** — No accounts, no sign-ups, no paywalls. Open a tool and start working.
+- 🎨 **No Watermarks** — Export code screenshots, record your screen, generate keys — all output is clean and yours.
+- 🧰 **22+ Tools** — From JWT debugging to Docker Compose generation, CSS effects to SQLite queries.
+- 🌐 **Mock APIs** — Ready-to-use JSON endpoints for ecommerce, user profiles, blog posts, and real estate data.
 
-## Official Site and Canonical Links
+👉 **Try it now:** [https://webtoolseasy.com](https://webtoolseasy.com)
 
-If you reference this product in blogs, videos, courses, newsletters, or tool lists, use these canonical URLs.
+---
 
-- Homepage: https://webtoolseasy.com
-- DevLens Studio: https://webtoolseasy.com/studio
-- ArchCost Canvas: https://webtoolseasy.com/canvas
-- Developer Tools Directory: https://webtoolseasy.com/tools
-- JWT Decoder: https://webtoolseasy.com/tools/jwt-decoder
-- JSON Query: https://webtoolseasy.com/tools/json-query
-- Regex Tester: https://webtoolseasy.com/tools/regex-tester
-- AWS Calculators: https://webtoolseasy.com/calculators
-- AWS Architecture Templates: https://webtoolseasy.com/architectures
-- JWT Claims Reference: https://webtoolseasy.com/jwt/claims
-- Regex Pattern Library: https://webtoolseasy.com/regex/patterns
+## Developer Tools (22 Tools)
 
-## Full App URL Directory (Backlinks)
+Every tool is free, runs locally in your browser, and requires no sign-up.
 
-This section provides crawlable backlinks for every current app page route.
+| Tool | Description | Link |
+| ---- | ----------- | ---- |
+| **API Tester** | Send HTTP requests and inspect responses directly in the browser | [Free Online API Tester](https://webtoolseasy.com/tools/api-tester) |
+| **JSON to Zod** | Convert JSON objects to Zod validation schemas instantly | [Free JSON to Zod Schema Converter](https://webtoolseasy.com/tools/json-to-zod) |
+| **SVG to React** | Transform raw SVG markup into clean React JSX components | [Free SVG to React Component Converter](https://webtoolseasy.com/tools/svg-to-react) |
+| **Regex Explainer** | Paste a regular expression and get a human-readable breakdown | [Free Regex Explainer & Visualizer](https://webtoolseasy.com/tools/regex-explainer) |
+| **Cron Explainer** | Translate cron expressions into plain English with next-run previews | [Free Cron Expression Explainer](https://webtoolseasy.com/tools/cron-explainer) |
+| **JWT Debugger** | Decode, inspect, and verify JSON Web Tokens (header, payload, signature) | [Free Online JWT Debugger](https://webtoolseasy.com/tools/jwt-debugger) |
+| **RSA Key Generator** | Generate RSA public/private key pairs in PEM format | [Free RSA Key Pair Generator](https://webtoolseasy.com/tools/rsa-generator) |
+| **SQLite Studio** | Run SQL queries against an in-browser SQLite database | [Free Online SQLite Studio](https://webtoolseasy.com/tools/sqlite-studio) |
+| **Log Explorer** | Parse, search, and filter structured log files (JSON, plain text) | [Free Log File Explorer](https://webtoolseasy.com/tools/log-explorer) |
+| **Code to Image** | Export beautiful code screenshots with syntax highlighting | [Free Code Screenshot Generator](https://webtoolseasy.com/tools/code-to-image) |
+| **DevLens** | Smart-paste inspector — auto-detects JWT, JSON, Base64, regex, timestamps, and more | [Free DevLens Smart Data Inspector](https://webtoolseasy.com/tools/dev-lens) |
+| **Screen Recorder** | Record your screen or tab directly in the browser — no extensions needed | [Free Browser Screen Recorder](https://webtoolseasy.com/tools/screen-recorder) |
+| **CSS Effects** | Generate and preview CSS effects like glassmorphism, shadows, and gradients | [Free CSS Effects Generator](https://webtoolseasy.com/tools/css-effects) |
+| **YAML ↔ JSON Converter** | Convert between YAML and JSON formats with live preview | [Free YAML JSON Converter](https://webtoolseasy.com/tools/yaml-json-converter) |
+| **SQL Formatter** | Format and beautify raw SQL queries for readability | [Free Online SQL Formatter](https://webtoolseasy.com/tools/sql-formatter) |
+| **Docker Compose** | Generate and edit Docker Compose files visually | [Free Docker Compose Generator](https://webtoolseasy.com/tools/docker-compose) |
+| **ID Generator** | Generate UUIDs (v4, v7), ULIDs, NanoIDs, and other unique identifiers | [Free UUID & ID Generator](https://webtoolseasy.com/tools/id-generator) |
+| **Base64 File** | Encode and decode files to/from Base64 | [Free Base64 File Encoder & Decoder](https://webtoolseasy.com/tools/base64-file) |
+| **Bcrypt Generator** | Hash passwords with bcrypt and verify hashes | [Free Bcrypt Hash Generator](https://webtoolseasy.com/tools/bcrypt-generator) |
+| **Color Accessibility** | Check color contrast ratios against WCAG accessibility standards | [Free Color Contrast & Accessibility Checker](https://webtoolseasy.com/tools/color-a11y) |
+| **Diff Checker** | Compare two blocks of text and view a side-by-side diff | [Free Online Diff Checker](https://webtoolseasy.com/tools/diff-checker) |
+| **CSS Grid Architect** | Design CSS Grid layouts visually with live code export | [Free CSS Grid Layout Builder](https://webtoolseasy.com/tools/css-grid-architect) |
+
+---
+
+## Mock APIs
+
+Ready-to-use, fake JSON API endpoints for frontend prototyping and testing. No authentication required.
+
+| Mock API | Description | Link |
+| -------- | ----------- | ---- |
+| **Ecommerce Products** | Product catalog with prices, categories, images, and ratings | [Free Ecommerce Products Mock API](https://webtoolseasy.com/mock-api/ecommerce-products) |
+| **User Profiles** | Realistic user data with names, emails, avatars, and addresses | [Free User Profiles Mock API](https://webtoolseasy.com/mock-api/user-profiles) |
+| **Blog Posts** | Blog articles with titles, authors, tags, and body content | [Free Blog Posts Mock API](https://webtoolseasy.com/mock-api/blog-posts) |
+| **Real Estate** | Property listings with locations, prices, and specifications | [Free Real Estate Listings Mock API](https://webtoolseasy.com/mock-api/real-estate) |
+
+---
+
+## Full App URL Directory
+
+Crawlable backlinks for every live page on [webtoolseasy.com](https://webtoolseasy.com).
 
 ### Core Pages
 
-- [Homepage](https://webtoolseasy.com)
-- [DevLens Studio](https://webtoolseasy.com/studio)
-- [ArchCost Canvas](https://webtoolseasy.com/canvas)
-- [Developer Tools Directory](https://webtoolseasy.com/tools)
-- [AWS Calculators Index](https://webtoolseasy.com/calculators)
-- [AWS Architecture Templates Index](https://webtoolseasy.com/architectures)
-- [JWT Claims Index](https://webtoolseasy.com/jwt/claims)
-- [Regex Patterns Index](https://webtoolseasy.com/regex/patterns)
-- [Privacy](https://webtoolseasy.com/privacy)
+- [WebToolsEasy — Free Developer Tools Hub](https://webtoolseasy.com)
+- [Privacy Policy](https://webtoolseasy.com/privacy)
 
-### DevLens Tool Pages
+### All Developer Tools
 
-- [Base64 Encoder and Decoder](https://webtoolseasy.com/tools/base64)
-- [Certificate Inspector](https://webtoolseasy.com/tools/certificate-inspector)
-- [Color Utilities](https://webtoolseasy.com/tools/color)
-- [Cron Parser](https://webtoolseasy.com/tools/cron)
-- [Env File Editor](https://webtoolseasy.com/tools/env-file-editor)
-- [JSON Query](https://webtoolseasy.com/tools/json-query)
-- [JWT Decoder](https://webtoolseasy.com/tools/jwt-decoder)
-- [Regex Tester](https://webtoolseasy.com/tools/regex-tester)
-- [Timestamp Converter](https://webtoolseasy.com/tools/timestamp-converter)
-- [URL Decoder](https://webtoolseasy.com/tools/url-decoder)
-- [UUID Utilities](https://webtoolseasy.com/tools/uuid)
+- [Free Online API Tester](https://webtoolseasy.com/tools/api-tester)
+- [Free JSON to Zod Schema Converter](https://webtoolseasy.com/tools/json-to-zod)
+- [Free SVG to React Component Converter](https://webtoolseasy.com/tools/svg-to-react)
+- [Free Regex Explainer & Visualizer](https://webtoolseasy.com/tools/regex-explainer)
+- [Free Cron Expression Explainer](https://webtoolseasy.com/tools/cron-explainer)
+- [Free Online JWT Debugger](https://webtoolseasy.com/tools/jwt-debugger)
+- [Free RSA Key Pair Generator](https://webtoolseasy.com/tools/rsa-generator)
+- [Free Online SQLite Studio](https://webtoolseasy.com/tools/sqlite-studio)
+- [Free Log File Explorer](https://webtoolseasy.com/tools/log-explorer)
+- [Free Code Screenshot Generator](https://webtoolseasy.com/tools/code-to-image)
+- [Free DevLens Smart Data Inspector](https://webtoolseasy.com/tools/dev-lens)
+- [Free Browser Screen Recorder](https://webtoolseasy.com/tools/screen-recorder)
+- [Free CSS Effects Generator](https://webtoolseasy.com/tools/css-effects)
+- [Free YAML JSON Converter](https://webtoolseasy.com/tools/yaml-json-converter)
+- [Free Online SQL Formatter](https://webtoolseasy.com/tools/sql-formatter)
+- [Free Docker Compose Generator](https://webtoolseasy.com/tools/docker-compose)
+- [Free UUID & ID Generator](https://webtoolseasy.com/tools/id-generator)
+- [Free Base64 File Encoder & Decoder](https://webtoolseasy.com/tools/base64-file)
+- [Free Bcrypt Hash Generator](https://webtoolseasy.com/tools/bcrypt-generator)
+- [Free Color Contrast & Accessibility Checker](https://webtoolseasy.com/tools/color-a11y)
+- [Free Online Diff Checker](https://webtoolseasy.com/tools/diff-checker)
+- [Free CSS Grid Layout Builder](https://webtoolseasy.com/tools/css-grid-architect)
 
-### ArchCost Calculator Pages
+### Mock API Endpoints
 
-- [EC2 Pricing Calculator](https://webtoolseasy.com/calculators/ec2)
-- [RDS Pricing Calculator](https://webtoolseasy.com/calculators/rds)
-- [S3 Pricing Calculator](https://webtoolseasy.com/calculators/s3)
-- [Lambda Pricing Calculator](https://webtoolseasy.com/calculators/lambda)
-- [ALB Pricing Calculator](https://webtoolseasy.com/calculators/alb)
+- [Free Ecommerce Products Mock API](https://webtoolseasy.com/mock-api/ecommerce-products)
+- [Free User Profiles Mock API](https://webtoolseasy.com/mock-api/user-profiles)
+- [Free Blog Posts Mock API](https://webtoolseasy.com/mock-api/blog-posts)
+- [Free Real Estate Listings Mock API](https://webtoolseasy.com/mock-api/real-estate)
 
-### Architecture Template Detail Pages
-
-- [Classic 3 Tier Web Architecture](https://webtoolseasy.com/architectures/classic-3-tier-web)
-- [Serverless API Architecture](https://webtoolseasy.com/architectures/serverless-api)
-
-### JWT Claim Reference Pages
-
-- [iss Claim](https://webtoolseasy.com/jwt/claims/iss)
-- [sub Claim](https://webtoolseasy.com/jwt/claims/sub)
-- [aud Claim](https://webtoolseasy.com/jwt/claims/aud)
-- [exp Claim](https://webtoolseasy.com/jwt/claims/exp)
-- [nbf Claim](https://webtoolseasy.com/jwt/claims/nbf)
-- [iat Claim](https://webtoolseasy.com/jwt/claims/iat)
-- [jti Claim](https://webtoolseasy.com/jwt/claims/jti)
-- [typ Claim](https://webtoolseasy.com/jwt/claims/typ)
-- [azp Claim](https://webtoolseasy.com/jwt/claims/azp)
-- [nonce Claim](https://webtoolseasy.com/jwt/claims/nonce)
-- [auth_time Claim](https://webtoolseasy.com/jwt/claims/auth_time)
-- [acr Claim](https://webtoolseasy.com/jwt/claims/acr)
-- [amr Claim](https://webtoolseasy.com/jwt/claims/amr)
-- [scope Claim](https://webtoolseasy.com/jwt/claims/scope)
-- [roles Claim](https://webtoolseasy.com/jwt/claims/roles)
-- [permissions Claim](https://webtoolseasy.com/jwt/claims/permissions)
-- [name Claim](https://webtoolseasy.com/jwt/claims/name)
-- [given_name Claim](https://webtoolseasy.com/jwt/claims/given_name)
-- [family_name Claim](https://webtoolseasy.com/jwt/claims/family_name)
-- [preferred_username Claim](https://webtoolseasy.com/jwt/claims/preferred_username)
-- [email Claim](https://webtoolseasy.com/jwt/claims/email)
-- [email_verified Claim](https://webtoolseasy.com/jwt/claims/email_verified)
-- [phone_number Claim](https://webtoolseasy.com/jwt/claims/phone_number)
-- [phone_number_verified Claim](https://webtoolseasy.com/jwt/claims/phone_number_verified)
-- [locale Claim](https://webtoolseasy.com/jwt/claims/locale)
-- [zoneinfo Claim](https://webtoolseasy.com/jwt/claims/zoneinfo)
-- [sid Claim](https://webtoolseasy.com/jwt/claims/sid)
-- [at_hash Claim](https://webtoolseasy.com/jwt/claims/at_hash)
-- [c_hash Claim](https://webtoolseasy.com/jwt/claims/c_hash)
-- [client_id Claim](https://webtoolseasy.com/jwt/claims/client_id)
-- [tenant Claim](https://webtoolseasy.com/jwt/claims/tenant)
-
-### Regex Pattern Detail Pages
-
-- [Email Regex Pattern](https://webtoolseasy.com/regex/patterns/email)
-- [UUID Regex Pattern](https://webtoolseasy.com/regex/patterns/uuid)
-- [IPv4 Regex Pattern](https://webtoolseasy.com/regex/patterns/ipv4)
-- [MAC Address Regex Pattern](https://webtoolseasy.com/regex/patterns/mac-address)
-- [Hex Color Regex Pattern](https://webtoolseasy.com/regex/patterns/hex-color)
-- [URL Regex Pattern](https://webtoolseasy.com/regex/patterns/url)
-- [Domain Name Regex Pattern](https://webtoolseasy.com/regex/patterns/domain-name)
-- [Slug Regex Pattern](https://webtoolseasy.com/regex/patterns/slug)
-- [SemVer Regex Pattern](https://webtoolseasy.com/regex/patterns/semver)
-- [ISO Date Regex Pattern](https://webtoolseasy.com/regex/patterns/date-iso)
-- [24h Time Regex Pattern](https://webtoolseasy.com/regex/patterns/time-24h)
-- [E.164 Phone Regex Pattern](https://webtoolseasy.com/regex/patterns/phone-e164)
-- [US ZIP Regex Pattern](https://webtoolseasy.com/regex/patterns/postal-us-zip)
-- [HTML Tag Regex Pattern](https://webtoolseasy.com/regex/patterns/html-tag)
-- [Credit Card Basic Regex Pattern](https://webtoolseasy.com/regex/patterns/credit-card-basic)
-- [Strong Password Regex Pattern](https://webtoolseasy.com/regex/patterns/strong-password)
-- [Linux File Path Regex Pattern](https://webtoolseasy.com/regex/patterns/linux-file-path)
-- [Windows File Path Regex Pattern](https://webtoolseasy.com/regex/patterns/windows-file-path)
-- [HTML Hex Entity Regex Pattern](https://webtoolseasy.com/regex/patterns/html-hex-entity)
-- [Markdown Heading Regex Pattern](https://webtoolseasy.com/regex/patterns/markdown-heading)
-- [GitHub Username Regex Pattern](https://webtoolseasy.com/regex/patterns/github-username)
-- [Git Commit SHA Regex Pattern](https://webtoolseasy.com/regex/patterns/git-commit-sha)
-- [Docker Image Tag Regex Pattern](https://webtoolseasy.com/regex/patterns/docker-image-tag)
-- [AWS ARN Regex Pattern](https://webtoolseasy.com/regex/patterns/aws-arn)
-- [Kubernetes Name Regex Pattern](https://webtoolseasy.com/regex/patterns/kubernetes-name)
-
-## What This Repository Includes
-
-- Next.js App Router implementation for the product website and app experiences.
-- Route-level metadata and JSON-LD structured data for search discoverability.
-- Static and generated data sources for tools, calculators, claims, and patterns.
-- Unit tests (Vitest) and end-to-end tests (Playwright).
-- Scripts for pricing updates, sitemap generation, and indexing workflows.
-
-## Privacy and Data Handling
-
-- Core inspection and transformation workflows are designed to run in-browser.
-- No database is required for core product workflows, including architecture sharing.
-- Architecture sharing works by compressing state into URL parameters.
-
-## Tech Stack
-
-- Framework: Next.js 16
-- Language: TypeScript
-- Styling: Tailwind CSS
-- State: Zustand
-- Diagram Canvas: React Flow
-- Testing: Vitest and Playwright
+---
 
 ## Quick Start
 
-Prerequisites:
+### Prerequisites
 
 - Node.js 22.x
 - npm 10+
 
-Setup:
+### Setup
 
 ```bash
 git clone https://github.com/gaurav10610/webtoolseasy.git
@@ -179,56 +127,102 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Run locally at http://localhost:3000.
+The app starts at [http://localhost:3000](http://localhost:3000).
 
-Database note:
+> **Note:** No database is required. All tools run locally in the browser.
 
-- Runtime does not require a database for core product flows.
+---
 
 ## Scripts
 
-| Script                 | Description              |
-| ---------------------- | ------------------------ |
-| npm run dev            | Start development server |
-| npm run build          | Production build         |
-| npm run start          | Start production server  |
-| npm run lint           | Run ESLint               |
-| npm run test:unit      | Run Vitest tests         |
-| npm run test:e2e       | Run Playwright tests     |
-| npm run test           | Run full test suite      |
-| npm run fetch-pricing  | Refresh AWS pricing data |
-| npm run update:sitemap | Regenerate sitemap.xml   |
+| Script | Description |
+| ------ | ----------- |
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint across source and scripts |
+| `npm run test:unit` | Run Vitest unit tests |
+| `npm run test:e2e` | Run Playwright end-to-end tests |
+| `npm run test` | Run full test suite (unit + e2e) |
+| `npm run perf:gates` | Run performance gate checks |
+| `npm run seo:crawl:quality` | Audit SEO crawl quality |
+| `npm run update:sitemap` | Regenerate sitemap.xml |
+| `npm run index:urls` | Submit URLs for search engine indexing |
+| `npm run indexnow:submit` | Submit URLs via IndexNow protocol |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+| ----- | ---------- |
+| Framework | [Next.js 16](https://nextjs.org/) |
+| Language | [TypeScript 6](https://www.typescriptlang.org/) |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) |
+| State Management | [Zustand](https://zustand.docs.pmnd.rs/) |
+| Testing | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) |
+| Animations | [Framer Motion](https://www.framer.com/motion/) |
+
+---
 
 ## Project Structure
 
 ```text
 src/
-	app/                # Next.js routes
-	components/         # UI and feature components
-	data/               # Static and generated data sources
-	hooks/              # React hooks
-	lib/                # Core business logic
-	store/              # Zustand stores
-	types/              # Shared TypeScript types
-	utils/              # Utility helpers
+  app/                # Next.js App Router — pages and API routes
+  components/         # Reusable UI and feature components
+  data/               # Static data sources
+  hooks/              # Custom React hooks
+  lib/                # Core business logic and utilities
+  store/              # Zustand state stores
+  types/              # Shared TypeScript type definitions
+  utils/              # General-purpose utility helpers
 ```
+
+---
+
+## Privacy & Data Handling
+
+WebToolsEasy is built on a **zero-trust, local-first architecture**:
+
+- All data processing happens **in your browser** — nothing is sent to a server.
+- No cookies, no analytics trackers, no third-party data sharing.
+- No database is required to use any tool.
+- Your input never leaves your device.
+
+Read the full [Privacy Policy](https://webtoolseasy.com/privacy).
+
+---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md).
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
-Implementation guides:
+Also check:
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- [SECURITY.md](SECURITY.md)
 
-- [docs/ADDING_A_DEVLENS_VIEW.md](docs/ADDING_A_DEVLENS_VIEW.md)
-- [docs/ADDING_AN_ARCHCOST_SERVICE.md](docs/ADDING_AN_ARCHCOST_SERVICE.md)
+### Implementation Guides
+
+- [Adding a DevLens Specialist View](docs/ADDING_A_DEVLENS_VIEW.md)
+
+---
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE).
 
+---
+
 ## Maintainer
 
-Gaurav Kumar Yadav
+**Gaurav Kumar Yadav**
 
-- GitHub: https://github.com/gaurav10610
-- LinkedIn: https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/
+- GitHub: [gaurav10610](https://github.com/gaurav10610)
+- LinkedIn: [Gaurav Kumar Yadav](https://www.linkedin.com/in/gaurav-kumar-yadav-6125817a/)
+
+---
+
+## Star History
+
+If you find WebToolsEasy useful, consider giving it a ⭐ on [GitHub](https://github.com/gaurav10610/webtoolseasy)!

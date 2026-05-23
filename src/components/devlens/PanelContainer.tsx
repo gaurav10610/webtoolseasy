@@ -23,7 +23,7 @@ import { CronView } from "./views/CronView";
 import { SqlView } from "./views/SqlView";
 import { CsvView } from "./views/CsvView";
 import { PemView } from "./views/PemView";
-import { DevLensPanel } from "@/store/useDevLensStore";
+import { DevLensPanel, useDevLensStore } from "@/store/useDevLensStore";
 
 type PanelContainerProps = {
   panel: DevLensPanel;
@@ -32,43 +32,62 @@ type PanelContainerProps = {
   footer?: ReactNode;
 };
 
+const ALL_TYPES = [
+  "unknown", "jwt", "json", "base64", "base64-data-url", "url", "timestamp", "uuid", 
+  "hex-color", "ip", "regex", "yaml", "xml", "env", "cron", "sql", "csv", 
+  "pem-certificate", "pem-private-key"
+];
+
 export function PanelContainer({
   panel,
   onChange,
   onRemove,
   footer,
 }: PanelContainerProps) {
-  const isUnknown = panel.detection.type === "unknown";
-  const isJwt = panel.detection.type === "jwt";
-  const isJson = panel.detection.type === "json";
+  const setOverrideType = useDevLensStore((state) => state.setOverrideType);
+  const activeType = panel.overrideType ?? panel.detection.type;
+
+  const isUnknown = activeType === "unknown";
+  const isJwt = activeType === "jwt";
+  const isJson = activeType === "json";
   const isBase64 =
-    panel.detection.type === "base64" ||
-    panel.detection.type === "base64-data-url";
-  const isUrlEncoded = panel.detection.type === "url";
-  const isTimestamp = panel.detection.type === "timestamp";
-  const isUuid = panel.detection.type === "uuid";
-  const isHexColor = panel.detection.type === "hex-color";
-  const isIp = panel.detection.type === "ip";
-  const isRegex = panel.detection.type === "regex";
-  const isYaml = panel.detection.type === "yaml";
-  const isXml = panel.detection.type === "xml";
-  const isEnv = panel.detection.type === "env";
-  const isCron = panel.detection.type === "cron";
-  const isSql = panel.detection.type === "sql";
-  const isCsv = panel.detection.type === "csv";
+    activeType === "base64" ||
+    activeType === "base64-data-url";
+  const isUrlEncoded = activeType === "url";
+  const isTimestamp = activeType === "timestamp";
+  const isUuid = activeType === "uuid";
+  const isHexColor = activeType === "hex-color";
+  const isIp = activeType === "ip";
+  const isRegex = activeType === "regex";
+  const isYaml = activeType === "yaml";
+  const isXml = activeType === "xml";
+  const isEnv = activeType === "env";
+  const isCron = activeType === "cron";
+  const isSql = activeType === "sql";
+  const isCsv = activeType === "csv";
   const isPem =
-    panel.detection.type === "pem-certificate" ||
-    panel.detection.type === "pem-private-key";
+    activeType === "pem-certificate" ||
+    activeType === "pem-private-key";
 
   return (
     <Panel
       title={
-        <span className="flex items-center gap-2">
+        <span className="flex items-center gap-3">
           Panel{" "}
           <TypeBadge
-            type={panel.detection.type}
-            confidence={panel.detection.confidence}
+            type={activeType}
+            confidence={panel.overrideType ? 1 : panel.detection.confidence}
           />
+          <select
+            value={panel.overrideType || ""}
+            onChange={(e) => setOverrideType(panel.id, e.target.value || null)}
+            className="text-xs bg-black/40 border border-white/10 rounded-md px-2 py-1 text-gray-300 outline-none focus:border-teal-500/50"
+          >
+            <option value="">Auto-Detect</option>
+            {ALL_TYPES.filter(t => t !== "unknown").map(t => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
         </span>
       }
       subtitle="Local-first inspection. No upload step."

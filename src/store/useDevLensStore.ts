@@ -6,6 +6,7 @@ export type DevLensPanel = {
   id: string;
   input: string;
   detection: DetectionResult;
+  overrideType: string | null;
 };
 
 type PanelWidthMap = Record<string, number>;
@@ -18,6 +19,7 @@ type DevLensState = {
   removePanel: (id: string) => void;
   setPanelWidths: (widths: PanelWidthMap) => void;
   updatePanelInput: (id: string, input: string) => void;
+  setOverrideType: (id: string, type: string | null) => void;
   addToHistory: (input: string) => void;
   clearHistory: () => void;
   loadPanels: (panels: DevLensPanel[]) => void;
@@ -33,6 +35,7 @@ function createPanel(input = ""): DevLensPanel {
       `panel-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     input,
     detection: detect(input),
+    overrideType: null,
   };
 }
 
@@ -155,6 +158,14 @@ export const useDevLensStore = create<DevLensState>((set, get) => ({
   setPanelWidths: (widths: PanelWidthMap) => {
     const panels = get().panels;
     set({ panelWidths: normalizePanelWidths(panels, widths) });
+  },
+
+  setOverrideType: (id: string, type: string | null) => {
+    const nextPanels = get().panels.map((panel) => {
+      if (panel.id !== id) return panel;
+      return { ...panel, overrideType: type };
+    });
+    set({ panels: nextPanels });
   },
 
   updatePanelInput: (id: string, input: string) => {

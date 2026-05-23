@@ -6,10 +6,8 @@ import {
   useRef,
   PointerEvent as ReactPointerEvent,
 } from "react";
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Panel } from "@/components/ui/Panel";
 import { Resizer } from "@/components/ui/Resizer";
 import { readClipboard } from "@/utils/clipboard";
 import { useDevLensStore, persistDevLensState } from "@/store/useDevLensStore";
@@ -172,55 +170,18 @@ export function Studio() {
   }
 
   return (
-    <div className="flex flex-col gap-6 px-6 py-10">
-      <Panel
-        title="DevLens Studio"
-        subtitle="Smart Paste Workbench"
-        action={
-          <div className="flex items-center gap-2">
-            <Badge variant="info">Local-first</Badge>
-            <Button variant="secondary" size="sm" onClick={addPanel}>
-              Add panel
-            </Button>
-            <Link
-              href="/canvas"
-              className="inline-flex h-8 items-center rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              Open ArchCost
-            </Link>
-          </div>
-        }
-      >
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              What You Can Do
-            </div>
-            <p className="mt-2 text-sm leading-6 text-gray-300">
-              Paste JWT, JSON, Base64, regex, timestamps, certs, and more to
-              inspect structure, decode content, and validate assumptions.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              How It Works
-            </div>
-            <p className="mt-2 text-sm leading-6 text-gray-300">
-              Smart Paste detects input type and routes it to specialist views
-              so you can debug faster without switching tools.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-              Privacy Model
-            </div>
-            <p className="mt-2 text-sm leading-6 text-gray-300">
-              Core analysis runs in your browser. Recent inputs are stored only
-              in local browser storage and can be cleared anytime.
-            </p>
-          </div>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#121214]/90 border border-white/10 p-4 px-6 rounded-3xl shadow-xl backdrop-blur-md gap-4">
+        <div className="flex items-center gap-3">
+          <Badge variant="info">Local Workspace</Badge>
+          <span className="text-sm font-medium text-gray-400">Zero data leaves your browser</span>
         </div>
-      </Panel>
+        <Button variant="primary" size="sm" onClick={addPanel} className="w-full sm:w-auto whitespace-nowrap shadow-[0_0_15px_rgba(79,70,229,0.3)]"
+          leadingIcon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>}
+        >
+          Add Panel
+        </Button>
+      </div>
 
       <HistoryDrawer
         items={history}
