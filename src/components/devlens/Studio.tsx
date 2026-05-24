@@ -56,6 +56,7 @@ export function Studio() {
         updatePanelInput,
         addToHistory,
         clearHistory,
+        setOverrideType: useDevLensStore.getState().setOverrideType,
         loadPanels: useDevLensStore.getState().loadPanels,
         restoreFromHistory: useDevLensStore.getState().restoreFromHistory,
       });

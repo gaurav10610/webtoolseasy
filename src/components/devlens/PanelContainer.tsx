@@ -76,7 +76,7 @@ export function PanelContainer({
           Panel{" "}
           <TypeBadge
             type={activeType}
-            confidence={panel.overrideType ? 1 : panel.detection.confidence}
+            confidence={panel.overrideType ? "high" : panel.detection.confidence}
           />
           <select
             value={panel.overrideType || ""}
