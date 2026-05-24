@@ -65,11 +65,8 @@ export function Nav() {
         <Link href="/" className="flex items-center gap-3 group shrink-0">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-[0_0_20px_rgba(79,70,229,0.35)] ring-1 ring-white/10 transition-transform group-hover:scale-[1.03]">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
+              <path d="M12 19h8" />
+              <path d="m4 17 6-6-6-6" />
             </svg>
           </div>
           <div>
