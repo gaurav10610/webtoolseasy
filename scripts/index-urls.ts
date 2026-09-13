@@ -1,4 +1,3 @@
-import request from "request";
 import { google } from "googleapis";
 import fs from "fs";
 import path from "path";
@@ -105,40 +104,43 @@ export const indexUrlsInGoogle = () => {
       return;
     }
 
-    const indexResults: unknown[] = [];
-
     let urlsToIndex: string[];
 
     if (process.env.INDEX_ALL_URLS === "true") {
-      const sitemapPath = `${process.cwd()}/public/sitemap.xml`;
-      urlsToIndex = await getAllUrlsFromSitemap(sitemapPath);
+      urlsToIndex = await getAllUrlsFromSitemap();
     } else {
       urlsToIndex = updatedUrls;
     }
 
-    urlsToIndex.forEach((urlToIndex: string) => {
-      const options = {
-        url: "https://indexing.googleapis.com/v3/urlNotifications:publish",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        auth: { bearer: tokens.access_token || "" },
-        json: {
-          url: urlToIndex,
-          type: "URL_UPDATED",
-        },
-      };
-      request(options, function (error, response, body) {
-        // Handle the response
-        console.log(body);
-        indexResults.push({
-          url: urlToIndex,
-          lastIndexed: new Date().toISOString(),
-          response: body,
-        });
-      });
-    });
+    console.log(`Submitting ${urlsToIndex.length} URLs to Google Indexing API...`);
+    for (const urlToIndex of urlsToIndex) {
+      try {
+        const response = await fetch(
+          "https://indexing.googleapis.com/v3/urlNotifications:publish",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${tokens.access_token || ""}`,
+            },
+            body: JSON.stringify({
+              url: urlToIndex,
+              type: "URL_UPDATED",
+            }),
+          },
+        );
+        const data = await response.json();
+        if (response.ok) {
+          console.log(`✓ [Google Indexing] ${urlToIndex}`);
+        } else {
+          console.warn(`⚠ [Google Indexing] ${urlToIndex}:`, response.status, data);
+        }
+        // Small delay to respect Google API quota and rate limits
+        await new Promise((resolve) => setTimeout(resolve, 80));
+      } catch (err: unknown) {
+        console.error(`✗ [Google Indexing Error] ${urlToIndex}:`, err);
+      }
+    }
 
     // Clear URLs after Google indexing (if not indexing all URLs)
     if (urlsToIndex.length > 0 && process.env.INDEX_ALL_URLS !== "true") {
@@ -151,8 +153,7 @@ const indexUrlsInIndexNow = async () => {
   let urlsToIndex: string[];
 
   if (process.env.INDEX_ALL_URLS === "true") {
-    const sitemapPath = `${process.cwd()}/public/sitemap.xml`;
-    urlsToIndex = await getAllUrlsFromSitemap(sitemapPath);
+    urlsToIndex = await getAllUrlsFromSitemap();
   } else {
     urlsToIndex = updatedUrls;
   }
