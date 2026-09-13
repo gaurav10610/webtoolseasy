@@ -69,9 +69,25 @@ function updateSitemap() {
     }
   }
 
-  // Get tools from src/data/tools/*.ts
+  // Exclude consolidated and pruned tools from sitemap to eliminate thin-content penalty
+  const excludedToolUrls = new Set([
+    "https://webtoolseasy.com/tools/uuid-v1-generator",
+    "https://webtoolseasy.com/tools/uuid-v3-generator",
+    "https://webtoolseasy.com/tools/uuid-v5-generator",
+    "https://webtoolseasy.com/tools/uuid-v7-generator",
+    "https://webtoolseasy.com/tools/guid-generator",
+    "https://webtoolseasy.com/tools/ulid-generator",
+    "https://webtoolseasy.com/tools/base64-decode",
+    "https://webtoolseasy.com/tools/tip-calculator",
+    "https://webtoolseasy.com/tools/fraction-calculator",
+    "https://webtoolseasy.com/tools/bmi-calculator",
+    "https://webtoolseasy.com/tools/calorie-calculator",
+    "https://webtoolseasy.com/tools/gpa-calculator",
+  ]);
+
   const toolsPath = `${process.cwd()}/src/data/tools`;
   const now = convertDateFormat(new Date().toISOString());
+
   const toolUrls = readdirSync(toolsPath)
     .filter((file) => file.endsWith(".ts"))
     .map((file) => {
@@ -83,7 +99,8 @@ function updateSitemap() {
         lastmod: now,
         priority: existing?.priority,
       };
-    });
+    })
+    .filter((tool) => !excludedToolUrls.has(tool.loc));
 
   // Get blogs from src/data/blog/config/*.ts
   const blogConfigPath = `${process.cwd()}/src/data/blog/config`;

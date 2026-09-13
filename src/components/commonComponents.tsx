@@ -48,32 +48,38 @@ export function RelatedTools({
 export function ToolDescription({
   descriptionData,
 }: Readonly<{ descriptionData: DescriptionBlock[] }>) {
+  if (!descriptionData || descriptionData.length === 0) return null;
   return (
-    <div className="flex flex-col w-full gap-4">
+    <article className="app-shell-section flex flex-col w-full gap-6 divide-y divide-[var(--mui-palette-divider)]">
       {map(descriptionData, (descriptionBlock, index) => (
         <ToolDescriptionBlock
           key={`desc-${index}`}
           descriptionBlock={descriptionBlock}
+          isFirst={index === 0}
         />
       ))}
-    </div>
+    </article>
   );
 }
 
 function ToolDescriptionBlock({
   descriptionBlock,
+  isFirst = false,
 }: Readonly<{
   descriptionBlock: DescriptionBlock;
+  isFirst?: boolean;
 }>) {
   return (
-    <section className="app-shell-section flex flex-col w-full gap-3">
-      <AppText
-        component="h2"
-        variant="h3"
-        className="!text-[var(--mui-palette-primary-main)]"
-      >
-        {descriptionBlock.heading}
-      </AppText>
+    <section className={`flex flex-col w-full gap-3 ${isFirst ? "" : "pt-6"}`}>
+      {descriptionBlock.heading && (
+        <AppText
+          component="h2"
+          variant="h3"
+          className="!text-[var(--mui-palette-text-primary)] !font-bold"
+        >
+          {descriptionBlock.heading}
+        </AppText>
+      )}
       {!isNil(descriptionBlock.blockData) &&
         isEmpty(descriptionBlock.listData) && (
           <DescriptionDataBlockData blockData={descriptionBlock.blockData} />

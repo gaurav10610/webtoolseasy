@@ -469,7 +469,7 @@ export default function UuidV4Generator({
               GUID vs UUID
             </h4>
             <p className="leading-relaxed text-slate-600 dark:text-slate-400">
-              GUID is Microsoft's implementation of the UUID standard. Both share identical 128-bit structure and are 100% interoperable across systems.
+              GUID is Microsoft&apos;s implementation of the UUID standard. Both share identical 128-bit structure and are 100% interoperable across systems.
             </p>
           </div>
         </div>
