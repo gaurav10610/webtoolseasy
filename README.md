@@ -111,7 +111,6 @@ npm run lint
 npm run test:unit
 npm run test:e2e
 npm run test
-npm run update:sitemap
 npm run index:urls
 npm run index:urls:all
 npm run generate:screenshots
