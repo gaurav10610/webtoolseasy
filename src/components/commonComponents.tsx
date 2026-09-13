@@ -1,6 +1,5 @@
 import { DescriptionBlock } from "@/types/description";
 import { isEmpty, isNil, map } from "lodash-es";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { AppNavigationConfig } from "@/types/config";
 import { RelatedToolCard } from "./appCards";
 import { AppChip, AppText } from "./lib/ui";
@@ -90,6 +89,21 @@ function ToolDescriptionBlock({
   );
 }
 
+function ChevronRightIcon({ className = "w-4 h-4 text-sky-600 dark:text-sky-400 mt-1 shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+      aria-hidden="true"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  );
+}
+
 function DescriptionLinks({
   links,
 }: Readonly<{
@@ -98,8 +112,8 @@ function DescriptionLinks({
   return (
     <div className="flex flex-col gap-2">
       {map(links, (link) => (
-        <div key={link.url} className="flex flex-row gap-2">
-          <KeyboardArrowRightIcon />
+        <div key={link.url} className="flex flex-row gap-2 items-start">
+          <ChevronRightIcon />
           <AppText
             href={link.url}
             component={"a"}
@@ -361,8 +375,8 @@ function DescriptionDataListData({
   return (
     <div className="flex flex-col gap-2 w-full">
       {map(listData, (data, index) => (
-        <div key={`list-${index}`} className="flex flex-row gap-2 w-full">
-          <KeyboardArrowRightIcon />
+        <div key={`list-${index}`} className="flex flex-row gap-2 w-full items-start">
+          <ChevronRightIcon />
           <AppText variant="body1" color="textSecondary">
             {parseMarkdownText(data)}
           </AppText>

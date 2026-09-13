@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --mui-palette-primary-main: #0f6cbd;
+  --mui-palette-primary-light: #5aa9e6;
+  --mui-palette-primary-dark: #084c8d;
+  --mui-palette-primary-contrastText: #ffffff;
+  --mui-palette-secondary-main: #6f42c1;
+  --mui-palette-secondary-light: #8b5fd6;
+  --mui-palette-secondary-dark: #4c2889;
+  --mui-palette-secondary-contrastText: #ffffff;
+  --mui-palette-success-main: #1a7f37;
+  --mui-palette-warning-main: #b7791f;
+  --mui-palette-error-main: #c62828;
+  --mui-palette-background-default: #f4f7fb;
+  --mui-palette-background-paper: #ffffff;
+  --mui-palette-text-primary: #0f172a;
+  --mui-palette-text-secondary: #475569;
+  --mui-palette-divider: rgba(15, 23, 42, 0.1);
+  color-scheme: light;
+}
+
+.dark {
+  --mui-palette-primary-main: #7dd3fc;
+  --mui-palette-primary-light: #bae6fd;
+  --mui-palette-primary-dark: #0369a1;
+  --mui-palette-primary-contrastText: #082f49;
+  --mui-palette-secondary-main: #c4b5fd;
+  --mui-palette-secondary-light: #ddd6fe;
+  --mui-palette-secondary-dark: #7c3aed;
+  --mui-palette-secondary-contrastText: #ffffff;
+  --mui-palette-success-main: #4ade80;
+  --mui-palette-warning-main: #fbbf24;
+  --mui-palette-error-main: #f87171;
+  --mui-palette-background-default: #0b1120;
+  --mui-palette-background-paper: #111827;
+  --mui-palette-text-primary: #f8fafc;
+  --mui-palette-text-secondary: #cbd5e1;
+  --mui-palette-divider: rgba(226, 232, 240, 0.14);
+  color-scheme: dark;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -17,6 +57,7 @@
   body {
     color: var(--mui-palette-text-primary);
     background-color: var(--mui-palette-background-default);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
   a {

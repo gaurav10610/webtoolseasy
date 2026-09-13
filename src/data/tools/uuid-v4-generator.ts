@@ -4,13 +4,14 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/uuid-v4-generator";
-const pageTitle = "UUID Generator Online - Generate Random UUID v4 & GUID Free";
+const pageTitle =
+  "UUID & GUID Generator Online - UUID v4, v7, v1, GUID & Bulk Identifiers";
 const pageDescription =
-  "Generate UUID v4 (random) identifiers instantly. Create single or bulk UUIDs with one click. Free online UUID/GUID generator with copy and download options.";
+  "Generate random UUID v4, time-ordered UUID v7, timestamp UUID v1, Microsoft GUIDs, and Nil UUIDs online. Instant single and bulk generation with customizable casing, delimiters, and 100% in-browser privacy.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/uuid-v4-generator.png`;
 
 const keywords =
-  "uuid generator,uuid generator online,uuid v4 generator,generate uuid,random uuid,guid generator,uuid creator,bulk uuid generator,unique identifier generator,uuid online free,uuid v4,create uuid,uuid maker,online guid generator";
+  "uuid generator,uuid v7 generator,uuid v4 generator,guid generator,uuid generator online,generate uuid,bulk uuid generator,uuid v1 generator,time ordered uuid,random uuid,unique identifier generator,uuid creator,microsoft guid generator,nil uuid generator,online guid generator";
 
 export const metadata: Metadata = {
   alternates: {

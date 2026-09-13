@@ -329,14 +329,6 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
               <RelatedTools relatedToolsConfigs={relatedToolsConfigs} />
             )}
             <ToolDescription descriptionData={toolDescriptionData} />
-
-            <div className="xl:hidden">
-              <SidePanel
-                className="w-full"
-                appConfigJson={apps}
-                pageUrl={params.pageUrl}
-              />
-            </div>
           </section>
         </div>
       </div>

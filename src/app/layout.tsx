@@ -1,7 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { robotoFont } from "@/design";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";
@@ -43,35 +41,39 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${robotoFont.variable} antialiased`}>
-        <AppRouterCacheProvider>
-          <AppThemeProvider>
-            {process.env.NODE_ENV === "production" && (
-              <GoogleAnalytics gaId={process.env.GA_CODE!} />
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=localStorage.getItem('webtoolseasy-theme-preference');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(p==='dark'||(p!=='light'&&d)){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="antialiased font-sans">
+        <AppThemeProvider>
+          {process.env.NODE_ENV === "production" &&
+            process.env.GA_CODE &&
+            !process.env.GA_CODE.includes("XXXX") && (
+              <GoogleAnalytics gaId={process.env.GA_CODE} />
             )}
 
-            <div className="min-h-screen">
-              <HeaderAppBar />
+          <div className="min-h-screen">
+            <HeaderAppBar />
 
-              <main
-                id="main-content"
-                className="w-full min-h-[calc(100vh-72px)]"
-              >
-                <div className="w-full px-3 py-4 md:px-5 md:py-6 xl:px-6 2xl:px-8">
-                  {children}
-                </div>
-              </main>
+            <main id="main-content" className="w-full min-h-[calc(100vh-72px)]">
+              <div className="w-full px-3 py-4 md:px-5 md:py-6 xl:px-6 2xl:px-8">
+                {children}
+              </div>
+            </main>
 
-              <section className="w-full px-3 pb-6 md:px-5 md:pb-8 xl:px-6 2xl:px-8">
-                <div className="rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)]/85 p-4 shadow-sm backdrop-blur md:p-6">
-                  <CommonSiteData className="w-full" />
-                </div>
-              </section>
+            <section className="w-full px-3 pb-6 md:px-5 md:pb-8 xl:px-6 2xl:px-8">
+              <div className="rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)]/85 p-4 shadow-sm backdrop-blur md:p-6">
+                <CommonSiteData className="w-full" />
+              </div>
+            </section>
 
-              <SiteFooter />
-            </div>
-          </AppThemeProvider>
-        </AppRouterCacheProvider>
+            <SiteFooter />
+          </div>
+        </AppThemeProvider>
       </body>
     </html>
   );

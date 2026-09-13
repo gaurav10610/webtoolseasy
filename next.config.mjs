@@ -1,18 +1,30 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
-    const coopCoepHeaders = [
+    return [
       {
-        key: "Cross-Origin-Opener-Policy",
-        value: "same-origin",
-      },
-      {
-        key: "Cross-Origin-Embedder-Policy",
-        value: "require-corp",
+        source: "/((?!api/|_next/).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
+          },
+          {
+            key: "CDN-Cache-Control",
+            value: "public, s-maxage=604800",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+        ],
       },
     ];
-    // No COOP/COEP headers needed – all tools use native WebCodecs API (no SharedArrayBuffer required)
-    return [];
   },
   async redirects() {
     return [
@@ -21,6 +33,43 @@ const nextConfig = {
         source: "/tools/:path((?:.*\\.js|.*\\.mjs|stackframe.*|pyodide.*))",
         destination: "/404",
         permanent: false,
+      },
+      // Consolidate fragmented UUID/GUID tools to Universal UUID Suite
+      {
+        source: "/tools/uuid-v1-generator",
+        destination: "/tools/uuid-v4-generator",
+        permanent: true,
+      },
+      {
+        source: "/tools/uuid-v3-generator",
+        destination: "/tools/uuid-v4-generator",
+        permanent: true,
+      },
+      {
+        source: "/tools/uuid-v5-generator",
+        destination: "/tools/uuid-v4-generator",
+        permanent: true,
+      },
+      {
+        source: "/tools/uuid-v7-generator",
+        destination: "/tools/uuid-v4-generator",
+        permanent: true,
+      },
+      {
+        source: "/tools/guid-generator",
+        destination: "/tools/uuid-v4-generator",
+        permanent: true,
+      },
+      {
+        source: "/tools/ulid-generator",
+        destination: "/tools/uuid-v4-generator",
+        permanent: true,
+      },
+      // Consolidate Base64 Decode to Universal Base64 Studio
+      {
+        source: "/tools/base64-decode",
+        destination: "/tools/base64-encode",
+        permanent: true,
       },
     ];
   },

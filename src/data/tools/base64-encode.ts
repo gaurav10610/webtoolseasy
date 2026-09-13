@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/base64-encode";
 const pageTitle =
-  "Base64 Encode Online - Convert Text, Files & Images to Base64 Free";
+  "Base64 Encode & Decode Online - Convert Text, Files & Images (100% Client-Side)";
 const pageDescription =
-  "Encode text, images, PDFs and files to Base64 instantly in your browser. Free online Base64 encoder with no file size limits. Supports drag-and-drop, copy-paste, and file upload.";
+  "Free online Base64 encoder and decoder. Convert text, JSON, images, PDFs, and files to and from Base64 instantly. Features URL-safe encoding, Data URI snippets, and 100% private in-browser processing.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/base64-encode.png`;
 
 const keywords =
-  "base64 encode,base64 encoder,base64 encode online,text to base64,image to base64,file to base64,base64 converter,encode base64,base64 encoding tool,convert to base64,base64 string encoder,online base64 encoder free,pdf to base64,base64 image encoder,data uri generator";
+  "base64 encode,base64 decode,base64 converter,base64 encoder online,text to base64,base64 to text,image to base64,file to base64,base64 to file,base64 string encoder,url safe base64,data uri generator,pdf to base64,base64 image decoder";
 
 export const metadata: Metadata = {
   alternates: {
@@ -63,16 +63,19 @@ export const metadata: Metadata = {
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    "Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64",
+    "Free Online Base64 Studio: Encode & Decode Text, Images, PDFs and Binary Files",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  relatedTools: [ApplicationIds.BASE64_DECODE],
+  relatedTools: [
+    ApplicationIds.JSON_FORMATTER,
+    ApplicationIds.UUID_VERSION4_GENERATOR,
+  ],
   structuredData: createToolStructuredData({
     pageUrl: "base64-encode",
     pageTitle,
     mainHeading:
-      "Free Online File to Base64 Encoder: Convert Image, Text, PDF and File to Base64",
+      "Free Online Base64 Studio: Encode & Decode Text, Images, PDFs and Binary Files",
     keywords: keywords.split(",").map((word) => word.trim()),
     faqs: [
       {

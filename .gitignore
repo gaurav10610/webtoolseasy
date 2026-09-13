@@ -7,6 +7,11 @@
 .yarn/install-state.gz
 
 webtoolseasy-452118-670a03d83db4.json
+indexing-api-project-*.json
+*-*.json
+!package.json
+!tsconfig.json
+!share-config.json
 
 # testing
 /coverage

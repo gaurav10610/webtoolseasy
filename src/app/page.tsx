@@ -1,20 +1,11 @@
 import { AppHeading } from "@/components/commonComponents";
 import { apps } from "@/data/apps";
-import { AppNavigationConfig, AppCategory } from "@/types/config";
+import { AppCategory, AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
-import { LazyOnView } from "@/components/common/LazyOnView";
-import SearchIcon from "@mui/icons-material/Search";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { groupBy, map, values, filter, includes, toLower } from "lodash-es";
+import { groupBy, map, values } from "lodash-es";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
-import {
-  AppAdornment,
-  AppBox,
-  AppChip,
-  AppField,
-  AppText,
-} from "@/components/lib/ui";
+import { AppBox, AppChip, AppText } from "@/components/lib/ui";
 import Link from "next/link";
 import {
   StructuredData,
@@ -22,8 +13,7 @@ import {
   generateWebsiteSchema,
   generateFAQPageSchema,
 } from "@/components/structuredData";
-import { SkeletonWithProps } from "@/components/lib/skeletons";
-import { Suspense } from "react";
+import { HomeDiscoveryFilter } from "@/components/HomeDiscoveryFilter";
 
 const pageTitle =
   "110+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
@@ -78,137 +68,6 @@ export const metadata: Metadata = {
   keywords,
 };
 
-function AppDiscoveryFilters({
-  categories,
-  selectedCategory,
-  searchQuery,
-  totalTools,
-  filteredCount,
-}: Readonly<{
-  categories: string[];
-  selectedCategory: string | null;
-  searchQuery: string | null;
-  totalTools: number;
-  filteredCount: number;
-}>) {
-  return (
-    <AppBox className="w-full mb-6">
-      <section className="app-shell-section flex flex-col gap-4">
-        <header className="flex items-center gap-2 mb-1">
-          <FilterListIcon color="primary" />
-          <AppText variant="h6" className="!font-semibold">
-            Discover tools ({filteredCount} of {totalTools})
-          </AppText>
-        </header>
-
-        <form method="GET" className="w-full">
-          {selectedCategory && (
-            <input type="hidden" name="category" value={selectedCategory} />
-          )}
-          <AppField
-            name="search"
-            placeholder="Search tools by name or category and press Enter"
-            size="small"
-            fullWidth
-            defaultValue={searchQuery || ""}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <AppAdornment position="start">
-                    <SearchIcon color="action" />
-                  </AppAdornment>
-                ),
-              },
-            }}
-          />
-        </form>
-
-        <nav className="flex flex-wrap gap-2" aria-label="Category filters">
-          <Link
-            href={
-              searchQuery ? `/?search=${encodeURIComponent(searchQuery)}` : "/"
-            }
-            className="no-underline"
-          >
-            <AppChip
-              label="All categories"
-              variant={!selectedCategory ? "filled" : "outlined"}
-              color={!selectedCategory ? "primary" : "default"}
-              className="cursor-pointer hover:shadow-md transition-shadow"
-            />
-          </Link>
-          {map(categories, (category) => {
-            const href = searchQuery
-              ? `/?category=${encodeURIComponent(
-                  category,
-                )}&search=${encodeURIComponent(searchQuery)}`
-              : `/?category=${encodeURIComponent(category)}`;
-
-            return (
-              <Link
-                key={`cat-${category}`}
-                href={href}
-                className="no-underline"
-              >
-                <AppChip
-                  label={category}
-                  variant={
-                    selectedCategory === category ? "filled" : "outlined"
-                  }
-                  color={selectedCategory === category ? "primary" : "default"}
-                  className="cursor-pointer hover:shadow-md transition-shadow"
-                />
-              </Link>
-            );
-          })}
-        </nav>
-
-        {(selectedCategory || searchQuery) && (
-          <div className="flex flex-wrap items-center gap-2 border-t border-[var(--mui-palette-divider)] pt-2">
-            <AppText variant="body2" color="textSecondary">
-              Active filters:
-            </AppText>
-            {selectedCategory && (
-              <Link
-                href={
-                  searchQuery
-                    ? `/?search=${encodeURIComponent(searchQuery)}`
-                    : "/"
-                }
-                className="no-underline"
-              >
-                <AppChip
-                  label={`Category: ${selectedCategory}`}
-                  size="small"
-                  color="secondary"
-                  className="cursor-pointer"
-                />
-              </Link>
-            )}
-            {searchQuery && (
-              <Link
-                href={
-                  selectedCategory
-                    ? `/?category=${encodeURIComponent(selectedCategory)}`
-                    : "/"
-                }
-                className="no-underline"
-              >
-                <AppChip
-                  label={`Search: ${searchQuery}`}
-                  size="small"
-                  color="secondary"
-                  className="cursor-pointer"
-                />
-              </Link>
-            )}
-          </div>
-        )}
-      </section>
-    </AppBox>
-  );
-}
-
 function PopularToolsSection({
   allApps,
   isMobile = false,
@@ -216,84 +75,65 @@ function PopularToolsSection({
   allApps: AppNavigationConfig[];
   isMobile?: boolean;
 }>) {
-  const featuredTools = [
-    ...allApps
-      .filter((app) => app.category === "Programming")
-      .slice(0, isMobile ? 2 : 3),
-    ...allApps
-      .filter((app) => app.category === "Text")
-      .slice(0, isMobile ? 2 : 3),
+  const topAppIds = [
+    "jsonformatter",
+    "base64encode",
+    "uuidv4generator",
+    "pdfmerge",
+    "imagecompressor",
+    "wordcounter",
   ];
+  const featuredTools = topAppIds
+    .map((id) => allApps.find((app) => app.applicationId === id))
+    .filter((app): app is AppNavigationConfig => !!app)
+    .slice(0, isMobile ? 4 : 6);
 
   return (
-    <section
-      className={`${
-        isMobile ? "p-4" : "p-6"
-      } bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200`}
-      aria-labelledby="popular-tools-heading"
-    >
-      <header
-        className={`flex items-center ${
-          isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
-        }`}
+    <div id="popular-tools-wrapper" className="w-full">
+      <section
+        className={`${
+          isMobile ? "p-4" : "p-6"
+        } bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-xl border border-purple-200 dark:border-purple-800/40`}
+        aria-labelledby="popular-tools-heading"
       >
-        <AppText
-          id="popular-tools-heading"
-          variant={isMobile ? "h6" : "h5"}
-          className="!font-semibold !text-purple-800"
+        <header
+          className={`flex items-center ${
+            isMobile ? "gap-2 mb-4 flex-wrap" : "gap-3 mb-4"
+          }`}
         >
-          🌟 Popular Tools
-        </AppText>
-        <AppChip
-          label="Most used"
-          color="secondary"
-          variant="outlined"
-          size="small"
-        />
-      </header>
-      <div
-        className={`grid ${
-          isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-3 gap-4"
-        }`}
-      >
-        <Suspense
-          fallback={
-            <div
-              className={`grid ${
-                isMobile
-                  ? "grid-cols-1 gap-3"
-                  : "grid-cols-1 md:grid-cols-3 gap-4"
-              }`}
-            >
-              {Array.from({ length: featuredTools.length }, (_, i) => (
-                <SkeletonWithProps
-                  key={i}
-                  height={200}
-                  className="rounded-lg"
-                />
-              ))}
+          <AppText
+            id="popular-tools-heading"
+            variant={isMobile ? "h6" : "h5"}
+            className="!font-semibold !text-purple-800 dark:!text-purple-300"
+          >
+            🌟 Popular Tools
+          </AppText>
+          <AppChip
+            label="Most used"
+            color="secondary"
+            variant="outlined"
+            size="small"
+          />
+        </header>
+        <div
+          className={`grid ${
+            isMobile ? "grid-cols-1 gap-3" : "grid-cols-1 md:grid-cols-3 gap-4"
+          }`}
+        >
+          {featuredTools.map((config) => (
+            <div key={config.applicationId} className="w-full">
+              <AppHomeCard
+                config={config}
+                isPriority={true}
+                className={`w-full h-full ${
+                  isMobile ? "p-3" : "p-4"
+                } hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-purple-200 bg-white dark:border-purple-700 dark:bg-slate-900`}
+              />
             </div>
-          }
-        >
-          {featuredTools.map((config, index) => (
-            <LazyOnView
-              key={config.applicationId}
-              className="w-full"
-              minHeight={isMobile ? 180 : 220}
-            >
-              <div style={{ animationDelay: `${index * 150}ms` }}>
-                <AppHomeCard
-                  config={config}
-                  className={`w-full h-full ${
-                    isMobile ? "p-3" : "p-4"
-                  } hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-purple-200 bg-white dark:border-purple-700 dark:bg-slate-900`}
-                />
-              </div>
-            </LazyOnView>
           ))}
-        </Suspense>
-      </div>
-    </section>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -301,21 +141,33 @@ function SectionAppList({
   category,
   configs,
   showCategoryTitle = true,
+  isPriority = false,
 }: Readonly<{
   category: string;
   configs: AppNavigationConfig[];
   showCategoryTitle?: boolean;
+  isPriority?: boolean;
 }>) {
   const emptyColumns = 4 - (configs.length % 4);
 
   return (
-    <section className="flex flex-col gap-4 w-full">
+    <section
+      className="flex flex-col gap-4 w-full tool-category-section"
+      data-category-section={category}
+      style={
+        !isPriority
+          ? {
+              contentVisibility: "auto",
+              containIntrinsicSize: "0 400px",
+            }
+          : undefined
+      }
+    >
       {showCategoryTitle && (
         <header className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-slate-700">
           <AppText
             variant="h2"
-            className="!text-xl md:!text-2xl !font-medium !text-gray-800"
-            color="textSecondary"
+            className="!text-xl md:!text-2xl !font-medium !text-gray-800 dark:!text-slate-100"
           >
             {category}
           </AppText>
@@ -327,89 +179,33 @@ function SectionAppList({
           />
         </header>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
-              {Array.from({ length: Math.min(configs.length, 8) }, (_, i) => (
-                <SkeletonWithProps
-                  key={i}
-                  height={180}
-                  className="rounded-lg"
-                />
-              ))}
-            </div>
-          }
-        >
-          {map(configs, (config, index) => {
-            return (
-              <LazyOnView
-                key={config.applicationId}
-                className="w-full"
-                minHeight={200}
-              >
-                <article
-                  className="w-full"
-                  style={{
-                    animationDelay: `${index * 100}ms`,
-                  }}
-                >
-                  <AppHomeCard
-                    config={config}
-                    className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-slate-700 dark:bg-slate-900"
-                  />
-                </article>
-              </LazyOnView>
-            );
-          })}
-          {map(new Array(emptyColumns), (_, idx) => {
-            return (
-              <div key={`empty-${idx}`} className="w-full hidden md:block" />
-            );
-          })}
-        </Suspense>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+        {map(configs, (config) => (
+          <article
+            key={config.applicationId}
+            className="w-full tool-card-item"
+            data-tool-id={config.applicationId}
+            data-tool-name={config.displayText.toLowerCase()}
+            data-tool-category={(config.category || "").toLowerCase()}
+          >
+            <AppHomeCard
+              config={config}
+              className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-slate-700 dark:bg-slate-900"
+            />
+          </article>
+        ))}
+        {emptyColumns < 4 &&
+          map(new Array(emptyColumns), (_, idx) => (
+            <div key={`empty-${idx}`} className="w-full hidden lg:block" />
+          ))}
       </div>
     </section>
   );
 }
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const params = await searchParams;
-  const selectedCategory =
-    typeof params.category === "string" ? params.category : null;
-  const searchQuery = typeof params.search === "string" ? params.search : null;
-
+export default function Home() {
   const allApps = values(apps);
-
-  // Filter apps based on query params
-  let filteredApps = allApps;
-
-  // Filter by category
-  if (selectedCategory) {
-    filteredApps = filter(
-      filteredApps,
-      (app) => app.category === selectedCategory,
-    );
-  }
-
-  // Filter by search query
-  if (searchQuery) {
-    const searchLower = toLower(searchQuery);
-    filteredApps = filter(
-      filteredApps,
-      (app) =>
-        includes(toLower(app.displayText), searchLower) ||
-        includes(toLower(app.category), searchLower),
-    );
-  }
-
-  const categoryWiseAppList = groupBy(filteredApps, "category");
-
-  // Remove undefined category
+  const categoryWiseAppList = groupBy(allApps, "category");
   delete categoryWiseAppList["undefined"];
 
   const allCategories = [
@@ -419,6 +215,31 @@ export default async function Home({
         .filter((category) => category && category.trim()),
     ),
   ].sort();
+
+  const CATEGORY_PRIORITY: AppCategory[] = [
+    AppCategory.PROGRAMMING,
+    AppCategory.MEDIA,
+    AppCategory.TEXT,
+    AppCategory.ONLINE_EDITORS,
+    AppCategory.SEO,
+    AppCategory.MISCELLANEOUS,
+    AppCategory.FINANCE,
+  ];
+
+  const sortedCategories = (Object.keys(categoryWiseAppList) as AppCategory[]).sort(
+    (a, b) => {
+      const idxA = CATEGORY_PRIORITY.indexOf(a);
+      const idxB = CATEGORY_PRIORITY.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b);
+    },
+  );
+
+  const quickCategories = CATEGORY_PRIORITY.filter((c) =>
+    allCategories.includes(c),
+  ).slice(0, 4);
 
   // Generate structured data for home page
   const organizationSchema = generateOrganizationSchema();
@@ -481,112 +302,97 @@ export default async function Home({
             </div>
           </section>
 
-          <AppDiscoveryFilters
+          <HomeDiscoveryFilter
             categories={allCategories}
-            selectedCategory={selectedCategory}
-            searchQuery={searchQuery}
             totalTools={allApps.length}
-            filteredCount={filteredApps.length}
           />
 
-          {!selectedCategory && !searchQuery && (
-            <nav
-              className="grid grid-cols-2 gap-4 w-full mb-2 md:grid-cols-4"
-              aria-label="Quick category access"
-            >
-              <Suspense
-                fallback={
-                  <div className="grid grid-cols-2 gap-4 w-full md:grid-cols-4">
-                    {Array.from({ length: 4 }, (_, i) => (
-                      <SkeletonWithProps
-                        key={i}
-                        height={88}
-                        className="rounded-lg"
-                      />
-                    ))}
-                  </div>
-                }
-              >
-                {allCategories.slice(0, 4).map((category) => {
-                  const categoryCount = allApps.filter(
-                    (app) => app.category === category,
-                  ).length;
-                  return (
-                    <Link
-                      key={`quick-${category}`}
-                      href={`/?category=${encodeURIComponent(category)}`}
-                      className="no-underline"
+          <nav
+            className="grid grid-cols-2 gap-4 w-full mb-2 md:grid-cols-4"
+            aria-label="Quick category access"
+          >
+            {quickCategories.map((category) => {
+              const categoryCount = allApps.filter(
+                (app) => app.category === category,
+              ).length;
+              return (
+                <Link
+                  key={`quick-${category}`}
+                  href={`/?category=${encodeURIComponent(category)}`}
+                  prefetch={false}
+                  className="no-underline"
+                >
+                  <AppBox className="app-shell-section !p-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-pointer">
+                    <AppText
+                      variant="h6"
+                      className="!font-bold !text-[var(--mui-palette-primary-main)]"
                     >
-                      <AppBox className="app-shell-section !p-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-pointer">
-                        <AppText
-                          variant="h6"
-                          className="!font-bold !text-[var(--mui-palette-primary-main)]"
-                        >
-                          {categoryCount}
-                        </AppText>
-                        <AppText
-                          variant="body2"
-                          color="textSecondary"
-                          className="truncate"
-                        >
-                          {category}
-                        </AppText>
-                      </AppBox>
-                    </Link>
-                  );
-                })}
-              </Suspense>
-            </nav>
-          )}
+                      {categoryCount}
+                    </AppText>
+                    <AppText
+                      variant="body2"
+                      color="textSecondary"
+                      className="truncate"
+                    >
+                      {category}
+                    </AppText>
+                  </AppBox>
+                </Link>
+              );
+            })}
+          </nav>
 
-          {filteredApps.length > 0 ? (
-            <div className="flex flex-col gap-8 w-full mt-2">
-              {!selectedCategory && !searchQuery && ENABLE_POPULAR_TOOLS && (
-                <PopularToolsSection allApps={allApps} />
-              )}
+          <div className="flex flex-col gap-8 w-full mt-2">
+            {ENABLE_POPULAR_TOOLS && <PopularToolsSection allApps={allApps} />}
 
-              {map(categoryWiseAppList, (configs, category) => {
-                return (
-                  <SectionAppList
-                    key={`section-${category}`}
-                    category={category}
-                    configs={configs}
-                    showCategoryTitle={!searchQuery}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div className="app-shell-section w-full text-center py-10">
-              <AppText variant="h6" color="textSecondary" className="mb-4">
-                🔍 No tools found matching your criteria
-              </AppText>
-              <AppText variant="body2" color="textSecondary" className="mb-4">
-                Try adjusting your search or removing filters.
-              </AppText>
-              <Link href="/" className="no-underline">
-                <AppChip
-                  label="Clear all filters"
-                  color="primary"
-                  className="cursor-pointer"
+            {sortedCategories.map((category, index) => {
+              const configs = categoryWiseAppList[category] || [];
+              if (configs.length === 0) return null;
+              return (
+                <SectionAppList
+                  key={`section-${category}`}
+                  category={category}
+                  configs={configs}
+                  showCategoryTitle={true}
+                  isPriority={index === 0}
                 />
-              </Link>
-            </div>
-          )}
+              );
+            })}
+          </div>
+
+          <div
+            id="no-tools-found"
+            style={{ display: "none" }}
+            className="app-shell-section w-full text-center py-10"
+          >
+            <AppText variant="h6" color="textSecondary" className="mb-4">
+              🔍 No tools found matching your criteria
+            </AppText>
+            <AppText variant="body2" color="textSecondary" className="mb-4">
+              Try adjusting your search or clearing filters.
+            </AppText>
+            <Link href="/" className="no-underline">
+              <AppChip
+                label="Clear all filters"
+                color="primary"
+                className="cursor-pointer"
+              />
+            </Link>
+          </div>
 
           {/* SEO Content Section — visible to search engines and users */}
-          <section className="w-full px-4 py-8 mt-2 bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-100">
+          <section className="w-full px-4 py-8 mt-2 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900/60 dark:to-slate-900/30 rounded-xl border border-gray-100 dark:border-slate-800">
             <div className="max-w-4xl mx-auto">
               <AppText
                 variant="h2"
-                className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 !mb-6"
+                className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 dark:!text-slate-100 !mb-6"
               >
                 Free Online Tools for Developers, Designers &amp; Everyone
               </AppText>
 
               <AppText
                 variant="body1"
-                className="!text-gray-600 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
               >
                 WebToolsEasy provides 115+ free browser-based utilities that
                 handle everything from JSON formatting and code beautification
@@ -599,13 +405,13 @@ export default async function Home({
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
               >
                 Popular Developer Tools
               </AppText>
               <AppText
                 variant="body1"
-                className="!text-gray-600 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
               >
                 Our developer toolkit includes a powerful{" "}
                 <strong>JSON formatter</strong> and validator,{" "}
@@ -621,13 +427,13 @@ export default async function Home({
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
               >
                 Image &amp; Media Tools
               </AppText>
               <AppText
                 variant="body1"
-                className="!text-gray-600 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
               >
                 Compress images, convert formats (PNG, JPG, WebP, SVG), resize
                 and crop photos, remove backgrounds, and create GIFs — all
@@ -641,13 +447,13 @@ export default async function Home({
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
               >
                 PDF &amp; Document Tools
               </AppText>
               <AppText
                 variant="body1"
-                className="!text-gray-600 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
               >
                 Edit, merge, split, and compress PDF files online for free.
                 Convert PDFs to images or Word documents and vice versa. Our{" "}
@@ -658,11 +464,11 @@ export default async function Home({
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
               >
                 Why Choose WebToolsEasy?
               </AppText>
-              <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-6">
+              <ul className="list-disc pl-6 text-gray-600 dark:text-slate-300 space-y-2 mb-6">
                 <li>
                   <strong>100% Free</strong> — No hidden fees, no premium tiers,
                   no usage limits
@@ -694,23 +500,4 @@ export default async function Home({
       </div>
     </>
   );
-}
-
-export async function generateStaticParams(): Promise<{ category: string }[]> {
-  const allApps = values(apps) as AppNavigationConfig[];
-  const enumValues = new Set(Object.values(AppCategory));
-
-  const categories = Array.from(
-    new Set(
-      allApps
-        .map((a) => a.category)
-        .filter(
-          (c): c is AppCategory => !!c && enumValues.has(c as AppCategory),
-        ),
-    ),
-  ).sort((a: AppCategory, b: AppCategory) =>
-    String(a).localeCompare(String(b)),
-  );
-
-  return categories.map((category) => ({ category: String(category) }));
 }

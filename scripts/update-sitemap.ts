@@ -116,7 +116,7 @@ function updateSitemap() {
 
   const commonUrls = [
     {
-      loc: `https://webtoolseasy.com`,
+      loc: `https://webtoolseasy.com/`,
       lastmod: now,
       priority: "1.0000",
     },

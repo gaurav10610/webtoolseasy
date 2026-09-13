@@ -29,6 +29,22 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
   } catch (e) {
     console.error("Failed to read GOOGLE_SERVICE_ACCOUNT_PATH:", e);
   }
+} else if (
+  fs.existsSync(
+    path.resolve(process.cwd(), "indexing-api-project-486117-caa3059e6480.json"),
+  )
+) {
+  try {
+    const p = path.resolve(
+      process.cwd(),
+      "indexing-api-project-486117-caa3059e6480.json",
+    );
+    const raw = fs.readFileSync(p, "utf8");
+    key = JSON.parse(raw);
+    console.log("Loaded local Google Service Account credentials:", key.client_email);
+  } catch (e) {
+    console.error("Failed to read local service account file:", e);
+  }
 } else {
   console.warn(
     "No Google service account provided. Set GOOGLE_SERVICE_ACCOUNT_PATH or GOOGLE_SERVICE_ACCOUNT_JSON to enable Google Indexing API.",
@@ -73,13 +89,11 @@ export const indexUrlsInGoogle = () => {
     return;
   }
 
-  const jwtClient = new google.auth.JWT(
-    key.client_email,
-    undefined,
-    key.private_key,
-    ["https://www.googleapis.com/auth/indexing"],
-    undefined,
-  );
+  const jwtClient = new google.auth.JWT({
+    email: key.client_email,
+    key: key.private_key,
+    scopes: ["https://www.googleapis.com/auth/indexing"],
+  });
 
   jwtClient.authorize(async function (err, tokens) {
     if (err) {
@@ -186,5 +200,5 @@ const indexUrlsInIndexNow = async () => {
 };
 
 indexUrlsInIndexNow().then(() => {
-  // indexUrlsInGoogle();
+  indexUrlsInGoogle();
 });

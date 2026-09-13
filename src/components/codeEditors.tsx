@@ -4,7 +4,6 @@ import {
   DiffEditor,
   DiffEditorProps,
 } from "./lib/editor";
-import { Typography } from "@mui/material";
 import { editor } from "monaco-editor";
 
 export function SingleCodeEditorWithHeaderV2({
@@ -27,13 +26,9 @@ export function SingleCodeEditorWithHeaderV2({
       }`}
     >
       {editorHeading && (
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
-        >
+        <h3 className="text-sm md:text-lg lg:text-xl font-semibold text-[var(--mui-palette-text-secondary)]">
           {editorHeading}
-        </Typography>
+        </h3>
       )}
       <CodeEditorV2
         language={codeEditorProps.language}
@@ -69,20 +64,12 @@ export function DiffEditorsWithHeader({
   return (
     <div className={`flex min-h-0 flex-col gap-2 ${className}`}>
       <div className="w-full flex flex-row justify-around">
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          className="!text-xl !font-semibold"
-        >
+        <h3 className="text-lg md:text-xl font-semibold text-[var(--mui-palette-text-secondary)]">
           {firstTextHeading}
-        </Typography>
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          className="!text-xl !font-semibold"
-        >
+        </h3>
+        <h3 className="text-lg md:text-xl font-semibold text-[var(--mui-palette-text-secondary)]">
           {secondTextHeading}
-        </Typography>
+        </h3>
       </div>
       <div className="flex-1 min-h-[280px]">
         <DiffEditor

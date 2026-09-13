@@ -2,8 +2,6 @@ import { apps } from "@/data/apps";
 import { getAllCategorySlugs, getCategoryConfig } from "@/data/categories";
 import { AppNavigationConfig } from "@/types/config";
 import { AppHomeCard } from "@/components/appCards";
-import { LazyOnView } from "@/components/common/LazyOnView";
-import { Typography } from "@mui/material";
 import { map } from "lodash-es";
 import { Metadata } from "next";
 import { BaseToolsAds } from "@/components/baseAds";
@@ -122,10 +120,12 @@ export default async function CategoryPage(props: {
     notFound();
   }
 
+  // Get all tools belonging to this category
   const categoryApps: AppNavigationConfig[] = config.toolIds
     .map((id) => apps[id])
-    .filter(Boolean);
+    .filter((app): app is AppNavigationConfig => app !== undefined);
 
+  // Generate structured data
   const structuredData = generateCategoryStructuredData(config);
 
   return (
@@ -152,33 +152,29 @@ export default async function CategoryPage(props: {
           Tools
         </Link>
         {" > "}
-        <span className="text-gray-700">{config.name}</span>
+        <span className="text-gray-700 dark:text-slate-200">{config.name}</span>
       </nav>
 
       {/* Hero Section */}
       <header
         className={`text-center py-8 bg-gradient-to-r ${config.heroGradient} rounded-xl border ${config.heroBorderColor} dark:shadow-lg`}
       >
-        <Typography
-          variant="h1"
-          className={`!text-3xl md:!text-4xl !font-bold ${config.heroTitleColor} mb-4`}
+        <h1
+          className={`text-3xl md:text-4xl font-bold ${config.heroTitleColor} mb-4`}
         >
           {config.heroTitle}
-        </Typography>
-        <Typography
-          variant="body1"
-          className="max-w-2xl mx-auto text-gray-600 mb-4 px-4"
-        >
+        </h1>
+        <p className="max-w-2xl mx-auto text-gray-600 dark:text-slate-300 mb-4 px-4 leading-relaxed">
           {config.heroDescription}
-        </Typography>
+        </p>
         <div className="flex flex-wrap justify-center gap-2 px-4">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300">
             ✓ 100% Client-Side
           </span>
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 dark:bg-blue-950/40 dark:text-blue-300">
             ✓ No Upload Required
           </span>
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-purple-100 text-purple-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-purple-100 text-purple-800 dark:bg-purple-950/40 dark:text-purple-300">
             ✓ Works Offline
           </span>
         </div>
@@ -186,26 +182,17 @@ export default async function CategoryPage(props: {
 
       {/* Tools Grid */}
       <section className="w-full">
-        <Typography
-          variant="h2"
-          className="!text-xl md:!text-2xl !font-semibold mb-6 text-center"
-        >
+        <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-slate-800 dark:text-slate-100">
           Available {config.name} ({categoryApps.length})
-        </Typography>
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {map(categoryApps, (app) => (
-            <LazyOnView
-              key={app.applicationId}
-              className="w-full"
-              minHeight={220}
-            >
-              <article className="w-full">
-                <AppHomeCard
-                  config={app}
-                  className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-slate-700 dark:bg-slate-900"
-                />
-              </article>
-            </LazyOnView>
+            <article key={app.applicationId} className="w-full">
+              <AppHomeCard
+                config={app}
+                className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-100 dark:border-slate-700 dark:bg-slate-900"
+              />
+            </article>
           ))}
         </div>
       </section>
@@ -213,23 +200,20 @@ export default async function CategoryPage(props: {
       <BaseToolsAds />
 
       {/* Features Section */}
-      <section className="py-8 px-4 bg-gray-50 rounded-xl dark:bg-slate-900/60">
-        <Typography
-          variant="h2"
-          className="!text-xl md:!text-2xl !font-semibold mb-6 text-center"
-        >
+      <section className="py-8 px-4 bg-gray-50 rounded-xl dark:bg-slate-900/60 border border-gray-200/50 dark:border-slate-800">
+        <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-slate-800 dark:text-slate-100">
           {config.featuresTitle}
-        </Typography>
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {config.features.map((feature, index) => (
             <div key={index} className="text-center p-4">
               <div className="text-4xl mb-3">{feature.emoji}</div>
-              <Typography variant="h3" className="!text-lg !font-medium mb-2">
+              <h3 className="text-lg font-medium mb-2 text-slate-800 dark:text-slate-100">
                 {feature.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-slate-400">
                 {feature.description}
-              </Typography>
+              </p>
             </div>
           ))}
         </div>
@@ -238,21 +222,21 @@ export default async function CategoryPage(props: {
       {/* Sub-Sections (if available) */}
       {config.subSections && config.subSections.length > 0 && (
         <section className="py-8 px-4">
-          <Typography
-            variant="h2"
-            className="!text-xl md:!text-2xl !font-semibold mb-6 text-center"
-          >
+          <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-slate-800 dark:text-slate-100">
             {config.subSectionsTitle}
-          </Typography>
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {config.subSections.map((section, index) => (
-              <div key={index} className="p-4 border rounded-lg">
-                <Typography variant="h3" className="!text-lg !font-medium mb-2">
+              <div
+                key={index}
+                className="p-4 border border-gray-200 dark:border-slate-800 rounded-lg"
+              >
+                <h3 className="text-lg font-medium mb-2 text-slate-800 dark:text-slate-100">
                   {section.emoji} {section.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-slate-400">
                   {section.description}
-                </Typography>
+                </p>
               </div>
             ))}
           </div>
@@ -261,19 +245,19 @@ export default async function CategoryPage(props: {
 
       {/* FAQ Section */}
       <section className="py-8 px-4">
-        <Typography
-          variant="h2"
-          className="!text-xl md:!text-2xl !font-semibold mb-6 text-center"
-        >
+        <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-slate-800 dark:text-slate-100">
           Frequently Asked Questions
-        </Typography>
+        </h2>
         <div className="space-y-4 max-w-3xl mx-auto">
           {config.faqs.map((faq, index) => (
-            <details key={index} className="border rounded-lg p-4">
-              <summary className="cursor-pointer font-medium">
+            <details
+              key={index}
+              className="border border-gray-200 dark:border-slate-800 rounded-lg p-4 bg-white dark:bg-slate-900"
+            >
+              <summary className="cursor-pointer font-medium text-slate-800 dark:text-slate-100">
                 {faq.question}
               </summary>
-              <p className="mt-2 text-gray-600 dark:text-slate-300">
+              <p className="mt-2 text-gray-600 dark:text-slate-300 leading-relaxed">
                 {faq.answer}
               </p>
             </details>
@@ -283,9 +267,9 @@ export default async function CategoryPage(props: {
 
       {/* Related Categories */}
       <section className="py-4">
-        <Typography variant="h2" className="!text-lg !font-medium mb-4">
+        <h2 className="text-lg font-medium mb-4 text-slate-800 dark:text-slate-100">
           Related Tool Categories
-        </Typography>
+        </h2>
         <div className="flex flex-wrap gap-2">
           {config.relatedCategories.map((related, index) => (
             <Link

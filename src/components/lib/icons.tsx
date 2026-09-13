@@ -1,23 +1,20 @@
-import Box from "@mui/material/Box";
-import { type SxProps, type Theme } from "@mui/material/styles";
 import React from "react";
 
-const iconSizes = {
-  inherit: "1em",
-  small: "1.25rem",
-  medium: "1.5rem",
-  large: "2rem",
+const sizeClasses = {
+  inherit: "w-[1em] h-[1em]",
+  small: "w-5 h-5",
+  medium: "w-6 h-6",
+  large: "w-8 h-8",
 } as const;
 
 export function CustomSvgIcon({
   children,
   size = "small",
-  sx,
   className = "",
 }: Readonly<{
   children: React.ReactNode;
   size?: "inherit" | "large" | "medium" | "small";
-  sx?: SxProps<Theme>;
+  sx?: Record<string, unknown>;
   className?: string;
 }>) {
   const normalizedChildren = React.Children.map(children, (child) => {
@@ -34,27 +31,10 @@ export function CustomSvgIcon({
   });
 
   return (
-    <Box
-      component="span"
-      className={className}
-      sx={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: iconSizes[size],
-        width: "1em",
-        height: "1em",
-        lineHeight: 0,
-        flexShrink: 0,
-        "& svg": {
-          display: "block",
-          width: "100%",
-          height: "100%",
-        },
-        ...sx,
-      }}
+    <span
+      className={`inline-flex items-center justify-center flex-shrink-0 leading-none [&>svg]:block [&>svg]:w-full [&>svg]:h-full ${sizeClasses[size]} ${className}`}
     >
       {normalizedChildren}
-    </Box>
+    </span>
   );
 }
