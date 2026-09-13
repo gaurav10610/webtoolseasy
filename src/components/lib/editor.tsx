@@ -59,35 +59,8 @@ export const CodeEditorV2: React.FC<CodeEditorPropsV2> = ({
     setMonacoLoaded(true);
   }, []);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (typeof window !== "undefined") {
-      if ("requestIdleCallback" in window) {
-        const idleId = (
-          window as unknown as {
-            requestIdleCallback: (
-              cb: () => void,
-              opts?: { timeout: number },
-            ) => number;
-          }
-        ).requestIdleCallback(
-          () => {
-            timer = setTimeout(() => setMonacoLoaded(true), 2500);
-          },
-          { timeout: 5000 },
-        );
-        return () => {
-          (
-            window as unknown as { cancelIdleCallback: (id: number) => void }
-          ).cancelIdleCallback(idleId);
-          clearTimeout(timer);
-        };
-      } else {
-        timer = setTimeout(() => setMonacoLoaded(true), 2500);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, []);
+  // Monaco loads on user interaction (focus, click, touch, type)
+  // avoiding heavy 920KB JS parse during initial page load and lighthouse audits
 
   const triggerLayout = useCallback(() => {
     if (!editorInstanceRef.current) {
@@ -212,35 +185,7 @@ export const DiffEditor: React.FC<DiffEditorProps> = ({
     setMonacoLoaded(true);
   }, []);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (typeof window !== "undefined") {
-      if ("requestIdleCallback" in window) {
-        const idleId = (
-          window as unknown as {
-            requestIdleCallback: (
-              cb: () => void,
-              opts?: { timeout: number },
-            ) => number;
-          }
-        ).requestIdleCallback(
-          () => {
-            timer = setTimeout(() => setMonacoLoaded(true), 2500);
-          },
-          { timeout: 5000 },
-        );
-        return () => {
-          (
-            window as unknown as { cancelIdleCallback: (id: number) => void }
-          ).cancelIdleCallback(idleId);
-          clearTimeout(timer);
-        };
-      } else {
-        timer = setTimeout(() => setMonacoLoaded(true), 2500);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, []);
+  // Monaco loads on user interaction (focus, click, touch, type)
 
   const defaultEditorOptions: editor.IStandaloneDiffEditorConstructionOptions =
     {

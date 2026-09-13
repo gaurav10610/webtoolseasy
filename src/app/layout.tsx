@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 import HeaderAppBar from "@/components/headerAppBar";
 import { CommonSiteData } from "@/components/commonSiteData";
 import { SiteFooter } from "@/components/siteFooter";
@@ -53,7 +53,22 @@ export default function RootLayout({
           {process.env.NODE_ENV === "production" &&
             process.env.GA_CODE &&
             !process.env.GA_CODE.includes("XXXX") && (
-              <GoogleAnalytics gaId={process.env.GA_CODE} />
+              <>
+                <Script
+                  src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_CODE}`}
+                  strategy="lazyOnload"
+                />
+                <Script id="google-analytics-init" strategy="lazyOnload">
+                  {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${process.env.GA_CODE}', {
+                      page_path: window.location.pathname,
+                    });
+                  `}
+                </Script>
+              </>
             )}
 
           <div className="min-h-screen">
