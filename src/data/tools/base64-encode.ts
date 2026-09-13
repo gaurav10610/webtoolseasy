@@ -99,41 +99,29 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is Base64 Encoding?",
+    heading: "Base64 Data URI Schemes & MIME Types Cheat Sheet",
     blockData: [
-      "Base64 encoding converts files and binary data into ASCII text strings for safe transmission and storage. Our free online Base64 encoder transforms images, documents, and other files into Base64 format instantly.",
-      "This encoding method is essential for web development, API integrations, and data storage where binary data needs to be represented as text. Use our tool to convert any file to Base64 without uploading to external servers.",
+      "• **PNG Image**: `data:image/png;base64,iVBORw0KGgo...` — Embed inline icons and sprites directly in CSS or HTML `<img>` tags.",
+      "• **JPEG Image**: `data:image/jpeg;base64,/9j/4AAQSkZJR...` — Inline photography or thumbnails without separate HTTP requests.",
+      "• **SVG Vector**: `data:image/svg+xml;base64,PHN2ZyB4bWx...` — Scalable resolution-independent graphics.",
+      "• **PDF Document**: `data:application/pdf;base64,JVBERi0x...` — Preview or download PDFs directly in the browser.",
+      "• **JSON Payload**: `data:application/json;base64,eyJhbGci...` — Inline structured configuration.",
     ],
   },
   {
-    heading: "How to Convert Files to Base64",
-    listData: [
-      "Select or drag and drop your file into the upload area",
-      "Choose your preferred output format (with or without data URI prefix)",
-      "Click encode to generate the Base64 string instantly",
-      "Copy the result or download as a text file",
-      "Supports images, PDFs, documents, and other file types up to 50MB",
-    ],
-  },
-  {
-    heading: "Why Use Our File to Base64 Encoder?",
-    listData: [
-      "Completely free with no file size restrictions or premium features",
-      "Client-side processing ensures your files never leave your device",
-      "Supports all file formats including images, documents, audio, and video",
-      "Generate clean Base64 strings or data URIs for immediate use",
-      "Mobile-friendly interface works on all devices and browsers",
-      "No registration, installation, or software download required",
-    ],
-  },
-  {
-    heading: "Common Use Cases for Base64 Encoding",
+    heading: "Standard Base64 vs URL-Safe Base64 (RFC 4648)",
     blockData: [
-      "**Web Development**: Embed images directly in CSS and HTML files",
-      "**API Integration**: Send binary data through JSON APIs and web services",
-      "**Email Attachments**: Include files in email systems and MIME encoding",
-      "**Data Storage**: Store binary data in text-based databases and configurations",
-      "**Cross-Platform Transfer**: Share files between different systems and platforms",
+      "Standard Base64 uses `+` and `/` characters, and `=` for padding. When passed inside URLs or query strings, these characters cause encoding errors because `+` is interpreted as a space and `/` is a path separator.",
+      "**URL-Safe Base64** replaces `+` with `-` (hyphen) and `/` with `_` (underscore), and typically omits trailing `=` padding characters. This format is required for JSON Web Tokens (JWT), OAuth tokens, and web URLs.",
+    ],
+  },
+  {
+    heading: "Programmatic Base64 Encoding Recipes",
+    blockData: [
+      "• **JavaScript (Browser)**: `btoa(unescape(encodeURIComponent(str)))` (Encode) | `decodeURIComponent(escape(atob(b64)))` (Decode)",
+      "• **Node.js**: `Buffer.from(str, 'utf-8').toString('base64')` | `Buffer.from(b64, 'base64').toString('utf-8')`",
+      "• **Python**: `import base64; base64.b64encode(b'hello').decode()` | `base64.urlsafe_b64encode(b'hello').decode()`",
+      "• **CLI / Terminal**: `echo -n 'hello' | base64` (Encode) | `echo -n 'aGVsbG8=' | base64 -d` (Decode)",
     ],
   },
 ];

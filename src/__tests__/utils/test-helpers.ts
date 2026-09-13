@@ -24,7 +24,7 @@ export async function loadBlogConfig(blogSlug: string) {
   }
 }
 
-export function validateMetadataExports(config: any): boolean {
+export function validateMetadataExports(config: Record<string, unknown>): boolean {
   return (
     config.metadata !== undefined &&
     typeof config.metadata === "object" &&
@@ -34,7 +34,7 @@ export function validateMetadataExports(config: any): boolean {
   );
 }
 
-export function validateToolConfig(config: any, toolName: string): string[] {
+export function validateToolConfig(config: Record<string, unknown>, toolName: string): string[] {
   const errors: string[] = [];
 
   if (!config.metadata) {

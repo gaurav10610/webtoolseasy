@@ -6,7 +6,6 @@ import {
 import { categoryConfigs } from "@/data/categories";
 import { DescriptionBlock } from "@/types/description";
 import {
-  AppHeading,
   RelatedTools,
   ToolDescription,
 } from "@/components/commonComponents";
@@ -17,7 +16,6 @@ import { SocialShareButtons } from "@/components/socialShareButtons";
 import SidePanel from "@/components/sidePanel";
 import { notFound } from "next/navigation";
 import { StructuredData } from "@/components/structuredData";
-import { AppChip, AppText } from "@/components/lib/ui";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -220,7 +218,7 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
   // Only pass tools from the current category to the SidePanel to prevent SEO topical dilution
   const categoryApps = currentCategoryConfig
     ? Object.fromEntries(
-        Object.entries(apps).filter(([_, app]) =>
+        Object.entries(apps).filter(([, app]) =>
           currentCategoryConfig.toolIds.includes(
             app.applicationId as ApplicationIds,
           ),
@@ -258,70 +256,80 @@ export default async function WebToolLayout(props: Readonly<LayoutProps>) {
             />
           </aside>
 
-          <section className="flex w-full min-w-0 flex-col gap-5">
-            <nav
-              aria-label="Breadcrumb"
-              className="flex flex-wrap items-center gap-2 rounded-[18px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-default)]/70 px-4 py-3"
-            >
-              <Link href="/" className="no-underline">
-                <AppText className="!text-sm !font-medium !text-[var(--mui-palette-primary-main)]">
+          <section className="flex w-full min-w-0 flex-col gap-4">
+            {/* Frame 0 Compact Header: Breadcrumb + H1 + Privacy Badge */}
+            <div className="flex flex-col gap-2 rounded-2xl border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] px-4 py-3 shadow-sm md:px-5 md:py-3.5">
+              <nav
+                aria-label="Breadcrumb"
+                className="flex flex-wrap items-center gap-1.5 text-xs text-[var(--mui-palette-text-secondary)]"
+              >
+                <Link href="/" className="transition-colors hover:text-[var(--mui-palette-primary-main)]">
                   Home
-                </AppText>
-              </Link>
-              <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
-                /
-              </AppText>
-              {currentCategoryConfig && (
-                <>
-                  <Link
-                    href={`/tools/category/${currentCategoryConfig.slug}`}
-                    className="no-underline"
-                  >
-                    <AppText className="!text-sm !font-medium !text-[var(--mui-palette-primary-main)]">
+                </Link>
+                <span>/</span>
+                {currentCategoryConfig && (
+                  <>
+                    <Link
+                      href={`/tools/category/${currentCategoryConfig.slug}`}
+                      className="transition-colors hover:text-[var(--mui-palette-primary-main)]"
+                    >
                       {currentCategoryConfig.name}
-                    </AppText>
-                  </Link>
-                  <AppText className="!text-sm !text-[var(--mui-palette-text-secondary)]">
-                    /
-                  </AppText>
-                </>
-              )}
-              <AppText className="!text-sm !font-semibold">
-                {currentAppConfig?.displayText ?? toolConfigData.pageTitle}
-              </AppText>
-            </nav>
+                    </Link>
+                    <span>/</span>
+                  </>
+                )}
+                <span className="font-medium text-[var(--mui-palette-text-primary)]">
+                  {currentAppConfig?.displayText ?? toolConfigData.pageTitle}
+                </span>
+              </nav>
 
-            <AppHeading heading={toolConfigData.mainHeading!} />
-
-            <div className="flex min-w-0 flex-col gap-4 rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div className="flex min-w-0 flex-1 flex-col gap-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <AppChip
-                      label="100% browser-based"
-                      color="success"
-                      variant="outlined"
-                      size="small"
-                    />
-                    <AppChip
-                      label="No signup required"
-                      color="primary"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <h1 className="text-lg font-bold tracking-tight text-[var(--mui-palette-text-primary)] sm:text-xl md:text-2xl">
+                  {toolConfigData.mainHeading ?? currentAppConfig?.displayText ?? toolConfigData.pageTitle}
+                </h1>
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    100% Client-Side Private
+                  </span>
+                  <span className="hidden rounded-full border border-sky-500/30 bg-sky-500/10 px-2.5 py-0.5 text-xs font-medium text-sky-700 dark:text-sky-400 sm:inline-flex">
+                    Zero Uploads
+                  </span>
                 </div>
+              </div>
+            </div>
 
-                <div className="flex-shrink-0">
+            {/* Primary Tool Canvas */}
+            <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-4 shadow-sm md:p-5">
+              <div className="flex w-full max-w-full flex-col gap-2">
+                {children}
+              </div>
+
+              {/* Tool Canvas Footer Strip: Privacy Guarantee & Social Share */}
+              <div className="mt-2 flex flex-col gap-3 border-t border-[var(--mui-palette-divider)] pt-3 text-xs text-[var(--mui-palette-text-secondary)] sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="h-4 w-4 text-emerald-500 shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
+                  <span>100% in-browser processing. Your data never leaves your device.</span>
+                </div>
+                <div className="shrink-0">
                   <SocialShareButtons
                     pageUrl={toolUrl}
                     heading={toolConfigData.pageTitle}
                   />
                 </div>
-              </div>
-
-              <div className="flex w-full max-w-full flex-col gap-2">
-                {children}
               </div>
             </div>
 

@@ -71,6 +71,32 @@ const nextConfig = {
         destination: "/tools/base64-encode",
         permanent: true,
       },
+      // Prune thin, non-indexed calculators to eliminate Google HCU domain penalty
+      {
+        source: "/tools/tip-calculator",
+        destination: "/tools/category/calculators",
+        permanent: true,
+      },
+      {
+        source: "/tools/fraction-calculator",
+        destination: "/tools/category/calculators",
+        permanent: true,
+      },
+      {
+        source: "/tools/bmi-calculator",
+        destination: "/tools/category/calculators",
+        permanent: true,
+      },
+      {
+        source: "/tools/calorie-calculator",
+        destination: "/tools/category/calculators",
+        permanent: true,
+      },
+      {
+        source: "/tools/gpa-calculator",
+        destination: "/tools/category/calculators",
+        permanent: true,
+      },
     ];
   },
   webpack(config) {

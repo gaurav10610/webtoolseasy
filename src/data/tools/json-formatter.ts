@@ -115,41 +115,32 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is JSON Formatting and Validation?",
+    heading: "JSON Syntax & Data Types Quick Reference",
     blockData: [
-      "JSON formatting transforms compact or minified JSON data into readable, properly indented format with syntax highlighting. Our free online JSON formatter instantly beautifies JSON while validating syntax errors and structure.",
-      "Professional JSON formatting is crucial for API development, configuration files, and data analysis. Use our tool to make JSON data more readable and catch formatting errors before deployment.",
+      "• **String**: Sequence of Unicode characters wrapped in double quotes: `\"name\": \"WebToolsEasy\"`. Escape characters with backslash (`\\\"`, `\\\\`, `\\n`, `\\t`).",
+      "• **Number**: Integer or floating-point in base 10 (no octal/hex): `42`, `-3.14`, `1.5e3`. NaN and Infinity are not valid in JSON.",
+      "• **Boolean**: Lowercase literal values only: `true` or `false`.",
+      "• **Null**: Empty value representation: `null`.",
+      "• **Object**: Unordered collection of zero or more key-value pairs wrapped in braces: `{\"key\": \"value\"}`. Keys must always be double-quoted strings.",
+      "• **Array**: Ordered sequence of zero or more comma-separated values wrapped in brackets: `[1, \"two\", true]`.",
     ],
   },
   {
-    heading: "How to Format and Validate JSON",
-    listData: [
-      "Paste your minified or unformatted JSON data into the input area",
-      "Choose indentation style (2 or 4 spaces) for consistent formatting",
-      "Click 'Format JSON' to beautify and validate your data instantly",
-      "View syntax errors highlighted with detailed error messages",
-      "Copy formatted JSON or download as .json file for your projects",
-    ],
-  },
-  {
-    heading: "Why Use Our JSON Formatter?",
-    listData: [
-      "Free online tool with advanced syntax validation and error detection",
-      "Supports large JSON files up to 10MB with fast processing",
-      "Real-time syntax highlighting makes errors easy to spot and fix",
-      "Customizable formatting options for different coding standards",
-      "Secure browser-based processing - your data never leaves your device",
-      "Works perfectly on mobile, tablet, and desktop devices",
-    ],
-  },
-  {
-    heading: "JSON Formatting Best Practices",
+    heading: "Common JSON Syntax Pitfalls & How to Fix Them",
     blockData: [
-      "• **Consistent Indentation**: Use consistent spacing (2 or 4 spaces) throughout JSON files",
-      "• **Property Names**: Always use double quotes for JSON property names",
-      "• **Data Types**: Validate that strings, numbers, booleans are properly formatted",
-      "• **API Development**: Format JSON responses for better debugging and testing",
-      "• **Configuration Files**: Well-formatted JSON configs are easier to maintain and update",
+      "• **Trailing Commas**: JSON forbids trailing commas after the last item: `[1, 2, 3,]` ❌ → `[1, 2, 3]` ✅.",
+      "• **Single Quotes**: JSON strictly requires double quotes for keys and strings: `{'user': 'alice'}` ❌ → `{\"user\": \"alice\"}` ✅.",
+      "• **Comments**: Standard JSON (RFC 8259) does not support `//` or `/* */` comments. If you need comments, consider JSONC (JSON with Comments) or YAML.",
+      "• **Unquoted Keys**: JavaScript allows `{id: 123}`, but JSON requires string keys: `{\"id\": 123}`.",
+    ],
+  },
+  {
+    heading: "Programmatic JSON Formatting Recipes",
+    blockData: [
+      "• **Node.js / Browser**: `JSON.stringify(data, null, 2)` (2-space indent) or `JSON.stringify(data)` (minify).",
+      "• **Python**: `import json; json.dumps(data, indent=2, sort_keys=True)`.",
+      "• **CLI / Terminal**: `cat input.json | jq .` (beautify) or `cat input.json | jq -c .` (compact / minify).",
+      "• **Go**: `import \"encoding/json\"; output, err := json.MarshalIndent(data, \"\", \"  \")`.",
     ],
   },
 ];

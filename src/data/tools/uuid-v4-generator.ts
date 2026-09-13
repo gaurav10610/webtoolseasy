@@ -63,41 +63,41 @@ export const metadata: Metadata = {
 
 export const componentConfig: ApplicationConfig = {
   mainHeading:
-    "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
+    "UUID & GUID Generator Studio — UUID v4, v7, v1, Microsoft GUID & ULID",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
     ApplicationIds.JWT_DECODER,
-    ApplicationIds.UUID_VERSION1_GENERATOR,
-    ApplicationIds.GUID_GENERATOR,
+    ApplicationIds.BASE64_ENCODE,
+    ApplicationIds.JSON_FORMATTER,
   ],
   structuredData: createToolStructuredData({
     pageUrl: "uuid-v4-generator",
     pageTitle,
     mainHeading:
-      "UUID v4 Generator Tool - Generate Single or Bulk Universally Unique Identifiers (UUIDs) Online for Free",
+      "UUID & GUID Generator Studio — UUID v4, v7, v1, Microsoft GUID & ULID",
     keywords: keywords.split(",").map((word) => word.trim()),
     faqs: [
       {
+        question: "What is the difference between UUID v4 and UUID v7?",
+        answer:
+          "UUID v4 is completely random (122 random bits). UUID v7 (RFC 9562) combines a 48-bit Unix epoch millisecond timestamp with 74 random bits. UUID v7 is time-ordered, which prevents B-Tree index fragmentation in databases like PostgreSQL and MySQL while remaining globally unique.",
+      },
+      {
+        question: "What is the difference between a UUID and a Microsoft GUID?",
+        answer:
+          "UUID (Universally Unique Identifier) and GUID (Globally Unique Identifier) are conceptually identical 128-bit numbers. Microsoft GUIDs traditionally use uppercase letters with curly braces like {D9B08230-29C5-403A-BF02-E213AB99290B}, while standard UUIDs are lowercase without braces.",
+      },
+      {
         question: "Are the generated UUIDs cryptographically secure?",
         answer:
-          "Yes, our UUID v4 generator uses your browser's built-in crypto.getRandomValues() API, which provides cryptographically strong random number generation for maximum security.",
+          "Yes, all UUIDs are generated in your browser using the Web Cryptography API (crypto.getRandomValues and crypto.randomUUID), ensuring cryptographically secure entropy with zero network transmission.",
       },
       {
-        question: "Is there a limit on how many UUIDs I can generate?",
+        question: "Can I generate UUIDs in bulk?",
         answer:
-          "No, you can generate unlimited UUIDs completely free. Generate single UUIDs or bulk generate thousands at once with no restrictions.",
-      },
-      {
-        question: "Are the generated UUIDs stored or logged anywhere?",
-        answer:
-          "No, all UUIDs are generated locally in your browser and are never sent to any server. Your generated identifiers remain completely private.",
-      },
-      {
-        question: "Are UUID v4 identifiers truly unique?",
-        answer:
-          "Yes, UUID v4 has 122 random bits, giving approximately 5.3 × 10^36 possible combinations. The probability of generating duplicate UUIDs is astronomically low.",
+          "Yes, you can generate up to 1,000 UUIDs at a time, toggle between lowercase/uppercase, add or remove hyphens and braces, and copy all or download as a text file.",
       },
     ],
   }),
@@ -105,43 +105,29 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "UUID Version 4 Generator - Random UUIDs",
+    heading: "UUID & GUID Version Comparison Matrix (RFC 9562)",
     blockData: [
-      "Generate RFC 4122 compliant UUID version 4 identifiers using cryptographically strong random number generation. Our free UUID v4 generator creates universally unique identifiers perfect for database keys, API tokens, session management, and distributed system identification.",
-      "UUID v4 uses pure randomness to ensure uniqueness across different systems, applications, and time periods. Each generated UUID has extremely low collision probability, making them ideal for microservices, cloud applications, and any system requiring guaranteed unique identifiers.",
+      "• **UUID v4 (Random)**: 122 bits of cryptographic randomness. Best for API request IDs, session tokens, and distributed tracing where time sequence should remain hidden.",
+      "• **UUID v7 (Time-Ordered)**: 48-bit millisecond timestamp + 74 random bits (RFC 9562). The modern industry standard for database primary keys because it preserves B-Tree index locality and avoids fragmentation.",
+      "• **UUID v1 (Timestamp + Node)**: 60-bit timestamp based on 100-nanosecond intervals + MAC/random node ID. Useful for legacy distributed systems.",
+      "• **ULID (Universally Unique Lexicographically Sortable Identifier)**: 128-bit Crockford's Base32 string (26 characters). URL-safe, case-insensitive, and chronological.",
+      "• **Microsoft GUID**: Standard 128-bit UUID formatted with uppercase hexadecimal characters and optional curly braces `{...}` for Windows/.NET compatibility.",
     ],
   },
   {
-    heading: "UUID Version 4 Specifications",
-    listData: [
-      "RFC 4122 compliant random UUID generation",
-      "128-bit identifier with 122 random bits",
-      "Standard format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-      "Cryptographically secure random number generation",
-      "Version 4 indicator in the 13th hexadecimal digit",
-      "Variant bits set according to RFC standards",
-      "Bulk generation up to 1000 UUIDs at once",
-    ],
-  },
-  {
-    heading: "When to Use UUID Version 4",
+    heading: "Programmatic UUID Generation Recipes",
     blockData: [
-      "• **Database Design**: Primary keys for distributed databases and sharding",
-      "• **API Development**: Request tracking, resource identification, and session tokens",
-      "• **Microservices**: Service-to-service communication and event correlation",
-      "• **File Systems**: Unique file naming and temporary resource identification",
-      "• **Security**: Non-sequential identifiers that don't reveal creation patterns",
+      "• **Node.js / Browser**: `crypto.randomUUID()` generates a secure v4 UUID natively without external dependencies.",
+      "• **Python**: `import uuid; str(uuid.uuid4())` generates a random v4 identifier.",
+      "• **PostgreSQL**: `SELECT gen_random_uuid();` generates a v4 UUID natively in PostgreSQL 13+.",
+      "• **Go**: `import \"github.com/google/uuid\"; id := uuid.New().String()`",
     ],
   },
   {
-    heading: "UUID v4 vs Other Versions",
-    listData: [
-      "No dependency on MAC address or timestamp (unlike v1)",
-      "Maximum privacy - no machine-identifying information",
-      "Completely random - unpredictable sequence generation",
-      "Suitable for public-facing systems and APIs",
-      "Better for security-sensitive applications",
-      "Ideal when you need pure randomness over time-based ordering",
+    heading: "Why UUID v7 is Replacing UUID v4 for Database Primary Keys",
+    blockData: [
+      "Traditional UUID v4 random identifiers cause severe performance degradation when used as clustered primary keys in SQL databases (PostgreSQL, MySQL InnoDB, SQLite). Because v4 is entirely random, new row inserts land at arbitrary leaf nodes in the B-Tree index, triggering constant page splits and cache evictions.",
+      "UUID v7 solves this by encoding the current Unix millisecond timestamp in the leading 48 bits. New inserts append monotonically to the right edge of the index tree, maintaining index density and write throughput comparable to auto-incrementing integers while preserving global uniqueness across distributed systems.",
     ],
   },
 ];

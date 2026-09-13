@@ -77,38 +77,29 @@ export const componentConfig: ApplicationConfig = {
 
 export const descriptionData: DescriptionBlock[] = [
   {
-    heading: "What is UNIX Timestamp?",
+    heading: "Unix Timestamp Resolution & Digits Cheat Sheet",
     blockData: [
-      "A UNIX timestamp (also called Epoch time) is the number of seconds that have elapsed since January 1, 1970, 00:00:00 UTC. Our converter transforms these numeric timestamps into human-readable dates and vice versa.",
-      "UNIX timestamps are widely used in programming, databases, and APIs because they're timezone-independent and easy to compare. Convert between timestamp and date formats instantly with our free tool.",
+      "• **Seconds (10 digits)**: `1773413400` — Standard POSIX/Unix timestamp used in Linux, Python (`time.time()`), and SQL databases.",
+      "• **Milliseconds (13 digits)**: `1773413400000` — Standard JavaScript epoch (`Date.now()`, `new Date().getTime()`), Java (`System.currentTimeMillis()`).",
+      "• **Microseconds (16 digits)**: `1773413400000000` — High-precision profiling and Python `time.time_ns() // 1000`.",
+      "• **Nanoseconds (19 digits)**: `1773413400000000000` — Go (`time.Now().UnixNano()`) and kernel performance telemetry.",
     ],
   },
   {
-    heading: "How to Use the UNIX Timestamp Converter",
+    heading: "Programmatic Unix Timestamp Recipes",
     blockData: [
-      "Enter a UNIX timestamp to convert it to a readable date, or select a date and time to get its UNIX timestamp. The tool shows multiple date formats and supports both seconds and milliseconds timestamps.",
-      "View the current UNIX timestamp, convert historical dates, or calculate future timestamps. Perfect for developers, database administrators, and anyone working with time-based data.",
+      "• **JavaScript / Node.js**: `Math.floor(Date.now() / 1000)` (Seconds) | `new Date(timestamp * 1000).toISOString()` (To ISO)",
+      "• **Python**: `import time; int(time.time())` (Current epoch) | `from datetime import datetime; datetime.fromtimestamp(ts)`",
+      "• **PostgreSQL**: `SELECT EXTRACT(EPOCH FROM NOW())::BIGINT;` (To epoch) | `to_timestamp(1773413400)` (To timestamp)",
+      "• **Bash / Terminal**: `date +%s` (Current) | `date -r 1773413400` (macOS/BSD) or `date -d @1773413400` (Linux)",
+      "• **Go**: `time.Now().Unix()` | `time.Unix(timestamp, 0)`",
     ],
   },
   {
-    heading: "UNIX Timestamp Formats",
+    heading: "The Year 2038 Problem (Y2038 Bug)",
     blockData: [
-      "Standard UNIX timestamps are in seconds (10 digits), while JavaScript and some systems use milliseconds (13 digits). Our tool automatically detects and converts both formats.",
-      "The tool displays dates in multiple formats: ISO 8601, UTC, local time, and human-readable format. Choose the format that best fits your needs.",
-    ],
-  },
-  {
-    heading: "Common Uses for UNIX Timestamps",
-    blockData: [
-      "Developers use UNIX timestamps for database records, API responses, log files, and session management. They're ideal for calculating time differences and scheduling events.",
-      "UNIX timestamps avoid timezone confusion and daylight saving time issues. They're perfect for distributed systems where different servers may be in different timezones.",
-    ],
-  },
-  {
-    heading: "Understanding Epoch Time",
-    blockData: [
-      "The Unix epoch started on January 1, 1970, chosen as a convenient reference point for time calculations in early Unix systems. All UNIX timestamps count seconds from this moment.",
-      "UNIX timestamps will eventually reach their 32-bit limit in 2038 (Year 2038 problem), but modern 64-bit systems handle much larger timestamps, extending functionality for billions of years.",
+      "On **January 19, 2038, at 03:14:07 UTC**, standard 32-bit signed integers will exceed their maximum capacity of `2,147,483,647` seconds, overflowing into negative numbers (`-2,147,483,648`) and resetting to December 13, 1901.",
+      "Modern 64-bit systems represent timestamps using 64-bit integers (`int64`), expanding Unix epoch capability up to 292 billion years into the future. Ensure all databases use `BIGINT` or `TIMESTAMPTZ` rather than 32-bit integer columns.",
     ],
   },
 ];
