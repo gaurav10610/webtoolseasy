@@ -1,8 +1,7 @@
-import Paper from "@mui/material/Paper";
+import React from "react";
 
 export function PaperWithChildren({
   children,
-  elevation = 12,
   variant = "elevation",
   square = true,
   className = "",
@@ -13,14 +12,17 @@ export function PaperWithChildren({
   square?: boolean;
   className?: string;
 }>) {
+  const variantClass =
+    variant === "outlined"
+      ? "border border-[var(--mui-palette-divider)] shadow-sm"
+      : "shadow-md";
+  const roundedClass = square ? "rounded-none" : "rounded-2xl";
+
   return (
-    <Paper
-      elevation={elevation}
-      variant={variant}
-      square={square}
-      className={className}
+    <div
+      className={`bg-[var(--mui-palette-background-paper)] text-[var(--mui-palette-text-primary)] ${roundedClass} ${variantClass} ${className}`}
     >
       {children}
-    </Paper>
+    </div>
   );
 }

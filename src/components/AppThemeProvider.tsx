@@ -1,8 +1,9 @@
 "use client";
 
-import { getAppTheme, ThemePreference, themeStorageKey } from "@/theme";
-import { CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
+export type ThemePreference = "light" | "dark" | "system";
+export const themeStorageKey = "webtoolseasy-theme-preference";
 
 interface ThemeContextValue {
   preference: ThemePreference;
@@ -19,11 +20,20 @@ export function AppThemeProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
   const [preference, setPreference] = useState<ThemePreference>("system");
+  const [systemPrefersDark, setSystemPrefersDark] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setSystemPrefersDark(mediaQuery.matches);
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setSystemPrefersDark(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+
     const storedPreference = window.localStorage.getItem(
       themeStorageKey,
     ) as ThemePreference | null;
@@ -37,35 +47,38 @@ export function AppThemeProvider({
     }
 
     setIsReady(true);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
   }, []);
 
-  useEffect(() => {
-    if (!isReady) {
-      return;
+  const resolvedMode = useMemo(() => {
+    if (preference === "system") {
+      return systemPrefersDark ? "dark" : "light";
     }
+    return preference;
+  }, [preference, systemPrefersDark]);
 
+  useEffect(() => {
+    if (!isReady) return;
     window.localStorage.setItem(themeStorageKey, preference);
-  }, [isReady, preference]);
+
+    const root = document.documentElement;
+    if (resolvedMode === "dark") {
+      root.classList.add("dark");
+      root.style.colorScheme = "dark";
+    } else {
+      root.classList.remove("dark");
+      root.style.colorScheme = "light";
+    }
+  }, [isReady, preference, resolvedMode]);
 
   useEffect(() => {
-    if (!("serviceWorker" in navigator)) {
-      return;
-    }
-
+    if (!("serviceWorker" in navigator)) return;
     navigator.serviceWorker.register("/sw.js").catch((error) => {
       console.error("Service worker registration failed:", error);
     });
   }, []);
 
-  const resolvedMode = !isReady
-    ? "light"
-    : preference === "system"
-      ? prefersDark
-        ? "dark"
-        : "light"
-      : preference;
-
-  const theme = useMemo(() => getAppTheme(resolvedMode), [resolvedMode]);
   const value = useMemo(
     () => ({ preference, resolvedMode, setPreference }),
     [preference, resolvedMode],
@@ -73,20 +86,15 @@ export function AppThemeProvider({
 
   return (
     <ThemePreferenceContext.Provider value={value}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline enableColorScheme />
-        {children}
-      </ThemeProvider>
+      {children}
     </ThemePreferenceContext.Provider>
   );
 }
 
 export function useThemePreference() {
   const context = useContext(ThemePreferenceContext);
-
   if (!context) {
     throw new Error("useThemePreference must be used within AppThemeProvider");
   }
-
   return context;
 }

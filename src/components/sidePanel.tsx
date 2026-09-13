@@ -1,24 +1,25 @@
 "use client";
 
 import { AppNavigationConfig } from "@/types/config";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { groupBy, keysIn, map, values } from "lodash-es";
 import Link from "next/link";
 import { useState } from "react";
-import {
-  AppAccordion,
-  AppAccordionBody,
-  AppAccordionHeader,
-  AppSurface,
-  AppText,
-} from "./lib/ui";
 
-/**
- * This component is used to display the links of the apps in the side panel
- * with categorized accordion sections for better organization
- * @param param0
- * @returns
- */
+function ChevronDownIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+      aria-hidden="true"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  );
+}
+
 const SectionLinks = ({
   category,
   appList,
@@ -38,70 +39,50 @@ const SectionLinks = ({
   );
 
   return (
-    <AppAccordion
-      expanded={isExpanded}
-      onChange={onToggle}
-      elevation={0}
-      disableGutters
-      sx={{
-        backgroundColor: "transparent",
-      }}
-    >
-      <AppAccordionHeader
-        expandIcon={<ExpandMoreIcon />}
-        sx={{
-          minHeight: "auto",
-          padding: "8px 12px",
-          "&.Mui-expanded": {
-            minHeight: "auto",
-          },
-          "& .MuiAccordionSummary-content": {
-            margin: "8px 0",
-            "&.Mui-expanded": {
-              margin: "8px 0",
-            },
-          },
-        }}
+    <div className="border-b border-[var(--mui-palette-divider)] last:border-b-0 py-1">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex w-full items-center justify-between py-2 text-left cursor-pointer transition-colors group"
       >
-        <AppText
-          variant="body1"
-          sx={{
-            fontWeight: hasActiveLink ? 700 : 500,
-            color: hasActiveLink ? "primary.main" : "text.primary",
-          }}
+        <span
+          className={`text-sm transition-colors ${
+            hasActiveLink
+              ? "font-bold text-[var(--mui-palette-primary-main)]"
+              : "font-medium text-[var(--mui-palette-text-primary)] group-hover:text-[var(--mui-palette-primary-main)]"
+          }`}
         >
           {category}
-        </AppText>
-      </AppAccordionHeader>
-      <AppAccordionBody sx={{ padding: "0 12px 12px 24px" }}>
-        <div className="flex flex-col gap-2 border-l-2 border-[var(--mui-palette-divider)] pl-3">
-          {map(appList, (app) => (
-            <Link
-              href={`/${app.navigateUrl}`}
-              key={app.applicationId}
-              className="no-underline"
-            >
-              <AppText
-                color={
-                  selectedPageUrl === app.navigateUrl
-                    ? "primary"
-                    : "textSecondary"
-                }
-                variant="body2"
-                sx={{
-                  fontWeight: selectedPageUrl === app.navigateUrl ? 700 : 400,
-                  "&:hover": {
-                    color: "primary.main",
-                  },
-                }}
+        </span>
+        <ChevronDownIcon
+          className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+            isExpanded ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {isExpanded && (
+        <div className="pb-3 pl-3 pt-1 border-l-2 border-[var(--mui-palette-divider)] ml-2 flex flex-col gap-2">
+          {map(appList, (app) => {
+            const isSelected = selectedPageUrl === app.navigateUrl;
+            return (
+              <Link
+                href={`/${app.navigateUrl}`}
+                key={app.applicationId}
+                prefetch={false}
+                className={`text-xs no-underline transition-colors hover:text-[var(--mui-palette-primary-main)] ${
+                  isSelected
+                    ? "font-bold text-[var(--mui-palette-primary-main)]"
+                    : "text-[var(--mui-palette-text-secondary)]"
+                }`}
               >
                 {app.displayText}
-              </AppText>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
-      </AppAccordionBody>
-    </AppAccordion>
+      )}
+    </div>
   );
 };
 
@@ -116,20 +97,17 @@ export default function SidePanel({
 }>) {
   const categoryWiseAppList = groupBy(values(appConfigJson), "category");
 
-  // Remove undefined category
   delete categoryWiseAppList["undefined"];
 
   const categories = keysIn(categoryWiseAppList);
   const selectedPageUrl = `tools/${pageUrl}`;
 
-  // Find which category contains the current page and expand it by default
   const activeCategoryIndex = categories.findIndex((category) =>
     (categoryWiseAppList[category] as AppNavigationConfig[]).some(
       (app) => selectedPageUrl === app.navigateUrl,
     ),
   );
 
-  // State to manage which accordion is expanded
   const [expandedIndex, setExpandedIndex] = useState<number>(
     activeCategoryIndex >= 0 ? activeCategoryIndex : -1,
   );
@@ -139,15 +117,16 @@ export default function SidePanel({
   };
 
   return (
-    <AppSurface
-      variant="outlined"
-      className={`rounded-[20px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] shadow-sm ${className}`}
+    <div
+      className={`rounded-[20px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-3 md:p-4 shadow-sm ${className}`}
     >
-      <div className="flex flex-col gap-1 p-3 md:p-4">
-        <AppText className="!text-base !font-semibold">Browse tools</AppText>
-        <AppText className="!mb-2 !text-sm !text-[var(--mui-palette-text-secondary)]">
+      <div className="flex flex-col gap-1">
+        <h3 className="text-base font-semibold text-[var(--mui-palette-text-primary)]">
+          Browse tools
+        </h3>
+        <p className="mb-2 text-sm text-[var(--mui-palette-text-secondary)]">
           Jump to similar workflows with a consistent enterprise-style layout.
-        </AppText>
+        </p>
         {map(categories, (category, index) => (
           <SectionLinks
             key={category}
@@ -159,6 +138,6 @@ export default function SidePanel({
           />
         ))}
       </div>
-    </AppSurface>
+    </div>
   );
 }

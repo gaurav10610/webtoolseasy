@@ -1,29 +1,30 @@
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import React from "react";
 
 export default function BasicCardWithActions({
   cardContent,
   cardActions,
   variant = "outlined",
-  sx = {},
+  className = "",
 }: Readonly<{
   cardContent: React.ReactNode;
   cardActions?: React.ReactNode;
   variant?: "outlined" | "elevation";
   sx?: Record<string, unknown>;
+  className?: string;
 }>) {
-  const stylesObj = {
-    ...sx,
-  };
+  const variantClass =
+    variant === "outlined"
+      ? "border border-[var(--mui-palette-divider)] shadow-sm"
+      : "shadow-md";
+
   return (
-    <Box sx={stylesObj}>
-      <Card variant={variant}>
-        <CardContent>{cardContent}</CardContent>
-        {cardActions && <CardActions>{cardActions}</CardActions>}
-      </Card>
-    </Box>
+    <div
+      className={`rounded-2xl bg-[var(--mui-palette-background-paper)] ${variantClass} ${className}`}
+    >
+      <div className="p-4 md:p-6">{cardContent}</div>
+      {cardActions && (
+        <div className="flex items-center gap-2 p-4 pt-0">{cardActions}</div>
+      )}
+    </div>
   );
 }
