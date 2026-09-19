@@ -68,10 +68,9 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
-    ApplicationIds.MARKDOWN_EDITOR,
-    ApplicationIds.UUID_VERSION1_GENERATOR,
+    ApplicationIds.JSON_FORMATTER,
+    ApplicationIds.BASE64_ENCODE,
     ApplicationIds.UUID_VERSION4_GENERATOR,
-    ApplicationIds.GUID_GENERATOR,
   ],
   structuredData: createToolStructuredData({
     pageUrl: "jwt-decoder",

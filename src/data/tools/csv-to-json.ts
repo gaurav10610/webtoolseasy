@@ -75,6 +75,23 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "CSV to JSON Converter - Free Online Tool",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "How does the CSV to JSON conversion handle headers?",
+        answer:
+          "The first row of your CSV is automatically parsed as the JSON object keys. Each subsequent row becomes a corresponding JSON object with matching key-value pairs.",
+      },
+      {
+        question: "Is there a file size limit for CSV to JSON conversion?",
+        answer:
+          "No server upload limits apply because all processing happens client-side directly in your browser's memory.",
+      },
+      {
+        question: "Does it support custom delimiters like semicolons or tabs?",
+        answer:
+          "Yes, standard comma-separated values, semicolon-delimited, and tab-separated (TSV) values are supported.",
+      },
+    ],
   }),
 };
 

@@ -10,7 +10,7 @@ const pageDescription =
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/diff-checker.png`;
 
 const keywords =
-  "diff checker,diff checker online,compare code online,code diff,text diff,compare two files,diff tool online,online diff,compare text differences,side by side diff,diff viewer,code comparison tool,file compare online free";
+  "diff checker,diff checker online,text compare,text compare online,compare text online,compare code online,code diff,text diff,compare two files,diff tool online,online diff,compare text differences,side by side diff,diff viewer,code comparison tool,text comparison tool,file compare online free";
 
 export const metadata: Metadata = {
   alternates: {
@@ -66,7 +66,7 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
-    ApplicationIds.TEXT_COMPARE,
+    ApplicationIds.JSON_FORMATTER,
     ApplicationIds.CODE_MINIFIER,
     ApplicationIds.JS_FORMATTER,
   ],

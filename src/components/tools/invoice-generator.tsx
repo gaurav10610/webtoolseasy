@@ -16,7 +16,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
-import { jsPDF } from "jspdf";
 import { SnackBarWithPosition } from "../lib/snackBar";
 import { ToolComponentProps } from "@/types/component";
 import { componentConfig } from "@/data/tools/invoice-generator";
@@ -158,7 +157,7 @@ export default function InvoiceGenerator({
     return subtotal + tax - invoiceData.discount;
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     // Validation
     if (!invoiceData.companyName) {
       setError("Company name is required");
@@ -176,6 +175,7 @@ export default function InvoiceGenerator({
     setError("");
 
     try {
+      const { jsPDF } = await import("jspdf");
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       let yPos = 20;

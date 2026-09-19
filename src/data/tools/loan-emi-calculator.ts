@@ -5,13 +5,13 @@ import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/loan-emi-calculator";
 const pageTitle =
-  "EMI Calculator Online - Loan EMI Calculator for Home, Car & Personal Loans";
+  "Loan EMI & Mortgage Calculator Online - Monthly Payments & Amortization";
 const pageDescription =
-  "Calculate monthly EMI for home, car, and personal loans. Free EMI calculator shows payment breakdowns with interest and principal. Amortization schedule and charts included.";
+  "Calculate monthly EMI and mortgage payments for home, car, and personal loans. Free calculator with interest/principal breakdown and amortization schedule.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/loan-emi-calculator.png`;
 
 const keywords =
-  "emi calculator,emi calculator online,loan emi calculator,home loan emi calculator,car loan emi calculator,personal loan emi calculator,emi calculator free,loan calculator,monthly emi calculator,emi calculator online free,loan repayment calculator";
+  "loan emi calculator,mortgage calculator,home loan emi calculator,home mortgage calculator,mortgage payment calculator,car loan emi calculator,personal loan emi calculator,emi calculator free,loan calculator,monthly emi calculator,loan repayment calculator";
 
 export const metadata: Metadata = {
   alternates: {
@@ -62,17 +62,37 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: "Loan EMI Calculator: Calculate Monthly Payments & Amortization",
+  mainHeading: "Loan EMI & Mortgage Calculator: Monthly Payments & Amortization",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
-  relatedTools: [ApplicationIds.COMPOUND_INTEREST_CALCULATOR],
+  relatedTools: [
+    ApplicationIds.COMPOUND_INTEREST_CALCULATOR,
+    ApplicationIds.SIP_CALCULATOR,
+  ],
   structuredData: createToolStructuredData({
     pageUrl: "loan-emi-calculator",
-    pageTitle,
+    pageTitle: "Loan EMI & Mortgage Calculator Online",
     mainHeading:
-      "Loan EMI Calculator: Calculate Monthly Payments & Amortization",
+      "Loan EMI & Mortgage Calculator: Calculate Monthly Payments & Amortization",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "How is a mortgage payment different from a loan EMI?",
+        answer:
+          "Mortgage payments are essentially long-term EMIs specifically secured by real estate. The underlying mathematical amortization formula is identical.",
+      },
+      {
+        question: "How does pre-paying a loan or mortgage affect EMI?",
+        answer:
+          "Making lump-sum pre-payments directly reduces the principal balance, which drastically reduces total interest paid and can significantly shorten your repayment tenure.",
+      },
+      {
+        question: "Is this loan calculator free to use?",
+        answer:
+          "Yes, it is 100% free with no limits, no signup, and instant client-side calculation.",
+      },
+    ],
   }),
 };
 

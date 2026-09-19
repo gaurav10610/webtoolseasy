@@ -19,8 +19,25 @@ const nextConfig = {
             value: "nosniff",
           },
           {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(self), microphone=(self), geolocation=()",
+          },
+          {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+      {
+        source: "/icons/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
           },
         ],
       },
@@ -92,9 +109,28 @@ const nextConfig = {
         destination: "/tools/category/calculators",
         permanent: true,
       },
+      // Consolidate text-compare to Diff Checker
       {
-        source: "/tools/gpa-calculator",
-        destination: "/tools/category/calculators",
+        source: "/tools/text-compare",
+        destination: "/tools/diff-checker",
+        permanent: true,
+      },
+      // Consolidate html-to-markdown to Markdown to HTML Studio
+      {
+        source: "/tools/html-to-markdown",
+        destination: "/tools/markdown-to-html-converter",
+        permanent: true,
+      },
+      // Consolidate mortgage-calculator to Loan EMI Studio
+      {
+        source: "/tools/mortgage-calculator",
+        destination: "/tools/loan-emi-calculator",
+        permanent: true,
+      },
+      // Consolidate text-editor to Markdown Editor
+      {
+        source: "/tools/text-editor",
+        destination: "/tools/markdown-editor",
         permanent: true,
       },
     ];
@@ -116,7 +152,11 @@ const nextConfig = {
     },
   },
   experimental: {
-    optimizePackageImports: ["lodash-es"],
+    optimizePackageImports: [
+      "lodash-es",
+      "@mui/material",
+      "@mui/icons-material",
+    ],
   },
 };
 

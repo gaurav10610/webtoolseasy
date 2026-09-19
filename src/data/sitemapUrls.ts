@@ -19,6 +19,10 @@ export const EXCLUDED_SITEMAP_TOOLS = new Set([
   "bmi-calculator",
   "calorie-calculator",
   "gpa-calculator",
+  "text-compare",
+  "html-to-markdown",
+  "mortgage-calculator",
+  "text-editor",
 ]);
 
 export function getAllSitemapEntries(): MetadataRoute.Sitemap {

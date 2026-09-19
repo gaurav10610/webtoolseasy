@@ -65,6 +65,7 @@ export const componentConfig: ApplicationConfig = {
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
+    ApplicationIds.CSV_TO_JSON,
     ApplicationIds.JSON_FORMATTER,
     ApplicationIds.JSON_VIEWER,
     ApplicationIds.XML_TO_JSON,
@@ -74,6 +75,23 @@ export const componentConfig: ApplicationConfig = {
     pageTitle,
     mainHeading: "JSON to CSV Converter - Free Online Tool",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Can this tool convert nested JSON objects to CSV?",
+        answer:
+          "Yes, nested objects and arrays are flattened or serialized so they fit cleanly into tabular CSV rows and columns.",
+      },
+      {
+        question: "Can I open the exported CSV in Excel or Google Sheets?",
+        answer:
+          "Yes, the generated CSV file follows RFC 4180 standard formatting and opens seamlessly in Microsoft Excel, Google Sheets, LibreOffice, or Numbers.",
+      },
+      {
+        question: "Is my JSON data uploaded to any server?",
+        answer:
+          "No, the conversion is processed entirely within your browser client. Your data never touches any external server.",
+      },
+    ],
   }),
 };
 

@@ -141,19 +141,64 @@ export const ToolControls = memo(function ToolControls({
   color,
   size = "small",
 }: ToolControlsProps) {
+  // Global Cmd+Enter / Ctrl+Enter shortcut to trigger primary action
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        const primaryButton =
+          buttons.find(
+            (b) =>
+              !b.disabled &&
+              b.onClick &&
+              (b.type === "run" ||
+                b.type === "format" ||
+                b.variant === "contained")
+          ) || buttons.find((b) => !b.disabled && b.onClick);
+
+        if (primaryButton?.onClick) {
+          e.preventDefault();
+          primaryButton.onClick();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [buttons]);
+
+  // Find index of first primary action button to show shortcut badge
+  const primaryIndex = buttons.findIndex(
+    (b) =>
+      !b.disabled &&
+      b.onClick &&
+      (b.type === "run" || b.type === "format" || b.variant === "contained")
+  );
+
   return (
     <div
       className={`flex flex-col gap-2 w-full md:flex-row md:flex-wrap ${className}`}
     >
       {buttons.map((button, index) => {
         const config = getButtonConfig(button, isFullScreen);
+        const isPrimary = index === primaryIndex;
+
+        const renderedText = isPrimary ? (
+          <span className="inline-flex items-center gap-1.5">
+            <span>{config.text}</span>
+            <kbd className="hidden sm:inline-block text-[9px] px-1 py-0.5 rounded bg-black/20 text-white/95 font-mono leading-none">
+              ⌘↵
+            </kbd>
+          </span>
+        ) : (
+          config.text
+        );
 
         // Handle fullscreen button special visibility logic
         if (button.type === "fullscreen") {
           return (
             <ButtonWithHandler
               key={index}
-              buttonText={config.text}
+              buttonText={renderedText}
               variant={config.variant}
               size={size}
               startIcon={config.icon}
@@ -168,7 +213,7 @@ export const ToolControls = memo(function ToolControls({
         return (
           <ButtonWithHandler
             key={index}
-            buttonText={config.text}
+            buttonText={renderedText}
             variant={config.variant}
             size={size}
             startIcon={config.icon}

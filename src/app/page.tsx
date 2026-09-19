@@ -14,6 +14,7 @@ import {
   generateFAQPageSchema,
 } from "@/components/structuredData";
 import { HomeDiscoveryFilter } from "@/components/HomeDiscoveryFilter";
+import { RecentlyUsedTools } from "@/components/RecentlyUsedTools";
 
 const pageTitle =
   "110+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
@@ -204,7 +205,15 @@ function SectionAppList({
 }
 
 export default function Home() {
-  const allApps = values(apps);
+  const EXCLUDED_REDIRECTED = new Set([
+    "tools/text-compare",
+    "tools/html-to-markdown",
+    "tools/mortgage-calculator",
+    "tools/text-editor",
+  ]);
+  const allApps = values(apps).filter(
+    (app) => !EXCLUDED_REDIRECTED.has(app.navigateUrl)
+  );
   const categoryWiseAppList = groupBy(allApps, "category");
   delete categoryWiseAppList["undefined"];
 
@@ -343,6 +352,7 @@ export default function Home() {
           </nav>
 
           <div className="flex flex-col gap-8 w-full mt-2">
+            <RecentlyUsedTools />
             {ENABLE_POPULAR_TOOLS && <PopularToolsSection allApps={allApps} />}
 
             {sortedCategories.map((category, index) => {

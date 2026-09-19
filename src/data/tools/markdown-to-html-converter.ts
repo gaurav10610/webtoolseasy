@@ -4,20 +4,21 @@ import { Metadata } from "next";
 import { createToolStructuredData } from "@/util/structuredDataUtils";
 
 const navigationUrl = "/tools/markdown-to-html-converter";
-const pageTitle = "Markdown to HTML Converter Online - Convert MD to HTML Free";
+const pageTitle = "Markdown ⇄ HTML Converter Online - Convert MD to HTML & HTML to MD";
 const pageDescription =
-  "Convert Markdown to clean HTML code instantly. Free online Markdown to HTML converter with live preview and syntax highlighting. Copy or download the generated HTML.";
+  "Convert Markdown to clean HTML and HTML to Markdown instantly. Free bidirectional online converter with live preview, syntax highlighting, and zero uploads.";
 const imageUrl = `${process.env.SCREENSHOTS_BASE_URL}/tools/markdown-to-html-converter.png`;
 
 const keywords =
-  "markdown to html,markdown to html converter,convert markdown to html,md to html,markdown converter,markdown to html online,markdown to html converter online,markdown parser,md to html converter,markdown to html free,convert md to html online";
+  "markdown to html,html to markdown,convert html to markdown,html to md,markdown to html converter,convert markdown to html,md to html,markdown converter,html to markdown converter online,markdown parser,md to html converter,markdown to html free,convert md to html online";
 
 export const metadata: Metadata = {
   alternates: {
     canonical: `${process.env.HOSTNAME}${navigationUrl}`,
   },
-  title: pageTitle,
-  description: pageDescription,
+  title: "Markdown ⇄ HTML Converter Online - Convert MD to HTML & HTML to MD",
+  description:
+    "Convert Markdown to clean HTML and HTML to Markdown instantly. Free bidirectional online converter with live preview, syntax highlighting, and zero uploads.",
   keywords,
   metadataBase: new URL(
     process.env.NODE_ENV === "development"
@@ -61,21 +62,39 @@ export const metadata: Metadata = {
 };
 
 export const componentConfig: ApplicationConfig = {
-  mainHeading: "Markdown to HTML Converter: Transform Markdown to HTML Online",
+  mainHeading:
+    "Markdown ⇄ HTML Converter: Bidirectional Markdown to HTML & HTML to Markdown Online",
   navigationUrl,
   pageTitle,
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
-    ApplicationIds.HTML_TO_MARKDOWN,
     ApplicationIds.MARKDOWN_EDITOR,
+    ApplicationIds.HTML_EDITOR,
     ApplicationIds.HTML_FORMATTER,
   ],
   structuredData: createToolStructuredData({
     pageUrl: "markdown-to-html-converter",
-    pageTitle,
+    pageTitle: "Markdown ⇄ HTML Converter Online",
     mainHeading:
-      "Markdown to HTML Converter: Transform Markdown to HTML Online",
+      "Markdown ⇄ HTML Converter: Transform Markdown to HTML and HTML to Markdown Online",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "Can I convert HTML back to Markdown?",
+        answer:
+          "Yes! This tool supports bidirectional conversion. You can convert Markdown to HTML or convert HTML back into clean Markdown with a single click.",
+      },
+      {
+        question: "Is my content processed privately?",
+        answer:
+          "Yes. All conversion runs 100% in your browser using client-side JavaScript. No data is sent to any server.",
+      },
+      {
+        question: "Does it support GitHub-flavored Markdown (GFM)?",
+        answer:
+          "Yes, standard and GitHub-flavored markdown elements like tables, fenced code blocks, checklists, and strikethrough are fully supported.",
+      },
+    ],
   }),
 };
 

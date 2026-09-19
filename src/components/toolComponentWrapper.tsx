@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { ToolComponentProps } from "@/types/component";
 import { ToolPageSkeleton } from "./lib/skeletons";
 import { decompressStringFromBase64 } from "@/util/commonUtils";
+import { recordRecentTool } from "@/util/recentTools";
 
 interface ToolComponentWrapperProps {
   pageUrl: string;
@@ -25,6 +26,12 @@ function ToolComponentInner({
   const searchParams = useSearchParams();
   const [queryParams, setQueryParams] =
     useState<{ [key: string]: string }>(initialQueryParams);
+
+  useEffect(() => {
+    if (pageUrl) {
+      recordRecentTool(pageUrl);
+    }
+  }, [pageUrl]);
 
   useEffect(() => {
     let isMounted = true;
