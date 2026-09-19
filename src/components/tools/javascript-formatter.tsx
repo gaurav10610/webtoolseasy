@@ -2,9 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { js_beautify } from "js-beautify";
-import { format as prettierFormat } from "prettier/standalone";
-import * as prettierBabel from "prettier/plugins/babel";
-import * as prettierEstree from "prettier/plugins/estree";
 import { ContentCopy } from "@mui/icons-material";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
@@ -19,9 +16,18 @@ const formatWithPrettier = async (code: string) => {
   const parser =
     trimmed.startsWith("{") || trimmed.startsWith("[") ? "json" : "babel-ts";
 
-  return await prettierFormat(code, {
+  const [prettier, prettierBabel, prettierEstree] = await Promise.all([
+    import("prettier/standalone"),
+    import("prettier/plugins/babel"),
+    import("prettier/plugins/estree"),
+  ]);
+
+  return await prettier.format(code, {
     parser,
-    plugins: [prettierBabel, prettierEstree],
+    plugins: [
+      (prettierBabel as { default?: unknown }).default || prettierBabel,
+      (prettierEstree as { default?: unknown }).default || prettierEstree,
+    ] as never,
     semi: true,
     singleQuote: false,
   });

@@ -12,7 +12,6 @@ import {
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { jsPDF } from "jspdf";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout } from "../common/ToolLayout";
@@ -101,6 +100,7 @@ export default function WordToPDF({
       setProcessingState(ProcessingState.PROCESSING);
       setError("");
 
+      const { jsPDF } = await import("jspdf");
       // Create PDF
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();

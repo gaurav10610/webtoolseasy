@@ -20,7 +20,6 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import WorkIcon from "@mui/icons-material/Work";
-import { jsPDF } from "jspdf";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
 import { ToolLayout } from "../common/ToolLayout";
@@ -295,8 +294,9 @@ export default function ResumeBuilder({
     }));
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     try {
+      const { jsPDF } = await import("jspdf");
       const pdf = new jsPDF();
       let yPos = 20;
       const pageWidth = pdf.internal.pageSize.getWidth();

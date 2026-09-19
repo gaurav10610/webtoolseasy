@@ -68,7 +68,6 @@ export const componentConfig: ApplicationConfig = {
   tags: keywords.split(",").map((word) => word.trim()),
   relatedTools: [
     ApplicationIds.BASE64_ENCODE,
-    ApplicationIds.BASE64_DECODE,
     ApplicationIds.JWT_DECODER,
     ApplicationIds.JSON_FORMATTER,
     ApplicationIds.CASE_CONVERETR,
@@ -79,6 +78,23 @@ export const componentConfig: ApplicationConfig = {
     mainHeading:
       "Online URL Encoder Decoder: Encode and Decode URLs, URI Components & Query Parameters",
     keywords: keywords.split(",").map((word) => word.trim()),
+    faqs: [
+      {
+        question: "What is the difference between encodeURI and encodeURIComponent?",
+        answer:
+          "encodeURI is designed for complete URLs and preserves protocol, host, and path separators like :, /, ?, and #. encodeURIComponent encodes every special character, making it safe for query parameter values.",
+      },
+      {
+        question: "Why should space be %20 instead of + in URLs?",
+        answer:
+          "In the path portion of a URL, spaces must be encoded as %20 per RFC 3986. The + symbol for spaces is only valid in query strings under application/x-www-form-urlencoded format.",
+      },
+      {
+        question: "Is this URL encoder decoder secure and private?",
+        answer:
+          "Yes, all percent-encoding and decoding happens entirely inside your browser. No URLs or query parameters are ever logged or transmitted to our servers.",
+      },
+    ],
   }),
 };
 

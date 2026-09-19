@@ -57,16 +57,18 @@ Happy converting!`;
     [toolState]
   );
 
-  // Editor configuration for Markdown
-  const markdownEditorProps = useEditorConfig({
-    language: "markdown",
+  const [isHtmlToMd, setIsHtmlToMd] = useState(false);
+
+  // Editor configuration for Left Input
+  const leftEditorProps = useEditorConfig({
+    language: isHtmlToMd ? "html" : "markdown",
     value: toolState.code,
     onChange: handleCodeChange,
   });
 
-  // Editor configuration for HTML output
-  const htmlEditorProps = useEditorConfig({
-    language: "html",
+  // Editor configuration for Right Output
+  const rightEditorProps = useEditorConfig({
+    language: isHtmlToMd ? "markdown" : "html",
     value: htmlOutput,
     onChange: () => {}, // Read-only
     readOnly: true,
@@ -182,19 +184,50 @@ Happy converting!`;
   };
 
   useEffect(() => {
-    const html = convertMarkdownToHtml(toolState.code);
-    setHtmlOutput(html);
-  }, [toolState.code]);
+    let isCurrent = true;
+    if (isHtmlToMd) {
+      import("turndown").then(({ default: TurndownService }) => {
+        if (!isCurrent) return;
+        const turndownService = new TurndownService({
+          headingStyle: "atx",
+          codeBlockStyle: "fenced",
+        });
+        setHtmlOutput(turndownService.turndown(toolState.code));
+      }).catch(() => {
+        if (isCurrent) setHtmlOutput(toolState.code);
+      });
+    } else {
+      const html = convertMarkdownToHtml(toolState.code);
+      setHtmlOutput(html);
+    }
+    return () => {
+      isCurrent = false;
+    };
+  }, [toolState.code, isHtmlToMd]);
+
+  const swapDirection = useCallback(() => {
+    setIsHtmlToMd((prev) => !prev);
+    if (htmlOutput) {
+      toolState.setCode(htmlOutput);
+    }
+    toolState.actions.showMessage(!isHtmlToMd ? "Switched to HTML → Markdown" : "Switched to Markdown → HTML");
+  }, [htmlOutput, isHtmlToMd, toolState]);
 
   const buttons = useMemo(
     () => [
+      {
+        type: "custom" as const,
+        text: isHtmlToMd ? "⇄ Switch to MD → HTML" : "⇄ Switch to HTML → MD",
+        onClick: swapDirection,
+        variant: "contained" as const,
+      },
       ...createCommonButtons({
         onCopy: () => toolState.actions.copyText(htmlOutput),
         onShareLink: () => toolState.actions.copyShareableLink(toolState.code),
         onFullScreen: toolState.toggleFullScreen,
       }),
     ],
-    [toolState, htmlOutput]
+    [isHtmlToMd, swapDirection, toolState, htmlOutput]
   );
 
   return (
@@ -213,9 +246,9 @@ Happy converting!`;
           isFullScreen={toolState.isFullScreen}
           leftPanel={
             <SingleCodeEditorWithHeaderV2
-              codeEditorProps={markdownEditorProps}
+              codeEditorProps={leftEditorProps}
               themeOption="vs-dark"
-              editorHeading="Markdown Input"
+              editorHeading={isHtmlToMd ? "HTML Input" : "Markdown Input"}
               className={
                 toolState.isFullScreen ? "h-full" : "h-[65vh] min-h-[320px]"
               }
@@ -233,7 +266,7 @@ Happy converting!`;
                   color="textSecondary"
                   className="!text-sm md:!text-lg lg:!text-xl !font-semibold"
                 >
-                  HTML Output
+                  {isHtmlToMd ? "Markdown Output" : "HTML Output"}
                 </Typography>
                 <Tabs
                   value={viewMode}
@@ -260,7 +293,7 @@ Happy converting!`;
               {viewMode === "code" ? (
                 <div className="flex-1 min-h-[200px] md:min-h-[280px]">
                   <SingleCodeEditorWithHeaderV2
-                    codeEditorProps={htmlEditorProps}
+                    codeEditorProps={rightEditorProps}
                     themeOption="vs-dark"
                     editorHeading=""
                     className="h-full"

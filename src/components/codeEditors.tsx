@@ -4,7 +4,7 @@ import {
   DiffEditor,
   DiffEditorProps,
 } from "./lib/editor";
-import { editor } from "monaco-editor";
+import type { editor } from "monaco-editor";
 
 export function SingleCodeEditorWithHeaderV2({
   editorHeading,

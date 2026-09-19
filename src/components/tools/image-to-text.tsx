@@ -27,7 +27,6 @@ import {
   decodeText,
   encodeText,
 } from "@/util/commonUtils";
-import Tesseract from "tesseract.js";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
 import ImageIcon from "@mui/icons-material/Image";
@@ -123,6 +122,7 @@ export default function ImageToTextConverter({
     setOcrProgress({ status: "Initializing...", progress: 0 });
 
     try {
+      const { default: Tesseract } = await import("tesseract.js");
       const {
         data: { text },
       } = await Tesseract.recognize(selectedImage, ocrLanguage, {

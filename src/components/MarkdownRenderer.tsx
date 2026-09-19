@@ -5,22 +5,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
-import mermaid from "mermaid";
 import "highlight.js/styles/github-dark.css";
 import { Typography } from "@mui/material";
 
 interface MarkdownRendererProps {
   content: string;
-}
-
-// Initialize mermaid
-if (typeof window !== "undefined") {
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: "default",
-    securityLevel: "loose",
-    fontFamily: "inherit",
-  });
 }
 
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
@@ -29,16 +18,28 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   const mermaidRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Render mermaid diagrams after component mounts
+    // Render mermaid diagrams only when present
     if (mermaidRef.current) {
       const mermaidElements =
         mermaidRef.current.querySelectorAll(".language-mermaid");
-      mermaidElements.forEach((element, index) => {
-        const code = element.textContent || "";
-        const id = `mermaid-${index}`;
-        element.innerHTML = `<div class="mermaid" id="${id}">${code}</div>`;
-      });
-      mermaid.run();
+      if (mermaidElements.length > 0) {
+        import("mermaid").then(({ default: mermaid }) => {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+            securityLevel: "loose",
+            fontFamily: "inherit",
+          });
+          mermaidElements.forEach((element, index) => {
+            const code = element.textContent || "";
+            const id = `mermaid-${index}`;
+            element.innerHTML = `<div class="mermaid" id="${id}">${code}</div>`;
+          });
+          mermaid.run();
+        }).catch((err) => {
+          console.error("Failed to render mermaid diagram:", err);
+        });
+      }
     }
   }, [content]);
 

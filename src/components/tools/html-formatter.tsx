@@ -8,13 +8,16 @@ import { ToolLayout, CodeEditorLayout } from "../common/ToolLayout";
 import { ToolControls } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 import { html_beautify } from "js-beautify";
-import { format as prettierFormat } from "prettier/standalone";
-import * as prettierHtml from "prettier/plugins/html";
 
 const formatHtmlWithPrettier = async (code: string) => {
-  return await prettierFormat(code, {
+  const [prettier, prettierHtml] = await Promise.all([
+    import("prettier/standalone"),
+    import("prettier/plugins/html"),
+  ]);
+
+  return await prettier.format(code, {
     parser: "html",
-    plugins: [prettierHtml],
+    plugins: [(prettierHtml as { default?: unknown }).default || prettierHtml] as never,
   });
 };
 

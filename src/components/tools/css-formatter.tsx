@@ -2,8 +2,6 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { css_beautify } from "js-beautify";
-import { format as prettierFormat } from "prettier/standalone";
-import * as prettierPostcss from "prettier/plugins/postcss";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import { ToolComponentProps } from "@/types/component";
 import { useToolState } from "@/hooks/useToolState";
@@ -13,9 +11,14 @@ import { ToolControls, createCommonButtons } from "../common/ToolControls";
 import { SingleCodeEditorWithHeaderV2 } from "../codeEditors";
 
 const formatCssWithPrettier = async (code: string) => {
-  return await prettierFormat(code, {
+  const [prettier, prettierPostcss] = await Promise.all([
+    import("prettier/standalone"),
+    import("prettier/plugins/postcss"),
+  ]);
+
+  return await prettier.format(code, {
     parser: "css",
-    plugins: [prettierPostcss],
+    plugins: [(prettierPostcss as { default?: unknown }).default || prettierPostcss] as never,
   });
 };
 
