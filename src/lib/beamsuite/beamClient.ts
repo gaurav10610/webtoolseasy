@@ -336,11 +336,18 @@ export class BeamClient {
 
     // Listen for incoming tracks if I am receiver
     this.pc.ontrack = (event) => {
-      if (event.streams && event.streams[0]) {
-        this.remoteStream = event.streams[0];
-        this.setStatus("streaming");
-        this.callbacks.onRemoteStream?.(this.remoteStream);
+      let stream = event.streams && event.streams[0];
+      if (!stream) {
+        if (!this.remoteStream) {
+          this.remoteStream = new MediaStream();
+        }
+        this.remoteStream.addTrack(event.track);
+        stream = this.remoteStream;
+      } else {
+        this.remoteStream = stream;
       }
+      this.setStatus("streaming");
+      this.callbacks.onRemoteStream?.(stream);
     };
 
     // Control DataChannel
