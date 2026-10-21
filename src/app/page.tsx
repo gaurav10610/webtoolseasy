@@ -17,11 +17,11 @@ import { HomeDiscoveryFilter } from "@/components/HomeDiscoveryFilter";
 import { RecentlyUsedTools } from "@/components/RecentlyUsedTools";
 
 const pageTitle =
-  "110+ Free Online Tools - JSON Formatter, PDF Editor, Image Compressor & More | WebToolsEasy";
+  "WebToolsEasy — Free Online Tools & High-Performance WebRTC Media Suites (100% Private)";
 const pageDescription =
-  "Use 110+ free online tools that run 100% in your browser with complete privacy. JSON formatter, PDF editor, image compressor, code beautifier, resume builder, video converter & more. No signup, no data upload, works offline.";
+  "115+ free browser tools and high-performance WebRTC suites. Unlimited P2P file transfers, wireless phone camera to OBS Studio, lossless video cutter, PDF editor, JSON formatter & more. 100% private in-browser execution with zero cloud storage.";
 const keywords =
-  "free online tools, private browser tools, client-side developer tools, no upload pdf editor, offline privacy-first tools";
+  "p2p file transfer, obs camera source, wireless webcam, lossless video cutter, free online tools, client-side tools, private browser utilities, json formatter, pdf merge, image compressor, webtoolseasy";
 
 const ENABLE_POPULAR_TOOLS = true;
 
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     name: "Gaurav Kumar Yadav",
   },
   robots: "index, follow",
-  metadataBase: new URL(process.env.HOSTNAME!),
+  metadataBase: new URL(process.env.HOSTNAME || "https://webtoolseasy.com"),
   openGraph: {
     title: pageTitle,
     type: "website",
@@ -69,6 +69,233 @@ export const metadata: Metadata = {
   keywords,
 };
 
+function FlagshipShowcase() {
+  return (
+    <section className="w-full space-y-4 my-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-200 dark:border-slate-800 pb-3">
+        <div>
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Featured Flagship Suites
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            High-Performance WebRTC &amp; In-Browser Media Engines
+          </h2>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md">
+          Zero cloud storage, no account registration, hardware-accelerated speeds.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* SUITE 1: DROPSTREAM */}
+        <div className="group relative rounded-2xl border border-blue-200 dark:border-blue-900/60 bg-gradient-to-b from-blue-50/50 to-white dark:from-blue-950/20 dark:to-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-700 transition-all duration-300 hover:-translate-y-1">
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-3xl p-2.5 rounded-xl bg-blue-100 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800">
+                📦
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                WebRTC DataChannel
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                DropStream P2P Transfer
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Send unlimited files, entire directories, and confidential notes directly between devices. Zero cloud uploads, no file size caps, and end-to-end encryption.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-100/60 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
+                ⚡ Unlimited File Size
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-100/60 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
+                📁 Folder Structure
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-100/60 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
+                🔒 E2E Encrypted
+              </span>
+            </div>
+          </div>
+          <div className="pt-5">
+            <Link
+              href="/drop"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition active:scale-98"
+            >
+              Launch DropStream &rarr;
+            </Link>
+          </div>
+        </div>
+
+        {/* SUITE 2: BEAMSUITE */}
+        <div className="group relative rounded-2xl border border-red-200 dark:border-red-900/60 bg-gradient-to-b from-red-50/50 to-white dark:from-red-950/20 dark:to-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-xl hover:border-red-400 dark:hover:border-red-700 transition-all duration-300 hover:-translate-y-1">
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-3xl p-2.5 rounded-xl bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800">
+                📡
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                Sub-100ms Latency
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition">
+                BeamSuite Wireless Camera &amp; Screen
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Turn your smartphone into a wireless 1080p camera or screen source for OBS Studio. Live ON-AIR tally lights, camera flipping, torch control, and zero driver setup.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-800/50">
+                🎥 OBS Browser Source
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-800/50">
+                🔴 Live Tally Light
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-800/50">
+                📲 QR Code Sync
+              </span>
+            </div>
+          </div>
+          <div className="pt-5">
+            <Link
+              href="/beam"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-red-600 hover:bg-red-700 text-white shadow-sm transition active:scale-98"
+            >
+              Launch BeamSuite &rarr;
+            </Link>
+          </div>
+        </div>
+
+        {/* SUITE 3: LOCALSTUDIO */}
+        <div className="group relative rounded-2xl border border-violet-200 dark:border-violet-900/60 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-xl hover:border-violet-400 dark:hover:border-violet-700 transition-all duration-300 hover:-translate-y-1">
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-3xl p-2.5 rounded-xl bg-violet-100 dark:bg-violet-900/40 border border-violet-200 dark:border-violet-800">
+                🎬
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                Zero Re-Encoding
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition">
+                LocalStudio Media Tools
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Cut and trim video clips with 0.1s frame precision, or extract uncompressed 16-bit PCM WAV audio from video files directly inside your browser. No watermarks.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-violet-100/60 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50">
+                ✂️ Lossless Trimming
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-violet-100/60 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50">
+                🎙️ Audio to WAV
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-violet-100/60 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50">
+                🚫 Zero Watermarks
+              </span>
+            </div>
+          </div>
+          <div className="pt-5">
+            <Link
+              href="/studio"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-violet-600 hover:bg-violet-700 text-white shadow-sm transition active:scale-98"
+            >
+              Launch LocalStudio &rarr;
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ComparisonMatrix() {
+  return (
+    <section className="w-full my-6 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-5">
+      <div className="text-center max-w-2xl mx-auto space-y-2">
+        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          Why Choose In-Browser &amp; Direct P2P?
+        </h3>
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+          See how WebToolsEasy compares to traditional cloud tools that upload your private data to remote servers.
+        </p>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
+              <th className="py-3 px-3 font-semibold">Feature / Metric</th>
+              <th className="py-3 px-3 font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-t-lg">
+                WebToolsEasy (P2P / Client)
+              </th>
+              <th className="py-3 px-3 font-semibold">WeTransfer / AirDrop</th>
+              <th className="py-3 px-3 font-semibold">StreamYard / Camo</th>
+              <th className="py-3 px-3 font-semibold">CloudConvert / 123apps</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+            <tr>
+              <td className="py-3 px-3 font-medium text-slate-800 dark:text-slate-200">Server Data Storage</td>
+              <td className="py-3 px-3 font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20">
+                0 Days (Never touches cloud)
+              </td>
+              <td className="py-3 px-3 text-slate-500">Stored 7–30 days on servers</td>
+              <td className="py-3 px-3 text-slate-500">Relayed via cloud servers</td>
+              <td className="py-3 px-3 text-slate-500">Uploaded to remote disk</td>
+            </tr>
+            <tr>
+              <td className="py-3 px-3 font-medium text-slate-800 dark:text-slate-200">Transfer / File Size Limit</td>
+              <td className="py-3 px-3 font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20">
+                Unlimited (Multi-GB P2P)
+              </td>
+              <td className="py-3 px-3 text-slate-500">Capped at 2GB on free tier</td>
+              <td className="py-3 px-3 text-slate-500">Limited resolution &amp; time</td>
+              <td className="py-3 px-3 text-slate-500">Capped at 500MB – 1GB</td>
+            </tr>
+            <tr>
+              <td className="py-3 px-3 font-medium text-slate-800 dark:text-slate-200">Processing Latency</td>
+              <td className="py-3 px-3 font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20">
+                Instant (0s upload wait)
+              </td>
+              <td className="py-3 px-3 text-slate-500">Full upload + download wait</td>
+              <td className="py-3 px-3 text-slate-500">300ms–800ms cloud lag</td>
+              <td className="py-3 px-3 text-slate-500">Queued cloud re-encoding</td>
+            </tr>
+            <tr>
+              <td className="py-3 px-3 font-medium text-slate-800 dark:text-slate-200">Watermarks &amp; Paywalls</td>
+              <td className="py-3 px-3 font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20">
+                Zero Watermarks, 100% Free
+              </td>
+              <td className="py-3 px-3 text-slate-500">Paid tiers up to $12/mo</td>
+              <td className="py-3 px-3 text-slate-500">Forced watermarks / $25/mo</td>
+              <td className="py-3 px-3 text-slate-500">Daily file conversion limits</td>
+            </tr>
+            <tr>
+              <td className="py-3 px-3 font-medium text-slate-800 dark:text-slate-200">Encryption &amp; Privacy</td>
+              <td className="py-3 px-3 font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20">
+                DTLS/SRTP Peer-to-Peer
+              </td>
+              <td className="py-3 px-3 text-slate-500">Decrypted on cloud server</td>
+              <td className="py-3 px-3 text-slate-500">Decrypted for cloud mixing</td>
+              <td className="py-3 px-3 text-slate-500">Decrypted for processing</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 function PopularToolsSection({
   allApps,
   isMobile = false,
@@ -77,12 +304,12 @@ function PopularToolsSection({
   isMobile?: boolean;
 }>) {
   const topAppIds = [
+    "dropstream",
+    "beamsuite",
+    "localstudio",
     "jsonformatter",
     "base64encode",
-    "uuidv4generator",
     "pdfmerge",
-    "imagecompressor",
-    "wordcounter",
   ];
   const featuredTools = topAppIds
     .map((id) => allApps.find((app) => app.applicationId === id))
@@ -107,7 +334,7 @@ function PopularToolsSection({
             variant={isMobile ? "h6" : "h5"}
             className="!font-semibold !text-purple-800 dark:!text-purple-300"
           >
-            🌟 Popular Tools
+            🌟 Trending &amp; Popular Tools
           </AppText>
           <AppChip
             label="Most used"
@@ -226,8 +453,8 @@ export default function Home() {
   ].sort();
 
   const CATEGORY_PRIORITY: AppCategory[] = [
-    AppCategory.PROGRAMMING,
     AppCategory.MEDIA,
+    AppCategory.PROGRAMMING,
     AppCategory.TEXT,
     AppCategory.ONLINE_EDITORS,
     AppCategory.SEO,
@@ -258,27 +485,32 @@ export default function Home() {
       {
         question: "What is WebToolsEasy?",
         answer:
-          "WebToolsEasy is a collection of 115+ free online tools including JSON formatter, PDF editor, image compressor, code beautifier, resume builder, and more. All tools run 100% in your browser — your data never leaves your device.",
+          "WebToolsEasy is a suite of 115+ free online tools and high-performance WebRTC suites including DropStream (unlimited P2P file transfer), BeamSuite (wireless phone camera to OBS Studio), LocalStudio (lossless video cutter), JSON formatter, PDF editor, image compressor, and code formatters. All processing runs 100% in your browser or directly between devices with zero cloud uploads.",
       },
       {
-        question: "Are these tools completely free?",
+        question: "How does DropStream P2P file transfer work without file size limits?",
         answer:
-          "Yes, all 115+ tools on WebToolsEasy are completely free to use with no hidden charges, no signup required, and no usage limits.",
+          "DropStream uses direct WebRTC DataChannels with adaptive backpressure to stream files directly between two web browsers. Because files flow directly from peer to peer without ever uploading to a cloud server, there are no artificial file size caps, no server storage costs, and maximum privacy.",
       },
       {
-        question: "Is my data safe when using these tools?",
+        question: "How does BeamSuite turn a phone camera into an OBS source with sub-100ms latency?",
         answer:
-          "Absolutely. All tools process your data locally in your browser using client-side JavaScript. No data is ever uploaded to any server, ensuring 100% privacy and security.",
+          "BeamSuite creates a direct peer-to-peer WebRTC MediaStream between your mobile phone browser and the OBS Studio browser source. Using hardware H.264/VP8 video encoding and STUN signaling, latency is typically under 100ms with real-time tally light feedback.",
+      },
+      {
+        question: "How does LocalStudio cut videos without losing quality?",
+        answer:
+          "LocalStudio processes video files locally in your browser memory using the HTML5 MediaStream and Web Audio APIs. It slices video frames and extracts audio tracks directly on your device hardware without slow cloud uploads or watermark degradation.",
+      },
+      {
+        question: "Are these tools completely free and private?",
+        answer:
+          "Yes. All 115+ tools and WebRTC suites on WebToolsEasy are 100% free with no signups, no watermarks, and no cloud file retention. Your confidential data never leaves your device.",
       },
       {
         question: "Do these tools work offline?",
         answer:
-          "Yes. Once the page is loaded, most tools work without an internet connection since all processing happens directly in your browser.",
-      },
-      {
-        question: "What categories of tools are available?",
-        answer:
-          "WebToolsEasy offers tools across 7 categories: Programming (JSON formatter, code minifier, regex tester), Media (image compressor, video converter, GIF maker), Text (word counter, case converter), Finance (loan calculator, SIP calculator), Online Editors (JavaScript editor, HTML editor, Markdown editor), SEO & Development (meta tag generator, robots.txt generator), and Miscellaneous (password generator, QR code generator, resume builder).",
+          "Yes. Once loaded, client-side tools like the JSON formatter, diff checker, base64 encoder, image compressor, and LocalStudio work completely offline without an active internet connection.",
       },
     ],
   });
@@ -292,25 +524,32 @@ export default function Home() {
 
       <div className="w-full py-2 md:py-4">
         <div className="flex flex-col gap-4 items-center w-full">
-          <AppHeading heading="Free Online Tools — No Signup, No Upload, 100% Private" />
+          <AppHeading heading="Free Online Tools &amp; WebRTC Media Suites — 100% Private, Zero Cloud Uploads" />
 
           <section className="app-shell-section w-full">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-3xl">
                 <AppText className="!text-base !text-[var(--mui-palette-text-secondary)]">
-                  115+ free online tools for developers, designers, and everyday
-                  tasks. Format JSON, compress images, edit PDFs, convert files,
-                  and more — everything runs in your browser with complete
-                  privacy.
+                  115+ free browser tools for creators, developers, designers, and everyday
+                  tasks. Stream unlimited P2P files, beam wireless phone cameras to OBS Studio,
+                  trim video losslessly, format JSON, compress images, and edit PDFs — everything runs
+                  locally on your device.
                 </AppText>
               </div>
               <SocialShareButtons
-                pageUrl={`${process.env.HOSTNAME}`}
+                pageUrl={`${process.env.HOSTNAME || "https://webtoolseasy.com"}`}
                 heading={pageTitle}
               />
             </div>
           </section>
 
+          {/* FLAGSHIP SUITES SHOWCASE */}
+          <FlagshipShowcase />
+
+          {/* PRIVACY & COMPARISON MATRIX */}
+          <ComparisonMatrix />
+
+          {/* SEARCH & FILTERS */}
           <HomeDiscoveryFilter
             categories={allCategories}
             totalTools={allApps.length}
@@ -392,118 +631,96 @@ export default function Home() {
 
           {/* SEO Content Section — visible to search engines and users */}
           <section className="w-full px-4 py-8 mt-2 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900/60 dark:to-slate-900/30 rounded-xl border border-gray-100 dark:border-slate-800">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto space-y-6">
               <AppText
                 variant="h2"
-                className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 dark:!text-slate-100 !mb-6"
+                className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 dark:!text-slate-100 !mb-4"
               >
-                Free Online Tools for Developers, Designers &amp; Everyone
+                High-Performance WebRTC Media Suites &amp; 115+ Free Online Utilities
               </AppText>
 
               <AppText
                 variant="body1"
-                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
               >
-                WebToolsEasy provides 115+ free browser-based utilities that
-                handle everything from JSON formatting and code beautification
-                to PDF editing, image compression, and financial calculations.
-                Unlike other online tools,{" "}
-                <strong>your data never leaves your browser</strong> — every
-                operation runs locally using client-side JavaScript, giving you
-                complete privacy and security without any server uploads.
+                WebToolsEasy is engineered around a simple, powerful philosophy:{" "}
+                <strong>your data belongs on your device</strong>. Unlike traditional online tool portals that require uploading sensitive documents, confidential videos, and database credentials to 3rd-party cloud servers, WebToolsEasy executes all computations directly in your web browser using modern WebRTC, WebAssembly, HTML5 Canvas, and Web Audio APIs.
               </AppText>
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-2"
               >
-                Popular Developer Tools
+                Flagship Suite 1: DropStream Unlimited P2P File &amp; Folder Sharing
               </AppText>
               <AppText
                 variant="body1"
-                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
               >
-                Our developer toolkit includes a powerful{" "}
-                <strong>JSON formatter</strong> and validator,{" "}
-                <strong>JavaScript editor</strong> with live preview,{" "}
-                <strong>HTML/CSS/SQL formatter</strong>,{" "}
-                <strong>regex tester</strong>,{" "}
-                <strong>Base64 encoder/decoder</strong>,{" "}
-                <strong>JWT decoder</strong>, <strong>diff checker</strong>, and
-                converters for JSON&#8596;CSV, JSON&#8596;YAML, XML&#8596;JSON,
-                and Markdown&#8596;HTML. All formatters support syntax
-                highlighting, error detection, and one-click copy.
+                DropStream breaks the 2GB upload limit imposed by services like WeTransfer and Google Drive. By establishing a direct, end-to-end encrypted WebRTC DataChannel between sender and receiver, files stream at maximum local network and internet bandwidth without intermediate server staging. Complete folder structures, 4K video rushes, and multi-gigabyte ZIP archives transfer friction-free with instant QR code pairing.
               </AppText>
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-2"
               >
-                Image &amp; Media Tools
+                Flagship Suite 2: BeamSuite Wireless Phone Camera &amp; Screen to OBS Studio
               </AppText>
               <AppText
                 variant="body1"
-                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
               >
-                Compress images, convert formats (PNG, JPG, WebP, SVG), resize
-                and crop photos, remove backgrounds, and create GIFs — all
-                without uploading to any server. Our{" "}
-                <strong>video converter</strong>,{" "}
-                <strong>screen recorder</strong>, and{" "}
-                <strong>audio recorder</strong> tools let you work with media
-                files directly in your browser using WebAssembly-powered
-                processing.
+                Streamers, podcasters, and content creators can turn any iOS or Android phone into a studio-grade 1080p webcam for OBS Studio without buying expensive capture cards or installing third-party apps. With sub-100ms ultra-low latency, hardware torch controls, lens switching, and automatic live tally lights, BeamSuite delivers professional multi-cam capabilities straight into your broadcast workflow.
               </AppText>
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-2"
               >
-                PDF &amp; Document Tools
+                Flagship Suite 3: LocalStudio Lossless Video Cutter &amp; Audio Extraction
               </AppText>
               <AppText
                 variant="body1"
-                className="!text-gray-600 dark:!text-slate-300 !mb-4 !leading-relaxed"
+                className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
               >
-                Edit, merge, split, and compress PDF files online for free.
-                Convert PDFs to images or Word documents and vice versa. Our{" "}
-                <strong>resume builder</strong> and{" "}
-                <strong>invoice generator</strong> create professional documents
-                instantly with no signup required.
+                Trim video recordings with 0.1-second accuracy and export uncompressed 16-bit PCM WAV audio tracks directly in your browser. Because processing is performed entirely in client-side memory using browser codecs, there is zero compression loss, zero watermark branding, and zero server upload queue.
               </AppText>
 
               <AppText
                 variant="h3"
-                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-2"
               >
-                Why Choose WebToolsEasy?
+                Comprehensive Developer &amp; Document Toolkit
               </AppText>
-              <ul className="list-disc pl-6 text-gray-600 dark:text-slate-300 space-y-2 mb-6">
-                <li>
-                  <strong>100% Free</strong> — No hidden fees, no premium tiers,
-                  no usage limits
-                </li>
-                <li>
-                  <strong>Complete Privacy</strong> — All processing happens in
-                  your browser, zero server uploads
-                </li>
-                <li>
-                  <strong>No Signup Required</strong> — Use any tool instantly
-                  without creating an account
-                </li>
-                <li>
-                  <strong>Works Offline</strong> — Once loaded, most tools
-                  function without internet
-                </li>
-                <li>
-                  <strong>Mobile Friendly</strong> — Responsive design works on
-                  phones, tablets, and desktops
-                </li>
-                <li>
-                  <strong>Auto-Save</strong> — Your work is automatically saved
-                  and restored on page reload
-                </li>
-              </ul>
+              <AppText
+                variant="body1"
+                className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
+              >
+                Alongside our flagship media suites, WebToolsEasy offers 110+ offline developer utilities including JSON formatters, JavaScript editors, regex testers, Base64 decoders, JWT parsers, SQL beautifiers, PDF merging, and image compressors. All utilities feature syntax highlighting, dark mode support, and keyboard shortcuts (Cmd+K).
+              </AppText>
+
+              <div className="pt-4 border-t border-gray-200 dark:border-slate-800">
+                <AppText
+                  variant="h3"
+                  className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mb-3"
+                >
+                  Key Architectural Advantages
+                </AppText>
+                <ul className="list-disc pl-6 text-gray-600 dark:text-slate-300 space-y-2">
+                  <li>
+                    <strong>Zero-Knowledge Architecture:</strong> Files and streams flow peer-to-peer or execute in-memory; our servers never receive, store, or view your content.
+                  </li>
+                  <li>
+                    <strong>No Artificial Size Limits:</strong> Transfer and edit multi-gigabyte media without hitting paywalled file caps.
+                  </li>
+                  <li>
+                    <strong>No Accounts or Subscriptions:</strong> Free forever with no required login, cookies, or credit card forms.
+                  </li>
+                  <li>
+                    <strong>Hardware Accelerated:</strong> Harnesses WebRTC, WebAssembly, and your device GPU for blazing fast performance.
+                  </li>
+                </ul>
+              </div>
             </div>
           </section>
         </div>

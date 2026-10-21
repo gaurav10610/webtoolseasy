@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import {
+  StructuredData,
+  generateWebApplicationSchema,
+} from "@/components/structuredData";
 
 export const metadata: Metadata = {
   title: "BeamSuite - Free Wireless Phone Camera & Screen to OBS via WebRTC",
@@ -14,6 +18,9 @@ export const metadata: Metadata = {
     "free obs wireless webcam",
     "screen beam low latency",
   ],
+  alternates: {
+    canonical: `${process.env.HOSTNAME || "https://webtoolseasy.com"}/beam`,
+  },
   openGraph: {
     title: "BeamSuite - Free Wireless Phone Camera & Screen to OBS",
     description:
@@ -22,6 +29,12 @@ export const metadata: Metadata = {
     siteName: "WebToolsEasy",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "BeamSuite - Free Wireless Phone Camera & Screen to OBS",
+    description:
+      "Turn your phone into a high-definition, sub-100ms wireless OBS camera without installing apps.",
+  },
 };
 
 export default function BeamSuiteLayout({
@@ -29,5 +42,25 @@ export default function BeamSuiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  const schema = generateWebApplicationSchema({
+    name: "BeamSuite - Wireless Phone Camera & Screen to OBS",
+    description:
+      "Sub-100ms ultra-low latency WebRTC video bridge connecting smartphone cameras and screen shares directly to OBS Studio browser sources.",
+    url: `${process.env.HOSTNAME || "https://webtoolseasy.com"}/beam`,
+    applicationCategory: "MultimediaApplication",
+    keywords: [
+      "obs camera",
+      "wireless webcam",
+      "vdo ninja alternative",
+      "phone camera to obs",
+      "low latency streaming",
+    ],
+  });
+
+  return (
+    <>
+      <StructuredData data={schema} />
+      {children}
+    </>
+  );
 }

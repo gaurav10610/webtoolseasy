@@ -68,6 +68,24 @@ export function getAllSitemapEntries(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
+      url: `${HOSTNAME}/drop`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 1.0,
+    },
+    {
+      url: `${HOSTNAME}/beam`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 1.0,
+    },
+    {
+      url: `${HOSTNAME}/studio`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 1.0,
+    },
+    {
       url: `${HOSTNAME}/blog`,
       lastModified: now,
       changeFrequency: "weekly" as const,
