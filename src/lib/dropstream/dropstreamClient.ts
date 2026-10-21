@@ -39,6 +39,7 @@ export class DropStreamClient {
   private callbacks: DropStreamCallbacks = {};
   private pingInterval: number | null = null;
   private candidateQueue: RTCIceCandidateInit[] = [];
+  private createdObjectUrls: Set<string> = new Set();
 
   // Receiving state
   private currentIncomingFile: FileItem | null = null;
@@ -372,6 +373,8 @@ export class DropStreamClient {
             type: this.currentIncomingFile.type,
           });
           const downloadUrl = URL.createObjectURL(blob);
+          this.createdObjectUrls.add(downloadUrl);
+
           this.currentIncomingFile.status = "completed";
           this.currentIncomingFile.progress = 100;
           this.currentIncomingFile.downloadUrl = downloadUrl;
@@ -383,8 +386,9 @@ export class DropStreamClient {
           // Auto-trigger download
           this.triggerDownload(downloadUrl, this.currentIncomingFile.name);
 
-          // Reset incoming state
+          // Reset incoming state and release chunk references for GC
           this.currentIncomingFile = null;
+          this.incomingChunks.length = 0;
           this.incomingChunks = [];
         }
         break;
@@ -566,28 +570,71 @@ export class DropStreamClient {
     }
   }
 
+  public revokeAllObjectUrls(): void {
+    for (const url of this.createdObjectUrls) {
+      try {
+        URL.revokeObjectURL(url);
+      } catch {}
+    }
+    this.createdObjectUrls.clear();
+  }
+
+  public clearCompletedFiles(): void {
+    const remaining = new Map<string, FileItem>();
+    for (const [id, item] of this.files.entries()) {
+      if (item.status === "completed" || item.status === "cancelled") {
+        if (item.downloadUrl && this.createdObjectUrls.has(item.downloadUrl)) {
+          try {
+            URL.revokeObjectURL(item.downloadUrl);
+            this.createdObjectUrls.delete(item.downloadUrl);
+          } catch {}
+        }
+      } else {
+        remaining.set(id, item);
+      }
+    }
+    this.files = remaining;
+    this.notifyQueueUpdate();
+  }
+
   public leaveRoom(): void {
+    this.stopHeartbeat();
     this.sendSignaling({ type: "leave" });
     this.cleanupPeerConnection();
     if (this.ws) {
+      this.ws.onopen = null;
+      this.ws.onclose = null;
+      this.ws.onerror = null;
+      this.ws.onmessage = null;
       this.ws.close();
       this.ws = null;
     }
     this.setStatus("disconnected");
     this.remotePeer = null;
+    this.revokeAllObjectUrls();
     this.files.clear();
+    this.incomingChunks.length = 0;
+    this.incomingChunks = [];
+    this.currentIncomingFile = null;
     this.notifyQueueUpdate();
   }
 
   private cleanupPeerConnection(): void {
     this.candidateQueue = [];
     if (this.dc) {
+      this.dc.onopen = null;
+      this.dc.onclose = null;
+      this.dc.onerror = null;
+      this.dc.onmessage = null;
       try {
         this.dc.close();
       } catch {}
       this.dc = null;
     }
     if (this.pc) {
+      this.pc.onicecandidate = null;
+      this.pc.onconnectionstatechange = null;
+      this.pc.ondatachannel = null;
       try {
         this.pc.close();
       } catch {}

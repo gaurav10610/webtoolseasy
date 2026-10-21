@@ -366,9 +366,20 @@ export default function DropStreamPage() {
                   {/* Transfer List */}
                   {fileQueue.length > 0 && (
                     <div className="space-y-3">
-                      <h4 className="text-xs uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
-                        Active & Completed Transfers
-                      </h4>
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-xs uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
+                          Active & Completed Transfers
+                        </h4>
+                        {fileQueue.some((f) => f.status === "completed" || f.status === "cancelled") && (
+                          <button
+                            onClick={() => clientRef.current?.clearCompletedFiles()}
+                            className="text-xs text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                            title="Release downloaded files from browser memory"
+                          >
+                            Clear Completed (Free Memory)
+                          </button>
+                        )}
+                      </div>
                       <div className="space-y-2.5">
                         {fileQueue.map((item) => (
                           <div
