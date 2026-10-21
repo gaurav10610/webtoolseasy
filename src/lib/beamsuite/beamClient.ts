@@ -88,29 +88,47 @@ export class BeamClient {
       videoConstraints.frameRate = { ideal: 30 };
     }
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: videoConstraints,
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-      });
+    const audioConstraints = {
+      echoCancellation: true,
+      noiseSuppression: true,
+      autoGainControl: true,
+    };
 
-      this.localStream = stream;
-      this.attachLocalTracks();
-      return stream;
-    } catch (err) {
-      // Fallback: try basic video without frameRate constraints
-      const fallbackStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
+    let stream: MediaStream | null = null;
+
+    // Cascade 1: Requested quality + facingMode + audio
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: videoConstraints,
+        audio: audioConstraints,
       });
-      this.localStream = fallbackStream;
-      this.attachLocalTracks();
-      return fallbackStream;
+    } catch {
+      // Cascade 2: Requested quality + facingMode without audio (in case mic is denied or unavailable)
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: videoConstraints,
+          audio: false,
+        });
+      } catch {
+        // Cascade 3: Basic generic video + audio
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true,
+          });
+        } catch {
+          // Cascade 4: Basic video only (absolute fallback)
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false,
+          });
+        }
+      }
     }
+
+    this.localStream = stream;
+    this.attachLocalTracks();
+    return stream;
   }
 
   public async switchCamera(): Promise<MediaStream> {

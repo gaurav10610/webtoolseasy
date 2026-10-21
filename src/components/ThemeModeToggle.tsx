@@ -78,11 +78,15 @@ const themeOptions = [
   },
 ];
 
-export function ThemeModeToggle() {
+export function ThemeModeToggle({ showLabels = false }: { showLabels?: boolean }) {
   const { preference, setPreference } = useThemePreference();
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)] p-1 shadow-sm">
+    <div
+      role="radiogroup"
+      aria-label="Theme mode selection"
+      className="inline-flex items-center gap-0.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/80 p-0.5 shadow-xs backdrop-blur-sm"
+    >
       {themeOptions.map((option) => {
         const isActive = preference === option.value;
 
@@ -90,15 +94,18 @@ export function ThemeModeToggle() {
           <button
             key={option.value}
             type="button"
+            role="radio"
+            aria-checked={isActive}
+            title={`Switch to ${option.label} theme`}
             onClick={() => setPreference(option.value)}
-            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1 rounded-full px-2 py-1 text-xs font-medium transition-all duration-150 cursor-pointer ${
               isActive
-                ? "bg-sky-600 text-white dark:bg-sky-500 shadow-sm"
-                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                ? "bg-white text-slate-900 dark:bg-slate-800 dark:text-white shadow-xs font-semibold"
+                : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
             }`}
           >
             {option.icon}
-            <span>{option.label}</span>
+            {showLabels && <span className="text-[11px]">{option.label}</span>}
           </button>
         );
       })}

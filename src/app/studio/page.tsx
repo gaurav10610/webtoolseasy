@@ -134,12 +134,12 @@ export default function LocalStudioPage() {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header Hero */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-950/60 text-violet-800 dark:text-violet-300 border border-violet-200 dark:border-violet-800">
-            <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse"></span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
             100% In-Browser Media Engine • Zero Cloud Uploads • No Watermarks
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            LocalStudio <span className="text-violet-600 dark:text-violet-400">Media Suite</span>
+            LocalStudio <span className="text-blue-600 dark:text-blue-400">Media Suite</span>
           </h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             Surgically cut video clips without re-encoding quality loss, or extract pure WAV audio from video files directly inside your browser. Instant processing at hardware speeds.
@@ -162,7 +162,7 @@ export default function LocalStudioPage() {
               onClick={() => setActiveTab("video_cutter")}
               className={`pb-3 px-4 text-sm font-semibold border-b-2 transition cursor-pointer ${
                 activeTab === "video_cutter"
-                  ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
+                  ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
                   : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               }`}
             >
@@ -172,7 +172,7 @@ export default function LocalStudioPage() {
               onClick={() => setActiveTab("audio_extractor")}
               className={`pb-3 px-4 text-sm font-semibold border-b-2 transition cursor-pointer ${
                 activeTab === "audio_extractor"
-                  ? "border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400"
+                  ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
                   : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               }`}
             >
