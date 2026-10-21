@@ -67,8 +67,8 @@ export const metadata: Metadata = {
 
 function HeroSection() {
   return (
-    <section className="w-full text-center space-y-6 pt-4 pb-8 border-b border-slate-200 dark:border-slate-800">
-      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+    <section className="w-full text-center space-y-6 pt-4 pb-8 border-b border-slate-200/80 dark:border-slate-800/80">
+      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         Zero Cloud Uploads • End-to-End Encrypted • No Account Needed
       </div>
@@ -76,37 +76,37 @@ function HeroSection() {
       <div className="space-y-3 max-w-3xl mx-auto">
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
           The Private, Zero-Cloud{" "}
-          <span className="bg-gradient-to-r from-blue-600 via-violet-600 to-red-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
             Web Suite
           </span>
         </h1>
-        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-          Stream unlimited multi-gigabyte files between devices, beam your phone camera directly to OBS Studio with sub-100ms latency, and cut video losslessly — all in your browser.
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto font-normal">
+          Stream unlimited multi-gigabyte files between devices, beam your phone camera directly to OBS Studio with sub-100ms latency, and cut video losslessly — all computed directly inside your browser.
         </p>
       </div>
 
-      {/* Quick Launch Action Pills */}
+      {/* Primary Action Buttons */}
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
         <Link
           href="/drop"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow transition active:scale-98"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition active:scale-98"
         >
           <span>📦</span>
           <span>Launch DropStream (P2P Transfer)</span>
         </Link>
         <Link
           href="/beam"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-red-600 hover:bg-red-700 text-white shadow transition active:scale-98"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-2xs transition active:scale-98"
         >
-          <span>📡</span>
-          <span>Launch BeamSuite (OBS Camera)</span>
+          <span>📷</span>
+          <span>BeamSuite (OBS Camera)</span>
         </Link>
         <Link
           href="/studio"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-violet-600 hover:bg-violet-700 text-white shadow transition active:scale-98"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-2xs transition active:scale-98"
         >
           <span>🎬</span>
-          <span>Launch LocalStudio (Media Tools)</span>
+          <span>LocalStudio (Media Tools)</span>
         </Link>
       </div>
 
@@ -118,7 +118,7 @@ function HeroSection() {
             name="search"
             placeholder="Search 110+ developer & media tools (⌘K)..."
             aria-label="Search tools"
-            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-2.5 pl-4 pr-12 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 shadow-xs focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pl-4 pr-12 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 shadow-xs focus:border-blue-500 focus:outline-none"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">
             ⌘K
@@ -132,26 +132,26 @@ function HeroSection() {
 function FlagshipShowcase() {
   return (
     <section className="w-full space-y-4 my-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-200 dark:border-slate-800 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 dark:border-slate-800/80 pb-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             Flagship WebRTC &amp; Browser-Native Suites
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Harnessing peer-to-peer WebRTC, Web Audio, and hardware codecs directly in your browser.
+            High-performance tools powered by peer-to-peer WebRTC, Web Audio, and hardware codecs.
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* SUITE 1: DROPSTREAM */}
-        <div className="group relative rounded-2xl border border-blue-200 dark:border-blue-900/60 bg-gradient-to-b from-blue-50/50 to-white dark:from-blue-950/20 dark:to-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-700 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-200">
           <div className="space-y-3.5">
             <div className="flex items-center justify-between">
-              <span className="text-3xl p-2.5 rounded-xl bg-blue-100 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800">
+              <span className="text-2xl p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60">
                 📦
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                 WebRTC DataChannel
               </span>
@@ -165,13 +165,13 @@ function FlagshipShowcase() {
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-100/60 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 ⚡ Unlimited File Size
               </span>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-100/60 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
-                📁 Folder Structure
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                📁 Folder Transfer
               </span>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-100/60 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 🔒 E2E Encrypted
               </span>
             </div>
@@ -179,7 +179,7 @@ function FlagshipShowcase() {
           <div className="pt-5">
             <Link
               href="/drop"
-              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition active:scale-98"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition active:scale-98"
             >
               Launch DropStream &rarr;
             </Link>
@@ -187,19 +187,19 @@ function FlagshipShowcase() {
         </div>
 
         {/* SUITE 2: BEAMSUITE */}
-        <div className="group relative rounded-2xl border border-red-200 dark:border-red-900/60 bg-gradient-to-b from-red-50/50 to-white dark:from-red-950/20 dark:to-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-xl hover:border-red-400 dark:hover:border-red-700 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-200">
           <div className="space-y-3.5">
             <div className="flex items-center justify-between">
-              <span className="text-3xl p-2.5 rounded-xl bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800">
-                📡
+              <span className="text-2xl p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60">
+                📷
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                 Sub-100ms Latency
               </span>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
                 BeamSuite Wireless Camera &amp; Screen
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
@@ -207,13 +207,13 @@ function FlagshipShowcase() {
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 🎥 OBS Browser Source
               </span>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 🔴 Live Tally Light
               </span>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-100/60 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 📲 QR Code Sync
               </span>
             </div>
@@ -221,7 +221,7 @@ function FlagshipShowcase() {
           <div className="pt-5">
             <Link
               href="/beam"
-              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-red-600 hover:bg-red-700 text-white shadow-sm transition active:scale-98"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition active:scale-98"
             >
               Launch BeamSuite &rarr;
             </Link>
@@ -229,19 +229,19 @@ function FlagshipShowcase() {
         </div>
 
         {/* SUITE 3: LOCALSTUDIO */}
-        <div className="group relative rounded-2xl border border-violet-200 dark:border-violet-900/60 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-xl hover:border-violet-400 dark:hover:border-violet-700 transition-all duration-300 hover:-translate-y-1">
+        <div className="group relative rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-200">
           <div className="space-y-3.5">
             <div className="flex items-center justify-between">
-              <span className="text-3xl p-2.5 rounded-xl bg-violet-100 dark:bg-violet-900/40 border border-violet-200 dark:border-violet-800">
+              <span className="text-2xl p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60">
                 🎬
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                 Zero Re-Encoding
               </span>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
                 LocalStudio Media Tools
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
@@ -249,13 +249,13 @@ function FlagshipShowcase() {
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-violet-100/60 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 ✂️ Lossless Trimming
               </span>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-violet-100/60 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 🎙️ Audio to WAV
               </span>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-violet-100/60 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300 border border-violet-200/50 dark:border-violet-800/50">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 🚫 Zero Watermarks
               </span>
             </div>
@@ -263,7 +263,7 @@ function FlagshipShowcase() {
           <div className="pt-5">
             <Link
               href="/studio"
-              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-violet-600 hover:bg-violet-700 text-white shadow-sm transition active:scale-98"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition active:scale-98"
             >
               Launch LocalStudio &rarr;
             </Link>
