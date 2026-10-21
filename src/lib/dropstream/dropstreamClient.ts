@@ -38,6 +38,7 @@ export class DropStreamClient {
   private files: Map<string, FileItem> = new Map();
   private callbacks: DropStreamCallbacks = {};
   private pingInterval: number | null = null;
+  private candidateQueue: RTCIceCandidateInit[] = [];
 
   // Receiving state
   private currentIncomingFile: FileItem | null = null;
@@ -254,6 +255,8 @@ export class DropStreamClient {
         await this.initiatePeerConnection(fromPeerId, false);
         if (!this.pc) return;
         await this.pc.setRemoteDescription(new RTCSessionDescription(signalData.sdp));
+        await this.drainCandidateQueue();
+
         const answer = await this.pc.createAnswer();
         await this.pc.setLocalDescription(answer);
         this.sendSignaling({
@@ -264,14 +267,31 @@ export class DropStreamClient {
       } else if (signalData.sdp.type === "answer") {
         if (this.pc) {
           await this.pc.setRemoteDescription(new RTCSessionDescription(signalData.sdp));
+          await this.drainCandidateQueue();
         }
       }
     } else if (signalData.candidate) {
-      if (this.pc && this.pc.remoteDescription) {
+      if (this.pc && this.pc.remoteDescription && this.pc.remoteDescription.type) {
         try {
           await this.pc.addIceCandidate(new RTCIceCandidate(signalData.candidate));
         } catch (e) {
           console.warn("Failed to add ICE candidate", e);
+        }
+      } else {
+        this.candidateQueue.push(signalData.candidate);
+      }
+    }
+  }
+
+  private async drainCandidateQueue(): Promise<void> {
+    if (!this.pc) return;
+    while (this.candidateQueue.length > 0) {
+      const cand = this.candidateQueue.shift();
+      if (cand) {
+        try {
+          await this.pc.addIceCandidate(new RTCIceCandidate(cand));
+        } catch (e) {
+          console.warn("Failed to add queued candidate", e);
         }
       }
     }
@@ -560,6 +580,7 @@ export class DropStreamClient {
   }
 
   private cleanupPeerConnection(): void {
+    this.candidateQueue = [];
     if (this.dc) {
       try {
         this.dc.close();

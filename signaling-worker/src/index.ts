@@ -124,15 +124,18 @@ export class SignalingRoom extends DurableObject {
       case "signal":
         // Direct WebRTC signaling packet (SDP offer/answer or ICE candidate)
         if (payload.targetPeerId) {
-          const targetSockets = this.ctx.getWebSockets(payload.targetPeerId);
           const messageToSend = JSON.stringify({
             type: "signal",
             fromPeerId,
             data: payload.data,
           });
-          for (const targetWs of targetSockets) {
+          const allSockets = this.ctx.getWebSockets();
+          for (const s of allSockets) {
             try {
-              targetWs.send(messageToSend);
+              const p = s.deserializeAttachment() as PeerAttachment | null;
+              if (p?.peerId === payload.targetPeerId) {
+                s.send(messageToSend);
+              }
             } catch {
               // Ignore disconnected socket
             }
