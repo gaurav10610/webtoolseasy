@@ -24,6 +24,15 @@ test.describe("Core Pages E2E Tests", () => {
       await home.checkCategories();
       console.log("✓ Categories displayed");
     });
+
+    test("tools directory page loads successfully", async ({ page }) => {
+      await page.goto("/tools");
+      await expect(page.locator("h1")).toContainText("All Free Online Tools");
+      const toolCards = page.locator(".tool-card-item");
+      const count = await toolCards.count();
+      expect(count).toBeGreaterThan(50);
+      console.log(`✓ Tools directory loads with ${count} tools`);
+    });
   });
 
   test.describe("Category Pages", () => {

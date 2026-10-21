@@ -86,6 +86,12 @@ export function getAllSitemapEntries(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
+      url: `${HOSTNAME}/tools`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
       url: `${HOSTNAME}/blog`,
       lastModified: now,
       changeFrequency: "weekly" as const,

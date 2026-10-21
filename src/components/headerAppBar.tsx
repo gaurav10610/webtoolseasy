@@ -102,7 +102,14 @@ export default function HeaderAppBar({
             </div>
 
             <div className="hidden xl:flex items-center gap-2">
-              <AppChip label="110+ tools" color="primary" variant="outlined" />
+              <Link href="/tools" className="no-underline">
+                <AppChip
+                  label="All 110+ tools"
+                  color="primary"
+                  variant="outlined"
+                  className="cursor-pointer hover:bg-sky-50 dark:hover:bg-slate-800 transition"
+                />
+              </Link>
               <AppChip
                 label="Private by default"
                 color="success"
