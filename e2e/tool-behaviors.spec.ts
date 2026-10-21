@@ -165,7 +165,8 @@ async function assertHasOutput(page: Page, selector: string, timeout = 8_000) {
 async function assertNumericResultVisible(page: Page) {
   // Look for any element that shows a number (result cards, headings, outputs)
   const hasNumber = await page.locator("main").evaluate((el) => {
-    return /\d+(\.\d+)?/.test(el.innerText);
+    const text = (el as HTMLElement).innerText || el.textContent || "";
+    return /\d+(\.\d+)?/.test(text);
   });
   expect(hasNumber).toBe(true);
 }
