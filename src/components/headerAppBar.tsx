@@ -21,6 +21,12 @@ const navigationItems = [
     description: "Wireless camera & screen bridge to OBS",
   },
   {
+    name: "CodePair",
+    href: "/codepair",
+    badge: "IDE",
+    description: "Zero-cloud real-time pair programming",
+  },
+  {
     name: "LocalStudio",
     href: "/studio",
     badge: "Media",

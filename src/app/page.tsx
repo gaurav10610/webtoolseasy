@@ -1,10 +1,6 @@
-import { AppHeading } from "@/components/commonComponents";
-import { apps } from "@/data/apps";
-import { AppCategory, AppNavigationConfig } from "@/types/config";
-import { AppHomeCard } from "@/components/appCards";
 import { Metadata } from "next";
 import { SocialShareButtons } from "@/components/socialShareButtons";
-import { AppBox, AppChip, AppText } from "@/components/lib/ui";
+import { AppText } from "@/components/lib/ui";
 import Link from "next/link";
 import {
   StructuredData,
@@ -12,7 +8,6 @@ import {
   generateWebsiteSchema,
   generateFAQPageSchema,
 } from "@/components/structuredData";
-import { RecentlyUsedTools } from "@/components/RecentlyUsedTools";
 
 const pageTitle =
   "WebToolsEasy — The Private, Zero-Cloud Web Suite (WebRTC & In-Browser Tools)";
@@ -81,7 +76,7 @@ function HeroSection() {
           </span>
         </h1>
         <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto font-normal">
-          Stream unlimited multi-gigabyte files between devices, beam your phone camera directly to OBS Studio with sub-100ms latency, and cut video losslessly — all computed directly inside your browser.
+          Stream unlimited multi-gigabyte files between devices, beam your phone camera directly to OBS Studio with sub-100ms latency, collaborate on code in real time, and cut video losslessly — all computed directly inside your browser.
         </p>
       </div>
 
@@ -93,6 +88,13 @@ function HeroSection() {
         >
           <span>📦</span>
           <span>Launch DropStream (P2P Transfer)</span>
+        </Link>
+        <Link
+          href="/codepair"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-2xs transition active:scale-98"
+        >
+          <span>⚡</span>
+          <span>CodePair (P2P Coding)</span>
         </Link>
         <Link
           href="/beam"
@@ -110,20 +112,20 @@ function HeroSection() {
         </Link>
       </div>
 
-      {/* Quick Search trigger input for tools & command palette */}
-      <div className="pt-2 max-w-md mx-auto w-full">
-        <div className="relative">
-          <input
-            type="text"
-            name="search"
-            placeholder="Search 110+ developer & media tools (⌘K)..."
-            aria-label="Search tools"
-            className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pl-4 pr-12 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 shadow-xs focus:border-blue-500 focus:outline-none"
-          />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">
-            ⌘K
-          </kbd>
-        </div>
+      {/* Trust & Zero-Cloud Value Pillars */}
+      <div className="pt-2 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <span className="flex items-center gap-1.5">
+          <span className="text-emerald-500 font-bold">✓</span> 100% Client-Side Processing
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="text-emerald-500 font-bold">✓</span> Zero Server Data Storage
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="text-emerald-500 font-bold">✓</span> No Accounts or Passwords
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="text-emerald-500 font-bold">✓</span> Free &amp; Open Source
+        </span>
       </div>
     </section>
   );
@@ -143,7 +145,7 @@ function FlagshipShowcase() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* SUITE 1: DROPSTREAM */}
         <div className="group relative rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-200">
           <div className="space-y-3.5">
@@ -269,6 +271,48 @@ function FlagshipShowcase() {
             </Link>
           </div>
         </div>
+
+        {/* SUITE 4: CODEPAIR */}
+        <div className="group relative rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-200">
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span className="text-2xl p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200/60 dark:border-blue-800/60">
+                ⚡
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                P2P Monaco IDE
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                CodePair Collaborative Editor
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Zero-cloud real-time pair programming. Multi-cursor synchronization, Monaco syntax highlighting for 10+ languages, and live HTML/JS sandbox execution directly browser-to-browser.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                👥 Multi-Cursor Sync
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                👁️ Live Sandbox
+              </span>
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                🔒 Zero Cloud Storage
+              </span>
+            </div>
+          </div>
+          <div className="pt-5">
+            <Link
+              href="/codepair"
+              className="inline-flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition active:scale-98"
+            >
+              Launch CodePair &rarr;
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -348,101 +392,22 @@ function ComparisonMatrix() {
           </tbody>
         </table>
       </div>
-    </section>
-  );
-}
 
-function CuratedUtilitiesPreview({
-  allApps,
-}: Readonly<{
-  allApps: AppNavigationConfig[];
-}>) {
-  const topAppIds = [
-    "jsonformatter",
-    "base64encode",
-    "pdfmerge",
-    "imagecompressor",
-    "diff-checker",
-    "markdowneditor",
-  ];
-  const featuredTools = topAppIds
-    .map((id) => allApps.find((app) => app.applicationId === id))
-    .filter((app): app is AppNavigationConfig => !!app);
-
-  const categories = [
-    "Programming",
-    "Media",
-    "Online Editors",
-    "SEO & Development",
-  ];
-
-  return (
-    <section className="w-full space-y-6 my-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-200 dark:border-slate-800 pb-3">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Popular Developer &amp; Everyday Utilities
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            A curated selection of our most-used offline formatters and editors.
-          </p>
-        </div>
-        <Link
-          href="/tools"
-          className="text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 self-start sm:self-auto"
-        >
-          View All 110+ Tools &rarr;
-        </Link>
-      </div>
-
-      {/* Category Links for Fast Discovery */}
-      <nav
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full"
-        aria-label="Quick category access"
-      >
-        {categories.map((category) => (
-          <Link
-            key={`quick-${category}`}
-            href={`/tools#category-${encodeURIComponent(category)}`}
-            className="no-underline category-link"
-          >
-            <AppBox className="p-3 text-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition cursor-pointer">
-              <AppText className="truncate text-xs font-semibold text-slate-700 dark:text-slate-300">
-                {category}
-              </AppText>
-            </AppBox>
-          </Link>
-        ))}
-      </nav>
-
-      {/* Curated Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {featuredTools.map((config) => (
-          <div key={config.applicationId} className="w-full">
-            <AppHomeCard
-              config={config}
-              isPriority={true}
-              className="w-full h-full p-4 hover:shadow-lg transition-all duration-300 hover:scale-102 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Directory CTA Banner */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/20 dark:to-purple-950/30 border border-blue-200/80 dark:border-blue-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Directory Hub Callout Banner */}
+      <div className="mt-8 p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1 text-center sm:text-left">
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-            Looking for more tools? We host 110+ utilities.
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-            From PDF merging and regex testing to CSV parsing and color converters — all 100% free and client-side.
+          <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            Need offline developer or document utilities?
+          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Explore our complete directory of 110+ offline client-side converters, formatters, and generators.
           </p>
         </div>
         <Link
           href="/tools"
-          className="py-2.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold shadow transition whitespace-nowrap active:scale-98"
+          className="py-2 px-4 rounded-lg bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white text-xs font-medium transition whitespace-nowrap active:scale-98"
         >
-          Explore All 110+ Tools &rarr;
+          Explore All Tools &rarr;
         </Link>
       </div>
     </section>
@@ -450,16 +415,6 @@ function CuratedUtilitiesPreview({
 }
 
 export default function Home() {
-  const EXCLUDED_REDIRECTED = new Set([
-    "tools/text-compare",
-    "tools/html-to-markdown",
-    "tools/mortgage-calculator",
-    "tools/text-editor",
-  ]);
-  const allApps = Object.values(apps).filter(
-    (app) => !EXCLUDED_REDIRECTED.has(app.navigateUrl)
-  );
-
   const organizationSchema = generateOrganizationSchema();
   const websiteSchema = generateWebsiteSchema();
   const faqSchema = generateFAQPageSchema({
@@ -516,19 +471,11 @@ export default function Home() {
           {/* HERO SECTION */}
           <HeroSection />
 
-          {/* FLAGSHIP SHOWCASE (DropStream, BeamSuite, LocalStudio) */}
+          {/* FLAGSHIP SHOWCASE (DropStream, BeamSuite, CodePair, LocalStudio) */}
           <FlagshipShowcase />
-
-          {/* RECENTLY USED TOOLS (Client-Side Storage) */}
-          <div className="w-full">
-            <RecentlyUsedTools />
-          </div>
 
           {/* COMPARISON MATRIX (WebToolsEasy vs Cloud Services) */}
           <ComparisonMatrix />
-
-          {/* CURATED POPULAR UTILITIES PREVIEW + DIRECTORY LINK */}
-          <CuratedUtilitiesPreview allApps={allApps} />
 
           {/* SEO CONTENT SECTION */}
           <section className="w-full px-5 py-8 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900/60 dark:to-slate-900/30 rounded-2xl border border-gray-100 dark:border-slate-800">
@@ -537,7 +484,7 @@ export default function Home() {
                 variant="h2"
                 className="!text-2xl md:!text-3xl !font-semibold !text-gray-800 dark:!text-slate-100 !mb-4"
               >
-                High-Performance WebRTC Media Suites &amp; 110+ Client-Side Utilities
+                High-Performance WebRTC Media Suites &amp; Zero-Cloud Web Applications
               </AppText>
 
               <AppText
@@ -545,7 +492,7 @@ export default function Home() {
                 className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
               >
                 WebToolsEasy is engineered around a simple, powerful philosophy:{" "}
-                <strong>your data belongs on your device</strong>. Unlike traditional online tool portals that require uploading sensitive documents, confidential videos, and database credentials to 3rd-party cloud servers, WebToolsEasy executes all computations directly in your web browser using modern WebRTC, WebAssembly, HTML5 Canvas, and Web Audio APIs.
+                <strong>your data belongs on your device</strong>. Unlike traditional online tool portals that require uploading sensitive documents, confidential videos, proprietary code, and database credentials to 3rd-party cloud servers, WebToolsEasy executes all computations directly in your web browser using modern WebRTC, WebAssembly, HTML5 Canvas, and Web Audio APIs.
               </AppText>
 
               <AppText
@@ -578,7 +525,20 @@ export default function Home() {
                 variant="h3"
                 className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-2"
               >
-                Flagship Suite 3: LocalStudio Lossless Video Cutter &amp; Audio Extraction
+                Flagship Suite 3: CodePair Real-Time Collaborative Monaco IDE
+              </AppText>
+              <AppText
+                variant="body1"
+                className="!text-gray-600 dark:!text-slate-300 !leading-relaxed"
+              >
+                Pair program with peers across the globe in a zero-cloud collaborative IDE powered by Microsoft Monaco Editor. Featuring multi-cursor synchronization directly over WebRTC DataChannels, support for 10+ languages (TypeScript, Python, HTML/CSS, Rust, Go, SQL), an interactive execution runner, and live sandboxed DOM preview. Zero cloud code storage guarantees your proprietary source code never leaves your peer connection.
+              </AppText>
+
+              <AppText
+                variant="h3"
+                className="!text-xl !font-medium !text-gray-700 dark:!text-slate-200 !mt-6 !mb-2"
+              >
+                Flagship Suite 4: LocalStudio Lossless Video Cutter &amp; Audio Extraction
               </AppText>
               <AppText
                 variant="body1"

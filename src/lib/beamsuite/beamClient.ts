@@ -9,7 +9,12 @@ const RTC_CONFIG: RTCConfiguration = {
     { urls: "stun:stun.l.google.com:19302" },
     { urls: "stun:stun1.l.google.com:19302" },
     { urls: "stun:stun2.l.google.com:19302" },
+    { urls: "stun:stun3.l.google.com:19302" },
+    { urls: "stun:stun4.l.google.com:19302" },
+    { urls: "stun:stun.cloudflare.com:3478" },
+    { urls: "stun:stun.services.mozilla.com" },
   ],
+  iceCandidatePoolSize: 10,
 };
 
 export interface BeamClientCallbacks {
@@ -308,8 +313,19 @@ export class BeamClient {
       }
     };
 
+    this.pc.oniceconnectionstatechange = () => {
+      if (!this.pc) return;
+      if (this.pc.iceConnectionState === "failed") {
+        console.warn("[BeamSuite WebRTC] ICE connection failed, attempting ICE restart...");
+        try {
+          this.pc.restartIce();
+        } catch {}
+      }
+    };
+
     this.pc.onconnectionstatechange = () => {
       if (!this.pc) return;
+      console.log(`[BeamSuite WebRTC] Connection state: ${this.pc.connectionState}`);
       if (this.pc.connectionState === "connected") {
         this.setStatus("streaming");
         if (this.role === "receiver") {
@@ -326,7 +342,7 @@ export class BeamClient {
     };
 
     // Attach local tracks if I am sender
-    if (this.localStream) {
+    if (this.localStream && this.role === "sender") {
       this.localStream.getTracks().forEach((track) => {
         if (this.localStream && this.pc) {
           this.pc.addTrack(track, this.localStream);
@@ -334,20 +350,41 @@ export class BeamClient {
       });
     }
 
+    // Configure receiving transceivers if I am receiver
+    if (!isInitiator && this.role === "receiver") {
+      try {
+        this.pc.addTransceiver("video", { direction: "recvonly" });
+        this.pc.addTransceiver("audio", { direction: "recvonly" });
+      } catch {}
+    }
+
     // Listen for incoming tracks if I am receiver
     this.pc.ontrack = (event) => {
+      console.log(`[BeamSuite WebRTC] ontrack: kind=${event.track.kind}, id=${event.track.id}`);
       let stream = event.streams && event.streams[0];
       if (!stream) {
         if (!this.remoteStream) {
           this.remoteStream = new MediaStream();
         }
-        this.remoteStream.addTrack(event.track);
-        stream = this.remoteStream;
+        if (!this.remoteStream.getTracks().some((t) => t.id === event.track.id)) {
+          this.remoteStream.addTrack(event.track);
+        }
       } else {
         this.remoteStream = stream;
       }
+
+      event.track.onunmute = () => {
+        console.log(`[BeamSuite WebRTC] track unmuted: kind=${event.track.kind}`);
+        if (this.remoteStream) {
+          this.setStatus("streaming");
+          this.callbacks.onRemoteStream?.(this.remoteStream);
+        }
+      };
+
       this.setStatus("streaming");
-      this.callbacks.onRemoteStream?.(stream);
+      if (this.remoteStream) {
+        this.callbacks.onRemoteStream?.(this.remoteStream);
+      }
     };
 
     // Control DataChannel

@@ -1,66 +1,20 @@
 import { readdirSync } from "fs";
 import path from "path";
-import { getAllCategorySlugs } from "./categories";
 import type { MetadataRoute } from "next";
 
 export const HOSTNAME = "https://webtoolseasy.com";
 
-// Redirected, consolidated, or pruned tools that MUST NOT be in the sitemap
-export const EXCLUDED_SITEMAP_TOOLS = new Set([
-  "uuid-v1-generator",
-  "uuid-v3-generator",
-  "uuid-v5-generator",
-  "uuid-v7-generator",
-  "guid-generator",
-  "ulid-generator",
-  "base64-decode",
-  "tip-calculator",
-  "fraction-calculator",
-  "bmi-calculator",
-  "calorie-calculator",
-  "gpa-calculator",
-  "text-compare",
-  "html-to-markdown",
-  "mortgage-calculator",
-  "text-editor",
-]);
-
+/**
+ * Focused Sitemap for Maximum Search Engine Crawl Budget Efficiency.
+ * Legacy tools remain 100% live and discoverable behind /tools/* and the /tools hub directory,
+ * but are intentionally omitted from sitemap.xml to prevent search engine bots
+ * from exhausting crawl quota on static legacy calculators.
+ */
 export function getAllSitemapEntries(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  // Tools
-  const toolsDir = path.join(process.cwd(), "src/data/tools");
-  const toolFiles = readdirSync(toolsDir).filter((file) => file.endsWith(".ts"));
-  const toolEntries: MetadataRoute.Sitemap = toolFiles
-    .map((file) => file.replace(".ts", ""))
-    .filter((tool) => !EXCLUDED_SITEMAP_TOOLS.has(tool))
-    .map((tool) => ({
-      url: `${HOSTNAME}/tools/${tool}`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }));
-
-  // Blog posts
-  const blogDir = path.join(process.cwd(), "src/data/blog/config");
-  const blogFiles = readdirSync(blogDir).filter((file) => file.endsWith(".ts"));
-  const blogEntries: MetadataRoute.Sitemap = blogFiles.map((file) => ({
-    url: `${HOSTNAME}/blog/${file.replace(".ts", "")}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
-  // Categories
-  const categorySlugs = getAllCategorySlugs();
-  const categoryEntries: MetadataRoute.Sitemap = categorySlugs.map((slug) => ({
-    url: `${HOSTNAME}/tools/category/${slug}`,
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
-  }));
-
-  return [
+  // Core Flagship WebRTC Suites & Hubs
+  const flagshipEntries: MetadataRoute.Sitemap = [
     {
       url: `${HOSTNAME}/`,
       lastModified: now,
@@ -75,6 +29,12 @@ export function getAllSitemapEntries(): MetadataRoute.Sitemap {
     },
     {
       url: `${HOSTNAME}/beam`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 1.0,
+    },
+    {
+      url: `${HOSTNAME}/codepair`,
       lastModified: now,
       changeFrequency: "daily" as const,
       priority: 1.0,
@@ -97,8 +57,25 @@ export function getAllSitemapEntries(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
-    ...categoryEntries,
-    ...toolEntries,
+  ];
+
+  // Pillar Blog Guides (high-traffic SEO content)
+  const blogDir = path.join(process.cwd(), "src/data/blog/config");
+  let blogEntries: MetadataRoute.Sitemap = [];
+  try {
+    const blogFiles = readdirSync(blogDir).filter((file) => file.endsWith(".ts"));
+    blogEntries = blogFiles.map((file) => ({
+      url: `${HOSTNAME}/blog/${file.replace(".ts", "")}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }));
+  } catch (err) {
+    console.warn("Could not read blog directory for sitemap:", err);
+  }
+
+  return [
+    ...flagshipEntries,
     ...blogEntries,
   ];
 }
