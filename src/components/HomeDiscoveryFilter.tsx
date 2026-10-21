@@ -172,6 +172,7 @@ export function HomeDiscoveryFilter({
           </div>
           <input
             type="text"
+            name="search"
             placeholder="Search 115+ tools by name or category..."
             value={searchQuery}
             onChange={handleSearchChange}

@@ -109,6 +109,9 @@ export enum ApplicationIds {
   TABLE_GENERATOR = "table-generator",
   TS_COMPILER = "tscompiler",
   FRAME_EXTRACTOR = "frame-extractor",
+  DROP_STREAM = "dropstream",
+  BEAM_SUITE = "beamsuite",
+  LOCAL_STUDIO = "localstudio",
 }
 
 export interface BaseAppConfig {

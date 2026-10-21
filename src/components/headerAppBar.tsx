@@ -73,18 +73,43 @@ export default function HeaderAppBar({
               </kbd>
             </button>
 
-            {/* Flagship P2P Tool Link */}
-            <Link
-              href="/drop"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition shadow-xs"
-              title="Fast, private P2P file & folder transfer"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              DropStream P2P
-            </Link>
+            {/* Flagship High-Performance Suites */}
+            <div className="hidden lg:flex items-center gap-1.5">
+              <Link
+                href="/drop"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition shadow-xs"
+                title="Fast, private P2P file & folder transfer"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                DropStream
+              </Link>
+              <Link
+                href="/beam"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/60 transition shadow-xs"
+                title="Wireless Phone Camera & Screen to OBS"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                BeamSuite
+              </Link>
+              <Link
+                href="/studio"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-violet-50 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-800 hover:bg-violet-100 dark:hover:bg-violet-900/60 transition shadow-xs"
+                title="Lossless Video Cutter & Audio Tools"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                LocalStudio
+              </Link>
+            </div>
 
             <div className="hidden xl:flex items-center gap-2">
-              <AppChip label="110+ tools" color="primary" variant="outlined" />
+              <Link href="/tools" className="no-underline">
+                <AppChip
+                  label="All 110+ tools"
+                  color="primary"
+                  variant="outlined"
+                  className="cursor-pointer hover:bg-sky-50 dark:hover:bg-slate-800 transition"
+                />
+              </Link>
               <AppChip
                 label="Private by default"
                 color="success"

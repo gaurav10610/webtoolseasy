@@ -775,4 +775,25 @@ export const apps: Record<ApplicationIds, AppNavigationConfig> = {
     iconRelativeUrl: "ts-icon.svg",
     category: AppCategory.ONLINE_EDITORS,
   },
+  [ApplicationIds.DROP_STREAM]: {
+    applicationId: "dropstream",
+    displayText: "DropStream P2P Transfer",
+    navigateUrl: "drop",
+    iconRelativeUrl: "download.svg",
+    category: AppCategory.MISCELLANEOUS,
+  },
+  [ApplicationIds.BEAM_SUITE]: {
+    applicationId: "beamsuite",
+    displayText: "BeamSuite Camera & Screen to OBS",
+    navigateUrl: "beam",
+    iconRelativeUrl: "webcam-icon.svg",
+    category: AppCategory.MEDIA,
+  },
+  [ApplicationIds.LOCAL_STUDIO]: {
+    applicationId: "localstudio",
+    displayText: "LocalStudio Video Cutter & Audio Tools",
+    navigateUrl: "studio",
+    iconRelativeUrl: "video-convert.svg",
+    category: AppCategory.MEDIA,
+  },
 };

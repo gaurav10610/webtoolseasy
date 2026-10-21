@@ -177,6 +177,37 @@ const TOOL_SYNONYMS: Record<string, string[]> = {
     "uri encode",
     "percent encoding",
   ],
+  dropstream: [
+    "p2p file transfer",
+    "send files",
+    "unlimited file share",
+    "airdrop alternative",
+    "snapdrop",
+    "webrtc file transfer",
+    "share large files",
+    "dropstream",
+    "peer to peer transfer",
+  ],
+  beamsuite: [
+    "phone camera to obs",
+    "obs camera source",
+    "wireless webcam",
+    "vdo ninja",
+    "stream to obs",
+    "screen share to obs",
+    "beamsuite",
+    "low latency camera",
+  ],
+  localstudio: [
+    "video cutter",
+    "trim video",
+    "cut video online",
+    "extract audio to wav",
+    "lossless video trim",
+    "no watermark video editor",
+    "localstudio",
+    "audio extractor",
+  ],
 };
 
 const CATEGORIES = [
