@@ -438,7 +438,7 @@ export function CommandPalette() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleInputKeyDown}
-            placeholder="Search 110+ tools (e.g. diff, json, pdf, mortgage, jwt)..."
+            placeholder="Search tools and suites (e.g. dropstream, codepair, json, diff)..."
             className="w-full bg-transparent text-base outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400"
             aria-label="Search tools"
           />

@@ -12,9 +12,9 @@ import {
 const pageTitle =
   "WebToolsEasy — The Private, Zero-Cloud Web Suite (WebRTC & In-Browser Tools)";
 const pageDescription =
-  "High-performance WebRTC suites and 110+ private browser utilities. Send unlimited files with DropStream P2P, stream phone cameras to OBS Studio with BeamSuite, and cut video losslessly with LocalStudio. 100% client-side with zero cloud storage.";
+  "High-performance zero-cloud WebRTC suites. Send unlimited files with DropStream P2P, stream phone cameras to OBS Studio with BeamSuite, collaborate in real time with CodePair IDE, and edit media losslessly with LocalStudio. 100% client-side with zero cloud storage.";
 const keywords =
-  "p2p file transfer, obs camera source, wireless webcam, lossless video cutter, free online tools, client-side tools, private browser utilities, json formatter, pdf merge, image compressor, webtoolseasy";
+  "p2p file transfer, obs camera source, wireless webcam, pair programming ide, collaborative code editor, lossless video cutter, free online tools, client-side tools, private browser utilities, webtoolseasy";
 
 export const metadata: Metadata = {
   alternates: {
@@ -393,23 +393,6 @@ function ComparisonMatrix() {
         </table>
       </div>
 
-      {/* Directory Hub Callout Banner */}
-      <div className="mt-8 p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="space-y-1 text-center sm:text-left">
-          <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-            Need offline developer or document utilities?
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Explore our complete directory of 110+ offline client-side converters, formatters, and generators.
-          </p>
-        </div>
-        <Link
-          href="/tools"
-          className="py-2 px-4 rounded-lg bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 text-white text-xs font-medium transition whitespace-nowrap active:scale-98"
-        >
-          Explore All Tools &rarr;
-        </Link>
-      </div>
     </section>
   );
 }
@@ -422,7 +405,7 @@ export default function Home() {
       {
         question: "What is WebToolsEasy?",
         answer:
-          "WebToolsEasy is a high-performance, privacy-first web suite powered by WebRTC and in-browser APIs. It features DropStream (unlimited P2P file & folder transfer), BeamSuite (wireless phone camera & screen to OBS Studio), LocalStudio (lossless video cutter & WAV audio extractor), alongside 110+ client-side developer and media utilities.",
+          "WebToolsEasy is an enterprise-grade, privacy-first web suite powered by WebRTC and in-browser APIs. It features DropStream (unlimited P2P file & folder transfer), BeamSuite (wireless phone camera & screen to OBS Studio), CodePair (real-time collaborative Monaco IDE), and LocalStudio (lossless video cutter & WAV audio extractor).",
       },
       {
         question: "How does DropStream P2P file transfer work without file size limits?",
@@ -435,6 +418,11 @@ export default function Home() {
           "BeamSuite creates a direct peer-to-peer WebRTC MediaStream between your mobile phone browser and the OBS Studio browser source. Using hardware H.264/VP8 video encoding and STUN signaling, latency is typically under 100ms with real-time tally light feedback.",
       },
       {
+        question: "How does CodePair synchronize code and cursors without a cloud backend?",
+        answer:
+          "CodePair connects developers directly via an encrypted WebRTC DataChannel. Monaco editor text deltas, multi-cursor positions, selections, and language changes are synchronized peer-to-peer with microsecond latency. Code runs locally in the browser with zero cloud storage.",
+      },
+      {
         question: "How does LocalStudio cut videos without losing quality?",
         answer:
           "LocalStudio processes video files locally in your browser memory using the HTML5 MediaStream and Web Audio APIs. It slices video frames and extracts audio tracks directly on your device hardware without slow cloud uploads or watermark degradation.",
@@ -443,11 +431,6 @@ export default function Home() {
         question: "Are these tools completely free and private?",
         answer:
           "Yes. All tools and WebRTC suites on WebToolsEasy are 100% free with no signups, no watermarks, and no cloud file retention. Your confidential data never leaves your device.",
-      },
-      {
-        question: "Where can I find the classic developer utilities?",
-        answer:
-          "All 110+ developer and productivity utilities (JSON formatter, PDF merge, Base64 encoder, image compressor, regex tester, etc.) are available in our complete directory at webtoolseasy.com/tools or instantly via the ⌘K command palette.",
       },
     ],
   });
