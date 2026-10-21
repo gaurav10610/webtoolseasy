@@ -73,15 +73,25 @@ export default function HeaderAppBar({
               </kbd>
             </button>
 
-            {/* Flagship P2P Tool Link */}
-            <Link
-              href="/drop"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition shadow-xs"
-              title="Fast, private P2P file & folder transfer"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              DropStream P2P
-            </Link>
+            {/* Flagship P2P Tools */}
+            <div className="hidden sm:flex items-center gap-2">
+              <Link
+                href="/drop"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition shadow-xs"
+                title="Fast, private P2P file & folder transfer"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                DropStream P2P
+              </Link>
+              <Link
+                href="/beam"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/60 transition shadow-xs"
+                title="Wireless Phone Camera & Screen to OBS"
+              >
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                BeamSuite OBS
+              </Link>
+            </div>
 
             <div className="hidden xl:flex items-center gap-2">
               <AppChip label="110+ tools" color="primary" variant="outlined" />
