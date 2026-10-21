@@ -22,6 +22,7 @@ export default function BeamSuitePage() {
   // Audio & playback state
   const [isReceiverMuted, setIsReceiverMuted] = useState<boolean>(true);
   const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
+  const [hasRemoteVideoFrames, setHasRemoteVideoFrames] = useState<boolean>(false);
 
   // Studio Controls state
   const [captureSource, setCaptureSource] = useState<CaptureSource>("camera");
@@ -51,12 +52,20 @@ export default function BeamSuitePage() {
 
   // Safely play remote video with automatic muted fallback to prevent black screen
   const attemptPlayRemoteVideo = useCallback((el: HTMLVideoElement) => {
-    el.play().catch((err) => {
+    if (!el.paused && el.readyState >= 2) {
+      return;
+    }
+    el.play().catch((err: unknown) => {
+      const isAbort = err instanceof Error && err.name === "AbortError";
+      if (isAbort) return; // Ignore harmless aborted play calls during fast stream loading
       console.warn("Unmuted autoplay restricted by browser policy; muting to guarantee live playback:", err);
       el.muted = true;
       setIsReceiverMuted(true);
       setAutoplayBlocked(true);
-      el.play().catch((e) => console.error("Muted playback attempt also failed:", e));
+      el.play().catch((e: unknown) => {
+        if (e instanceof Error && e.name === "AbortError") return;
+        console.error("Muted playback attempt also failed:", e);
+      });
     });
   }, []);
 
@@ -212,21 +221,46 @@ export default function BeamSuitePage() {
   const handleStartSender = async (targetRoom?: string) => {
     setErrorMessage("");
     setIsStartingMedia(true);
-    setRole("sender");
 
     const code = (targetRoom || joinInput.trim() || generateRandomCode()).toUpperCase().trim();
-    setRoomId(code);
-    generateQrCode(code);
 
     if (clientRef.current) {
       clientRef.current.role = "sender";
       try {
         const stream = await clientRef.current.startCamera("environment", quality);
         setLocalStream(stream);
+        setRole("sender");
+        setRoomId(code);
+        generateQrCode(code);
         await clientRef.current.joinRoom(code);
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
         setErrorMessage(`Camera access denied or unavailable: ${msg}. Please allow camera permissions.`);
+      } finally {
+        setIsStartingMedia(false);
+      }
+    }
+  };
+
+  const handleStartScreenShareSender = async (targetRoom?: string) => {
+    setErrorMessage("");
+    setIsStartingMedia(true);
+
+    const code = (targetRoom || joinInput.trim() || generateRandomCode()).toUpperCase().trim();
+
+    if (clientRef.current) {
+      clientRef.current.role = "sender";
+      try {
+        const stream = await clientRef.current.startScreenShare();
+        setLocalStream(stream);
+        setCaptureSource("screen");
+        setRole("sender");
+        setRoomId(code);
+        generateQrCode(code);
+        await clientRef.current.joinRoom(code);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setErrorMessage(`Screen share cancelled or failed: ${msg}`);
       } finally {
         setIsStartingMedia(false);
       }
@@ -255,17 +289,6 @@ export default function BeamSuitePage() {
     setIsMicMuted(!isUnmuted);
   };
 
-  const handleStartScreenShare = async () => {
-    if (!clientRef.current) return;
-    try {
-      const stream = await clientRef.current.startScreenShare();
-      setCaptureSource("screen");
-      setLocalStream(stream);
-    } catch (err) {
-      setErrorMessage(`Screen share cancelled or failed: ${err}`);
-    }
-  };
-
   const handleCopyObsLink = () => {
     const obsUrl = `${window.location.origin}/beam?view=${roomId}`;
     navigator.clipboard.writeText(obsUrl);
@@ -284,6 +307,7 @@ export default function BeamSuitePage() {
     clientRef.current?.leaveRoom();
     setLocalStream(null);
     setRemoteStream(null);
+    setHasRemoteVideoFrames(false);
     setRoomId("");
     setStatus("disconnected");
   };
@@ -302,6 +326,8 @@ export default function BeamSuitePage() {
           autoPlay
           playsInline
           muted={isReceiverMuted}
+          onLoadedMetadata={() => setHasRemoteVideoFrames(true)}
+          onPlaying={() => setHasRemoteVideoFrames(true)}
           className="w-full h-full object-contain pointer-events-none"
         />
 
@@ -316,6 +342,15 @@ export default function BeamSuitePage() {
             </p>
             <div className="text-xs text-slate-500 font-mono">
               Status: {status}
+            </div>
+          </div>
+        )}
+
+        {status === "streaming" && !hasRemoteVideoFrames && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-white space-y-3 p-6 text-center">
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="text-sm font-semibold text-slate-200">
+              Decoding live video stream...
             </div>
           </div>
         )}
@@ -375,21 +410,30 @@ export default function BeamSuitePage() {
                 <div className="space-y-2">
                   <div className="text-3xl">📷</div>
                   <div className="space-y-1">
-                    <h3 className="font-semibold text-base text-slate-900 dark:text-white">Start Camera Stream (Sender)</h3>
+                    <h3 className="font-semibold text-base text-slate-900 dark:text-white">Stream from this Device (Sender)</h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Use this phone or computer camera as a wireless video source. Prompts for camera permission and creates an instant OBS stream link.
+                      Turn this phone or laptop into a live wireless camera or screen source for OBS Studio.
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-2">
-                  <button
-                    onClick={() => handleStartSender()}
-                    disabled={isStartingMedia}
-                    className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm shadow-xs transition active:scale-98 cursor-pointer disabled:opacity-50 min-h-[44px]"
-                  >
-                    {isStartingMedia ? "Requesting Camera..." : "Start Camera Stream"}
-                  </button>
+                <div className="space-y-2.5 pt-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => handleStartSender()}
+                      disabled={isStartingMedia}
+                      className="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-xs sm:text-sm shadow-xs transition active:scale-98 cursor-pointer disabled:opacity-50 min-h-[44px]"
+                    >
+                      {isStartingMedia ? "Starting..." : "📷 Camera Stream"}
+                    </button>
+                    <button
+                      onClick={() => handleStartScreenShareSender()}
+                      disabled={isStartingMedia}
+                      className="py-2.5 px-3 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white font-medium rounded-lg text-xs sm:text-sm shadow-xs transition active:scale-98 cursor-pointer disabled:opacity-50 min-h-[44px]"
+                    >
+                      🖥️ Share Screen
+                    </button>
+                  </div>
 
                   <div className="flex items-center gap-2 pt-1">
                     <input
@@ -449,7 +493,7 @@ export default function BeamSuitePage() {
                     status === "streaming"
                       ? "bg-emerald-600 text-white animate-pulse"
                       : status === "connecting_peer"
-                      ? "bg-blue-600 text-white"
+                      ? "bg-blue-600 text-white animate-pulse"
                       : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
                   }`}>
                     {status === "streaming" ? "🔴 LIVE ON AIR" : status === "connecting_peer" ? "CONNECTING..." : "⚪ STANDBY"}
@@ -498,6 +542,8 @@ export default function BeamSuitePage() {
                     playsInline
                     muted={isReceiverMuted}
                     onClick={handleToggleUnmute}
+                    onLoadedMetadata={() => setHasRemoteVideoFrames(true)}
+                    onPlaying={() => setHasRemoteVideoFrames(true)}
                     className="w-full h-full object-contain cursor-pointer"
                   />
                 )}
@@ -528,6 +574,19 @@ export default function BeamSuitePage() {
                         {copiedPhoneLink ? "✓ Link Copied" : "Copy Phone Link"}
                       </button>
                     </div>
+                  </div>
+                )}
+
+                {/* Decoding state when connected but waiting for keyframes */}
+                {role === "receiver" && status === "streaming" && !hasRemoteVideoFrames && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-white space-y-3 p-6 text-center">
+                    <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="text-sm font-semibold text-slate-200">
+                      Decoding live video feed...
+                    </div>
+                    <p className="text-xs text-slate-400 max-w-xs">
+                      Connection established. Streaming video frames from camera.
+                    </p>
                   </div>
                 )}
 
@@ -584,13 +643,6 @@ export default function BeamSuitePage() {
                         title="Dim display to save battery during long streams"
                       >
                         🌙 Dim
-                      </button>
-
-                      <button
-                        onClick={handleStartScreenShare}
-                        className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs font-medium transition cursor-pointer"
-                      >
-                        🖥️ <span className="hidden sm:inline">Share</span> Screen
                       </button>
                     </div>
                   </div>
