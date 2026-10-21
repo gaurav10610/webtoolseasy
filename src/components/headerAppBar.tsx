@@ -32,12 +32,6 @@ const navigationItems = [
     badge: "Media",
     description: "Lossless video cutter & WAV audio extractor",
   },
-  {
-    name: "All 110+ Tools",
-    href: "/tools",
-    badge: "110+",
-    description: "Complete client-side utilities directory",
-  },
 ];
 
 export default function HeaderAppBar({

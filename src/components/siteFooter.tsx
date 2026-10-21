@@ -3,41 +3,30 @@ import { AppChip, AppText } from "./lib/ui";
 
 const footerGroups = [
   {
-    title: "Tool categories",
+    title: "Flagship Suites",
     links: [
-      { href: "/tools/category/dev-tools", label: "Developer Tools" },
-      { href: "/tools/category/image-tools", label: "Image Tools" },
-      { href: "/tools/category/pdf-tools", label: "PDF Tools" },
-      { href: "/tools/category/text-tools", label: "Text Tools" },
-      { href: "/tools/category/calculators", label: "Calculators" },
+      { href: "/drop", label: "DropStream (P2P Transfer)" },
+      { href: "/beam", label: "BeamSuite (Camera to OBS)" },
+      { href: "/codepair", label: "CodePair (Collaborative IDE)" },
+      { href: "/studio", label: "LocalStudio (Video & Audio)" },
     ],
   },
   {
-    title: "Popular tools",
+    title: "Architecture & Privacy",
     links: [
-      { href: "/tools/json-formatter", label: "JSON Formatter" },
-      { href: "/tools/image-compress", label: "Image Compressor" },
-      { href: "/tools/pdf-editor", label: "PDF Editor" },
-      { href: "/tools/regex-tester", label: "Regex Tester" },
-      { href: "/tools/password-generator", label: "Password Generator" },
-      { href: "/tools/screen-recorder", label: "Screen Recorder" },
-      { href: "/tools/qr-code-generator", label: "QR Code Generator" },
-      { href: "/tools/resume-builder", label: "Resume Builder" },
+      { href: "/blog/offline-web-tools-guide", label: "Zero-Cloud Architecture" },
+      { href: "/blog/secure-password-generation-guide", label: "Client-Side Cryptography" },
+      { href: "/blog/privacy-first-pdf-tools-guide", label: "Private Document Security" },
+      { href: "/blog/rest-api-jwt-authentication-guide", label: "JWT & Token Inspection" },
     ],
   },
   {
-    title: "Resources",
+    title: "Engineering Guides",
     links: [
-      { href: "/blog", label: "Blog" },
-      { href: "/blog/offline-web-tools-guide", label: "Offline Web Tools" },
-      {
-        href: "/blog/privacy-first-pdf-tools-guide",
-        label: "PDF Privacy Guide",
-      },
-      {
-        href: "/blog/free-developer-tools-guide",
-        label: "Developer Tools Guide",
-      },
+      { href: "/blog", label: "All Technical Guides" },
+      { href: "/blog/client-side-json-formatting-guide", label: "Client-Side JSON Guide" },
+      { href: "/blog/free-developer-tools-guide", label: "Modern Developer Workflows" },
+      { href: "/blog/private-image-compression-guide", label: "In-Browser Media Processing" },
     ],
   },
 ];
@@ -53,14 +42,15 @@ export function SiteFooter() {
             WebToolsEasy
           </AppText>
           <AppText className="max-w-xl !text-sm !text-slate-300">
-            A modern suite of privacy-first online tools for developers,
-            creators, and business teams. Everything runs in the browser for a
-            faster and more trustworthy workflow.
+            Enterprise-grade, zero-cloud browser utilities powered by WebRTC.
+            All processing, real-time streaming, and collaborative sync occurs
+            directly peer-to-peer or inside your device memory with zero server
+            storage.
           </AppText>
           <div className="flex flex-wrap gap-2">
-            <AppChip label="Privacy-first" color="success" variant="outlined" />
-            <AppChip label="Browser-based" color="primary" variant="outlined" />
-            <AppChip label="115+ tools" color="secondary" variant="outlined" />
+            <AppChip label="Zero-Cloud" color="success" variant="outlined" />
+            <AppChip label="Peer-to-Peer" color="primary" variant="outlined" />
+            <AppChip label="100% Client-Side" color="secondary" variant="outlined" />
           </div>
         </div>
 
@@ -89,11 +79,10 @@ export function SiteFooter() {
       <div className="border-t border-slate-800">
         <div className="mx-auto flex w-full max-w-[1720px] flex-col gap-2 px-3 py-4 text-sm text-slate-400 md:flex-row md:items-center md:justify-between md:px-5">
           <AppText className="!text-sm !text-slate-400">
-            © {currentYear} WebToolsEasy. Professional browser tools with no
-            signup and no forced uploads.
+            © {currentYear} WebToolsEasy. High-performance zero-cloud browser architecture.
           </AppText>
           <AppText className="!text-sm !text-slate-400">
-            All tools run in your browser. Your files never leave your device.
+            Direct peer-to-peer WebRTC connections. No servers retain your files or streams.
           </AppText>
         </div>
       </div>
