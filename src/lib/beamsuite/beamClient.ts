@@ -45,6 +45,11 @@ export class BeamClient {
 
   private callbacks: BeamClientCallbacks = {};
   private candidateQueue: RTCIceCandidateInit[] = [];
+  private isSettingRemoteDescription: boolean = false;
+  private reconnectAttempts: number = 0;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private isManualLeave: boolean = false;
+  private targetPeerId: string | null = null;
   private pingInterval: number | null = null;
 
   constructor(role: BeamRole = "sender", callbacks?: BeamClientCallbacks) {
@@ -133,6 +138,9 @@ export class BeamClient {
 
     this.localStream = stream;
     this.attachLocalTracks();
+    if (this.targetPeerId && this.role === "sender") {
+      this.initiatePeerConnection(this.targetPeerId, true).catch(() => {});
+    }
     return stream;
   }
 
@@ -167,6 +175,9 @@ export class BeamClient {
     });
     this.localStream = stream;
     this.attachLocalTracks();
+    if (this.targetPeerId && this.role === "sender") {
+      this.initiatePeerConnection(this.targetPeerId, true).catch(() => {});
+    }
     return stream;
   }
 
@@ -191,6 +202,23 @@ export class BeamClient {
   // Connect to Signaling Room
   public async joinRoom(roomId: string, customPeerId?: string): Promise<void> {
     this.roomId = roomId.toUpperCase().trim();
+    this.isManualLeave = false;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
+    if (this.ws) {
+      this.ws.onopen = null;
+      this.ws.onclose = null;
+      this.ws.onerror = null;
+      this.ws.onmessage = null;
+      try {
+        this.ws.close();
+      } catch {}
+      this.ws = null;
+    }
+
     this.setStatus("connecting_signaling");
 
     const wsUrl = `${DEFAULT_SIGNALING_URL}/room/${this.roomId}${
@@ -202,10 +230,12 @@ export class BeamClient {
     } catch (err) {
       this.setStatus("error");
       this.callbacks.onError?.(`WebSocket connection error: ${err}`);
+      this.scheduleReconnect();
       return;
     }
 
     this.ws.onopen = () => {
+      this.reconnectAttempts = 0;
       const metadata: BeamPeerMetadata = {
         peerId: this.peerId,
         role: this.role,
@@ -228,16 +258,44 @@ export class BeamClient {
     };
 
     this.ws.onerror = () => {
-      this.setStatus("error");
-      this.callbacks.onError?.("Signaling connection error.");
+      if (!this.isManualLeave) {
+        this.setStatus("error");
+        this.callbacks.onError?.("Signaling connection error.");
+      }
     };
 
     this.ws.onclose = () => {
       this.stopHeartbeat();
-      if (this.status !== "streaming") {
+      if (this.isManualLeave) {
         this.setStatus("disconnected");
+        return;
       }
+      if (this.status !== "streaming") {
+        this.setStatus("reconnecting");
+      }
+      this.scheduleReconnect();
     };
+  }
+
+  private scheduleReconnect(): void {
+    if (this.isManualLeave || !this.roomId) return;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    if (this.reconnectAttempts >= 8) {
+      console.warn("[BeamSuite] Max reconnect attempts reached.");
+      this.setStatus("error");
+      return;
+    }
+    const delay = Math.min(1000 * Math.pow(1.5, this.reconnectAttempts), 8000);
+    this.reconnectAttempts++;
+    this.reconnectTimer = setTimeout(() => {
+      if (!this.isManualLeave && this.roomId) {
+        console.log(`[BeamSuite] Reconnecting to room ${this.roomId} (attempt ${this.reconnectAttempts})...`);
+        this.joinRoom(this.roomId, this.peerId || undefined);
+      }
+    }, delay);
   }
 
   private startHeartbeat(): void {
@@ -270,20 +328,27 @@ export class BeamClient {
         this.callbacks.onRoomJoined?.(this.roomId, this.peerId);
 
         // If other peers are in the room and I am the Sender, initiate the MediaStream Offer
-        if (msg.peers && msg.peers.length > 0 && this.role === "sender") {
+        if (msg.peers && msg.peers.length > 0) {
           const targetPeer = msg.peers[0];
-          await this.initiatePeerConnection(targetPeer.peerId, true);
+          this.targetPeerId = targetPeer.peerId;
+          if (this.role === "sender") {
+            await this.initiatePeerConnection(targetPeer.peerId, true);
+          }
         }
         break;
 
       case "peer_joined":
         // New peer joined. If I am the Sender, create offer to send media
-        if (msg.peerId && msg.peerId !== this.peerId && this.role === "sender") {
-          await this.initiatePeerConnection(msg.peerId, true);
+        if (msg.peerId && msg.peerId !== this.peerId) {
+          this.targetPeerId = msg.peerId;
+          if (this.role === "sender") {
+            await this.initiatePeerConnection(msg.peerId, true);
+          }
         }
         break;
 
       case "peer_left":
+        this.targetPeerId = null;
         this.cleanupPeerConnection();
         this.setStatus("in_room");
         this.setTally(false);
@@ -501,6 +566,12 @@ export class BeamClient {
   }
 
   public leaveRoom(): void {
+    this.isManualLeave = true;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    this.targetPeerId = null;
     this.stopHeartbeat();
     this.sendSignaling({ type: "leave" });
     this.cleanupPeerConnection();

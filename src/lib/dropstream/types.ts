@@ -4,6 +4,7 @@ export type ConnectionStatus =
   | "in_room"
   | "connecting_peer"
   | "connected"
+  | "reconnecting"
   | "error";
 
 export interface PeerInfo {

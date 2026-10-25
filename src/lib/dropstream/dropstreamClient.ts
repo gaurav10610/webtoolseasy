@@ -39,6 +39,10 @@ export class DropStreamClient {
   private callbacks: DropStreamCallbacks = {};
   private pingInterval: number | null = null;
   private candidateQueue: RTCIceCandidateInit[] = [];
+  private isSettingRemoteDescription: boolean = false;
+  private reconnectAttempts: number = 0;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private isManualLeave: boolean = false;
   private createdObjectUrls: Set<string> = new Set();
 
   // Receiving state
@@ -71,6 +75,23 @@ export class DropStreamClient {
   // Connect to Signaling Room
   public async joinRoom(roomId: string, customPeerId?: string): Promise<void> {
     this.roomId = roomId.toUpperCase().trim();
+    this.isManualLeave = false;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
+    if (this.ws) {
+      this.ws.onopen = null;
+      this.ws.onclose = null;
+      this.ws.onerror = null;
+      this.ws.onmessage = null;
+      try {
+        this.ws.close();
+      } catch {}
+      this.ws = null;
+    }
+
     this.setStatus("connecting_signaling");
 
     const deviceMetadata = this.getDeviceMetadata();
@@ -83,10 +104,12 @@ export class DropStreamClient {
     } catch (err) {
       this.setStatus("error");
       this.callbacks.onError?.(`Failed to connect to signaling server: ${err}`);
+      this.scheduleReconnect();
       return;
     }
 
     this.ws.onopen = () => {
+      this.reconnectAttempts = 0;
       // Send initial metadata
       this.sendSignaling({
         type: "join",
@@ -105,16 +128,46 @@ export class DropStreamClient {
     };
 
     this.ws.onerror = () => {
-      this.setStatus("error");
-      this.callbacks.onError?.("Signaling connection error.");
+      if (!this.isManualLeave) {
+        this.setStatus("error");
+        this.callbacks.onError?.("Signaling connection error.");
+      }
     };
 
     this.ws.onclose = () => {
       this.stopHeartbeat();
-      if (this.status !== "connected") {
+      if (this.isManualLeave) {
         this.setStatus("disconnected");
+        return;
       }
+      if (this.dc && this.dc.readyState === "open") {
+        console.warn("[DropStream] Signaling WS disconnected while P2P DataChannel is active. Attempting background reconnect...");
+      } else {
+        this.setStatus("reconnecting");
+      }
+      this.scheduleReconnect();
     };
+  }
+
+  private scheduleReconnect(): void {
+    if (this.isManualLeave || !this.roomId) return;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    if (this.reconnectAttempts >= 8) {
+      console.warn("[DropStream] Max reconnect attempts reached.");
+      this.setStatus("error");
+      return;
+    }
+    const delay = Math.min(1000 * Math.pow(1.5, this.reconnectAttempts), 8000);
+    this.reconnectAttempts++;
+    this.reconnectTimer = setTimeout(() => {
+      if (!this.isManualLeave && this.roomId) {
+        console.log(`[DropStream] Reconnecting to room ${this.roomId} (attempt ${this.reconnectAttempts})...`);
+        this.joinRoom(this.roomId, this.peerId || undefined);
+      }
+    }, delay);
   }
 
   private startHeartbeat(): void {
@@ -213,6 +266,16 @@ export class DropStreamClient {
       }
     };
 
+    this.pc.oniceconnectionstatechange = () => {
+      if (!this.pc) return;
+      if (this.pc.iceConnectionState === "failed") {
+        console.warn("[DropStream WebRTC] ICE connection failed, attempting ICE restart...");
+        try {
+          this.pc.restartIce();
+        } catch {}
+      }
+    };
+
     this.pc.onconnectionstatechange = () => {
       if (!this.pc) return;
       if (this.pc.connectionState === "connected") {
@@ -255,7 +318,9 @@ export class DropStreamClient {
       if (signalData.sdp.type === "offer") {
         await this.initiatePeerConnection(fromPeerId, false);
         if (!this.pc) return;
+        this.isSettingRemoteDescription = true;
         await this.pc.setRemoteDescription(new RTCSessionDescription(signalData.sdp));
+        this.isSettingRemoteDescription = false;
         await this.drainCandidateQueue();
 
         const answer = await this.pc.createAnswer();
@@ -267,12 +332,14 @@ export class DropStreamClient {
         });
       } else if (signalData.sdp.type === "answer") {
         if (this.pc) {
+          this.isSettingRemoteDescription = true;
           await this.pc.setRemoteDescription(new RTCSessionDescription(signalData.sdp));
+          this.isSettingRemoteDescription = false;
           await this.drainCandidateQueue();
         }
       }
     } else if (signalData.candidate) {
-      if (this.pc && this.pc.remoteDescription && this.pc.remoteDescription.type) {
+      if (this.pc && this.pc.remoteDescription && !this.isSettingRemoteDescription) {
         try {
           await this.pc.addIceCandidate(new RTCIceCandidate(signalData.candidate));
         } catch (e) {
@@ -598,6 +665,11 @@ export class DropStreamClient {
   }
 
   public leaveRoom(): void {
+    this.isManualLeave = true;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
     this.stopHeartbeat();
     this.sendSignaling({ type: "leave" });
     this.cleanupPeerConnection();

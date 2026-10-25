@@ -8,6 +8,8 @@ import {
   CodePairStatus,
   RemoteCursorState,
 } from "@/lib/codepair/codePairClient";
+import { P2PPersistence } from "@/lib/p2p/p2pState";
+import { P2PConnectionHeader } from "@/components/p2p/P2PConnectionHeader";
 import type { editor } from "monaco-editor";
 
 // Dynamically load Monaco Editor with zero SSR
@@ -137,12 +139,12 @@ const SUPPORTED_LANGUAGES = [
 
 function CodePairContent() {
   const searchParams = useSearchParams();
-  const initialRoom = searchParams.get("room") || "";
 
-  // Core state
-  const [roomId, setRoomId] = useState<string>(initialRoom);
+  // Core connection state
+  const [roomId, setRoomId] = useState<string>("");
   const [joinInput, setJoinInput] = useState<string>("");
   const [status, setStatus] = useState<CodePairStatus>("disconnected");
+  const [isRestoredSession, setIsRestoredSession] = useState<boolean>(false);
   const [partner, setPartner] = useState<{
     peerId: string;
     username: string;
@@ -176,11 +178,20 @@ function CodePairContent() {
     languageRef.current = language;
   }, [language]);
 
-  // Initialize or rejoin room
+  // Connect to room and sync state
   const connectToRoom = useCallback(
     (targetRoomId: string) => {
       const codeClean = targetRoomId.toUpperCase().trim();
       if (!codeClean) return;
+
+      if (
+        clientRef.current &&
+        clientRef.current.roomId === codeClean &&
+        clientRef.current.status !== "disconnected" &&
+        clientRef.current.status !== "error"
+      ) {
+        return;
+      }
 
       if (clientRef.current) {
         clientRef.current.leaveRoom();
@@ -190,7 +201,7 @@ function CodePairContent() {
         onStatusChange: (s) => setStatus(s),
         onPeerConnected: (peer) => {
           setPartner(peer);
-          setCopyFeedback(`Partner joined: ${peer.username}!`);
+          setCopyFeedback(`Partner connected: ${peer.username}!`);
           setTimeout(() => setCopyFeedback(""), 4000);
         },
         onPeerDisconnected: () => {
@@ -212,17 +223,37 @@ function CodePairContent() {
           docVersionRef.current = Math.max(docVersionRef.current, version);
           if (editorRef.current && editorRef.current.getValue() !== newCode) {
             isRemoteChangeRef.current = true;
-            const currentPosition = editorRef.current.getPosition();
-            editorRef.current.setValue(newCode);
-            if (currentPosition) {
-              editorRef.current.setPosition(currentPosition);
+            const model = editorRef.current.getModel();
+            if (model) {
+              const currentPosition = editorRef.current.getPosition();
+              const selections = editorRef.current.getSelections();
+
+              // Smoothly execute edits to preserve cursor position and avoid cursor jumping
+              editorRef.current.executeEdits("remote-peer", [
+                {
+                  range: model.getFullModelRange(),
+                  text: newCode,
+                  forceMoveMarkers: true,
+                },
+              ]);
+
+              if (currentPosition) {
+                editorRef.current.setPosition(currentPosition);
+              }
+              if (selections) {
+                editorRef.current.setSelections(selections);
+              }
+            } else {
+              editorRef.current.setValue(newCode);
             }
             setCode(newCode);
+            P2PPersistence.saveState("codepair_code", newCode);
             isRemoteChangeRef.current = false;
           }
         },
         onRemoteLanguageChange: (newLang) => {
           setLanguage(newLang);
+          P2PPersistence.saveState("codepair_language", newLang);
         },
         onRemoteCursor: (cursor) => {
           renderRemoteCursor(cursor);
@@ -234,6 +265,14 @@ function CodePairContent() {
 
       clientRef.current = client;
       setRoomId(codeClean);
+
+      // Save active session & sync URL search parameters
+      P2PPersistence.saveSession("codepair", {
+        roomId: codeClean,
+        metadata: { language: languageRef.current },
+      });
+      P2PPersistence.syncUrl({ room: codeClean });
+
       client.joinRoom(codeClean);
     },
     []
@@ -280,20 +319,64 @@ function CodePairContent() {
     );
   };
 
-  // Auto-connect if room query parameter exists on mount
+  // Restore State from Browser Memory & Handle URL on Initial Mount
   useEffect(() => {
-    if (initialRoom) {
-      connectToRoom(initialRoom);
+    // 1. Restore code, language, and theme from browser memory
+    const savedCode = P2PPersistence.loadState<string>("codepair_code");
+    const savedLang = P2PPersistence.loadState<string>("codepair_language");
+    const savedTheme = P2PPersistence.loadState<"vs-dark" | "light">("codepair_theme");
+
+    if (savedLang) {
+      setLanguage(savedLang);
     }
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+    if (savedCode) {
+      setCode(savedCode);
+      setIsRestoredSession(true);
+    }
+
+    // 2. Check room from URL query param, then fallback to persisted session
+    const params = new URLSearchParams(window.location.search);
+    const urlRoom = params.get("room");
+    const savedSession = P2PPersistence.loadSession("codepair");
+
+    const targetRoom = urlRoom || savedSession?.roomId || "";
+    if (targetRoom) {
+      if (!urlRoom && savedSession?.roomId) {
+        setIsRestoredSession(true);
+      }
+      connectToRoom(targetRoom);
+    }
+
+    // 3. BeforeUnload warning if user has unsaved edits or active connection
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // Always save draft immediately
+      if (codeRef.current) {
+        P2PPersistence.saveState("codepair_code", codeRef.current);
+      }
+      if (clientRef.current && clientRef.current.status === "connected") {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       clientRef.current?.leaveRoom();
     };
-  }, [initialRoom, connectToRoom]);
+  }, [connectToRoom]);
 
   // Handle local text edits inside Monaco
   const handleEditorChange = (value: string | undefined) => {
     const nextCode = value ?? "";
     setCode(nextCode);
+
+    // Save to browser memory immediately
+    P2PPersistence.saveState("codepair_code", nextCode);
 
     if (isRemoteChangeRef.current) return;
 
@@ -337,14 +420,25 @@ function CodePairContent() {
   // Language switcher
   const handleLanguageChange = (newLang: string) => {
     setLanguage(newLang);
+    P2PPersistence.saveState("codepair_language", newLang);
     if (DEFAULT_TEMPLATES[newLang] && (!code || code === DEFAULT_TEMPLATES[language])) {
       const template = DEFAULT_TEMPLATES[newLang];
       setCode(template);
       editorRef.current?.setValue(template);
+      P2PPersistence.saveState("codepair_code", template);
     }
     if (clientRef.current && clientRef.current.status === "connected") {
       clientRef.current.broadcastLanguageChange(newLang);
     }
+  };
+
+  // Reset to default template
+  const handleResetTemplate = () => {
+    const template = DEFAULT_TEMPLATES[language] || DEFAULT_TEMPLATES.javascript;
+    setCode(template);
+    editorRef.current?.setValue(template);
+    P2PPersistence.saveState("codepair_code", template);
+    setIsRestoredSession(false);
   };
 
   // Create new room
@@ -353,12 +447,14 @@ function CodePairContent() {
     connectToRoom(newCode);
   };
 
-  // Copy shareable link
-  const handleCopyInviteLink = () => {
-    const inviteUrl = `${window.location.origin}/codepair?room=${roomId}`;
-    navigator.clipboard.writeText(inviteUrl);
-    setCopyFeedback("Invite link copied to clipboard!");
-    setTimeout(() => setCopyFeedback(""), 3000);
+  // Leave room
+  const handleLeaveRoom = () => {
+    clientRef.current?.leaveRoom();
+    setRoomId("");
+    setPartner(null);
+    setStatus("disconnected");
+    P2PPersistence.clearSession("codepair");
+    P2PPersistence.syncUrl({ room: null });
   };
 
   // Client-side code execution sandbox (JavaScript/TypeScript)
@@ -375,7 +471,6 @@ function CodePairContent() {
     };
 
     try {
-      // Execute in isolated function context
       const runFn = new Function("console", code);
       runFn(customConsole);
       if (logs.length === 0) {
@@ -407,140 +502,122 @@ function CodePairContent() {
         }
       `}</style>
 
-      {/* Top Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs shrink-0">
-        {/* Left: Branding & Room controls */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 font-bold text-sm tracking-tight text-white">
-            <span className="text-blue-500">⚡</span>
-            <span>CodePair</span>
+      {/* Uniform P2P Connection Header - Visible At All Times */}
+      <P2PConnectionHeader
+        appName="CodePair"
+        appBadge="IDE"
+        appIcon={<span>⚡</span>}
+        status={status}
+        roomId={roomId}
+        peerName={partner?.username}
+        peerDetails={partner ? "Collaborator" : undefined}
+        isRestoredSession={isRestoredSession}
+        onNewRoom={handleCreateRoom}
+        onLeaveRoom={handleLeaveRoom}
+        onReconnect={() => roomId && connectToRoom(roomId)}
+        shareUrl={
+          typeof window !== "undefined" && roomId
+            ? `${window.location.origin}/codepair?room=${roomId}`
+            : undefined
+        }
+      >
+        {/* Language Selector */}
+        <select
+          value={language}
+          onChange={(e) => handleLanguageChange(e.target.value)}
+          className="px-2.5 py-1 bg-slate-900 border border-slate-700 rounded-md text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+        >
+          {SUPPORTED_LANGUAGES.map((lang) => (
+            <option key={lang.id} value={lang.id}>
+              {lang.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Theme Selector */}
+        <button
+          type="button"
+          onClick={() => {
+            const nextTheme = theme === "vs-dark" ? "light" : "vs-dark";
+            setTheme(nextTheme);
+            P2PPersistence.saveState("codepair_theme", nextTheme);
+          }}
+          className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs cursor-pointer"
+          title="Toggle Editor Theme"
+        >
+          {theme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
+        </button>
+
+        {/* Run Code (for JS/TS) */}
+        {(language === "javascript" || language === "typescript") && (
+          <button
+            type="button"
+            onClick={handleRunCode}
+            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-md shadow-xs transition flex items-center gap-1 cursor-pointer"
+          >
+            ▶ Run
+          </button>
+        )}
+
+        {/* Live Preview Toggle */}
+        <button
+          type="button"
+          onClick={() => setShowPreview(!showPreview)}
+          className={`px-2.5 py-1 rounded-md text-xs transition cursor-pointer ${
+            showPreview
+              ? "bg-blue-600 text-white"
+              : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+          }`}
+        >
+          👁️ Preview
+        </button>
+
+        {/* Reset Template Option */}
+        <button
+          type="button"
+          onClick={handleResetTemplate}
+          className="px-2 py-1 text-slate-400 hover:text-slate-200 text-xs transition cursor-pointer"
+          title="Reset to default language template"
+        >
+          Reset
+        </button>
+      </P2PConnectionHeader>
+
+      {/* When no room is active: Quick Join & Create Banner */}
+      {!roomId && (
+        <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-slate-300">
+            <span>You are currently in solo mode.</span>
+            <span className="text-slate-500">•</span>
+            <span>Edits are automatically saved to your browser memory across reloads.</span>
           </div>
-
-          {!roomId ? (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleCreateRoom}
-                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-xs transition cursor-pointer"
-              >
-                + New Pairing Session
-              </button>
-              <div className="flex items-center gap-1.5">
-                <input
-                  type="text"
-                  placeholder="Room Code"
-                  value={joinInput}
-                  onChange={(e) => setJoinInput(e.target.value.toUpperCase())}
-                  className="px-2.5 py-1.5 bg-slate-950 border border-slate-700 rounded-md text-center font-mono uppercase tracking-wider text-xs focus:ring-1 focus:ring-blue-500 outline-none w-28"
-                  maxLength={12}
-                />
-                <button
-                  onClick={() => connectToRoom(joinInput)}
-                  disabled={!joinInput.trim()}
-                  className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-md disabled:opacity-40 transition cursor-pointer"
-                >
-                  Join
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-md font-mono text-xs">
-                <span className="text-slate-500">ROOM:</span>
-                <span className="font-semibold text-blue-400">{roomId}</span>
-              </div>
-
-              <button
-                onClick={handleCopyInviteLink}
-                className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-md transition flex items-center gap-1.5 cursor-pointer"
-              >
-                🔗 <span>Invite</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  clientRef.current?.leaveRoom();
-                  setRoomId("");
-                  setPartner(null);
-                  setStatus("disconnected");
-                }}
-                className="px-2 py-1 text-slate-400 hover:text-red-400 text-xs transition cursor-pointer"
-              >
-                Leave
-              </button>
-            </div>
-          )}
-
-          {/* Connection status badge */}
-          {roomId && (
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium bg-slate-950 border border-slate-800">
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  status === "connected"
-                    ? "bg-emerald-500 animate-pulse"
-                    : status === "connecting"
-                    ? "bg-amber-500 animate-spin"
-                    : "bg-slate-500"
-                }`}
-              ></span>
-              <span className="text-slate-300">
-                {status === "connected"
-                  ? partner
-                    ? `Connected with ${partner.username}`
-                    : "Waiting for partner..."
-                  : status === "connecting"
-                  ? "Connecting..."
-                  : "Offline"}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Right: Controls (Language, Theme, Run, Preview toggle) */}
-        <div className="flex items-center gap-2">
-          {/* Language Selector */}
-          <select
-            value={language}
-            onChange={(e) => handleLanguageChange(e.target.value)}
-            className="px-2.5 py-1 bg-slate-950 border border-slate-700 rounded-md text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
-          >
-            {SUPPORTED_LANGUAGES.map((lang) => (
-              <option key={lang.id} value={lang.id}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
-
-          {/* Theme Selector */}
-          <button
-            onClick={() => setTheme(theme === "vs-dark" ? "light" : "vs-dark")}
-            className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs cursor-pointer"
-          >
-            {theme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
-          </button>
-
-          {/* Run Code (for JS/TS) */}
-          {(language === "javascript" || language === "typescript") && (
+          <div className="flex items-center gap-2">
             <button
-              onClick={handleRunCode}
-              className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-md shadow-xs transition flex items-center gap-1 cursor-pointer"
+              onClick={handleCreateRoom}
+              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-xs transition cursor-pointer"
             >
-              ▶ Run
+              + Start Collaborative Room
             </button>
-          )}
-
-          {/* Live Preview Toggle */}
-          <button
-            onClick={() => setShowPreview(!showPreview)}
-            className={`px-2.5 py-1 rounded-md text-xs transition cursor-pointer ${
-              showPreview
-                ? "bg-blue-600 text-white"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
-          >
-            👁️ Preview
-          </button>
+            <div className="flex items-center gap-1">
+              <input
+                type="text"
+                placeholder="Enter Room Code"
+                value={joinInput}
+                onChange={(e) => setJoinInput(e.target.value.toUpperCase())}
+                className="px-2.5 py-1 bg-slate-950 border border-slate-700 rounded-md text-center font-mono uppercase tracking-wider text-xs focus:ring-1 focus:ring-blue-500 outline-none w-32"
+                maxLength={12}
+              />
+              <button
+                onClick={() => connectToRoom(joinInput)}
+                disabled={!joinInput.trim()}
+                className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-md disabled:opacity-40 transition cursor-pointer"
+              >
+                Join
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Copy / Action feedback banner */}
       {copyFeedback && (
