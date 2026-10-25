@@ -374,13 +374,31 @@ export class DropStreamClient {
     };
 
     channel.onclose = () => {
+      console.log("[DropStream DataChannel] Channel closed.");
       if (this.status === "connected") {
         this.setStatus("in_room");
       }
+      if (this.remotePeer) {
+        this.callbacks.onPeerDisconnected?.(this.remotePeer.peerId);
+        this.remotePeer = null;
+      }
+      this.cleanupPeerConnection();
     };
 
-    channel.onerror = (err) => {
-      console.error("DataChannel error", err);
+    channel.onerror = (event: Event) => {
+      const errorEvent = event as RTCErrorEvent;
+      const detail = errorEvent?.error?.message || "Transport closed";
+      if (
+        channel.readyState === "closing" ||
+        channel.readyState === "closed" ||
+        !this.pc ||
+        this.pc.connectionState === "closed" ||
+        this.pc.connectionState === "disconnected"
+      ) {
+        console.log(`[DropStream DataChannel] Peer closed transport (${detail})`);
+      } else {
+        console.warn(`[DropStream DataChannel Warning] ${detail}`);
+      }
     };
 
     channel.onmessage = (event) => {

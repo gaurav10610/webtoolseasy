@@ -253,14 +253,13 @@ export class BeamClient {
         const msg = JSON.parse(event.data) as SignalingMessage;
         await this.handleSignalingMessage(msg);
       } catch (e) {
-        console.error("Signaling error", e);
+        console.warn("[BeamSuite Signaling Message Warning]", e);
       }
     };
 
     this.ws.onerror = () => {
       if (!this.isManualLeave) {
-        this.setStatus("error");
-        this.callbacks.onError?.("Signaling connection error.");
+        console.warn("[BeamSuite WS Warning] Signaling connection dropped, will reconnect on close");
       }
     };
 
