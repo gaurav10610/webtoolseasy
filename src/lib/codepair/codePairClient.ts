@@ -421,8 +421,20 @@ export class CodePairClient {
       this.handlePeerDisconnected();
     };
 
-    channel.onerror = (err) => {
-      console.error("[CodePair DataChannel Error]", err);
+    channel.onerror = (event: Event) => {
+      const errorEvent = event as RTCErrorEvent;
+      const detail = errorEvent?.error?.message || "Transport closed";
+      if (
+        channel.readyState === "closing" ||
+        channel.readyState === "closed" ||
+        !this.pc ||
+        this.pc.connectionState === "closed" ||
+        this.pc.connectionState === "disconnected"
+      ) {
+        console.log(`[CodePair DataChannel] Channel closed by peer (${detail})`);
+      } else {
+        console.warn(`[CodePair DataChannel Warning] ${detail}`);
+      }
     };
   }
 

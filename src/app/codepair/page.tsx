@@ -259,7 +259,7 @@ function CodePairContent() {
           renderRemoteCursor(cursor);
         },
         onError: (err) => {
-          console.error("CodePair error:", err);
+          console.warn("CodePair warning:", err);
         },
       });
 
@@ -350,15 +350,10 @@ function CodePairContent() {
       connectToRoom(targetRoom);
     }
 
-    // 3. BeforeUnload warning if user has unsaved edits or active connection
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      // Always save draft immediately
+    // 3. BeforeUnload: save latest draft to browser storage
+    const handleBeforeUnload = () => {
       if (codeRef.current) {
         P2PPersistence.saveState("codepair_code", codeRef.current);
-      }
-      if (clientRef.current && clientRef.current.status === "connected") {
-        e.preventDefault();
-        e.returnValue = "";
       }
     };
 
