@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import QRCode from "qrcode";
 import { DropStreamClient } from "@/lib/dropstream/dropstreamClient";
 import { ConnectionStatus, FileItem, PeerInfo } from "@/lib/dropstream/types";
+import { P2PPersistence } from "@/lib/p2p/p2pState";
+import { P2PConnectionHeader } from "@/components/p2p/P2PConnectionHeader";
 
 // Helper for formatting byte sizes
 function formatBytes(bytes: number, decimals = 1): string {
@@ -19,6 +21,7 @@ export default function DropStreamPage() {
   const [roomId, setRoomId] = useState<string>("");
   const [joinInput, setJoinInput] = useState<string>("");
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
+  const [isRestoredSession, setIsRestoredSession] = useState<boolean>(false);
   const [remotePeer, setRemotePeer] = useState<PeerInfo | null>(null);
   const [fileQueue, setFileQueue] = useState<FileItem[]>([]);
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
@@ -31,43 +34,11 @@ export default function DropStreamPage() {
 
   const clientRef = useRef<DropStreamClient | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileQueueRef = useRef<FileItem[]>(fileQueue);
 
-  // Initialize DropStream Client
   useEffect(() => {
-    const client = new DropStreamClient({
-      onStatusChange: (newStatus) => setStatus(newStatus),
-      onRoomJoined: (id) => {
-        setRoomId(id);
-        generateQrCode(id);
-      },
-      onPeerConnected: (peer) => setRemotePeer(peer),
-      onPeerDisconnected: () => {
-        setRemotePeer(null);
-      },
-      onFileQueueUpdated: (files) => setFileQueue([...files]),
-      onChatMessage: (msg) => {
-        setChatMessages((prev) => [...prev, msg]);
-      },
-      onError: (err) => {
-        setErrorMessage(err);
-      },
-    });
-
-    clientRef.current = client;
-
-    // Check if room is present in URL search params
-    const params = new URLSearchParams(window.location.search);
-    const roomFromUrl = params.get("room");
-    if (roomFromUrl) {
-      const cleanRoom = roomFromUrl.toUpperCase().trim();
-      setRoomId(cleanRoom);
-      client.joinRoom(cleanRoom);
-    }
-
-    return () => {
-      client.leaveRoom();
-    };
-  }, []);
+    fileQueueRef.current = fileQueue;
+  }, [fileQueue]);
 
   const generateQrCode = async (id: string) => {
     try {
@@ -86,14 +57,89 @@ export default function DropStreamPage() {
     }
   };
 
+  // Initialize DropStream Client & restore session from browser memory
+  useEffect(() => {
+    // 1. Restore chat messages from storage
+    const savedChat = P2PPersistence.loadState<Array<{ from: string; text: string; timestamp: number }>>("dropstream_chat");
+    if (savedChat && savedChat.length > 0) {
+      setChatMessages(savedChat);
+    }
+
+    const client = new DropStreamClient({
+      onStatusChange: (newStatus) => setStatus(newStatus),
+      onRoomJoined: (id) => {
+        setRoomId(id);
+        generateQrCode(id);
+        P2PPersistence.saveSession("drop", { roomId: id });
+        P2PPersistence.syncUrl({ room: id });
+      },
+      onPeerConnected: (peer) => setRemotePeer(peer),
+      onPeerDisconnected: () => {
+        setRemotePeer(null);
+      },
+      onFileQueueUpdated: (files) => setFileQueue([...files]),
+      onChatMessage: (msg) => {
+        setChatMessages((prev) => {
+          const updated = [...prev, msg];
+          P2PPersistence.saveState("dropstream_chat", updated);
+          return updated;
+        });
+      },
+      onError: (err) => {
+        setErrorMessage(err);
+      },
+    });
+
+    clientRef.current = client;
+
+    // 2. Check if room is present in URL search params, then fallback to persisted session
+    const params = new URLSearchParams(window.location.search);
+    const roomFromUrl = params.get("room");
+    const savedSession = P2PPersistence.loadSession("drop");
+
+    const targetRoom = roomFromUrl || savedSession?.roomId || "";
+    if (targetRoom) {
+      const cleanRoom = targetRoom.toUpperCase().trim();
+      setRoomId(cleanRoom);
+      if (!roomFromUrl && savedSession?.roomId) {
+        setIsRestoredSession(true);
+      }
+      generateQrCode(cleanRoom);
+      client.joinRoom(cleanRoom);
+    }
+
+    // 3. Prevent accidental tab closure while transferring
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      const hasActiveTransfer = fileQueueRef.current.some(
+        (f) => f.status === "transferring"
+      );
+      if (hasActiveTransfer) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      client.leaveRoom();
+    };
+  }, []);
+
   const handleCreateRoom = async () => {
     setErrorMessage("");
+    setIsRestoredSession(false);
     try {
       const res = await fetch("https://webtoolseasy-signaling.gaurav10610.workers.dev/new-room");
       const data = await res.json();
       if (data?.roomId) {
-        setRoomId(data.roomId);
-        clientRef.current?.joinRoom(data.roomId);
+        const id = data.roomId.toUpperCase().trim();
+        setRoomId(id);
+        generateQrCode(id);
+        P2PPersistence.saveSession("drop", { roomId: id });
+        P2PPersistence.syncUrl({ room: id });
+        clientRef.current?.joinRoom(id);
       }
     } catch {
       // Fallback: generate local room code
@@ -104,6 +150,9 @@ export default function DropStreamPage() {
       }
       const formatted = `${code.slice(0, 3)}-${code.slice(3)}`;
       setRoomId(formatted);
+      generateQrCode(formatted);
+      P2PPersistence.saveSession("drop", { roomId: formatted });
+      P2PPersistence.syncUrl({ room: formatted });
       clientRef.current?.joinRoom(formatted);
     }
   };
@@ -111,9 +160,23 @@ export default function DropStreamPage() {
   const handleJoinRoom = () => {
     if (!joinInput.trim()) return;
     setErrorMessage("");
+    setIsRestoredSession(false);
     const clean = joinInput.toUpperCase().trim();
     setRoomId(clean);
+    generateQrCode(clean);
+    P2PPersistence.saveSession("drop", { roomId: clean });
+    P2PPersistence.syncUrl({ room: clean });
     clientRef.current?.joinRoom(clean);
+  };
+
+  const handleLeaveRoom = () => {
+    clientRef.current?.leaveRoom();
+    setRoomId("");
+    setRemotePeer(null);
+    setStatus("disconnected");
+    setIsRestoredSession(false);
+    P2PPersistence.clearSession("drop");
+    P2PPersistence.syncUrl({ room: null });
   };
 
   const handleCopyLink = () => {
@@ -149,19 +212,55 @@ export default function DropStreamPage() {
     e.preventDefault();
     if (!chatInput.trim() || status !== "connected") return;
     clientRef.current?.sendChatMessage(chatInput);
-    setChatMessages((prev) => [
-      ...prev,
-      { from: "You", text: chatInput.trim(), timestamp: Date.now() },
-    ]);
+    setChatMessages((prev) => {
+      const updated = [
+        ...prev,
+        { from: "You", text: chatInput.trim(), timestamp: Date.now() },
+      ];
+      P2PPersistence.saveState("dropstream_chat", updated);
+      return updated;
+    });
     setChatInput("");
   };
 
   const isConnected = status === "connected";
-  const isInRoom = status === "in_room" || status === "connecting_peer" || status === "connected";
+  const isInRoom = Boolean(roomId && status !== "disconnected");
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+      {/* Uniform Persistent P2P Connection Header - Visible At All Times */}
+      <P2PConnectionHeader
+        appName="DropStream"
+        appBadge="P2P"
+        appIcon={<span>⚡</span>}
+        status={status}
+        roomId={roomId}
+        peerName={remotePeer?.deviceName}
+        peerDetails={remotePeer?.browser ? `${remotePeer.browser} on ${remotePeer.os}` : undefined}
+        isRestoredSession={isRestoredSession}
+        onNewRoom={handleCreateRoom}
+        onLeaveRoom={handleLeaveRoom}
+        onReconnect={() => roomId && clientRef.current?.joinRoom(roomId)}
+        shareUrl={
+          typeof window !== "undefined" && roomId
+            ? `${window.location.origin}/drop?room=${roomId}`
+            : undefined
+        }
+      >
+        {isInRoom && (
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setActiveTab(activeTab === "files" ? "notes" : "files")}
+              className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-md transition cursor-pointer"
+            >
+              {activeTab === "files" ? "📝 Secret Notes" : "📁 Files"}
+            </button>
+          </div>
+        )}
+      </P2PConnectionHeader>
+
+      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Header Hero */}
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
@@ -179,11 +278,11 @@ export default function DropStreamPage() {
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 flex items-center justify-between text-sm">
+          <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-300 flex items-center justify-between text-sm shadow-xs">
             <span>{errorMessage}</span>
             <button
               onClick={() => setErrorMessage("")}
-              className="text-red-500 hover:text-red-700 font-bold ml-3"
+              className="text-red-500 hover:text-red-700 font-bold ml-3 cursor-pointer"
             >
               ✕
             </button>
@@ -206,7 +305,7 @@ export default function DropStreamPage() {
                 </div>
                 <button
                   onClick={handleCreateRoom}
-                  className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-95 transition text-white font-medium rounded-lg text-sm shadow"
+                  className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-95 transition text-white font-medium rounded-lg text-sm shadow-xs cursor-pointer"
                 >
                   Create Transfer Room
                 </button>
@@ -232,7 +331,7 @@ export default function DropStreamPage() {
                   />
                   <button
                     onClick={handleJoinRoom}
-                    className="py-2 px-4 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white rounded-lg text-sm font-medium transition"
+                    className="py-2 px-4 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white rounded-lg text-sm font-medium transition cursor-pointer"
                   >
                     Join
                   </button>
@@ -242,73 +341,11 @@ export default function DropStreamPage() {
           ) : (
             /* Connected Room Dashboard */
             <div className="space-y-6">
-              {/* Room Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
-                    Room Code:
-                  </span>
-                  <span className="font-mono text-lg font-bold text-blue-600 dark:text-blue-400 tracking-wider">
-                    {roomId}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleCopyLink}
-                    className="px-3 py-1.5 text-xs font-medium rounded-md bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition flex items-center gap-1.5 shadow-sm"
-                  >
-                    {copiedLink ? "✓ Link Copied!" : "📋 Copy Link"}
-                  </button>
-
-                  <button
-                    onClick={() => setShowQrModal(true)}
-                    className="px-3 py-1.5 text-xs font-medium rounded-md bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition flex items-center gap-1.5 shadow-sm"
-                  >
-                    📱 Show QR
-                  </button>
-
-                  <button
-                    onClick={() => clientRef.current?.leaveRoom()}
-                    className="px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md transition"
-                  >
-                    Leave Room
-                  </button>
-                </div>
-              </div>
-
-              {/* Status Pill */}
-              <div className="flex items-center justify-between p-3 rounded-lg border text-sm">
-                <div className="flex items-center gap-2">
-                  {isConnected ? (
-                    <>
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span className="font-semibold text-emerald-700 dark:text-emerald-400">
-                        Connected to Peer:
-                      </span>
-                      <span className="text-slate-600 dark:text-slate-300 font-medium">
-                        {remotePeer?.deviceName || "Remote Device"}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
-                      <span className="text-amber-700 dark:text-amber-400 font-medium">
-                        Waiting for peer to join... (Share the room code or QR)
-                      </span>
-                    </>
-                  )}
-                </div>
-                <span className="text-xs text-slate-400 font-mono">
-                  {status.replace("_", " ")}
-                </span>
-              </div>
-
               {/* Tabs: Files vs Secret Notes */}
               <div className="flex border-b border-slate-200 dark:border-slate-800">
                 <button
                   onClick={() => setActiveTab("files")}
-                  className={`pb-2.5 px-4 text-sm font-semibold border-b-2 transition ${
+                  className={`pb-2.5 px-4 text-sm font-semibold border-b-2 transition cursor-pointer ${
                     activeTab === "files"
                       ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
                       : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
@@ -318,7 +355,7 @@ export default function DropStreamPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("notes")}
-                  className={`pb-2.5 px-4 text-sm font-semibold border-b-2 transition ${
+                  className={`pb-2.5 px-4 text-sm font-semibold border-b-2 transition cursor-pointer ${
                     activeTab === "notes"
                       ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
                       : "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
@@ -426,7 +463,7 @@ export default function DropStreamPage() {
                                   <a
                                     href={item.downloadUrl}
                                     download={item.name}
-                                    className="px-2.5 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded font-medium transition"
+                                    className="px-2.5 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded font-medium transition cursor-pointer"
                                   >
                                     Save
                                   </a>
@@ -494,7 +531,7 @@ export default function DropStreamPage() {
                     <button
                       type="submit"
                       disabled={!isConnected || !chatInput.trim()}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition disabled:opacity-50"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition disabled:opacity-50 cursor-pointer"
                     >
                       Send
                     </button>
@@ -519,12 +556,20 @@ export default function DropStreamPage() {
                   <img src={qrCodeUrl} alt="Room QR Code" className="w-52 h-52" />
                 </div>
               )}
-              <button
-                onClick={() => setShowQrModal(false)}
-                className="w-full py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium rounded-lg text-sm transition"
-              >
-                Close
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCopyLink}
+                  className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-xs transition cursor-pointer"
+                >
+                  {copiedLink ? "✓ Link Copied" : "Copy Direct Link"}
+                </button>
+                <button
+                  onClick={() => setShowQrModal(false)}
+                  className="py-2 px-4 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium rounded-lg text-xs transition cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         )}

@@ -8,6 +8,7 @@ export type BeamStatus =
   | "in_room"
   | "connecting_peer"
   | "streaming"
+  | "reconnecting"
   | "error";
 
 export interface BeamPeerMetadata {

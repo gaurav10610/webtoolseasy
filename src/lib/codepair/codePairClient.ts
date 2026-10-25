@@ -23,7 +23,14 @@ const RTC_CONFIG: RTCConfiguration = {
   iceCandidatePoolSize: 10,
 };
 
-export type CodePairStatus = "disconnected" | "connecting" | "connected" | "error";
+export type CodePairStatus =
+  | "disconnected"
+  | "connecting_signaling"
+  | "in_room"
+  | "connecting_peer"
+  | "connected"
+  | "reconnecting"
+  | "error";
 
 export interface RemoteCursorState {
   peerId: string;
@@ -71,6 +78,10 @@ export class CodePairClient {
   private remotePeerId: string | null = null;
   private isInitiator: boolean = false;
   private candidateQueue: RTCIceCandidateInit[] = [];
+  private isSettingRemoteDescription: boolean = false;
+  private reconnectAttempts: number = 0;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private isManualLeave: boolean = false;
   private callbacks: CodePairCallbacks = {};
   private pingInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -122,7 +133,24 @@ export class CodePairClient {
 
   public async joinRoom(roomId: string): Promise<void> {
     this.roomId = roomId.toUpperCase().trim();
-    this.setStatus("connecting");
+    this.isManualLeave = false;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
+    if (this.ws) {
+      this.ws.onopen = null;
+      this.ws.onclose = null;
+      this.ws.onerror = null;
+      this.ws.onmessage = null;
+      try {
+        this.ws.close();
+      } catch {}
+      this.ws = null;
+    }
+
+    this.setStatus("connecting_signaling");
 
     const wsUrl = `${DEFAULT_SIGNALING_URL}/room/${this.roomId}?peerId=${encodeURIComponent(
       this.peerId
@@ -133,10 +161,12 @@ export class CodePairClient {
     } catch (err) {
       this.setStatus("error");
       this.callbacks.onError?.(`Signaling connection failed: ${err}`);
+      this.scheduleReconnect();
       return;
     }
 
     this.ws.onopen = () => {
+      this.reconnectAttempts = 0;
       this.sendSignaling({
         type: "join",
         metadata: {
@@ -158,15 +188,45 @@ export class CodePairClient {
     };
 
     this.ws.onerror = (err) => {
-      console.warn("[CodePair WS Error]", err);
+      if (!this.isManualLeave) {
+        console.warn("[CodePair WS Error]", err);
+      }
     };
 
     this.ws.onclose = () => {
       this.stopHeartbeat();
-      if (this.status !== "connected") {
+      if (this.isManualLeave) {
         this.setStatus("disconnected");
+        return;
       }
+      if (this.dataChannel && this.dataChannel.readyState === "open") {
+        console.warn("[CodePair] WS closed but DataChannel is open. Attempting background reconnect...");
+      } else {
+        this.setStatus("reconnecting");
+      }
+      this.scheduleReconnect();
     };
+  }
+
+  private scheduleReconnect(): void {
+    if (this.isManualLeave || !this.roomId) return;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    if (this.reconnectAttempts >= 8) {
+      console.warn("[CodePair] Max reconnect attempts reached.");
+      this.setStatus("error");
+      return;
+    }
+    const delay = Math.min(1000 * Math.pow(1.5, this.reconnectAttempts), 8000);
+    this.reconnectAttempts++;
+    this.reconnectTimer = setTimeout(() => {
+      if (!this.isManualLeave && this.roomId) {
+        console.log(`[CodePair] Reconnecting to room ${this.roomId} (attempt ${this.reconnectAttempts})...`);
+        this.joinRoom(this.roomId);
+      }
+    }, delay);
   }
 
   private startHeartbeat(): void {
@@ -195,11 +255,13 @@ export class CodePairClient {
         if (msg.peerId) {
           this.peerId = msg.peerId as string;
         }
+        this.setStatus("in_room");
         const peers = (msg.peers as Array<{ peerId: string }>) || [];
         if (peers.length > 0) {
           // A peer is already waiting in this room: initiate WebRTC connection
           this.remotePeerId = peers[0].peerId;
           this.isInitiator = true;
+          this.setStatus("connecting_peer");
           await this.initPeerConnection(true);
         }
         break;
@@ -210,6 +272,7 @@ export class CodePairClient {
         if (!this.remotePeerId && newPeerId !== this.peerId) {
           this.remotePeerId = newPeerId;
           this.isInitiator = false;
+          this.setStatus("connecting_peer");
           await this.initPeerConnection(false);
         }
         break;
@@ -224,9 +287,12 @@ export class CodePairClient {
         const data = msg.data as { sdp?: RTCSessionDescriptionInit; candidate?: RTCIceCandidateInit };
         if (data.sdp) {
           if (!this.pc) {
+            this.setStatus("connecting_peer");
             await this.initPeerConnection(false);
           }
+          this.isSettingRemoteDescription = true;
           await this.pc!.setRemoteDescription(new RTCSessionDescription(data.sdp));
+          this.isSettingRemoteDescription = false;
 
           // Drain queued candidates
           while (this.candidateQueue.length > 0) {
@@ -247,7 +313,7 @@ export class CodePairClient {
             });
           }
         } else if (data.candidate) {
-          if (this.pc && this.pc.remoteDescription) {
+          if (this.pc && this.pc.remoteDescription && !this.isSettingRemoteDescription) {
             await this.pc.addIceCandidate(new RTCIceCandidate(data.candidate));
           } else {
             this.candidateQueue.push(data.candidate);
@@ -368,6 +434,16 @@ export class CodePairClient {
           username: msg.username,
           color: msg.color,
         });
+        // Proactively send current document to newly connected peer
+        const currentDoc = this.callbacks.onDocSyncRequired?.();
+        if (currentDoc && currentDoc.code) {
+          this.sendData({
+            type: "DOC_SYNC_RES",
+            code: currentDoc.code,
+            language: currentDoc.language,
+            version: currentDoc.version,
+          });
+        }
         break;
       }
 
@@ -411,7 +487,7 @@ export class CodePairClient {
   private handlePeerDisconnected(): void {
     this.dataChannel = null;
     this.remotePeerId = null;
-    this.setStatus(this.ws && this.ws.readyState === WebSocket.OPEN ? "connecting" : "disconnected");
+    this.setStatus(this.ws && this.ws.readyState === WebSocket.OPEN ? "in_room" : "disconnected");
     this.callbacks.onPeerDisconnected?.();
   }
 
@@ -448,6 +524,11 @@ export class CodePairClient {
   }
 
   public leaveRoom(): void {
+    this.isManualLeave = true;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
     this.stopHeartbeat();
     if (this.dataChannel) {
       try {
