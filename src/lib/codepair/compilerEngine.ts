@@ -789,35 +789,129 @@ export function isCodeFromDifferentLanguage(
     }
   }
 
-  // Check 2: Does it contain unmistakable header markers of another language?
-  const OTHER_LANGUAGE_MARKERS: Record<SupportedLanguageId, string[]> = {
-    javascript: ["Welcome to CodePair JavaScript Studio", "findPrimes(limit = 40)"],
-    typescript: ["CodePair TypeScript Workspace", "interface PeerProfile", "class CollaborationSession"],
-    python: ["Welcome to CodePair Python Studio", "analyze_dataset(numbers)", "sample_data = [12, 19, 24"],
-    sql: ["Welcome to CodePair SQL Studio", "CREATE TABLE IF NOT EXISTS developers", "('Ada Lovelace'"],
-    html: ["CodePair Live Preview", "<!DOCTYPE html>", "CodePair Live Sandbox"],
-    markdown: ["Welcome to CodePair Markdown Studio", "### Supported Language Engines", "Zero-cloud, real-time collaborative documentation"],
+  // Check 2: Unmistakable starter markers from any language (including legacy templates)
+  const LEGACY_AND_LANGUAGE_SIGNATURES: Record<SupportedLanguageId, string[]> = {
+    javascript: [
+      "Welcome to CodePair JavaScript Studio",
+      "// Welcome to CodePair!",
+      "// Welcome to CodePair! 🚀",
+      "findPrimes",
+      "Calculated prime numbers",
+      "prime numbers up to",
+      "// 100% Zero-Cloud, Peer-to-Peer Collaborative IDE",
+      "// Real-time multi-cursor sync directly between browsers",
+    ],
+    typescript: [
+      "CodePair TypeScript Workspace",
+      "interface PeerProfile",
+      "class CollaborationSession",
+    ],
+    python: [
+      "Welcome to CodePair Python Studio",
+      "analyze_dataset",
+      "sample_data = [12, 19, 24",
+      "First 8 Fibonacci terms",
+    ],
+    sql: [
+      "Welcome to CodePair SQL Studio",
+      "CREATE TABLE IF NOT EXISTS developers",
+      "('Ada Lovelace'",
+      "FROM developers",
+    ],
+    html: [
+      "CodePair Live Preview",
+      "<!DOCTYPE html>",
+      "CodePair Live Sandbox",
+      "<title>CodePair Live Preview</title>",
+    ],
+    markdown: [
+      "Welcome to CodePair Markdown Studio",
+      "### Supported Language Engines",
+      "Zero-cloud, real-time collaborative documentation",
+    ],
     json: ['"app": "CodePair"', '"inBrowserCompilers"', '"handshakeLatencyMs"'],
-    lua: ["CodePair Lua 5.3 Studio", "function fibonacci(n)", 'local fruits = {"Apple"'],
-    yaml: ["CodePair Pipeline Configuration", "CodePair Zero-Cloud Workflow", "pyodide-wasm"],
-    xml: ['<?xml version="1.0" encoding="UTF-8"?>', '<project name="CodePair"', "Zero-Cloud Peer-to-Peer Collaborative IDE"],
-    rust: ["CodePair Rust Studio", "struct Developer {", 'Developer::new("Ferris"'],
+    lua: [
+      "CodePair Lua 5.3 Studio",
+      "local fruits =",
+    ],
+    yaml: [
+      "CodePair Pipeline Configuration",
+      "CodePair Zero-Cloud Workflow",
+    ],
+    xml: [
+      "<project name=\"CodePair\"",
+      "Zero-Cloud Peer-to-Peer Collaborative IDE",
+    ],
+    rust: ["CodePair Rust Studio", "Developer::new(\"Ferris\""],
     go: ["CodePair Go Workspace", "type Worker struct", "CodePair Go Studio Initialized"],
-    cpp: ["CodePair C++20 Studio", "=== CodePair C++ Workspace ===", "struct Task {"],
+    cpp: ["CodePair C++20 Studio", "=== CodePair C++ Workspace ==="],
     csharp: ["CodePair C# Workspace", "CodePair C# 12 Studio", "public record TeamMember"],
-    java: ["CodePair Java 21 Studio", "=== Zero-Cloud Suite Portfolio ===", "public record Project"],
+    java: ["CodePair Java 21 Studio", "=== Zero-Cloud Suite Portfolio ==="],
     php: ["CodePair PHP Studio", "class CollaborationRoom", "CP-LIVE-2026"],
     ruby: ["CodePair Ruby 3.3 Studio", "class CodePairSession", "CP-RUBY-99"],
-    shell: ["CodePair Bash / Shell Studio", "=== System Environment Telemetry ===", "Browser Sandbox"],
-    kotlin: ["CodePair Kotlin Studio", "data class Developer(val name: String", "CodePair Kotlin 2.0 Studio"],
-    swift: ["CodePair Swift Studio", "=== CodePair Swift 5.10 Workspace ===", "struct P2PPeer {"],
+    shell: ["CodePair Bash / Shell Studio", "=== System Environment Telemetry ==="],
+    kotlin: ["CodePair Kotlin Studio", "CodePair Kotlin 2.0 Studio"],
+    swift: ["CodePair Swift Studio", "=== CodePair Swift 5.10 Workspace ==="],
   };
 
-  for (const [langId, markers] of Object.entries(OTHER_LANGUAGE_MARKERS)) {
+  for (const [langId, markers] of Object.entries(LEGACY_AND_LANGUAGE_SIGNATURES)) {
     if (langId !== targetLang) {
       if (markers.some((marker) => normalized.includes(marker))) {
         return true;
       }
+    }
+  }
+
+  // Check 3: Cross-Language Syntax Incompatibilities
+  // JavaScript/TypeScript syntax residing in non-JS/TS languages (excluding markdown documentation)
+  if (targetLang !== "javascript" && targetLang !== "typescript" && targetLang !== "markdown") {
+    // console.log is strictly JavaScript / TypeScript
+    if (normalized.includes("console.log(") || normalized.includes("console.error(")) {
+      return true;
+    }
+    // JS legacy starter template function
+    if (normalized.includes("findPrimes")) {
+      return true;
+    }
+  }
+
+  // Python-specific syntax violations: JS constructs that are invalid in Python
+  if (targetLang === "python") {
+    if (
+      normalized.includes("function ") ||
+      normalized.includes("const ") ||
+      normalized.includes("let ") ||
+      normalized.includes("===") ||
+      normalized.includes("!==") ||
+      normalized.startsWith("//") ||
+      normalized.includes("\n//")
+    ) {
+      return true;
+    }
+  }
+
+  // SQL-specific syntax violations
+  if (targetLang === "sql") {
+    if (
+      normalized.includes("console.log") ||
+      normalized.includes("print(") ||
+      normalized.includes("function ") ||
+      normalized.includes("def ") ||
+      normalized.startsWith("//") ||
+      normalized.startsWith("#")
+    ) {
+      return true;
+    }
+  }
+
+  // Non-Python languages containing Python signatures
+  if (targetLang !== "python") {
+    if (
+      normalized.includes("def analyze_dataset") ||
+      normalized.includes("import statistics") ||
+      normalized.includes("import numpy")
+    ) {
+      return true;
     }
   }
 
@@ -846,7 +940,6 @@ let fengariInstance: {
   load: (code: string) => () => unknown;
   to_jsstring: (val: unknown) => string;
 } | null = null;
-let fengariLoadingPromise: Promise<unknown> | null = null;
 
 let rubyVmInstance: {
   eval: (code: string) => { toString: () => string };
@@ -1053,9 +1146,9 @@ async function getOrLoadRuby(onStatus?: (msg: string) => void) {
     );
     onStatus?.("Fetching Ruby WASM binary...");
     const response = await fetch("https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.6.2/dist/ruby.wasm");
-    const module = await WebAssembly.compileStreaming(response);
+    const wasmModule = await WebAssembly.compileStreaming(response);
     onStatus?.("Initializing Ruby VM...");
-    const { vm } = await DefaultRubyVM(module);
+    const { vm } = await DefaultRubyVM(wasmModule);
     rubyVmInstance = vm as typeof rubyVmInstance;
     return rubyVmInstance;
   })();
