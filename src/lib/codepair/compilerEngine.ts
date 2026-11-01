@@ -767,6 +767,63 @@ for peer in peers {
 `,
 };
 
+export function normalizeCodeSnippet(s: string | undefined | null): string {
+  if (!s) return "";
+  return s.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+}
+
+/**
+ * Checks if code belongs to a different language (e.g. JS template loaded into Python from stale browser cache).
+ */
+export function isCodeFromDifferentLanguage(
+  codeText: string,
+  targetLang: SupportedLanguageId
+): boolean {
+  const normalized = normalizeCodeSnippet(codeText);
+  if (!normalized) return false;
+
+  // Check 1: Does it match another language's starter template exactly?
+  for (const [langId, tmpl] of Object.entries(CODEPAIR_TEMPLATES)) {
+    if (langId !== targetLang && normalizeCodeSnippet(tmpl) === normalized) {
+      return true;
+    }
+  }
+
+  // Check 2: Does it contain unmistakable header markers of another language?
+  const OTHER_LANGUAGE_MARKERS: Record<SupportedLanguageId, string[]> = {
+    javascript: ["Welcome to CodePair JavaScript Studio", "findPrimes(limit = 40)"],
+    typescript: ["CodePair TypeScript Workspace", "interface PeerProfile", "class CollaborationSession"],
+    python: ["Welcome to CodePair Python Studio", "analyze_dataset(numbers)", "sample_data = [12, 19, 24"],
+    sql: ["Welcome to CodePair SQL Studio", "CREATE TABLE IF NOT EXISTS developers", "('Ada Lovelace'"],
+    html: ["CodePair Live Preview", "<!DOCTYPE html>", "CodePair Live Sandbox"],
+    markdown: ["Welcome to CodePair Markdown Studio", "### Supported Language Engines", "Zero-cloud, real-time collaborative documentation"],
+    json: ['"app": "CodePair"', '"inBrowserCompilers"', '"handshakeLatencyMs"'],
+    lua: ["CodePair Lua 5.3 Studio", "function fibonacci(n)", 'local fruits = {"Apple"'],
+    yaml: ["CodePair Pipeline Configuration", "CodePair Zero-Cloud Workflow", "pyodide-wasm"],
+    xml: ['<?xml version="1.0" encoding="UTF-8"?>', '<project name="CodePair"', "Zero-Cloud Peer-to-Peer Collaborative IDE"],
+    rust: ["CodePair Rust Studio", "struct Developer {", 'Developer::new("Ferris"'],
+    go: ["CodePair Go Workspace", "type Worker struct", "CodePair Go Studio Initialized"],
+    cpp: ["CodePair C++20 Studio", "=== CodePair C++ Workspace ===", "struct Task {"],
+    csharp: ["CodePair C# Workspace", "CodePair C# 12 Studio", "public record TeamMember"],
+    java: ["CodePair Java 21 Studio", "=== Zero-Cloud Suite Portfolio ===", "public record Project"],
+    php: ["CodePair PHP Studio", "class CollaborationRoom", "CP-LIVE-2026"],
+    ruby: ["CodePair Ruby 3.3 Studio", "class CodePairSession", "CP-RUBY-99"],
+    shell: ["CodePair Bash / Shell Studio", "=== System Environment Telemetry ===", "Browser Sandbox"],
+    kotlin: ["CodePair Kotlin Studio", "data class Developer(val name: String", "CodePair Kotlin 2.0 Studio"],
+    swift: ["CodePair Swift Studio", "=== CodePair Swift 5.10 Workspace ===", "struct P2PPeer {"],
+  };
+
+  for (const [langId, markers] of Object.entries(OTHER_LANGUAGE_MARKERS)) {
+    if (langId !== targetLang) {
+      if (markers.some((marker) => normalized.includes(marker))) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 // Singleton storage for in-browser compilers
 let pyodideInstance: { runPythonAsync: (code: string) => Promise<unknown> } | null = null;
 let pyodideLoadingPromise: Promise<unknown> | null = null;
