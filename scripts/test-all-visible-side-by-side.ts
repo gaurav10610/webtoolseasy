@@ -81,7 +81,7 @@ async function runThoroughVisibleTests() {
   console.log("Dev Alpha collaboratively typing code in Monaco...");
   const extraHtml = `\n<!-- Collaboratively edited in real-time by Dev Alpha -->\n<script>console.log("CodePair P2P active!");</script>`;
   await pageA.evaluate((snippet) => {
-    // @ts-ignore
+    // @ts-expect-error window.monaco is loaded dynamically
     const monaco = window.monaco;
     if (monaco) {
       const models = monaco.editor.getModels();

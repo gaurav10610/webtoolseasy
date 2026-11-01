@@ -425,7 +425,7 @@ export class BeamClient {
     // Listen for incoming tracks if I am receiver
     this.pc.ontrack = (event) => {
       console.log(`[BeamSuite WebRTC] ontrack: kind=${event.track.kind}, id=${event.track.id}`);
-      let stream = event.streams && event.streams[0];
+      const stream = event.streams && event.streams[0];
       if (!stream) {
         if (!this.remoteStream) {
           this.remoteStream = new MediaStream();

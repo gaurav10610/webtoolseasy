@@ -357,6 +357,22 @@ function CodePairContent() {
     editorRef.current = editorInstance;
     monacoRef.current = monaco;
 
+    // Sanitize any cross-language contamination on editor mount
+    const currentVal = editorInstance.getValue();
+    if (
+      isCodeFromDifferentLanguage(currentVal, languageRef.current) ||
+      (codeRef.current && currentVal !== codeRef.current)
+    ) {
+      isProgrammaticChangeRef.current = true;
+      try {
+        editorInstance.setValue(codeRef.current);
+      } finally {
+        setTimeout(() => {
+          isProgrammaticChangeRef.current = false;
+        }, 50);
+      }
+    }
+
     editorInstance.onDidChangeCursorPosition((e) => {
       if (!clientRef.current || clientRef.current.status !== "connected") return;
       const selection = editorInstance.getSelection();
