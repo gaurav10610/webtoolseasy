@@ -59,6 +59,8 @@ function CodePairContent() {
   // Editor state
   const [language, setLanguage] = useState<SupportedLanguageId>("javascript");
   const [code, setCode] = useState<string>(CODEPAIR_TEMPLATES.javascript);
+  const [languageBuffers, setLanguageBuffers] = useState<Partial<Record<SupportedLanguageId, string>>>({});
+  const languageBuffersRef = useRef<Partial<Record<SupportedLanguageId, string>>>({});
   const [theme, setTheme] = useState<"vs-dark" | "light">("vs-dark");
   const [showPreview, setShowPreview] = useState<boolean>(true);
   const [copyFeedback, setCopyFeedback] = useState<string>("");
@@ -77,6 +79,7 @@ function CodePairContent() {
   const monacoRef = useRef<typeof import("monaco-editor") | null>(null);
   const docVersionRef = useRef<number>(1);
   const isRemoteChangeRef = useRef<boolean>(false);
+  const isProgrammaticChangeRef = useRef<boolean>(false);
   const remoteDecorationsRef = useRef<string[]>([]);
   const codeRef = useRef<string>(code);
   const languageRef = useRef<SupportedLanguageId>(language);
@@ -241,15 +244,39 @@ function CodePairContent() {
     const savedCode = P2PPersistence.loadState<string>("codepair_code");
     const savedLang = P2PPersistence.loadState<SupportedLanguageId>("codepair_language");
     const savedTheme = P2PPersistence.loadState<"vs-dark" | "light">("codepair_theme");
+    const savedBuffers = P2PPersistence.loadState<Partial<Record<SupportedLanguageId, string>>>("codepair_lang_buffers");
 
-    if (savedLang && LANGUAGE_REGISTRY.some((l) => l.id === savedLang)) {
-      setLanguage(savedLang);
-    }
+    const validLang = savedLang && LANGUAGE_REGISTRY.some((l) => l.id === savedLang) ? savedLang : "javascript";
+    setLanguage(validLang);
+
     if (savedTheme) {
       setTheme(savedTheme);
     }
+
+    const buffers: Partial<Record<SupportedLanguageId, string>> = savedBuffers || {};
+
+    // Determine initial code:
+    // 1. If buffer has a custom snippet for validLang, use it.
+    // 2. If savedCode exists and doesn't belong to another language template, use it.
+    // 3. Otherwise, use validLang's official starter template!
+    let initialCode = buffers[validLang];
+    if (!initialCode && savedCode) {
+      const isFromOtherLang = Object.entries(CODEPAIR_TEMPLATES).some(
+        ([id, tmpl]) => id !== validLang && savedCode.trim() === tmpl.trim()
+      );
+      if (!isFromOtherLang) {
+        initialCode = savedCode;
+        buffers[validLang] = savedCode;
+      }
+    }
+    if (!initialCode) {
+      initialCode = CODEPAIR_TEMPLATES[validLang] || CODEPAIR_TEMPLATES.javascript;
+    }
+
+    languageBuffersRef.current = buffers;
+    setLanguageBuffers(buffers);
+    setCode(initialCode);
     if (savedCode) {
-      setCode(savedCode);
       setIsRestoredSession(true);
     }
 
@@ -282,9 +309,25 @@ function CodePairContent() {
   // Handle local text edits inside Monaco
   const handleEditorChange = (value: string | undefined) => {
     const nextCode = value ?? "";
+    codeRef.current = nextCode;
     setCode(nextCode);
 
     P2PPersistence.saveState("codepair_code", nextCode);
+
+    if (isProgrammaticChangeRef.current) return;
+
+    // Save into language buffers if customized away from default template
+    const currentLang = languageRef.current;
+    const defaultTemplate = (CODEPAIR_TEMPLATES[currentLang] || "").trim();
+    const isDefault = nextCode.trim() === defaultTemplate;
+
+    const nextBuffers: Partial<Record<SupportedLanguageId, string>> = {
+      ...languageBuffersRef.current,
+      [currentLang]: isDefault ? undefined : nextCode,
+    };
+    languageBuffersRef.current = nextBuffers;
+    setLanguageBuffers(nextBuffers);
+    P2PPersistence.saveState("codepair_lang_buffers", nextBuffers);
 
     if (isRemoteChangeRef.current) return;
 
@@ -327,17 +370,59 @@ function CodePairContent() {
   // Language switcher
   const handleLanguageChange = (newLang: SupportedLanguageId) => {
     const prevLang = language;
+    if (newLang === prevLang) return;
+
+    // Immediately update language ref & state
+    languageRef.current = newLang;
     setLanguage(newLang);
     P2PPersistence.saveState("codepair_language", newLang);
 
-    // If editor has the template of previous language or is blank, switch to the new template
-    const isPreviousTemplate = !code.trim() || code === CODEPAIR_TEMPLATES[prevLang];
-    if (isPreviousTemplate && CODEPAIR_TEMPLATES[newLang]) {
-      const template = CODEPAIR_TEMPLATES[newLang];
-      setCode(template);
-      editorRef.current?.setValue(template);
-      P2PPersistence.saveState("codepair_code", template);
+    // Current code in editor
+    const currentCode = editorRef.current ? editorRef.current.getValue() : code;
+
+    // Check if current code was the default starter template of prevLang (or empty)
+    const prevTemplate = (CODEPAIR_TEMPLATES[prevLang] || "").trim();
+    const isUnmodifiedPrevTemplate = !currentCode.trim() || currentCode.trim() === prevTemplate;
+
+    // Save customized code for prevLang, or leave cleared if it was the default template
+    const nextBuffers: Partial<Record<SupportedLanguageId, string>> = {
+      ...languageBuffersRef.current,
+      [prevLang]: isUnmodifiedPrevTemplate ? undefined : currentCode,
+    };
+    languageBuffersRef.current = nextBuffers;
+    setLanguageBuffers(nextBuffers);
+    P2PPersistence.saveState("codepair_lang_buffers", nextBuffers);
+
+    // Determine code for newLang:
+    // If the user previously wrote custom code for newLang, restore it.
+    // Otherwise, always load the default template for newLang!
+    const targetTemplate = CODEPAIR_TEMPLATES[newLang] || CODEPAIR_TEMPLATES.javascript;
+    const existingCustomCode = nextBuffers[newLang];
+
+    const nextCode =
+      existingCustomCode &&
+      existingCustomCode.trim() &&
+      existingCustomCode.trim() !== prevTemplate
+        ? existingCustomCode
+        : targetTemplate;
+
+    codeRef.current = nextCode;
+    setCode(nextCode);
+
+    if (editorRef.current) {
+      isProgrammaticChangeRef.current = true;
+      try {
+        editorRef.current.setValue(nextCode);
+      } finally {
+        setTimeout(() => {
+          isProgrammaticChangeRef.current = false;
+        }, 50);
+      }
     }
+    P2PPersistence.saveState("codepair_code", nextCode);
+
+    // Clear previous execution results for the new language
+    setExecutionResult(null);
 
     // Default right pane tab depending on language
     if (newLang === "html" || newLang === "markdown") {
@@ -351,17 +436,40 @@ function CodePairContent() {
 
     if (clientRef.current && clientRef.current.status === "connected") {
       clientRef.current.broadcastLanguageChange(newLang);
+      docVersionRef.current += 1;
+      clientRef.current.broadcastCodeChange(nextCode, docVersionRef.current);
     }
   };
 
   // Reset to default template
   const handleResetTemplate = () => {
     const template = CODEPAIR_TEMPLATES[language] || CODEPAIR_TEMPLATES.javascript;
+    codeRef.current = template;
     setCode(template);
-    editorRef.current?.setValue(template);
+    if (editorRef.current) {
+      isProgrammaticChangeRef.current = true;
+      try {
+        editorRef.current.setValue(template);
+      } finally {
+        setTimeout(() => {
+          isProgrammaticChangeRef.current = false;
+        }, 50);
+      }
+    }
+    const nextBuffers = { ...languageBuffersRef.current };
+    delete nextBuffers[language];
+    languageBuffersRef.current = nextBuffers;
+    setLanguageBuffers(nextBuffers);
+    P2PPersistence.saveState("codepair_lang_buffers", nextBuffers);
+
     P2PPersistence.saveState("codepair_code", template);
     setIsRestoredSession(false);
     setExecutionResult(null);
+
+    if (clientRef.current && clientRef.current.status === "connected") {
+      docVersionRef.current += 1;
+      clientRef.current.broadcastCodeChange(template, docVersionRef.current);
+    }
   };
 
   // Create new room

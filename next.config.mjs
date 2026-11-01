@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
+  poweredByHeader: false,
   async headers() {
     return [
       {
@@ -32,7 +34,16 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=86400, stale-while-revalidate=604800",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/:path*.(svg|png|jpg|jpeg|webp|ico|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
@@ -151,6 +162,11 @@ const nextConfig = {
       "lodash-es",
       "@mui/material",
       "@mui/icons-material",
+      "fast-xml-parser",
+      "qrcode",
+      "uuid",
+      "react-markdown",
+      "remark-gfm",
     ],
   },
 };
