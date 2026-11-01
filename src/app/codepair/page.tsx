@@ -10,6 +10,14 @@ import {
 } from "@/lib/codepair/codePairClient";
 import { P2PPersistence } from "@/lib/p2p/p2pState";
 import { P2PConnectionHeader } from "@/components/p2p/P2PConnectionHeader";
+import {
+  SupportedLanguageId,
+  LanguageInfo,
+  LANGUAGE_REGISTRY,
+  CODEPAIR_TEMPLATES,
+  executeCodeInBrowser,
+  ExecutionResult,
+} from "@/lib/codepair/compilerEngine";
 import type { editor } from "monaco-editor";
 
 // Dynamically load Monaco Editor with zero SSR
@@ -18,124 +26,21 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   loading: () => (
     <div className="w-full h-full min-h-[400px] bg-slate-950 flex flex-col items-center justify-center text-slate-400 font-mono text-sm space-y-3">
       <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      <div>Loading CodePair Editor...</div>
+      <div>Loading CodePair IDE...</div>
     </div>
   ),
 });
 
-const DEFAULT_TEMPLATES: Record<string, string> = {
-  javascript: `// Welcome to CodePair! 🚀
-// 100% Zero-Cloud, Peer-to-Peer Collaborative IDE.
-// Real-time multi-cursor sync directly between browsers.
-
-function findPrimes(limit = 50) {
-  const primes = [];
-  for (let i = 2; i <= limit; i++) {
-    let isPrime = true;
-    for (let j = 2; j * j <= i; j++) {
-      if (i % j === 0) {
-        isPrime = false;
-        break;
-      }
-    }
-    if (isPrime) primes.push(i);
+// Dynamically load MarkdownRenderer with zero SSR
+const MarkdownRenderer = dynamic(
+  () => import("@/components/MarkdownRenderer").then((m) => m.MarkdownRenderer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="p-6 text-slate-400 font-mono text-xs">Loading Markdown preview...</div>
+    ),
   }
-  return primes;
-}
-
-console.log("Calculated prime numbers up to 50:");
-console.log(findPrimes(50));
-`,
-  html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CodePair Live Preview</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #f8fafc;
-    }
-    .card {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 2.5rem;
-      border-radius: 1.25rem;
-      text-align: center;
-      max-width: 440px;
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-    }
-    h1 { margin-top: 0; font-size: 1.75rem; color: #60a5fa; }
-    p { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; }
-    button {
-      margin-top: 1rem;
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    button:hover { background: #1d4ed8; transform: translateY(-1px); }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>🚀 CodePair Preview</h1>
-    <p>Edits from both developers render instantly with zero cloud storage.</p>
-    <button onclick="alert('Hello from CodePair!')">Click Interactive Button</button>
-  </div>
-</body>
-</html>
-`,
-  python: `# Welcome to CodePair Python Studio 🐍
-# Real-time peer-to-peer collaboration
-
-def fibonacci(n):
-    sequence = [0, 1]
-    while len(sequence) < n:
-        sequence.append(sequence[-1] + sequence[-2])
-    return sequence[:n]
-
-print("First 10 Fibonacci numbers:")
-print(fibonacci(10))
-`,
-  typescript: `// CodePair TypeScript Workspace ⚡
-interface User {
-  id: string;
-  name: string;
-  role: "admin" | "developer" | "reviewer";
-}
-
-const team: User[] = [
-  { id: "1", name: "Dev Alpha", role: "developer" },
-  { id: "2", name: "Dev Beta", role: "reviewer" }
-];
-
-console.log("Active Team Members:", team);
-`,
-};
-
-const SUPPORTED_LANGUAGES = [
-  { id: "javascript", name: "JavaScript" },
-  { id: "typescript", name: "TypeScript" },
-  { id: "html", name: "HTML / CSS" },
-  { id: "python", name: "Python" },
-  { id: "json", name: "JSON" },
-  { id: "markdown", name: "Markdown" },
-  { id: "rust", name: "Rust" },
-  { id: "go", name: "Go" },
-  { id: "sql", name: "SQL" },
-];
+);
 
 function CodePairContent() {
   const searchParams = useSearchParams();
@@ -152,13 +57,19 @@ function CodePairContent() {
   } | null>(null);
 
   // Editor state
-  const [language, setLanguage] = useState<string>("javascript");
-  const [code, setCode] = useState<string>(DEFAULT_TEMPLATES.javascript);
+  const [language, setLanguage] = useState<SupportedLanguageId>("javascript");
+  const [code, setCode] = useState<string>(CODEPAIR_TEMPLATES.javascript);
   const [theme, setTheme] = useState<"vs-dark" | "light">("vs-dark");
   const [showPreview, setShowPreview] = useState<boolean>(true);
-  const [showConsole, setShowConsole] = useState<boolean>(false);
-  const [consoleLogs, setConsoleLogs] = useState<Array<{ type: string; text: string }>>([]);
   const [copyFeedback, setCopyFeedback] = useState<string>("");
+
+  // Compiler & Execution State
+  const [isCompiling, setIsCompiling] = useState<boolean>(false);
+  const [compilerStatus, setCompilerStatus] = useState<string>("");
+  const [executionResult, setExecutionResult] = useState<ExecutionResult | null>(null);
+  const [activeOutputTab, setActiveOutputTab] = useState<"output" | "tables" | "preview">("output");
+  const [activeSqlTableIndex, setActiveSqlTableIndex] = useState<number>(0);
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
 
   // Refs
   const clientRef = useRef<CodePairClient | null>(null);
@@ -168,7 +79,7 @@ function CodePairContent() {
   const isRemoteChangeRef = useRef<boolean>(false);
   const remoteDecorationsRef = useRef<string[]>([]);
   const codeRef = useRef<string>(code);
-  const languageRef = useRef<string>(language);
+  const languageRef = useRef<SupportedLanguageId>(language);
 
   useEffect(() => {
     codeRef.current = code;
@@ -201,12 +112,11 @@ function CodePairContent() {
         onStatusChange: (s) => setStatus(s),
         onPeerConnected: (peer) => {
           setPartner(peer);
-          setCopyFeedback(`Partner connected: ${peer.username}!`);
+          setCopyFeedback(`Collaborator connected: ${peer.username}!`);
           setTimeout(() => setCopyFeedback(""), 4000);
         },
         onPeerDisconnected: () => {
           setPartner(null);
-          // Clear remote decorations
           if (editorRef.current) {
             remoteDecorationsRef.current = editorRef.current.deltaDecorations(
               remoteDecorationsRef.current,
@@ -228,7 +138,6 @@ function CodePairContent() {
               const currentPosition = editorRef.current.getPosition();
               const selections = editorRef.current.getSelections();
 
-              // Smoothly execute edits to preserve cursor position and avoid cursor jumping
               editorRef.current.executeEdits("remote-peer", [
                 {
                   range: model.getFullModelRange(),
@@ -252,8 +161,19 @@ function CodePairContent() {
           }
         },
         onRemoteLanguageChange: (newLang) => {
-          setLanguage(newLang);
-          P2PPersistence.saveState("codepair_language", newLang);
+          const validLang = newLang as SupportedLanguageId;
+          setLanguage(validLang);
+          P2PPersistence.saveState("codepair_language", validLang);
+
+          // Synchronize output tab for previewable languages
+          if (validLang === "html" || validLang === "markdown") {
+            setActiveOutputTab("preview");
+            setShowPreview(true);
+          } else if (validLang === "sql") {
+            setActiveOutputTab("tables");
+          } else {
+            setActiveOutputTab("output");
+          }
         },
         onRemoteCursor: (cursor) => {
           renderRemoteCursor(cursor);
@@ -266,7 +186,6 @@ function CodePairContent() {
       clientRef.current = client;
       setRoomId(codeClean);
 
-      // Save active session & sync URL search parameters
       P2PPersistence.saveSession("codepair", {
         roomId: codeClean,
         metadata: { language: languageRef.current },
@@ -285,7 +204,6 @@ function CodePairContent() {
     const monaco = monacoRef.current;
     const newDecorations: editor.IModelDeltaDecoration[] = [];
 
-    // Cursor caret decoration
     newDecorations.push({
       range: new monaco.Range(cursor.line, cursor.column, cursor.line, cursor.column),
       options: {
@@ -296,7 +214,6 @@ function CodePairContent() {
       },
     });
 
-    // Selection decoration if text is selected
     if (cursor.selection) {
       newDecorations.push({
         range: new monaco.Range(
@@ -321,12 +238,11 @@ function CodePairContent() {
 
   // Restore State from Browser Memory & Handle URL on Initial Mount
   useEffect(() => {
-    // 1. Restore code, language, and theme from browser memory
     const savedCode = P2PPersistence.loadState<string>("codepair_code");
-    const savedLang = P2PPersistence.loadState<string>("codepair_language");
+    const savedLang = P2PPersistence.loadState<SupportedLanguageId>("codepair_language");
     const savedTheme = P2PPersistence.loadState<"vs-dark" | "light">("codepair_theme");
 
-    if (savedLang) {
+    if (savedLang && LANGUAGE_REGISTRY.some((l) => l.id === savedLang)) {
       setLanguage(savedLang);
     }
     if (savedTheme) {
@@ -337,7 +253,6 @@ function CodePairContent() {
       setIsRestoredSession(true);
     }
 
-    // 2. Check room from URL query param, then fallback to persisted session
     const params = new URLSearchParams(window.location.search);
     const urlRoom = params.get("room");
     const savedSession = P2PPersistence.loadSession("codepair");
@@ -350,7 +265,6 @@ function CodePairContent() {
       connectToRoom(targetRoom);
     }
 
-    // 3. BeforeUnload: save latest draft to browser storage
     const handleBeforeUnload = () => {
       if (codeRef.current) {
         P2PPersistence.saveState("codepair_code", codeRef.current);
@@ -370,7 +284,6 @@ function CodePairContent() {
     const nextCode = value ?? "";
     setCode(nextCode);
 
-    // Save to browser memory immediately
     P2PPersistence.saveState("codepair_code", nextCode);
 
     if (isRemoteChangeRef.current) return;
@@ -389,7 +302,6 @@ function CodePairContent() {
     editorRef.current = editorInstance;
     monacoRef.current = monaco;
 
-    // Listen for local cursor movements and broadcast to peer
     editorInstance.onDidChangeCursorPosition((e) => {
       if (!clientRef.current || clientRef.current.status !== "connected") return;
       const selection = editorInstance.getSelection();
@@ -413,15 +325,30 @@ function CodePairContent() {
   };
 
   // Language switcher
-  const handleLanguageChange = (newLang: string) => {
+  const handleLanguageChange = (newLang: SupportedLanguageId) => {
+    const prevLang = language;
     setLanguage(newLang);
     P2PPersistence.saveState("codepair_language", newLang);
-    if (DEFAULT_TEMPLATES[newLang] && (!code || code === DEFAULT_TEMPLATES[language])) {
-      const template = DEFAULT_TEMPLATES[newLang];
+
+    // If editor has the template of previous language or is blank, switch to the new template
+    const isPreviousTemplate = !code.trim() || code === CODEPAIR_TEMPLATES[prevLang];
+    if (isPreviousTemplate && CODEPAIR_TEMPLATES[newLang]) {
+      const template = CODEPAIR_TEMPLATES[newLang];
       setCode(template);
       editorRef.current?.setValue(template);
       P2PPersistence.saveState("codepair_code", template);
     }
+
+    // Default right pane tab depending on language
+    if (newLang === "html" || newLang === "markdown") {
+      setActiveOutputTab("preview");
+      setShowPreview(true);
+    } else if (newLang === "sql") {
+      setActiveOutputTab("tables");
+    } else {
+      setActiveOutputTab("output");
+    }
+
     if (clientRef.current && clientRef.current.status === "connected") {
       clientRef.current.broadcastLanguageChange(newLang);
     }
@@ -429,11 +356,12 @@ function CodePairContent() {
 
   // Reset to default template
   const handleResetTemplate = () => {
-    const template = DEFAULT_TEMPLATES[language] || DEFAULT_TEMPLATES.javascript;
+    const template = CODEPAIR_TEMPLATES[language] || CODEPAIR_TEMPLATES.javascript;
     setCode(template);
     editorRef.current?.setValue(template);
     P2PPersistence.saveState("codepair_code", template);
     setIsRestoredSession(false);
+    setExecutionResult(null);
   };
 
   // Create new room
@@ -452,32 +380,75 @@ function CodePairContent() {
     P2PPersistence.syncUrl({ room: null });
   };
 
-  // Client-side code execution sandbox (JavaScript/TypeScript)
-  const handleRunCode = () => {
-    setShowConsole(true);
-    setConsoleLogs([]);
-
-    const logs: Array<{ type: string; text: string }> = [];
-    const customConsole = {
-      log: (...args: unknown[]) => logs.push({ type: "log", text: args.map(String).join(" ") }),
-      warn: (...args: unknown[]) => logs.push({ type: "warn", text: args.map(String).join(" ") }),
-      error: (...args: unknown[]) => logs.push({ type: "error", text: args.map(String).join(" ") }),
-      info: (...args: unknown[]) => logs.push({ type: "info", text: args.map(String).join(" ") }),
-    };
+  // In-Browser Code Execution Handler
+  const handleRunCode = async () => {
+    setIsCompiling(true);
+    setCompilerStatus("Initializing execution engine...");
+    setShowPreview(true);
 
     try {
-      const runFn = new Function("console", code);
-      runFn(customConsole);
-      if (logs.length === 0) {
-        logs.push({ type: "info", text: "Code executed successfully with zero console output." });
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      logs.push({ type: "error", text: `Runtime Error: ${msg}` });
-    }
+      const result = await executeCodeInBrowser(language, code, (statusMsg) => {
+        setCompilerStatus(statusMsg);
+      });
 
-    setConsoleLogs(logs);
+      setExecutionResult(result);
+
+      if (language === "sql" && result.sqlTables && result.sqlTables.length > 0) {
+        setActiveOutputTab("tables");
+        setActiveSqlTableIndex(0);
+      } else if (language === "html" || language === "markdown") {
+        setActiveOutputTab("preview");
+      } else {
+        setActiveOutputTab("output");
+      }
+    } catch (err) {
+      console.error("Execution error:", err);
+    } finally {
+      setIsCompiling(false);
+      setCompilerStatus("");
+    }
   };
+
+  // 1-Click Code Formatter / Beautifier
+  const handleFormatCode = () => {
+    try {
+      if (language === "json") {
+        const parsed = JSON.parse(code);
+        const formatted = JSON.stringify(parsed, null, 2);
+        setCode(formatted);
+        editorRef.current?.setValue(formatted);
+        P2PPersistence.saveState("codepair_code", formatted);
+        setCopyFeedback("Formatted JSON with 2-space indentation");
+        setTimeout(() => setCopyFeedback(""), 2500);
+      } else if (editorRef.current) {
+        editorRef.current.getAction("editor.action.formatDocument")?.run();
+        setCopyFeedback("Auto-formatted code structure");
+        setTimeout(() => setCopyFeedback(""), 2500);
+      }
+    } catch {
+      setCopyFeedback("Could not format: please fix syntax errors first");
+      setTimeout(() => setCopyFeedback(""), 3000);
+    }
+  };
+
+  // Minify JSON
+  const handleMinifyJson = () => {
+    try {
+      const parsed = JSON.parse(code);
+      const minified = JSON.stringify(parsed);
+      setCode(minified);
+      editorRef.current?.setValue(minified);
+      P2PPersistence.saveState("codepair_code", minified);
+      setCopyFeedback("Minified JSON to compact single-line");
+      setTimeout(() => setCopyFeedback(""), 2500);
+    } catch {
+      setCopyFeedback("Invalid JSON syntax");
+      setTimeout(() => setCopyFeedback(""), 3000);
+    }
+  };
+
+  const currentLangInfo = LANGUAGE_REGISTRY.find((l) => l.id === language);
+  const isRunnable = Boolean(currentLangInfo?.canExecute);
 
   return (
     <div className="flex flex-col h-[calc(100vh-64px)] w-full bg-slate-950 text-slate-100 overflow-hidden font-sans">
@@ -516,17 +487,33 @@ function CodePairContent() {
             : undefined
         }
       >
-        {/* Language Selector */}
+        {/* Comprehensive Language Selector with Categories */}
         <select
           value={language}
-          onChange={(e) => handleLanguageChange(e.target.value)}
-          className="px-2.5 py-1 bg-slate-900 border border-slate-700 rounded-md text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+          onChange={(e) => handleLanguageChange(e.target.value as SupportedLanguageId)}
+          className="px-2.5 py-1 bg-slate-900 border border-slate-700 hover:border-slate-600 rounded-md text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer font-medium"
         >
-          {SUPPORTED_LANGUAGES.map((lang) => (
-            <option key={lang.id} value={lang.id}>
-              {lang.name}
-            </option>
-          ))}
+          <optgroup label="Web & Scripting (In-Browser Compilers)">
+            {LANGUAGE_REGISTRY.filter((l) => l.category === "Web & Scripting").map((lang) => (
+              <option key={lang.id} value={lang.id}>
+                {lang.icon} {lang.name} {lang.canExecute ? "▶" : ""}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Data, Query & Markup">
+            {LANGUAGE_REGISTRY.filter((l) => l.category === "Data & Markup").map((lang) => (
+              <option key={lang.id} value={lang.id}>
+                {lang.icon} {lang.name} {lang.canExecute ? "⚡" : ""}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Systems & Backend">
+            {LANGUAGE_REGISTRY.filter((l) => l.category === "Systems & Backend").map((lang) => (
+              <option key={lang.id} value={lang.id}>
+                {lang.icon} {lang.name}
+              </option>
+            ))}
+          </optgroup>
         </select>
 
         {/* Theme Selector */}
@@ -537,34 +524,81 @@ function CodePairContent() {
             setTheme(nextTheme);
             P2PPersistence.saveState("codepair_theme", nextTheme);
           }}
-          className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs cursor-pointer"
+          className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs cursor-pointer transition"
           title="Toggle Editor Theme"
         >
           {theme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
         </button>
 
-        {/* Run Code (for JS/TS) */}
-        {(language === "javascript" || language === "typescript") && (
+        {/* In-Browser Run Button */}
+        {isRunnable && (
           <button
             type="button"
             onClick={handleRunCode}
-            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-md shadow-xs transition flex items-center gap-1 cursor-pointer"
+            disabled={isCompiling}
+            className={`px-3 py-1 text-white font-medium rounded-md shadow-xs transition flex items-center gap-1.5 cursor-pointer text-xs ${
+              isCompiling
+                ? "bg-amber-600 animate-pulse"
+                : language === "sql"
+                ? "bg-indigo-600 hover:bg-indigo-500"
+                : "bg-emerald-600 hover:bg-emerald-500"
+            }`}
+            title={`Compile and execute ${currentLangInfo?.name} in browser WebAssembly / Sandbox`}
           >
-            ▶ Run
+            {isCompiling ? (
+              <>
+                <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span>Compiling...</span>
+              </>
+            ) : language === "sql" ? (
+              <>
+                <span>⚡</span>
+                <span>Run Query</span>
+              </>
+            ) : (
+              <>
+                <span>▶</span>
+                <span>Run Code</span>
+              </>
+            )}
           </button>
         )}
 
-        {/* Live Preview Toggle */}
+        {/* JSON Specific Tools */}
+        {language === "json" && (
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handleFormatCode}
+              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-md transition cursor-pointer"
+              title="Format JSON with 2-space indentation"
+            >
+              Format
+            </button>
+            <button
+              type="button"
+              onClick={handleMinifyJson}
+              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-md transition cursor-pointer"
+              title="Minify JSON"
+            >
+              Minify
+            </button>
+          </div>
+        )}
+
+        {/* Output / Preview Pane Toggle */}
         <button
           type="button"
           onClick={() => setShowPreview(!showPreview)}
-          className={`px-2.5 py-1 rounded-md text-xs transition cursor-pointer ${
+          className={`px-2.5 py-1 rounded-md text-xs transition cursor-pointer flex items-center gap-1 ${
             showPreview
               ? "bg-blue-600 text-white"
               : "bg-slate-800 text-slate-300 hover:bg-slate-700"
           }`}
+          title="Toggle Output and Live Sandbox Pane"
         >
-          👁️ Preview
+          <span>👁️</span>
+          <span>{language === "html" || language === "markdown" ? "Live Preview" : "Output Pane"}</span>
         </button>
 
         {/* Reset Template Option */}
@@ -572,11 +606,19 @@ function CodePairContent() {
           type="button"
           onClick={handleResetTemplate}
           className="px-2 py-1 text-slate-400 hover:text-slate-200 text-xs transition cursor-pointer"
-          title="Reset to default language template"
+          title="Reset to default language starter template"
         >
           Reset
         </button>
       </P2PConnectionHeader>
+
+      {/* Compiler Status Notification Banner */}
+      {compilerStatus && (
+        <div className="bg-amber-600/90 text-white text-xs py-1 px-4 flex items-center justify-center gap-2 animate-pulse font-mono">
+          <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          <span>{compilerStatus}</span>
+        </div>
+      )}
 
       {/* When no room is active: Quick Join & Create Banner */}
       {!roomId && (
@@ -584,7 +626,7 @@ function CodePairContent() {
           <div className="flex items-center gap-2 text-slate-300">
             <span>You are currently in solo mode.</span>
             <span className="text-slate-500">•</span>
-            <span>Edits are automatically saved to your browser memory across reloads.</span>
+            <span>All edits & compiler settings are automatically preserved in browser memory.</span>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -614,14 +656,14 @@ function CodePairContent() {
         </div>
       )}
 
-      {/* Copy / Action feedback banner */}
+      {/* Action Feedback Banner */}
       {copyFeedback && (
         <div className="bg-blue-600/90 text-white text-xs py-1.5 px-4 text-center font-medium animate-in fade-in duration-200">
           {copyFeedback}
         </div>
       )}
 
-      {/* Main Workspace (Monaco Editor + Live Preview) */}
+      {/* Main Workspace (Monaco Editor + Live Output / Sandbox) */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         {/* Monaco Code Editor Pane */}
         <div className={`flex-1 h-full min-h-0 relative ${showPreview ? "md:w-1/2" : "w-full"}`}>
@@ -646,75 +688,275 @@ function CodePairContent() {
               formatOnPaste: true,
             }}
           />
-
-          {/* Integrated Console Drawer for Code Runner */}
-          {showConsole && (
-            <div className="absolute bottom-0 left-0 right-0 max-h-48 bg-slate-950 border-t border-slate-800 z-20 flex flex-col shadow-2xl">
-              <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900 border-b border-slate-800 text-[11px] font-mono text-slate-400">
-                <span className="font-semibold text-slate-200">Console Output</span>
-                <button
-                  onClick={() => setShowConsole(false)}
-                  className="hover:text-white cursor-pointer"
-                >
-                  ✕
-                </button>
-              </div>
-              <div className="p-3 overflow-y-auto space-y-1 font-mono text-xs max-h-40">
-                {consoleLogs.map((log, idx) => (
-                  <div
-                    key={idx}
-                    className={`leading-relaxed ${
-                      log.type === "error"
-                        ? "text-red-400"
-                        : log.type === "warn"
-                        ? "text-amber-400"
-                        : log.type === "info"
-                        ? "text-blue-400"
-                        : "text-slate-300"
-                    }`}
-                  >
-                    <span className="opacity-50 select-none mr-2">›</span>
-                    {log.text}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Live Preview / Sandbox Pane */}
+        {/* Live Preview / Output Pane */}
         {showPreview && (
           <div className="w-full md:w-1/2 h-full min-h-0 bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 flex flex-col">
-            <div className="flex items-center justify-between px-3.5 py-1.5 bg-slate-900/90 border-b border-slate-800 text-[11px] font-mono text-slate-400">
-              <span className="flex items-center gap-1.5 text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                Live Render Output
-              </span>
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest">
-                Sandboxed
-              </span>
+            {/* Output Header Tabs */}
+            <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/95 border-b border-slate-800 text-[11px] font-mono text-slate-400 shrink-0">
+              <div className="flex items-center gap-1.5">
+                {/* Preview Tab (for HTML & Markdown) */}
+                {(language === "html" || language === "markdown") && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveOutputTab("preview")}
+                    className={`px-2.5 py-1 rounded transition cursor-pointer font-medium ${
+                      activeOutputTab === "preview"
+                        ? "bg-slate-800 text-blue-400"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    👁️ {language === "html" ? "DOM Preview" : "Rendered Markdown"}
+                  </button>
+                )}
+
+                {/* Console Output Tab */}
+                <button
+                  type="button"
+                  onClick={() => setActiveOutputTab("output")}
+                  className={`px-2.5 py-1 rounded transition cursor-pointer font-medium ${
+                    activeOutputTab === "output"
+                      ? "bg-slate-800 text-blue-400"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  📟 Terminal Output
+                  {executionResult?.logs && executionResult.logs.length > 0 && (
+                    <span className="ml-1.5 px-1.5 py-0.2 bg-slate-700 rounded-full text-[10px]">
+                      {executionResult.logs.length}
+                    </span>
+                  )}
+                </button>
+
+                {/* SQL Result Tables Tab */}
+                {language === "sql" && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveOutputTab("tables")}
+                    className={`px-2.5 py-1 rounded transition cursor-pointer font-medium ${
+                      activeOutputTab === "tables"
+                        ? "bg-slate-800 text-indigo-400"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    🗄️ Query Results
+                    {executionResult?.sqlTables && executionResult.sqlTables.length > 0 && (
+                      <span className="ml-1.5 px-1.5 py-0.2 bg-indigo-900/80 text-indigo-200 rounded-full text-[10px]">
+                        {executionResult.sqlTables.length}
+                      </span>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              {/* Execution Latency & Actions */}
+              <div className="flex items-center gap-2">
+                {executionResult?.executionTimeMs !== undefined && (
+                  <span className="text-[10px] text-emerald-400 font-medium">
+                    ⚡ {executionResult.executionTimeMs}ms
+                  </span>
+                )}
+                {language === "html" && activeOutputTab === "preview" && (
+                  <div className="flex items-center gap-1 border-l border-slate-800 pl-2">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewDevice("desktop")}
+                      className={`px-1.5 py-0.5 rounded text-[10px] cursor-pointer ${
+                        previewDevice === "desktop" ? "bg-blue-600 text-white" : "text-slate-400"
+                      }`}
+                      title="Desktop view"
+                    >
+                      🖥️
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewDevice("mobile")}
+                      className={`px-1.5 py-0.5 rounded text-[10px] cursor-pointer ${
+                        previewDevice === "mobile" ? "bg-blue-600 text-white" : "text-slate-400"
+                      }`}
+                      title="Mobile view (375px)"
+                    >
+                      📱
+                    </button>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setExecutionResult(null)}
+                  className="hover:text-slate-200 text-slate-500 cursor-pointer ml-1 text-xs"
+                  title="Clear output"
+                >
+                  Clear
+                </button>
+              </div>
             </div>
 
-            <div className="flex-1 h-full bg-white relative">
-              {language === "html" ? (
-                <iframe
-                  title="CodePair Live HTML Preview"
-                  srcDoc={code}
-                  sandbox="allow-scripts allow-modals"
-                  className="w-full h-full border-none"
-                />
-              ) : (
-                <div className="w-full h-full bg-slate-900 text-slate-400 p-6 flex flex-col items-center justify-center text-center space-y-3 font-mono text-xs">
-                  <div className="text-3xl">💻</div>
-                  <div className="font-semibold text-slate-200">
-                    {language.toUpperCase()} Workspace
-                  </div>
-                  <p className="max-w-sm text-slate-400 text-xs">
-                    Real-time peer-to-peer code synchronization is active. Select{" "}
-                    <span className="text-blue-400 font-bold">HTML / CSS</span> from the language
-                    menu for live DOM iframe rendering, or click{" "}
-                    <span className="text-emerald-400 font-bold">▶ Run</span> to execute JavaScript.
-                  </p>
+            {/* Content Area */}
+            <div className="flex-1 h-full min-h-0 bg-slate-950 overflow-auto relative">
+              {/* TAB 1: HTML LIVE PREVIEW */}
+              {activeOutputTab === "preview" && language === "html" && (
+                <div
+                  className={`h-full mx-auto transition-all duration-200 bg-white ${
+                    previewDevice === "mobile"
+                      ? "max-w-[375px] shadow-2xl border-x border-slate-700"
+                      : "w-full"
+                  }`}
+                >
+                  <iframe
+                    title="CodePair Live HTML Preview"
+                    srcDoc={code}
+                    sandbox="allow-scripts allow-modals"
+                    className="w-full h-full border-none"
+                  />
+                </div>
+              )}
+
+              {/* TAB 2: MARKDOWN LIVE PREVIEW */}
+              {activeOutputTab === "preview" && language === "markdown" && (
+                <div className="p-6 h-full overflow-y-auto text-slate-200 prose prose-invert prose-sm max-w-none">
+                  <MarkdownRenderer content={code} />
+                </div>
+              )}
+
+              {/* TAB 3: SQL TABLES VIEWER */}
+              {activeOutputTab === "tables" && language === "sql" && (
+                <div className="p-4 h-full flex flex-col space-y-3 font-mono text-xs">
+                  {executionResult?.sqlTables && executionResult.sqlTables.length > 0 ? (
+                    <>
+                      {/* Multiple Tables Selector */}
+                      {executionResult.sqlTables.length > 1 && (
+                        <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+                          {executionResult.sqlTables.map((tbl, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => setActiveSqlTableIndex(i)}
+                              className={`px-2.5 py-1 rounded text-[11px] cursor-pointer font-medium ${
+                                activeSqlTableIndex === i
+                                  ? "bg-indigo-600 text-white"
+                                  : "bg-slate-800 text-slate-400 hover:text-slate-200"
+                              }`}
+                            >
+                              Result #{i + 1} ({tbl.rowsCount} rows)
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Render Active Table */}
+                      {(() => {
+                        const table = executionResult.sqlTables[activeSqlTableIndex];
+                        if (!table) return null;
+                        return (
+                          <div className="flex-1 flex flex-col space-y-2 overflow-hidden">
+                            <div className="text-[11px] text-slate-400 flex justify-between items-center">
+                              <span>Showing {table.rowsCount} row(s)</span>
+                              <span className="text-emerald-400">SQLite in-memory query</span>
+                            </div>
+                            <div className="flex-1 overflow-auto rounded-lg border border-slate-800 bg-slate-900/50">
+                              <table data-testid="sql-results-table" className="w-full text-left border-collapse">
+                                <thead>
+                                  <tr className="bg-slate-800/80 text-slate-200 text-[11px] border-b border-slate-700 sticky top-0">
+                                    <th className="py-2 px-3 text-slate-500 w-10 text-center">#</th>
+                                    {table.columns.map((col, idx) => (
+                                      <th key={idx} className="py-2 px-3 font-semibold">
+                                        {col}
+                                      </th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {table.values.length === 0 ? (
+                                    <tr>
+                                      <td
+                                        colSpan={table.columns.length + 1}
+                                        className="py-6 text-center text-slate-500 text-xs"
+                                      >
+                                        Query returned 0 rows.
+                                      </td>
+                                    </tr>
+                                  ) : (
+                                    table.values.map((row, rIdx) => (
+                                      <tr
+                                        key={rIdx}
+                                        className="border-b border-slate-800/60 hover:bg-slate-800/40 text-slate-300 text-xs"
+                                      >
+                                        <td className="py-1.5 px-3 text-slate-600 text-center text-[10px]">
+                                          {rIdx + 1}
+                                        </td>
+                                        {row.map((cell, cIdx) => (
+                                          <td key={cIdx} className="py-1.5 px-3 whitespace-nowrap">
+                                            {cell === null ? (
+                                              <span className="text-slate-600 italic">NULL</span>
+                                            ) : (
+                                              String(cell)
+                                            )}
+                                          </td>
+                                        ))}
+                                      </tr>
+                                    ))
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </>
+                  ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-slate-500 space-y-2">
+                      <div className="text-3xl">🗄️</div>
+                      <div className="font-semibold text-slate-300">SQLite WebAssembly Database Ready</div>
+                      <p className="text-xs text-slate-500 max-w-xs text-center">
+                        Click <span className="text-indigo-400 font-bold">⚡ Run Query</span> to create tables, insert data, and query in-memory database.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 4: TERMINAL OUTPUT CONSOLE (JS, TS, Python, Lua, JSON, etc.) */}
+              {activeOutputTab === "output" && (
+                <div data-testid="codepair-terminal" className="p-4 h-full flex flex-col font-mono text-xs overflow-y-auto space-y-1.5">
+                  {executionResult?.logs && executionResult.logs.length > 0 ? (
+                    executionResult.logs.map((log, idx) => (
+                      <div
+                        key={idx}
+                        className={`leading-relaxed flex items-start gap-2 ${
+                          log.type === "error"
+                            ? "text-rose-400 bg-rose-950/20 px-2 py-1 rounded border-l-2 border-rose-500"
+                            : log.type === "warn"
+                            ? "text-amber-400 bg-amber-950/20 px-2 py-1 rounded border-l-2 border-amber-500"
+                            : log.type === "info"
+                            ? "text-sky-300 bg-sky-950/20 px-2 py-1 rounded"
+                            : "text-slate-300"
+                        }`}
+                      >
+                        <span className="opacity-40 select-none shrink-0 font-bold">›</span>
+                        <span className="whitespace-pre-wrap break-words">{log.text}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-slate-500 space-y-3 p-6 text-center">
+                      <div className="text-3xl">{currentLangInfo?.icon || "💻"}</div>
+                      <div className="font-semibold text-slate-200 text-sm">
+                        {currentLangInfo?.name} Workspace
+                      </div>
+                      <p className="text-xs text-slate-400 max-w-sm">
+                        {isRunnable ? (
+                          <>
+                            Powered by <span className="text-emerald-400 font-semibold">{currentLangInfo?.engineName}</span>. Click{" "}
+                            <span className="text-emerald-400 font-bold">▶ Run Code</span> to compile and execute directly inside your browser.
+                          </>
+                        ) : (
+                          <>
+                            Full syntax highlighting and zero-cloud multi-cursor pair programming active.
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -730,10 +972,14 @@ function CodePairContent() {
           </span>
           <span className="hidden sm:inline text-slate-600">•</span>
           <span className="hidden sm:inline">Zero Cloud Code Storage</span>
+          <span className="hidden md:inline text-slate-600">•</span>
+          <span className="hidden md:inline text-slate-400">
+            Engine: {currentLangInfo?.engineName || "Client-Side"}
+          </span>
         </div>
 
         <div className="flex items-center gap-3 text-slate-400">
-          <span>Lang: {language}</span>
+          <span>Lang: {currentLangInfo?.name || language}</span>
           <span>•</span>
           <span>Lines: {code.split("\n").length}</span>
         </div>

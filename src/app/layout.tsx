@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
 import HeaderAppBar from "@/components/headerAppBar";
-import { CommonSiteData } from "@/components/commonSiteData";
 import { SiteFooter } from "@/components/siteFooter";
 import { AppThemeProvider } from "@/components/AppThemeProvider";
 
@@ -75,16 +74,10 @@ export default function RootLayout({
             <HeaderAppBar />
 
             <main id="main-content" className="w-full min-h-[calc(100vh-72px)]">
-              <div className="w-full px-3 py-4 md:px-5 md:py-6 xl:px-6 2xl:px-8">
+              <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
                 {children}
               </div>
             </main>
-
-            <section className="w-full px-3 pb-6 md:px-5 md:pb-8 xl:px-6 2xl:px-8">
-              <div className="rounded-[24px] border border-[var(--mui-palette-divider)] bg-[var(--mui-palette-background-paper)]/85 p-4 shadow-sm backdrop-blur md:p-6">
-                <CommonSiteData className="w-full" />
-              </div>
-            </section>
 
             <SiteFooter />
           </div>
