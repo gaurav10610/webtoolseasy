@@ -17,6 +17,8 @@ import {
   CODEPAIR_TEMPLATES,
   executeCodeInBrowser,
   ExecutionResult,
+  isCodeFromDifferentLanguage,
+  normalizeCodeSnippet,
 } from "@/lib/codepair/compilerEngine";
 import type { editor } from "monaco-editor";
 
@@ -247,6 +249,7 @@ function CodePairContent() {
     const savedBuffers = P2PPersistence.loadState<Partial<Record<SupportedLanguageId, string>>>("codepair_lang_buffers");
 
     const validLang = savedLang && LANGUAGE_REGISTRY.some((l) => l.id === savedLang) ? savedLang : "javascript";
+    languageRef.current = validLang;
     setLanguage(validLang);
 
     if (savedTheme) {
@@ -255,18 +258,21 @@ function CodePairContent() {
 
     const buffers: Partial<Record<SupportedLanguageId, string>> = savedBuffers || {};
 
+    // Sanitize any stale or cross-language contaminated buffers from old browser cache
+    for (const key of Object.keys(buffers) as SupportedLanguageId[]) {
+      if (buffers[key] && isCodeFromDifferentLanguage(buffers[key]!, key)) {
+        delete buffers[key];
+      }
+    }
+
     // Determine initial code:
     // 1. If buffer has a custom snippet for validLang, use it.
     // 2. If savedCode exists and doesn't belong to another language template, use it.
     // 3. Otherwise, use validLang's official starter template!
     let initialCode = buffers[validLang];
     if (!initialCode && savedCode) {
-      const isFromOtherLang = Object.entries(CODEPAIR_TEMPLATES).some(
-        ([id, tmpl]) => id !== validLang && savedCode.trim() === tmpl.trim()
-      );
-      if (!isFromOtherLang) {
+      if (!isCodeFromDifferentLanguage(savedCode, validLang)) {
         initialCode = savedCode;
-        buffers[validLang] = savedCode;
       }
     }
     if (!initialCode) {
@@ -275,8 +281,13 @@ function CodePairContent() {
 
     languageBuffersRef.current = buffers;
     setLanguageBuffers(buffers);
+    codeRef.current = initialCode;
     setCode(initialCode);
-    if (savedCode) {
+    P2PPersistence.saveState("codepair_lang_buffers", buffers);
+    P2PPersistence.saveState("codepair_code", initialCode);
+    P2PPersistence.saveState("codepair_language", validLang);
+
+    if (savedCode && !isCodeFromDifferentLanguage(savedCode, validLang)) {
       setIsRestoredSession(true);
     }
 
@@ -295,6 +306,7 @@ function CodePairContent() {
     const handleBeforeUnload = () => {
       if (codeRef.current) {
         P2PPersistence.saveState("codepair_code", codeRef.current);
+        P2PPersistence.saveState("codepair_language", languageRef.current);
       }
     };
 
@@ -318,8 +330,8 @@ function CodePairContent() {
 
     // Save into language buffers if customized away from default template
     const currentLang = languageRef.current;
-    const defaultTemplate = (CODEPAIR_TEMPLATES[currentLang] || "").trim();
-    const isDefault = nextCode.trim() === defaultTemplate;
+    const defaultTemplate = CODEPAIR_TEMPLATES[currentLang] || "";
+    const isDefault = normalizeCodeSnippet(nextCode) === normalizeCodeSnippet(defaultTemplate);
 
     const nextBuffers: Partial<Record<SupportedLanguageId, string>> = {
       ...languageBuffersRef.current,
@@ -380,15 +392,25 @@ function CodePairContent() {
     // Current code in editor
     const currentCode = editorRef.current ? editorRef.current.getValue() : code;
 
-    // Check if current code was the default starter template of prevLang (or empty)
-    const prevTemplate = (CODEPAIR_TEMPLATES[prevLang] || "").trim();
-    const isUnmodifiedPrevTemplate = !currentCode.trim() || currentCode.trim() === prevTemplate;
+    // Check if current code was the default starter template of prevLang (or of any other language)
+    const isUnmodifiedTemplate =
+      !currentCode.trim() ||
+      normalizeCodeSnippet(currentCode) === normalizeCodeSnippet(CODEPAIR_TEMPLATES[prevLang]) ||
+      isCodeFromDifferentLanguage(currentCode, prevLang);
 
-    // Save customized code for prevLang, or leave cleared if it was the default template
+    // Save customized code for prevLang, or leave cleared if it was a default/other template
     const nextBuffers: Partial<Record<SupportedLanguageId, string>> = {
       ...languageBuffersRef.current,
-      [prevLang]: isUnmodifiedPrevTemplate ? undefined : currentCode,
+      [prevLang]: isUnmodifiedTemplate ? undefined : currentCode,
     };
+
+    // Clean up any cross-language contaminations from all buffers
+    for (const key of Object.keys(nextBuffers) as SupportedLanguageId[]) {
+      if (nextBuffers[key] && isCodeFromDifferentLanguage(nextBuffers[key]!, key)) {
+        delete nextBuffers[key];
+      }
+    }
+
     languageBuffersRef.current = nextBuffers;
     setLanguageBuffers(nextBuffers);
     P2PPersistence.saveState("codepair_lang_buffers", nextBuffers);
@@ -397,14 +419,12 @@ function CodePairContent() {
     // If the user previously wrote custom code for newLang, restore it.
     // Otherwise, always load the default template for newLang!
     const targetTemplate = CODEPAIR_TEMPLATES[newLang] || CODEPAIR_TEMPLATES.javascript;
-    const existingCustomCode = nextBuffers[newLang];
+    let nextCode = nextBuffers[newLang];
 
-    const nextCode =
-      existingCustomCode &&
-      existingCustomCode.trim() &&
-      existingCustomCode.trim() !== prevTemplate
-        ? existingCustomCode
-        : targetTemplate;
+    // If nextCode is missing or belongs to a different language, force targetTemplate!
+    if (!nextCode || !nextCode.trim() || isCodeFromDifferentLanguage(nextCode, newLang)) {
+      nextCode = targetTemplate;
+    }
 
     codeRef.current = nextCode;
     setCode(nextCode);
