@@ -559,7 +559,7 @@ function CodePairContent() {
   const isRunnable = Boolean(currentLangInfo?.canExecute);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)] w-full bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="flex flex-col h-[calc(100vh-100px)] w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden shadow-xl font-sans">
       {/* Dynamic Cursor CSS */}
       <style jsx global>{`
         .codepair-remote-cursor {
@@ -576,7 +576,7 @@ function CodePairContent() {
         }
       `}</style>
 
-      {/* Uniform P2P Connection Header - Visible At All Times */}
+      {/* Uniform P2P Connection Header - Consistent Toolbar Header */}
       <P2PConnectionHeader
         appName="CodePair"
         appBadge="IDE"
@@ -589,6 +589,9 @@ function CodePairContent() {
         onNewRoom={handleCreateRoom}
         onLeaveRoom={handleLeaveRoom}
         onReconnect={() => roomId && connectToRoom(roomId)}
+        onJoinRoom={connectToRoom}
+        isSticky={false}
+        className="rounded-t-2xl shrink-0"
         shareUrl={
           typeof window !== "undefined" && roomId
             ? `${window.location.origin}/codepair?room=${roomId}`
@@ -599,7 +602,7 @@ function CodePairContent() {
         <select
           value={language}
           onChange={(e) => handleLanguageChange(e.target.value as SupportedLanguageId)}
-          className="px-2.5 py-1 bg-slate-900 border border-slate-700 hover:border-slate-600 rounded-md text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer font-medium"
+          className="h-8 px-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1.5 focus:ring-blue-500 cursor-pointer font-medium shadow-2xs transition-colors"
         >
           <optgroup label="Web & Scripting (In-Browser Compilers)">
             {LANGUAGE_REGISTRY.filter((l) => l.category === "Web & Scripting").map((lang) => (
@@ -624,39 +627,25 @@ function CodePairContent() {
           </optgroup>
         </select>
 
-        {/* Theme Selector */}
-        <button
-          type="button"
-          onClick={() => {
-            const nextTheme = theme === "vs-dark" ? "light" : "vs-dark";
-            setTheme(nextTheme);
-            P2PPersistence.saveState("codepair_theme", nextTheme);
-          }}
-          className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs cursor-pointer transition"
-          title="Toggle Editor Theme"
-        >
-          {theme === "vs-dark" ? "🌙 Dark" : "☀️ Light"}
-        </button>
-
         {/* In-Browser Run Button */}
         {isRunnable && (
           <button
             type="button"
             onClick={handleRunCode}
             disabled={isCompiling}
-            className={`px-3 py-1 text-white font-medium rounded-md shadow-xs transition flex items-center gap-1.5 cursor-pointer text-xs ${
+            className={`h-8 px-3 inline-flex items-center gap-1.5 rounded-lg text-xs font-semibold text-white shadow-xs transition-colors cursor-pointer focus:outline-none focus:ring-1.5 focus:ring-offset-1 focus:ring-offset-slate-950 ${
               isCompiling
-                ? "bg-amber-600 animate-pulse"
+                ? "bg-amber-600 animate-pulse focus:ring-amber-500"
                 : language === "sql"
-                ? "bg-indigo-600 hover:bg-indigo-500"
-                : "bg-emerald-600 hover:bg-emerald-500"
+                ? "bg-indigo-600 hover:bg-indigo-500 focus:ring-indigo-500"
+                : "bg-emerald-600 hover:bg-emerald-500 focus:ring-emerald-500"
             }`}
             title={`Compile and execute ${currentLangInfo?.name} in browser WebAssembly / Sandbox`}
           >
             {isCompiling ? (
               <>
                 <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                <span>Compiling...</span>
+                <span>Running...</span>
               </>
             ) : language === "sql" ? (
               <>
@@ -678,7 +667,7 @@ function CodePairContent() {
             <button
               type="button"
               onClick={handleFormatCode}
-              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-md transition cursor-pointer"
+              className="h-8 px-2.5 inline-flex items-center rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-2xs transition-colors cursor-pointer"
               title="Format JSON with 2-space indentation"
             >
               Format
@@ -686,7 +675,7 @@ function CodePairContent() {
             <button
               type="button"
               onClick={handleMinifyJson}
-              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-md transition cursor-pointer"
+              className="h-8 px-2.5 inline-flex items-center rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-2xs transition-colors cursor-pointer"
               title="Minify JSON"
             >
               Minify
@@ -698,25 +687,43 @@ function CodePairContent() {
         <button
           type="button"
           onClick={() => setShowPreview(!showPreview)}
-          className={`px-2.5 py-1 rounded-md text-xs transition cursor-pointer flex items-center gap-1 ${
+          className={`h-8 px-2.5 inline-flex items-center gap-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border shadow-2xs ${
             showPreview
-              ? "bg-blue-600 text-white"
-              : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+              ? "bg-blue-600 hover:bg-blue-500 text-white border-blue-500"
+              : "bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700"
           }`}
           title="Toggle Output and Live Sandbox Pane"
         >
           <span>👁️</span>
-          <span>{language === "html" || language === "markdown" ? "Live Preview" : "Output Pane"}</span>
+          <span className="hidden sm:inline">
+            {language === "html" || language === "markdown" ? "Preview" : "Output"}
+          </span>
+        </button>
+
+        {/* Theme Selector */}
+        <button
+          type="button"
+          onClick={() => {
+            const nextTheme = theme === "vs-dark" ? "light" : "vs-dark";
+            setTheme(nextTheme);
+            P2PPersistence.saveState("codepair_theme", nextTheme);
+          }}
+          className="h-8 px-2.5 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium shadow-2xs transition-colors cursor-pointer"
+          title="Toggle Editor Theme"
+        >
+          <span>{theme === "vs-dark" ? "🌙" : "☀️"}</span>
+          <span className="hidden sm:inline">{theme === "vs-dark" ? "Dark" : "Light"}</span>
         </button>
 
         {/* Reset Template Option */}
         <button
           type="button"
           onClick={handleResetTemplate}
-          className="px-2 py-1 text-slate-400 hover:text-slate-200 text-xs transition cursor-pointer"
+          className="h-8 px-2.5 inline-flex items-center gap-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-rose-50 dark:hover:bg-rose-950/30 hover:border-rose-300 dark:hover:border-rose-800/60 hover:text-rose-600 dark:hover:text-rose-400 text-slate-600 dark:text-slate-400 text-xs font-medium shadow-2xs transition-colors cursor-pointer"
           title="Reset to default language starter template"
         >
-          Reset
+          <span>↺</span>
+          <span className="hidden sm:inline">Reset</span>
         </button>
       </P2PConnectionHeader>
 
@@ -725,42 +732,6 @@ function CodePairContent() {
         <div className="bg-amber-600/90 text-white text-xs py-1 px-4 flex items-center justify-center gap-2 animate-pulse font-mono">
           <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span>{compilerStatus}</span>
-        </div>
-      )}
-
-      {/* When no room is active: Quick Join & Create Banner */}
-      {!roomId && (
-        <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 text-slate-300">
-            <span>You are currently in solo mode.</span>
-            <span className="text-slate-500">•</span>
-            <span>All edits & compiler settings are automatically preserved in browser memory.</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleCreateRoom}
-              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-xs transition cursor-pointer"
-            >
-              + Start Collaborative Room
-            </button>
-            <div className="flex items-center gap-1">
-              <input
-                type="text"
-                placeholder="Enter Room Code"
-                value={joinInput}
-                onChange={(e) => setJoinInput(e.target.value.toUpperCase())}
-                className="px-2.5 py-1 bg-slate-950 border border-slate-700 rounded-md text-center font-mono uppercase tracking-wider text-xs focus:ring-1 focus:ring-blue-500 outline-none w-32"
-                maxLength={12}
-              />
-              <button
-                onClick={() => connectToRoom(joinInput)}
-                disabled={!joinInput.trim()}
-                className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-md disabled:opacity-40 transition cursor-pointer"
-              >
-                Join
-              </button>
-            </div>
-          </div>
         </div>
       )}
 
@@ -794,6 +765,7 @@ function CodePairContent() {
               smoothScrolling: true,
               cursorBlinking: "smooth",
               formatOnPaste: true,
+              padding: { top: 12, bottom: 12 },
             }}
           />
         </div>
@@ -802,20 +774,21 @@ function CodePairContent() {
         {showPreview && (
           <div className="w-full md:w-1/2 h-full min-h-0 bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 flex flex-col">
             {/* Output Header Tabs */}
-            <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/95 border-b border-slate-800 text-[11px] font-mono text-slate-400 shrink-0">
+            <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/95 border-b border-slate-800 text-xs text-slate-400 shrink-0">
               <div className="flex items-center gap-1.5">
                 {/* Preview Tab (for HTML & Markdown) */}
                 {(language === "html" || language === "markdown") && (
                   <button
                     type="button"
                     onClick={() => setActiveOutputTab("preview")}
-                    className={`px-2.5 py-1 rounded transition cursor-pointer font-medium ${
+                    className={`h-7 px-2.5 rounded-lg transition-colors cursor-pointer font-medium text-xs inline-flex items-center gap-1.5 ${
                       activeOutputTab === "preview"
-                        ? "bg-slate-800 text-blue-400"
-                        : "text-slate-400 hover:text-slate-200"
+                        ? "bg-slate-800 text-blue-400 border border-blue-500/30"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                     }`}
                   >
-                    👁️ {language === "html" ? "DOM Preview" : "Rendered Markdown"}
+                    <span>👁️</span>
+                    <span>{language === "html" ? "DOM Preview" : "Markdown"}</span>
                   </button>
                 )}
 
@@ -823,15 +796,16 @@ function CodePairContent() {
                 <button
                   type="button"
                   onClick={() => setActiveOutputTab("output")}
-                  className={`px-2.5 py-1 rounded transition cursor-pointer font-medium ${
+                  className={`h-7 px-2.5 rounded-lg transition-colors cursor-pointer font-medium text-xs inline-flex items-center gap-1.5 ${
                     activeOutputTab === "output"
-                      ? "bg-slate-800 text-blue-400"
-                      : "text-slate-400 hover:text-slate-200"
+                      ? "bg-slate-800 text-blue-400 border border-blue-500/30"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                   }`}
                 >
-                  📟 Terminal Output
+                  <span>📟</span>
+                  <span>Terminal Output</span>
                   {executionResult?.logs && executionResult.logs.length > 0 && (
-                    <span className="ml-1.5 px-1.5 py-0.2 bg-slate-700 rounded-full text-[10px]">
+                    <span className="ml-1 px-1.5 py-0.5 bg-slate-700 text-slate-200 rounded-full text-[10px]">
                       {executionResult.logs.length}
                     </span>
                   )}
@@ -842,15 +816,16 @@ function CodePairContent() {
                   <button
                     type="button"
                     onClick={() => setActiveOutputTab("tables")}
-                    className={`px-2.5 py-1 rounded transition cursor-pointer font-medium ${
+                    className={`h-7 px-2.5 rounded-lg transition-colors cursor-pointer font-medium text-xs inline-flex items-center gap-1.5 ${
                       activeOutputTab === "tables"
-                        ? "bg-slate-800 text-indigo-400"
-                        : "text-slate-400 hover:text-slate-200"
+                        ? "bg-slate-800 text-indigo-400 border border-indigo-500/30"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                     }`}
                   >
-                    🗄️ Query Results
+                    <span>🗄️</span>
+                    <span>Query Results</span>
                     {executionResult?.sqlTables && executionResult.sqlTables.length > 0 && (
-                      <span className="ml-1.5 px-1.5 py-0.2 bg-indigo-900/80 text-indigo-200 rounded-full text-[10px]">
+                      <span className="ml-1 px-1.5 py-0.5 bg-indigo-900/80 text-indigo-200 rounded-full text-[10px]">
                         {executionResult.sqlTables.length}
                       </span>
                     )}
@@ -861,7 +836,7 @@ function CodePairContent() {
               {/* Execution Latency & Actions */}
               <div className="flex items-center gap-2">
                 {executionResult?.executionTimeMs !== undefined && (
-                  <span className="text-[10px] text-emerald-400 font-medium">
+                  <span className="text-[11px] font-mono text-emerald-400 font-medium">
                     ⚡ {executionResult.executionTimeMs}ms
                   </span>
                 )}
@@ -870,8 +845,8 @@ function CodePairContent() {
                     <button
                       type="button"
                       onClick={() => setPreviewDevice("desktop")}
-                      className={`px-1.5 py-0.5 rounded text-[10px] cursor-pointer ${
-                        previewDevice === "desktop" ? "bg-blue-600 text-white" : "text-slate-400"
+                      className={`h-6 px-1.5 rounded-md text-xs cursor-pointer transition-colors ${
+                        previewDevice === "desktop" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-slate-200"
                       }`}
                       title="Desktop view"
                     >
@@ -880,8 +855,8 @@ function CodePairContent() {
                     <button
                       type="button"
                       onClick={() => setPreviewDevice("mobile")}
-                      className={`px-1.5 py-0.5 rounded text-[10px] cursor-pointer ${
-                        previewDevice === "mobile" ? "bg-blue-600 text-white" : "text-slate-400"
+                      className={`h-6 px-1.5 rounded-md text-xs cursor-pointer transition-colors ${
+                        previewDevice === "mobile" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-slate-200"
                       }`}
                       title="Mobile view (375px)"
                     >
@@ -892,7 +867,7 @@ function CodePairContent() {
                 <button
                   type="button"
                   onClick={() => setExecutionResult(null)}
-                  className="hover:text-slate-200 text-slate-500 cursor-pointer ml-1 text-xs"
+                  className="h-7 px-2 rounded-lg hover:bg-slate-800 hover:text-slate-200 text-slate-400 cursor-pointer text-xs transition-colors"
                   title="Clear output"
                 >
                   Clear
